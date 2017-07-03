@@ -1,0 +1,290 @@
+DEF ASDF DANK
+DEF DANK MEMES 5
+DEF GLOBAL aFloat 3333333333.1111111111111111111111
+DEF GLOBAL COORDS $DankCoords$ 3.11 ~ 0.0000
+DEF GLOBAL TELE $DankCoords$ 3 1 0 3 1
+DEF RandNum 5
+
+OPTIONS:
+	blockOption stonebrick 0
+	coordsOption 383 69 95
+
+OPTIONS:
+///	Style
+///	Avaliable options: +X -X +Z -Z (and) height in y
+	styleOption +X 16
+///	Parse, cmd, compiler
+	parseOption true
+	commandOption true
+	combinerOption true
+	filePathFuncOption C:\Users\Austin\Documents\Austin\powder game code\eGO\Server Stuff\1.12\world\data\functions\custom
+///	Filepath to MCFunctions
+/// Preserve coordinates for each group
+	keepCoordsOption false
+
+///	C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\CCU - Command Combiner Unlimited\test.ccu
+
+//=
+FUNC {ARGS ACTIVATE CCU.xpNumber}
+	say test
+=//
+
+MFUNC {MFunc_TheGreatestFunction}:
+	say THESE
+	say ARE
+	say THE
+	say GREATEST
+	DEF COMMANDS Dankest |0| memes |1|
+	say COMMANDS(asdf;asdf2) -SPLIT- COMMANDS(more)
+	say COMMANDS
+	say WOOOOOOOOOOOO
+	
+	//=	test cond
+	COND:
+		ayy
+		lmao
+	=//
+	
+	//=
+	comment
+	block
+	=//
+	
+	say YESSSSSSSSSSSSSSSSS
+	setblock Grp_APulse air 0
+
+GROUP {Grp_APulse}:
+	say a
+	say b
+
+GROUP {PULSE Grp_B}:
+	say b
+	
+GROUP {CLOCK Grp_C}:
+	say c
+	
+GROUP {Grp_DClock}:
+	say d
+	
+GROUP {Grp_E}:
+	say e
+	
+GROUP {Grp_F}:
+	say f
+	
+GROUP {Grp_G}:
+	say g
+	
+GROUP {Grp_AyyLmao}:
+	setblock Grp_AyyLmao air 0
+	say ASDF
+	say $DankCoords$ test
+	say 1
+	say 2
+	say 3
+	COND:
+		testCond
+		testCond2
+	say 4
+	say 5
+	
+	GROUP {Grp_Test2}:
+		say test
+		say ABORTMISSION
+		DEF GLOBAL ABORTMISSION LiterallyAbortMission
+		DEF $SA$ hell yeah
+		/// say test
+		say $SA$
+		say ABORTMISSION
+		lmao
+		ayy
+	say 6
+	say 7
+	say 8
+	say 9
+	DEF $Spam$ yas
+	GROUP {Grp_Test}:
+		say $SA$
+		ayy
+		say ABORTMISSION
+		lmao
+		DEF $Spam$ not_yas
+		fill Grp_AyyLmao air 0
+		say $Spam$
+	COND:
+		say ABORTMISSION
+		say $SA$
+		say $Spam$
+		say 11
+		say 12
+		say 13
+		say 14
+	say 15
+	say 16
+	say 17
+	say 18
+	say 19
+	say 20
+	say 21
+	
+GROUP {Grp_TheBestGroup}:
+	say a
+	say b
+	say c
+	say d
+	say e
+	say f
+	say g
+	COND:
+		say h
+		say i
+		say j
+		say k
+	say l
+	COND:
+		say m
+		say n
+		say o
+		say p
+		say q
+		say r
+		say s
+		say t
+	
+GROUP {Grp_TheGreatestGroup}:
+	say 1
+	USE {END asdfasdf}:
+		say 2
+		say 3
+		say 4
+		say 5
+		say 6
+	USE {BEG asdfasdf}:
+		say 7
+		say 8
+		say 9
+		say 10
+		say 11
+	USE {END NOSPACE asdfasdf}:
+		say 12
+		say 13
+		say 14
+		say 15
+		say 16
+	USE {BEG NOSPACE asdfasdf}:
+		say 17
+		say 18
+		USE {EncapsulatedUse}:
+			say 19
+			say 20
+		say 21
+	say 22
+	say 23
+	say 24
+	say 25
+	say 26
+	say 27
+	say 28
+	say 29
+	say 30
+	say 31
+	say 32
+	tellraw @a {"text":"ayylmao"}
+	
+GROUP {BLOCK redstone_block CLOCK Grp_asdf}:
+	say rekt
+	say rekt again
+	
+	/*
+	say a
+	b
+	c;
+	d
+	e
+	*/
+	
+	say
+	say
+	say
+	say
+	
+	@e[type=ArmorStand,RRStand] RRti + 1 {DisabledSlots:2096896}
+	@e[type=ArmorStand,RRStand] RRti - 1 {DisabledSlots:2096896}
+	@e[type=ArmorStand,RRStand] RRti = 10 {DisabledSlots:2096896}
+	@e[type=ArmorStand,RRStand] RRti ? RandNum
+	@e[type=ArmorStand,RRStand] RRti ? 0 10
+	@e[type=ArmorStand,RRStand] reset RRti
+	@e[type=ArmorStand,RRStand] enable RRti
+	@e[type=ArmorStand,RRStand] + RRTimer {Marker:1b}
+	@e[type=ArmorStand,RRStand] - RRTimer {Marker:1b}
+	RRd_y J> @e[type=ArmorStand,RRStand]
+	RRd_y L> @e[type=ArmorStand,RRStand]
+	RRd_y E>
+	
+	ayylmao RRti + 1 {DisabledSlots:2096896}
+	ayylmao RRti - 1 {DisabledSlots:2096896}
+	ayylmao RRti = 10 {DisabledSlots:2096896}
+	ayylmao RRti ? 3
+	ayylmao RRti ? 0 10
+	ayylmao reset RRti
+	ayylmao enable RRti
+	@ayylmao + RRTimer {Marker:1b}
+	ayylmao - RRTimer {Marker:1b}
+	RRd_y J> ayylmao
+	RRd_y L> ayylmao
+	RRd_y E>
+	
+	tellraw @a[TSToken>=1,SPtsc>=1,SPtsn=10] {"text":"","extra"[{"text":"You have submitted 10 incorrect answers, and have 0 tries left.","color":"gray"}]}
+	scoreboard players operation @p SPtp = 3 Number
+	
+	fill Grp_asdf air 0
+	
+	//=
+	LOOP {20 21 + 1}:
+		LOOP {1 2 + 1} {5 7 + 1}:
+			LOOP {10 8 - 1}:
+				say 0--> |0;1| 1--> |1;1| 2--> |0| EXTRA--> |0;2|
+	
+	LOOP {20 21 + 1}:
+		LOOP {1 2 + 1} {5 7 + 1}:
+			say 0--> |0| 1--> |1| 2--> 10 EXTRA--> |0;1|
+			say 0--> |0| 1--> |1| 2--> 9 EXTRA--> |0;1|
+			say 0--> |0| 1--> |1| 2--> 8 EXTRA--> |0;1|
+	
+	LOOP {20 21 + 1}:
+		say 0--> 1 1--> 5 2--> 10 EXTRA--> |0|
+		say 0--> 1 1--> 5 2--> 9 EXTRA--> |0|
+		say 0--> 1 1--> 5 2--> 8 EXTRA--> |0|
+		say 0--> 2 1--> 6 2--> 10 EXTRA--> |0|
+		say 0--> 2 1--> 6 2--> 9 EXTRA--> |0|
+		say 0--> 2 1--> 6 2--> 8 EXTRA--> |0|
+		say 0-->  1--> 7 2--> 10 EXTRA--> |0|
+		say 0-->  1--> 7 2--> 9 EXTRA--> |0|
+		say 0-->  1--> 7 2--> 8 EXTRA--> |0|
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	LOOP 1 2 + 1 () 5 7 + 1
+		LOOP 10 8 - 1
+			say 0--> |0||1| 1--> |2||1| 2--> |0|
+		END
+	END
+	
+	say 0--> 1 1--> 5 2--> 10
+	say 0--> 1 1--> 5 2--> 9
+	say 0--> 1 1--> 5 2--> 8
+	say 0--> 2 1--> 6 2--> 10
+	say 0--> 2 1--> 6 2--> 9
+	say 0--> 2 1--> 6 2--> 8
+	say 0--> 1--> 7 2--> 10
+	say 0--> 1--> 7 2--> 9
+	say 0--> 1--> 7 2--> 8
+	
+	
+	=//

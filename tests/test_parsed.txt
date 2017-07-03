@@ -1,0 +1,161 @@
+Grp_APulse | PULSE		[384 70 96 | stonebrick 0]
+	say a
+	say b
+
+Grp_B | PULSE		[384 72 96 | stonebrick 0]
+	say b
+
+Grp_C | CLOCK		[384 74 96 | stonebrick 0]
+	say c
+
+Grp_DClock | CLOCK		[384 76 96 | stonebrick 0]
+	say d
+
+Grp_E | PULSE		[384 78 96 | stonebrick 0]
+	say e
+
+Grp_F | PULSE		[384 80 96 | stonebrick 0]
+	say f
+
+Grp_G | PULSE		[384 82 96 | stonebrick 0]
+	say g
+
+Grp_Test2 | PULSE		[384 84 96 | stonebrick 0]
+	say test
+	say ABORTMISSION
+	say hell yeah
+	say LiterallyAbortMission
+	lmao
+	ayy
+
+Grp_Test | PULSE		[384 70 98 | stonebrick 0]
+	say $SA$
+	ayy
+	say LiterallyAbortMission
+	lmao
+	fill 384 72 98 399 74 98 air 0
+	say not_yas
+
+Grp_AyyLmao | PULSE		[384 72 98 | stonebrick 0]
+	setblock 384 72 98 air 0
+	say MEMES 5
+	say 3 1 0 3 1 test
+	say 1
+	say 2
+	say 3
+	 | testCond
+	 L testCond2
+	say 4
+	say 5
+	say 6
+	say 7
+	say 8
+	say 9
+	 | say LiterallyAbortMission
+	 | say $SA$
+	 | say yas
+	 | say 11
+	 | say 12
+	 | say 13
+	 L say 14
+	say 15
+	say 16
+	say 17
+	say 18
+	say 19
+	say 20
+	say 21
+
+Grp_TheBestGroup | PULSE		[384 76 98 | stonebrick 0]
+	say a
+	say b
+	say c
+	say d
+	say e
+	say f
+	say g
+	 | say h
+	 | say i
+	 | say j
+	 L say k
+	
+	say l
+	 | say m
+	 | say n
+	 | say o
+	 | say p
+	 | say q
+	 | say r
+	 | say s
+	 L say t
+
+Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
+	say 1
+	say 2 asdfasdf
+	say 3 asdfasdf
+	say 4 asdfasdf
+	say 5 asdfasdf
+	say 6 asdfasdf
+	asdfasdf say 7
+	asdfasdf say 8
+	asdfasdf say 9
+	asdfasdf say 10
+	asdfasdf say 11
+	say 12asdfasdf
+	say 13asdfasdf
+	say 14asdfasdf
+	say 15asdfasdf
+	say 16asdfasdf
+	asdfasdfsay 17
+	asdfasdfsay 18
+	asdfasdfEncapsulatedUse say 19
+	asdfasdfEncapsulatedUse say 20
+	asdfasdfsay 21
+	say 22
+	say 23
+	say 24
+	say 25
+	say 26
+	say 27
+	say 28
+	say 29
+	say 30
+	say 31
+	say 32
+	tellraw @a {"text":"ayylmao"}
+
+Grp_asdf | CLOCK		[384 83 98 | redstone_block 0]
+	say rekt
+	say rekt again
+	say abc;de
+	say
+	say
+	say
+	say
+	scoreboard players add @e[type=ArmorStand,RRStand] RRti 1 {DisabledSlots:2096896}
+	scoreboard players remove @e[type=ArmorStand,RRStand] RRti 1 {DisabledSlots:2096896}
+	scoreboard players set @e[type=ArmorStand,RRStand] RRti 10 {DisabledSlots:2096896}
+	scoreboard players test @e[type=ArmorStand,RRStand] RRti 5
+	scoreboard players test @e[type=ArmorStand,RRStand] RRti 0 10
+	scoreboard players reset @e[type=ArmorStand,RRStand] 0
+	scoreboard players enable @e[type=ArmorStand,RRStand] 0
+	scoreboard players tag @e[type=ArmorStand,RRStand] add 0 {Marker:1b}
+	scoreboard players tag @e[type=ArmorStand,RRStand] remove 0 {Marker:1b}
+	scoreboard teams join RRd_y @e[type=ArmorStand,RRStand]
+	scoreboard teams leave RRd_y @e[type=ArmorStand,RRStand]
+	scoreboard teams empty RRd_y
+	scoreboard players add ayylmao RRti 1 {DisabledSlots:2096896}
+	scoreboard players remove ayylmao RRti 1 {DisabledSlots:2096896}
+	scoreboard players set ayylmao RRti 10 {DisabledSlots:2096896}
+	scoreboard players test ayylmao RRti 3
+	scoreboard players test ayylmao RRti 0 10
+	scoreboard players reset ayylmao 0
+	scoreboard players enable ayylmao 0
+	scoreboard players tag @ayylmao add 0 {Marker:1b}
+	scoreboard players tag ayylmao remove 0 {Marker:1b}
+	scoreboard teams join RRd_y ayylmao
+	scoreboard teams leave RRd_y ayylmao
+	scoreboard teams empty RRd_y
+	tellraw @a[TSToken>=1,SPtsc>=1,SPtsn=10] {"text":"","extra"[{"text":"You have submitted 10 incorrect answers, and have 0 tries left.","color":"gray"}]}
+	scoreboard players operation @p SPtp = 3 Number
+	fill 384 83 98 399 85 98 air 0
