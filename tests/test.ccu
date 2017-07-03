@@ -4,6 +4,7 @@ DEF GLOBAL aFloat 3333333333.1111111111111111111111
 DEF GLOBAL COORDS $DankCoords$ 3.11 ~ 0.0000
 DEF GLOBAL TELE $DankCoords$ 3 1 0 3 1
 DEF RandNum 5
+DEF ScOP scoreboard players operation
 
 OPTIONS:
 	blockOption stonebrick 0
@@ -191,7 +192,7 @@ GROUP {Grp_TheGreatestGroup}:
 	say 32
 	tellraw @a {"text":"ayylmao"}
 	
-GROUP {BLOCK redstone_block CLOCK Grp_asdf}:
+GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	say rekt
 	say rekt again
 	
@@ -206,8 +207,48 @@ GROUP {BLOCK redstone_block CLOCK Grp_asdf}:
 	say
 	say
 	say
-	say
+	say @a
 	
+/// This actual mess actually parses into the correct damn thing
+///	tl;dr if you don't know what you're doing with the execute shortcuts, there's pretty much no way you can mess this up
+	@p ~ ~ ~ execute @a ~ ~ ~ @s @r stonebrick 0 ~ ~-1 ~ @e stonebrick * say @a
+	execute @p ~ ~ ~ execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ detect ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick * say @a
+	
+	execute @a ~ ~ ~ say test
+	@a ~ ~ ~ say test
+	@a say test
+	@s @s @s
+	
+	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
+	@a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
+	@a ~ ~ ~ detect stonebrick 0 say test
+	@a detect ~ ~ ~ stonebrick 0 say test
+	@a detect stonebrick 0 say test
+	@a stonebrick 0 ~ ~ ~ say test
+	@a stonebrick ~ ~ ~ say test
+	@a stonebrick 0 say test
+	@a stonebrick say test
+	
+	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
+	@a ~ ~ ~ detect ~ ~ ~ stonebrick * @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
+	@a ~ ~ ~ detect stonebrick * @a ~ ~ ~ detect stonebrick * say test
+	@a detect ~ ~ ~ stonebrick * @a detect ~ ~ ~ stonebrick * say test
+	@a stonebrick * ~ ~ ~ @a stonebrick * ~ ~ ~ say test
+	@a stonebrick * @a stonebrick * say test
+	@a stonebrick @a stonebrick say test
+	
+	execute @a detect stonebrick 0 say test
+	execute @a say test
+	
+/// except the following few of course
+	@a not_a_block 0 say test
+///	especially the following - it's just plain wrong wtf are you doing
+	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 ~ ~ ~ say test
+	
+	
+	
+	@e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
+	@e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
 	@e[type=ArmorStand,RRStand] RRti + 1 {DisabledSlots:2096896}
 	@e[type=ArmorStand,RRStand] RRti - 1 {DisabledSlots:2096896}
 	@e[type=ArmorStand,RRStand] RRti = 10 {DisabledSlots:2096896}
@@ -221,6 +262,21 @@ GROUP {BLOCK redstone_block CLOCK Grp_asdf}:
 	RRd_y L> @e[type=ArmorStand,RRStand]
 	RRd_y E>
 	
+	@a @e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
+	@a @e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
+	@a @e[type=ArmorStand,RRStand] RRti + 1 {DisabledSlots:2096896}
+	@a @e[type=ArmorStand,RRStand] RRti - 1 {DisabledSlots:2096896}
+	@a @e[type=ArmorStand,RRStand] RRti = 10 {DisabledSlots:2096896}
+	@a @e[type=ArmorStand,RRStand] RRti ? RandNum
+	@a @e[type=ArmorStand,RRStand] RRti ? 0 10
+	@a @e[type=ArmorStand,RRStand] reset RRti
+	@a @e[type=ArmorStand,RRStand] enable RRti
+	@a @e[type=ArmorStand,RRStand] + RRTimer {Marker:1b}
+	@a @e[type=ArmorStand,RRStand] - RRTimer {Marker:1b}
+	@a RRd_y J> @e[type=ArmorStand,RRStand]
+	@a RRd_y L> @e[type=ArmorStand,RRStand]
+	@a RRd_y E>
+	
 	ayylmao RRti + 1 {DisabledSlots:2096896}
 	ayylmao RRti - 1 {DisabledSlots:2096896}
 	ayylmao RRti = 10 {DisabledSlots:2096896}
@@ -228,7 +284,7 @@ GROUP {BLOCK redstone_block CLOCK Grp_asdf}:
 	ayylmao RRti ? 0 10
 	ayylmao reset RRti
 	ayylmao enable RRti
-	@ayylmao + RRTimer {Marker:1b}
+	ayylmao + RRTimer {Marker:1b}
 	ayylmao - RRTimer {Marker:1b}
 	RRd_y J> ayylmao
 	RRd_y L> ayylmao

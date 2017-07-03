@@ -16,9 +16,9 @@ public class Main {
 	 * -Combiners - DONE
 	 * -Better RCON usage
 	 * -Usage of BRANCH via MFUNC
-	 * -Scoreboard simplification
-	 * -Execute simplification
-	 * -Selector simplification
+	 * -Scoreboard shortcuts - DONE
+	 * -Execute shortcuts - DONE
+	 * -Selector shortcuts
 	 * -Check whether commands exist
 	 * -Server override using 'minecraft:' when detecing commands exist
 	 * -Combiner options using .mcfunction

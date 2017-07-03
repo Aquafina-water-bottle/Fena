@@ -242,6 +242,9 @@ public class Box {
 										coordsCalcY++;
 										coordsCalcXZ++;
 									} else {
+										lengthCalc = 0;
+										blockArray = removeArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox, 10,
+												0);
 										break;
 									}
 								}
@@ -253,6 +256,9 @@ public class Box {
 										coordsCalcY--;
 										coordsCalcXZ++;
 									} else {
+										lengthCalc = 0;
+										blockArray = removeArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox, 10,
+												0);
 										break;
 									}
 								}
@@ -266,7 +272,6 @@ public class Box {
 			}
 		}
 
-		/*
 		System.out.println("");
 		for (int asdf = 0; asdf < arrayApprox; asdf++) {
 			for (int asfd = 0; asfd < GroupStructure.styleOptionY; asfd++) {
@@ -275,7 +280,6 @@ public class Box {
 			System.out.println("");
 		}
 		System.out.println("");
-		*/
 
 		// get 2nd fill coords, specifically xz length
 		for (int xz = 0; xz < arrayApprox; xz++) {
@@ -364,8 +368,10 @@ public class Box {
 		if (writeDatFile.isFile()) {
 			GeneralFile readDatFile = new GeneralFile(writeDatFile);
 			ArrayList<String> datFileArray = readDatFile.getFileArray();
-			initialFillCommand = "fill " + datFileArray.get(0) + " air 0";
-			Setblock.initialCommands.add(initialFillCommand);
+			if (datFileArray.size() != 0) {
+				initialFillCommand = "fill " + datFileArray.get(0) + " air 0";
+				Setblock.initialCommands.add(initialFillCommand);
+			}
 		}
 
 		// Actually opens the file
@@ -389,7 +395,7 @@ public class Box {
 		}
 
 		// Write out coords for each group name
-		for (int i = 1; i < Cmd_Group.arrayGroupSave.size(); i++) {
+		for (int i = 0; i < Cmd_Group.arrayGroupSave.size(); i++) {
 			writer.println(Cmd_Group.arrayGroupSave.get(i)[0] + "=" + groupNameCoordArray[i].getString());
 		}
 		writer.close();
