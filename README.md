@@ -1,4 +1,4 @@
-SO this is incomplete but so far it has features like:
+SO **this is incomplete** but so far it has features like:
 * Groups for indiviual command blocks
 * (limited) .mcfunction support
 * scoreboard shortcuts
