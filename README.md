@@ -11,3 +11,4 @@ SO this is incomplete but so far it has features like:
 -rcon support
 
 and assuming I do things correctly, the list of things I'm planning on adding will be in the 'main.java' class
+test
