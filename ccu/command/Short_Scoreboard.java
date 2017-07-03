@@ -2,7 +2,7 @@ package ccu.command;
 
 import ccu.general.ReadConfig;
 
-public class ScoreboardShortcut {
+public class Short_Scoreboard {
 	private final static int STRING = 0;
 	private final static int INT = 1;
 	private final static int SELECTOR = 2;

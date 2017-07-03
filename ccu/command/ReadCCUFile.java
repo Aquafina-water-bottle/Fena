@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import ccu.general.GeneralFile;
-import ccu.general.ReadConfig;
 
 public class ReadCCUFile {
 	private ArrayList<String> ccuFileArray = new ArrayList<String>();
@@ -102,6 +101,7 @@ public class ReadCCUFile {
 		String[] defineParamsCalc = null;
 		String definitionCalc = null;
 		boolean getStatement = false;
+		String definitionSave = null;
 
 		ArrayList<String> getCalcArray = new ArrayList<String>();
 		ArrayList<String> encapsulateArray = new ArrayList<String>();
@@ -130,15 +130,22 @@ public class ReadCCUFile {
 				defineLineCalc = null;
 				defineParamsCalc = null;
 				definitionCalc = null;
+				definitionSave = null;
 				// iterates through all definitions
 				// starts at the negative end to prioritize the more tabulated definition
 				for (int defIndex = Var_Define.arrayDefineSave.size() - 1; defIndex >= 0; defIndex--) {
 
 					// if a definition matches up
 					// System.out.println(this.tabNum + " | " + VAR_Define.arrayDefineSave.get(defIndex)[1] + " | " + ccuFileArray.get(i));
+
+					// when the line starts with 'DEF'
+					if (ccuFileArray.get(i).trim().substring(0, 3).equals("DEF") == true) {
+						definitionSave = ccuFileArray.get(i);
+						ccuFileArray.set(i, definitionSave.substring(Var_Define.getDefineIndex(definitionSave)));
+					}
+
 					if (ccuFileArray.get(i).trim().contains(Var_Define.arrayDefineSave.get(defIndex)[2])
-							&& this.tabNum >= Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[1])
-							&& ccuFileArray.get(i).trim().substring(0, 3).equals("DEF") == false) {
+							&& this.tabNum >= Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[1])) {
 						recheckLine = true;
 
 						// get anything past the definition
@@ -190,6 +197,14 @@ public class ReadCCUFile {
 										.replaceFirst(Pattern.quote(Var_Define.arrayDefineSave.get(defIndex)[2]), definitionCalc);
 								ccuFileArray.set(i, defineLineCalc);
 							}
+
+							// Gets the definition back to re-add 'DEF' in front
+							if (definitionSave != null) {
+								ccuFileArray.set(i,
+										definitionSave.substring(0, Var_Define.getDefineIndex(definitionSave)) + ccuFileArray.get(i));
+								System.out.println(ccuFileArray.get(i));
+							}
+
 						} else {
 							// sets it as is because params aren't an issue
 							ccuFileArray.set(i,
@@ -210,6 +225,9 @@ public class ReadCCUFile {
 						}
 						break;
 					} else {
+						if (definitionSave != null) {
+							ccuFileArray.set(i, definitionSave);
+						}
 						recheckLine = false;
 					}
 				}
@@ -397,11 +415,15 @@ public class ReadCCUFile {
 				}
 			}
 			if (getStatement == false) {
-				if (ScoreboardShortcut.getCommand(ccuFileArray.get(i), tabNum) != null) {
-					ccuFileArray.set(i, ScoreboardShortcut.getCommand(ccuFileArray.get(i), tabNum));
+				if (Short_Scoreboard.getCommand(ccuFileArray.get(i), tabNum) != null) {
+					ccuFileArray.set(i, Short_Scoreboard.getCommand(ccuFileArray.get(i), tabNum));
 				}
-				if (ExecuteShortcut.getCommand(ccuFileArray.get(i), tabNum) != null) {
-					ccuFileArray.set(i, ExecuteShortcut.getCommand(ccuFileArray.get(i), tabNum));
+				if (Short_Execute.getCommand(ccuFileArray.get(i), tabNum) != null) {
+					ccuFileArray.set(i, Short_Execute.getCommand(ccuFileArray.get(i), tabNum));
+				}
+
+				if (Short_Selector.getCommand(ccuFileArray.get(i), tabNum) != null) {
+					ccuFileArray.set(i, Short_Selector.getCommand(ccuFileArray.get(i), tabNum));
 				}
 			}
 		}

@@ -156,37 +156,35 @@ Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
 	execute @a ~ ~ ~ say test
-	say The following is not supported
 	execute @a ~ ~ ~ not_a_block 0 say test
-	say the following is just plain wrong wtf are you doing
 	execute @a ~ ~ ~ detect ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
-	execute @e[type=ArmorStand,RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
-	execute @e[type=ArmorStand,RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
-	scoreboard players add @e[type=ArmorStand,RRStand] RRti 1 {DisabledSlots:2096896}
-	scoreboard players remove @e[type=ArmorStand,RRStand] RRti 1 {DisabledSlots:2096896}
-	scoreboard players set @e[type=ArmorStand,RRStand] RRti 10 {DisabledSlots:2096896}
-	scoreboard players test @e[type=ArmorStand,RRStand] RRti 5
-	scoreboard players test @e[type=ArmorStand,RRStand] RRti 0 10
-	scoreboard players reset @e[type=ArmorStand,RRStand] RRti
-	scoreboard players enable @e[type=ArmorStand,RRStand] RRti
-	scoreboard players tag @e[type=ArmorStand,RRStand] add RRTimer {Marker:1b}
-	scoreboard players tag @e[type=ArmorStand,RRStand] remove RRTimer {Marker:1b}
-	scoreboard teams join RRd_y @e[type=ArmorStand,RRStand]
-	scoreboard teams leave RRd_y @e[type=ArmorStand,RRStand]
+	execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation 
+	execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation 
+	scoreboard players add @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}
+	scoreboard players remove @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}
+	scoreboard players set @e[type=ArmorStand,tag=RRStand] RRti 10 {DisabledSlots:2096896}
+	scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 5
+	scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 0 10
+	scoreboard players reset @e[type=ArmorStand,tag=RRStand] RRti
+	scoreboard players enable @e[type=ArmorStand,tag=RRStand] RRti
+	scoreboard players tag @e[type=ArmorStand,tag=RRStand] add RRTimer {Marker:1b}
+	scoreboard players tag @e[type=ArmorStand,tag=RRStand] remove RRTimer {Marker:1b}
+	scoreboard teams join RRd_y @e[type=ArmorStand,tag=RRStand]
+	scoreboard teams leave RRd_y @e[type=ArmorStand,tag=RRStand]
 	scoreboard teams empty RRd_y
-	execute @a ~ ~ ~ execute @e[type=ArmorStand,RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
-	execute @a ~ ~ ~ execute @e[type=ArmorStand,RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
-	execute @a ~ ~ ~ scoreboard players add @e[type=ArmorStand,RRStand] RRti 1 {DisabledSlots:2096896}
-	execute @a ~ ~ ~ scoreboard players remove @e[type=ArmorStand,RRStand] RRti 1 {DisabledSlots:2096896}
-	execute @a ~ ~ ~ scoreboard players set @e[type=ArmorStand,RRStand] RRti 10 {DisabledSlots:2096896}
-	execute @a ~ ~ ~ scoreboard players test @e[type=ArmorStand,RRStand] RRti 5
-	execute @a ~ ~ ~ scoreboard players test @e[type=ArmorStand,RRStand] RRti 0 10
-	execute @a ~ ~ ~ scoreboard players reset @e[type=ArmorStand,RRStand] RRti
-	execute @a ~ ~ ~ scoreboard players enable @e[type=ArmorStand,RRStand] RRti
-	execute @a ~ ~ ~ scoreboard players tag @e[type=ArmorStand,RRStand] add RRTimer {Marker:1b}
-	execute @a ~ ~ ~ scoreboard players tag @e[type=ArmorStand,RRStand] remove RRTimer {Marker:1b}
-	execute @a ~ ~ ~ scoreboard teams join RRd_y @e[type=ArmorStand,RRStand]
-	execute @a ~ ~ ~ scoreboard teams leave RRd_y @e[type=ArmorStand,RRStand]
+	execute @a ~ ~ ~ execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation 
+	execute @a ~ ~ ~ execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation 
+	execute @a ~ ~ ~ scoreboard players add @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}
+	execute @a ~ ~ ~ scoreboard players remove @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}
+	execute @a ~ ~ ~ scoreboard players set @e[type=ArmorStand,tag=RRStand] RRti 10 {DisabledSlots:2096896}
+	execute @a ~ ~ ~ scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 5
+	execute @a ~ ~ ~ scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 0 10
+	execute @a ~ ~ ~ scoreboard players reset @e[type=ArmorStand,tag=RRStand] RRti
+	execute @a ~ ~ ~ scoreboard players enable @e[type=ArmorStand,tag=RRStand] RRti
+	execute @a ~ ~ ~ scoreboard players tag @e[type=ArmorStand,tag=RRStand] add RRTimer {Marker:1b}
+	execute @a ~ ~ ~ scoreboard players tag @e[type=ArmorStand,tag=RRStand] remove RRTimer {Marker:1b}
+	execute @a ~ ~ ~ scoreboard teams join RRd_y @e[type=ArmorStand,tag=RRStand]
+	execute @a ~ ~ ~ scoreboard teams leave RRd_y @e[type=ArmorStand,tag=RRStand]
 	execute @a ~ ~ ~ scoreboard teams empty RRd_y
 	scoreboard players add ayylmao RRti 1 {DisabledSlots:2096896}
 	scoreboard players remove ayylmao RRti 1 {DisabledSlots:2096896}
@@ -200,6 +198,13 @@ Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	scoreboard teams join RRd_y ayylmao
 	scoreboard teams leave RRd_y ayylmao
 	scoreboard teams empty RRd_y
-	tellraw @a[TSToken>=1,SPtsc>=1,SPtsn=10] {"text":"","extra"[{"text":"You have submitted 10 incorrect answers, and have 0 tries left.","color":"gray"}]}
+	tellraw @a[score_TSToken_min=1,score_SPtsc=1,score_SPtsn=10,score_SPtsn_min=10] {"text":"","extra"[{"text":"You have submitted 10 incorrect answers, and have 0 tries left.","color":"gray"}]}
 	scoreboard players operation @p SPtp = 3 Number
-	fill 384 70 100 399 74 100 air 0
+	effect @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRci=0,score_RRci_min=0,score_RRar=1,score_RRar_min=1] 11 1 0 true
+	effect @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRci=0,score_RRci_min=0,score_RRar_min=1,score_RRar=2] 7 1 1 true
+	say @a[score_name_min=3,score_name=5] @a[score_name_min=3,score_name=4] @a[score_name_min=3]
+	say @a[score_name=5,score_name_min=3] @a[score_name=5,score_name_min=4] @a[score_name=3]
+	say @a[score_name_min=4,score_name=5] @a[score_name_min=4,score_name=4] @a[score_name_min=4]
+	say @a[score_name=4,score_name_min=3] @a[score_name=4,score_name_min=4] @a[score_name=2]
+	scoreboard players operation @p SPtp
+	fill 384 70 100 399 75 100 air 0

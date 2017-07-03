@@ -66,6 +66,7 @@ public class ReadConfig {
 	public static String[] serverOverrideArray = null;
 	public static String[] blockArray = null;
 	public static String[] selectorArray = null;
+	public static String[] targetSelectorArray = null;
 
 	public static void getConfigOptions() {
 		GeneralFile configFile = new GeneralFile("CCU.ini");
@@ -88,7 +89,7 @@ public class ReadConfig {
 				case "mcVersion":
 					mcVersion = Integer.parseInt(tempInput);
 					break;
-					
+
 				case "regFilePath":
 					regFilePath = new File(tempInput);
 					break;
@@ -96,7 +97,7 @@ public class ReadConfig {
 				case "globalCombinerFilePath":
 					globalCombinerFilePath = new File(tempInput);
 					break;
-					
+
 				case "preventServerKick":
 					if (tempInput.equalsIgnoreCase("true")) {
 						preventServerKick = true;
@@ -134,7 +135,7 @@ public class ReadConfig {
 						}
 					}
 					break;
-					
+
 				case "rconFunction":
 					if (tempInput.equalsIgnoreCase("true")) {
 						rconFunction = true;
@@ -144,7 +145,7 @@ public class ReadConfig {
 						}
 					}
 					break;
-					
+
 				case "rconDouble":
 					if (tempInput.equalsIgnoreCase("true")) {
 						rconDouble = true;
@@ -182,6 +183,10 @@ public class ReadConfig {
 				case "selectorArray":
 					selectorArray = tempInput.split(",");
 					break;
+
+				case "targetSelectorArray":
+					targetSelectorArray = tempInput.split(",");
+					break;
 				}
 			}
 		}
@@ -196,7 +201,7 @@ public class ReadConfig {
 				System.exit(0);
 			}
 		}
-		
+
 		/*
 		if (globalCombinerFilePath == null || globalCombinerFilePath.toString().length() == 0) {
 			System.out.println("WARNING: 'globalCombinerFilePath' field is empty");
@@ -212,12 +217,12 @@ public class ReadConfig {
 			System.out.println("WARNING: 'mcVersion' field is empty - defaults to 1.12 (2)");
 			mcVersion = 2;
 		}
-		
+
 		if (preventServerKick == null) {
 			System.out.println("WARNING: 'preventServerKick' field is empty - defaults to 'false'");
 			preventServerKick = false;
 		}
-		
+
 		if (serverPlugins == null) {
 			System.out.println("WARNING: 'serverPlugins' field is empty - defaults to 'false'");
 			serverPlugins = false;
@@ -241,13 +246,13 @@ public class ReadConfig {
 				System.out.println("WARNING: 'rconFunction' field is empty - defaults to 'false'");
 				rconFunction = false;
 			}
-			
+
 			if (rconDouble == null) {
 				System.out.println("WARNING: 'rconFunction' field is empty - defaults to 'false'");
 				System.exit(0);
 				rconDouble = false;
 			}
-			
+
 			if (rconIP == null) {
 				System.out.println("ERROR: 'rconIP' field is empty although 'rconEnable' is set to true");
 				System.exit(0);
@@ -265,7 +270,7 @@ public class ReadConfig {
 		if (minecraftCommandsArray == null || minecraftCommandsArray[0].equals("")) {
 			System.out.println("WARNING: Array " + minecraftCommandsArray + " field is empty");
 		}
-		
+
 		if (serverPlugins == false) {
 			serverOverrideArray = null;
 		} else {
@@ -273,7 +278,6 @@ public class ReadConfig {
 				System.out.println("WARNING: Array " + serverOverrideArray + " field is empty");
 			}
 		}
-		
 
 		if (blockArray == null || blockArray[0].equals("")) {
 			System.out.println("ERROR: Array " + blockArray + " field is empty");
@@ -282,6 +286,11 @@ public class ReadConfig {
 
 		if (selectorArray == null || selectorArray[0].equals("")) {
 			System.out.println("ERROR: Array " + selectorArray + " field is empty");
+			System.exit(0);
+		}
+
+		if (targetSelectorArray == null || targetSelectorArray[0].equals("")) {
+			System.out.println("ERROR: Array " + targetSelectorArray + " field is empty");
 			System.exit(0);
 		}
 	}

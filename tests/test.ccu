@@ -5,6 +5,8 @@ DEF GLOBAL COORDS $DankCoords$ 3.11 ~ 0.0000
 DEF GLOBAL TELE $DankCoords$ 3 1 0 3 1
 DEF RandNum 5
 DEF ScOP scoreboard players operation
+DEF $Ayylmao$ ScOP @p
+DEF $Ayylmao$ $Ayylmao$ SPtp
 
 OPTIONS:
 	blockOption stonebrick 0
@@ -262,20 +264,22 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	RRd_y L> @e[type=ArmorStand,RRStand]
 	RRd_y E>
 	
-	@a @e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
-	@a @e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
-	@a @e[type=ArmorStand,RRStand] RRti + 1 {DisabledSlots:2096896}
-	@a @e[type=ArmorStand,RRStand] RRti - 1 {DisabledSlots:2096896}
-	@a @e[type=ArmorStand,RRStand] RRti = 10 {DisabledSlots:2096896}
-	@a @e[type=ArmorStand,RRStand] RRti ? RandNum
-	@a @e[type=ArmorStand,RRStand] RRti ? 0 10
-	@a @e[type=ArmorStand,RRStand] reset RRti
-	@a @e[type=ArmorStand,RRStand] enable RRti
-	@a @e[type=ArmorStand,RRStand] + RRTimer {Marker:1b}
-	@a @e[type=ArmorStand,RRStand] - RRTimer {Marker:1b}
-	@a RRd_y J> @e[type=ArmorStand,RRStand]
-	@a RRd_y L> @e[type=ArmorStand,RRStand]
-	@a RRd_y E>
+	USE {@a}:
+		@e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
+		@e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
+		@e[type=ArmorStand,RRStand] RRti + 1 {DisabledSlots:2096896}
+		@e[type=ArmorStand,RRStand] RRti - 1 {DisabledSlots:2096896}
+		@e[type=ArmorStand,RRStand] RRti = 10 {DisabledSlots:2096896}
+		@e[type=ArmorStand,RRStand] RRti ? RandNum
+		@e[type=ArmorStand,RRStand] RRti ? 0 10
+		@e[type=ArmorStand,RRStand] reset RRti
+		@e[type=ArmorStand,RRStand] enable RRti
+		@e[type=ArmorStand,RRStand] + RRTimer {Marker:1b}
+		@e[type=ArmorStand,RRStand] - RRTimer {Marker:1b}
+		RRd_y J> @e[type=ArmorStand,RRStand]
+		RRd_y L> @e[type=ArmorStand,RRStand]
+		RRd_y E>
+	
 	
 	ayylmao RRti + 1 {DisabledSlots:2096896}
 	ayylmao RRti - 1 {DisabledSlots:2096896}
@@ -290,9 +294,26 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	RRd_y L> ayylmao
 	RRd_y E>
 	
-	tellraw @a[TSToken>=1,SPtsc>=1,SPtsn=10] {"text":"","extra"[{"text":"You have submitted 10 incorrect answers, and have 0 tries left.","color":"gray"}]}
+	tellraw @a[TSToken>=1,SPtsc<=1,SPtsn=10] {"text":"","extra"[{"text":"You have submitted 10 incorrect answers, and have 0 tries left.","color":"gray"}]}
 	scoreboard players operation @p SPtp = 3 Number
 	
+	DEF $SA$ x=-153,y=0,z=299,dx=158,dy=110,dz=168
+	effect @a[$SA$,m=2,RRci=0,RRar=1] 11 1 0 true
+	effect @a[$SA$,m=2,RRci=0,RRar>=1<=2] 7 1 1 true
+	
+	say @a[name>=3<=5] @a[name>=3<5] @a[name>=3]
+	say @a[name<=5>=3] @a[name<=5>3] @a[name<=3]
+	say @a[name>3<=5] @a[name>3<5] @a[name>3]
+	say @a[name<5>=3] @a[name<5>3] @a[name<3]
+	
+	$Ayylmao$
+	
+///	the following will result in an error
+///	say @a[name>=3>5]
+///	say @a[name<=3<5]
+///	say @a[name>5>=3]
+///	say @a[name<5<=3]
+
 	fill Grp_asdf air 0
 	
 	//=

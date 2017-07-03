@@ -15,17 +15,17 @@ public class Main {
 	 * For the program
 	 * -Combiners - DONE
 	 * -Better RCON usage
-	 * -Usage of BRANCH via MFUNC
+	 * -Usage of BRANCH via MFUNC and nicknames
 	 * -Scoreboard shortcuts - DONE
 	 * -Execute shortcuts - DONE
-	 * -Selector shortcuts
+	 * -Selector shortcuts - DONE
 	 * -Check whether commands exist
 	 * -Server override using 'minecraft:' when detecing commands exist
 	 * -Combiner options using .mcfunction
 	 * -Save coords option
 	 * -Definitions working with COORDS and TELE
-	 * -Repeated definitions 
-	 * -Definitions within definitions 
+	 * -Repeated definitions - Already works apparently
+	 * -Definitions within definitions - DONE
 	 * 
 	 * 
 	 * General statements

@@ -70,6 +70,19 @@ public class Var_Define {
 		 */
 
 		// Removes "DEF" and for all arguments
+
+		String whitespaceCalc = this.fullLineGet.substring(0,
+				(this.fullLineGet.length() - this.fullLineGet.replaceAll("^\\s+", "").length()));
+		if (whitespaceCalc.contains(" ")) {
+			System.out.println("ERROR: Line '" + this.fullLineGet + "' contains spaces instead of tab spaces");
+			System.exit(0);
+		}
+
+		if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
+			System.out.println("ERROR: Line '" + this.fullLineGet + "' contains an incorrect number of tab spaces");
+			System.exit(0);
+		}
+
 		String statementEncase = this.fullLineGet.replaceFirst("DEF", "").replaceAll("^\\s+", "");
 		switch (statementEncase.substring(0, statementEncase.indexOf(" "))) {
 		case "GLOBAL":
@@ -98,8 +111,8 @@ public class Var_Define {
 				if (isGlobal == null) {
 					isGlobal = true;
 				} else {
-					System.out.println(
-							"ERROR: There are at least two parameters that conflict with each other in line '" + this.fullLineGet + "'");
+					System.out.println("ERROR: There are at least two parameters that conflict with each other in line '"
+							+ this.fullLineGet + "'");
 					System.exit(0);
 				}
 				// removes GLOBAL
@@ -110,8 +123,8 @@ public class Var_Define {
 				if (defineType == null) {
 					defineType = 4;
 				} else {
-					System.out.println(
-							"ERROR: There are at least two parameters that conflict with each other in line '" + this.fullLineGet + "'");
+					System.out.println("ERROR: There are at least two parameters that conflict with each other in line '"
+							+ this.fullLineGet + "'");
 					System.exit(0);
 				}
 				// removes COORDS
@@ -122,8 +135,8 @@ public class Var_Define {
 				if (defineType == null) {
 					defineType = 5;
 				} else {
-					System.out.println(
-							"ERROR: There are at least two parameters that conflict with each other in line '" + this.fullLineGet + "'");
+					System.out.println("ERROR: There are at least two parameters that conflict with each other in line '"
+							+ this.fullLineGet + "'");
 					System.exit(0);
 				}
 				// removes TELE
@@ -210,7 +223,8 @@ public class Var_Define {
 						try {
 							Float.parseFloat(coordsArrayCalc[i]);
 						} catch (NumberFormatException e) {
-							System.out.println("ERROR: '" + coordsArrayDisp[i] + "' in line '" + this.fullLineGet + "' must be a number");
+							System.out.println(
+									"ERROR: '" + coordsArrayDisp[i] + "' in line '" + this.fullLineGet + "' must be a number");
 							System.exit(0);
 						}
 					}
@@ -218,7 +232,8 @@ public class Var_Define {
 					if (defineType == 4) {
 						System.out.println("ERROR: Coordinates must be a set of 3 or 6 numbers in line '" + this.fullLineGet + "'");
 					} else {
-						System.out.println("ERROR: Teleport coordinates must be a set of 5 numbers in line '" + this.fullLineGet + "'");
+						System.out
+								.println("ERROR: Teleport coordinates must be a set of 5 numbers in line '" + this.fullLineGet + "'");
 					}
 					System.exit(0);
 
@@ -250,8 +265,32 @@ public class Var_Define {
 				arrayDefineSave.add(arrayDefineCalc);
 			}
 		}
-
 		return null;
+	}
+
+	public static int getDefineIndex(String getLine) {
+		String statementEncase = getLine.replaceFirst("DEF", "").replaceAll("^\\s+", "");
+		String statementEncaseCalc = null;
+
+		if (statementEncase.contains(" ")) {
+			statementEncaseCalc = statementEncase.substring(0, statementEncase.indexOf(" "));
+			if (statementEncaseCalc.equals("GLOBAL") || statementEncaseCalc.equals("TELE") || statementEncaseCalc.equals("COORDS")) {
+				// removes keyword
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+			}
+		}
+		
+		if (statementEncase.contains(" ")) {
+			statementEncaseCalc = statementEncase.substring(0, statementEncase.indexOf(" "));
+			if (statementEncaseCalc.equals("GLOBAL") || statementEncaseCalc.equals("TELE") || statementEncaseCalc.equals("COORDS")) {
+				// removes keyword
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+			}
+		}
+		
+		statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+		
+		return getLine.length() - statementEncase.length();
 	}
 
 }

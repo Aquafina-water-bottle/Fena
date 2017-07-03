@@ -13,11 +13,14 @@ import ccu.general.ReadConfig;
 
 public class Setblock {
 
-	// initial commands are setblocks and fill commands before the setting of command blocks
+	// initial commands are fill commands before the setting of command blocks
 	public static ArrayList<String> initialCommands = new ArrayList<String>();
 
 	// the command blocks themselves
 	public static ArrayList<String> setblockCommands = new ArrayList<String>();
+	
+	// final commands are the setblock commands for non-command blocks
+	public static ArrayList<String> finalCommands = new ArrayList<String>();
 
 	// the command blocks except with added backslashes to work with the combiner
 	public static ArrayList<String> combinerSetblockCommands = new ArrayList<String>();
@@ -38,7 +41,7 @@ public class Setblock {
 
 		// getting the setblock commands
 		for (int i = 0; i < Cmd_Group.arrayGroupSave.size(); i++) {
-			initialCommands.add("setblock " + Box.groupNameCoordArray[i].getString() + " " + Cmd_Group.arraySetblockSave.get(i));
+			finalCommands.add("setblock " + Box.groupNameCoordArray[i].getString() + " " + Cmd_Group.arraySetblockSave.get(i));
 		}
 
 		// initialization
@@ -136,6 +139,9 @@ public class Setblock {
 				writer.println(writeCmd);
 			}
 			for (String writeCmd : setblockCommands) {
+				writer.println(writeCmd);
+			}
+			for (String writeCmd : finalCommands) {
 				writer.println(writeCmd);
 			}
 
@@ -280,6 +286,16 @@ public class Setblock {
 
 		for (int i = 0; i < setblockCommands.size(); i++) {
 			combinerSetblockCommands.add(setblockCommands.get(i).replace("\\", "\\\\").replace("\"", "\\\""));
+			if (ReadConfig.preventServerKick == true) {
+				combinerCommandLengths
+				.add(combinerSetblockCommands.get(i).replace("\\", "AA").replace("\"", "AA").replace("=", "AAAAAA").length());
+			} else {
+				combinerCommandLengths.add(combinerSetblockCommands.get(i).length());
+			}
+		}
+		
+		for (int i = 0; i < finalCommands.size(); i++) {
+			combinerSetblockCommands.add(finalCommands.get(i).replace("\\", "\\\\").replace("\"", "\\\""));
 			if (ReadConfig.preventServerKick == true) {
 				combinerCommandLengths
 						.add(combinerSetblockCommands.get(i).replace("\\", "AA").replace("\"", "AA").replace("=", "AAAAAA").length());
