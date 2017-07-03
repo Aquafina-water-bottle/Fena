@@ -389,7 +389,7 @@ public class Box {
 		}
 
 		// Write out coords for each group name
-		for (int i = 1; i < Cmd_Group.arrayGroupSave.size(); i++) {
+		for (int i = 0; i < Cmd_Group.arrayGroupSave.size(); i++) {
 			writer.println(Cmd_Group.arrayGroupSave.get(i)[0] + "=" + groupNameCoordArray[i].getString());
 		}
 		writer.close();
