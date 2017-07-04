@@ -1,6 +1,7 @@
 Grp_APulse | PULSE		[384 70 96 | stonebrick 0]
 	say a
 	say b
+	function custom:RayCaster/theHunted/test/init
 
 Grp_B | PULSE		[384 72 96 | stonebrick 0]
 	say b
@@ -39,7 +40,11 @@ Grp_Test | PULSE		[384 70 98 | stonebrick 0]
 Grp_AyyLmao | PULSE		[384 72 98 | stonebrick 0]
 	setblock 384 72 98 air 0
 	say MEMES 5
-	say 3 1 0 3 1 test
+	say -301 MARKER
+	say 51 MARKER
+	say 930.0 MARKER
+	say 40 MARKER
+	say 0 MARKER
 	say 1
 	say 2
 	say 3
@@ -127,7 +132,7 @@ Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
 Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	say rekt
 	say rekt again
-	say abc;de
+	say abde
 	say
 	say
 	say
@@ -200,11 +205,12 @@ Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	scoreboard teams empty RRd_y
 	tellraw @a[score_TSToken_min=1,score_SPtsc=1,score_SPtsn=10,score_SPtsn_min=10] {"text":"","extra"[{"text":"You have submitted 10 incorrect answers, and have 0 tries left.","color":"gray"}]}
 	scoreboard players operation @p SPtp = 3 Number
+	tellraw @a {"selector":"@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,score_asdf=5,score_asdf_min=5]"}
 	effect @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRci=0,score_RRci_min=0,score_RRar=1,score_RRar_min=1] 11 1 0 true
 	effect @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRci=0,score_RRci_min=0,score_RRar_min=1,score_RRar=2] 7 1 1 true
 	say @a[score_name_min=3,score_name=5] @a[score_name_min=3,score_name=4] @a[score_name_min=3]
 	say @a[score_name=5,score_name_min=3] @a[score_name=5,score_name_min=4] @a[score_name=3]
 	say @a[score_name_min=4,score_name=5] @a[score_name_min=4,score_name=4] @a[score_name_min=4]
 	say @a[score_name=4,score_name_min=3] @a[score_name=4,score_name_min=4] @a[score_name=2]
-	scoreboard players operation @p SPtp
+	scoreboard players operation @p TEST @p SPtp
 	fill 384 70 100 399 75 100 air 0

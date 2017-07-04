@@ -2,11 +2,11 @@ DEF ASDF DANK
 DEF DANK MEMES 5
 DEF GLOBAL aFloat 3333333333.1111111111111111111111
 DEF GLOBAL COORDS $DankCoords$ 3.11 ~ 0.0000
-DEF GLOBAL TELE $DankCoords$ 3 1 0 3 1
+DEF GLOBAL TELE $DankCoords$ -301 51 930.0 40 0
 DEF RandNum 5
 DEF ScOP scoreboard players operation
-DEF $Ayylmao$ ScOP @p
-DEF $Ayylmao$ $Ayylmao$ SPtp
+DEF $test$ ScOP @p TEST
+DEF $test$ $test$ @p SPtp
 
 OPTIONS:
 	blockOption stonebrick 0
@@ -32,7 +32,7 @@ FUNC {ARGS ACTIVATE CCU.xpNumber}
 	say test
 =//
 
-MFUNC {MFunc_TheGreatestFunction}:
+MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 	say THESE
 	say ARE
 	say THE
@@ -53,12 +53,30 @@ MFUNC {MFunc_TheGreatestFunction}:
 	block
 	=//
 	
+	MFUNC {init MFunc_MainInit}:
+		say test
+		say test
+		say test
+		say test
+		
+	MFUNC {BRANCH test init MFunc_InitTest}:
+		say asdf
+		say asdf
+		say asdf
+		say asdf
+		
+	MFUNC {test MFunc_Test}:
+		say asdf2
+		say asdf2
+		say asdf2
+	
 	say YESSSSSSSSSSSSSSSSS
 	setblock Grp_APulse air 0
 
 GROUP {Grp_APulse}:
 	say a
 	say b
+	function MFunc_InitTest
 
 GROUP {PULSE Grp_B}:
 	say b
@@ -81,7 +99,11 @@ GROUP {Grp_G}:
 GROUP {Grp_AyyLmao}:
 	setblock Grp_AyyLmao air 0
 	say ASDF
-	say $DankCoords$ test
+	say $DankCoords$[x] MARKER
+	say $DankCoords$[y] MARKER
+	say $DankCoords$[z] MARKER
+	say $DankCoords$[ry] MARKER
+	say $DankCoords$[rx] MARKER
 	say 1
 	say 2
 	say 3
@@ -201,7 +223,7 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	/*
 	say a
 	b
-	c;
+///	c;
 	d
 	e
 	*/
@@ -298,6 +320,7 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	scoreboard players operation @p SPtp = 3 Number
 	
 	DEF $SA$ x=-153,y=0,z=299,dx=158,dy=110,dz=168
+	tellraw @a {"selector":"@a[$SA$,asdf=5]"}
 	effect @a[$SA$,m=2,RRci=0,RRar=1] 11 1 0 true
 	effect @a[$SA$,m=2,RRci=0,RRar>=1<=2] 7 1 1 true
 	
@@ -306,7 +329,7 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	say @a[name>3<=5] @a[name>3<5] @a[name>3]
 	say @a[name<5>=3] @a[name<5>3] @a[name<3]
 	
-	$Ayylmao$
+	$test$
 	
 ///	the following will result in an error
 ///	say @a[name>=3>5]

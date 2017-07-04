@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import ccu.general.GeneralFile;
+import ccu.mcfunction.FunctionNick;
 
 public class ReadCCUFile {
 	private ArrayList<String> ccuFileArray = new ArrayList<String>();
@@ -102,6 +103,7 @@ public class ReadCCUFile {
 		String definitionCalc = null;
 		boolean getStatement = false;
 		String definitionSave = null;
+		Integer defineCoordsCalc = null;
 
 		ArrayList<String> getCalcArray = new ArrayList<String>();
 		ArrayList<String> encapsulateArray = new ArrayList<String>();
@@ -135,7 +137,6 @@ public class ReadCCUFile {
 				// starts at the negative end to prioritize the more tabulated definition
 				for (int defIndex = Var_Define.arrayDefineSave.size() - 1; defIndex >= 0; defIndex--) {
 
-					// if a definition matches up
 					// System.out.println(this.tabNum + " | " + VAR_Define.arrayDefineSave.get(defIndex)[1] + " | " + ccuFileArray.get(i));
 
 					// when the line starts with 'DEF'
@@ -144,6 +145,7 @@ public class ReadCCUFile {
 						ccuFileArray.set(i, definitionSave.substring(Var_Define.getDefineIndex(definitionSave)));
 					}
 
+					// if a definition matches up
 					if (ccuFileArray.get(i).trim().contains(Var_Define.arrayDefineSave.get(defIndex)[2])
 							&& this.tabNum >= Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[1])) {
 						recheckLine = true;
@@ -202,14 +204,94 @@ public class ReadCCUFile {
 							if (definitionSave != null) {
 								ccuFileArray.set(i,
 										definitionSave.substring(0, Var_Define.getDefineIndex(definitionSave)) + ccuFileArray.get(i));
-								System.out.println(ccuFileArray.get(i));
 							}
 
 						} else {
+
+							// checks whether it is a TELE or COORDS definition with [ and ]
+							if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 4
+									|| Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 5) {
+								if (defineLineCalc.isEmpty() == false && defineLineCalc.contains("[") && defineLineCalc.contains("]")
+										&& defineLineCalc.indexOf("[") < defineLineCalc.indexOf("]")) {
+									defineLineCalc = defineLineCalc.substring(defineLineCalc.indexOf("[") + 1,
+											defineLineCalc.indexOf("]"));
+
+									if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 4) {
+										switch (defineLineCalc) {
+										case "x":
+											defineCoordsCalc = 0;
+											break;
+										case "y":
+											defineCoordsCalc = 1;
+											break;
+										case "z":
+											defineCoordsCalc = 2;
+											break;
+										case "2x":
+											defineCoordsCalc = 3;
+											break;
+										case "2y":
+											defineCoordsCalc = 4;
+											break;
+										case "2z":
+											defineCoordsCalc = 5;
+											break;
+										}
+									}
+
+									if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 5) {
+										switch (defineLineCalc) {
+										case "x":
+											defineCoordsCalc = 0;
+											break;
+										case "y":
+											defineCoordsCalc = 1;
+											break;
+										case "z":
+											defineCoordsCalc = 2;
+											break;
+										case "ry":
+											defineCoordsCalc = 3;
+											break;
+										case "rx":
+											defineCoordsCalc = 4;
+											break;
+										}
+									}
+
+									if (defineCoordsCalc == null) {
+										System.out.println("ERROR: Parameter '" + defineLineCalc + "' is incorrect in line '"
+												+ ccuFileArray.get(i) + "'");
+										System.exit(0);
+									}
+
+									// array for coords
+									defineParamsCalc = Var_Define.arrayDefineSave.get(defIndex)[3].split(" ");
+
+									// removes anything in between [ and ]
+									defineLineCalc = ccuFileArray.get(i).substring(0, ccuFileArray.get(i).indexOf("["))
+											+ ccuFileArray.get(i).substring(ccuFileArray.get(i).indexOf("]") + 1);
+
+									// replaces the definition with the specific coordinate
+									defineLineCalc = defineLineCalc.replaceFirst(
+											Pattern.quote(Var_Define.arrayDefineSave.get(defIndex)[2]),
+											defineParamsCalc[defineCoordsCalc]);
+									ccuFileArray.set(i, defineLineCalc);
+
+									continue;
+								}
+							}
+
 							// sets it as is because params aren't an issue
 							ccuFileArray.set(i,
 									ccuFileArray.get(i).replaceFirst(Pattern.quote(Var_Define.arrayDefineSave.get(defIndex)[2]),
 											Var_Define.arrayDefineSave.get(defIndex)[3]));
+							
+							// add definition after
+							if (definitionSave != null) {
+								ccuFileArray.set(i,
+										definitionSave.substring(0, Var_Define.getDefineIndex(definitionSave)) + ccuFileArray.get(i));
+							}
 						}
 
 						// tests for recurring definition
@@ -424,6 +506,10 @@ public class ReadCCUFile {
 
 				if (Short_Selector.getCommand(ccuFileArray.get(i), tabNum) != null) {
 					ccuFileArray.set(i, Short_Selector.getCommand(ccuFileArray.get(i), tabNum));
+				}
+				
+				if (FunctionNick.getCommand(ccuFileArray.get(i), tabNum) != null) {
+					ccuFileArray.set(i, FunctionNick.getCommand(ccuFileArray.get(i), tabNum));
 				}
 			}
 		}

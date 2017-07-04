@@ -14,19 +14,21 @@ public class Main {
 	/* TODO - Goal is 3 to 4 per day
 	 * For the program
 	 * -Combiners - DONE
-	 * -Better RCON usage
-	 * -Usage of BRANCH via MFUNC and nicknames
 	 * -Scoreboard shortcuts - DONE
 	 * -Execute shortcuts - DONE
 	 * -Selector shortcuts - DONE
-	 * -Check whether commands exist
+	 * -Definitions working with COORDS and TELE - DONE
+	 * -Definitions within definitions - DONE
+	 * -Usage of BRANCH via MFUNC - DONE
+	 * -MFUNC nicknames - DONE
+	 * 
+	 * -Repeated definitions - Already works apparently
+	 * -Check whether commands exist - WILL NOT DO
+	 * 
+	 * -Better RCON usage
 	 * -Server override using 'minecraft:' when detecing commands exist
 	 * -Combiner options using .mcfunction
 	 * -Save coords option
-	 * -Definitions working with COORDS and TELE
-	 * -Repeated definitions - Already works apparently
-	 * -Definitions within definitions - DONE
-	 * 
 	 * 
 	 * General statements
 	 * -FUNC
@@ -47,14 +49,14 @@ public class Main {
 	 * -Escaping using '/' at the beginning of a line
 	 * -Skipping lines using ';'
 	 */
-	
+
 	// .replaceAll("^\\s+", "") = space to the left
 	// .replaceAll("\\s+$", "") = space to the right
 
 	public static void main(String[] args) {
 		// Reads the .ini file and gets the options
 		ReadConfig.getConfigOptions();
-		
+
 		if (ReadConfig.regFilePath.toString().endsWith(".ccu") == false) {
 			System.out.println("ERROR: File does not end with '.ccu'");
 			System.exit(0);

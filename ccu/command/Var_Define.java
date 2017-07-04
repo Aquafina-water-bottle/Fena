@@ -51,7 +51,7 @@ public class Var_Define {
 		String defineName = null;
 		String defintionGet = null;
 		Boolean isGlobal = null;
-		int paramMaxNum = 1;
+		int paramMaxNum = 0;
 
 		String[] coordsArrayDisp = null;
 		String[] coordsArrayCalc = null;
@@ -268,6 +268,8 @@ public class Var_Define {
 		return null;
 	}
 
+	// This is used specifically for getting the part past the definition name
+	// There cannot be a definition in replacement for 'GLOBAL' or 'TELE' or 'COORDS'
 	public static int getDefineIndex(String getLine) {
 		String statementEncase = getLine.replaceFirst("DEF", "").replaceAll("^\\s+", "");
 		String statementEncaseCalc = null;
@@ -279,7 +281,7 @@ public class Var_Define {
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 			}
 		}
-		
+
 		if (statementEncase.contains(" ")) {
 			statementEncaseCalc = statementEncase.substring(0, statementEncase.indexOf(" "));
 			if (statementEncaseCalc.equals("GLOBAL") || statementEncaseCalc.equals("TELE") || statementEncaseCalc.equals("COORDS")) {
@@ -287,9 +289,9 @@ public class Var_Define {
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 			}
 		}
-		
+
 		statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
-		
+
 		return getLine.length() - statementEncase.length();
 	}
 
