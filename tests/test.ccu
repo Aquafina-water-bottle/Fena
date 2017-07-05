@@ -8,6 +8,13 @@ DEF ScOP scoreboard players operation
 DEF $test$ ScOP @p TEST
 DEF $test$ $test$ @p SPtp
 
+DEF def1 def2
+DEF def2 def3
+
+DEF recurring_asdf aRecurringDefinition
+DEF aRecurringDefinition aSecondRecurringDefinition
+DEF aSecondRecurringDefinition yeah this is recurring_asdf
+
 OPTIONS:
 	blockOption stonebrick 0
 	coordsOption 383 69 95
@@ -39,7 +46,10 @@ MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 	say GREATEST
 	DEF COMMANDS Dankest |0| memes |1|
 	say COMMANDS(asdf;asdf2) -SPLIT- COMMANDS(more)
+	say COMMANDS()
 	say COMMANDS
+	say asdf def1 asdf
+///	say aRecurringDefinition
 	say WOOOOOOOOOOOO
 	
 	//=	test cond
@@ -69,6 +79,9 @@ MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 		say asdf2
 		say asdf2
 		say asdf2
+		
+	MFUNC {asdf}:
+		say theRealAsdf
 	
 	say YESSSSSSSSSSSSSSSSS
 	setblock Grp_APulse air 0
@@ -107,6 +120,7 @@ GROUP {Grp_AyyLmao}:
 	say 1
 	say 2
 	say 3
+	kill @a[anobjective=3]
 	COND:
 		testCond
 		testCond2
@@ -147,6 +161,15 @@ GROUP {Grp_AyyLmao}:
 	say 15
 	say 16
 	say 17
+	
+	FUNC {Func_goingToActivate}:
+		Ye
+		ARGS
+
+	FUNC {ACTIVATE Func_goingToActivate ARGS}:
+		ayy
+		lmao
+		
 	say 18
 	say 19
 	say 20
@@ -241,7 +264,7 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	execute @a ~ ~ ~ say test
 	@a ~ ~ ~ say test
 	@a say test
-	@s @s @s
+	@s @s @s kill @a[RRti>=1,testTag,kek>=1<=3]
 	
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
 	@a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
@@ -266,10 +289,8 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	
 /// except the following few of course
 	@a not_a_block 0 say test
-///	especially the following - it's just plain wrong wtf are you doing
+///	especially the following - it's just plain wrong wtf are you doing this isn't autocorrect
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 ~ ~ ~ say test
-	
-	
 	
 	@e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
 	@e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
@@ -301,7 +322,6 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 		RRd_y J> @e[type=ArmorStand,RRStand]
 		RRd_y L> @e[type=ArmorStand,RRStand]
 		RRd_y E>
-	
 	
 	ayylmao RRti + 1 {DisabledSlots:2096896}
 	ayylmao RRti - 1 {DisabledSlots:2096896}

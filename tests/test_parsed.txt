@@ -1,27 +1,27 @@
-Grp_APulse | PULSE		[384 70 96 | stonebrick 0]
+GROUP | Grp_APulse | PULSE		[384 70 96 | stonebrick 0]
 	say a
 	say b
 	function custom:RayCaster/theHunted/test/init
 
-Grp_B | PULSE		[384 72 96 | stonebrick 0]
+GROUP | Grp_B | PULSE		[384 72 96 | stonebrick 0]
 	say b
 
-Grp_C | CLOCK		[384 74 96 | stonebrick 0]
+GROUP | Grp_C | CLOCK		[384 74 96 | stonebrick 0]
 	say c
 
-Grp_DClock | CLOCK		[384 76 96 | stonebrick 0]
+GROUP | Grp_DClock | CLOCK		[384 76 96 | stonebrick 0]
 	say d
 
-Grp_E | PULSE		[384 78 96 | stonebrick 0]
+GROUP | Grp_E | PULSE		[384 78 96 | stonebrick 0]
 	say e
 
-Grp_F | PULSE		[384 80 96 | stonebrick 0]
+GROUP | Grp_F | PULSE		[384 80 96 | stonebrick 0]
 	say f
 
-Grp_G | PULSE		[384 82 96 | stonebrick 0]
+GROUP | Grp_G | PULSE		[384 82 96 | stonebrick 0]
 	say g
 
-Grp_Test2 | PULSE		[384 84 96 | stonebrick 0]
+GROUP | Grp_Test2 | PULSE		[384 84 96 | stonebrick 0]
 	say test
 	say ABORTMISSION
 	say hell yeah
@@ -29,7 +29,7 @@ Grp_Test2 | PULSE		[384 84 96 | stonebrick 0]
 	lmao
 	ayy
 
-Grp_Test | PULSE		[384 70 98 | stonebrick 0]
+GROUP | Grp_Test | PULSE		[384 70 98 | stonebrick 0]
 	say $SA$
 	ayy
 	say LiterallyAbortMission
@@ -37,7 +37,7 @@ Grp_Test | PULSE		[384 70 98 | stonebrick 0]
 	fill 384 72 98 399 74 98 air 0
 	say not_yas
 
-Grp_AyyLmao | PULSE		[384 72 98 | stonebrick 0]
+GROUP | Grp_AyyLmao | PULSE		[384 72 98 | stonebrick 0]
 	setblock 384 72 98 air 0
 	say MEMES 5
 	say -301 MARKER
@@ -48,6 +48,7 @@ Grp_AyyLmao | PULSE		[384 72 98 | stonebrick 0]
 	say 1
 	say 2
 	say 3
+	minecraft:kill @a[score_anobjective=3,score_anobjective_min=3]
 	 | testCond
 	 L testCond2
 	say 4
@@ -66,12 +67,13 @@ Grp_AyyLmao | PULSE		[384 72 98 | stonebrick 0]
 	say 15
 	say 16
 	say 17
+	Func_goingToActivate
 	say 18
 	say 19
 	say 20
 	say 21
 
-Grp_TheBestGroup | PULSE		[384 76 98 | stonebrick 0]
+GROUP | Grp_TheBestGroup | PULSE		[384 76 98 | stonebrick 0]
 	say a
 	say b
 	say c
@@ -94,7 +96,7 @@ Grp_TheBestGroup | PULSE		[384 76 98 | stonebrick 0]
 	 | say s
 	 L say t
 
-Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
+GROUP | Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
 	say 1
 	say 2 asdfasdf
 	say 3 asdfasdf
@@ -129,7 +131,7 @@ Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
 	say 32
 	tellraw @a {"text":"ayylmao"}
 
-Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
+GROUP | Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	say rekt
 	say rekt again
 	say abde
@@ -142,7 +144,7 @@ Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	execute @a ~ ~ ~ say test
 	execute @a ~ ~ ~ say test
 	execute @a ~ ~ ~ say test
-	execute @s ~ ~ ~ execute @s ~ ~ ~ execute @s
+	execute @s ~ ~ ~ execute @s ~ ~ ~ execute @s ~ ~ ~ minecraft:kill @a[score_RRti_min=1,tag=testTag,score_kek_min=1,score_kek=3]
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
@@ -214,3 +216,38 @@ Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	say @a[score_name=4,score_name_min=3] @a[score_name=4,score_name_min=4] @a[score_name=2]
 	scoreboard players operation @p TEST @p SPtp
 	fill 384 70 100 399 75 100 air 0
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+MFUNC | MFunc_MainRaycaster | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/init.mcfunction
+	say test
+	say test
+	say test
+	say test
+
+MFUNC | MFunc_MainInit | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/test/init.mcfunction
+	say asdf
+	say asdf
+	say asdf
+	say asdf
+
+MFUNC | MFunc_InitTest | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/test.mcfunction
+	say asdf2
+	say asdf2
+	say asdf2
+
+MFUNC | MFunc_Test | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/asdf.mcfunction
+	say theRealAsdf
+
+MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/Main.mcfunction
+	say THESE
+	say ARE
+	say THE
+	say GREATEST
+	say Dankest asdf memes asdf2 -SPLIT- Dankest more memes 
+	say Dankest  memes 
+	say Dankest  memes 
+	say asdf def3 asdf
+	say WOOOOOOOOOOOO
+	say YESSSSSSSSSSSSSSSSS
+	setblock 384 70 96 air 0

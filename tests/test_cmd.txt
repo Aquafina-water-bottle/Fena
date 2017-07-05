@@ -30,28 +30,30 @@ setblock 391 72 98 chain_command_block 5 replace {Command:"say 0 MARKER",TrackOu
 setblock 392 72 98 chain_command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:1b}
 setblock 393 72 98 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
 setblock 394 72 98 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 395 72 98 chain_command_block 13 replace {Command:"testCond",TrackOutput:0b,auto:1b}
-setblock 396 72 98 chain_command_block 13 replace {Command:"testCond2",TrackOutput:0b,auto:1b}
-setblock 397 72 98 chain_command_block 5 replace {Command:"say 4",TrackOutput:0b,auto:1b}
-setblock 398 72 98 chain_command_block 5 replace {Command:"say 5",TrackOutput:0b,auto:1b}
-setblock 399 72 98 chain_command_block 1 replace {Command:"say 6",TrackOutput:0b,auto:1b}
-setblock 399 73 98 chain_command_block 4 replace {Command:"say 7",TrackOutput:0b,auto:1b}
-setblock 398 73 98 chain_command_block 4 replace {Command:"say 8",TrackOutput:0b,auto:1b}
-setblock 397 73 98 chain_command_block 4 replace {Command:"say 9",TrackOutput:0b,auto:1b}
-setblock 396 73 98 chain_command_block 12 replace {Command:"say LiterallyAbortMission",TrackOutput:0b,auto:1b}
-setblock 395 73 98 chain_command_block 12 replace {Command:"say $SA$",TrackOutput:0b,auto:1b}
-setblock 394 73 98 chain_command_block 12 replace {Command:"say yas",TrackOutput:0b,auto:1b}
-setblock 393 73 98 chain_command_block 12 replace {Command:"say 11",TrackOutput:0b,auto:1b}
-setblock 392 73 98 chain_command_block 12 replace {Command:"say 12",TrackOutput:0b,auto:1b}
-setblock 391 73 98 chain_command_block 12 replace {Command:"say 13",TrackOutput:0b,auto:1b}
-setblock 390 73 98 chain_command_block 12 replace {Command:"say 14",TrackOutput:0b,auto:1b}
-setblock 389 73 98 chain_command_block 4 replace {Command:"say 15",TrackOutput:0b,auto:1b}
-setblock 388 73 98 chain_command_block 4 replace {Command:"say 16",TrackOutput:0b,auto:1b}
-setblock 387 73 98 chain_command_block 4 replace {Command:"say 17",TrackOutput:0b,auto:1b}
-setblock 386 73 98 chain_command_block 4 replace {Command:"say 18",TrackOutput:0b,auto:1b}
-setblock 385 73 98 chain_command_block 4 replace {Command:"say 19",TrackOutput:0b,auto:1b}
-setblock 384 73 98 chain_command_block 1 replace {Command:"say 20",TrackOutput:0b,auto:1b}
-setblock 384 74 98 chain_command_block 5 replace {Command:"say 21",TrackOutput:0b,auto:1b}
+setblock 395 72 98 chain_command_block 5 replace {Command:"minecraft:kill @a[score_anobjective=3,score_anobjective_min=3]",TrackOutput:0b,auto:1b}
+setblock 396 72 98 chain_command_block 13 replace {Command:"testCond",TrackOutput:0b,auto:1b}
+setblock 397 72 98 chain_command_block 13 replace {Command:"testCond2",TrackOutput:0b,auto:1b}
+setblock 398 72 98 chain_command_block 5 replace {Command:"say 4",TrackOutput:0b,auto:1b}
+setblock 399 72 98 chain_command_block 1 replace {Command:"say 5",TrackOutput:0b,auto:1b}
+setblock 399 73 98 chain_command_block 4 replace {Command:"say 6",TrackOutput:0b,auto:1b}
+setblock 398 73 98 chain_command_block 4 replace {Command:"say 7",TrackOutput:0b,auto:1b}
+setblock 397 73 98 chain_command_block 4 replace {Command:"say 8",TrackOutput:0b,auto:1b}
+setblock 396 73 98 chain_command_block 4 replace {Command:"say 9",TrackOutput:0b,auto:1b}
+setblock 395 73 98 chain_command_block 12 replace {Command:"say LiterallyAbortMission",TrackOutput:0b,auto:1b}
+setblock 394 73 98 chain_command_block 12 replace {Command:"say $SA$",TrackOutput:0b,auto:1b}
+setblock 393 73 98 chain_command_block 12 replace {Command:"say yas",TrackOutput:0b,auto:1b}
+setblock 392 73 98 chain_command_block 12 replace {Command:"say 11",TrackOutput:0b,auto:1b}
+setblock 391 73 98 chain_command_block 12 replace {Command:"say 12",TrackOutput:0b,auto:1b}
+setblock 390 73 98 chain_command_block 12 replace {Command:"say 13",TrackOutput:0b,auto:1b}
+setblock 389 73 98 chain_command_block 12 replace {Command:"say 14",TrackOutput:0b,auto:1b}
+setblock 388 73 98 chain_command_block 4 replace {Command:"say 15",TrackOutput:0b,auto:1b}
+setblock 387 73 98 chain_command_block 4 replace {Command:"say 16",TrackOutput:0b,auto:1b}
+setblock 386 73 98 chain_command_block 4 replace {Command:"say 17",TrackOutput:0b,auto:1b}
+setblock 385 73 98 chain_command_block 4 replace {Command:"Func_goingToActivate",TrackOutput:0b,auto:1b}
+setblock 384 73 98 chain_command_block 1 replace {Command:"say 18",TrackOutput:0b,auto:1b}
+setblock 384 74 98 chain_command_block 5 replace {Command:"say 19",TrackOutput:0b,auto:1b}
+setblock 385 74 98 chain_command_block 5 replace {Command:"say 20",TrackOutput:0b,auto:1b}
+setblock 386 74 98 chain_command_block 5 replace {Command:"say 21",TrackOutput:0b,auto:1b}
 setblock 385 76 98 command_block 5 replace {Command:"say a",TrackOutput:0b,auto:0b}
 setblock 386 76 98 chain_command_block 5 replace {Command:"say b",TrackOutput:0b,auto:1b}
 setblock 387 76 98 chain_command_block 5 replace {Command:"say c",TrackOutput:0b,auto:1b}
@@ -118,7 +120,7 @@ setblock 393 70 100 chain_command_block 5 replace {Command:"execute @p ~ ~ ~ exe
 setblock 394 70 100 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
 setblock 395 70 100 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
 setblock 396 70 100 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
-setblock 397 70 100 chain_command_block 5 replace {Command:"execute @s ~ ~ ~ execute @s ~ ~ ~ execute @s",TrackOutput:0b,auto:1b}
+setblock 397 70 100 chain_command_block 5 replace {Command:"execute @s ~ ~ ~ execute @s ~ ~ ~ execute @s ~ ~ ~ minecraft:kill @a[score_RRti_min=1,tag=testTag,score_kek_min=1,score_kek=3]",TrackOutput:0b,auto:1b}
 setblock 398 70 100 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
 setblock 399 70 100 chain_command_block 1 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
 setblock 399 71 100 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
