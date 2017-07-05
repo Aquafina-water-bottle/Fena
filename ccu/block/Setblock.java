@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import ccu.command.Cmd_Group;
+import ccu.command.Cmd_MFunc;
 import ccu.command.Var_Options;
 import ccu.general.GeneralFile;
 import ccu.general.ReadConfig;
@@ -179,7 +180,7 @@ public class Setblock {
 							groupType = "PULSE";
 						}
 
-						writer.println(Cmd_Group.arrayGroupSave.get(i)[0] + " | " + groupType + "\t\t["
+						writer.println("GROUP | " + Cmd_Group.arrayGroupSave.get(i)[0] + " | " + groupType + "\t\t["
 								+ Box.groupNameCoordArray[i].getString() + " | " + Cmd_Group.arraySetblockSave.get(i) + "]");
 					}
 
@@ -200,6 +201,31 @@ public class Setblock {
 					}
 				}
 			}
+			
+			writer.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+			
+			for (int i = 0; i < Cmd_MFunc.arrayMFuncSave.size(); i++) {
+				for (int j = 0; j < Cmd_MFunc.arrayMFuncSave.get(i).length; j++) {
+
+					// line breaks between each group
+					if (i != 0 && j == 0) {
+						writer.println("");
+					}
+
+					// sets group name
+					if (j == 0) {
+						if (Cmd_MFunc.arrayMFuncNameSave.get(i).isEmpty()) {
+							writer.println("MFUNC | " + Cmd_MFunc.arrayMFuncSave.get(i)[0]);
+						} else {
+							writer.println("MFUNC | " + Cmd_MFunc.arrayMFuncNameSave.get(i) + " | " + Cmd_MFunc.arrayMFuncSave.get(i)[0]);
+						}
+					} else {
+						// the actual commands
+					writer.println("\t" + Cmd_MFunc.arrayMFuncSave.get(i)[j]);
+					}
+				}
+			}
+			
 			writer.close();
 
 		}

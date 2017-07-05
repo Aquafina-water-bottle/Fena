@@ -70,7 +70,7 @@ public class Cmd_Group {
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
 					
 					if (statementArgs.contains(" ") == false) {
-						System.out.println("ERROR: Invalid parameters for 'BLOCK' in line '" + this.fullLineGet + "'");
+						System.out.println("ERROR: Invalid arguments for 'BLOCK' in line '" + this.fullLineGet + "'");
 						System.exit(0);
 					}
 					
@@ -123,7 +123,7 @@ public class Cmd_Group {
 						gotParam = true;
 					} else {
 						System.out.println(
-								"ERROR: There are two parameters that conflict with each other in line '" + this.fullLineGet + "'");
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 						System.exit(0);
 					}
 					break;
@@ -136,7 +136,7 @@ public class Cmd_Group {
 						gotParam = true;
 					} else {
 						System.out.println(
-								"ERROR: There are two parameters that conflict with each other in line '" + this.fullLineGet + "'");
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 						System.exit(0);
 					}
 					break;
@@ -147,7 +147,7 @@ public class Cmd_Group {
 
 					if (setblockCalc == null) {
 						if (statementArgs.contains(" ") == false) {
-							System.out.println("ERROR: Invalid parameters for 'BLOCK' in line '" + this.fullLineGet + "'");
+							System.out.println("ERROR: Invalid arguments for 'BLOCK' in line '" + this.fullLineGet + "'");
 							System.exit(0);
 						}
 						setblockCalc = statementArgs.substring(0, statementArgs.indexOf(" "));

@@ -1,9 +1,8 @@
-package ccu.mcfunction;
+package ccu.command;
 
-import ccu.command.Cmd_MFunc;
+import ccu.general.ReadConfig;
 
-public class FunctionNick {
-
+public class ServerOverride {
 	public static String getCommand(String getString, int tabNum) {
 
 		String getWhiteSpace = null;
@@ -11,22 +10,28 @@ public class FunctionNick {
 		String[] shortcutCalcArray = null;
 		String shortcutResultCalc = null;
 		boolean changedLine = false;
+		boolean shortcutDataTag = false;
 
 		getWhiteSpace = getString.substring(0, tabNum);
 		shortcutCalc = getString.substring(tabNum);
 		shortcutCalcArray = shortcutCalc.split(" ");
-		for (int i = 0; i < shortcutCalcArray.length; i++) {
 
-			// if it ends with 'function'
-			if (shortcutCalcArray[i].endsWith("function")) {
-				for (int j = 0; j < Cmd_MFunc.arrayMFuncNameSave.size(); j++) {
-					if (i + 1 < shortcutCalcArray.length && shortcutCalcArray[i + 1].equals(Cmd_MFunc.arrayMFuncNameSave.get(j))) {
-						shortcutCalcArray[i + 1] = Cmd_MFunc.fileMFuncCommandSave.get(j);
+		for (int j = 0; j < shortcutCalcArray.length; j++) {
+
+			// if it's a data tag --> 3 (DATATAG)
+			if (shortcutCalcArray[j].startsWith("{")) {
+				shortcutDataTag = true;
+			}
+			if (shortcutDataTag == false) {
+				for (String cmdGet : ReadConfig.serverOverrideArray) {
+					if (shortcutCalcArray[j].equals(cmdGet)) {
+						shortcutCalcArray[j] = "minecraft:" + shortcutCalcArray[j];
 						changedLine = true;
 						break;
 					}
 				}
 			}
+			
 		}
 
 		if (changedLine == true) {

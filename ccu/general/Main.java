@@ -21,13 +21,14 @@ public class Main {
 	 * -Definitions within definitions - DONE
 	 * -Usage of BRANCH via MFUNC - DONE
 	 * -MFUNC nicknames - DONE
+	 * -Server override using 'minecraft:' when detecing commands exist - DONE
+	 * -Putting MFUNC into the parsed file - DONE
 	 * 
 	 * -Repeated definitions - Already works apparently
 	 * -Check whether commands exist - WILL NOT DO
 	 * 
 	 * -Better RCON usage
-	 * -Server override using 'minecraft:' when detecing commands exist
-	 * -Combiner options using .mcfunction
+	 * -Combiner options using .mcfunction - do when multiparse works
 	 * -Save coords option
 	 * 
 	 * General statements

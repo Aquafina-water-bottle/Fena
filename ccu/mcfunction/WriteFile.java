@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.regex.Pattern;
 
 import ccu.command.Cmd_MFunc;
 import ccu.command.Var_Options;
