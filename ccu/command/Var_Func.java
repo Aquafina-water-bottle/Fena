@@ -16,66 +16,14 @@ public class Var_Func {
 	 * {GLOBAL args}:
 	 * {args}:
 	 * -ACTIVATE is essentially just putting 'CCU.xpNumber' at the end of the function
-	 * eg.
-	 * FUNC {GLOBAL CCU.xpNumber}:
-	 * 		ayy
-	 * 		lmao
-	 * 		args
-	 * 		using the arguments really well here
-	 * 
-	 * 
-	 * FUNC {args ACTVATE CCU.xpNumber}
-	 * 		the
-	 * 		actual
-	 * 		arguments
-	 * 
-	 * the above FUNC is saved and CCU.xpNumber is called as a function call
-	 * 
-	 * 
-	 * 
+	 * 	
 	 * How functions should work - No checkCommands() recurring loop
 	 * Instead, just copies as is without any modification
-	 * if there is a function call, it will check for params and whether it is isolated in a singular line
-	 * then pastes in replacement of the line (aka returns function array) --> it should automatically do resetArray
+	 * Function call without CALL will be modified to add the call and reparsed
 	 * 
 	 * To check for recurring functions with the combination of definitions and functions-
 	 * -does a different constructor for ccuSubSetFile (add another string for function name)
 	 * -If at any point a function call matches the function name, error + stop
-	 * 
-	 * FUNC {GLOBAL Func_Lmao}:
-	 * 		say |0|
-	 * 		FUNC GLOBAL {Func_Asdf}:
-	 * 			say |0|
-	 * 			say |0;1| first, |0| second
-	 * 		Func_Asdf(3)
-	 * Func_Lmao(1)
-	 * Func_Asdf(5)
-	 * 
-	 * turns into
-	 * 
-	 * say |0|
-	 * FUNC GLOBAL {Func_Asdf}:
-	 * 		say |0|
-	 * 		say |0;1| first, |0| second
-	 * Func_Asdf(3)
-	 * Func_Asdf(5)
-	 * 
-	 * turns into
-	 * 
-	 * say |0|
-	 * say 3
-	 * say |0| first, 3 second
-	 * say 5
-	 * say |0| first, 5 second
-	 * 
-	 * 
-	 * turns into
-	 * 
-	 * say 1
-	 * say 3
-	 * say 1 first, 3 second
-	 * say 5
-	 * say 1 first, 5 second
 	 */
 
 	// FUNC array save
@@ -86,6 +34,9 @@ public class Var_Func {
 
 	// Save tabNum per func
 	public static ArrayList<Integer> arrayFuncTabNumSave = new ArrayList<Integer>();
+
+	// Save param number
+	public static ArrayList<Integer> arrayFuncParamSave = new ArrayList<Integer>();
 
 	// Array calc (removing tab spaces)
 	private String[] arrayFuncCalc = null;
@@ -110,6 +61,7 @@ public class Var_Func {
 		Boolean hasActivated = null;
 		boolean activateConfirm = false;
 		String activatedFunc = null;
+		int paramMaxNum = 0;
 
 		String statementEncase = this.fullLineGet.replaceFirst("FUNC", "").replaceAll("^\\s+", "");
 		if (statementEncase.startsWith("{") && statementEncase.endsWith("}:")) {
@@ -124,13 +76,13 @@ public class Var_Func {
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
 				case "GLOBAL":
 					// removes GLOBAL
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					isGlobal = true;
 					break;
 
 				case "ACTIVATE":
 					// removes ACTIVATE
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					hasActivated = true;
 
 					if (statementArgs.contains(" ") == false) {
@@ -139,6 +91,26 @@ public class Var_Func {
 					}
 
 					activatedFunc = statementArgs.substring(0, statementArgs.indexOf(" "));
+
+					// testing if it has parameters and does not have an ending bracket
+					while (true) {
+						if (activatedFunc.contains("(") && activatedFunc.endsWith(")") == false) {
+							if (statementArgs.contains(" ")) {
+
+								// removes current
+								statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+								activatedFunc += " " + statementArgs.substring(0, statementArgs.indexOf(" "));
+							} else {
+								System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+								System.exit(0);
+							}
+						} else {
+							break;
+						}
+					}
+
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+
 					break;
 				}
 			}
@@ -148,7 +120,7 @@ public class Var_Func {
 				case "GLOBAL":
 					if (isGlobal == null) {
 						// removes GLOBAL
-						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 						isGlobal = true;
 
 					} else {
@@ -161,7 +133,7 @@ public class Var_Func {
 				case "ACTIVATE":
 					if (hasActivated == null) {
 						// removes ACTIVATE
-						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 						hasActivated = true;
 
 						if (statementArgs.contains(" ") == false) {
@@ -177,7 +149,7 @@ public class Var_Func {
 								if (statementArgs.contains(" ")) {
 
 									// removes current
-									statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+									statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 									activatedFunc += " " + statementArgs.substring(0, statementArgs.indexOf(" "));
 								} else {
 									System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
@@ -188,7 +160,7 @@ public class Var_Func {
 							}
 						}
 
-						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 
 					} else {
 						System.out.println(
@@ -203,10 +175,6 @@ public class Var_Func {
 			// sets global settings
 			if (isGlobal == null) {
 				isGlobal = false;
-			}
-
-			if (isGlobal == true) {
-				this.tabNum = 0;
 			}
 
 			// sets activate settings
@@ -231,19 +199,48 @@ public class Var_Func {
 				}
 			}
 
-			// Adds full function array
+			// Checks if the function name is literally nothing
+			if (statementArgs.trim().length() == 0) {
+				System.out.println("ERROR: Function name at '" + this.fullLineGet + "' is blank");
+				System.exit(0);
+			}
+
+			// a function name cannot be anything in the exceptionArray
+			for (String checkException : Var_Define.exceptionArray) {
+				if (statementArgs.equals(checkException)) {
+					System.out.println("ERROR: A function cannot be '" + statementArgs + "' in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+			}
+
+			// Checks if the function has spaces
+			if (statementArgs.trim().contains(" ")) {
+				System.out.println("ERROR: Function name at '" + this.fullLineGet + "' contains spaces");
+				System.exit(0);
+			}
+
+			// Adds the function to the arrayList
 			arrayFuncCalc = new String[arrayGet.size()];
 			for (int i = 0; i < arrayGet.size(); i++) {
+				// Adds full function array while removing tab spaces
 				arrayFuncCalc[i] = arrayGet.get(i).substring(this.tabNum);
+			}
+			
+			// Gets param number
+			paramMaxNum = ParamUtils.countParams(arrayGet);
+			arrayFuncParamSave.add(paramMaxNum);
+
+			// Adds tab num
+			if (isGlobal == true) {
+				arrayFuncTabNumSave.add(0);
+			} else {
+				arrayFuncTabNumSave.add(this.tabNum - 1);
 			}
 
 			arrayFuncSave.add(arrayFuncCalc);
 
 			// Adds the name
 			arrayFuncNameSave.add(statementArgs);
-
-			// Adds tab num
-			arrayFuncTabNumSave.add(this.tabNum);
 		}
 
 		if (activateConfirm) {

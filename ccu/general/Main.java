@@ -24,6 +24,8 @@ public class Main {
 	 * -Server override using 'minecraft:' when detecing commands exist - DONE
 	 * -Putting MFUNC into the parsed file - DONE
 	 * 
+	 * -FUNC - DONE (now with future params)
+	 * 
 	 * -Repeated definitions - Already works apparently
 	 * -Check whether commands exist - WILL NOT DO
 	 * 
@@ -32,7 +34,6 @@ public class Main {
 	 * -Save coords option
 	 * 
 	 * General statements
-	 * -FUNC
 	 * -ARRAY
 	 * -IF
 	 * -LOOP

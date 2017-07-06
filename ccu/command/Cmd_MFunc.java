@@ -101,7 +101,7 @@ public class Cmd_MFunc {
 
 			} else {
 				arrayMFuncNameSave.add("");
-				branchCalc = Var_Options.filePathFuncOption.toString() + "/" + statementArgs;
+				branchCalc += "/" + statementArgs;
 			}
 
 			// replaces all \ with /
@@ -148,7 +148,7 @@ public class Cmd_MFunc {
 				branchCalc = branchCalc + ".mcfunction";
 				// System.out.println("File created: " + branchCalc + ".mcfunction");
 			}
-			
+
 			// TODO move this to the writeFile class
 			System.out.println("File created: '" + branchCalc + "'");
 

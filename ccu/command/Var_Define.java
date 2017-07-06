@@ -20,7 +20,7 @@ public class Var_Define {
 			"DEF", "ARRAY", "GLOBAL", "COORDS", "TELE",
 			"GROUP", "PULSE", "CLOCK", "BLOCK",
 			"USE", "BEG", "END", "NOSPACE",
-			"FUNC", "ACTIVATE",
+			"FUNC", "ACTIVATE", "CALL", 
 			"MFUNC", "BRANCH",
 			
 			"COND", "OPTIONS", "UNASSIGN"
@@ -150,7 +150,7 @@ public class Var_Define {
 				defineName = statementEncase.substring(0, statementEncase.indexOf(" "));
 				defintionGet = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 
-				// Checks of defineName is literally nothing
+				// Checks if defineName is literally nothing
 				if (defineName.trim().length() == 0) {
 					System.out.println("ERROR: Definition '" + this.fullLineGet + "' is blank");
 					System.exit(0);
@@ -164,12 +164,8 @@ public class Var_Define {
 					}
 				}
 
-				// Checks how many parameters exist (up to 1000 because why the hell would you need more than 1000 parameters)
-				for (int i = 0; i < 1000; i++) {
-					if (defintionGet.contains("|" + i + "|")) {
-						paramMaxNum = i + 1;
-					}
-				}
+				// Checks how many parameters exist
+				paramMaxNum = ParamUtils.countParams(defintionGet);
 
 			} else {
 				System.out.println("ERROR: '" + this.fullLineGet + "' does not define anything without spaces");
