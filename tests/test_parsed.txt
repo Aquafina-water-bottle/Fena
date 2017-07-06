@@ -67,8 +67,20 @@ GROUP | Grp_AyyLmao | PULSE		[384 72 98 | stonebrick 0]
 	say 15
 	say 16
 	say 17
-	Func_goingToActivate
+	say Ye
+	say ayy
+	say lmao
+	TheGreatestARGS (shouldn't be considered a function)
 	say 18
+	say Ye
+	say ayy
+	say lmao
+	TheGreatestARGS (shouldn't be considered a function)
+	asdfasdfsaf
+	asdfae564rwe
+	d45e
+	78y65re7
+	6756re
 	say 19
 	say 20
 	say 21
@@ -102,6 +114,11 @@ GROUP | Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
 	say 3 asdfasdf
 	say 4 asdfasdf
 	say 5 asdfasdf
+	asdfasdfsaf asdfasdf
+	asdfae564rwe asdfasdf
+	d45e asdfasdf
+	78y65re7 asdfasdf
+	6756re asdfasdf
 	say 6 asdfasdf
 	asdfasdf say 7
 	asdfasdf say 8
@@ -123,6 +140,13 @@ GROUP | Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
 	say 24
 	say 25
 	say 26
+	say ayy
+	say asdf
+	say (first 15) (second 526)
+	say FIRST
+	say 5 10 SECOND
+	say 1 2 FIRST
+	say test
 	say 27
 	say 28
 	say 29
@@ -236,7 +260,7 @@ MFUNC | MFunc_InitTest | C:/Users/Austin/Documents/Austin/powder game code/eGO/S
 	say asdf2
 	say asdf2
 
-MFUNC | MFunc_Test | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/asdf.mcfunction
+MFUNC | MFunc_Test | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/asdf.mcfunction
 	say theRealAsdf
 
 MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/Main.mcfunction
@@ -249,5 +273,17 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say Dankest  memes 
 	say asdf def3 asdf
 	say WOOOOOOOOOOOO
+	say 1
+	say 33|saytest|
+	say 10
+	say 4
+	say 5
+	say 6
+	say 1
+	say 3|saytest|
+	say 
+	say 1
+	say 3|saytest|
+	say 
 	say YESSSSSSSSSSSSSSSSS
 	setblock 384 70 96 air 0

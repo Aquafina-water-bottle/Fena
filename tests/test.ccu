@@ -15,6 +15,17 @@ DEF recurring_asdf aRecurringDefinition
 DEF aRecurringDefinition aSecondRecurringDefinition
 DEF aSecondRecurringDefinition yeah this is recurring_asdf
 
+FUNC {GetRandFunc1}:
+	say 1
+	say |0|3|saytest|
+	say |2|
+	
+FUNC {GetRandFunc2}:
+	say 4
+	say 5
+	say 6
+	
+
 OPTIONS:
 	blockOption stonebrick 0
 	coordsOption 383 69 95
@@ -38,7 +49,7 @@ OPTIONS:
 FUNC {ARGS ACTIVATE CCU.xpNumber}
 	say test
 =//
-
+//(test)
 MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 	say THESE
 	say ARE
@@ -51,6 +62,8 @@ MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 	say asdf def1 asdf
 ///	say aRecurringDefinition
 	say WOOOOOOOOOOOO
+	
+	CALL {GetRandFunc1(3;2;10;5), GetRandFunc2, GetRandFunc1, GetRandFunc1()}
 	
 	//=	test cond
 	COND:
@@ -117,6 +130,7 @@ GROUP {Grp_AyyLmao}:
 	say $DankCoords$[z] MARKER
 	say $DankCoords$[ry] MARKER
 	say $DankCoords$[rx] MARKER
+	FUNC {UnUsedFunc}:
 	say 1
 	say 2
 	say 3
@@ -163,14 +177,44 @@ GROUP {Grp_AyyLmao}:
 	say 17
 	
 	FUNC {Func_goingToActivate}:
-		Ye
+		say Ye
 		ARGS
+		TheGreatestARGS (shouldn't be considered a function)
 
 	FUNC {ACTIVATE Func_goingToActivate ARGS}:
-		ayy
-		lmao
+		say ayy
+		say lmao
 		
 	say 18
+	Func_goingToActivate
+	
+	
+	FUNC {GLOBAL Func_goingToActivate}:
+		asdfasdfsaf
+		asdfae564rwe
+		d45e
+		78y65re7
+		6756re
+		
+	CALL {Func_goingToActivate}
+
+	FUNC {Recurring1}:
+		Ayy
+		Lmao
+		Recurring2
+	
+	FUNC {Recurring2}:
+		Ayy
+		Lmao
+		Recurring3
+		
+	FUNC {Recurring3}:
+		Ayy
+		Lmao
+		Recurring1
+	
+	/// Recurring1
+	
 	say 19
 	say 20
 	say 21
@@ -206,6 +250,7 @@ GROUP {Grp_TheGreatestGroup}:
 		say 3
 		say 4
 		say 5
+		Func_goingToActivate
 		say 6
 	USE {BEG asdfasdf}:
 		say 7
@@ -231,6 +276,25 @@ GROUP {Grp_TheGreatestGroup}:
 	say 24
 	say 25
 	say 26
+	
+	FUNC {Func_TestDefinition}:
+		say ayy
+		DEF $Apparently$ say (first |0|) (second |0;1|)
+		say asdf
+		$Apparently$(15)
+	
+	Func_TestDefinition(526)
+	
+	FUNC {Func_TestDefinition}:
+		say FIRST
+		FUNC {Func_TestDefinition2}:
+			say |0| |1| SECOND
+			say |0;1| |1;1| FIRST
+		Func_TestDefinition2(5;10)
+		say test
+	
+	Func_TestDefinition(1;2)
+	
 	say 27
 	say 28
 	say 29
