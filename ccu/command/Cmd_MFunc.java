@@ -3,6 +3,8 @@ package ccu.command;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import ccu.general.GeneralFile;
+
 public class Cmd_MFunc {
 
 	// The actual commands
@@ -127,27 +129,8 @@ public class Cmd_MFunc {
 			 * if file is asdf.mcfunction
 			 *  -does nothing woot woot
 			 */
-
-			if (branchCalc.contains(".")) {
-				if (branchCalc.substring(branchCalc.lastIndexOf(".")).equals(".mcfunction")) {
-					// success
-					// System.out.println("File created: '" + branchCalc + "'");
-				} else {
-					String fileTypeTemp = branchCalc.substring(branchCalc.lastIndexOf("."));
-					if (branchCalc.lastIndexOf("/") > branchCalc.lastIndexOf(".")) {
-						branchCalc += ".mcfunction";
-						// System.out.println("File created: " + branchCalc + ".mcfunction");
-					} else {
-						System.out.println(
-								"WARNING: File '" + branchCalc + "' ends with '" + fileTypeTemp + "' instead of '.mcfunction'");
-						branchCalc = branchCalc.substring(0, branchCalc.length() - fileTypeTemp.length()) + ".mcfunction";
-						System.out.println("File created: '" + branchCalc + "'");
-					}
-				}
-			} else {
-				branchCalc = branchCalc + ".mcfunction";
-				// System.out.println("File created: " + branchCalc + ".mcfunction");
-			}
+			
+			branchCalc = GeneralFile.checkFileExtension(branchCalc, ".mcfunction");
 
 			// TODO move this to the writeFile class
 			System.out.println("File created: '" + branchCalc + "'");

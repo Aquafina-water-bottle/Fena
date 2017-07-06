@@ -3,7 +3,7 @@ package ccu.command;
 import java.util.ArrayList;
 
 public class Con_Loop {
-	private ArrayList<String> arrayUseReturn = new ArrayList<String>();
+	private ArrayList<String> arrayLoopReturn = new ArrayList<String>();
 	private ArrayList<String> arrayGet = new ArrayList<String>();
 	private int tabNum;
 	private String fullLineGet;
@@ -168,6 +168,6 @@ public class Con_Loop {
 			System.exit(0);
 		}
 
-		return arrayUseReturn;
+		return arrayLoopReturn;
 	}
 }

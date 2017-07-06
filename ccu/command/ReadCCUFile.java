@@ -29,8 +29,7 @@ public class ReadCCUFile {
 	// Constructor
 	public ReadCCUFile(File fileName) {
 		GeneralFile ccuFile = new GeneralFile(fileName);
-		this.ccuFileArray = GeneralFile.removeSkipLineBlock(
-				GeneralFile.removeComment(GeneralFile.removeCommentBlock(ccuFile.getFileArray(), "//=", "=//"), "//"), "/*", "*/");
+		this.ccuFileArray = GeneralFile.parseCCU(ccuFile.getFileArray());
 		// .replaceAll("\\s+$", "")
 	}
 
@@ -51,6 +50,7 @@ public class ReadCCUFile {
 			"GROUP",
 			"DEF",
 			"FUNC",
+			"IMPORT",
 			// "UNASSIGN",
 			"CALL", 
 			// "ARRAY",
@@ -362,7 +362,12 @@ public class ReadCCUFile {
 						singleLineStatement = true;
 						break;
 
-					// case "IMPORT":
+					case "IMPORT":
+						Var_Import objImport = new Var_Import(ccuFileArray.get(i), this.tabNum);
+						getCalcArray = objImport.getArray();
+						resetArray = true;
+						singleLineStatement = true;
+						break;						
 
 					// case "OBJREV":
 
@@ -491,26 +496,17 @@ public class ReadCCUFile {
 					getStatement = true;
 					// combines any given arrays
 					this.ccuFileArray.clear();
-					if (getCalcArray == null || getCalcArray.size() == 0) {
-						for (String line : subListTopArray) {
-							this.ccuFileArray.add(line);
-						}
-
-						for (String line : subListBottomArray) {
-							this.ccuFileArray.add(line);
-						}
-					} else {
-						for (String line : subListTopArray) {
-							this.ccuFileArray.add(line);
-						}
-						for (String line : getCalcArray) {
-							this.ccuFileArray.add(line);
-						}
-						for (String line : subListBottomArray) {
-							this.ccuFileArray.add(line);
-						}
+					
+					if (subListTopArray != null) {
+						ccuFileArray.addAll(subListTopArray);
 					}
-
+					if (getCalcArray != null) {
+						ccuFileArray.addAll(getCalcArray);
+					}
+					if (subListBottomArray != null) {
+						ccuFileArray.addAll(subListBottomArray);
+					}
+					
 					// only resets when the the statement isn't a single line
 					if (singleLineStatement == false) {
 

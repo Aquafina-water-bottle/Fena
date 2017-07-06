@@ -51,6 +51,7 @@ public class ReadConfig {
 	public static Integer mcVersion = null;
 	public static File regFilePath = null;
 	public static File globalCombinerFilePath = null;
+	public static File importLibraryPath = null;
 	public static Boolean preventServerKick = null;
 	public static Boolean serverPlugins = null;
 	public static String[] groupSuffixPulse = null;
@@ -93,9 +94,13 @@ public class ReadConfig {
 				case "regFilePath":
 					regFilePath = new File(tempInput);
 					break;
-
+					
 				case "globalCombinerFilePath":
 					globalCombinerFilePath = new File(tempInput);
+					break;
+
+				case "importLibraryPath":
+					importLibraryPath = new File(tempInput);
 					break;
 
 				case "preventServerKick":

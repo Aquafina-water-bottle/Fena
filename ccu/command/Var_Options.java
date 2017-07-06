@@ -88,7 +88,7 @@ public class Var_Options {
 			for (String optionName : optionArray) {
 
 				if (line.contains(optionName) && line.trim().substring(0, optionName.length()).equals(optionName)) {
-					String tempInput = line.substring(optionName.length() + 1).trim();
+					String tempInput = line.substring(line.indexOf(optionName) + optionName.length() + 1).trim();
 
 					if (optionName == "blockOption") {
 						Var_Options.blockOption = tempInput;

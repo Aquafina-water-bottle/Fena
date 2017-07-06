@@ -31,6 +31,7 @@ public class GeneralFile {
 		e.printStackTrace();
 	}
 
+	// gets file array
 	public ArrayList<String> getFileArray() {
 		InputStream in = null;
 
@@ -67,6 +68,35 @@ public class GeneralFile {
 		}
 		return doc;
 	}
+	
+	public static ArrayList<String> parseCCU(ArrayList<String> getArray) {
+		ArrayList<String> returnArray = GeneralFile.removeSkipLineBlock(
+				GeneralFile.removeComment(GeneralFile.removeCommentBlock(getArray, "//=", "=//"), "//"), "/*", "*/");
+		return returnArray;
+	}
+
+	public static String checkFileExtension(String fileGet, String fileExtension) {
+		if (fileGet.contains(".")) {
+			if (fileGet.substring(fileGet.lastIndexOf(".")).equals(fileExtension)) {
+				// success
+				// System.out.println("File created: '" + fileGet + "'");
+			} else {
+				String fileTypeTemp = fileGet.substring(fileGet.lastIndexOf("."));
+				if (fileGet.lastIndexOf("/") > fileGet.lastIndexOf(".")) {
+					fileGet += fileExtension;
+					// System.out.println("File created: " + fileGet + fileExtension);
+				} else {
+					System.out.println(
+							"WARNING: File '" + fileGet + "' ends with '" + fileTypeTemp + "' instead of '" + fileExtension + "'");
+					fileGet = fileGet.substring(0, fileGet.length() - fileTypeTemp.length()) + fileExtension;
+				}
+			}
+		} else {
+			fileGet += fileExtension;
+		}
+
+		return fileGet;
+	}
 
 	public static ArrayList<String> removeComment(ArrayList<String> fileArrayList, String startComment) {
 		ArrayList<String> doc = new ArrayList<String>();
@@ -96,7 +126,8 @@ public class GeneralFile {
 		boolean commentBlock = false;
 
 		for (String line : fileArrayList) {
-			if (line.trim().length() >= startComment.length() && line.trim().substring(0, startComment.length()).equals(startComment)) {
+			if (line.trim().length() >= startComment.length()
+					&& line.trim().substring(0, startComment.length()).equals(startComment)) {
 				commentBlock = true;
 			}
 
@@ -146,9 +177,37 @@ public class GeneralFile {
 		return doc;
 	}
 
+	public static ArrayList<File> getFilesInFolder(final File folder, final String fileExtension) {
+		ArrayList<File> fileArray = new ArrayList<File>();
+
+		for (final File fileEntry : folder.listFiles()) {
+			if (fileEntry.getName().endsWith(fileExtension)) {
+				fileArray.add(fileEntry);
+			}
+		}
+
+		return fileArray;
+	}
+
+	public static ArrayList<File> getAllFiles(final File folder, final String fileExtension) {
+		ArrayList<File> fileArray = new ArrayList<File>();
+
+		for (final File fileEntry : folder.listFiles()) {
+			if (fileEntry.isDirectory()) {
+				fileArray.addAll(getAllFiles(fileEntry, fileExtension));
+			} else {
+				if (fileEntry.getName().endsWith(fileExtension)) {
+					fileArray.add(fileEntry);
+				}
+			}
+		}
+
+		return fileArray;
+	}
+
 	// Checks for directory
 	/*
-	public static void dirCheckError(File pathName, String varPathName) {
+	public static void checkDir(File pathName, String varPathName) {
 		if (pathName == null) {
 			System.out.println("WARNING: Directory " + varPathName + " was not found in the .ccu file");
 		} else {

@@ -241,6 +241,9 @@ public class Var_Func {
 
 			// Adds the name
 			arrayFuncNameSave.add(statementArgs);
+		} else {
+			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
+			System.exit(0);
 		}
 
 		if (activateConfirm) {

@@ -22,6 +22,7 @@ public class Var_Define {
 			"USE", "BEG", "END", "NOSPACE",
 			"FUNC", "ACTIVATE", "CALL", 
 			"MFUNC", "BRANCH",
+			"IMPORT", "LIBRARY", "*",
 			
 			"COND", "OPTIONS", "UNASSIGN"
 			};

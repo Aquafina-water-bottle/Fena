@@ -344,7 +344,7 @@ public class Box {
 
 	public static void finalizeCoords() {
 		/** Get coordinates in commands
-		 * TODO: This must also include imported name_dat.ccu files
+//		 * TODO: This must also include imported name_dat.txt files
 		 * 
 		 * Use stringbuilder --> split array, detect whether any match exactly with group name
 		 * - detects whether i - 1 is exactly "setblock" or "fill", then do coords accordingly
@@ -361,7 +361,7 @@ public class Box {
 
 		// Gets the name_dat.ccu file as a string to open
 		String regFileCalc = ReadConfig.regFilePath.getName().toString();
-		regFileCalc = regFileCalc.substring(0, regFileCalc.indexOf(".ccu")) + "_dat.ccu";
+		regFileCalc = regFileCalc.substring(0, regFileCalc.indexOf(".ccu")) + "_dat.txt";
 		File writeDatFile = new File(ReadConfig.regFilePath.getParentFile().toString() + "//" + regFileCalc);
 
 		// Adds to the initialCommands (previous fill air command)
