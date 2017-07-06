@@ -51,7 +51,7 @@ public class ReadCCUFile {
 			"DEF",
 			"FUNC",
 			"IMPORT",
-			// "UNASSIGN",
+			"UNASSIGN",
 			"CALL", 
 			// "ARRAY",
 			// "OBJADD",
@@ -176,7 +176,8 @@ public class ReadCCUFile {
 
 					// if a definition matches up
 					if (getBegCalcString.trim().contains(Var_Define.arrayDefineSave.get(defIndex)[2])
-							&& this.tabNum >= Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[1])) {
+							&& this.tabNum >= Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[1])
+							&& getBegCalcString.trim().startsWith("UNASSIGN") == false) {
 						recheckLine = true;
 
 						begIndexCalc = getBegCalcString.indexOf(Var_Define.arrayDefineSave.get(defIndex)[2]);
@@ -320,7 +321,7 @@ public class ReadCCUFile {
 				if (ccuFileArray.get(i).endsWith(")") && ccuFileArray.get(i).contains("(")) {
 					if (ccuFileArray.get(i).substring(0, ccuFileArray.get(i).indexOf("(")).trim()
 							.equals(Var_Func.arrayFuncNameSave.get(funcIndex))) {
-						
+
 						Var_Call objCall = new Var_Call(ccuFileArray.get(i), this.tabNum, checkFunction);
 						ccuFileArray.set(i, objCall.getFuncCall());
 						break;
@@ -343,7 +344,6 @@ public class ReadCCUFile {
 
 					// gets statement
 					String statementTest = ccuFileArray.get(i).substring(this.tabNum, statement.length() + this.tabNum);
-
 					// TODO: Will gather DEF, IMPORT, TEAMREV, OBJREV in this area
 					// This is to get the array for said statement
 
@@ -367,7 +367,14 @@ public class ReadCCUFile {
 						getCalcArray = objImport.getArray();
 						resetArray = true;
 						singleLineStatement = true;
-						break;						
+						break;
+
+					case "UNASSIGN":
+						Var_Unassign objUnassign = new Var_Unassign(ccuFileArray.get(i), this.tabNum);
+						getCalcArray = objUnassign.getArray();
+						resetArray = true;
+						singleLineStatement = true;
+						break;
 
 					// case "OBJREV":
 
@@ -496,7 +503,7 @@ public class ReadCCUFile {
 					getStatement = true;
 					// combines any given arrays
 					this.ccuFileArray.clear();
-					
+
 					if (subListTopArray != null) {
 						ccuFileArray.addAll(subListTopArray);
 					}
@@ -506,7 +513,7 @@ public class ReadCCUFile {
 					if (subListBottomArray != null) {
 						ccuFileArray.addAll(subListBottomArray);
 					}
-					
+
 					// only resets when the the statement isn't a single line
 					if (singleLineStatement == false) {
 

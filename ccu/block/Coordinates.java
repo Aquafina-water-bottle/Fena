@@ -96,7 +96,7 @@ public class Coordinates {
 		this.x += coor.x;
 		this.y += coor.y;
 		this.z += coor.z;
-		
+
 		if (coor.relativeX.equals("~")) {
 			this.relativeX = "~";
 		}
@@ -106,7 +106,7 @@ public class Coordinates {
 		if (coor.relativeZ.equals("~")) {
 			this.relativeZ = "~";
 		}
-		
+
 		return this;
 	}
 
@@ -127,7 +127,7 @@ public class Coordinates {
 		this.z += offset[2];
 		return this;
 	}
-	
+
 	public Coordinates switchDirection() {
 		int tempZ = this.z;
 		int tempX = this.x;

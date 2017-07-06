@@ -71,7 +71,7 @@ public class Con_Use {
 						useAtBeg = true;
 					} else {
 						System.out.println(
-								"ERROR: There are two parameters that conflict with each other in line '" + this.fullLineGet + "'");
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 					}
 					// removes BEG
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
@@ -82,7 +82,7 @@ public class Con_Use {
 						useAtBeg = false;
 					} else {
 						System.out.println(
-								"ERROR: There are two parameters that conflict with each other in line '" + this.fullLineGet + "'");
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 					}
 					// removes END
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
@@ -93,7 +93,7 @@ public class Con_Use {
 						noSpace = true;
 					} else {
 						System.out.println(
-								"ERROR: There are two parameters that conflict with each other in line '" + this.fullLineGet + "'");
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 					}
 					// removes NOSPACE
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);

@@ -32,7 +32,7 @@ public class Cmd_Group {
 		 * "PULSE" and "CLOCK" to specify type
 		 */
 		// System.out.println("LINE " + fullLineGet);
-		
+
 		boolean gotParam = false;
 		String setblockCalc = null;
 		boolean validBlock = false;
@@ -68,12 +68,12 @@ public class Cmd_Group {
 				case "BLOCK":
 					// removes BLOCK
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
-					
+
 					if (statementArgs.contains(" ") == false) {
 						System.out.println("ERROR: Invalid arguments for 'BLOCK' in line '" + this.fullLineGet + "'");
 						System.exit(0);
 					}
-					
+
 					setblockCalc = statementArgs.substring(0, statementArgs.indexOf(" "));
 
 					// checks whether it's a valid block - if not, ERROR
@@ -105,7 +105,6 @@ public class Cmd_Group {
 					} else {
 						setblockCalc = setblockCalc + " " + 0;
 					}
-					
 
 					// Adds setblock type
 					arraySetblockSave.add(setblockCalc);
@@ -181,29 +180,27 @@ public class Cmd_Group {
 						} else {
 							setblockCalc = setblockCalc + " " + 0;
 						}
-						
 
 						// Adds setblock type
 						arraySetblockSave.add(setblockCalc);
 						break;
-						
+
 					} else {
 						System.out.println(
-								"ERROR: There are two parameters that conflict with each other in line '" + this.fullLineGet + "'");
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 					}
 
 				}
 			}
-			
+
 			// if setblock type is null, adds regular option
 			if (setblockCalc == null) {
 				arraySetblockSave.add(Var_Options.blockOption);
 			}
-			
-			
+
 			// tests for any spaces in the group name
 			if (statementArgs.contains(" ") || statementArgs.contains("\t")) {
-				System.out.println("ERROR: Parameters in line '" + this.fullLineGet + "' contains unnecessary spaces");
+				System.out.println("ERROR: Arguments in line '" + this.fullLineGet + "' contains unnecessary spaces");
 				System.exit(0);
 			}
 

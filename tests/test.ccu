@@ -49,7 +49,7 @@ FUNC {ARGS ACTIVATE CCU.xpNumber}
 	say test
 =//
 //(test)
-MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
+MFUNC 		{BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 	say THESE
 	say ARE
 	say THE
@@ -62,7 +62,7 @@ MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 ///	say aRecurringDefinition
 	say WOOOOOOOOOOOO
 	
-	IMPORT {WITHIN *}
+	IMPORT {LIBRARY General\utils.ccu}
 	CCU.xpNumber
 	
 	CALL {GetRandFunc1(3;2;10;5), GetRandFunc2, GetRandFunc1, GetRandFunc1()}
@@ -297,6 +297,9 @@ GROUP {Grp_TheGreatestGroup}:
 	
 	Func_TestDefinition(1;2)
 	
+	UNASSIGN {FUNC Func_TestDefinition}
+	Func_TestDefinition
+	
 	say 27
 	say 28
 	say 29
@@ -416,6 +419,29 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	say @a[name<5>=3] @a[name<5>3] @a[name<3]
 	
 	$test$
+	
+	DEF $test$ say test
+	DEF $test$ say test2
+	
+	$test$
+	UNASSIGN {DEF $test$}
+	$test$
+	UNASSIGN {DEF $test$}
+	$test$
+	
+	FUNC {GLOBAL Func_AyyLmao}:
+		say ayy
+		say lmao
+		
+	Func_AyyLmao
+	
+	FUNC {Func_AyyLmao}:
+		say lmao compared to ayy
+	
+	Func_AyyLmao
+	
+	UNASSIGN {FUNC GLOBAL Func_AyyLmao}
+	Func_AyyLmao
 	
 ///	the following will result in an error
 ///	say @a[name>=3>5]

@@ -35,14 +35,12 @@ public class Con_Cond {
 				String whitespaceCalc = this.arrayGet.get(i).substring(0,
 						(this.arrayGet.get(i).length() - this.arrayGet.get(i).replaceAll("^\\s+", "").length()));
 				if (whitespaceCalc.contains(" ")) {
-					System.out.println(
-							"ERROR: Line '" + this.arrayGet.get(i) + "' contains spaces instead of tab spaces");
+					System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains spaces instead of tab spaces");
 					System.exit(0);
 				}
 
 				if (whitespaceCalc.length() - whitespaceCalc.replaceAll("\t", "").length() != this.tabNum) {
-					System.out.println(
-							"ERROR: Line '" + this.arrayGet.get(i) + "' contains an incorrect number of tab spaces");
+					System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains an incorrect number of tab spaces");
 					System.exit(0);
 				}
 

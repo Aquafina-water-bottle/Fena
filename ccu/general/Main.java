@@ -25,6 +25,7 @@ public class Main {
 	 * -Putting MFUNC into the parsed file - DONE
 	 * 
 	 * -FUNC - DONE (now with future params)
+	 * -IMPORT - DONE (without importing .dat files)
 	 * 
 	 * -Repeated definitions - Already works apparently
 	 * -Check whether commands exist - WILL NOT DO
@@ -37,7 +38,6 @@ public class Main {
 	 * -ARRAY
 	 * -IF
 	 * -LOOP
-	 * -IMPORT
 	 * -UNASSIGN
 	 * -OBJADD / OBJREV
 	 * -TEAMADD / TEAMREV

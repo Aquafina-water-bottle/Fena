@@ -108,9 +108,7 @@ public class Var_Func {
 							break;
 						}
 					}
-
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
-
 					break;
 				}
 			}
@@ -219,13 +217,32 @@ public class Var_Func {
 				System.exit(0);
 			}
 
+			// Checks whether the defineName and tabnum is the same anywhere --> will remove
+			int funcIndex = 0;
+			int tabNumCalc = 0;
+			
+			if (isGlobal == false) {
+				tabNumCalc = this.tabNum - 1;
+			}
+			
+			while (funcIndex < arrayFuncNameSave.size()) {
+				if (arrayFuncNameSave.get(funcIndex).equals(statementArgs) && arrayFuncTabNumSave.get(funcIndex).equals(tabNumCalc)) {
+					Var_Func.arrayFuncSave.remove(funcIndex);
+					Var_Func.arrayFuncNameSave.remove(funcIndex);
+					Var_Func.arrayFuncTabNumSave.remove(funcIndex);
+					Var_Func.arrayFuncParamSave.remove(funcIndex);
+				} else {
+					funcIndex++;
+				}
+			}
+
 			// Adds the function to the arrayList
 			arrayFuncCalc = new String[arrayGet.size()];
 			for (int i = 0; i < arrayGet.size(); i++) {
 				// Adds full function array while removing tab spaces
 				arrayFuncCalc[i] = arrayGet.get(i).substring(this.tabNum);
 			}
-			
+
 			// Gets param number
 			paramMaxNum = ParamUtils.countParams(arrayGet);
 			arrayFuncParamSave.add(paramMaxNum);

@@ -14,9 +14,14 @@ public class Var_Import {
 	 * GROUPCOORDS - to import only group coordinates from the name_dat.ccu files
 	 * Defaults to LIBRARY
 	 * 
-	 * LIBRARY should not be used with GROUPCOORDS - all ccu files that aren't specifically meant for importing should be elsewhere
 	 * LIBRARY cannot work with WITHIN
-	 * * cannot work with WITHIN
+	 * 
+	 * LIBRARY + * --> All of the library is imported
+	 * WITHIN + * --> All files within the same folder as the main are imported
+	 * NORMAL + * --> All files in the given directory stated (AS WELL AS FOLDERS WITHIN IT) are imported
+	 * LIBRARY --> Library file path with the given path will be imported
+	 * WITHIN --> Tests if the file is either within the folder or a folder up (prioritizes the file within the folder) and imports that
+	 * NORMAL --> The file specified is imported 
 	 * 
 	 * whether the functions / definitions / arrays in the imported files are global depends on the actual file itself
 	 * aka the funcs / defs / arrays should be specified with "global" themselves
@@ -72,7 +77,6 @@ public class Var_Import {
 			}
 
 			if (statementArgs.contains(" ")) {
-
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
 				case "LIBRARY":
 					importLookupType = 1;
@@ -105,6 +109,10 @@ public class Var_Import {
 				case "LIBRARY":
 					if (importLookupType == null) {
 						importLookupType = 1;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					// removes LIBRARY
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
@@ -113,6 +121,10 @@ public class Var_Import {
 				case "WITHIN":
 					if (importLookupType == null) {
 						importLookupType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					// removes WITHIN
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
@@ -121,6 +133,10 @@ public class Var_Import {
 				case "*":
 					if (importDirectory == null) {
 						importDirectory = true;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					// removes *
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
@@ -129,6 +145,10 @@ public class Var_Import {
 				case "GROUPCOORDS":
 					if (importType == null) {
 						importType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					// removes GROUPCOORDS
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
@@ -139,6 +159,10 @@ public class Var_Import {
 				case "LIBRARY":
 					if (importLookupType == null) {
 						importLookupType = 1;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					statementArgs = null;
 					break;
@@ -146,6 +170,10 @@ public class Var_Import {
 				case "WITHIN":
 					if (importLookupType == null) {
 						importLookupType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					statementArgs = null;
 					break;
@@ -153,6 +181,10 @@ public class Var_Import {
 				case "*":
 					if (importDirectory == null) {
 						importDirectory = true;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					statementArgs = null;
 					break;
@@ -160,6 +192,10 @@ public class Var_Import {
 				case "GROUPCOORDS":
 					if (importType == null) {
 						importType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					statementArgs = null;
 					break;
@@ -331,12 +367,12 @@ public class Var_Import {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 			System.exit(0);
 		}
-		
+
 		// Adds the proper whitespace
 		for (int i = 0; i < arrayReturn.size(); i++) {
 			arrayReturn.set(i, whitespaceCalc + arrayReturn.get(i));
 		}
-		
+
 		return arrayReturn;
 	}
 }

@@ -129,7 +129,7 @@ public class Cmd_MFunc {
 			 * if file is asdf.mcfunction
 			 *  -does nothing woot woot
 			 */
-			
+
 			branchCalc = GeneralFile.checkFileExtension(branchCalc, ".mcfunction");
 
 			// TODO move this to the writeFile class

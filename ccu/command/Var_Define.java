@@ -58,7 +58,6 @@ public class Var_Define {
 		String[] coordsArrayCalc = null;
 		boolean testInt = false;
 		boolean testFloat = false;
-		boolean foundRepeat = false;
 
 		/* defineType
 		 * null = unspecified, will be specified after
@@ -112,8 +111,8 @@ public class Var_Define {
 				if (isGlobal == null) {
 					isGlobal = true;
 				} else {
-					System.out.println("ERROR: There are at least two parameters that conflict with each other in line '"
-							+ this.fullLineGet + "'");
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 					System.exit(0);
 				}
 				// removes GLOBAL
@@ -124,8 +123,8 @@ public class Var_Define {
 				if (defineType == null) {
 					defineType = 4;
 				} else {
-					System.out.println("ERROR: There are at least two parameters that conflict with each other in line '"
-							+ this.fullLineGet + "'");
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 					System.exit(0);
 				}
 				// removes COORDS
@@ -136,8 +135,8 @@ public class Var_Define {
 				if (defineType == null) {
 					defineType = 5;
 				} else {
-					System.out.println("ERROR: There are at least two parameters that conflict with each other in line '"
-							+ this.fullLineGet + "'");
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 					System.exit(0);
 				}
 				// removes TELE
@@ -249,18 +248,18 @@ public class Var_Define {
 			arrayDefineCalc[4] = paramMaxNum + "";
 
 			// Checks whether the defineName and tabnum is the same anywhere --> will remove
-			for (int i = 0; i < arrayDefineSave.size(); i++) {
-				if (arrayDefineSave.get(i)[2].equals(defineName) && arrayDefineSave.get(i)[1].equals(tabNum + "")) {
-					arrayDefineSave.set(i, arrayDefineCalc);
-					foundRepeat = true;
+			int defIndex = 0;
+			while (defIndex < arrayDefineSave.size()) {
+				if (arrayDefineSave.get(defIndex)[2].equals(defineName) && arrayDefineSave.get(defIndex)[1].equals(tabNum + "")) {
+					arrayDefineSave.remove(defIndex);
+				} else {
+					defIndex++;
 				}
 			}
+			
+			arrayDefineSave.add(arrayDefineCalc);
 
 			// System.out.println(arrayDefineCalc[2] + " | " + arrayDefineCalc[1]);
-
-			if (foundRepeat == false) {
-				arrayDefineSave.add(arrayDefineCalc);
-			}
 		}
 		return null;
 	}

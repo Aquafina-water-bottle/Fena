@@ -183,16 +183,18 @@ public class Box {
 								try {
 									blockArrayCalc[coordsCalcY][coordsCalcXZ] = 10;
 								} catch (ArrayIndexOutOfBoundsException e) {
-									System.out.println("ERROR: The developer goofed up when trying to make the box (REPORT IMMEDIATELY)");
+									System.out.println(
+											"ERROR: The developer goofed up when trying to make the box (REPORT IMMEDIATELY)");
 									System.exit(0);
 								}
 
 								// success
 								if (lengthCalc == GroupStructure.groupLineArray.get(i)) {
-									blockArrayCalc = surroundingArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox,
-											10, 2);
+									blockArrayCalc = surroundingArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY,
+											arrayApprox, 10, 2);
 
-									blockArray = removeArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox, 10, 1);
+									blockArray = removeArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox, 10,
+											1);
 
 									for (int j = 0; j < GroupStructure.groupCoordsArray.get(i).length; j++) {
 										GroupStructure.groupCoordsArray.get(i)[j] = GroupStructure.groupCoordsArray.get(i)[j]
@@ -213,7 +215,8 @@ public class Box {
 												.addCoordinates(Var_Options.coordsOption);
 									} else {
 										groupNameFillArray[i] = groupNameCoordsObj
-												.addCoordinates(16, 16, (int) (Math.ceil(GroupStructure.groupLineArray.get(i) / 16) + 1))
+												.addCoordinates(16, 16,
+														(int) (Math.ceil(GroupStructure.groupLineArray.get(i) / 16) + 1))
 												.switchDirection().addCoordinates(Var_Options.coordsOption);
 									}
 
@@ -243,8 +246,8 @@ public class Box {
 										coordsCalcXZ++;
 									} else {
 										lengthCalc = 0;
-										blockArray = removeArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox, 10,
-												0);
+										blockArray = removeArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox,
+												10, 0);
 										break;
 									}
 								}
@@ -257,8 +260,8 @@ public class Box {
 										coordsCalcXZ++;
 									} else {
 										lengthCalc = 0;
-										blockArray = removeArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox, 10,
-												0);
+										blockArray = removeArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox,
+												10, 0);
 										break;
 									}
 								}
@@ -344,7 +347,7 @@ public class Box {
 
 	public static void finalizeCoords() {
 		/** Get coordinates in commands
-//		 * TODO: This must also include imported name_dat.txt files
+		//		 * TODO: This must also include imported name_dat.txt files
 		 * 
 		 * Use stringbuilder --> split array, detect whether any match exactly with group name
 		 * - detects whether i - 1 is exactly "setblock" or "fill", then do coords accordingly

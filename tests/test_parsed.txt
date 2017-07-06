@@ -1,328 +1,27 @@
-GROUP | Grp_OhFuckYeah | PULSE		[384 70 96 | glass 0]
-	say 1
-	say 2
-	say 3
-	say 4
-	say 5
-	say 6
-	say 7
-	say 8
-	say 9
-	say 10
-	say 11
-	say 12
-	say 13
-	say 14
-	say 15
-	say 16
-	say 17
-	say 18
-	say 19
-	say 20
-	say 21
-	say 22
-	say 23
-	say 24
-	say 25
-	say 26
-	say 27
-	say 28
-	say 29
-	say 30
-	say 31
-	say 32
-	say 33
-	say 34
-	say 35
-	say 36
-	say 37
-	say 38
-	say 39
-	say 40
-	say 41
-	say 42
-	say 43
-	say 44
-	say 45
-	say 46
-	say 47
-	say 48
-	say 49
-	say 50
-	say 51
-	say 52
-	say 53
-	say 54
-	say 55
-	say 56
-	say 57
-	say 58
-	say 59
-	say 60
-	say 61
-	say 62
-	say 63
-	say 64
-	say 65
-	say 66
-	say 67
-	say 68
-	say 69
-	say 70
-	say 71
-	say 72
-	say 73
-	say 74
-	say 75
-	say 76
-	say 77
-	say 78
-	say 79
-	say 80
-	say 81
-	say 82
-	say 83
-	say 84
-	say 85
-	say 86
-	say 87
-	say 88
-	say 89
-	say 90
-	say 91
-	say 92
-	say 93
-	say 94
-	say 95
-	say 96
-	say 97
-	say 98
-	say 99
-	say 100
-	say 101
-	say 102
-	say 103
-	say 104
-	say 105
-	say 106
-	say 107
-	say 108
-	say 109
-	say 110
-	say 111
-	say 112
-	say 113
-	say 114
-	say 115
-	say 116
-	say 117
-	say 118
-	say 119
-	say 120
-	say 121
-	say 122
-	say 123
-	say 124
-	say 125
-	say 126
-	say 127
-	say 128
-	say 129
-	say 130
-	say 131
-	say 132
-	say 133
-	say 134
-	say 135
-	say 136
-	say 137
-	say 138
-	say 139
-	say 140
-	say 141
-	say 142
-	say 143
-	say 144
-	say 145
-	say 146
-	say 147
-	say 148
-	say 149
-	say 150
-	say 151
-	say 152
-	say 153
-	say 154
-	say 155
-	say 156
-	say 157
-	say 158
-	say 159
-	say 160
-	say 161
-	say 162
-	say 163
-	say 164
-	say 165
-	say 166
-	say 167
-	say 168
-	say 169
-	say 170
-	say 171
-	say 172
-	say 173
-	say 174
-	say 175
-	say 176
-	say 177
-	say 178
-	say 179
-	say 180
-	say 181
-	say 182
-	say 183
-	say 184
-	say 185
-	say 186
-	say 187
-	say 188
-	say 189
-	say 190
-	say 191
-	say 192
-	say 193
-	say 194
-	say 195
-	say 196
-	say 197
-	say 198
-	say 199
-	say 200
-	say 201
-	say 202
-	say 203
-	say 204
-	say 205
-	say 206
-	say 207
-	say 208
-	say 209
-	say 210
-	say 211
-	say 212
-	say 213
-	say 214
-	say 215
-	say 216
-	say 217
-	say 218
-	say 219
-	say 220
-	say 221
-	say 222
-	say 223
-	say 224
-	say 225
-	say 226
-	say 227
-	say 228
-	say 229
-	say 230
-	say 231
-	say 232
-	say 233
-	say 234
-	say 235
-	say 236
-	say 237
-	say 238
-	say 239
-	say 240
-	say 241
-	say 242
-	say 243
-	say 244
-	say 245
-	say 246
-	say 247
-	say 248
-	say 249
-	say 250
-	say 251
-	say 252
-	say 253
-	say 254
-	say 255
-	say 256
-	say 257
-	say 258
-	say 259
-	say 260
-	say 261
-	say 262
-	say 263
-	say 264
-	say 265
-	say 266
-	say 267
-	say 268
-	say 269
-	say 270
-	say 271
-	say 272
-	say 273
-	say 274
-	say 275
-	say 276
-	say 277
-	say 278
-	say 279
-	say 280
-	say 281
-	say 282
-	say 283
-	say 284
-	say 285
-	say 286
-	say 287
-	say 288
-	say 289
-	say 290
-	say 291
-	say 292
-	say 293
-	say 294
-	say 295
-	say 296
-	say 297
-	say 298
-	say 299
-
-GROUP | Grp_APulse | PULSE		[384 70 98 | glass 0]
+GROUP | Grp_APulse | PULSE		[384 70 96 | stonebrick 0]
 	say a
 	say b
-	function RayCaster:theHunted/test/init
+	function custom:RayCaster/theHunted/test/init
 
-GROUP | Grp_B | PULSE		[384 72 98 | glass 0]
+GROUP | Grp_B | PULSE		[384 72 96 | stonebrick 0]
 	say b
 
-GROUP | Grp_C | CLOCK		[384 74 98 | glass 0]
+GROUP | Grp_C | CLOCK		[384 74 96 | stonebrick 0]
 	say c
 
-GROUP | Grp_DClock | CLOCK		[384 76 98 | glass 0]
+GROUP | Grp_DClock | CLOCK		[384 76 96 | stonebrick 0]
 	say d
 
-GROUP | Grp_E | PULSE		[384 78 98 | glass 0]
+GROUP | Grp_E | PULSE		[384 78 96 | stonebrick 0]
 	say e
 
-GROUP | Grp_F | PULSE		[384 80 98 | glass 0]
+GROUP | Grp_F | PULSE		[384 80 96 | stonebrick 0]
 	say f
 
-GROUP | Grp_G | PULSE		[384 82 99 | glass 0]
+GROUP | Grp_G | PULSE		[384 82 96 | stonebrick 0]
 	say g
 
-GROUP | Grp_Test2 | PULSE		[384 84 99 | glass 0]
+GROUP | Grp_Test2 | PULSE		[384 84 96 | stonebrick 0]
 	say test
 	say ABORTMISSION
 	say hell yeah
@@ -330,16 +29,16 @@ GROUP | Grp_Test2 | PULSE		[384 84 99 | glass 0]
 	lmao
 	ayy
 
-GROUP | Grp_Test | PULSE		[384 70 100 | glass 0]
+GROUP | Grp_Test | PULSE		[384 70 98 | stonebrick 0]
 	say $SA$
 	ayy
 	say LiterallyAbortMission
 	lmao
-	fill 384 72 100 399 74 100 air 0
+	fill 384 72 98 399 74 98 air 0
 	say not_yas
 
-GROUP | Grp_AyyLmao | PULSE		[384 72 100 | glass 0]
-	setblock 384 72 100 air 0
+GROUP | Grp_AyyLmao | PULSE		[384 72 98 | stonebrick 0]
+	setblock 384 72 98 air 0
 	say MEMES 5
 	say -301 MARKER
 	say 51 MARKER
@@ -386,7 +85,7 @@ GROUP | Grp_AyyLmao | PULSE		[384 72 100 | glass 0]
 	say 20
 	say 21
 
-GROUP | Grp_TheBestGroup | PULSE		[384 76 100 | glass 0]
+GROUP | Grp_TheBestGroup | PULSE		[384 76 98 | stonebrick 0]
 	say a
 	say b
 	say c
@@ -409,7 +108,7 @@ GROUP | Grp_TheBestGroup | PULSE		[384 76 100 | glass 0]
 	 | say s
 	 L say t
 
-GROUP | Grp_TheGreatestGroup | PULSE		[384 79 100 | glass 0]
+GROUP | Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
 	say 1
 	say 2 asdfasdf
 	say 3 asdfasdf
@@ -448,6 +147,7 @@ GROUP | Grp_TheGreatestGroup | PULSE		[384 79 100 | glass 0]
 	say 5 10 SECOND
 	say 1 2 FIRST
 	say test
+	Func_TestDefinition
 	say 27
 	say 28
 	say 29
@@ -456,7 +156,7 @@ GROUP | Grp_TheGreatestGroup | PULSE		[384 79 100 | glass 0]
 	say 32
 	tellraw @a {"text":"ayylmao"}
 
-GROUP | Grp_asdf | CLOCK		[384 70 102 | stained_hardened_clay 11]
+GROUP | Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	say rekt
 	say rekt again
 	say abde
@@ -540,28 +240,35 @@ GROUP | Grp_asdf | CLOCK		[384 70 102 | stained_hardened_clay 11]
 	say @a[score_name_min=4,score_name=5] @a[score_name_min=4,score_name=4] @a[score_name_min=4]
 	say @a[score_name=4,score_name_min=3] @a[score_name=4,score_name_min=4] @a[score_name=2]
 	scoreboard players operation @p TEST @p SPtp
-	fill 384 70 102 399 75 102 air 0
+	say test2
+	scoreboard players operation @p TEST @p SPtp
+	$test$
+	say ayy
+	say lmao
+	say lmao compared to ayy
+	say lmao compared to ayy
+	fill 384 70 100 399 75 100 air 0
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-MFUNC | MFunc_MainRaycaster | C:/Users/Austin/AppData/Roaming/.minecraft/saves/Snapshot 17w18b/data/functions/RayCaster/theHunted/init.mcfunction
+MFUNC | MFunc_MainRaycaster | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/init.mcfunction
 	say test
 	say test
 	say test
 	say test
 
-MFUNC | MFunc_MainInit | C:/Users/Austin/AppData/Roaming/.minecraft/saves/Snapshot 17w18b/data/functions/RayCaster/theHunted/test/init.mcfunction
+MFUNC | MFunc_MainInit | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/test/init.mcfunction
 	say asdf
 	say asdf
 	say asdf
 	say asdf
 
-MFUNC | MFunc_InitTest | C:/Users/Austin/AppData/Roaming/.minecraft/saves/Snapshot 17w18b/data/functions/RayCaster/theHunted/test.mcfunction
+MFUNC | MFunc_InitTest | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/test.mcfunction
 	say asdf2
 	say asdf2
 	say asdf2
 
-MFUNC | MFunc_Test | C:/Users/Austin/AppData/Roaming/.minecraft/saves/Snapshot 17w18b/data/functions/RayCaster/theHunted/asdf.mcfunction
+MFUNC | MFunc_Test | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/asdf.mcfunction
 	say theRealAsdf
 
 MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/Main.mcfunction
@@ -574,7 +281,9 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say Dankest  memes 
 	say asdf def3 asdf
 	say WOOOOOOOOOOOO
-	CCU.xpNumber
+	say ye
+	say This is like for minecraft:xp stuff
+	say hell yeah
 	say 1
 	say 33|saytest|
 	say 10
@@ -588,4 +297,4 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say 3|saytest|
 	say 
 	say YESSSSSSSSSSSSSSSSS
-	setblock 384 70 98 air 0
+	setblock 384 70 96 air 0
