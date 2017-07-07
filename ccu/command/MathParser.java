@@ -1,5 +1,6 @@
 package ccu.command;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import ccu.general.NumberUtils;
@@ -109,8 +110,29 @@ public class MathParser {
 					}
 				} else {
 					if (arrayCalc.length == 4) {
-						for (String line : arrayCalc) {
-							calcArray.add(line.replace("(", "").replace(")", ""));
+						for (int i = 0; i < arrayCalc.length; i++) {
+
+							// if it's the 3rd element
+							if (i == 2) {
+								boolean foundOperator = false;
+								for (int j = 0; j < operatorArray.length; j++) {
+									if (arrayCalc[i].equals(operatorArray[j])) {
+										foundOperator = true;
+										arrayCalc[i] = j + "";
+										break;
+									}
+								}
+								if (foundOperator == false) {
+									System.out.println("ERROR: The argument '" + arrayCalc[i] + "' in line '" + fullLineGet
+											+ "' is not an operator");
+									System.exit(0);
+								}
+								calcArray.add(arrayCalc[i]);
+
+							} else {
+								calcArray.add(arrayCalc[i].replace("(", "").replace(")", ""));
+							}
+
 						}
 					}
 				}
@@ -185,6 +207,8 @@ public class MathParser {
 					}
 				}
 
+				break;
+
 			case 1: // *
 				// if it's incrementing by a negative number
 				if (numCalcArray[3] < 0) {
@@ -205,7 +229,7 @@ public class MathParser {
 				}
 
 				// if starting number < ending number and incrementing number < 1 and all positive
-				if (numCalcArray[0] < numCalcArray[1] && numCalcArray[0] > 0 && numCalcArray[3] < 1) {
+				if (numCalcArray[0] < numCalcArray[1] && numCalcArray[0] > 0 && (numCalcArray[3] < 1 && numCalcArray[3] > 0)) {
 					System.out.println("ERROR: LOOP arguments in line '" + fullLineGet + "' are invalid (it cannot reach the ending)");
 					System.exit(0);
 				}
@@ -217,7 +241,7 @@ public class MathParser {
 				}
 
 				// if starting number > ending number and incrementing number < 1 and all negative
-				if (numCalcArray[0] > numCalcArray[1] && numCalcArray[0] < 0 && numCalcArray[3] < 1) {
+				if (numCalcArray[0] > numCalcArray[1] && numCalcArray[0] < 0 && (numCalcArray[3] < 1 && numCalcArray[3] > 0)) {
 					System.out.println("ERROR: LOOP arguments in line '" + fullLineGet + "' are invalid (it cannot reach the ending)");
 					System.exit(0);
 				}
@@ -240,18 +264,59 @@ public class MathParser {
 					}
 				}
 
+				break;
+
 			case 2: // /
+				break;
 
 			case 3: // -
+				break;
 
 			case 4: // +
 
+				// if starting number < ending number and incrementing number > 0
+				if (numCalcArray[0] < numCalcArray[1] && numCalcArray[0] < 0 && numCalcArray[3] > 0) {
+					System.out.println("ERROR: LOOP arguments in line '" + fullLineGet + "' are invalid (it cannot reach the ending)");
+					System.exit(0);
+				}
+
+				// if starting number > ending number and incrementing number < 0
+				if (numCalcArray[0] > numCalcArray[1] && numCalcArray[0] < 0 && numCalcArray[3] < 0) {
+					System.out.println("ERROR: LOOP arguments in line '" + fullLineGet + "' are invalid (it cannot reach the ending)");
+					System.exit(0);
+				}
+
+				while (true) {
+					calcNum = calcNum + numCalcArray[3];
+
+					// BigDecimal asdftest = BigDecimal.valueOf(calcNum);
+					// System.out.println(BigDecimal.valueOf(Float.parseFloat(NumberUtils.roundFloat(calcNum, 9))));
+					returnArray.add(NumberUtils.roundFloat(calcNum, 9));
+
+					// detects ending by checking whether finalNum - previous and finalNum - current are different signs
+					if (NumberUtils.checkSameSign(numCalcArray[1] - Float.parseFloat(returnArray.get(returnArray.size() - 2)),
+							numCalcArray[1] - Float.parseFloat(returnArray.get(returnArray.size() - 1))) == false) {
+						returnArray.remove(returnArray.size() - 1);
+						break;
+					}
+
+					// detects repeat
+					if (returnArray.get(returnArray.size() - 1).equals(returnArray.get(returnArray.size() - 2))) {
+						returnArray.remove(returnArray.size() - 1);
+						break;
+					}
+				}
+
+				break;
 			}
 
 		}
 
+		System.out.println(calcArray);
 		System.out.println(returnArray);
-		return calcArray;
+		System.out.println("");
+
+		return returnArray;
 	}
 
 	private static String getLoopOperation(String getString, String fullLineGet, int argNumGet) {
@@ -281,7 +346,7 @@ public class MathParser {
 						midString = testFloat + "";
 						if (midString.contains(".") && Integer.parseInt(midString.substring(midString.indexOf(".") + 1)) == 0) {
 							midString = midString.substring(0, midString.indexOf(".")) + ".0";
-							
+
 						} else {
 							if (midString.substring(midString.indexOf(".") + 1).length() >= 9) {
 								midString = midString.substring(0, midString.indexOf(".") + 9);
@@ -350,7 +415,6 @@ public class MathParser {
 
 		// final String[] operatorArray = {"^", "*", "/", "%", "+", "-"};
 		final String[][] operatorOrderArray = {{"^"}, {"*", "/", "%"}, {"+", "-"}};
-		boolean isInt = false;
 		boolean isFloat = false;
 
 		if (NumberUtils.isFloat(getString)) {
@@ -366,10 +430,8 @@ public class MathParser {
 				// whether it is a float or int
 				for (String line : arrayCalc) {
 					arrayListCalc.add(line);
-					if (NumberUtils.isInt(line)) {
-						isInt = true;
-					}
-					if (isInt == false && NumberUtils.isFloat(line)) {
+
+					if (NumberUtils.isFloat(line)) {
 						isFloat = true;
 					}
 				}
@@ -440,6 +502,7 @@ public class MathParser {
 							}
 
 							if (arrayOperatorType.get(arrayIndex) == true) {
+
 								if (arrayNumType.get(arrayIndex - 1) && arrayNumType.get(arrayIndex + 1)) {
 									switch (arrayListCalc.get(arrayIndex)) {
 
