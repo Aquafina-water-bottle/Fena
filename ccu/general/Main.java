@@ -57,7 +57,11 @@ public class Main {
 	// .replaceAll("\\s+$", "") = space to the right
 
 	public static void main(String[] args) {
-		String ayylmao = "(1 - 2 + 2) 3 - (1.5 - 0.5)";
+		
+		
+		// String ayylmao = "((3) * 4 ^ 2) (3 + 0) - (1.5 - 0.5)";
+		// String ayylmao = "(-10.5 + 0.5) (-115) * (1.1 + .9)";
+		String ayylmao = "(-10) (-115) * (2.0)";
 		
 		ArrayList<String> asdf = MathParser.getLoopArray(ayylmao, ayylmao);
 		System.out.println(asdf);
