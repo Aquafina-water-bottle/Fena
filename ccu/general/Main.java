@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ccu.block.Box;
 import ccu.block.GroupStructure;
 import ccu.block.Setblock;
+import ccu.command.MathParser;
 import ccu.command.ReadCCUFile;
 import ccu.command.Var_Options;
 import ccu.mcfunction.WriteFile;
@@ -26,6 +27,7 @@ public class Main {
 	 * 
 	 * -FUNC - DONE (now with future params)
 	 * -IMPORT - DONE (without importing .dat files)
+	 * -UNASSIGN - DONE (since arrays, team lists and objective lists aren't a thing yet)
 	 * 
 	 * -Repeated definitions - Already works apparently
 	 * -Check whether commands exist - WILL NOT DO
@@ -38,7 +40,6 @@ public class Main {
 	 * -ARRAY
 	 * -IF
 	 * -LOOP
-	 * -UNASSIGN
 	 * -OBJADD / OBJREV
 	 * -TEAMADD / TEAMREV
 	 * -FILE
@@ -56,6 +57,13 @@ public class Main {
 	// .replaceAll("\\s+$", "") = space to the right
 
 	public static void main(String[] args) {
+		String ayylmao = "(1 - 2 + 2) 3 - (1.5 - 0.5)";
+		
+		ArrayList<String> asdf = MathParser.getLoopArray(ayylmao, ayylmao);
+		System.out.println(asdf);
+		
+		/*
+		
 		// Reads the .ini file and gets the options
 		ReadConfig.getConfigOptions();
 
@@ -99,5 +107,7 @@ public class Main {
 
 		// RCON
 		MinecraftRcon.useRcon();
+		
+		*/
 	}
 }

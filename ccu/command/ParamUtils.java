@@ -3,7 +3,7 @@ package ccu.command;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import ccu.general.IntUtils;
+import ccu.general.NumberUtils;
 
 public class ParamUtils {
 	// count number of params in a string
@@ -15,7 +15,7 @@ public class ParamUtils {
 			int paramIndex = 0;
 
 			while (paramIndex < paramsCalc.length) {
-				if (IntUtils.isInt(paramsCalc[paramIndex])) {
+				if (NumberUtils.isInt(paramsCalc[paramIndex])) {
 					if (paramMaxNum == null || paramMaxNum < Integer.parseInt(paramsCalc[paramIndex])) {
 						paramMaxNum = Integer.parseInt(paramsCalc[paramIndex]);
 					}
@@ -43,7 +43,7 @@ public class ParamUtils {
 				int paramIndex = 0;
 
 				while (paramIndex < paramsCalc.length) {
-					if (IntUtils.isInt(paramsCalc[paramIndex])) {
+					if (NumberUtils.isInt(paramsCalc[paramIndex])) {
 						if (paramMaxNum == null || paramMaxNum < Integer.parseInt(paramsCalc[paramIndex])) {
 							paramMaxNum = Integer.parseInt(paramsCalc[paramIndex]);
 						}
@@ -148,7 +148,7 @@ public class ParamUtils {
 					paramsCalc2 = paramsCalc[paramIndex].split(";");
 
 					// if both are integers
-					if (IntUtils.isInt(paramsCalc2[0]) && IntUtils.isInt(paramsCalc2[1])) {
+					if (NumberUtils.isInt(paramsCalc2[0]) && NumberUtils.isInt(paramsCalc2[1])) {
 						paramIntCalc = Integer.parseInt(paramsCalc2[1]) - 1;
 						if (paramIntCalc == 0) {
 							paramsCalc[paramIndex] = paramsCalc2[0];
@@ -203,7 +203,7 @@ public class ParamUtils {
 						paramsCalc2 = paramsCalc[paramIndex].split(";");
 
 						// if both are integers
-						if (IntUtils.isInt(paramsCalc2[0]) && IntUtils.isInt(paramsCalc2[1])) {
+						if (NumberUtils.isInt(paramsCalc2[0]) && NumberUtils.isInt(paramsCalc2[1])) {
 							paramIntCalc = Integer.parseInt(paramsCalc2[1]) - 1;
 							if (paramIntCalc == 0) {
 								paramsCalc[paramIndex] = paramsCalc2[0];
