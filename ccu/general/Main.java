@@ -58,9 +58,16 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		/*
 		String ayylmao = null;
 		
 		ayylmao = "((3) * 4 ^ 2) (3 + 0) + -(1.5 - 0.5)";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "((3) * 4 ^ 2) (3 + 0) - (1.5 - 0.5)";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "230 2 ^ 0.9";
 		MathParser.getLoopArray(ayylmao, ayylmao);
 		
 		ayylmao = "3 10 + 0.7";
@@ -81,8 +88,54 @@ public class Main {
 		ayylmao = "-10 -115.0 * 1";
 		MathParser.getLoopArray(ayylmao, ayylmao);
 		
-		/*
+		ayylmao = "100 5 - 5.0";
+		MathParser.getLoopArray(ayylmao, ayylmao);
 		
+		ayylmao = "256 1 / 2.0";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		*/
+
+		/*
+		ayylmao = "(3 * 4 ^ 2) (3 + 0) + -(2 - 1)";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "((3) * 4 ^ 2) (3 + 0) - (2 - 1)";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "2 2345678 ^ 2";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "3 10 + 2";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "(-11 + 1) (-115) * (1 + 1)";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "(-10) (-115) * (2)";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "(-10) (2 + (-115)) * (2)";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "-10 -115 * 0";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "-10 -115 * 1";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "100 5 - 5";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "256 1 / 2";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "1 1 + 5";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		
+		ayylmao = "1 5 + 0";
+		MathParser.getLoopArray(ayylmao, ayylmao);
+		*/
+
 		// Reads the .ini file and gets the options
 		ReadConfig.getConfigOptions();
 
@@ -126,7 +179,6 @@ public class Main {
 
 		// RCON
 		MinecraftRcon.useRcon();
-		
-		*/
+
 	}
 }
