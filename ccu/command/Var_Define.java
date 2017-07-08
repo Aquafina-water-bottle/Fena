@@ -2,6 +2,8 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.ParamUtils;
+
 public class Var_Define {
 	public static ArrayList<String[]> arrayDefineSave = new ArrayList<String[]>();
 
@@ -245,6 +247,9 @@ public class Var_Define {
 			arrayDefineCalc[1] = tabNum + "";
 			arrayDefineCalc[2] = defineName;
 			arrayDefineCalc[3] = defintionGet;
+			
+			// System.out.println("LOOKUP " + defintionGet);
+			
 			arrayDefineCalc[4] = paramMaxNum + "";
 
 			// Checks whether the defineName and tabnum is the same anywhere --> will remove

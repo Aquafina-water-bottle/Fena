@@ -1,9 +1,7 @@
-package ccu.command;
+package ccu.general;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-
-import ccu.general.NumberUtils;
 
 public class ParamUtils {
 	// count number of params in a string
@@ -100,6 +98,25 @@ public class ParamUtils {
 		}
 	}
 
+	// Get loop params from an ArrayList<String[]>
+	public static ArrayList<String> getLoopParams(ArrayList<String[]> getLoopArray, int loopIndex, int paramNum) {
+		ArrayList<String> returnArray = new ArrayList<String>();
+
+		for (int i = 0; i < paramNum; i++) {
+			if (getLoopArray.size() - 1 < i) {
+				returnArray.add("");
+			} else {
+				if (getLoopArray.get(i).length > loopIndex) {
+					returnArray.add(getLoopArray.get(i)[loopIndex]);
+				} else {
+					returnArray.add("");
+				}
+			}
+		}
+
+		return returnArray;
+	}
+
 	// Replaces all parameters in a string
 	public static String replaceParams(String getString, ArrayList<String> getParams, int paramNum) {
 
@@ -115,6 +132,7 @@ public class ParamUtils {
 	// Replaces all parameters in an array
 	public static ArrayList<String> replaceParams(ArrayList<String> getArray, ArrayList<String> getParams, int paramNum) {
 		String lineCalc = null;
+		ArrayList<String> returnArray = new ArrayList<String>();
 
 		for (int funcIndex = 0; funcIndex < getArray.size(); funcIndex++) {
 			if (paramNum > 0) {
@@ -122,11 +140,11 @@ public class ParamUtils {
 				for (int paramIndex = 0; paramIndex < paramNum; paramIndex++) {
 					lineCalc = lineCalc.replace(("|" + paramIndex + "|"), getParams.get(paramIndex));
 				}
-				getArray.set(funcIndex, lineCalc);
+				returnArray.add(lineCalc);
 			}
 		}
 
-		return getArray;
+		return returnArray;
 	}
 
 	// Calc all future params in a string (aka |1;2| --> |1;1| and |1;1| --> |1|)
@@ -158,6 +176,11 @@ public class ParamUtils {
 
 						changedLine = true;
 					}
+
+					if (paramsCalc.length - 1 == paramIndex) {
+						paramsCalc[paramIndex] += "|";
+					}
+
 					paramIndex += 2;
 					continue;
 				}
@@ -213,6 +236,11 @@ public class ParamUtils {
 
 							changedLine = true;
 						}
+
+						if (paramsCalc.length - 1 == paramIndex) {
+							paramsCalc[paramIndex] += "|";
+						}
+
 						paramIndex += 2;
 						continue;
 					}

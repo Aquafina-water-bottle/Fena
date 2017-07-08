@@ -84,7 +84,7 @@ public class Short_Execute {
 
 			// if it is a command --> 4
 			for (String cmdGet : ReadConfig.minecraftCommandsArray) {
-				if (shortcutCalcArray[j].startsWith(cmdGet)) {
+				if (shortcutCalcArray[j].endsWith(cmdGet)) {
 					shortcutTypeArray[j] = COMMAND;
 					break;
 				}

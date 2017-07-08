@@ -2,6 +2,8 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.ParamUtils;
+
 public class Var_Func {
 	/** Used for storing or reusing chunks of commands
 	 * Avaliable parameters:

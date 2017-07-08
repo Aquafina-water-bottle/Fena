@@ -1,9 +1,11 @@
 package ccu.command;
 
-
+import ccu.general.NumberUtils;
 import ccu.general.ReadConfig;
 
 public class Short_Selector {
+
+	// essentially converts the 'asdf>=5<=2' bits into their selected things
 	private static String getSelector(String selectorGet, String firstOperator, String secondOperator) {
 		// all the combinationes of 
 		// greaterEqual >=
@@ -18,6 +20,7 @@ public class Short_Selector {
 		String selectorCalc = null;
 		String swapTemp = null;
 
+		// swaps if the order is different
 		if (secondOperator.equals("") == false) {
 			if (selectorGet.indexOf(firstOperator) > selectorGet.indexOf(secondOperator)) {
 				swapTemp = secondOperator + "";
@@ -36,10 +39,8 @@ public class Short_Selector {
 					selectorGet.indexOf(secondOperator));
 			selectorEnd = selectorGet.substring(selectorGet.indexOf(secondOperator) + secondOperator.length());
 		}
-		try {
-			Integer.parseInt(selectorMid);
-			Integer.parseInt(selectorEnd);
-		} catch (NumberFormatException e) {
+
+		if (NumberUtils.isInt(selectorMid) == false || NumberUtils.isInt(selectorEnd) == false) {
 			isScore = false;
 		}
 
@@ -106,6 +107,7 @@ public class Short_Selector {
 		// Essentially anything except the first line will be a possible selector
 
 		for (int i = 1; i < shortcutCalcArray.length; i++) {
+			changedLine = false;
 
 			// Checks whether it's a proper selector in the first place
 			for (String getSelector : ReadConfig.selectorArray) {
@@ -133,6 +135,7 @@ public class Short_Selector {
 						if (shortcutSelectorCalc.contains(",")) {
 							shortcutSelectorArray = shortcutSelectorCalc.split(",");
 						} else {
+							shortcutSelectorArray = new String[1];
 							shortcutSelectorArray[0] = shortcutSelectorCalc;
 						}
 
@@ -186,18 +189,20 @@ public class Short_Selector {
 											isScore = false;
 											break;
 										}
-									}
 
-									// first part is not recognized - meaning it's an objective
-									if (isScore == true) {
+										// if it's already parsed as a score
+										if (selectorBeg.startsWith("score_")) {
+											isScore = false;
+											break;
+										}
+
 										// checks if the next one is an int (if not, it isn't a score)
-										try {
-											Integer.parseInt(selectorEnd);
-										} catch (NumberFormatException e) {
+										if (NumberUtils.isInt(selectorEnd) == false) {
 											isScore = false;
 										}
 									}
 
+									// first part is not recognized - meaning it's an objective
 									// if it is still a score
 									if (isScore == true) {
 										shortcutSelectorArray[j] = "score_" + selectorBeg + "=" + selectorEnd + ",score_" + selectorBeg
@@ -316,8 +321,13 @@ public class Short_Selector {
 							shortcutResultCalc += "," + shortcutSelectorArray[j];
 						}
 					}
+
+					System.out.println(shortcutSelectorArray[j] + " MARKER");
 				}
+
 				shortcutCalcArray[i] = getSelectorSave + "[" + shortcutResultCalc + "]" + shortcutEndCalc;
+				System.out.println("THETRUEMARKER " + shortcutCalcArray[i]);
+				System.out.println("");
 
 			} else {
 				shortcutCalcArray[i] = "@" + shortcutCalcArray[i];
@@ -334,6 +344,12 @@ public class Short_Selector {
 
 			}
 		}
+
+		/*
+		System.out.println(fullLineGet);
+		System.out.println(shortcutFinalResultCalc);
+		System.out.println("");
+		*/
 
 		return shortcutFinalResultCalc;
 	}

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import ccu.general.GeneralFile;
+import ccu.general.ParamUtils;
 import ccu.general.ReadConfig;
 import ccu.mcfunction.FunctionNick;
 
@@ -59,7 +60,7 @@ public class ReadCCUFile {
 			// "TEAMADD",
 			// "TEAMREV",
 			"OPTIONS",
-			// "LOOP",
+			"LOOP",
 			// "IF",
 			"USE",
 			"COND"
@@ -216,87 +217,92 @@ public class ReadCCUFile {
 
 						} else {
 							// checks whether it is a TELE or COORDS definition with [ and ]
-							if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 4
-									|| Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 5) {
-								if (getEndString.isEmpty() == false && getEndString.startsWith("[") && getEndString.contains("]")
-										&& getEndString.indexOf("[") < getEndString.indexOf("]")) {
+							if ((Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 4
+									|| Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 5)
+									&& (getEndString.isEmpty() == false && getEndString.startsWith("[") && getEndString.contains("]")
+											&& getEndString.indexOf("[") < getEndString.indexOf("]"))) {
 
-									getParamsString = getEndString.substring(getEndString.indexOf("["), getEndString.indexOf("]") + 1);
-									getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
+								getParamsString = getEndString.substring(getEndString.indexOf("["), getEndString.indexOf("]") + 1);
+								getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
 
-									defineParamCalc = getParamsString.substring(1, getParamsString.length() - 1);
+								defineParamCalc = getParamsString.substring(1, getParamsString.length() - 1);
 
-									if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 4) {
-										switch (defineParamCalc) {
-										case "x":
-											defineCoordsCalc = 0;
-											break;
-										case "y":
-											defineCoordsCalc = 1;
-											break;
-										case "z":
-											defineCoordsCalc = 2;
-											break;
-										case "2x":
-											defineCoordsCalc = 3;
-											break;
-										case "2y":
-											defineCoordsCalc = 4;
-											break;
-										case "2z":
-											defineCoordsCalc = 5;
-											break;
-										}
+								if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 4) {
+									switch (defineParamCalc) {
+									case "x":
+										defineCoordsCalc = 0;
+										break;
+									case "y":
+										defineCoordsCalc = 1;
+										break;
+									case "z":
+										defineCoordsCalc = 2;
+										break;
+									case "2x":
+										defineCoordsCalc = 3;
+										break;
+									case "2y":
+										defineCoordsCalc = 4;
+										break;
+									case "2z":
+										defineCoordsCalc = 5;
+										break;
 									}
-
-									if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 5) {
-										switch (defineParamCalc) {
-										case "x":
-											defineCoordsCalc = 0;
-											break;
-										case "y":
-											defineCoordsCalc = 1;
-											break;
-										case "z":
-											defineCoordsCalc = 2;
-											break;
-										case "ry":
-											defineCoordsCalc = 3;
-											break;
-										case "rx":
-											defineCoordsCalc = 4;
-											break;
-										}
-									}
-
-									if (defineCoordsCalc == null) {
-										System.out.println("ERROR: Parameter '" + defineParamCalc + "' is incorrect in line '"
-												+ ccuFileArray.get(i) + "'");
-										System.exit(0);
-									}
-
-									// array for coords
-									String defineParamsCalc[] = null;
-									defineParamsCalc = Var_Define.arrayDefineSave.get(defIndex)[3].split(" ");
-									definitionCalc = defineParamsCalc[defineCoordsCalc];
-									definitionCalc = ParamUtils.calcFutureParams(definitionCalc);
-
-									// replaces the definition with the specific coordinate
-									ccuFileArray.set(i, getBegString + definitionCalc + getEndString);
-
-									// continue;
 								}
+
+								if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 5) {
+									switch (defineParamCalc) {
+									case "x":
+										defineCoordsCalc = 0;
+										break;
+									case "y":
+										defineCoordsCalc = 1;
+										break;
+									case "z":
+										defineCoordsCalc = 2;
+										break;
+									case "ry":
+										defineCoordsCalc = 3;
+										break;
+									case "rx":
+										defineCoordsCalc = 4;
+										break;
+									}
+								}
+
+								if (defineCoordsCalc == null) {
+									System.out.println("ERROR: Parameter '" + defineParamCalc + "' is incorrect in line '"
+											+ ccuFileArray.get(i) + "'");
+									System.exit(0);
+								}
+
+								// array for coords
+								String defineParamsCalc[] = null;
+								defineParamsCalc = Var_Define.arrayDefineSave.get(defIndex)[3].split(" ");
+								definitionCalc = defineParamsCalc[defineCoordsCalc];
+								definitionCalc = ParamUtils.calcFutureParams(definitionCalc);
+
+								// replaces the definition with the specific coordinate
+								ccuFileArray.set(i, getBegString + definitionCalc + getEndString);
+
+								// continue;
+
 							} else {
 
 								// sets it as is because params aren't an issue
 								definitionCalc = Var_Define.arrayDefineSave.get(defIndex)[3];
 								definitionCalc = ParamUtils.calcFutureParams(definitionCalc);
 								ccuFileArray.set(i, getBegString + definitionCalc + getEndString);
+
+								// System.out.println(definitionCalc + " MARKER");
 							}
 						}
 
 						// tests for recurring definition
 						for (String testDefinition : usedDefinitionArray) {
+							/*System.out.println(definitionCalc);
+							System.out.println(ccuFileArray.get(i));
+							System.out.println(usedDefinitionArray);*/
 							if (definitionCalc.contains(testDefinition)) {
 								System.out.println("ERROR: Recurring definition at line '" + ccuFileArray.get(i)
 										+ "' starting with the definition '" + testDefinition + "'");
@@ -491,6 +497,12 @@ public class ReadCCUFile {
 						case "FUNC":
 							Var_Func objFunc = new Var_Func(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objFunc.getArray();
+							resetArray = true;
+							break;
+
+						case "LOOP":
+							Con_Loop objLoop = new Con_Loop(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							getCalcArray = objLoop.getArray();
 							resetArray = true;
 							break;
 

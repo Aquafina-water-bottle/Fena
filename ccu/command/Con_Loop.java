@@ -2,6 +2,10 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.NumberUtils;
+import ccu.general.ParamUtils;
+import ccu.general.StringUtils;
+
 public class Con_Loop {
 	private ArrayList<String> arrayLoopReturn = new ArrayList<String>();
 	private ArrayList<String> arrayGet = new ArrayList<String>();
@@ -26,6 +30,11 @@ public class Con_Loop {
 		 */
 		// System.out.println("LINE " + fullLineGet);
 
+		ArrayList<String[]> loopArrayStorage = new ArrayList<String[]>();
+		ArrayList<String> paramArrayGet = new ArrayList<String>();
+		int paramNum = 0;
+		int loopNum = 0;
+
 		ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayGet, tabNum);
 		ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
 		if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
@@ -35,139 +44,98 @@ public class Con_Loop {
 		// Removes "LOOP" and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("LOOP", "").replaceAll("^\\s+", "");
 		if (statementEncase.startsWith("{") && statementEncase.endsWith("}:")) {
-			
+
+			statementEncase = statementEncase.substring(0, statementEncase.length() - 1);
+			// Gets rid of the last colon
+			// splits in spaces, gets number of {}
+
+			// if it's 4
+
+			// if it's more than 4 --> calculate brackets
+			String stringCalc = null;
+			int tempCount = 0;
+
+			if (StringUtils.countChars(statementEncase, "{") == StringUtils.countChars(statementEncase, "}")
+					&& StringUtils.countChars(statementEncase, "{") > 0) {
+
+				String[] arrayCalc = statementEncase.split(" ");
+				String[] loopArray = null;
+
+				for (String line : arrayCalc) {
+
+					if (stringCalc == null) {
+						stringCalc = line;
+					} else {
+						stringCalc += " " + line;
+					}
+
+					// counts number of brackets
+					tempCount += StringUtils.countChars(line, "{");
+					tempCount -= StringUtils.countChars(line, "}");
+
+					if (tempCount == 0) {
+						loopArray = MathParser.getLoopArray(stringCalc.substring(1, stringCalc.length() - 1), fullLineGet); // gets the math stuff here
+						loopArrayStorage.add(loopArray);
+						stringCalc = null;
+					}
+				}
+
+				// checks tab spaces
+				String whitespaceCalc = "";
+
+				for (int i = 0; i < this.arrayGet.size(); i++) {
+
+					whitespaceCalc = this.arrayGet.get(i).substring(0,
+							(this.arrayGet.get(i).length() - this.arrayGet.get(i).replaceAll("^\\s+", "").length()));
+					if (whitespaceCalc.contains(" ")) {
+						System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains spaces instead of tab spaces");
+						System.exit(0);
+					}
+
+					if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
+						System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains an incorrect number of tab spaces");
+						System.exit(0);
+					}
+
+					// removes a tab space infront of the line
+					this.arrayGet.set(i, this.arrayGet.get(i).substring(1));
+				}
+
+				// gets param num within the encapsulated array
+				paramNum = ParamUtils.countParams(arrayGet);
+
+				// makes sure it loops through all arrays
+				loopNum = NumberUtils.getMaxSize(loopArrayStorage);
+				for (int i = 0; i < loopNum; i++) {
+
+					// get params from the specific index (if n/a, returns "")
+					paramArrayGet = ParamUtils.getLoopParams(loopArrayStorage, i, paramNum);
+
+					// replaces params and adds it onto the arrayLoopReturn
+					arrayLoopReturn.addAll(ParamUtils.replaceParams(this.arrayGet, paramArrayGet, paramNum));
+				}
+
+			} else {
+				System.out.println("ERROR: Curly brackets in line '" + this.fullLineGet + "' are not balanced");
+				System.exit(0);
+			}
+
 			/*
-			Boolean useAtBeg = null;
-			Boolean noSpace = null;
-
-			// Gets parameters
-			String statementArgs = statementEncase.substring(1, statementEncase.length() - 2);
-			if (statementArgs.contains(" ")) {
-				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
-				case "BEG":
-					useAtBeg = true;
-					// removes BEG
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
-					break;
-
-				case "END":
-					useAtBeg = false;
-					// removes END
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
-					break;
-
-				case "NOSPACE":
-					noSpace = true;
-					// removes NOSPACE
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
-					break;
+			System.out.println("");
+			for (String[] asdf : loopArrayStorage) {
+				for (String asdf2 : asdf) {
+					System.out.print(asdf2 + "\t");
 				}
+				System.out.println("");
 			}
-
-			// Gets second parameters
-			if (statementArgs.contains(" ")) {
-				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
-				case "BEG":
-					if (useAtBeg == null) {
-						useAtBeg = true;
-					} else {
-						System.out.println("ERROR: There are two parameters that conflict with each other in line '"
-								+ this.fullLineGet + "'");
-					}
-					// removes BEG
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
-					break;
-
-				case "END":
-					if (useAtBeg == null) {
-						useAtBeg = false;
-					} else {
-						System.out.println("ERROR: There are two parameters that conflict with each other in line '"
-								+ this.fullLineGet + "'");
-					}
-					// removes END
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
-					break;
-
-				case "NOSPACE":
-					if (noSpace == null) {
-						noSpace = true;
-					} else {
-						System.out.println("ERROR: There are two parameters that conflict with each other in line '"
-								+ this.fullLineGet + "'");
-					}
-					// removes NOSPACE
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
-					break;
-				}
-				// the end should make 'statementArgs' as the actual use thing
-			}
-			
-			// sets default values if parameter options aren't used
-			if (useAtBeg == null) {
-				useAtBeg = true;
-			}
-			if (noSpace == null) {
-				noSpace = false;
-			}
-			
-
-			for (int i = 0; i < this.arrayGet.size(); i++) {
-				// Checking tab spaces
-				String whitespaceCalc = this.arrayGet.get(i).substring(0,
-						(this.arrayGet.get(i).length() - this.arrayGet.get(i).replaceAll("^\\s+", "").length()));
-				if (whitespaceCalc.contains(" ")) {
-					System.out.println(
-							"ERROR: Line '" + this.arrayGet.get(i) + "' contains spaces instead of tab spaces");
-					System.exit(0);
-				}
-
-				if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
-					System.out.println(
-							"ERROR: Line '" + this.arrayGet.get(i) + "' contains an incorrect number of tab spaces");
-					System.exit(0);
-				}
-
-				String newString = null;
-				String newStringCalc = null;
-				// checks for conditional settings
-				// this is the main part where the "USE" gets put into place
-				
-				newString = whitespaceCalc.substring(1, whitespaceCalc.length());
-				
-				// if conditional
-				if (this.arrayGet.get(i).replaceAll("^\\s+", "").contains("CCU_COND_")) {
-					newStringCalc = this.arrayGet.get(i).replaceAll("^\\s+", "").replace("CCU_COND_", "");
-					newString = newString + "CCU_COND_";
-				} else {
-					newStringCalc = this.arrayGet.get(i).replaceAll("^\\s+", "");
-				}
-
-				
-				// whether it is at the beginning or at the end
-				// seperates into whether noSpace is true or not
-				if (useAtBeg == true) {
-					if (noSpace == true) {
-						newString = newString + statementArgs + newStringCalc;
-					} else {
-						newString = newString + statementArgs + " " + newStringCalc;
-					}
-				} else {
-					if (noSpace == true) {
-						newString = newString + newStringCalc + statementArgs;
-					} else {
-						newString = newString + newStringCalc + " " + statementArgs;
-					}
-				}
-				
-				arrayUseReturn.add(newString);
-			}*/
+			*/
 
 		} else {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 			System.exit(0);
 		}
-
+		
+		ParamUtils.calcFutureParams(arrayLoopReturn);
 		return arrayLoopReturn;
 	}
 }

@@ -1,8 +1,31 @@
 package ccu.general;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class NumberUtils {
+	
+	// get max number
+	public static int getMaxSize(ArrayList<String[]> arrayGet) {
+		int numCalc = 0;
+		
+		if (arrayGet.isEmpty()) {
+			return 0;
+		}
+		
+		if (arrayGet.size() == 1) {
+			return arrayGet.get(0).length;
+		}
+		
+		for (int i = 0; i < arrayGet.size(); i++) {
+			if (arrayGet.get(i).length > numCalc) {
+				numCalc = arrayGet.get(i).length;
+			}
+		}
+		
+		return numCalc;
+	}
+	
 	// checks if it's a number (int or float)
 	public static boolean isNum(String testNum) {
 		if (testNum == null) {

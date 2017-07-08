@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import ccu.block.Box;
 import ccu.block.GroupStructure;
 import ccu.block.Setblock;
-import ccu.command.MathParser;
 import ccu.command.ReadCCUFile;
 import ccu.command.Var_Options;
 import ccu.mcfunction.WriteFile;

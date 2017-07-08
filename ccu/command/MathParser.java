@@ -22,7 +22,7 @@ class storeValueType {
 }
 
 public class MathParser {
-	public static ArrayList<String> getLoopArray(String getArgs, String fullLineGet) {
+	public static String[] getLoopArray(String getArgs, String fullLineGet) {
 		// Operators are +, -, *, / and ^
 
 		ArrayList<String> calcArray = new ArrayList<String>();
@@ -34,11 +34,8 @@ public class MathParser {
 		// meaning the list is already given and no math is required
 		if (getArgs.contains(";")) {
 			arrayCalc = getArgs.split(";");
-			for (String line : arrayCalc) {
-				calcArray.add(line);
-			}
 
-			return calcArray;
+			return arrayCalc;
 
 		} else {
 			// meaning actual math has to be used lol
@@ -685,12 +682,73 @@ public class MathParser {
 				break;
 			}
 		}
-
+		
+		/*
 		System.out.println(calcArray);
 		System.out.println(returnArray);
 		System.out.println("");
+		*/
+		
+		String[] returnStringArray = new String[returnArray.size()];
+		for (int i = 0; i < returnArray.size(); i++) {
+			returnStringArray[i] = returnArray.get(i);
+		}
 
-		return returnArray;
+		return returnStringArray;
+	}
+
+	private static String getOperation(String getString, String fullLineGet) {
+
+		// checks if there are brackets in the first places
+		if (StringUtils.countChars(getString, "(") == StringUtils.countChars(getString, ")")) {
+
+			if (StringUtils.countChars(getString, "(") > 0) {
+
+				String begString = "";
+				String midString = "";
+				String endString = "";
+
+				int bracketSave = StringUtils.countChars(getString, "(");
+				for (int i = 0; i < bracketSave; i++) {
+					begString = getString.substring(0, getString.lastIndexOf("("));
+					endString = getString.substring(getString.lastIndexOf("("));
+					if (endString.contains(")")) {
+						midString = endString.substring(0, endString.indexOf(")") + 1);
+						endString = endString.substring(endString.indexOf(")") + 1);
+
+						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet);
+
+						if (getValue.isFloat) {
+							midString = getValue.getFloat + "";
+						} else {
+							midString = getValue.getInt + "";
+						}
+
+						getString = begString + midString + endString;
+
+					} else {
+						System.out.println("ERROR: Unbalanced brackets in '" + getString + "' in line '" + fullLineGet + "'");
+						System.exit(0);
+					}
+				}
+			} else {
+				if (getString.isEmpty()) {
+					System.out.println("ERROR: The argument '" + getString + "' in line '" + fullLineGet + "' is empty");
+					System.exit(0);
+				} else {
+					System.out.println("ERROR: The argument '" + getString + "' in line '" + fullLineGet + "' is not an operator");
+					System.exit(0);
+				}
+
+				return getString;
+			}
+
+		} else {
+			System.out.println("ERROR: Unbalanced brackets in '" + getString + "' in line '" + fullLineGet + "'");
+			System.exit(0);
+		}
+
+		return getString;
 	}
 
 	private static String getLoopOperation(String getString, String fullLineGet, int argNumGet) {
@@ -708,8 +766,12 @@ public class MathParser {
 
 				int bracketSave = StringUtils.countChars(getString, "(");
 				for (int i = 0; i < bracketSave; i++) {
+
+					// gets last "("
 					begString = getString.substring(0, getString.lastIndexOf("("));
 					endString = getString.substring(getString.lastIndexOf("("));
+
+					// gets first ")" after "("
 					if (endString.contains(")")) {
 						midString = endString.substring(0, endString.indexOf(")") + 1);
 						endString = endString.substring(endString.indexOf(")") + 1);
@@ -794,7 +856,7 @@ public class MathParser {
 			if (NumberUtils.isInt(getString)) {
 				storeValueType returnValue = new storeValueType(Float.parseFloat(getString), false);
 				return returnValue;
-				
+
 			} else {
 
 				if (getString.contains(" ") == false) {
