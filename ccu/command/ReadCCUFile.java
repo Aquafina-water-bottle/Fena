@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 import ccu.general.GeneralFile;
 import ccu.general.ParamUtils;
-import ccu.general.ReadConfig;
-import ccu.mcfunction.FunctionNick;
 
 public class ReadCCUFile {
 	private ArrayList<String> ccuFileArray = new ArrayList<String>();
@@ -61,7 +59,7 @@ public class ReadCCUFile {
 			// "TEAMREV",
 			"OPTIONS",
 			"LOOP",
-			// "IF",
+			"IF",
 			"USE",
 			"COND"
 			};
@@ -112,6 +110,8 @@ public class ReadCCUFile {
 		Integer begIndexCalc = null;
 		Integer endIndexCalc = null;
 
+		int tempStorage = 0;
+
 		// Gets beginning 'DEF' part if it exists, and just gets the whole line if it doesn't
 		String getBegCalcString = "";
 
@@ -140,6 +140,13 @@ public class ReadCCUFile {
 			// Resets index as resetting it at the bottom did not work
 			if (resetIndex != null) {
 				i = resetIndex + 0;
+				i += tempStorage;
+				if (this.ccuFileArray.size() - 1 < i) {
+					break;
+				}
+
+				tempStorage = 0;
+
 				resetIndex = null;
 			}
 
@@ -464,16 +471,19 @@ public class ReadCCUFile {
 
 						// switch case for all statements with encapsulation
 						switch (statementTest) {
+
 						case "MFUNC":
-							Cmd_MFunc objMFunc = new Cmd_MFunc(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							Temp_MFunc objMFunc = new Temp_MFunc(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objMFunc.getArray();
 							resetArray = true;
+							tempStorage = getCalcArray.size();
 							break;
 
 						case "GROUP":
-							Cmd_Group objGroup = new Cmd_Group(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							Temp_Group objGroup = new Temp_Group(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objGroup.getArray();
 							resetArray = true;
+							tempStorage = getCalcArray.size();
 							break;
 
 						case "OPTIONS":
@@ -499,13 +509,18 @@ public class ReadCCUFile {
 							getCalcArray = objFunc.getArray();
 							resetArray = true;
 							break;
-
+							
 						case "LOOP":
 							Con_Loop objLoop = new Con_Loop(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objLoop.getArray();
 							resetArray = true;
 							break;
 
+						case "IF":
+							Con_If objIf = new Con_If(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							getCalcArray = objIf.getArray();
+							resetArray = true;
+							break;
 						}
 					}
 				}
@@ -569,25 +584,27 @@ public class ReadCCUFile {
 
 			if (getStatement == false) {
 				// scoreboard shortcuts
+
+				/*
 				if (Short_Scoreboard.getCommand(ccuFileArray.get(i), tabNum) != null) {
 					ccuFileArray.set(i, Short_Scoreboard.getCommand(ccuFileArray.get(i), tabNum));
 				}
-
+				
 				// execute shortcuts
 				if (Short_Execute.getCommand(ccuFileArray.get(i), tabNum) != null) {
 					ccuFileArray.set(i, Short_Execute.getCommand(ccuFileArray.get(i), tabNum));
 				}
-
+				
 				// selector shortcuts
 				if (Short_Selector.getCommand(ccuFileArray.get(i), tabNum) != null) {
 					ccuFileArray.set(i, Short_Selector.getCommand(ccuFileArray.get(i), tabNum));
 				}
-
+				
 				// function shortcuts
 				if (FunctionNick.getCommand(ccuFileArray.get(i), tabNum) != null) {
 					ccuFileArray.set(i, FunctionNick.getCommand(ccuFileArray.get(i), tabNum));
 				}
-
+				
 				// server override
 				if (ReadConfig.serverPlugins == true
 						&& (ReadConfig.serverOverrideArray == null || ReadConfig.serverOverrideArray[0].equals("")) == false) {
@@ -595,8 +612,131 @@ public class ReadCCUFile {
 						ccuFileArray.set(i, ServerOverride.getCommand(ccuFileArray.get(i), tabNum));
 					}
 				}
+				*/
+
 			}
 		}
 		return ccuFileArray;
+	}
+
+	public ArrayList<String> getCommands(ArrayList<String> getCommandsArray) {
+		int indexCalc = 0;
+		int subListCalc1 = -2;
+		int subListCalc2 = -2;
+		Integer resetIndex = null;
+		String statementName = null;
+
+		ArrayList<String> getCalcArray = new ArrayList<String>();
+		ArrayList<String> encapsulateArray = new ArrayList<String>();
+		ArrayList<String> subListTopArray = new ArrayList<String>();
+		ArrayList<String> subListBottomArray = new ArrayList<String>();
+
+		for (int i = 0; i < getCommandsArray.size(); i++) {
+			
+			if (resetIndex != null) {
+				i = resetIndex + 0;
+				resetIndex = null;
+			}
+			
+			if (getCommandsArray.get(i).trim().startsWith("GROUP")) {
+				statementName = "GROUP";
+			}
+			if (getCommandsArray.get(i).trim().startsWith("MFUNC")) {
+				statementName = "MFUNC";
+			}
+
+			if (statementName != null) {
+
+				this.tabNum++;
+				indexCalc = i;
+
+				// clears array whenever it gets filled by detecting a statement
+				encapsulateArray.clear();
+
+				// gets encapsulation array by detecting the number of tab spaces
+				// tl;dr if it has a min number of tab spaces as stated, it will be added
+				while (true) {
+					indexCalc++;
+
+					// if proper number of tabnums and not past size limit
+					if (indexCalc < getCommandsArray.size() && getCommandsArray.get(indexCalc).substring(0, this.tabNum).length()
+							- getCommandsArray.get(indexCalc).substring(0, this.tabNum).replace("\t", "").length() == this.tabNum) {
+
+						// Starting process of getting the top/bottom array index numbers
+						// Also adds the line to the encapsulation array
+						encapsulateArray.add(getCommandsArray.get(indexCalc));
+						if (subListCalc1 == -2) {
+							subListCalc1 = indexCalc - 1;
+						}
+					} else {
+						subListCalc2 = indexCalc;
+						break;
+					}
+				}
+
+				// Sublists
+				subListTopArray.clear();
+				subListBottomArray.clear();
+
+				// actually creates the top / bottom sublists
+				if (subListCalc1 >= 0) {
+					subListTopArray = new ArrayList<String>(getCommandsArray.subList(0, subListCalc1));
+				}
+				subListBottomArray = new ArrayList<String>(getCommandsArray.subList(subListCalc2, getCommandsArray.size()));
+				subListCalc1 = -2;
+				subListCalc2 = -2;
+
+				// detect if the encapsulated array size is 0
+				if (encapsulateArray.size() == 0) {
+					System.out.println("WARNING: " + statementName + " has 0 commands at line '" + getCommandsArray.get(i) + "'");
+					if (i > 0) {
+						subListTopArray = new ArrayList<String>(getCommandsArray.subList(0, i));
+						// System.out.println(subListTopArray);
+					} else {
+						subListTopArray.clear();
+					}
+					subListBottomArray = new ArrayList<String>(getCommandsArray.subList(i + 1, getCommandsArray.size()));
+				}
+
+				switch (statementName) {
+				case "GROUP":
+					Cmd_Group objGroup = new Cmd_Group(encapsulateArray, this.tabNum, getCommandsArray.get(i));
+					getCalcArray = objGroup.getArray();
+					break;
+
+				case "MFUNC":
+					Cmd_MFunc objMFunc = new Cmd_MFunc(encapsulateArray, this.tabNum, getCommandsArray.get(i));
+					getCalcArray = objMFunc.getArray();
+					break;
+
+				}
+
+				// combines any given arrays
+				getCommandsArray.clear();
+
+				if (subListTopArray != null) {
+					getCommandsArray.addAll(subListTopArray);
+				}
+				if (getCalcArray != null) {
+					getCommandsArray.addAll(getCalcArray);
+				}
+				if (subListBottomArray != null) {
+					getCommandsArray.addAll(subListBottomArray);
+				}
+
+				// general reset
+				indexCalc = 0;
+				this.tabNum--;
+				resetIndex = i + 0;
+				statementName = null;
+			}
+		}
+		
+		if (getCommandsArray.isEmpty()) {
+			return null;
+		} else {
+			return getCommandsArray;
+		}
+		
 	}
 }

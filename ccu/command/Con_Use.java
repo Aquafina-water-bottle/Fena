@@ -2,7 +2,7 @@ package ccu.command;
 
 import java.util.ArrayList;
 
-import ccu.general.ArgUtils;
+import ccu.general.StringUtils;
 
 public class Con_Use {
 	private ArrayList<String> arrayUseReturn = new ArrayList<String>();
@@ -113,20 +113,21 @@ public class Con_Use {
 			}
 			
 			// Checking tab spaces
-			String whitespaceCalc = ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
-
+			
+			
 			for (int i = 0; i < this.arrayGet.size(); i++) {
 				String newString = null;
 				String newStringCalc = null;
 				// checks for conditional settings
 				// this is the main part where the "USE" gets put into place
-
-				newString = whitespaceCalc.substring(1, whitespaceCalc.length());
+				
+				String whiteSpaceCalc = StringUtils.getWhiteSpace(this.arrayGet.get(i));
+				newString = whiteSpaceCalc.substring(1);
 
 				// if conditional
 				if (this.arrayGet.get(i).replaceAll("^\\s+", "").contains("CCU_COND_")) {
 					newStringCalc = this.arrayGet.get(i).replaceAll("^\\s+", "").replace("CCU_COND_", "");
-					newString = newString + "CCU_COND_";
+					newString += "CCU_COND_";
 				} else {
 					newStringCalc = this.arrayGet.get(i).replaceAll("^\\s+", "");
 				}

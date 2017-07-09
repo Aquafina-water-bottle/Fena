@@ -79,8 +79,7 @@ public class Short_Selector {
 
 	}
 
-	public static String getCommand(String fullLineGet, int tabNum) {
-		String getWhiteSpace = null;
+	public static String getCommand(String fullLineGet) {
 		String shortcutCalc = null;
 		String shortcutEndCalc = null;
 		String[] shortcutCalcArray = null;
@@ -100,8 +99,7 @@ public class Short_Selector {
 		boolean changedLine = false;
 		boolean isScore = false;
 
-		getWhiteSpace = fullLineGet.substring(0, tabNum);
-		shortcutCalc = fullLineGet.substring(tabNum);
+		shortcutCalc = fullLineGet.trim();
 		shortcutCalcArray = shortcutCalc.split("@");
 
 		// Essentially anything except the first line will be a possible selector
@@ -332,11 +330,10 @@ public class Short_Selector {
 		if (changedLine == true) {
 			for (int i = 0; i < shortcutCalcArray.length; i++) {
 				if (i == 0) {
-					shortcutFinalResultCalc = getWhiteSpace + shortcutCalcArray[i];
+					shortcutFinalResultCalc = shortcutCalcArray[i];
 				} else {
 					shortcutFinalResultCalc += shortcutCalcArray[i];
 				}
-
 			}
 		}
 
@@ -345,7 +342,7 @@ public class Short_Selector {
 		System.out.println(shortcutFinalResultCalc);
 		System.out.println("");
 		*/
-
+		
 		return shortcutFinalResultCalc;
 	}
 }

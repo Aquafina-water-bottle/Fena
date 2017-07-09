@@ -4,16 +4,14 @@ import ccu.command.Cmd_MFunc;
 
 public class FunctionNick {
 
-	public static String getCommand(String getString, int tabNum) {
+	public static String getCommand(String getString) {
 
-		String getWhiteSpace = null;
 		String shortcutCalc = null;
 		String[] shortcutCalcArray = null;
 		String shortcutResultCalc = null;
 		boolean changedLine = false;
 
-		getWhiteSpace = getString.substring(0, tabNum);
-		shortcutCalc = getString.substring(tabNum);
+		shortcutCalc = getString.trim();
 		shortcutCalcArray = shortcutCalc.split(" ");
 		for (int i = 0; i < shortcutCalcArray.length; i++) {
 
@@ -32,7 +30,7 @@ public class FunctionNick {
 		if (changedLine == true) {
 			for (int j = 0; j < shortcutCalcArray.length; j++)
 				if (j == 0) {
-					shortcutResultCalc = getWhiteSpace + shortcutCalcArray[j];
+					shortcutResultCalc = shortcutCalcArray[j];
 				} else {
 					if (shortcutCalcArray[j].equals("") == false) {
 						shortcutResultCalc += " " + shortcutCalcArray[j];

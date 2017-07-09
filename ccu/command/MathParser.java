@@ -169,9 +169,14 @@ public class MathParser {
 
 		// check if the array contains a float anywhere
 		for (String line : calcArray) {
-			if (NumberUtils.isFloat(line)) {
-				isFloat = true;
-				break;
+			if (NumberUtils.isNum(line)) {
+				if (NumberUtils.isFloat(line)) {
+					isFloat = true;
+					break;
+				}
+			} else {
+				System.out.println("ERROR: '" + line + "' in line '" + fullLineGet + "' is not a number");
+				System.exit(0);
 			}
 		}
 
@@ -434,7 +439,7 @@ public class MathParser {
 
 		} else { // calculates int array
 			int[] numCalcArray = new int[4];
-
+			
 			for (int i = 0; i < calcArray.size(); i++) {
 				numCalcArray[i] = Integer.parseInt(calcArray.get(i));
 			}
@@ -703,7 +708,7 @@ public class MathParser {
 		return returnStringArray;
 	}
 
-	private static String getOperation(String getString, String fullLineGet) {
+	public static String getOperation(String getString, String fullLineGet) {
 		/** This is primarily for actual CALC() stuff, including IF
 		 */
 
@@ -744,10 +749,12 @@ public class MathParser {
 					System.out.println("ERROR: The argument '" + getString + "' in line '" + fullLineGet + "' is empty");
 					System.exit(0);
 				} else {
-					System.out.println("ERROR: The argument '" + getString + "' in line '" + fullLineGet + "' is not an operator");
-					System.exit(0);
+					if (NumberUtils.isNum(getString) == false) {
+						System.out.println("ERROR: The argument '" + getString + "' in line '" + fullLineGet + "' is not an operator");
+						System.exit(0);
+					}
 				}
-
+				
 				return getString;
 			}
 
@@ -755,7 +762,7 @@ public class MathParser {
 			System.out.println("ERROR: Unbalanced brackets in '" + getString + "' in line '" + fullLineGet + "'");
 			System.exit(0);
 		}
-
+		
 		return getString;
 	}
 
@@ -763,7 +770,7 @@ public class MathParser {
 		/** The main difference between the above and this is 'argNumGet'
 		 * if that's 3, it detects whether it's a valid loop operator or not (if it isn't, you're a potato)
 		 */
-
+		
 		final String[] operatorArray = {"^", "*", "/", "-", "+"};
 
 		// checks if there are brackets in the first places
@@ -829,7 +836,7 @@ public class MathParser {
 						}
 					}
 				}
-
+				
 				return getString;
 			}
 
@@ -837,7 +844,7 @@ public class MathParser {
 			System.out.println("ERROR: Unbalanced brackets in '" + getString + "' in line '" + fullLineGet + "'");
 			System.exit(0);
 		}
-
+		
 		return getString;
 	}
 

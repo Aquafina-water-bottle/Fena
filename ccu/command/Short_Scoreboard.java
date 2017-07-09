@@ -8,8 +8,7 @@ public class Short_Scoreboard {
 	private final static int SELECTOR = 2;
 	private final static int DATATAG = 3;
 	
-	public static String getCommand(String getString, int tabNum) {
-		String getWhiteSpace = null;
+	public static String getCommand(String getString) {
 		String shortcutCalc = null;
 		String[] shortcutCalcArray = null;
 		int[] shortcutTypeArray = null;
@@ -47,8 +46,7 @@ public class Short_Scoreboard {
 		 * anything with a data tag, even with spaces will be 3 and not 0, 1 or 2
 		 */
 
-		getWhiteSpace = getString.substring(0, tabNum);
-		shortcutCalc = getString.substring(tabNum);
+		shortcutCalc = getString.trim();
 		shortcutCalcArray = shortcutCalc.split(" ");
 		shortcutTypeArray = new int[shortcutCalcArray.length];
 		for (int j = 0; j < shortcutCalcArray.length; j++) {
@@ -251,7 +249,7 @@ public class Short_Scoreboard {
 		if (changedLine == true) {
 			for (int j = 0; j < shortcutCalcArray.length; j++)
 				if (j == 0) {
-					shortcutResultCalc = getWhiteSpace + shortcutCalcArray[j];
+					shortcutResultCalc = shortcutCalcArray[j];
 				} else {
 					if (shortcutCalcArray[j].equals("") == false) {
 						shortcutResultCalc += " " + shortcutCalcArray[j];

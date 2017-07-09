@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ccu.general.ArgUtils;
 import ccu.general.ReadConfig;
+import ccu.general.StringUtils;
 
 public class Cmd_Group {
 	// Temporary command save --> will be parsed further
@@ -39,10 +40,13 @@ public class Cmd_Group {
 		boolean validBlock = false;
 
 		ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayGet, tabNum);
-		ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
+		ArrayList<String> checkCommandsArray = ccuSubsetFile.getCommands(this.arrayGet);
 		if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
 			this.arrayGet = checkCommandsArray;
 		}
+		
+		// Check tab spaces
+		ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
 
 		// Removes "GROUP " and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("GROUP", "").replaceAll("^\\s+", "");
@@ -235,12 +239,9 @@ public class Cmd_Group {
 
 			String[] arrayGroup = new String[this.arrayGet.size() + 1];
 			arrayGroup[0] = statementArgs;
-			
-			// Check tab spaces
-			ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
-			
+
 			for (int i = 0; i < this.arrayGet.size(); i++) {
-				arrayGroup[i + 1] = this.arrayGet.get(i).replaceAll("^\\s+", "");
+				arrayGroup[i + 1] = StringUtils.generalParse(this.arrayGet.get(i).trim());
 			}
 
 			arrayGroupSave.add(arrayGroup);
@@ -259,7 +260,7 @@ public class Cmd_Group {
 			}
 		}
 
-		// should always return null
+		// should return null if parseCommands is true
 		return null;
 	}
 }

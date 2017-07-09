@@ -3,6 +3,7 @@ package ccu.command;
 import java.util.ArrayList;
 
 import ccu.general.ArgUtils;
+import ccu.general.StringUtils;
 
 public class Con_Cond {
 	private ArrayList<String> arrayCondReturn = new ArrayList<String>();
@@ -28,27 +29,26 @@ public class Con_Cond {
 		if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
 			this.arrayGet = checkCommandsArray;
 		}
+		
+		ArgUtils.checkWhiteSpace(this.arrayGet, tabNum);
 
 		// Removes "COND " and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("COND", "").replaceAll("^\\s+", "");
 		if (statementEncase.endsWith(":")) {
 
-			// checks tab spaces
-			String whitespaceCalc = ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
-
 			for (int i = 0; i < this.arrayGet.size(); i++) {
 				// Adds "CCU_COND_" in front of each command assuming it isn't already in the front
-
 				String newString = null;
+
+				// checks tab spaces
+				String whiteSpaceCalc = StringUtils.getWhiteSpace(this.arrayGet.get(i));
 
 				if (this.arrayGet.get(i).replaceAll("^\\s+", "").contains("CCU_COND_")) {
 					newString = this.arrayGet.get(i).replace("CCU_COND_", "");
-					newString = whitespaceCalc.substring(1, whitespaceCalc.length()) + "CCU_COND_"
-							+ newString.replace(whitespaceCalc, "");
+					newString = whiteSpaceCalc.substring(1) + "CCU_COND_" + newString.replace(whiteSpaceCalc, "");
 				} else {
 					// Puts CCU_COND_ before the thing
-					newString = whitespaceCalc.substring(1, whitespaceCalc.length()) + "CCU_COND_"
-							+ this.arrayGet.get(i).replace(whitespaceCalc, "");
+					newString = whiteSpaceCalc.substring(1) + "CCU_COND_" + this.arrayGet.get(i).replace(whiteSpaceCalc, "");
 				}
 				arrayCondReturn.add(newString);
 			}

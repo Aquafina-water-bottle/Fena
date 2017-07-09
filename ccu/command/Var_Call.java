@@ -105,8 +105,8 @@ public class Var_Call {
 				}
 
 				// replaces params
-				ParamUtils.replaceParams(this.arrayReturn, useParamsCalc, Var_Func.arrayFuncParamSave.get(funcIndexSave));
-				ParamUtils.calcFutureParams(this.arrayReturn);
+				this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc, Var_Func.arrayFuncParamSave.get(funcIndexSave));
+				this.arrayReturn = ParamUtils.calcFutureParams(this.arrayReturn);
 			}
 
 		} else {

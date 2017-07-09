@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import ccu.general.ArgUtils;
 import ccu.general.GeneralFile;
+import ccu.general.StringUtils;
 
 public class Cmd_MFunc {
 
@@ -133,7 +134,6 @@ public class Cmd_MFunc {
 
 			branchCalc = GeneralFile.checkFileExtension(branchCalc, ".mcfunction");
 
-			// TODO move this to the writeFile class
 			System.out.println("File created: '" + branchCalc + "'");
 
 			// Gets replacement for definitions via fileMFuncCommandSave
@@ -148,7 +148,7 @@ public class Cmd_MFunc {
 
 			// readCommands() recurring method is done down here because the beginning arguments must be gotten first
 			ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayGet, tabNum);
-			ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
+			ArrayList<String> checkCommandsArray = ccuSubsetFile.getCommands(this.arrayGet);
 			if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
 				this.arrayGet = checkCommandsArray;
 			}
@@ -157,7 +157,7 @@ public class Cmd_MFunc {
 			// Notice how the first element in each array is the mfunc name and not a valid command
 			String[] arrayMFunc = new String[this.arrayGet.size() + 1];
 			arrayMFunc[0] = branchCalc;
-			
+
 			// checks tab spaces
 			ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
 
@@ -170,7 +170,7 @@ public class Cmd_MFunc {
 					System.exit(0);
 				}
 
-				arrayMFunc[i + 1] = this.arrayGet.get(i).replaceAll("^\\s+", "");
+				arrayMFunc[i + 1] = StringUtils.generalParse(this.arrayGet.get(i).trim());
 			}
 
 			arrayMFuncSave.add(arrayMFunc);
@@ -189,8 +189,6 @@ public class Cmd_MFunc {
 				}
 			}
 		}
-
-		// should always return null
 		return null;
 	}
 }

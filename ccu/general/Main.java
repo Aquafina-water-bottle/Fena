@@ -62,7 +62,7 @@ public class Main {
 	// .replaceAll("\\s+$", "") = space to the right
 
 	public static void main(String[] args) {
-		
+
 		/*
 		String ayylmao = null;
 		
@@ -153,35 +153,44 @@ public class Main {
 		ReadCCUFile ccuFile = new ReadCCUFile(ReadConfig.regFilePath);
 
 		// Parses all CCU statements including defines
-		ArrayList<String> checkLength = ccuFile.checkCommands();
-
-		// This pretty much only runs if something isn't encapsulated with MFUNC or GROUP
-		if (checkLength == null || checkLength.size() == 0) {
-		} else {
-			System.out.println("WARNING: Unnused commands starting from '" + checkLength.get(0) + "'");
-		}
+		ArrayList<String> getCommandsArray = ccuFile.checkCommands();
 
 		// Checks if any options are left blank, and sets them to a default value if they are
 		Var_Options.checkOptions();
+		
+		/*
+		for (String asdf : getCommandsArray) {
+			System.out.println(asdf);
+		}*/
+
+		// Parses all groups and mfuncs
+		ArrayList<String> checkLength = ccuFile.getCommands(getCommandsArray);
+		
+		// This pretty much only runs if something isn't encapsulated with MFUNC or GROUP
+		if (checkLength == null || checkLength.size() == 0) {
+		} else {
+			System.out.println("ERROR: Unnused commands starting from '" + checkLength.get(0) + "'");
+			System.exit(0);
+		}
 
 		// Get the structures for each command block group
 		GroupStructure.getGroupStructures();
-
+		
 		// Gets the full arrangement of structures
 		Box.getBox();
-
+		
 		// Finalizes all commands with "setblock groupName" and "fill groupName"
 		// Also writes the name_dat.ccu file
 		Box.finalizeCoords();
-
+		
 		// Writes the mcfunction files since it's literally the easiest thing to do lmao
 		WriteFile.writeMCFunction();
-
+		
 		// Writes the _commands, _parsed, and _combiner files
 		Setblock.getCommands();
-
+		
 		// Writes the global Combiner file under globalCombinerFilePath
-
+		
 		// RCON
 		MinecraftRcon.useRcon();
 

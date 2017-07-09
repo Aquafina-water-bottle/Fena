@@ -17,8 +17,10 @@ public class ArgUtils {
 		return returnArray;
 	}
 
-	public static String checkWhiteSpace(ArrayList<String> getArray, int tabNum) {
+	public static void checkWhiteSpace(ArrayList<String> getArray, int tabNum) {
 		String whitespaceCalc = null;
+		int tabNumCalc = tabNum + 0;
+		int countTabSpaces = 0;
 
 		for (int i = 0; i < getArray.size(); i++) {
 
@@ -29,15 +31,27 @@ public class ArgUtils {
 				System.exit(0);
 			}
 
-			if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != tabNum) {
+			countTabSpaces = StringUtils.countChars(whitespaceCalc, "\t");
+
+			// check if it's GROUP or MFUNC as they can be skipped
+			if (getArray.get(i).trim().startsWith("GROUP") || getArray.get(i).trim().startsWith("MFUNC")) {
+				tabNumCalc++;
+				continue;
+			}
+
+			// check if it's been reduced
+			if (countTabSpaces < tabNumCalc) {
+				tabNumCalc = countTabSpaces + 0;
+			}
+
+			// if the number of tab spaces in the current line exceeds tab number calc or if it ever drops below the accepted tabnum
+			if (countTabSpaces > tabNumCalc || countTabSpaces < tabNum) {
 				System.out.println("ERROR: Line '" + getArray.get(i) + "' contains an incorrect number of tab spaces");
 				System.exit(0);
 			}
 		}
-
-		return whitespaceCalc;
 	}
-	
+
 	public static String checkWhiteSpace(String getString, int tabNum) {
 		String whitespaceCalc = null;
 

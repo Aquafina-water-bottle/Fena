@@ -3,6 +3,14 @@ package ccu.general;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+/* TODO
+ * Parameters should be thought of --
+ * 	whenever a tab space occurs because of LOOP / FUNC / DEF
+ * 		-increases 2nd number by 1, and starts replacing
+ *	parameters are replaced before checkCommands
+ */
+
+
 public class ParamUtils {
 	// count number of params in a string
 	public static int countParams(String getParamString) {
@@ -140,10 +148,11 @@ public class ParamUtils {
 				for (int paramIndex = 0; paramIndex < paramNum; paramIndex++) {
 					lineCalc = lineCalc.replace(("|" + paramIndex + "|"), getParams.get(paramIndex));
 				}
+				
 				returnArray.add(lineCalc);
 			}
 		}
-
+		
 		return returnArray;
 	}
 
