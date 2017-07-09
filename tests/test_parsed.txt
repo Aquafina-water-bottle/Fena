@@ -1,27 +1,72 @@
-GROUP | Grp_APulse | PULSE		[384 70 96 | stonebrick 0]
+GROUP | Grp_AyyLmao1_A | PULSE		[384 70 96 | stonebrick 0]
+	say 1 _A
+
+GROUP | Grp_AyyLmao2_A | PULSE		[384 72 96 | stonebrick 0]
+	say 2 _A
+
+GROUP | Grp_AyyLmao3_A | PULSE		[384 74 96 | stonebrick 0]
+	say 3 _A
+
+GROUP | Grp_MainGroup_A | PULSE		[384 76 96 | stonebrick 0]
+	say 1
+	say 2
+	say 3
+	say okay
+
+GROUP | Grp_AyyLmao1_B | PULSE		[384 78 96 | stonebrick 0]
+	say 1 _B
+
+GROUP | Grp_AyyLmao2_B | PULSE		[384 80 96 | stonebrick 0]
+	say 2 _B
+
+GROUP | Grp_AyyLmao3_B | PULSE		[384 82 96 | stonebrick 0]
+	say 3 _B
+
+GROUP | Grp_MainGroup_B | PULSE		[384 84 96 | stonebrick 0]
+	say 1
+	say 2
+	say 3
+	say okay
+
+GROUP | Grp_AyyLmao1_C | PULSE		[384 70 98 | stonebrick 0]
+	say 1 _C
+
+GROUP | Grp_AyyLmao2_C | PULSE		[384 72 98 | stonebrick 0]
+	say 2 _C
+
+GROUP | Grp_AyyLmao3_C | PULSE		[384 74 98 | stonebrick 0]
+	say 3 _C
+
+GROUP | Grp_MainGroup_C | PULSE		[384 76 98 | stonebrick 0]
+	say 1
+	say 2
+	say 3
+	say okay
+
+GROUP | Grp_APulse | PULSE		[384 78 98 | stonebrick 0]
 	say a
 	say b
 	function custom:RayCaster/theHunted/test/init
 
-GROUP | Grp_B | PULSE		[384 72 96 | stonebrick 0]
+GROUP | Grp_B | PULSE		[384 80 98 | stonebrick 0]
 	say b
 
-GROUP | Grp_C | CLOCK		[384 74 96 | stonebrick 0]
+GROUP | Grp_C | CLOCK		[384 82 98 | stonebrick 0]
 	say c
 
-GROUP | Grp_DClock | CLOCK		[384 76 96 | stonebrick 0]
+GROUP | Grp_DClock | CLOCK		[384 84 98 | stonebrick 0]
 	say d
 
-GROUP | Grp_E | PULSE		[384 78 96 | stonebrick 0]
+GROUP | Grp_E | PULSE		[384 70 100 | stonebrick 0]
 	say e
 
-GROUP | Grp_F | PULSE		[384 80 96 | stonebrick 0]
+GROUP | Grp_F | PULSE		[384 72 100 | stonebrick 0]
 	say f
 
-GROUP | Grp_G | PULSE		[384 82 96 | stonebrick 0]
+GROUP | Grp_G | PULSE		[384 74 100 | stonebrick 0]
 	say g
 
-GROUP | Grp_Test2 | PULSE		[384 84 96 | stonebrick 0]
+GROUP | Grp_Test2 | PULSE		[384 76 100 | stonebrick 0]
 	say test
 	say ABORTMISSION
 	say hell yeah
@@ -29,16 +74,16 @@ GROUP | Grp_Test2 | PULSE		[384 84 96 | stonebrick 0]
 	lmao
 	ayy
 
-GROUP | Grp_Test | PULSE		[384 70 98 | stonebrick 0]
+GROUP | Grp_Test | PULSE		[384 78 100 | stonebrick 0]
 	say $SA$
 	ayy
 	say LiterallyAbortMission
 	lmao
-	fill 384 72 98 399 74 98 air 0
+	fill 384 80 100 399 82 100 air 0
 	say not_yas
 
-GROUP | Grp_AyyLmao | PULSE		[384 72 98 | stonebrick 0]
-	setblock 384 72 98 air 0
+GROUP | Grp_AyyLmao | PULSE		[384 80 100 | stonebrick 0]
+	setblock 384 80 100 air 0
 	say MEMES 5
 	say -301 MARKER
 	say 51 MARKER
@@ -67,25 +112,12 @@ GROUP | Grp_AyyLmao | PULSE		[384 72 98 | stonebrick 0]
 	say 15
 	say 16
 	say 17
-	say Ye
-	say ayy
-	say lmao
-	TheGreatestARGS (shouldn't be considered a function)
 	say 18
-	say Ye
-	say ayy
-	say lmao
-	TheGreatestARGS (shouldn't be considered a function)
-	asdfasdfsaf
-	asdfae564rwe
-	d45e
-	78y65re7
-	6756re
 	say 19
 	say 20
 	say 21
 
-GROUP | Grp_TheBestGroup | PULSE		[384 76 98 | stonebrick 0]
+GROUP | Grp_TheBestGroup | PULSE		[384 84 100 | stonebrick 0]
 	say a
 	say b
 	say c
@@ -108,17 +140,12 @@ GROUP | Grp_TheBestGroup | PULSE		[384 76 98 | stonebrick 0]
 	 | say s
 	 L say t
 
-GROUP | Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
+GROUP | Grp_TheGreatestGroup | PULSE		[384 70 102 | stonebrick 0]
 	say 1
 	say 2 asdfasdf
 	say 3 asdfasdf
 	say 4 asdfasdf
 	say 5 asdfasdf
-	asdfasdfsaf asdfasdf
-	asdfae564rwe asdfasdf
-	d45e asdfasdf
-	78y65re7 asdfasdf
-	6756re asdfasdf
 	say 6 asdfasdf
 	asdfasdf say 7
 	asdfasdf say 8
@@ -142,10 +169,10 @@ GROUP | Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
 	say 26
 	say ayy
 	say asdf
-	say (first 15) (second |0|)
+	say (first 15) (second 526)
 	say FIRST
-	say |0| |1| SECOND
-	say |0| |1| FIRST
+	say 5 10 SECOND
+	say 1 2 FIRST
 	say test
 	Func_TestDefinition
 	say 27
@@ -156,129 +183,129 @@ GROUP | Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
 	say 32
 	tellraw @a {"text":"ayylmao"}
 
-GROUP | Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
+GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
 	say rekt
 	say rekt again
 	say abde
-	say 1  |  8.0  |  4096  ~  
+	say 1  |  8.0  |  4096  ~
 	say Current 1
 	say Previous 1  |  8.0  |  4096
 	say Current 2
 	say Previous 1  |  8.0  |  4096
 	say Current 3
 	say Previous 1  |  8.0  |  4096
-	say 2  |  7.5  |  2048  ~  
+	say 2  |  7.5  |  2048  ~
 	say Current 1
 	say Previous 2  |  7.5  |  2048
 	say Current 2
 	say Previous 2  |  7.5  |  2048
 	say Current 3
 	say Previous 2  |  7.5  |  2048
-	say 3  |  7.0  |  1024  ~  
+	say 3  |  7.0  |  1024  ~
 	say Current 1
 	say Previous 3  |  7.0  |  1024
 	say Current 2
 	say Previous 3  |  7.0  |  1024
 	say Current 3
 	say Previous 3  |  7.0  |  1024
-	say 4  |  6.5  |  512  ~  
+	say 4  |  6.5  |  512  ~
 	say Current 1
 	say Previous 4  |  6.5  |  512
 	say Current 2
 	say Previous 4  |  6.5  |  512
 	say Current 3
 	say Previous 4  |  6.5  |  512
-	say 5  |  6.0  |  256  ~  
+	say 5  |  6.0  |  256  ~
 	say Current 1
 	say Previous 5  |  6.0  |  256
 	say Current 2
 	say Previous 5  |  6.0  |  256
 	say Current 3
 	say Previous 5  |  6.0  |  256
-	say 6  |  5.5  |  128  ~  
+	say 6  |  5.5  |  128  ~
 	say Current 1
 	say Previous 6  |  5.5  |  128
 	say Current 2
 	say Previous 6  |  5.5  |  128
 	say Current 3
 	say Previous 6  |  5.5  |  128
-	say 7  |  5.0  |  64  ~  
+	say 7  |  5.0  |  64  ~
 	say Current 1
 	say Previous 7  |  5.0  |  64
 	say Current 2
 	say Previous 7  |  5.0  |  64
 	say Current 3
 	say Previous 7  |  5.0  |  64
-	say 8  |  4.5  |  32  ~  
+	say 8  |  4.5  |  32  ~
 	say Current 1
 	say Previous 8  |  4.5  |  32
 	say Current 2
 	say Previous 8  |  4.5  |  32
 	say Current 3
 	say Previous 8  |  4.5  |  32
-	say 9  |  4.0  |  16  ~  
+	say 9  |  4.0  |  16  ~
 	say Current 1
 	say Previous 9  |  4.0  |  16
 	say Current 2
 	say Previous 9  |  4.0  |  16
 	say Current 3
 	say Previous 9  |  4.0  |  16
-	say 10  |  3.5  |  8  ~  
+	say 10  |  3.5  |  8  ~
 	say Current 1
 	say Previous 10  |  3.5  |  8
 	say Current 2
 	say Previous 10  |  3.5  |  8
 	say Current 3
 	say Previous 10  |  3.5  |  8
-	say 11  |  3.0  |  4  ~  
+	say 11  |  3.0  |  4  ~
 	say Current 1
 	say Previous 11  |  3.0  |  4
 	say Current 2
 	say Previous 11  |  3.0  |  4
 	say Current 3
 	say Previous 11  |  3.0  |  4
-	say 12  |  2.5  |  2  ~  
+	say 12  |  2.5  |  2  ~
 	say Current 1
 	say Previous 12  |  2.5  |  2
 	say Current 2
 	say Previous 12  |  2.5  |  2
 	say Current 3
 	say Previous 12  |  2.5  |  2
-	say 13  |  2.0  |  1  ~  
+	say 13  |  2.0  |  1  ~
 	say Current 1
 	say Previous 13  |  2.0  |  1
 	say Current 2
 	say Previous 13  |  2.0  |  1
 	say Current 3
 	say Previous 13  |  2.0  |  1
-	say 14  |  1.5  |    ~  
+	say 14  |  1.5  |    ~
 	say Current 1
-	say Previous 14  |  1.5  |  
+	say Previous 14  |  1.5  |
 	say Current 2
-	say Previous 14  |  1.5  |  
+	say Previous 14  |  1.5  |
 	say Current 3
-	say Previous 14  |  1.5  |  
-	say 15  |  1.0  |    ~  
+	say Previous 14  |  1.5  |
+	say 15  |  1.0  |    ~
 	say Current 1
-	say Previous 15  |  1.0  |  
+	say Previous 15  |  1.0  |
 	say Current 2
-	say Previous 15  |  1.0  |  
+	say Previous 15  |  1.0  |
 	say Current 3
-	say Previous 15  |  1.0  |  
-	say 16  |    |    ~  
+	say Previous 15  |  1.0  |
+	say 16  |    |    ~
 	say Current 1
-	say Previous 16  |    |  
+	say Previous 16  |    |
 	say Current 2
-	say Previous 16  |    |  
+	say Previous 16  |    |
 	say Current 3
-	say Previous 16  |    |  
-	say 17  |    |    ~  
+	say Previous 16  |    |
+	say 17  |    |    ~
 	say Current 1
-	say Previous 17  |    |  
+	say Previous 17  |    |
 	say Current 2
-	say Previous 17  |    |  
+	say Previous 17  |    |
 	say Current 3
-	say Previous 17  |    |  
+	say Previous 17  |    |
 	execute @p ~ ~ ~ execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ detect ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick * say @a
 	execute @p ~ ~ ~ execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ detect ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick * say @a
 	execute @a ~ ~ ~ say test
@@ -344,9 +371,9 @@ GROUP | Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	tellraw @a[SPtp=5] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"218 18 -37","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Diamond Race","color":"aqua","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 5"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Diamond Race","color":"aqua"}}},{"text":"!","color":"gray"}]}
 	execute @a[score_SPtp_min=1] ~ ~ ~ playsound minecraft:entity.experience_orb.touch voice @a[c=1,score_SPtp_min=1]
 	scoreboard players set @a[score_SPtp_min=1] SPtp 0
-	say @a[score_m=2,score_m_min=2]
-	say @a[score_c=2,score_c_min=2]
-	say @a[score_name=2,score_name_min=2]
+	say @a[m=2]
+	say @a[c=2]
+	say @a[name=2]
 	say @a[score_test=2,score_test_min=2]
 	say
 	say
@@ -394,11 +421,7 @@ GROUP | Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	say test2
 	scoreboard players operation @p TEST @p SPtp
 	$test$
-	say ayy
-	say lmao
-	say lmao compared to ayy
-	say lmao compared to ayy
-	fill 384 70 100 399 85 100 air 0
+	fill 384 70 104 399 84 104 air 0
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -406,6 +429,7 @@ MFUNC | MFunc_MainRaycaster | C:/Users/Austin/Documents/Austin/powder game code/
 	say test
 	say test
 	say test
+	say 1 = 1
 	say test
 
 MFUNC | MFunc_MainInit | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/test/init.mcfunction
@@ -423,29 +447,28 @@ MFUNC | MFunc_Test | C:/Users/Austin/Documents/Austin/powder game code/eGO/Serve
 	say theRealAsdf
 
 MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/Main.mcfunction
+	Func_test|0|
+	Func_test_A
+	Func_test_B
+	Func_test_C
 	say THESE
 	say ARE
 	say THE
 	say GREATEST
-	say Dankest asdf memes asdf2 -SPLIT- Dankest more memes 
-	say Dankest  memes 
-	say Dankest  memes 
+	say Dankest asdf memes asdf2 -SPLIT- Dankest more memes
+	say Dankest  memes
+	say Dankest  memes
 	say asdf def3 asdf
 	say WOOOOOOOOOOOO
 	say ye
-	say This is like for minecraft:xp stuff
-	say hell yeah
 	say 1
-	say |0|3|saytest|
-	say |2|
-	say 4
-	say 5
-	say 6
+	say 3
+	say 10
 	say 1
-	say |0|3|saytest|
-	say |2|
+	say
+	say
 	say 1
-	say |0|3|saytest|
-	say |2|
+	say
+	say
 	say YESSSSSSSSSSSSSSSSS
-	setblock 384 70 96 air 0
+	setblock 384 78 98 air 0
