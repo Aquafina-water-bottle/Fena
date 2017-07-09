@@ -2,6 +2,8 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.ArgUtils;
+
 public class Con_Use {
 	private ArrayList<String> arrayUseReturn = new ArrayList<String>();
 	private ArrayList<String> arrayGet = new ArrayList<String>();
@@ -109,21 +111,11 @@ public class Con_Use {
 			if (noSpace == null) {
 				noSpace = false;
 			}
+			
+			// Checking tab spaces
+			String whitespaceCalc = ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
 
 			for (int i = 0; i < this.arrayGet.size(); i++) {
-				// Checking tab spaces
-				String whitespaceCalc = this.arrayGet.get(i).substring(0,
-						(this.arrayGet.get(i).length() - this.arrayGet.get(i).replaceAll("^\\s+", "").length()));
-				if (whitespaceCalc.contains(" ")) {
-					System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains spaces instead of tab spaces");
-					System.exit(0);
-				}
-
-				if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
-					System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains an incorrect number of tab spaces");
-					System.exit(0);
-				}
-
 				String newString = null;
 				String newStringCalc = null;
 				// checks for conditional settings

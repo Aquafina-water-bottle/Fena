@@ -2,6 +2,7 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.ArgUtils;
 import ccu.general.ParamUtils;
 
 public class Var_Define {
@@ -72,18 +73,9 @@ public class Var_Define {
 		 */
 
 		// Removes "DEF" and for all arguments
-
-		String whitespaceCalc = this.fullLineGet.substring(0,
-				(this.fullLineGet.length() - this.fullLineGet.replaceAll("^\\s+", "").length()));
-		if (whitespaceCalc.contains(" ")) {
-			System.out.println("ERROR: Line '" + this.fullLineGet + "' contains spaces instead of tab spaces");
-			System.exit(0);
-		}
-
-		if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
-			System.out.println("ERROR: Line '" + this.fullLineGet + "' contains an incorrect number of tab spaces");
-			System.exit(0);
-		}
+		
+		// Checks tab spaces
+		ArgUtils.checkWhiteSpace(this.fullLineGet, this.tabNum);
 
 		String statementEncase = this.fullLineGet.replaceFirst("DEF", "").replaceAll("^\\s+", "");
 		switch (statementEncase.substring(0, statementEncase.indexOf(" "))) {

@@ -321,13 +321,8 @@ public class Short_Selector {
 							shortcutResultCalc += "," + shortcutSelectorArray[j];
 						}
 					}
-
-					System.out.println(shortcutSelectorArray[j] + " MARKER");
 				}
-
 				shortcutCalcArray[i] = getSelectorSave + "[" + shortcutResultCalc + "]" + shortcutEndCalc;
-				System.out.println("THETRUEMARKER " + shortcutCalcArray[i]);
-				System.out.println("");
 
 			} else {
 				shortcutCalcArray[i] = "@" + shortcutCalcArray[i];

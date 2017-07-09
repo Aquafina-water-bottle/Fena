@@ -2,6 +2,7 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.ArgUtils;
 import ccu.general.ReadConfig;
 
 public class Cmd_Group {
@@ -234,21 +235,11 @@ public class Cmd_Group {
 
 			String[] arrayGroup = new String[this.arrayGet.size() + 1];
 			arrayGroup[0] = statementArgs;
+			
+			// Check tab spaces
+			ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
+			
 			for (int i = 0; i < this.arrayGet.size(); i++) {
-
-				// Checking tab spaces
-				String whitespaceCalc = this.arrayGet.get(i).substring(0,
-						(this.arrayGet.get(i).length() - this.arrayGet.get(i).replaceAll("^\\s+", "").length()));
-				if (whitespaceCalc.contains(" ")) {
-					System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains spaces instead of tab spaces");
-					System.exit(0);
-				}
-
-				if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
-					System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains an incorrect number of tab spaces");
-					System.exit(0);
-				}
-
 				arrayGroup[i + 1] = this.arrayGet.get(i).replaceAll("^\\s+", "");
 			}
 

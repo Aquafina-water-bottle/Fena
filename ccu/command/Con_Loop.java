@@ -2,6 +2,7 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.ArgUtils;
 import ccu.general.NumberUtils;
 import ccu.general.ParamUtils;
 import ccu.general.StringUtils;
@@ -81,22 +82,9 @@ public class Con_Loop {
 				}
 
 				// checks tab spaces
-				String whitespaceCalc = "";
+				ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
 
 				for (int i = 0; i < this.arrayGet.size(); i++) {
-
-					whitespaceCalc = this.arrayGet.get(i).substring(0,
-							(this.arrayGet.get(i).length() - this.arrayGet.get(i).replaceAll("^\\s+", "").length()));
-					if (whitespaceCalc.contains(" ")) {
-						System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains spaces instead of tab spaces");
-						System.exit(0);
-					}
-
-					if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
-						System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains an incorrect number of tab spaces");
-						System.exit(0);
-					}
-
 					// removes a tab space infront of the line
 					this.arrayGet.set(i, this.arrayGet.get(i).substring(1));
 				}
@@ -134,7 +122,7 @@ public class Con_Loop {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 			System.exit(0);
 		}
-		
+
 		ParamUtils.calcFutureParams(arrayLoopReturn);
 		return arrayLoopReturn;
 	}

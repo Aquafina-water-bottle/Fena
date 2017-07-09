@@ -142,10 +142,10 @@ GROUP | Grp_TheGreatestGroup | PULSE		[384 79 98 | stonebrick 0]
 	say 26
 	say ayy
 	say asdf
-	say (first 15) (second 526)
+	say (first 15) (second |0|)
 	say FIRST
-	say 5 10 SECOND
-	say 1 2 FIRST
+	say |0| |1| SECOND
+	say |0| |1| FIRST
 	say test
 	Func_TestDefinition
 	say 27
@@ -160,10 +160,125 @@ GROUP | Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	say rekt
 	say rekt again
 	say abde
-	say
-	say
-	say
-	say @a
+	say 1  |  8.0  |  4096  ~  
+	say Current 1
+	say Previous 1  |  8.0  |  4096
+	say Current 2
+	say Previous 1  |  8.0  |  4096
+	say Current 3
+	say Previous 1  |  8.0  |  4096
+	say 2  |  7.5  |  2048  ~  
+	say Current 1
+	say Previous 2  |  7.5  |  2048
+	say Current 2
+	say Previous 2  |  7.5  |  2048
+	say Current 3
+	say Previous 2  |  7.5  |  2048
+	say 3  |  7.0  |  1024  ~  
+	say Current 1
+	say Previous 3  |  7.0  |  1024
+	say Current 2
+	say Previous 3  |  7.0  |  1024
+	say Current 3
+	say Previous 3  |  7.0  |  1024
+	say 4  |  6.5  |  512  ~  
+	say Current 1
+	say Previous 4  |  6.5  |  512
+	say Current 2
+	say Previous 4  |  6.5  |  512
+	say Current 3
+	say Previous 4  |  6.5  |  512
+	say 5  |  6.0  |  256  ~  
+	say Current 1
+	say Previous 5  |  6.0  |  256
+	say Current 2
+	say Previous 5  |  6.0  |  256
+	say Current 3
+	say Previous 5  |  6.0  |  256
+	say 6  |  5.5  |  128  ~  
+	say Current 1
+	say Previous 6  |  5.5  |  128
+	say Current 2
+	say Previous 6  |  5.5  |  128
+	say Current 3
+	say Previous 6  |  5.5  |  128
+	say 7  |  5.0  |  64  ~  
+	say Current 1
+	say Previous 7  |  5.0  |  64
+	say Current 2
+	say Previous 7  |  5.0  |  64
+	say Current 3
+	say Previous 7  |  5.0  |  64
+	say 8  |  4.5  |  32  ~  
+	say Current 1
+	say Previous 8  |  4.5  |  32
+	say Current 2
+	say Previous 8  |  4.5  |  32
+	say Current 3
+	say Previous 8  |  4.5  |  32
+	say 9  |  4.0  |  16  ~  
+	say Current 1
+	say Previous 9  |  4.0  |  16
+	say Current 2
+	say Previous 9  |  4.0  |  16
+	say Current 3
+	say Previous 9  |  4.0  |  16
+	say 10  |  3.5  |  8  ~  
+	say Current 1
+	say Previous 10  |  3.5  |  8
+	say Current 2
+	say Previous 10  |  3.5  |  8
+	say Current 3
+	say Previous 10  |  3.5  |  8
+	say 11  |  3.0  |  4  ~  
+	say Current 1
+	say Previous 11  |  3.0  |  4
+	say Current 2
+	say Previous 11  |  3.0  |  4
+	say Current 3
+	say Previous 11  |  3.0  |  4
+	say 12  |  2.5  |  2  ~  
+	say Current 1
+	say Previous 12  |  2.5  |  2
+	say Current 2
+	say Previous 12  |  2.5  |  2
+	say Current 3
+	say Previous 12  |  2.5  |  2
+	say 13  |  2.0  |  1  ~  
+	say Current 1
+	say Previous 13  |  2.0  |  1
+	say Current 2
+	say Previous 13  |  2.0  |  1
+	say Current 3
+	say Previous 13  |  2.0  |  1
+	say 14  |  1.5  |    ~  
+	say Current 1
+	say Previous 14  |  1.5  |  
+	say Current 2
+	say Previous 14  |  1.5  |  
+	say Current 3
+	say Previous 14  |  1.5  |  
+	say 15  |  1.0  |    ~  
+	say Current 1
+	say Previous 15  |  1.0  |  
+	say Current 2
+	say Previous 15  |  1.0  |  
+	say Current 3
+	say Previous 15  |  1.0  |  
+	say 16  |    |    ~  
+	say Current 1
+	say Previous 16  |    |  
+	say Current 2
+	say Previous 16  |    |  
+	say Current 3
+	say Previous 16  |    |  
+	say 17  |    |    ~  
+	say Current 1
+	say Previous 17  |    |  
+	say Current 2
+	say Previous 17  |    |  
+	say Current 3
+	say Previous 17  |    |  
 	execute @p ~ ~ ~ execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ detect ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick * say @a
 	execute @p ~ ~ ~ execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ detect ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick * say @a
 	execute @a ~ ~ ~ say test
@@ -190,8 +305,8 @@ GROUP | Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	execute @a ~ ~ ~ say test
 	execute @a ~ ~ ~ not_a_block 0 say test
 	execute @a ~ ~ ~ detect ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
-	execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation 
-	execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation 
+	execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti2
+	execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = 3 Number
 	scoreboard players add @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}
 	scoreboard players remove @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}
 	scoreboard players set @e[type=ArmorStand,tag=RRStand] RRti 10 {DisabledSlots:2096896}
@@ -204,8 +319,44 @@ GROUP | Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	scoreboard teams join RRd_y @e[type=ArmorStand,tag=RRStand]
 	scoreboard teams leave RRd_y @e[type=ArmorStand,tag=RRStand]
 	scoreboard teams empty RRd_y
-	execute @a ~ ~ ~ execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation 
-	execute @a ~ ~ ~ execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation 
+	say Test
+	say String
+	say Yee
+	minecraft:tp @a[score_SPtp=1,score_SPtp_min=1] 49 36 -45 -90 0
+	tellraw @a[score_SPtp=1,score_SPtp_min=1]
+	tellraw @a[m=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
+	tellraw @a[SPtp=1] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"49 36 -45","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Ice Race","color":"aqua","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 1"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Ice Race","color":"aqua"}}},{"text":"!","color":"gray"}]}
+	minecraft:tp @a[score_SPtp=2,score_SPtp_min=2] 75 7 -80 90 0
+	tellraw @a[score_SPtp=2,score_SPtp_min=2]
+	tellraw @a[m=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
+	tellraw @a[SPtp=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"75 7 -80","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Slow Race","color":"gray","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 2"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Slow Race","color":"gray"}}},{"text":"!","color":"gray"}]}
+	minecraft:tp @a[score_SPtp=3,score_SPtp_min=3] 73 7 -102 90 0
+	tellraw @a[score_SPtp=3,score_SPtp_min=3]
+	tellraw @a[m=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
+	tellraw @a[SPtp=3] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"73 7 -102","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Nether Race","color":"red","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 3"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Nether Race","color":"red"}}},{"text":"!","color":"gray"}]}
+	minecraft:tp @a[score_SPtp=4,score_SPtp_min=4] 23 7 -133 -90 0
+	tellraw @a[score_SPtp=4,score_SPtp_min=4]
+	tellraw @a[m=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
+	tellraw @a[SPtp=4] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"23 7 -133","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Evil Race","color":"gray","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 4"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Evil Race","color":"gray"}}},{"text":"!","color":"gray"}]}
+	minecraft:tp @a[score_SPtp=5,score_SPtp_min=5] 218 18 -37 -90 0
+	tellraw @a[score_SPtp=5,score_SPtp_min=5]
+	tellraw @a[m=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
+	tellraw @a[SPtp=5] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"218 18 -37","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Diamond Race","color":"aqua","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 5"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Diamond Race","color":"aqua"}}},{"text":"!","color":"gray"}]}
+	execute @a[score_SPtp_min=1] ~ ~ ~ playsound minecraft:entity.experience_orb.touch voice @a[c=1,score_SPtp_min=1]
+	scoreboard players set @a[score_SPtp_min=1] SPtp 0
+	say @a[score_m=2,score_m_min=2]
+	say @a[score_c=2,score_c_min=2]
+	say @a[score_name=2,score_name_min=2]
+	say @a[score_test=2,score_test_min=2]
+	say
+	say
+	say
+	tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
+	tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"$Coords|0|$","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"$Event|0|$","color":"$EventC|0|$","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |0|"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to $Event|0|$","color":"$EventC|0|$"}}},{"text":"!","color":"gray"}]}
+	execute @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
+	execute @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"$Coords|0|$","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"$Event|0|$","color":"$EventC|0|$","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |0|"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to $Event|0|$","color":"$EventC|0|$"}}},{"text":"!","color":"gray"}]}
+	execute @a ~ ~ ~ execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti2
+	execute @a ~ ~ ~ execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = 3 Number
 	execute @a ~ ~ ~ scoreboard players add @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}
 	execute @a ~ ~ ~ scoreboard players remove @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}
 	execute @a ~ ~ ~ scoreboard players set @e[type=ArmorStand,tag=RRStand] RRti 10 {DisabledSlots:2096896}
@@ -235,10 +386,10 @@ GROUP | Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	tellraw @a {"selector":"@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,score_asdf=5,score_asdf_min=5]"}
 	effect @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRci=0,score_RRci_min=0,score_RRar=1,score_RRar_min=1] 11 1 0 true
 	effect @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRci=0,score_RRci_min=0,score_RRar_min=1,score_RRar=2] 7 1 1 true
-	say @a[score_name_min=3,score_name=5] @a[score_name_min=3,score_name=4] @a[score_name_min=3]
-	say @a[score_name=5,score_name_min=3] @a[score_name=5,score_name_min=4] @a[score_name=3]
-	say @a[score_name_min=4,score_name=5] @a[score_name_min=4,score_name=4] @a[score_name_min=4]
-	say @a[score_name=4,score_name_min=3] @a[score_name=4,score_name_min=4] @a[score_name=2]
+	say @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRar_min=3,score_RRar=5] @a[score_OMG_WORK_min=3,score_OMG_WORK=4] @a[score_OMG_WORK_min=3] 3
+	say @a[score_OMG_WORK=5,score_OMG_WORK_min=3] @a[score_OMG_WORK=5,score_OMG_WORK_min=4] @a[score_OMG_WORK=3]
+	say @a[score_OMG_WORK_min=4,score_OMG_WORK=5] @a[score_OMG_WORK_min=4,score_OMG_WORK=4] @a[score_OMG_WORK_min=4]
+	say @a[score_OMG_WORK=4,score_OMG_WORK_min=3] @a[score_OMG_WORK=4,score_OMG_WORK_min=4] @a[score_OMG_WORK=2]
 	scoreboard players operation @p TEST @p SPtp
 	say test2
 	scoreboard players operation @p TEST @p SPtp
@@ -247,7 +398,7 @@ GROUP | Grp_asdf | CLOCK		[384 70 100 | stained_hardened_clay 11]
 	say lmao
 	say lmao compared to ayy
 	say lmao compared to ayy
-	fill 384 70 100 399 75 100 air 0
+	fill 384 70 100 399 85 100 air 0
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -285,16 +436,16 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say This is like for minecraft:xp stuff
 	say hell yeah
 	say 1
-	say 33|saytest|
-	say 10
+	say |0|3|saytest|
+	say |2|
 	say 4
 	say 5
 	say 6
 	say 1
-	say 3|saytest|
-	say 
+	say |0|3|saytest|
+	say |2|
 	say 1
-	say 3|saytest|
-	say 
+	say |0|3|saytest|
+	say |2|
 	say YESSSSSSSSSSSSSSSSS
 	setblock 384 70 96 air 0

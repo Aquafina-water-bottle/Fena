@@ -227,6 +227,7 @@ public class Var_Func {
 				tabNumCalc = this.tabNum - 1;
 			}
 			
+			// checks for repeats
 			while (funcIndex < arrayFuncNameSave.size()) {
 				if (arrayFuncNameSave.get(funcIndex).equals(statementArgs) && arrayFuncTabNumSave.get(funcIndex).equals(tabNumCalc)) {
 					Var_Func.arrayFuncSave.remove(funcIndex);
@@ -238,7 +239,7 @@ public class Var_Func {
 				}
 			}
 
-			// Adds the function to the arrayList
+			// Adds the function to the arrayList while removing tab spaces according to tabNum
 			arrayFuncCalc = new String[arrayGet.size()];
 			for (int i = 0; i < arrayGet.size(); i++) {
 				// Adds full function array while removing tab spaces

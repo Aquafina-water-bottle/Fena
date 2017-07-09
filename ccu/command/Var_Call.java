@@ -2,6 +2,7 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.ArgUtils;
 import ccu.general.ParamUtils;
 
 public class Var_Call {
@@ -32,21 +33,10 @@ public class Var_Call {
 		ArrayList<String> useParamsCalc = new ArrayList<String>();
 		String lineCalc = null;
 		int funcIndexSave = 0;
+		
 
-		// Checks for whitespace
-		String whitespaceCalc = this.fullLineGet.substring(0,
-				(this.fullLineGet.length() - this.fullLineGet.replaceAll("^\\s+", "").length()));
-		if (whitespaceCalc.contains(" ")) {
-			System.out.println("ERROR: Line '" + this.fullLineGet + "' contains spaces instead of tab spaces");
-			System.exit(0);
-		}
-
-		// Checks for actual spaces instead of tab spaces
-		if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
-			System.out.println("ERROR: Line '" + this.fullLineGet + "' contains an incorrect number of tab spaces");
-			System.exit(0);
-		}
-
+		// Checking tab spaces
+		String whitespaceCalc = ArgUtils.checkWhiteSpace(this.fullLineGet, this.tabNum);
 		String statementEncase = this.fullLineGet.replaceFirst("CALL", "").replaceAll("^\\s+", "");
 
 		// if it's a proper CALL

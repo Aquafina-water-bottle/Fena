@@ -27,18 +27,20 @@ public class Main {
 	 * -FUNC - DONE (now with future params)
 	 * -IMPORT - DONE (without importing .dat files)
 	 * -UNASSIGN - DONE (since arrays, team lists and objective lists aren't a thing yet)
+	 * -LOOP - DONE (completely woot)
 	 * 
 	 * -Repeated definitions - Already works apparently
 	 * -Check whether commands exist - WILL NOT DO
 	 * 
-	 * -Better RCON usage
+	 * -Better RCON usage - do when multiparse works
 	 * -Combiner options using .mcfunction - do when multiparse works
 	 * -Save coords option
+	 * -Multiparse
 	 * 
 	 * General statements
+	 * -INITIALIZE
 	 * -ARRAY
 	 * -IF
-	 * -LOOP
 	 * -OBJADD / OBJREV
 	 * -TEAMADD / TEAMREV
 	 * -FILE
@@ -50,6 +52,10 @@ public class Main {
 	 * -Escaping using '`'
 	 * -Escaping using '/' at the beginning of a line
 	 * -Skipping lines using ';'
+	 * 
+	 * 
+	 * Main thing is that all shortcuts will be done when parsing only at GROUP and MFUNC
+	 * GROUP and MFUNC 
 	 */
 
 	// .replaceAll("^\\s+", "") = space to the left

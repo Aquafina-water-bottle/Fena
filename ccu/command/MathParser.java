@@ -23,6 +23,9 @@ class storeValueType {
 
 public class MathParser {
 	public static String[] getLoopArray(String getArgs, String fullLineGet) {
+		/** This gets the full array for arguments like {1 3 + 1}
+		 * Eg. The above would return a string array of '1', '2', '3'
+		 */
 		// Operators are +, -, *, / and ^
 
 		ArrayList<String> calcArray = new ArrayList<String>();
@@ -124,7 +127,7 @@ public class MathParser {
 					if (arrayCalc.length == 4) {
 						for (int i = 0; i < arrayCalc.length; i++) {
 
-							// if it's the 3rd element
+							// if it's the 3rd element --> detects operator
 							if (i == 2) {
 								boolean foundOperator = false;
 								for (int j = 0; j < operatorArray.length; j++) {
@@ -134,6 +137,8 @@ public class MathParser {
 										break;
 									}
 								}
+
+								// if the operator wasn't found
 								if (foundOperator == false) {
 									System.out.println("ERROR: The argument '" + arrayCalc[i] + "' in line '" + fullLineGet
 											+ "' is not an operator");
@@ -154,7 +159,7 @@ public class MathParser {
 			}
 		}
 
-		if (calcArray.size() < 4) {
+		if (calcArray.size() < 4) { // less than 4 arguments = fail
 			System.out.println("ERROR: 4 LOOP arguments are required for line '" + fullLineGet + "'");
 			System.exit(0);
 		}
@@ -162,6 +167,7 @@ public class MathParser {
 		ArrayList<String> returnArray = new ArrayList<String>();
 		boolean isFloat = false;
 
+		// check if the array contains a float anywhere
 		for (String line : calcArray) {
 			if (NumberUtils.isFloat(line)) {
 				isFloat = true;
@@ -169,7 +175,7 @@ public class MathParser {
 			}
 		}
 
-		// calculate calc array
+		// calculate calc array for floats
 		if (isFloat) {
 			float[] numCalcArray = new float[4];
 
@@ -426,7 +432,7 @@ public class MathParser {
 				break;
 			}
 
-		} else {
+		} else { // calculates int array
 			int[] numCalcArray = new int[4];
 
 			for (int i = 0; i < calcArray.size(); i++) {
@@ -682,13 +688,13 @@ public class MathParser {
 				break;
 			}
 		}
-		
+
 		/*
 		System.out.println(calcArray);
 		System.out.println(returnArray);
 		System.out.println("");
 		*/
-		
+
 		String[] returnStringArray = new String[returnArray.size()];
 		for (int i = 0; i < returnArray.size(); i++) {
 			returnStringArray[i] = returnArray.get(i);
@@ -698,6 +704,8 @@ public class MathParser {
 	}
 
 	private static String getOperation(String getString, String fullLineGet) {
+		/** This is primarily for actual CALC() stuff, including IF
+		 */
 
 		// checks if there are brackets in the first places
 		if (StringUtils.countChars(getString, "(") == StringUtils.countChars(getString, ")")) {
@@ -752,6 +760,9 @@ public class MathParser {
 	}
 
 	private static String getLoopOperation(String getString, String fullLineGet, int argNumGet) {
+		/** The main difference between the above and this is 'argNumGet'
+		 * if that's 3, it detects whether it's a valid loop operator or not (if it isn't, you're a potato)
+		 */
 
 		final String[] operatorArray = {"^", "*", "/", "-", "+"};
 

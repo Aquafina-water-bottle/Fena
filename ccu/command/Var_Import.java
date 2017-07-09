@@ -3,6 +3,7 @@ package ccu.command;
 import java.io.File;
 import java.util.ArrayList;
 
+import ccu.general.ArgUtils;
 import ccu.general.GeneralFile;
 import ccu.general.ReadConfig;
 
@@ -55,17 +56,8 @@ public class Var_Import {
 		// File array
 		ArrayList<File> getFileArray = new ArrayList<File>();
 
-		String whitespaceCalc = this.fullLineGet.substring(0,
-				(this.fullLineGet.length() - this.fullLineGet.replaceAll("^\\s+", "").length()));
-		if (whitespaceCalc.contains(" ")) {
-			System.out.println("ERROR: Line '" + this.fullLineGet + "' contains spaces instead of tab spaces");
-			System.exit(0);
-		}
-
-		if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
-			System.out.println("ERROR: Line '" + this.fullLineGet + "' contains an incorrect number of tab spaces");
-			System.exit(0);
-		}
+		// Checks tab spaces
+		String whitespaceCalc = ArgUtils.checkWhiteSpace(this.fullLineGet, this.tabNum);
 
 		String statementEncase = this.fullLineGet.replaceFirst("IMPORT", "").replaceAll("^\\s+", "");
 		if (statementEncase.startsWith("{") && statementEncase.endsWith("}")) {

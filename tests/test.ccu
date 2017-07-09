@@ -320,10 +320,98 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	e
 	*/
 	
-	say
-	say
-	say
-	say @a
+	
+	LOOP {1 17 + 1} {(2 ^ 3) 1 - 0.5} {4096 1 / 2}:
+		say |0|  |  |1|  |  |2|  ~  |3|
+		LOOP {1 3 + 1}:
+			say Current |0|
+			say Previous |0;1|  |  |1;1|  |  |2;1|
+			
+///	porting over a random thing
+	FUNC {Func_SpawnpointSystem}:
+		DEF $Num$ 5
+
+		DEF COORDS $Coords1$ 49 36 -45
+		DEF TELE $CoordsTP1$ 49 36 -45 -90 0
+		DEF $Event1$ Ice Race
+		DEF $EventShort1$ ir
+		DEF $EventC1$ aqua
+
+		DEF COORDS $Coords2$ 75 7 -80
+		DEF TELE $CoordsTP2$ 75 7 -80 90 0
+		DEF $Event2$ Slow Race
+		DEF $EventShort2$ sr
+		DEF $EventC2$ gray
+
+		DEF COORDS $Coords3$ 73 7 -102
+		DEF TELE $CoordsTP3$ 73 7 -102 90 0
+		DEF $Event3$ Nether Race
+		DEF $EventShort3$ nr
+		DEF $EventC3$ red
+
+		DEF COORDS $Coords4$ 23 7 -133
+		DEF TELE $CoordsTP4$ 23 7 -133 -90 0
+		DEF $Event4$ Evil Race
+		DEF $EventShort4$ evilr
+		DEF $EventC4$ gray
+
+		DEF COORDS $Coords5$ 218 18 -37
+		DEF TELE $CoordsTP5$ 218 18 -37 -90 0
+		DEF $Event5$ Diamond Race
+		DEF $EventShort5$ dr
+		DEF $EventC5$ aqua
+		
+		/*
+		DEF $TextStart$ 
+		{"text":"","extra":[
+		{"text":"[","color":"gray"},
+		{"text":"SP","color":"yellow","bold":"true",
+			"hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},
+			"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}
+		},{"text":"]","color":"gray"},{"text":": "},
+		*/
+		
+		LOOP {Test;String;Yee}:
+			say |0|
+		
+		LOOP {1 $Num$ + 1}:
+			tp @a[SPtp=|0|] $CoordsTP|0|$
+			
+			tellraw @a[SPtp=|0|]
+			tellraw @a[m=2] $TextStart$
+			
+			/*
+			tellraw @a[SPtp=|0|] $TextStart$
+			{"text":"You have been teleported to ","color":"gray"},
+			{"text":"$Coords|0|$","color":"yellow","bold":"true"},
+			{"text":" at ","color":"gray"},
+			{"text":"$Event|0|$","color":"$EventC|0|$","bold":"true",
+				"clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |0|"},
+				"hoverEvent":{"action":"show_text","value":{"text":"Teleport to $Event|0|$","color":"$EventC|0|$"}}
+			},
+			{"text":"!","color":"gray"}]}
+			*/
+			
+		@a[SPtp>=1] playsound minecraft:entity.experience_orb.touch voice @a[c=1,SPtp>=1]
+		@a[SPtp>=1] SPtp = 0
+		
+	//=
+	FUNC {Func_TestDefinitions}:
+		DEF GLOBAL $Num$ 5
+
+		DEF COORDS $Coords1$ 49 36 -45
+		DEF TELE $CoordsTP1$ 49 36 -45 -90 0
+		DEF $Event1$ Ice Race
+		DEF $EventShort1$ ir
+		DEF $EventC1$ aqua
+		
+		say $Num$
+		say $Coords1$
+		say $CoordsTP1$
+		say $Event1$
+		say $EventShort1$
+		say $EventC1$
+	=//
 	
 /// This actual mess actually parses into the correct damn thing
 ///	tl;dr if you don't know what you're doing with the execute shortcuts, there's pretty much no way you can mess this up
@@ -376,6 +464,25 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	RRd_y L> @e[type=ArmorStand,RRStand]
 	RRd_y E>
 	
+	Func_SpawnpointSystem
+///	Func_TestDefinitions
+	
+	LOOP {m;c;name;test}:
+		say @a[|0|=2]
+
+
+	say
+	say
+	say
+	tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
+	tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"$Coords|0|$","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"$Event|0|$","color":"$EventC|0|$","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |0|"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to $Event|0|$","color":"$EventC|0|$"}}},{"text":"!","color":"gray"}]}
+	
+	@a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
+	@a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"$Coords|0|$","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"$Event|0|$","color":"$EventC|0|$","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |0|"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to $Event|0|$","color":"$EventC|0|$"}}},{"text":"!","color":"gray"}]}
+	
+	
+
+	
 	USE {@a}:
 		@e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
 		@e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
@@ -413,10 +520,10 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	effect @a[$SA$,m=2,RRci=0,RRar=1] 11 1 0 true
 	effect @a[$SA$,m=2,RRci=0,RRar>=1<=2] 7 1 1 true
 	
-	say @a[name>=3<=5] @a[name>=3<5] @a[name>=3]
-	say @a[name<=5>=3] @a[name<=5>3] @a[name<=3]
-	say @a[name>3<=5] @a[name>3<5] @a[name>3]
-	say @a[name<5>=3] @a[name<5>3] @a[name<3]
+	say @a[$SA$,m=2,RRar>=3<=5] @a[OMG_WORK>=3<5] @a[OMG_WORK>=3] 3
+	say @a[OMG_WORK<=5>=3] @a[OMG_WORK<=5>3] @a[OMG_WORK<=3]
+	say @a[OMG_WORK>3<=5] @a[OMG_WORK>3<5] @a[OMG_WORK>3]
+	say @a[OMG_WORK<5>=3] @a[OMG_WORK<5>3] @a[OMG_WORK<3]
 	
 	$test$
 	

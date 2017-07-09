@@ -3,6 +3,7 @@ package ccu.command;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import ccu.general.ArgUtils;
 import ccu.general.GeneralFile;
 
 public class Cmd_MFunc {
@@ -156,22 +157,11 @@ public class Cmd_MFunc {
 			// Notice how the first element in each array is the mfunc name and not a valid command
 			String[] arrayMFunc = new String[this.arrayGet.size() + 1];
 			arrayMFunc[0] = branchCalc;
+			
+			// checks tab spaces
+			ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
 
 			for (int i = 0; i < this.arrayGet.size(); i++) {
-
-				// Checking tab spaces
-				String whitespaceCalc = this.arrayGet.get(i).substring(0,
-						(this.arrayGet.get(i).length() - this.arrayGet.get(i).replaceAll("^\\s+", "").length()));
-				if (whitespaceCalc.contains(" ")) {
-					System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains spaces instead of tab spaces");
-					System.exit(0);
-				}
-
-				if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
-					System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains an incorrect number of tab spaces");
-					System.exit(0);
-				}
-
 				// Check if "CCU_COND_" is in the front
 				if (this.arrayGet.get(i).replaceAll("^\\s+", "").length() >= 9
 						&& this.arrayGet.get(i).replaceAll("^\\s+", "").substring(0, 9).equals("CCU_COND_")) {

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import ccu.block.Coordinates;
+import ccu.general.ArgUtils;
 
 public class Var_Options {
 	private ArrayList<String> arrayGet = new ArrayList<String>();
@@ -58,31 +59,10 @@ public class Var_Options {
 			this.arrayGet = checkCommandsArray;
 		}
 
+		// checks tab spaces
+		ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
+
 		for (String line : this.arrayGet) {
-			// gets whitespace to the left of the string
-			// detects spaces
-
-			String whitespaceCalc = line.substring(0, (line.length() - line.replaceAll("^\\s+", "").length()));
-			if (whitespaceCalc.contains(" ")) {
-				System.out.println("ERROR: Line '" + line + "' contains spaces");
-				System.exit(0);
-			}
-
-			// \t characters are determined by getCommands() as min #
-			// all extra \t characters should've already
-			// disappeared from the previous methods
-
-			/*
-			System.out.println(whitespaceCalc.length());
-			System.out.println(whitespaceCalc.replace("\t", "").length());
-			System.out.println(this.tabNum);
-			*/
-
-			if (whitespaceCalc.length() - whitespaceCalc.replace("\t", "").length() != this.tabNum) {
-				System.out.println("ERROR: Line '" + line + "' contains an incorrect number of tab spaces");
-				System.exit(0);
-			}
-
 			// now actually starts detecting the options lol
 			lineUsed = false;
 			for (String optionName : optionArray) {
@@ -204,8 +184,7 @@ public class Var_Options {
 			Var_Options.parseOption = true;
 		}
 		if (filePathFuncOption == null || filePathFuncOption.toString().length() == 0) {
-			System.out
-					.println("WARNING: 'filePathFuncOption' field is empty - will be an issue if mcfunctions are used");
+			System.out.println("WARNING: 'filePathFuncOption' field is empty - will be an issue if mcfunctions are used");
 			Var_Options.filePathFuncOption = null;
 		} else {
 			if (filePathFuncOption.isDirectory() == false) {

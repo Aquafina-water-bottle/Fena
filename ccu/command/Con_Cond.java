@@ -2,6 +2,8 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.ArgUtils;
+
 public class Con_Cond {
 	private ArrayList<String> arrayCondReturn = new ArrayList<String>();
 	private ArrayList<String> arrayGet = new ArrayList<String>();
@@ -30,20 +32,11 @@ public class Con_Cond {
 		// Removes "COND " and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("COND", "").replaceAll("^\\s+", "");
 		if (statementEncase.endsWith(":")) {
+
+			// checks tab spaces
+			String whitespaceCalc = ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
+
 			for (int i = 0; i < this.arrayGet.size(); i++) {
-				// Checking tab spaces
-				String whitespaceCalc = this.arrayGet.get(i).substring(0,
-						(this.arrayGet.get(i).length() - this.arrayGet.get(i).replaceAll("^\\s+", "").length()));
-				if (whitespaceCalc.contains(" ")) {
-					System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains spaces instead of tab spaces");
-					System.exit(0);
-				}
-
-				if (whitespaceCalc.length() - whitespaceCalc.replaceAll("\t", "").length() != this.tabNum) {
-					System.out.println("ERROR: Line '" + this.arrayGet.get(i) + "' contains an incorrect number of tab spaces");
-					System.exit(0);
-				}
-
 				// Adds "CCU_COND_" in front of each command assuming it isn't already in the front
 
 				String newString = null;
