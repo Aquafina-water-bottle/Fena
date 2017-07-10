@@ -98,15 +98,14 @@ public class Var_Call {
 					}
 				}
 
+				// replaces params
+				this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc, Var_Func.arrayFuncParamSave.get(funcIndexSave), tabNum);
+
 				ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayReturn, tabNum, checkFunction);
 				ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
 				if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
 					this.arrayReturn = checkCommandsArray;
 				}
-
-				// replaces params
-				this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc, Var_Func.arrayFuncParamSave.get(funcIndexSave));
-				this.arrayReturn = ParamUtils.calcFutureParams(this.arrayReturn);
 			}
 
 		} else {

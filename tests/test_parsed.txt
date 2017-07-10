@@ -7,39 +7,45 @@ GROUP | Grp_AyyLmao2_A | PULSE		[384 72 96 | stonebrick 0]
 GROUP | Grp_AyyLmao3_A | PULSE		[384 74 96 | stonebrick 0]
 	say 3 _A
 
-GROUP | Grp_MainGroup_A | PULSE		[384 76 96 | stonebrick 0]
-	say 1
-	say 2
-	say 3
-	say okay
-
-GROUP | Grp_AyyLmao1_B | PULSE		[384 78 96 | stonebrick 0]
+GROUP | Grp_AyyLmao1_B | PULSE		[384 76 96 | stonebrick 0]
 	say 1 _B
 
-GROUP | Grp_AyyLmao2_B | PULSE		[384 80 96 | stonebrick 0]
+GROUP | Grp_AyyLmao2_B | PULSE		[384 78 96 | stonebrick 0]
 	say 2 _B
 
-GROUP | Grp_AyyLmao3_B | PULSE		[384 82 96 | stonebrick 0]
+GROUP | Grp_AyyLmao3_B | PULSE		[384 80 96 | stonebrick 0]
 	say 3 _B
 
-GROUP | Grp_MainGroup_B | PULSE		[384 84 96 | stonebrick 0]
+GROUP | Grp_AyyLmao1_C | PULSE		[384 82 96 | stonebrick 0]
+	say 1 _C
+
+GROUP | Grp_AyyLmao2_C | PULSE		[384 84 96 | stonebrick 0]
+	say 2 _C
+
+GROUP | Grp_AyyLmao3_C | PULSE		[384 70 98 | stonebrick 0]
+	say 3 _C
+
+GROUP | Grp_MainGroup_A | PULSE		[384 72 98 | stonebrick 0]
 	say 1
+	say 2 > 1
 	say 2
+	say 3 > 1
 	say 3
 	say okay
 
-GROUP | Grp_AyyLmao1_C | PULSE		[384 70 98 | stonebrick 0]
-	say 1 _C
-
-GROUP | Grp_AyyLmao2_C | PULSE		[384 72 98 | stonebrick 0]
-	say 2 _C
-
-GROUP | Grp_AyyLmao3_C | PULSE		[384 74 98 | stonebrick 0]
-	say 3 _C
+GROUP | Grp_MainGroup_B | PULSE		[384 74 98 | stonebrick 0]
+	say 1
+	say 2 > 1
+	say 2
+	say 3 > 1
+	say 3
+	say okay
 
 GROUP | Grp_MainGroup_C | PULSE		[384 76 98 | stonebrick 0]
 	say 1
+	say 2 > 1
 	say 2
+	say 3 > 1
 	say 3
 	say okay
 
@@ -448,9 +454,9 @@ MFUNC | MFunc_Test | C:/Users/Austin/Documents/Austin/powder game code/eGO/Serve
 
 MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/Main.mcfunction
 	Func_test|0|
-	Func_test_A
-	Func_test_B
-	Func_test_C
+	say
+	say
+	say
 	say THESE
 	say ARE
 	say THE

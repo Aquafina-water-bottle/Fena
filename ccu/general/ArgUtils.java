@@ -33,10 +33,12 @@ public class ArgUtils {
 
 			countTabSpaces = StringUtils.countChars(whitespaceCalc, "\t");
 
-			// check if it's GROUP or MFUNC as they can be skipped
-			if (getArray.get(i).trim().startsWith("GROUP") || getArray.get(i).trim().startsWith("MFUNC")) {
-				tabNumCalc++;
-				continue;
+			// check if it's any statement --> can be skipped
+			for (String statement : ReadCCUFile.statementArray) {
+				if ((i > 0) && getArray.get(i - 1).trim().startsWith(statement)) {
+					tabNumCalc++;
+					break;
+				}
 			}
 
 			// check if it's been reduced

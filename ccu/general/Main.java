@@ -162,14 +162,14 @@ public class Main {
 		for (String asdf : getCommandsArray) {
 			System.out.println(asdf);
 		}*/
-
-		// Parses all groups and mfuncs
-		ArrayList<String> checkLength = ccuFile.getCommands(getCommandsArray);
 		
 		// This pretty much only runs if something isn't encapsulated with MFUNC or GROUP
-		if (checkLength == null || checkLength.size() == 0) {
+		if (getCommandsArray == null || getCommandsArray.size() == 0) {
 		} else {
-			System.out.println("ERROR: Unnused commands starting from '" + checkLength.get(0) + "'");
+			System.out.println("\tERROR: Unnused commands in lines:");
+			for (String line : getCommandsArray) {
+				System.out.println("'" + line + "'");
+			}
 			System.exit(0);
 		}
 

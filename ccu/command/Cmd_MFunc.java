@@ -148,7 +148,7 @@ public class Cmd_MFunc {
 
 			// readCommands() recurring method is done down here because the beginning arguments must be gotten first
 			ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayGet, tabNum);
-			ArrayList<String> checkCommandsArray = ccuSubsetFile.getCommands(this.arrayGet);
+			ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
 			if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
 				this.arrayGet = checkCommandsArray;
 			}

@@ -44,7 +44,7 @@ public class ReadCCUFile {
 	}
 
 	// @formatter:off
-	private static final String[] cmdArray = {
+	public static final String[] statementArray = {
 			"MFUNC",
 			"GROUP",
 			"DEF",
@@ -219,7 +219,6 @@ public class ReadCCUFile {
 							// replace all params
 							definitionCalc = ParamUtils.replaceParams(Var_Define.arrayDefineSave.get(defIndex)[3], useParamsCalc,
 									Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[4]));
-							definitionCalc = ParamUtils.calcFutureParams(definitionCalc);
 							ccuFileArray.set(i, getBegString + definitionCalc + getEndString);
 
 						} else {
@@ -287,7 +286,6 @@ public class ReadCCUFile {
 								String defineParamsCalc[] = null;
 								defineParamsCalc = Var_Define.arrayDefineSave.get(defIndex)[3].split(" ");
 								definitionCalc = defineParamsCalc[defineCoordsCalc];
-								definitionCalc = ParamUtils.calcFutureParams(definitionCalc);
 
 								// replaces the definition with the specific coordinate
 								ccuFileArray.set(i, getBegString + definitionCalc + getEndString);
@@ -298,7 +296,6 @@ public class ReadCCUFile {
 
 								// sets it as is because params aren't an issue
 								definitionCalc = Var_Define.arrayDefineSave.get(defIndex)[3];
-								definitionCalc = ParamUtils.calcFutureParams(definitionCalc);
 								ccuFileArray.set(i, getBegString + definitionCalc + getEndString);
 
 								// System.out.println(definitionCalc + " MARKER");
@@ -348,7 +345,7 @@ public class ReadCCUFile {
 				}
 			}
 
-			for (String statement : ReadCCUFile.cmdArray) {
+			for (String statement : statementArray) {
 				singleLineStatement = false;
 
 				// detects whether it is a proper statement
@@ -473,17 +470,15 @@ public class ReadCCUFile {
 						switch (statementTest) {
 
 						case "MFUNC":
-							Temp_MFunc objMFunc = new Temp_MFunc(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							Cmd_MFunc objMFunc = new Cmd_MFunc(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objMFunc.getArray();
 							resetArray = true;
-							tempStorage = getCalcArray.size();
 							break;
 
 						case "GROUP":
-							Temp_Group objGroup = new Temp_Group(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							Cmd_Group objGroup = new Cmd_Group(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objGroup.getArray();
 							resetArray = true;
-							tempStorage = getCalcArray.size();
 							break;
 
 						case "OPTIONS":
@@ -617,126 +612,5 @@ public class ReadCCUFile {
 			}
 		}
 		return ccuFileArray;
-	}
-
-	public ArrayList<String> getCommands(ArrayList<String> getCommandsArray) {
-		int indexCalc = 0;
-		int subListCalc1 = -2;
-		int subListCalc2 = -2;
-		Integer resetIndex = null;
-		String statementName = null;
-
-		ArrayList<String> getCalcArray = new ArrayList<String>();
-		ArrayList<String> encapsulateArray = new ArrayList<String>();
-		ArrayList<String> subListTopArray = new ArrayList<String>();
-		ArrayList<String> subListBottomArray = new ArrayList<String>();
-
-		for (int i = 0; i < getCommandsArray.size(); i++) {
-			
-			if (resetIndex != null) {
-				i = resetIndex + 0;
-				resetIndex = null;
-			}
-			
-			if (getCommandsArray.get(i).trim().startsWith("GROUP")) {
-				statementName = "GROUP";
-			}
-			if (getCommandsArray.get(i).trim().startsWith("MFUNC")) {
-				statementName = "MFUNC";
-			}
-
-			if (statementName != null) {
-
-				this.tabNum++;
-				indexCalc = i;
-
-				// clears array whenever it gets filled by detecting a statement
-				encapsulateArray.clear();
-
-				// gets encapsulation array by detecting the number of tab spaces
-				// tl;dr if it has a min number of tab spaces as stated, it will be added
-				while (true) {
-					indexCalc++;
-
-					// if proper number of tabnums and not past size limit
-					if (indexCalc < getCommandsArray.size() && getCommandsArray.get(indexCalc).substring(0, this.tabNum).length()
-							- getCommandsArray.get(indexCalc).substring(0, this.tabNum).replace("\t", "").length() == this.tabNum) {
-
-						// Starting process of getting the top/bottom array index numbers
-						// Also adds the line to the encapsulation array
-						encapsulateArray.add(getCommandsArray.get(indexCalc));
-						if (subListCalc1 == -2) {
-							subListCalc1 = indexCalc - 1;
-						}
-					} else {
-						subListCalc2 = indexCalc;
-						break;
-					}
-				}
-
-				// Sublists
-				subListTopArray.clear();
-				subListBottomArray.clear();
-
-				// actually creates the top / bottom sublists
-				if (subListCalc1 >= 0) {
-					subListTopArray = new ArrayList<String>(getCommandsArray.subList(0, subListCalc1));
-				}
-				subListBottomArray = new ArrayList<String>(getCommandsArray.subList(subListCalc2, getCommandsArray.size()));
-				subListCalc1 = -2;
-				subListCalc2 = -2;
-
-				// detect if the encapsulated array size is 0
-				if (encapsulateArray.size() == 0) {
-					System.out.println("WARNING: " + statementName + " has 0 commands at line '" + getCommandsArray.get(i) + "'");
-					if (i > 0) {
-						subListTopArray = new ArrayList<String>(getCommandsArray.subList(0, i));
-						// System.out.println(subListTopArray);
-					} else {
-						subListTopArray.clear();
-					}
-					subListBottomArray = new ArrayList<String>(getCommandsArray.subList(i + 1, getCommandsArray.size()));
-				}
-
-				switch (statementName) {
-				case "GROUP":
-					Cmd_Group objGroup = new Cmd_Group(encapsulateArray, this.tabNum, getCommandsArray.get(i));
-					getCalcArray = objGroup.getArray();
-					break;
-
-				case "MFUNC":
-					Cmd_MFunc objMFunc = new Cmd_MFunc(encapsulateArray, this.tabNum, getCommandsArray.get(i));
-					getCalcArray = objMFunc.getArray();
-					break;
-
-				}
-
-				// combines any given arrays
-				getCommandsArray.clear();
-
-				if (subListTopArray != null) {
-					getCommandsArray.addAll(subListTopArray);
-				}
-				if (getCalcArray != null) {
-					getCommandsArray.addAll(getCalcArray);
-				}
-				if (subListBottomArray != null) {
-					getCommandsArray.addAll(subListBottomArray);
-				}
-
-				// general reset
-				indexCalc = 0;
-				this.tabNum--;
-				resetIndex = i + 0;
-				statementName = null;
-			}
-		}
-		
-		if (getCommandsArray.isEmpty()) {
-			return null;
-		} else {
-			return getCommandsArray;
-		}
-		
 	}
 }

@@ -38,6 +38,7 @@ public class Con_If {
 
 			for (String operator : operatorArray) {
 				if (statementArgs.contains(operator)) {
+					
 					if (foundOperator == null) { // checks multiple different operators
 						foundOperator = true;
 						getOperator = operator;

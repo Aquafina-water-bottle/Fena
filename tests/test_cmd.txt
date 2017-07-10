@@ -2,24 +2,30 @@ fill 383 69 95 400 86 107 air 0
 setblock 385 70 96 command_block 5 replace {Command:"say 1 _A",TrackOutput:0b,auto:0b}
 setblock 385 72 96 command_block 5 replace {Command:"say 2 _A",TrackOutput:0b,auto:0b}
 setblock 385 74 96 command_block 5 replace {Command:"say 3 _A",TrackOutput:0b,auto:0b}
-setblock 385 76 96 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
-setblock 386 76 96 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
-setblock 387 76 96 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 388 76 96 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
-setblock 385 78 96 command_block 5 replace {Command:"say 1 _B",TrackOutput:0b,auto:0b}
-setblock 385 80 96 command_block 5 replace {Command:"say 2 _B",TrackOutput:0b,auto:0b}
-setblock 385 82 96 command_block 5 replace {Command:"say 3 _B",TrackOutput:0b,auto:0b}
-setblock 385 84 96 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
-setblock 386 84 96 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
-setblock 387 84 96 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 388 84 96 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
-setblock 385 70 98 command_block 5 replace {Command:"say 1 _C",TrackOutput:0b,auto:0b}
-setblock 385 72 98 command_block 5 replace {Command:"say 2 _C",TrackOutput:0b,auto:0b}
-setblock 385 74 98 command_block 5 replace {Command:"say 3 _C",TrackOutput:0b,auto:0b}
+setblock 385 76 96 command_block 5 replace {Command:"say 1 _B",TrackOutput:0b,auto:0b}
+setblock 385 78 96 command_block 5 replace {Command:"say 2 _B",TrackOutput:0b,auto:0b}
+setblock 385 80 96 command_block 5 replace {Command:"say 3 _B",TrackOutput:0b,auto:0b}
+setblock 385 82 96 command_block 5 replace {Command:"say 1 _C",TrackOutput:0b,auto:0b}
+setblock 385 84 96 command_block 5 replace {Command:"say 2 _C",TrackOutput:0b,auto:0b}
+setblock 385 70 98 command_block 5 replace {Command:"say 3 _C",TrackOutput:0b,auto:0b}
+setblock 385 72 98 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
+setblock 386 72 98 chain_command_block 5 replace {Command:"say 2 > 1",TrackOutput:0b,auto:1b}
+setblock 387 72 98 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
+setblock 388 72 98 chain_command_block 5 replace {Command:"say 3 > 1",TrackOutput:0b,auto:1b}
+setblock 389 72 98 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
+setblock 390 72 98 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
+setblock 385 74 98 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
+setblock 386 74 98 chain_command_block 5 replace {Command:"say 2 > 1",TrackOutput:0b,auto:1b}
+setblock 387 74 98 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
+setblock 388 74 98 chain_command_block 5 replace {Command:"say 3 > 1",TrackOutput:0b,auto:1b}
+setblock 389 74 98 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
+setblock 390 74 98 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
 setblock 385 76 98 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
-setblock 386 76 98 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
-setblock 387 76 98 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 388 76 98 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
+setblock 386 76 98 chain_command_block 5 replace {Command:"say 2 > 1",TrackOutput:0b,auto:1b}
+setblock 387 76 98 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
+setblock 388 76 98 chain_command_block 5 replace {Command:"say 3 > 1",TrackOutput:0b,auto:1b}
+setblock 389 76 98 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
+setblock 390 76 98 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
 setblock 385 78 98 command_block 5 replace {Command:"say a",TrackOutput:0b,auto:0b}
 setblock 386 78 98 chain_command_block 5 replace {Command:"say b",TrackOutput:0b,auto:1b}
 setblock 387 78 98 chain_command_block 5 replace {Command:"function custom:RayCaster/theHunted/test/init",TrackOutput:0b,auto:1b}

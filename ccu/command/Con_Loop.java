@@ -36,12 +36,6 @@ public class Con_Loop {
 		int paramNum = 0;
 		int loopNum = 0;
 
-		ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayGet, tabNum);
-		ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
-		if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
-			this.arrayGet = checkCommandsArray;
-		}
-
 		// Removes "LOOP" and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("LOOP", "").replaceAll("^\\s+", "");
 		if (statementEncase.startsWith("{") && statementEncase.endsWith("}:")) {
@@ -83,7 +77,7 @@ public class Con_Loop {
 
 				// checks tab spaces
 				ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
-
+				
 				for (int i = 0; i < this.arrayGet.size(); i++) {
 					// removes a tab space infront of the line
 					this.arrayGet.set(i, this.arrayGet.get(i).substring(1));
@@ -100,7 +94,13 @@ public class Con_Loop {
 					paramArrayGet = ParamUtils.getLoopParams(loopArrayStorage, i, paramNum);
 
 					// replaces params and adds it onto the arrayLoopReturn
-					arrayLoopReturn.addAll(ParamUtils.replaceParams(this.arrayGet, paramArrayGet, paramNum));
+					arrayLoopReturn.addAll(ParamUtils.replaceParams(this.arrayGet, paramArrayGet, paramNum, tabNum - 1));
+				}
+
+				ReadCCUFile ccuSubsetFile = new ReadCCUFile(arrayLoopReturn, tabNum);
+				ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
+				if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
+					arrayLoopReturn = checkCommandsArray;
 				}
 
 			} else {
@@ -123,7 +123,6 @@ public class Con_Loop {
 			System.exit(0);
 		}
 
-		ParamUtils.calcFutureParams(arrayLoopReturn);
 		return arrayLoopReturn;
 	}
 }
