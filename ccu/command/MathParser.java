@@ -212,7 +212,7 @@ public class MathParser {
 				}
 
 				while (true) {
-					calcNum = (float) java.lang.Math.pow(calcNum, numCalcArray[3]);
+					calcNum = (float) Math.pow(calcNum, numCalcArray[3]);
 					if (Double.isNaN(calcNum)) {
 						System.out.println("ERROR: Math error resulted in an undefined number in line '" + fullLineGet + "'");
 						System.exit(0);
@@ -714,9 +714,11 @@ public class MathParser {
 		return returnStringArray;
 	}
 
-	public static String getOperation(String getString, String fullLineGet, boolean isStrict) {
+	public static String getOperation(String getString, String fullLineGet, boolean isStrict, int calcType) {
 		/** This is primarily for actual CALC() stuff, including IF
 		 */
+		
+		// TODO make sin, cos and tan done in this method rather than the calcValue method
 
 		// checks if there are brackets in the first places
 		if (StringUtils.countChars(getString, "(") == StringUtils.countChars(getString, ")")) {
@@ -739,7 +741,8 @@ public class MathParser {
 						midString = endString.substring(0, endString.indexOf(")") + 1);
 						endString = endString.substring(endString.indexOf(")") + 1);
 
-						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet, true);
+						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet, true,
+								calcType);
 
 						if (getValue.isFloat) {
 							midString = getValue.getFloat + "";
@@ -760,7 +763,7 @@ public class MathParser {
 					System.exit(0);
 				} else {
 					if (NumberUtils.isNum(getString) == false) {
-						storeValueType getValue = calcValue(getString, fullLineGet, isStrict);
+						storeValueType getValue = calcValue(getString, fullLineGet, isStrict, calcType);
 						if (getValue.isFloat == null) {
 							if (isStrict == true) {
 								System.out
@@ -772,6 +775,23 @@ public class MathParser {
 								getString = getValue.getFloat + "";
 							} else {
 								getString = getValue.getInt + "";
+							}
+						}
+					} else {
+						if (calcType != 0) {
+							storeValueType getValue = calcValue(getString, fullLineGet, isStrict, calcType);
+							if (getValue.isFloat == null) {
+								if (isStrict == true) {
+									System.out
+											.println("ERROR: Arguments in '" + getString + "' in line '" + fullLineGet + "' are invalid");
+									System.exit(0);
+								}
+							} else {
+								if (getValue.isFloat) {
+									getString = getValue.getFloat + "";
+								} else {
+									getString = getValue.getInt + "";
+								}
 							}
 						}
 					}
@@ -816,7 +836,7 @@ public class MathParser {
 						midString = endString.substring(0, endString.indexOf(")") + 1);
 						endString = endString.substring(endString.indexOf(")") + 1);
 
-						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet, true);
+						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet, true, 0);
 
 						if (getValue.isFloat) {
 							midString = getValue.getFloat + "";
@@ -870,7 +890,7 @@ public class MathParser {
 		return getString;
 	}
 
-	private static storeValueType calcValue(String getString, String fullLineGet, boolean isStrict) {
+	private static storeValueType calcValue(String getString, String fullLineGet, boolean isStrict, int calcType) {
 		// -, +, *, /, ^, %
 		// Priority: ^, *, /, %, +, -
 
@@ -890,11 +910,43 @@ public class MathParser {
 
 		if (NumberUtils.isFloat(getString)) {
 			storeValueType returnValue = new storeValueType(Float.parseFloat(getString), true);
+			
+			switch (calcType) {
+			case 1:
+				returnValue.getFloat = (float) Math.sin(Math.toRadians(returnValue.getFloat));
+				break;
+
+			case 2:
+				returnValue.getFloat = (float) Math.cos(Math.toRadians(returnValue.getFloat));
+				break;
+
+			case 3:
+				returnValue.getFloat = (float) Math.tan(Math.toRadians(returnValue.getFloat));
+				break;
+			}
+			
+			returnValue.getFloat = Float.parseFloat(NumberUtils.roundFloat(returnValue.getFloat));
+			
 			return returnValue;
 
 		} else {
 			if (NumberUtils.isInt(getString)) {
 				storeValueType returnValue = new storeValueType(Float.parseFloat(getString), false);
+				
+				switch (calcType) {
+				case 1:
+					returnValue.getInt = (int) Math.sin(Math.toRadians(returnValue.getInt));
+					break;
+
+				case 2:
+					returnValue.getInt = (int) Math.cos(Math.toRadians(returnValue.getInt));
+					break;
+
+				case 3:
+					returnValue.getInt = (int) Math.tan(Math.toRadians(returnValue.getInt));
+					break;
+				}
+				
 				return returnValue;
 
 			} else {
@@ -902,7 +954,7 @@ public class MathParser {
 				if (getString.contains(" ") == false) {
 					if (isStrict == true) {
 						System.out.println("ERROR: Math operations in '" + getString
-								+ "' must be separated by spaces (apart from brackets) in line'" + fullLineGet + "'");
+								+ "' must be separated by spaces (apart from brackets) in line '" + fullLineGet + "'");
 						System.exit(0);
 					} else {
 						storeValueType returnValue = new storeValueType(getString);
@@ -926,7 +978,7 @@ public class MathParser {
 
 							// adds to arrayNumType only if it's a number
 							// adds number to arrayFloat, is null if operator
-							if (NumberUtils.isFloat(line)) {
+							if (NumberUtils.isNum(line)) {
 								arrayFloat.add(Float.parseFloat(line));
 								arrayNumType.add(true);
 							} else {
@@ -940,7 +992,7 @@ public class MathParser {
 
 							// adds to arrayNumType only if it's a number
 							// adds number to arrayFloat, is null if operator
-							if (NumberUtils.isInt(line)) {
+							if (NumberUtils.isNum(line)) {
 								arrayInt.add(Integer.parseInt(line));
 								arrayNumType.add(true);
 							} else {
@@ -948,7 +1000,6 @@ public class MathParser {
 								arrayNumType.add(false);
 							}
 						}
-
 					}
 
 					int arrayIndex = 0;
@@ -1083,8 +1134,34 @@ public class MathParser {
 			}
 		}
 
+		switch (calcType) {
+		case 1:
+			if (isFloat) {
+				arrayFloat.set(0, (float) Math.sin(Math.toRadians(arrayFloat.get(0))));
+			} else {
+				arrayInt.set(0, (int) Math.sin(Math.toRadians(arrayInt.get(0))));
+			}
+			break;
+
+		case 2:
+			if (isFloat) {
+				arrayFloat.set(0, (float) Math.cos(Math.toRadians(arrayFloat.get(0))));
+			} else {
+				arrayInt.set(0, (int) Math.cos(Math.toRadians(arrayInt.get(0))));
+			}
+			break;
+
+		case 3:
+			if (isFloat) {
+				arrayFloat.set(0, (float) Math.tan(Math.toRadians(arrayFloat.get(0))));
+			} else {
+				arrayInt.set(0, (int) Math.tan(Math.toRadians(arrayInt.get(0))));
+			}
+			break;
+		}
+
 		if (isFloat) {
-			storeValueType returnValue = new storeValueType(arrayFloat.get(0), true);
+			storeValueType returnValue = new storeValueType(Float.parseFloat(NumberUtils.roundFloat(arrayFloat.get(0))), true);
 			return returnValue;
 		} else {
 			storeValueType returnValue = new storeValueType(arrayInt.get(0), false);
@@ -1092,43 +1169,104 @@ public class MathParser {
 		}
 	}
 
-	public static String parseSecondaryStatements(String getString) {
+	public static String parseSecondaryStatements(String getString, String fullLineGet) {
 		// getCommand is like SIN, COS, TAN, CALC
 		// SIN, COS and TAN can be like CALC except the final value returns the sin/cos/tan version
-		
+
 		final String[] secondaryStatementArray = {"SIN", "COS", "TAN", "CALC"};
 
 		// if getStatement is true, then keeps going
 		String calcString = null;
 		String testBracketString = null;
 		String returnString = null;
+		boolean getArgs = false;
+
+		String begString = null;
+		String endString = null;
+		int calcType = 0;
 
 		// gets calcString
 		for (String secondaryStatement : secondaryStatementArray) {
 			if (getString.contains(secondaryStatement + "(")) {
-				calcString = getString.substring(getString.lastIndexOf(secondaryStatement + "("));
-				System.out.println(calcString + " " + secondaryStatement);
+				begString = getString.substring(0, getString.indexOf(secondaryStatement + "("));
+				calcString = getString.substring(getString.indexOf(secondaryStatement + "(") + secondaryStatement.length());
+
+				switch (secondaryStatement) {
+				case "CALC":
+					calcType = 0;
+					break;
+
+				case "SIN":
+					calcType = 1;
+					break;
+
+				case "COS":
+					calcType = 2;
+					break;
+
+				case "TAN":
+					calcType = 3;
+					break;
+				}
+
 				break;
 			}
 		}
-		
+
 		// if calcString is not null, then a secondary statement was found
 		if (calcString == null) {
 			returnString = getString + "";
 			return returnString;
+
 		} else {
 			// finds brackets
-			for (int i = 0; i < StringUtils.countChars(calcString, ")"); i++) {
+			int bracketNum = StringUtils.countChars(calcString, ")");
+
+			for (int i = 0; i < bracketNum; i++) {
 				if (i == 0) {
-					calcString = calcString.substring(0, calcString.indexOf(")"));
+					testBracketString = calcString.substring(0, calcString.indexOf(")") + 1);
+					calcString = calcString.substring(calcString.indexOf(")") + 1);
 				} else {
-					
+					testBracketString += calcString.substring(0, calcString.indexOf(")") + 1);
+					calcString = calcString.substring(calcString.indexOf(")") + 1);
+				}
+
+				if (StringUtils.countChars(testBracketString, "(") == StringUtils.countChars(testBracketString, ")")) {
+					// success - testBracketString is it
+					endString = calcString + "";
+					getArgs = true;
+					break;
 				}
 			}
+
+			if (getArgs == false) {
+				System.out.println("ERROR: Arguments in '" + getString + "' in line '" + fullLineGet + "' are invalid");
+				System.exit(0);
+			}
+
+			// no reason with CALC inside any of these
+			if (testBracketString.contains("CALC(")) {
+				testBracketString = testBracketString.replace("CALC", "");
+			}
+
+			// checks if there were any 'SIN', 'COS', 'TAN' - recurring function
 			
+			if (testBracketString.contains("SIN") || testBracketString.contains("COS") || testBracketString.contains("TAN")) {
+				testBracketString = parseSecondaryStatements(testBracketString, fullLineGet);
+			}
+
+			// Sends it to 
+			returnString = getOperation(testBracketString, fullLineGet, true, calcType);
+		}
+		
+		String totalString = begString + returnString + endString;
+		for (String secondaryStatement : secondaryStatementArray) {
 			
+			if (totalString.contains(secondaryStatement + "(")) {
+				totalString = parseSecondaryStatements(totalString, fullLineGet);
+			}
 		}
 
-		return getString;
+		return totalString;
 	}
 }

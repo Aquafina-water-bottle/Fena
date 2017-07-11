@@ -261,7 +261,12 @@ public class GroupStructure {
 				}
 
 				if (cmdLengthCalc == 0) {
-					groupLineCalc++;
+					
+					// only adds to the line if 
+					if (j != Cmd_Group.arrayGroupSave.get(i).length - 1) {
+						groupLineCalc++;
+					}
+					
 					if (cmdLengthCalc2 == 0) {
 						groupDirectionArrayCalc.add("SIDEWAYS");
 						coordTempZ++;

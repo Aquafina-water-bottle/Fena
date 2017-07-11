@@ -253,7 +253,7 @@ public class ReadCCUFile {
 										defineParamCalc = defineParamCalc.replace("z", defineParamsCalc[2]);
 									}
 
-									definitionCalc = MathParser.getOperation(defineParamCalc, ccuFileArray.get(i), true);
+									definitionCalc = MathParser.getOperation(defineParamCalc, ccuFileArray.get(i), true, 0);
 								}
 
 								if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 5) {
@@ -273,7 +273,7 @@ public class ReadCCUFile {
 										defineParamCalc = defineParamCalc.replace("z", defineParamsCalc[2]);
 									}
 
-									definitionCalc = MathParser.getOperation(defineParamCalc, ccuFileArray.get(i), true);
+									definitionCalc = MathParser.getOperation(defineParamCalc, ccuFileArray.get(i), true, 0);
 								}
 
 								// replaces the definition with the specific coordinate

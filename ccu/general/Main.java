@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ccu.block.Box;
 import ccu.block.GroupStructure;
 import ccu.block.Setblock;
+import ccu.command.MathParser;
 import ccu.command.ReadCCUFile;
 import ccu.command.Var_Options;
 import ccu.mcfunction.WriteFile;
@@ -140,28 +141,34 @@ public class Main {
 		ayylmao = "1 5 + 0";
 		MathParser.getLoopArray(ayylmao, ayylmao);
 		*/
+		
+		// String asdf = "this is a CALC(1 + SIN((1 - 2.0)) * (13 - 3)) asdf)";
+		// MathParser.parseSecondaryStatements(asdf, asdf);
+		
+		
 
+		
 		// Reads the .ini file and gets the options
 		ReadConfig.getConfigOptions();
-
+		
 		if (ReadConfig.regFilePath.toString().endsWith(".ccu") == false) {
 			System.out.println("ERROR: File does not end with '.ccu'");
 			System.exit(0);
 		}
-
+		
 		// Reads the file stated in the .ini file
 		ReadCCUFile ccuFile = new ReadCCUFile(ReadConfig.regFilePath);
-
+		
 		// Parses all CCU statements including defines
 		ArrayList<String> getCommandsArray = ccuFile.checkCommands();
-
+		
 		// Checks if any options are left blank, and sets them to a default value if they are
 		Var_Options.checkOptions();
 		
-		/*
-		for (String asdf : getCommandsArray) {
-			System.out.println(asdf);
-		}*/
+		
+		// for (String asdf : getCommandsArray) {
+		//	System.out.println(asdf);
+		// }
 		
 		// This pretty much only runs if something isn't encapsulated with MFUNC or GROUP
 		if (getCommandsArray != null && getCommandsArray.isEmpty() == false) {
@@ -172,7 +179,7 @@ public class Main {
 			}
 			System.exit(0);
 		}
-
+		
 		// Get the structures for each command block group
 		GroupStructure.getGroupStructures();
 		
@@ -193,6 +200,6 @@ public class Main {
 		
 		// RCON
 		// MinecraftRcon.useRcon();
-
+		
 	}
 }

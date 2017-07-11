@@ -69,8 +69,8 @@ public class Con_If {
 			// gets the actual numeric values on each side
 			splitArgsCalc = statementArgs.split(getOperator);
 
-			splitArgsTemp[0] = MathParser.getOperation(splitArgsCalc[0].trim(), this.fullLineGet, false);
-			splitArgsTemp[1] = MathParser.getOperation(splitArgsCalc[1].trim(), this.fullLineGet, false);
+			splitArgsTemp[0] = MathParser.getOperation(splitArgsCalc[0].trim(), this.fullLineGet, false, 0);
+			splitArgsTemp[1] = MathParser.getOperation(splitArgsCalc[1].trim(), this.fullLineGet, false, 0);
 			
 			// is number
 			if (NumberUtils.isNum(splitArgsTemp[0]) && NumberUtils.isNum(splitArgsTemp[1])) {

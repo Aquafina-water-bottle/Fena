@@ -2,6 +2,7 @@ package ccu.general;
 
 import java.util.ArrayList;
 
+import ccu.command.MathParser;
 import ccu.command.ServerOverride;
 import ccu.command.Short_Execute;
 import ccu.command.Short_Scoreboard;
@@ -64,7 +65,9 @@ public class StringUtils {
 		String returnString = null;
 		String calcString = null;
 		returnString = getString + "";
-
+		
+		returnString = MathParser.parseSecondaryStatements(returnString, getString);
+		
 		calcString = Short_Scoreboard.getCommand(returnString);
 		if (calcString != null) {
 			returnString = calcString + "";
