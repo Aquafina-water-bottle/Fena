@@ -97,7 +97,6 @@ public class ReadCCUFile {
 		int indexCalc = 0;
 		int subListCalc1 = -2;
 		int subListCalc2 = -2;
-		Integer resetIndex = null;
 		boolean resetArray = false;
 		boolean singleLineStatement = false;
 		boolean recheckLine = false;
@@ -106,11 +105,8 @@ public class ReadCCUFile {
 		String definitionCalc = null;
 		boolean getStatement = false;
 		String defineParamCalc = null;
-		Integer defineCoordsCalc = null;
 		Integer begIndexCalc = null;
 		Integer endIndexCalc = null;
-
-		int tempStorage = 0;
 
 		// Gets beginning 'DEF' part if it exists, and just gets the whole line if it doesn't
 		String getBegCalcString = "";
@@ -133,21 +129,18 @@ public class ReadCCUFile {
 
 		// if the define is within it, and the tabnum is less than or equal to define tab num
 
-		for (int i = 0; i < this.ccuFileArray.size(); i++) {
+		int i = -1;
+		while (i < this.ccuFileArray.size()) {
+
 			// Resets getStatement
 			getStatement = false;
 
 			// Resets index as resetting it at the bottom did not work
-			if (resetIndex != null) {
-				i = resetIndex + 0;
-				i += tempStorage;
-				if (this.ccuFileArray.size() - 1 < i) {
-					break;
-				}
+			i++;
 
-				tempStorage = 0;
-
-				resetIndex = null;
+			// makes sure stuff doesn't happen
+			if (this.ccuFileArray.size() - 1 < i) {
+				break;
 			}
 
 			// does at least once to check if it works
@@ -175,7 +168,8 @@ public class ReadCCUFile {
 					// System.out.println(this.tabNum + " | " + VAR_Define.arrayDefineSave.get(defIndex)[1] + " | " + ccuFileArray.get(i));
 
 					// when the line starts with 'DEF'
-					if (ccuFileArray.get(i).trim().substring(0, 3).equals("DEF") == true) {
+
+					if (ccuFileArray.get(i).trim().length() >= 3 && ccuFileArray.get(i).trim().substring(0, 3).equals("DEF") == true) {
 						getBegCalcString = ccuFileArray.get(i).substring(Var_Define.getDefineIndex(ccuFileArray.get(i)));
 						getBegString = ccuFileArray.get(i).substring(0, Var_Define.getDefineIndex(ccuFileArray.get(i)));
 					} else {
@@ -231,61 +225,56 @@ public class ReadCCUFile {
 								getParamsString = getEndString.substring(getEndString.indexOf("["), getEndString.indexOf("]") + 1);
 								getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
 
+								// everything within [ and ]
 								defineParamCalc = getParamsString.substring(1, getParamsString.length() - 1);
-
-								if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 4) {
-									switch (defineParamCalc) {
-									case "x":
-										defineCoordsCalc = 0;
-										break;
-									case "y":
-										defineCoordsCalc = 1;
-										break;
-									case "z":
-										defineCoordsCalc = 2;
-										break;
-									case "2x":
-										defineCoordsCalc = 3;
-										break;
-									case "2y":
-										defineCoordsCalc = 4;
-										break;
-									case "2z":
-										defineCoordsCalc = 5;
-										break;
-									}
-								}
-
-								if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 5) {
-									switch (defineParamCalc) {
-									case "x":
-										defineCoordsCalc = 0;
-										break;
-									case "y":
-										defineCoordsCalc = 1;
-										break;
-									case "z":
-										defineCoordsCalc = 2;
-										break;
-									case "ry":
-										defineCoordsCalc = 3;
-										break;
-									case "rx":
-										defineCoordsCalc = 4;
-										break;
-									}
-								}
-
-								if (defineCoordsCalc == null) {
-									System.out.println("ERROR: Parameter '" + defineParamCalc + "' is incorrect in line '"
-											+ ccuFileArray.get(i) + "'");
-									System.exit(0);
-								}
 
 								// array for coords
 								String defineParamsCalc[] = null;
 								defineParamsCalc = Var_Define.arrayDefineSave.get(defIndex)[3].split(" ");
-								definitionCalc = defineParamsCalc[defineCoordsCalc];
+
+								if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 4) {
+
+									if (defineParamCalc.contains("2x")) {
+										defineParamCalc = defineParamCalc.replace("2x", defineParamsCalc[3]);
+									}
+									if (defineParamCalc.contains("2y")) {
+										defineParamCalc = defineParamCalc.replace("2y", defineParamsCalc[4]);
+									}
+									if (defineParamCalc.contains("2z")) {
+										defineParamCalc = defineParamCalc.replace("2z", defineParamsCalc[5]);
+									}
+									if (defineParamCalc.contains("x")) {
+										defineParamCalc = defineParamCalc.replace("x", defineParamsCalc[0]);
+									}
+									if (defineParamCalc.contains("y")) {
+										defineParamCalc = defineParamCalc.replace("y", defineParamsCalc[1]);
+									}
+									if (defineParamCalc.contains("z")) {
+										defineParamCalc = defineParamCalc.replace("z", defineParamsCalc[2]);
+									}
+
+									definitionCalc = MathParser.getOperation(defineParamCalc, ccuFileArray.get(i), true);
+								}
+
+								if (Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[0]) == 5) {
+									if (defineParamCalc.contains("ry")) {
+										defineParamCalc = defineParamCalc.replace("ry", defineParamsCalc[3]);
+									}
+									if (defineParamCalc.contains("rx")) {
+										defineParamCalc = defineParamCalc.replace("rx", defineParamsCalc[4]);
+									}
+									if (defineParamCalc.contains("x")) {
+										defineParamCalc = defineParamCalc.replace("x", defineParamsCalc[0]);
+									}
+									if (defineParamCalc.contains("y")) {
+										defineParamCalc = defineParamCalc.replace("y", defineParamsCalc[1]);
+									}
+									if (defineParamCalc.contains("z")) {
+										defineParamCalc = defineParamCalc.replace("z", defineParamsCalc[2]);
+									}
+
+									definitionCalc = MathParser.getOperation(defineParamCalc, ccuFileArray.get(i), true);
+								}
 
 								// replaces the definition with the specific coordinate
 								ccuFileArray.set(i, getBegString + definitionCalc + getEndString);
@@ -464,7 +453,12 @@ public class ReadCCUFile {
 							subListBottomArray = new ArrayList<String>(this.ccuFileArray.subList(i + 1, this.ccuFileArray.size()));
 						}
 
-						// System.out.println(encapsulateArray);
+						/*
+						System.out.println(subListTopArray);
+						System.out.println(encapsulateArray);
+						System.out.println(subListBottomArray);
+						System.out.println("");
+						*/
 
 						// switch case for all statements with encapsulation
 						switch (statementTest) {
@@ -504,7 +498,7 @@ public class ReadCCUFile {
 							getCalcArray = objFunc.getArray();
 							resetArray = true;
 							break;
-							
+
 						case "LOOP":
 							Con_Loop objLoop = new Con_Loop(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objLoop.getArray();
@@ -572,42 +566,13 @@ public class ReadCCUFile {
 
 					// general reset
 					resetArray = false;
-					resetIndex = i + 0;
+					i--;
 					break;
 				}
 			}
 
 			if (getStatement == false) {
-				// scoreboard shortcuts
-
-				/*
-				if (Short_Scoreboard.getCommand(ccuFileArray.get(i), tabNum) != null) {
-					ccuFileArray.set(i, Short_Scoreboard.getCommand(ccuFileArray.get(i), tabNum));
-				}
-				
-				// execute shortcuts
-				if (Short_Execute.getCommand(ccuFileArray.get(i), tabNum) != null) {
-					ccuFileArray.set(i, Short_Execute.getCommand(ccuFileArray.get(i), tabNum));
-				}
-				
-				// selector shortcuts
-				if (Short_Selector.getCommand(ccuFileArray.get(i), tabNum) != null) {
-					ccuFileArray.set(i, Short_Selector.getCommand(ccuFileArray.get(i), tabNum));
-				}
-				
-				// function shortcuts
-				if (FunctionNick.getCommand(ccuFileArray.get(i), tabNum) != null) {
-					ccuFileArray.set(i, FunctionNick.getCommand(ccuFileArray.get(i), tabNum));
-				}
-				
-				// server override
-				if (ReadConfig.serverPlugins == true
-						&& (ReadConfig.serverOverrideArray == null || ReadConfig.serverOverrideArray[0].equals("")) == false) {
-					if (ServerOverride.getCommand(ccuFileArray.get(i), tabNum) != null) {
-						ccuFileArray.set(i, ServerOverride.getCommand(ccuFileArray.get(i), tabNum));
-					}
-				}
-				*/
+				// includes PARSE, CALC, SIN, COS, TAN here
 
 			}
 		}

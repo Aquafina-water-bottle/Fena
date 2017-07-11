@@ -11,7 +11,7 @@ import ccu.mcfunction.WriteFile;
 import ccu.rcon.MinecraftRcon;
 
 public class Main {
-	/* TODO - Goal is 3 to 4 per day
+	/* TODO
 	 * For the program
 	 * -Combiners - DONE
 	 * -Scoreboard shortcuts - DONE
@@ -24,10 +24,11 @@ public class Main {
 	 * -Server override using 'minecraft:' when detecing commands exist - DONE
 	 * -Putting MFUNC into the parsed file - DONE
 	 * 
-	 * -FUNC - DONE (now with future params)
+	 * -FUNC - DONE (now with proper future params)
 	 * -IMPORT - DONE (without importing .dat files)
 	 * -UNASSIGN - DONE (since arrays, team lists and objective lists aren't a thing yet)
 	 * -LOOP - DONE (completely woot)
+	 * -IF - DONE (completely WOOOT)
 	 * 
 	 * -Repeated definitions - Already works apparently
 	 * -Check whether commands exist - WILL NOT DO
@@ -40,7 +41,6 @@ public class Main {
 	 * General statements
 	 * -INITIALIZE
 	 * -ARRAY
-	 * -IF
 	 * -OBJADD / OBJREV
 	 * -TEAMADD / TEAMREV
 	 * -FILE
@@ -164,8 +164,8 @@ public class Main {
 		}*/
 		
 		// This pretty much only runs if something isn't encapsulated with MFUNC or GROUP
-		if (getCommandsArray == null || getCommandsArray.size() == 0) {
-		} else {
+		if (getCommandsArray != null && getCommandsArray.isEmpty() == false) {
+			
 			System.out.println("\tERROR: Unnused commands in lines:");
 			for (String line : getCommandsArray) {
 				System.out.println("'" + line + "'");
@@ -192,7 +192,7 @@ public class Main {
 		// Writes the global Combiner file under globalCombinerFilePath
 		
 		// RCON
-		MinecraftRcon.useRcon();
+		// MinecraftRcon.useRcon();
 
 	}
 }

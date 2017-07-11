@@ -237,13 +237,17 @@ public class Cmd_Group {
 			// Creates the string array, and puts it in the arraylist
 			// Notice how the first element in each array is the group name and not a valid command
 
+			
+			
+			this.arrayGet = StringUtils.skipLine(this.arrayGet);
+			
 			String[] arrayGroup = new String[this.arrayGet.size() + 1];
 			arrayGroup[0] = statementArgs;
 
 			for (int i = 0; i < this.arrayGet.size(); i++) {
 				arrayGroup[i + 1] = StringUtils.generalParse(this.arrayGet.get(i).trim());
 			}
-
+			
 			arrayGroupSave.add(arrayGroup);
 
 		} else {

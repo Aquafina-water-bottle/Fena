@@ -19,7 +19,7 @@ public class Setblock {
 
 	// the command blocks themselves
 	public static ArrayList<String> setblockCommands = new ArrayList<String>();
-	
+
 	// final commands are the setblock commands for non-command blocks
 	public static ArrayList<String> finalCommands = new ArrayList<String>();
 
@@ -201,9 +201,9 @@ public class Setblock {
 					}
 				}
 			}
-			
+
 			writer.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-			
+
 			for (int i = 0; i < Cmd_MFunc.arrayMFuncSave.size(); i++) {
 				for (int j = 0; j < Cmd_MFunc.arrayMFuncSave.get(i).length; j++) {
 
@@ -217,15 +217,16 @@ public class Setblock {
 						if (Cmd_MFunc.arrayMFuncNameSave.get(i).isEmpty()) {
 							writer.println("MFUNC | " + Cmd_MFunc.arrayMFuncSave.get(i)[0]);
 						} else {
-							writer.println("MFUNC | " + Cmd_MFunc.arrayMFuncNameSave.get(i) + " | " + Cmd_MFunc.arrayMFuncSave.get(i)[0]);
+							writer.println(
+									"MFUNC | " + Cmd_MFunc.arrayMFuncNameSave.get(i) + " | " + Cmd_MFunc.arrayMFuncSave.get(i)[0]);
 						}
 					} else {
 						// the actual commands
-					writer.println("\t" + Cmd_MFunc.arrayMFuncSave.get(i)[j]);
+						writer.println("\t" + Cmd_MFunc.arrayMFuncSave.get(i)[j]);
 					}
 				}
 			}
-			
+
 			writer.close();
 
 		}
@@ -277,7 +278,8 @@ public class Setblock {
 		// if serverPlugins is true - adds minecraft:
 		if (ReadConfig.serverPlugins == true) {
 			for (String serverCmd : ReadConfig.serverOverrideArray) {
-				if (serverCmd.equals("fill") || serverCmd.equals("summon") || serverCmd.equals("kill") || serverCmd.equals("setblock")) {
+				if (serverCmd.equals("fill") || serverCmd.equals("summon") || serverCmd.equals("kill")
+						|| serverCmd.equals("setblock")) {
 					combinerBeg = combinerBeg.replace(serverCmd, "minecraft:" + serverCmd);
 					combinerMid = combinerMid.replace(serverCmd, "minecraft:" + serverCmd);
 					combinerEnd = combinerEnd.replace(serverCmd, "minecraft:" + serverCmd);
@@ -303,9 +305,9 @@ public class Setblock {
 			combinerSetblockCommands.add(initialCommands.get(i).replace("\\", "\\\\").replace("\"", "\\\""));
 			if (ReadConfig.preventServerKick == true) {
 				combinerCommandLengths
-						.add(combinerSetblockCommands.get(i).replace("\\", "AA").replace("\"", "AA").replace("=", "AAAAAA").length());
+						.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).replace("\\", "AA").replace("\"", "AA").replace("=", "AAAAAA").length());
 			} else {
-				combinerCommandLengths.add(combinerSetblockCommands.get(i).length());
+				combinerCommandLengths.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).length());
 			}
 
 		}
@@ -314,19 +316,20 @@ public class Setblock {
 			combinerSetblockCommands.add(setblockCommands.get(i).replace("\\", "\\\\").replace("\"", "\\\""));
 			if (ReadConfig.preventServerKick == true) {
 				combinerCommandLengths
-				.add(combinerSetblockCommands.get(i).replace("\\", "AA").replace("\"", "AA").replace("=", "AAAAAA").length());
+						.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).replace("\\", "AA").replace("\"", "AA").replace("=", "AAAAAA").length());
 			} else {
-				combinerCommandLengths.add(combinerSetblockCommands.get(i).length());
+				combinerCommandLengths.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).length());
 			}
 		}
-		
+
 		for (int i = 0; i < finalCommands.size(); i++) {
 			combinerSetblockCommands.add(finalCommands.get(i).replace("\\", "\\\\").replace("\"", "\\\""));
 			if (ReadConfig.preventServerKick == true) {
 				combinerCommandLengths
-						.add(combinerSetblockCommands.get(i).replace("\\", "AA").replace("\"", "AA").replace("=", "AAAAAA").length());
+						.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).replace("\\", "AA").replace("\"", "AA").replace("=", "AAAAAA").length());
+				
 			} else {
-				combinerCommandLengths.add(combinerSetblockCommands.get(i).length());
+				combinerCommandLengths.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).length());
 			}
 		}
 
@@ -338,7 +341,7 @@ public class Setblock {
 
 		// server
 		// initialization
-		combinerLengthCalc += combinerBegLength + combinerEndLength;
+		combinerLengthCalc += combinerBegLength + combinerMidLength + combinerEndLength;
 
 		for (int i = 0; i < combinerSetblockCommands.size(); i++) {
 
@@ -346,6 +349,7 @@ public class Setblock {
 			combinerArrayCalc.add(combinerSetblockCommands.get(i));
 
 			combinerLengthCalc += combinerCommandLengths.get(i);
+			combinerLengthCalc += combinerMidLength;
 
 			// if it is the end
 			if (i == combinerSetblockCommands.size() - 1) {
@@ -353,8 +357,7 @@ public class Setblock {
 			}
 
 			// regular detection
-			if (finalCommand == true || combinerLengthCalc + combinerMidLength * (combinerArrayCalc.size() + 1)
-					+ combinerCommandLengths.get(i + 1) >= 32500) {
+			if (finalCommand == true || (combinerLengthCalc + combinerMidLength + combinerCommandLengths.get(i + 1)) >= 32500) {
 
 				// singular command
 				if (combinerLengthCalc >= 32500) {

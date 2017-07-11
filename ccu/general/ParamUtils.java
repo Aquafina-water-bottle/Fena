@@ -126,22 +126,26 @@ public class ParamUtils {
 
 	// Replaces all parameters in a string
 	public static String replaceParams(String getString, ArrayList<String> getParams, int paramNum) {
-
+		
 		if (paramNum > 0) {
 			for (int paramIndex = 0; paramIndex < paramNum; paramIndex++) {
 				getString = getString.replace(("|" + paramIndex + "|"), getParams.get(paramIndex));
 			}
 		}
-
+		
 		return getString;
 	}
 
 	// Replaces all parameters in an array
 	public static ArrayList<String> replaceParams(ArrayList<String> getArray, ArrayList<String> getParams, int paramNum, int tabNum) {
-		System.out.println(getArray);
 		
 		String lineCalc = null;
 		ArrayList<String> returnArray = new ArrayList<String>();
+		
+		// if there's no params in the first place
+		if (getParams == null || getParams.isEmpty()) {
+			return getArray;
+		}
 
 		// calcs number of tab spaces
 		int tabNumCalc = 0;
@@ -159,7 +163,7 @@ public class ParamUtils {
 		ArrayList<Integer> paramEncapsulateArray = new ArrayList<Integer>();
 
 		paramEncapsulateArray.add(0);
-		tabNumPrevious = tabNum + 0;
+		tabNumCalc = tabNum + 0;
 
 		for (int funcIndex = 0; funcIndex < getArray.size(); funcIndex++) {
 
@@ -169,6 +173,7 @@ public class ParamUtils {
 				lineCalc = getArray.get(funcIndex);
 
 				// gets tab number
+				tabNumPrevious = tabNumCalc + 0;
 				tabNumCalc = StringUtils.countChars(lineCalc, "\t");
 
 				// meaning tabnum went up - check if previous was FUNC or LOOP
@@ -187,7 +192,6 @@ public class ParamUtils {
 
 					// checks if it's an invalid amount missing for some reason
 					if (tabNumCalc < tabNum) {
-						System.out.println(tabNumCalc + " " + tabNum);
 						System.out.println(
 								"ERROR: Tab spaces are off when replacing parameters starting from line '" + getArray.get(0) + "'");
 						System.exit(0);
@@ -206,6 +210,7 @@ public class ParamUtils {
 				
 				// only if paramEncapsulate is 0
 				paramEncapsulateGet = paramEncapsulateArray.get(tabNumCalc - tabNum);
+				
 				if (paramEncapsulateGet == 0) {
 					for (int paramIndex = 0; paramIndex < paramNum; paramIndex++) {
 						lineCalc = lineCalc.replace(("|" + paramIndex + "|"), getParams.get(paramIndex));
@@ -225,126 +230,11 @@ public class ParamUtils {
 			}
 		}
 		
-		System.out.println(returnArray);
-		System.out.println("");
+		// System.out.println(getArray);
+		// System.out.println("");
+		
 		return returnArray;
+		
+		
 	}
-
-	// Calc all future params in a string (aka |1;2| --> |1;1| and |1;1| --> |1|)
-	// FUTURE PARAMS ARE DUMB --> these won't be used anymore
-	/*
-	public static String calcFutureParams(String getString) {
-	
-		boolean changedLine = false;
-		String lineCalc = null;
-	
-		if (getString.contains("|")) {
-			String[] paramsCalc = getString.split(Pattern.quote("|"));
-			String[] paramsCalc2 = null;
-			int paramIntCalc = 0;
-			int paramIndex = 0;
-	
-			while (paramIndex < paramsCalc.length) {
-				// if it has ; and there is only one ;
-				if (paramsCalc[paramIndex].contains(";")
-						&& paramsCalc[paramIndex].length() - paramsCalc[paramIndex].replace(";", "").length() == 1) {
-					paramsCalc2 = paramsCalc[paramIndex].split(";");
-	
-					// if both are integers
-					if (NumberUtils.isInt(paramsCalc2[0]) && NumberUtils.isInt(paramsCalc2[1])) {
-						paramIntCalc = Integer.parseInt(paramsCalc2[1]) - 1;
-						if (paramIntCalc == 0) {
-							paramsCalc[paramIndex] = paramsCalc2[0];
-						} else {
-							paramsCalc[paramIndex] = paramsCalc2[0] + ";" + paramIntCalc;
-						}
-	
-						changedLine = true;
-					}
-	
-					if (paramsCalc.length - 1 == paramIndex) {
-						paramsCalc[paramIndex] += "|";
-					}
-	
-					paramIndex += 2;
-					continue;
-				}
-				paramIndex++;
-			}
-	
-			if (changedLine == true) {
-				for (int i = 0; i < paramsCalc.length; i++) {
-					if (i == 0) {
-						lineCalc = paramsCalc[0];
-					} else {
-						lineCalc += "|" + paramsCalc[i];
-					}
-				}
-			} else {
-				lineCalc = getString;
-			}
-		} else {
-			lineCalc = getString;
-		}
-	
-		return lineCalc;
-	}
-	
-	// Calc all future params in a string (aka |1;2| --> |1;1| and |1;1| --> |1|)
-	public static ArrayList<String> calcFutureParams(ArrayList<String> getArray) {
-	
-		boolean changedLine = false;
-		String lineCalc = null;
-	
-		for (int arrayIndex = 0; arrayIndex < getArray.size(); arrayIndex++) {
-	
-			if (getArray.get(arrayIndex).contains("|")) {
-				String[] paramsCalc = getArray.get(arrayIndex).split(Pattern.quote("|"));
-				String[] paramsCalc2 = null;
-				int paramIntCalc = 0;
-				int paramIndex = 0;
-	
-				while (paramIndex < paramsCalc.length) {
-					// if it has ; and there is only one ;
-					if (paramsCalc[paramIndex].contains(";")
-							&& paramsCalc[paramIndex].length() - paramsCalc[paramIndex].replace(";", "").length() == 1) {
-						paramsCalc2 = paramsCalc[paramIndex].split(";");
-	
-						// if both are integers
-						if (NumberUtils.isInt(paramsCalc2[0]) && NumberUtils.isInt(paramsCalc2[1])) {
-							paramIntCalc = Integer.parseInt(paramsCalc2[1]) - 1;
-							if (paramIntCalc == 0) {
-								paramsCalc[paramIndex] = paramsCalc2[0];
-							} else {
-								paramsCalc[paramIndex] = paramsCalc2[0] + ";" + paramIntCalc;
-							}
-	
-							changedLine = true;
-						}
-	
-						if (paramsCalc.length - 1 == paramIndex) {
-							paramsCalc[paramIndex] += "|";
-						}
-	
-						paramIndex += 2;
-						continue;
-					}
-					paramIndex++;
-				}
-	
-				if (changedLine == true) {
-					for (int i = 0; i < paramsCalc.length; i++) {
-						if (i == 0) {
-							lineCalc = paramsCalc[0];
-						} else {
-							lineCalc += "|" + paramsCalc[i];
-						}
-					}
-					getArray.set(arrayIndex, lineCalc);
-				}
-			}
-		}
-	
-		return getArray;
-	}*/
 }

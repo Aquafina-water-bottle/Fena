@@ -71,7 +71,7 @@ public class GeneralFile {
 
 	public static ArrayList<String> parseCCU(ArrayList<String> getArray) {
 		ArrayList<String> returnArray = GeneralFile.removeSkipLineBlock(
-				GeneralFile.removeComment(GeneralFile.removeCommentBlock(getArray, "//=", "=//"), "//"), "/*", "*/");
+				GeneralFile.removeComment(GeneralFile.removeCommentBlock(getArray, "//=", "=//"), "//"), "/*", "*/", "-/-");
 		return returnArray;
 	}
 
@@ -144,7 +144,8 @@ public class GeneralFile {
 	}
 
 	// Skip lines encapsulation
-	public static ArrayList<String> removeSkipLineBlock(ArrayList<String> fileArrayList, String startSkip, String endSkip) {
+	public static ArrayList<String> removeSkipLineBlock(ArrayList<String> fileArrayList, String startSkip, String endSkip,
+			String midSkip) {
 		ArrayList<String> doc = new ArrayList<String>();
 		boolean skipLineBlock = false;
 		String lineCalc = null;
@@ -152,6 +153,12 @@ public class GeneralFile {
 		for (String line : fileArrayList) {
 			if (line.trim().length() >= startSkip.length() && line.trim().substring(0, startSkip.length()).equals(startSkip)) {
 				skipLineBlock = true;
+				lineCalc = null;
+				continue;
+			}
+			
+			if (line.trim().length() >= midSkip.length() && line.trim().substring(0, midSkip.length()).equals(midSkip)) {
+				doc.add(lineCalc);
 				lineCalc = null;
 				continue;
 			}

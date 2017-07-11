@@ -2,6 +2,7 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.NumberUtils;
 import ccu.general.StringUtils;
 
 public class Con_If {
@@ -26,6 +27,7 @@ public class Con_If {
 		Boolean foundOperator = null;
 		String getOperator = null;
 		String[] splitArgsCalc = null;
+		String[] splitArgsTemp = new String[2];
 		float[] splitArgsFloat = new float[2];
 		Boolean calcStatement = null;
 
@@ -38,7 +40,7 @@ public class Con_If {
 
 			for (String operator : operatorArray) {
 				if (statementArgs.contains(operator)) {
-					
+
 					if (foundOperator == null) { // checks multiple different operators
 						foundOperator = true;
 						getOperator = operator;
@@ -66,50 +68,71 @@ public class Con_If {
 
 			// gets the actual numeric values on each side
 			splitArgsCalc = statementArgs.split(getOperator);
-			splitArgsFloat[0] = Float.parseFloat(MathParser.getOperation(splitArgsCalc[0].trim(), this.fullLineGet));
-			splitArgsFloat[1] = Float.parseFloat(MathParser.getOperation(splitArgsCalc[1].trim(), this.fullLineGet));
 
-			// calculates whether it should accept the array or not (with calcStatement)
-			switch (getOperator) {
-			case "=":
-				if (splitArgsFloat[0] == splitArgsFloat[1]) {
-					calcStatement = true;
-				} else {
-					calcStatement = false;
-				}
-				break;
+			splitArgsTemp[0] = MathParser.getOperation(splitArgsCalc[0].trim(), this.fullLineGet, false);
+			splitArgsTemp[1] = MathParser.getOperation(splitArgsCalc[1].trim(), this.fullLineGet, false);
+			
+			// is number
+			if (NumberUtils.isNum(splitArgsTemp[0]) && NumberUtils.isNum(splitArgsTemp[1])) {
+				
+				splitArgsFloat[0] = Float.parseFloat(splitArgsTemp[0]);
+				splitArgsFloat[1] = Float.parseFloat(splitArgsTemp[1]);
+				
+				// calculates whether it should accept the array or not (with calcStatement)
+				switch (getOperator) {
+				case "=":
+					if (splitArgsFloat[0] == splitArgsFloat[1]) {
+						calcStatement = true;
+					} else {
+						calcStatement = false;
+					}
+					break;
 
-			case "<":
-				if (splitArgsFloat[0] < splitArgsFloat[1]) {
-					calcStatement = true;
-				} else {
-					calcStatement = false;
-				}
-				break;
+				case "<":
+					if (splitArgsFloat[0] < splitArgsFloat[1]) {
+						calcStatement = true;
+					} else {
+						calcStatement = false;
+					}
+					break;
 
-			case ">":
-				if (splitArgsFloat[0] > splitArgsFloat[1]) {
-					calcStatement = true;
-				} else {
-					calcStatement = false;
-				}
-				break;
+				case ">":
+					if (splitArgsFloat[0] > splitArgsFloat[1]) {
+						calcStatement = true;
+					} else {
+						calcStatement = false;
+					}
+					break;
 
-			case "<=":
-				if (splitArgsFloat[0] <= splitArgsFloat[1]) {
-					calcStatement = true;
-				} else {
-					calcStatement = false;
-				}
-				break;
+				case "<=":
+					if (splitArgsFloat[0] <= splitArgsFloat[1]) {
+						calcStatement = true;
+					} else {
+						calcStatement = false;
+					}
+					break;
 
-			case ">=":
-				if (splitArgsFloat[0] >= splitArgsFloat[1]) {
-					calcStatement = true;
-				} else {
-					calcStatement = false;
+				case ">=":
+					if (splitArgsFloat[0] >= splitArgsFloat[1]) {
+						calcStatement = true;
+					} else {
+						calcStatement = false;
+					}
+					break;
 				}
-				break;
+				
+			} else { // if string
+				if (getOperator.equals("=")) {
+					if (splitArgsTemp[0].equals(splitArgsTemp[1])) {
+						calcStatement = true;
+					} else {
+						calcStatement = false;
+					}
+				} else {
+					System.out.println("ERROR: Operator '" + getOperator + "' for comparing string is not recognized for line '"
+							+ this.fullLineGet + "'");
+					System.exit(0);
+				}
 			}
 
 			// checks if calcStatement is null --> aka fail
@@ -126,12 +149,12 @@ public class Con_If {
 				if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
 					this.arrayGet = checkCommandsArray;
 				}
-				
+
 				// gets rid of tab spaces
 				for (int i = 0; i < this.arrayGet.size(); i++) {
 					this.arrayGet.set(i, this.arrayGet.get(i).substring(1));
 				}
-				
+
 				return this.arrayGet;
 			} else {
 				return null;
@@ -141,7 +164,7 @@ public class Con_If {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 			System.exit(0);
 		}
-		
+
 		// if you reach here, idk what to do anymore >_>
 		return null;
 	}

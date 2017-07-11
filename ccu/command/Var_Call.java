@@ -20,6 +20,7 @@ public class Var_Call {
 	}
 
 	public ArrayList<String> getArray() {
+		
 		/** It's the exact same as stating a function name
 		 * It just allows you to call multiple functions in the same line
 		 * USAGE:
@@ -33,7 +34,6 @@ public class Var_Call {
 		ArrayList<String> useParamsCalc = new ArrayList<String>();
 		String lineCalc = null;
 		int funcIndexSave = 0;
-		
 
 		// Checking tab spaces
 		String whitespaceCalc = ArgUtils.checkWhiteSpace(this.fullLineGet, this.tabNum);
@@ -71,7 +71,7 @@ public class Var_Call {
 					if (statementArgs.equals(Var_Func.arrayFuncNameSave.get(funcIndex))) {
 
 						useParamsCalc = ParamUtils.getParams(getParamCalc, Var_Func.arrayFuncParamSave.get(funcIndex));
-
+						
 						for (int i = 0; i < Var_Func.arrayFuncSave.get(funcIndex).length; i++) {
 							lineCalc = whitespaceCalc + Var_Func.arrayFuncSave.get(funcIndex)[i];
 							arrayReturn.add(lineCalc);
@@ -80,7 +80,6 @@ public class Var_Call {
 						functionExists = true;
 						funcIndexSave = funcIndex;
 						break;
-
 					}
 				}
 
@@ -100,7 +99,7 @@ public class Var_Call {
 
 				// replaces params
 				this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc, Var_Func.arrayFuncParamSave.get(funcIndexSave), tabNum);
-
+				
 				ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayReturn, tabNum, checkFunction);
 				ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
 				if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
@@ -112,7 +111,7 @@ public class Var_Call {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 			System.exit(0);
 		}
-
+		
 		return this.arrayReturn;
 	}
 

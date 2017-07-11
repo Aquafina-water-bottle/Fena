@@ -20,6 +20,7 @@ public class Con_Loop {
 	}
 
 	public ArrayList<String> getArray() {
+		
 		/** Iterates though either an array or a given set of numbers
 		 * Valid operators are: +, -, /, *, ^, () (NOTICE: % is not valid)
 		 * Examples:
@@ -70,6 +71,7 @@ public class Con_Loop {
 
 					if (tempCount == 0) {
 						loopArray = MathParser.getLoopArray(stringCalc.substring(1, stringCalc.length() - 1), fullLineGet); // gets the math stuff here
+						
 						loopArrayStorage.add(loopArray);
 						stringCalc = null;
 					}
@@ -95,6 +97,7 @@ public class Con_Loop {
 
 					// replaces params and adds it onto the arrayLoopReturn
 					arrayLoopReturn.addAll(ParamUtils.replaceParams(this.arrayGet, paramArrayGet, paramNum, tabNum - 1));
+					
 				}
 
 				ReadCCUFile ccuSubsetFile = new ReadCCUFile(arrayLoopReturn, tabNum);

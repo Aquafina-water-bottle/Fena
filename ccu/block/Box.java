@@ -323,7 +323,7 @@ public class Box {
 
 						// iterating through group names
 						for (int nameIndex = 0; nameIndex < Cmd_Group.arrayGroupSave.size(); nameIndex++) {
-							if (splitArrayCalc[k].equals(Cmd_Group.arrayGroupSave.get(nameIndex)[0])) {
+							if (k != 0 && splitArrayCalc[k].equals(Cmd_Group.arrayGroupSave.get(nameIndex)[0])) {
 								if (splitArrayCalc[k - 1].equals("setblock")) {
 									splitArrayCalc[k] = groupNameCoordArray[nameIndex].getString();
 								}
@@ -333,6 +333,17 @@ public class Box {
 								}
 							}
 						}
+						
+						if (k != 0 && splitArrayCalc[k].equals("SELF")) {
+							if (splitArrayCalc[k - 1].equals("setblock")) {
+								splitArrayCalc[k] = groupNameCoordArray[i].getString();
+							}
+							if (splitArrayCalc[k - 1].equals("fill")) {
+								splitArrayCalc[k] = groupNameCoordArray[i].getString() + " "
+										+ groupNameFillArray[i].getString();
+							}
+						}
+						
 						if (recombineCommand == null) {
 							recombineCommand = splitArrayCalc[k];
 						} else {

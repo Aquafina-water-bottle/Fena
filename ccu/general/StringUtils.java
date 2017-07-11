@@ -1,5 +1,7 @@
 package ccu.general;
 
+import java.util.ArrayList;
+
 import ccu.command.ServerOverride;
 import ccu.command.Short_Execute;
 import ccu.command.Short_Scoreboard;
@@ -13,45 +15,79 @@ public class StringUtils {
 		if (replaceChar.length() > 1) {
 			charNum /= replaceChar.length();
 		}
-		
+
 		return charNum;
 	}
-	
+
 	public static String getWhiteSpace(String getString) {
 		String returnString = null;
 		returnString = getString.substring(0, StringUtils.countChars(getString, "\t"));
-		
+
 		return returnString;
 	}
-	
+
+	public static ArrayList<String> skipLine(ArrayList<String> getArray) {
+		ArrayList<String> returnArray = new ArrayList<String>();
+		String calcString = "";
+		boolean skipLine = false;
+
+		for (int i = 0; i < getArray.size(); i++) {
+			
+			skipLine = false;
+			if (getArray.get(i).endsWith(";")) {
+				skipLine = true;
+			}
+			
+			if (skipLine == true) {
+				if (calcString.isEmpty()) {
+					calcString += getArray.get(i).substring(0, getArray.get(i).length() - 1);
+				} else {
+					
+					// trims to get rid of any whitespace in the front of the string
+					calcString += getArray.get(i).trim().substring(0, getArray.get(i).trim().length() - 1);
+				}
+			} else {
+				if (calcString.isEmpty()) {
+					returnArray.add(getArray.get(i));
+				} else {
+					returnArray.add(calcString);
+					returnArray.add(getArray.get(i));
+					calcString = "";
+				}
+			}
+		}
+
+		return returnArray;
+	}
+
 	public static String generalParse(String getString) {
 		String returnString = null;
 		String calcString = null;
 		returnString = getString + "";
-		
+
 		calcString = Short_Scoreboard.getCommand(returnString);
 		if (calcString != null) {
 			returnString = calcString + "";
 		}
-		
+
 		// execute shortcuts
 		calcString = Short_Execute.getCommand(returnString);
 		if (calcString != null) {
 			returnString = calcString + "";
 		}
-		
+
 		// selector shortcuts
 		calcString = Short_Selector.getCommand(returnString);
 		if (calcString != null) {
 			returnString = calcString + "";
 		}
-		
+
 		// function shortcuts
 		calcString = FunctionNick.getCommand(returnString);
 		if (calcString != null) {
 			returnString = calcString + "";
 		}
-		
+
 		// server override
 		calcString = ServerOverride.getCommand(returnString);
 		if (ReadConfig.serverPlugins == true
@@ -60,7 +96,7 @@ public class StringUtils {
 				returnString = calcString + "";
 			}
 		}
-		
+
 		return returnString;
 	}
 }

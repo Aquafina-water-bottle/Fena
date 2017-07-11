@@ -26,8 +26,8 @@ public class Var_Define {
 			"FUNC", "ACTIVATE", "CALL", 
 			"MFUNC", "BRANCH",
 			"IMPORT", "LIBRARY", "*",
-			
-			"COND", "OPTIONS", "UNASSIGN"
+			"CALC", "SIN", "COS", "TAN", "SELF",
+			"COND", "OPTIONS", "UNASSIGN", "IF", "LOOP",
 			};
 	// @formatter:on
 

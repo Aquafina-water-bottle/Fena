@@ -9,9 +9,15 @@ class storeValueType {
 	public Boolean isFloat = null;
 	Integer getInt = null;
 	Float getFloat = null;
+	String getString = null;
+
+	// Constructor for string apparently
+	public storeValueType(String getString) {
+		this.getString = getString;
+	}
 
 	// Constructor for ints
-	public storeValueType(float getNum, boolean isFloat) {
+	public storeValueType(float getNum, Boolean isFloat) {
 		this.isFloat = isFloat;
 		if (isFloat) {
 			this.getFloat = getNum;
@@ -439,7 +445,7 @@ public class MathParser {
 
 		} else { // calculates int array
 			int[] numCalcArray = new int[4];
-			
+
 			for (int i = 0; i < calcArray.size(); i++) {
 				numCalcArray[i] = Integer.parseInt(calcArray.get(i));
 			}
@@ -708,7 +714,7 @@ public class MathParser {
 		return returnStringArray;
 	}
 
-	public static String getOperation(String getString, String fullLineGet) {
+	public static String getOperation(String getString, String fullLineGet, boolean isStrict) {
 		/** This is primarily for actual CALC() stuff, including IF
 		 */
 
@@ -716,6 +722,10 @@ public class MathParser {
 		if (StringUtils.countChars(getString, "(") == StringUtils.countChars(getString, ")")) {
 
 			if (StringUtils.countChars(getString, "(") > 0) {
+
+				if ((getString.startsWith("(") && getString.endsWith(")")) == false) {
+					getString = "(" + getString + ")";
+				}
 
 				String begString = "";
 				String midString = "";
@@ -729,7 +739,7 @@ public class MathParser {
 						midString = endString.substring(0, endString.indexOf(")") + 1);
 						endString = endString.substring(endString.indexOf(")") + 1);
 
-						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet);
+						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet, true);
 
 						if (getValue.isFloat) {
 							midString = getValue.getFloat + "";
@@ -750,11 +760,23 @@ public class MathParser {
 					System.exit(0);
 				} else {
 					if (NumberUtils.isNum(getString) == false) {
-						System.out.println("ERROR: The argument '" + getString + "' in line '" + fullLineGet + "' is not an operator");
-						System.exit(0);
+						storeValueType getValue = calcValue(getString, fullLineGet, isStrict);
+						if (getValue.isFloat == null) {
+							if (isStrict == true) {
+								System.out
+										.println("ERROR: Arguments in '" + getString + "' in line '" + fullLineGet + "' are invalid");
+								System.exit(0);
+							}
+						} else {
+							if (getValue.isFloat) {
+								getString = getValue.getFloat + "";
+							} else {
+								getString = getValue.getInt + "";
+							}
+						}
 					}
 				}
-				
+
 				return getString;
 			}
 
@@ -762,7 +784,7 @@ public class MathParser {
 			System.out.println("ERROR: Unbalanced brackets in '" + getString + "' in line '" + fullLineGet + "'");
 			System.exit(0);
 		}
-		
+
 		return getString;
 	}
 
@@ -770,7 +792,7 @@ public class MathParser {
 		/** The main difference between the above and this is 'argNumGet'
 		 * if that's 3, it detects whether it's a valid loop operator or not (if it isn't, you're a potato)
 		 */
-		
+
 		final String[] operatorArray = {"^", "*", "/", "-", "+"};
 
 		// checks if there are brackets in the first places
@@ -794,7 +816,7 @@ public class MathParser {
 						midString = endString.substring(0, endString.indexOf(")") + 1);
 						endString = endString.substring(endString.indexOf(")") + 1);
 
-						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet);
+						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet, true);
 
 						if (getValue.isFloat) {
 							midString = getValue.getFloat + "";
@@ -836,7 +858,7 @@ public class MathParser {
 						}
 					}
 				}
-				
+
 				return getString;
 			}
 
@@ -844,11 +866,11 @@ public class MathParser {
 			System.out.println("ERROR: Unbalanced brackets in '" + getString + "' in line '" + fullLineGet + "'");
 			System.exit(0);
 		}
-		
+
 		return getString;
 	}
 
-	private static storeValueType calcValue(String getString, String fullLineGet) {
+	private static storeValueType calcValue(String getString, String fullLineGet, boolean isStrict) {
 		// -, +, *, /, ^, %
 		// Priority: ^, *, /, %, +, -
 
@@ -878,9 +900,14 @@ public class MathParser {
 			} else {
 
 				if (getString.contains(" ") == false) {
-					System.out.println("ERROR: Math operations in '" + getString
-							+ "' must be seperated by spaces (apart from brackets) in line'" + fullLineGet + "'");
-					System.exit(0);
+					if (isStrict == true) {
+						System.out.println("ERROR: Math operations in '" + getString
+								+ "' must be separated by spaces (apart from brackets) in line'" + fullLineGet + "'");
+						System.exit(0);
+					} else {
+						storeValueType returnValue = new storeValueType(getString);
+						return returnValue;
+					}
 				} else {
 					arrayCalc = getString.split(" ");
 
@@ -1063,5 +1090,45 @@ public class MathParser {
 			storeValueType returnValue = new storeValueType(arrayInt.get(0), false);
 			return returnValue;
 		}
+	}
+
+	public static String parseSecondaryStatements(String getString) {
+		// getCommand is like SIN, COS, TAN, CALC
+		// SIN, COS and TAN can be like CALC except the final value returns the sin/cos/tan version
+		
+		final String[] secondaryStatementArray = {"SIN", "COS", "TAN", "CALC"};
+
+		// if getStatement is true, then keeps going
+		String calcString = null;
+		String testBracketString = null;
+		String returnString = null;
+
+		// gets calcString
+		for (String secondaryStatement : secondaryStatementArray) {
+			if (getString.contains(secondaryStatement + "(")) {
+				calcString = getString.substring(getString.lastIndexOf(secondaryStatement + "("));
+				System.out.println(calcString + " " + secondaryStatement);
+				break;
+			}
+		}
+		
+		// if calcString is not null, then a secondary statement was found
+		if (calcString == null) {
+			returnString = getString + "";
+			return returnString;
+		} else {
+			// finds brackets
+			for (int i = 0; i < StringUtils.countChars(calcString, ")"); i++) {
+				if (i == 0) {
+					calcString = calcString.substring(0, calcString.indexOf(")"));
+				} else {
+					
+				}
+			}
+			
+			
+		}
+
+		return getString;
 	}
 }

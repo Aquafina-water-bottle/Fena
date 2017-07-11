@@ -153,11 +153,6 @@ public class Cmd_MFunc {
 				this.arrayGet = checkCommandsArray;
 			}
 
-			// Creates the string array, and puts it in the arraylist
-			// Notice how the first element in each array is the mfunc name and not a valid command
-			String[] arrayMFunc = new String[this.arrayGet.size() + 1];
-			arrayMFunc[0] = branchCalc;
-
 			// checks tab spaces
 			ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
 
@@ -169,7 +164,16 @@ public class Cmd_MFunc {
 							+ this.arrayGet.get(i).replace("CCU_COND_", "") + "'");
 					System.exit(0);
 				}
+			}
+			
+			this.arrayGet = StringUtils.skipLine(this.arrayGet);
 
+			// Creates the string array, and puts it in the arraylist
+			// Notice how the first element in each array is the mfunc name and not a valid command
+			String[] arrayMFunc = new String[this.arrayGet.size() + 1];
+			arrayMFunc[0] = branchCalc;
+			
+			for (int i = 0; i < this.arrayGet.size(); i++) {
 				arrayMFunc[i + 1] = StringUtils.generalParse(this.arrayGet.get(i).trim());
 			}
 
