@@ -24,12 +24,14 @@ public class Main {
 	 * -MFUNC nicknames - DONE
 	 * -Server override using 'minecraft:' when detecing commands exist - DONE
 	 * -Putting MFUNC into the parsed file - DONE
+	 * -Skipping lines using ';' - DONE
 	 * 
 	 * -FUNC - DONE (now with proper future params)
 	 * -IMPORT - DONE (without importing .dat files)
 	 * -UNASSIGN - DONE (since arrays, team lists and objective lists aren't a thing yet)
 	 * -LOOP - DONE (completely woot)
 	 * -IF - DONE (completely WOOOT)
+	 * -SIN COS TAN CALC - DONE WOOOOOOOOOT
 	 * 
 	 * -Repeated definitions - Already works apparently
 	 * -Check whether commands exist - WILL NOT DO
@@ -47,12 +49,9 @@ public class Main {
 	 * -FILE
 	 * 
 	 * Other
-	 * -CALC
 	 * -PARSE
-	 * -SIN COS TAN
 	 * -Escaping using '`'
 	 * -Escaping using '/' at the beginning of a line
-	 * -Skipping lines using ';'
 	 * 
 	 * 
 	 * Main thing is that all shortcuts will be done when parsing only at GROUP and MFUNC

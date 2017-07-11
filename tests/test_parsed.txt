@@ -53,6 +53,7 @@ GROUP | Grp_APulse | PULSE		[384 78 98 | stonebrick 0]
 	say a
 	say b
 	function custom:RayCaster/theHunted/test/init
+	setblock 384 78 98 air 0
 
 GROUP | Grp_B | PULSE		[384 80 98 | stonebrick 0]
 	say b
@@ -92,6 +93,7 @@ GROUP | Grp_AyyLmao | PULSE		[384 80 100 | stonebrick 0]
 	setblock 384 80 100 air 0
 	say MEMES 5
 	say -301 MARKER
+	say -582 RandCalc
 	say 51 MARKER
 	say 930.0 MARKER
 	say 40 MARKER
@@ -118,7 +120,20 @@ GROUP | Grp_AyyLmao | PULSE		[384 80 100 | stonebrick 0]
 	say 15
 	say 16
 	say 17
+	say Ye
+	say ayy
+	say lmao
+	TheGreatestARGS (shouldn't be considered a function)
 	say 18
+	say Ye
+	say ayy
+	say lmao
+	TheGreatestARGS (shouldn't be considered a function)
+	asdfasdfsaf
+	asdfae564rwe
+	d45e
+	78y65re7
+	6756re
 	say 19
 	say 20
 	say 21
@@ -152,6 +167,11 @@ GROUP | Grp_TheGreatestGroup | PULSE		[384 70 102 | stonebrick 0]
 	say 3 asdfasdf
 	say 4 asdfasdf
 	say 5 asdfasdf
+	asdfasdfsaf asdfasdf
+	asdfae564rwe asdfasdf
+	d45e asdfasdf
+	78y65re7 asdfasdf
+	6756re asdfasdf
 	say 6 asdfasdf
 	asdfasdf say 7
 	asdfasdf say 8
@@ -187,6 +207,7 @@ GROUP | Grp_TheGreatestGroup | PULSE		[384 70 102 | stonebrick 0]
 	say 30
 	say 31
 	say 32
+	say 33 34 35 36 37 38 39 40
 	tellraw @a {"text":"ayylmao"}
 
 GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
@@ -427,7 +448,11 @@ GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
 	say test2
 	scoreboard players operation @p TEST @p SPtp
 	$test$
-	fill 384 70 104 399 84 104 air 0
+	say ayy
+	say lmao
+	say lmao compared to ayy
+	say lmao compared to ayy
+	fill 384 70 104 399 85 104 air 0
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -437,6 +462,7 @@ MFUNC | MFunc_MainRaycaster | C:/Users/Austin/Documents/Austin/powder game code/
 	say test
 	say 1 = 1
 	say test
+	say MyBoyAsdf
 
 MFUNC | MFunc_MainInit | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/test/init.mcfunction
 	say asdf
@@ -448,6 +474,164 @@ MFUNC | MFunc_InitTest | C:/Users/Austin/Documents/Austin/powder game code/eGO/S
 	say asdf2
 	say asdf2
 	say asdf2
+	scoreboard players add @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa_min=0,score_RRpa=71] RRpa 1
+	scoreboard players set @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa_min=72] RRpa 1
+	say 0.70711 SIN
+	say 0.70711 COS
+	say 1.0 TAN
+	say 0.70711 SIN
+	say 0.70711 COS
+	say 1.0 TAN
+	say 0.70711 SIN
+	say 0.70711 COS
+	say 1.0 TAN
+	say 0.70711 SIN
+	say 0.70711 COS
+	say 1.0 TAN
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=1,score_RRpa_min=1] ~ ~ ~ particle happyVillager ~0.10353 ~1.63074 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=1,score_RRpa_min=1] ~ ~ ~ particle happyVillager ~-0.10353 ~1.63074 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=2,score_RRpa_min=2] ~ ~ ~ particle happyVillager ~0.2 ~1.76047 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=2,score_RRpa_min=2] ~ ~ ~ particle happyVillager ~-0.2 ~1.76047 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=3,score_RRpa_min=3] ~ ~ ~ particle happyVillager ~0.28284 ~1.88823 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=3,score_RRpa_min=3] ~ ~ ~ particle happyVillager ~-0.28284 ~1.88823 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=4,score_RRpa_min=4] ~ ~ ~ particle happyVillager ~0.34641 ~2.01303 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=4,score_RRpa_min=4] ~ ~ ~ particle happyVillager ~-0.34641 ~2.01303 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=5,score_RRpa_min=5] ~ ~ ~ particle happyVillager ~0.38637 ~2.13393 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=5,score_RRpa_min=5] ~ ~ ~ particle happyVillager ~-0.38637 ~2.13393 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=6,score_RRpa_min=6] ~ ~ ~ particle happyVillager ~0.4 ~2.25 ~0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=6,score_RRpa_min=6] ~ ~ ~ particle happyVillager ~-0.4 ~2.25 ~-0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=7,score_RRpa_min=7] ~ ~ ~ particle happyVillager ~0.38637 ~2.36037 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=7,score_RRpa_min=7] ~ ~ ~ particle happyVillager ~-0.38637 ~2.36037 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=8,score_RRpa_min=8] ~ ~ ~ particle happyVillager ~0.34641 ~2.46418 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=8,score_RRpa_min=8] ~ ~ ~ particle happyVillager ~-0.34641 ~2.46418 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=9,score_RRpa_min=9] ~ ~ ~ particle happyVillager ~0.28284 ~2.56067 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=9,score_RRpa_min=9] ~ ~ ~ particle happyVillager ~-0.28284 ~2.56067 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=10,score_RRpa_min=10] ~ ~ ~ particle happyVillager ~0.2 ~2.64906 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=10,score_RRpa_min=10] ~ ~ ~ particle happyVillager ~-0.2 ~2.64906 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=11,score_RRpa_min=11] ~ ~ ~ particle happyVillager ~0.10353 ~2.72872 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=11,score_RRpa_min=11] ~ ~ ~ particle happyVillager ~-0.10353 ~2.72872 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=12,score_RRpa_min=12] ~ ~ ~ particle happyVillager ~0.0 ~2.79905 ~-0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=12,score_RRpa_min=12] ~ ~ ~ particle happyVillager ~-0.0 ~2.79905 ~0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=13,score_RRpa_min=13] ~ ~ ~ particle happyVillager ~-0.10353 ~2.85947 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=13,score_RRpa_min=13] ~ ~ ~ particle happyVillager ~0.10353 ~2.85947 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=14,score_RRpa_min=14] ~ ~ ~ particle happyVillager ~-0.2 ~2.90953 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=14,score_RRpa_min=14] ~ ~ ~ particle happyVillager ~0.2 ~2.90953 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=15,score_RRpa_min=15] ~ ~ ~ particle happyVillager ~-0.28284 ~2.94889 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=15,score_RRpa_min=15] ~ ~ ~ particle happyVillager ~0.28284 ~2.94889 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=16,score_RRpa_min=16] ~ ~ ~ particle happyVillager ~-0.34641 ~2.97722 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=16,score_RRpa_min=16] ~ ~ ~ particle happyVillager ~0.34641 ~2.97722 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=17,score_RRpa_min=17] ~ ~ ~ particle happyVillager ~-0.38637 ~2.99429 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=17,score_RRpa_min=17] ~ ~ ~ particle happyVillager ~0.38637 ~2.99429 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=18,score_RRpa_min=18] ~ ~ ~ particle happyVillager ~-0.4 ~3.0 ~-0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=18,score_RRpa_min=18] ~ ~ ~ particle happyVillager ~0.4 ~3.0 ~0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=19,score_RRpa_min=19] ~ ~ ~ particle happyVillager ~-0.38637 ~2.99429 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=19,score_RRpa_min=19] ~ ~ ~ particle happyVillager ~0.38637 ~2.99429 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=20,score_RRpa_min=20] ~ ~ ~ particle happyVillager ~-0.34641 ~2.97722 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=20,score_RRpa_min=20] ~ ~ ~ particle happyVillager ~0.34641 ~2.97722 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=21,score_RRpa_min=21] ~ ~ ~ particle happyVillager ~-0.28284 ~2.94889 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=21,score_RRpa_min=21] ~ ~ ~ particle happyVillager ~0.28284 ~2.94889 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=22,score_RRpa_min=22] ~ ~ ~ particle happyVillager ~-0.2 ~2.90953 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=22,score_RRpa_min=22] ~ ~ ~ particle happyVillager ~0.2 ~2.90953 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=23,score_RRpa_min=23] ~ ~ ~ particle happyVillager ~-0.10353 ~2.85947 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=23,score_RRpa_min=23] ~ ~ ~ particle happyVillager ~0.10353 ~2.85947 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=24,score_RRpa_min=24] ~ ~ ~ particle happyVillager ~-0.0 ~2.79905 ~0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=24,score_RRpa_min=24] ~ ~ ~ particle happyVillager ~0.0 ~2.79905 ~-0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=25,score_RRpa_min=25] ~ ~ ~ particle happyVillager ~0.10353 ~2.72872 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=25,score_RRpa_min=25] ~ ~ ~ particle happyVillager ~-0.10353 ~2.72872 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=26,score_RRpa_min=26] ~ ~ ~ particle happyVillager ~0.2 ~2.64906 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=26,score_RRpa_min=26] ~ ~ ~ particle happyVillager ~-0.2 ~2.64906 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=27,score_RRpa_min=27] ~ ~ ~ particle happyVillager ~0.28284 ~2.56067 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=27,score_RRpa_min=27] ~ ~ ~ particle happyVillager ~-0.28284 ~2.56067 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=28,score_RRpa_min=28] ~ ~ ~ particle happyVillager ~0.34641 ~2.46418 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=28,score_RRpa_min=28] ~ ~ ~ particle happyVillager ~-0.34641 ~2.46418 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=29,score_RRpa_min=29] ~ ~ ~ particle happyVillager ~0.38637 ~2.36037 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=29,score_RRpa_min=29] ~ ~ ~ particle happyVillager ~-0.38637 ~2.36037 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=30,score_RRpa_min=30] ~ ~ ~ particle happyVillager ~0.4 ~2.25 ~0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=30,score_RRpa_min=30] ~ ~ ~ particle happyVillager ~-0.4 ~2.25 ~-0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=31,score_RRpa_min=31] ~ ~ ~ particle happyVillager ~0.38637 ~2.13393 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=31,score_RRpa_min=31] ~ ~ ~ particle happyVillager ~-0.38637 ~2.13393 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=32,score_RRpa_min=32] ~ ~ ~ particle happyVillager ~0.34641 ~2.01303 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=32,score_RRpa_min=32] ~ ~ ~ particle happyVillager ~-0.34641 ~2.01303 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=33,score_RRpa_min=33] ~ ~ ~ particle happyVillager ~0.28284 ~1.88823 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=33,score_RRpa_min=33] ~ ~ ~ particle happyVillager ~-0.28284 ~1.88823 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=34,score_RRpa_min=34] ~ ~ ~ particle happyVillager ~0.2 ~1.76047 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=34,score_RRpa_min=34] ~ ~ ~ particle happyVillager ~-0.2 ~1.76047 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=35,score_RRpa_min=35] ~ ~ ~ particle happyVillager ~0.10353 ~1.63074 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=35,score_RRpa_min=35] ~ ~ ~ particle happyVillager ~-0.10353 ~1.63074 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=36,score_RRpa_min=36] ~ ~ ~ particle happyVillager ~0.0 ~1.5 ~-0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=36,score_RRpa_min=36] ~ ~ ~ particle happyVillager ~-0.0 ~1.5 ~0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=37,score_RRpa_min=37] ~ ~ ~ particle happyVillager ~-0.10353 ~1.36926 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=37,score_RRpa_min=37] ~ ~ ~ particle happyVillager ~0.10353 ~1.36926 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=38,score_RRpa_min=38] ~ ~ ~ particle happyVillager ~-0.2 ~1.23953 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=38,score_RRpa_min=38] ~ ~ ~ particle happyVillager ~0.2 ~1.23953 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=39,score_RRpa_min=39] ~ ~ ~ particle happyVillager ~-0.28284 ~1.11177 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=39,score_RRpa_min=39] ~ ~ ~ particle happyVillager ~0.28284 ~1.11177 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=40,score_RRpa_min=40] ~ ~ ~ particle happyVillager ~-0.34641 ~0.98697 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=40,score_RRpa_min=40] ~ ~ ~ particle happyVillager ~0.34641 ~0.98697 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=41,score_RRpa_min=41] ~ ~ ~ particle happyVillager ~-0.38637 ~0.86607 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=41,score_RRpa_min=41] ~ ~ ~ particle happyVillager ~0.38637 ~0.86607 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=42,score_RRpa_min=42] ~ ~ ~ particle happyVillager ~-0.4 ~0.75 ~-0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=42,score_RRpa_min=42] ~ ~ ~ particle happyVillager ~0.4 ~0.75 ~0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=43,score_RRpa_min=43] ~ ~ ~ particle happyVillager ~-0.38637 ~0.63963 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=43,score_RRpa_min=43] ~ ~ ~ particle happyVillager ~0.38637 ~0.63963 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=44,score_RRpa_min=44] ~ ~ ~ particle happyVillager ~-0.34641 ~0.53582 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=44,score_RRpa_min=44] ~ ~ ~ particle happyVillager ~0.34641 ~0.53582 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=45,score_RRpa_min=45] ~ ~ ~ particle happyVillager ~-0.28284 ~0.43933 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=45,score_RRpa_min=45] ~ ~ ~ particle happyVillager ~0.28284 ~0.43933 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=46,score_RRpa_min=46] ~ ~ ~ particle happyVillager ~-0.2 ~0.35094 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=46,score_RRpa_min=46] ~ ~ ~ particle happyVillager ~0.2 ~0.35094 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=47,score_RRpa_min=47] ~ ~ ~ particle happyVillager ~-0.10353 ~0.27128 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=47,score_RRpa_min=47] ~ ~ ~ particle happyVillager ~0.10353 ~0.27128 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=48,score_RRpa_min=48] ~ ~ ~ particle happyVillager ~-0.0 ~0.20096 ~0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=48,score_RRpa_min=48] ~ ~ ~ particle happyVillager ~0.0 ~0.20096 ~-0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=49,score_RRpa_min=49] ~ ~ ~ particle happyVillager ~0.10353 ~0.14053 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=49,score_RRpa_min=49] ~ ~ ~ particle happyVillager ~-0.10353 ~0.14053 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=50,score_RRpa_min=50] ~ ~ ~ particle happyVillager ~0.2 ~0.09047 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=50,score_RRpa_min=50] ~ ~ ~ particle happyVillager ~-0.2 ~0.09047 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=51,score_RRpa_min=51] ~ ~ ~ particle happyVillager ~0.28284 ~0.05111 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=51,score_RRpa_min=51] ~ ~ ~ particle happyVillager ~-0.28284 ~0.05111 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=52,score_RRpa_min=52] ~ ~ ~ particle happyVillager ~0.34641 ~0.02278 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=52,score_RRpa_min=52] ~ ~ ~ particle happyVillager ~-0.34641 ~0.02278 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=53,score_RRpa_min=53] ~ ~ ~ particle happyVillager ~0.38637 ~0.00572 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=53,score_RRpa_min=53] ~ ~ ~ particle happyVillager ~-0.38637 ~0.00572 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=54,score_RRpa_min=54] ~ ~ ~ particle happyVillager ~0.4 ~0.0 ~0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=54,score_RRpa_min=54] ~ ~ ~ particle happyVillager ~-0.4 ~0.0 ~-0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=55,score_RRpa_min=55] ~ ~ ~ particle happyVillager ~0.38637 ~0.00572 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=55,score_RRpa_min=55] ~ ~ ~ particle happyVillager ~-0.38637 ~0.00572 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=56,score_RRpa_min=56] ~ ~ ~ particle happyVillager ~0.34641 ~0.02278 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=56,score_RRpa_min=56] ~ ~ ~ particle happyVillager ~-0.34641 ~0.02278 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=57,score_RRpa_min=57] ~ ~ ~ particle happyVillager ~0.28284 ~0.05111 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=57,score_RRpa_min=57] ~ ~ ~ particle happyVillager ~-0.28284 ~0.05111 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=58,score_RRpa_min=58] ~ ~ ~ particle happyVillager ~0.2 ~0.09047 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=58,score_RRpa_min=58] ~ ~ ~ particle happyVillager ~-0.2 ~0.09047 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=59,score_RRpa_min=59] ~ ~ ~ particle happyVillager ~0.10353 ~0.14053 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=59,score_RRpa_min=59] ~ ~ ~ particle happyVillager ~-0.10353 ~0.14053 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=60,score_RRpa_min=60] ~ ~ ~ particle happyVillager ~0.0 ~0.20096 ~-0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=60,score_RRpa_min=60] ~ ~ ~ particle happyVillager ~-0.0 ~0.20096 ~0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=61,score_RRpa_min=61] ~ ~ ~ particle happyVillager ~-0.10353 ~0.27128 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=61,score_RRpa_min=61] ~ ~ ~ particle happyVillager ~0.10353 ~0.27128 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=62,score_RRpa_min=62] ~ ~ ~ particle happyVillager ~-0.2 ~0.35094 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=62,score_RRpa_min=62] ~ ~ ~ particle happyVillager ~0.2 ~0.35094 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=63,score_RRpa_min=63] ~ ~ ~ particle happyVillager ~-0.28284 ~0.43933 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=63,score_RRpa_min=63] ~ ~ ~ particle happyVillager ~0.28284 ~0.43933 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=64,score_RRpa_min=64] ~ ~ ~ particle happyVillager ~-0.34641 ~0.53582 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=64,score_RRpa_min=64] ~ ~ ~ particle happyVillager ~0.34641 ~0.53582 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=65,score_RRpa_min=65] ~ ~ ~ particle happyVillager ~-0.38637 ~0.63963 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=65,score_RRpa_min=65] ~ ~ ~ particle happyVillager ~0.38637 ~0.63963 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=66,score_RRpa_min=66] ~ ~ ~ particle happyVillager ~-0.4 ~0.75 ~-0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=66,score_RRpa_min=66] ~ ~ ~ particle happyVillager ~0.4 ~0.75 ~-0.0 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=67,score_RRpa_min=67] ~ ~ ~ particle happyVillager ~-0.38637 ~0.86607 ~0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=67,score_RRpa_min=67] ~ ~ ~ particle happyVillager ~0.38637 ~0.86607 ~-0.10353 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=68,score_RRpa_min=68] ~ ~ ~ particle happyVillager ~-0.34641 ~0.98697 ~0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=68,score_RRpa_min=68] ~ ~ ~ particle happyVillager ~0.34641 ~0.98697 ~-0.2 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=69,score_RRpa_min=69] ~ ~ ~ particle happyVillager ~-0.28284 ~1.11177 ~0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=69,score_RRpa_min=69] ~ ~ ~ particle happyVillager ~0.28284 ~1.11177 ~-0.28284 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=70,score_RRpa_min=70] ~ ~ ~ particle happyVillager ~-0.2 ~1.23953 ~0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=70,score_RRpa_min=70] ~ ~ ~ particle happyVillager ~0.2 ~1.23953 ~-0.34641 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=71,score_RRpa_min=71] ~ ~ ~ particle happyVillager ~-0.10353 ~1.36926 ~0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=71,score_RRpa_min=71] ~ ~ ~ particle happyVillager ~0.10353 ~1.36926 ~-0.38637 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=72,score_RRpa_min=72] ~ ~ ~ particle happyVillager ~-0.0 ~1.5 ~0.4 0 0 0 0 0 force
+	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=72,score_RRpa_min=72] ~ ~ ~ particle happyVillager ~0.0 ~1.5 ~-0.4 0 0 0 0 0 force
 
 MFUNC | MFunc_Test | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/asdf.mcfunction
 	say theRealAsdf
@@ -466,10 +650,13 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say Dankest  memes
 	say asdf def3 asdf
 	say WOOOOOOOOOOOO
-	say ye
+	CCU.xpNumber
 	say 1
 	say 3
 	say 10
+	say 4
+	say 5
+	say 6
 	say 1
 	say
 	say

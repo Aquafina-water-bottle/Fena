@@ -11,6 +11,8 @@ DEF $test$ $test$ @p SPtp
 DEF def1 def2
 DEF def2 def3
 
+DEF $mod$ 0.4
+
 DEF recurring_asdf aRecurringDefinition
 DEF aRecurringDefinition aSecondRecurringDefinition
 DEF aSecondRecurringDefinition yeah this is recurring_asdf
@@ -42,7 +44,7 @@ OPTIONS:
 /// Preserve coordinates for each group
 	keepCoordsOption false
 
-///	C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\CCU - Command Combiner Unlimited\test.ccu
+///	C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\CCU - Command Combiner Unlimited\tests\test.ccu
 
 //=
 FUNC {ARGS ACTIVATE CCU.xpNumber}
@@ -107,6 +109,11 @@ MFUNC 		{BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 			say 1 = 1
 		say test
 		
+		IF {asdf = asdf}:
+			say MyBoyAsdf
+		IF {asdf = notAsdf}:
+			say MyBoyNotAsdf
+		
 	MFUNC {BRANCH test init MFunc_InitTest}:
 		say asdf
 		say asdf
@@ -118,6 +125,40 @@ MFUNC 		{BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 		say asdf2
 		say asdf2
 		
+		@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa>=0<=71] RRpa + 1
+		@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa>=72] RRpa = 1
+		
+		//=
+		CALC(SIN(15.0) * $mod$) CALC(SIN(195.0) * 1.5 + 1.5) CALC(COS(15.0) * $mod$)
+		@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa=|0|] particle happyVillager ~CALC(SIN(15.0) * $mod$) ~CALC(SIN(195.0) * 1.5 + 1.5) ~CALC(COS(15.0) * $mod$) 0 0 0 0 0 force
+		=//
+		
+		say SIN(CALC(1 + 44.0)) SIN
+		say COS(CALC(1 + 44.0)) COS
+		say TAN(CALC(1 + 44.0)) TAN
+		
+		say SIN((1 + 44.0)) SIN
+		say COS((1 + 44.0)) COS
+		say TAN((1 + 44.0)) TAN
+		
+		say SIN(1 + 44.0) SIN
+		say COS(1 + 44.0) COS
+		say TAN(1 + 44.0) TAN
+		
+		say SIN(45.0) SIN
+		say COS(45.0) COS
+		say TAN(45.0) TAN
+		
+		LOOP {1 72 + 1} {15 1080 + 15.0} {195 1260 + 15.0} {5 360 + 5.0}:
+		///	say Tick |0| Angle |2| OppAngle |4| YAngle |6|
+			@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa=|0|] particle happyVillager ~CALC(SIN(|1|) * $mod$) ~CALC(SIN(|3|) * 1.5 + 1.5) ~CALC(COS(|1|) * $mod$) 0 0 0 0 0 force
+			@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa=|0|] particle happyVillager ~CALC(SIN(|2|) * $mod$) ~CALC(SIN(|3|) * 1.5 + 1.5) ~CALC(COS(|2|) * $mod$) 0 0 0 0 0 force
+			
+			//=
+			@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa=|0|] 'particle happyVillager ~'MUL(SIN(|2|);$mod$)' ~'ADD(MUL(SIN(|6|);1.5);1.5)' ~'MUL(COS(|2|);$mod$)' 0 0 0 0 0 force'
+			@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa=|0|] 'particle happyVillager ~'MUL(SIN(|4|);$mod$)' ~'ADD(MUL(SIN(|6|);1.5);1.5)' ~'MUL(COS(|4|);$mod$)' 0 0 0 0 0 force'
+			=//
+		
 	MFUNC {asdf}:
 		say theRealAsdf
 	
@@ -128,6 +169,7 @@ GROUP {Grp_APulse}:
 	say a
 	say b
 	function MFunc_InitTest
+	setblock SELF air 0
 
 GROUP {PULSE Grp_B}:
 	say b
@@ -151,6 +193,7 @@ GROUP {Grp_AyyLmao}:
 	setblock Grp_AyyLmao air 0
 	say ASDF
 	say $DankCoords$[x] MARKER
+	say $DankCoords$[(x * 2) + 20] RandCalc
 	say $DankCoords$[y] MARKER
 	say $DankCoords$[z] MARKER
 	say $DankCoords$[ry] MARKER
@@ -331,6 +374,14 @@ GROUP {Grp_TheGreatestGroup}:
 	say 30
 	say 31
 	say 32
+	
+	LOOP {33 40 + 1}:
+		IF {|0| = 33}:
+			say |0| ;
+		IF {|0| > 33}:
+			|0| ;
+	
+	
 	tellraw @a {"text":"ayylmao"}
 	
 GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
@@ -419,6 +470,7 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 			
 		@a[SPtp>=1] playsound minecraft:entity.experience_orb.touch voice @a[c=1,SPtp>=1]
 		@a[SPtp>=1] SPtp = 0
+		/// say @a SIN(HellYeah)
 		
 	//=
 	FUNC {Func_TestDefinitions}:

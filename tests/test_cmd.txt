@@ -1,4 +1,4 @@
-fill 383 69 95 400 86 107 air 0
+fill 383 69 95 400 86 108 air 0
 setblock 385 70 96 command_block 5 replace {Command:"say 1 _A",TrackOutput:0b,auto:0b}
 setblock 385 72 96 command_block 5 replace {Command:"say 2 _A",TrackOutput:0b,auto:0b}
 setblock 385 74 96 command_block 5 replace {Command:"say 3 _A",TrackOutput:0b,auto:0b}
@@ -29,6 +29,7 @@ setblock 390 76 98 chain_command_block 5 replace {Command:"say okay",TrackOutput
 setblock 385 78 98 command_block 5 replace {Command:"say a",TrackOutput:0b,auto:0b}
 setblock 386 78 98 chain_command_block 5 replace {Command:"say b",TrackOutput:0b,auto:1b}
 setblock 387 78 98 chain_command_block 5 replace {Command:"function custom:RayCaster/theHunted/test/init",TrackOutput:0b,auto:1b}
+setblock 388 78 98 chain_command_block 5 replace {Command:"setblock 384 78 98 air 0",TrackOutput:0b,auto:1b}
 setblock 385 80 98 command_block 5 replace {Command:"say b",TrackOutput:0b,auto:0b}
 setblock 385 82 98 repeating_command_block 5 replace {Command:"say c",TrackOutput:0b,auto:0b}
 setblock 385 84 98 repeating_command_block 5 replace {Command:"say d",TrackOutput:0b,auto:0b}
@@ -50,36 +51,50 @@ setblock 390 78 100 chain_command_block 5 replace {Command:"say not_yas",TrackOu
 setblock 385 80 100 command_block 5 replace {Command:"setblock 384 80 100 air 0",TrackOutput:0b,auto:0b}
 setblock 386 80 100 chain_command_block 5 replace {Command:"say MEMES 5",TrackOutput:0b,auto:1b}
 setblock 387 80 100 chain_command_block 5 replace {Command:"say -301 MARKER",TrackOutput:0b,auto:1b}
-setblock 388 80 100 chain_command_block 5 replace {Command:"say 51 MARKER",TrackOutput:0b,auto:1b}
-setblock 389 80 100 chain_command_block 5 replace {Command:"say 930.0 MARKER",TrackOutput:0b,auto:1b}
-setblock 390 80 100 chain_command_block 5 replace {Command:"say 40 MARKER",TrackOutput:0b,auto:1b}
-setblock 391 80 100 chain_command_block 5 replace {Command:"say 0 MARKER",TrackOutput:0b,auto:1b}
-setblock 392 80 100 chain_command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:1b}
-setblock 393 80 100 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
-setblock 394 80 100 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 395 80 100 chain_command_block 5 replace {Command:"minecraft:kill @a[score_anobjective=3,score_anobjective_min=3]",TrackOutput:0b,auto:1b}
-setblock 396 80 100 chain_command_block 13 replace {Command:"testCond",TrackOutput:0b,auto:1b}
-setblock 397 80 100 chain_command_block 13 replace {Command:"testCond2",TrackOutput:0b,auto:1b}
-setblock 398 80 100 chain_command_block 5 replace {Command:"say 4",TrackOutput:0b,auto:1b}
-setblock 399 80 100 chain_command_block 1 replace {Command:"say 5",TrackOutput:0b,auto:1b}
-setblock 399 81 100 chain_command_block 4 replace {Command:"say 6",TrackOutput:0b,auto:1b}
-setblock 398 81 100 chain_command_block 4 replace {Command:"say 7",TrackOutput:0b,auto:1b}
-setblock 397 81 100 chain_command_block 4 replace {Command:"say 8",TrackOutput:0b,auto:1b}
-setblock 396 81 100 chain_command_block 4 replace {Command:"say 9",TrackOutput:0b,auto:1b}
-setblock 395 81 100 chain_command_block 12 replace {Command:"say LiterallyAbortMission",TrackOutput:0b,auto:1b}
-setblock 394 81 100 chain_command_block 12 replace {Command:"say $SA$",TrackOutput:0b,auto:1b}
-setblock 393 81 100 chain_command_block 12 replace {Command:"say yas",TrackOutput:0b,auto:1b}
-setblock 392 81 100 chain_command_block 12 replace {Command:"say 11",TrackOutput:0b,auto:1b}
-setblock 391 81 100 chain_command_block 12 replace {Command:"say 12",TrackOutput:0b,auto:1b}
-setblock 390 81 100 chain_command_block 12 replace {Command:"say 13",TrackOutput:0b,auto:1b}
-setblock 389 81 100 chain_command_block 12 replace {Command:"say 14",TrackOutput:0b,auto:1b}
-setblock 388 81 100 chain_command_block 4 replace {Command:"say 15",TrackOutput:0b,auto:1b}
-setblock 387 81 100 chain_command_block 4 replace {Command:"say 16",TrackOutput:0b,auto:1b}
-setblock 386 81 100 chain_command_block 4 replace {Command:"say 17",TrackOutput:0b,auto:1b}
-setblock 385 81 100 chain_command_block 4 replace {Command:"say 18",TrackOutput:0b,auto:1b}
-setblock 384 81 100 chain_command_block 1 replace {Command:"say 19",TrackOutput:0b,auto:1b}
-setblock 384 82 100 chain_command_block 5 replace {Command:"say 20",TrackOutput:0b,auto:1b}
-setblock 385 82 100 chain_command_block 5 replace {Command:"say 21",TrackOutput:0b,auto:1b}
+setblock 388 80 100 chain_command_block 5 replace {Command:"say -582 RandCalc",TrackOutput:0b,auto:1b}
+setblock 389 80 100 chain_command_block 5 replace {Command:"say 51 MARKER",TrackOutput:0b,auto:1b}
+setblock 390 80 100 chain_command_block 5 replace {Command:"say 930.0 MARKER",TrackOutput:0b,auto:1b}
+setblock 391 80 100 chain_command_block 5 replace {Command:"say 40 MARKER",TrackOutput:0b,auto:1b}
+setblock 392 80 100 chain_command_block 5 replace {Command:"say 0 MARKER",TrackOutput:0b,auto:1b}
+setblock 393 80 100 chain_command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:1b}
+setblock 394 80 100 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
+setblock 395 80 100 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
+setblock 396 80 100 chain_command_block 5 replace {Command:"minecraft:kill @a[score_anobjective=3,score_anobjective_min=3]",TrackOutput:0b,auto:1b}
+setblock 397 80 100 chain_command_block 13 replace {Command:"testCond",TrackOutput:0b,auto:1b}
+setblock 398 80 100 chain_command_block 13 replace {Command:"testCond2",TrackOutput:0b,auto:1b}
+setblock 399 80 100 chain_command_block 1 replace {Command:"say 4",TrackOutput:0b,auto:1b}
+setblock 399 81 100 chain_command_block 4 replace {Command:"say 5",TrackOutput:0b,auto:1b}
+setblock 398 81 100 chain_command_block 4 replace {Command:"say 6",TrackOutput:0b,auto:1b}
+setblock 397 81 100 chain_command_block 4 replace {Command:"say 7",TrackOutput:0b,auto:1b}
+setblock 396 81 100 chain_command_block 4 replace {Command:"say 8",TrackOutput:0b,auto:1b}
+setblock 395 81 100 chain_command_block 4 replace {Command:"say 9",TrackOutput:0b,auto:1b}
+setblock 394 81 100 chain_command_block 12 replace {Command:"say LiterallyAbortMission",TrackOutput:0b,auto:1b}
+setblock 393 81 100 chain_command_block 12 replace {Command:"say $SA$",TrackOutput:0b,auto:1b}
+setblock 392 81 100 chain_command_block 12 replace {Command:"say yas",TrackOutput:0b,auto:1b}
+setblock 391 81 100 chain_command_block 12 replace {Command:"say 11",TrackOutput:0b,auto:1b}
+setblock 390 81 100 chain_command_block 12 replace {Command:"say 12",TrackOutput:0b,auto:1b}
+setblock 389 81 100 chain_command_block 12 replace {Command:"say 13",TrackOutput:0b,auto:1b}
+setblock 388 81 100 chain_command_block 12 replace {Command:"say 14",TrackOutput:0b,auto:1b}
+setblock 387 81 100 chain_command_block 4 replace {Command:"say 15",TrackOutput:0b,auto:1b}
+setblock 386 81 100 chain_command_block 4 replace {Command:"say 16",TrackOutput:0b,auto:1b}
+setblock 385 81 100 chain_command_block 4 replace {Command:"say 17",TrackOutput:0b,auto:1b}
+setblock 384 81 100 chain_command_block 1 replace {Command:"say Ye",TrackOutput:0b,auto:1b}
+setblock 384 82 100 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
+setblock 385 82 100 chain_command_block 5 replace {Command:"say lmao",TrackOutput:0b,auto:1b}
+setblock 386 82 100 chain_command_block 5 replace {Command:"TheGreatestARGS (shouldn't be considered a function)",TrackOutput:0b,auto:1b}
+setblock 387 82 100 chain_command_block 5 replace {Command:"say 18",TrackOutput:0b,auto:1b}
+setblock 388 82 100 chain_command_block 5 replace {Command:"say Ye",TrackOutput:0b,auto:1b}
+setblock 389 82 100 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
+setblock 390 82 100 chain_command_block 5 replace {Command:"say lmao",TrackOutput:0b,auto:1b}
+setblock 391 82 100 chain_command_block 5 replace {Command:"TheGreatestARGS (shouldn't be considered a function)",TrackOutput:0b,auto:1b}
+setblock 392 82 100 chain_command_block 5 replace {Command:"asdfasdfsaf",TrackOutput:0b,auto:1b}
+setblock 393 82 100 chain_command_block 5 replace {Command:"asdfae564rwe",TrackOutput:0b,auto:1b}
+setblock 394 82 100 chain_command_block 5 replace {Command:"d45e",TrackOutput:0b,auto:1b}
+setblock 395 82 100 chain_command_block 5 replace {Command:"78y65re7",TrackOutput:0b,auto:1b}
+setblock 396 82 100 chain_command_block 5 replace {Command:"6756re",TrackOutput:0b,auto:1b}
+setblock 397 82 100 chain_command_block 5 replace {Command:"say 19",TrackOutput:0b,auto:1b}
+setblock 398 82 100 chain_command_block 5 replace {Command:"say 20",TrackOutput:0b,auto:1b}
+setblock 399 82 100 chain_command_block 1 replace {Command:"say 21",TrackOutput:0b,auto:1b}
 setblock 385 84 100 command_block 5 replace {Command:"say a",TrackOutput:0b,auto:0b}
 setblock 386 84 100 chain_command_block 5 replace {Command:"say b",TrackOutput:0b,auto:1b}
 setblock 387 84 100 chain_command_block 5 replace {Command:"say c",TrackOutput:0b,auto:1b}
@@ -106,42 +121,48 @@ setblock 386 70 102 chain_command_block 5 replace {Command:"say 2 asdfasdf",Trac
 setblock 387 70 102 chain_command_block 5 replace {Command:"say 3 asdfasdf",TrackOutput:0b,auto:1b}
 setblock 388 70 102 chain_command_block 5 replace {Command:"say 4 asdfasdf",TrackOutput:0b,auto:1b}
 setblock 389 70 102 chain_command_block 5 replace {Command:"say 5 asdfasdf",TrackOutput:0b,auto:1b}
-setblock 390 70 102 chain_command_block 5 replace {Command:"say 6 asdfasdf",TrackOutput:0b,auto:1b}
-setblock 391 70 102 chain_command_block 5 replace {Command:"asdfasdf say 7",TrackOutput:0b,auto:1b}
-setblock 392 70 102 chain_command_block 5 replace {Command:"asdfasdf say 8",TrackOutput:0b,auto:1b}
-setblock 393 70 102 chain_command_block 5 replace {Command:"asdfasdf say 9",TrackOutput:0b,auto:1b}
-setblock 394 70 102 chain_command_block 5 replace {Command:"asdfasdf say 10",TrackOutput:0b,auto:1b}
-setblock 395 70 102 chain_command_block 5 replace {Command:"asdfasdf say 11",TrackOutput:0b,auto:1b}
-setblock 396 70 102 chain_command_block 5 replace {Command:"say 12asdfasdf",TrackOutput:0b,auto:1b}
-setblock 397 70 102 chain_command_block 5 replace {Command:"say 13asdfasdf",TrackOutput:0b,auto:1b}
-setblock 398 70 102 chain_command_block 5 replace {Command:"say 14asdfasdf",TrackOutput:0b,auto:1b}
-setblock 399 70 102 chain_command_block 1 replace {Command:"say 15asdfasdf",TrackOutput:0b,auto:1b}
-setblock 399 71 102 chain_command_block 4 replace {Command:"say 16asdfasdf",TrackOutput:0b,auto:1b}
-setblock 398 71 102 chain_command_block 4 replace {Command:"asdfasdfsay 17",TrackOutput:0b,auto:1b}
-setblock 397 71 102 chain_command_block 4 replace {Command:"asdfasdfsay 18",TrackOutput:0b,auto:1b}
-setblock 396 71 102 chain_command_block 4 replace {Command:"asdfasdfEncapsulatedUse say 19",TrackOutput:0b,auto:1b}
-setblock 395 71 102 chain_command_block 4 replace {Command:"asdfasdfEncapsulatedUse say 20",TrackOutput:0b,auto:1b}
-setblock 394 71 102 chain_command_block 4 replace {Command:"asdfasdfsay 21",TrackOutput:0b,auto:1b}
-setblock 393 71 102 chain_command_block 4 replace {Command:"say 22",TrackOutput:0b,auto:1b}
-setblock 392 71 102 chain_command_block 4 replace {Command:"say 23",TrackOutput:0b,auto:1b}
-setblock 391 71 102 chain_command_block 4 replace {Command:"say 24",TrackOutput:0b,auto:1b}
-setblock 390 71 102 chain_command_block 4 replace {Command:"say 25",TrackOutput:0b,auto:1b}
-setblock 389 71 102 chain_command_block 4 replace {Command:"say 26",TrackOutput:0b,auto:1b}
-setblock 388 71 102 chain_command_block 4 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
-setblock 387 71 102 chain_command_block 4 replace {Command:"say asdf",TrackOutput:0b,auto:1b}
-setblock 386 71 102 chain_command_block 4 replace {Command:"say (first 15) (second 526)",TrackOutput:0b,auto:1b}
-setblock 385 71 102 chain_command_block 4 replace {Command:"say FIRST",TrackOutput:0b,auto:1b}
-setblock 384 71 102 chain_command_block 1 replace {Command:"say 5 10 SECOND",TrackOutput:0b,auto:1b}
-setblock 384 72 102 chain_command_block 5 replace {Command:"say 1 2 FIRST",TrackOutput:0b,auto:1b}
-setblock 385 72 102 chain_command_block 5 replace {Command:"say test",TrackOutput:0b,auto:1b}
-setblock 386 72 102 chain_command_block 5 replace {Command:"Func_TestDefinition",TrackOutput:0b,auto:1b}
-setblock 387 72 102 chain_command_block 5 replace {Command:"say 27",TrackOutput:0b,auto:1b}
-setblock 388 72 102 chain_command_block 5 replace {Command:"say 28",TrackOutput:0b,auto:1b}
-setblock 389 72 102 chain_command_block 5 replace {Command:"say 29",TrackOutput:0b,auto:1b}
-setblock 390 72 102 chain_command_block 5 replace {Command:"say 30",TrackOutput:0b,auto:1b}
-setblock 391 72 102 chain_command_block 5 replace {Command:"say 31",TrackOutput:0b,auto:1b}
-setblock 392 72 102 chain_command_block 5 replace {Command:"say 32",TrackOutput:0b,auto:1b}
-setblock 393 72 102 chain_command_block 5 replace {Command:"tellraw @a {\"text\":\"ayylmao\"}",TrackOutput:0b,auto:1b}
+setblock 390 70 102 chain_command_block 5 replace {Command:"asdfasdfsaf asdfasdf",TrackOutput:0b,auto:1b}
+setblock 391 70 102 chain_command_block 5 replace {Command:"asdfae564rwe asdfasdf",TrackOutput:0b,auto:1b}
+setblock 392 70 102 chain_command_block 5 replace {Command:"d45e asdfasdf",TrackOutput:0b,auto:1b}
+setblock 393 70 102 chain_command_block 5 replace {Command:"78y65re7 asdfasdf",TrackOutput:0b,auto:1b}
+setblock 394 70 102 chain_command_block 5 replace {Command:"6756re asdfasdf",TrackOutput:0b,auto:1b}
+setblock 395 70 102 chain_command_block 5 replace {Command:"say 6 asdfasdf",TrackOutput:0b,auto:1b}
+setblock 396 70 102 chain_command_block 5 replace {Command:"asdfasdf say 7",TrackOutput:0b,auto:1b}
+setblock 397 70 102 chain_command_block 5 replace {Command:"asdfasdf say 8",TrackOutput:0b,auto:1b}
+setblock 398 70 102 chain_command_block 5 replace {Command:"asdfasdf say 9",TrackOutput:0b,auto:1b}
+setblock 399 70 102 chain_command_block 1 replace {Command:"asdfasdf say 10",TrackOutput:0b,auto:1b}
+setblock 399 71 102 chain_command_block 4 replace {Command:"asdfasdf say 11",TrackOutput:0b,auto:1b}
+setblock 398 71 102 chain_command_block 4 replace {Command:"say 12asdfasdf",TrackOutput:0b,auto:1b}
+setblock 397 71 102 chain_command_block 4 replace {Command:"say 13asdfasdf",TrackOutput:0b,auto:1b}
+setblock 396 71 102 chain_command_block 4 replace {Command:"say 14asdfasdf",TrackOutput:0b,auto:1b}
+setblock 395 71 102 chain_command_block 4 replace {Command:"say 15asdfasdf",TrackOutput:0b,auto:1b}
+setblock 394 71 102 chain_command_block 4 replace {Command:"say 16asdfasdf",TrackOutput:0b,auto:1b}
+setblock 393 71 102 chain_command_block 4 replace {Command:"asdfasdfsay 17",TrackOutput:0b,auto:1b}
+setblock 392 71 102 chain_command_block 4 replace {Command:"asdfasdfsay 18",TrackOutput:0b,auto:1b}
+setblock 391 71 102 chain_command_block 4 replace {Command:"asdfasdfEncapsulatedUse say 19",TrackOutput:0b,auto:1b}
+setblock 390 71 102 chain_command_block 4 replace {Command:"asdfasdfEncapsulatedUse say 20",TrackOutput:0b,auto:1b}
+setblock 389 71 102 chain_command_block 4 replace {Command:"asdfasdfsay 21",TrackOutput:0b,auto:1b}
+setblock 388 71 102 chain_command_block 4 replace {Command:"say 22",TrackOutput:0b,auto:1b}
+setblock 387 71 102 chain_command_block 4 replace {Command:"say 23",TrackOutput:0b,auto:1b}
+setblock 386 71 102 chain_command_block 4 replace {Command:"say 24",TrackOutput:0b,auto:1b}
+setblock 385 71 102 chain_command_block 4 replace {Command:"say 25",TrackOutput:0b,auto:1b}
+setblock 384 71 102 chain_command_block 1 replace {Command:"say 26",TrackOutput:0b,auto:1b}
+setblock 384 72 102 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
+setblock 385 72 102 chain_command_block 5 replace {Command:"say asdf",TrackOutput:0b,auto:1b}
+setblock 386 72 102 chain_command_block 5 replace {Command:"say (first 15) (second 526)",TrackOutput:0b,auto:1b}
+setblock 387 72 102 chain_command_block 5 replace {Command:"say FIRST",TrackOutput:0b,auto:1b}
+setblock 388 72 102 chain_command_block 5 replace {Command:"say 5 10 SECOND",TrackOutput:0b,auto:1b}
+setblock 389 72 102 chain_command_block 5 replace {Command:"say 1 2 FIRST",TrackOutput:0b,auto:1b}
+setblock 390 72 102 chain_command_block 5 replace {Command:"say test",TrackOutput:0b,auto:1b}
+setblock 391 72 102 chain_command_block 5 replace {Command:"Func_TestDefinition",TrackOutput:0b,auto:1b}
+setblock 392 72 102 chain_command_block 5 replace {Command:"say 27",TrackOutput:0b,auto:1b}
+setblock 393 72 102 chain_command_block 5 replace {Command:"say 28",TrackOutput:0b,auto:1b}
+setblock 394 72 102 chain_command_block 5 replace {Command:"say 29",TrackOutput:0b,auto:1b}
+setblock 395 72 102 chain_command_block 5 replace {Command:"say 30",TrackOutput:0b,auto:1b}
+setblock 396 72 102 chain_command_block 5 replace {Command:"say 31",TrackOutput:0b,auto:1b}
+setblock 397 72 102 chain_command_block 5 replace {Command:"say 32",TrackOutput:0b,auto:1b}
+setblock 398 72 102 chain_command_block 5 replace {Command:"say 33 34 35 36 37 38 39 40",TrackOutput:0b,auto:1b}
+setblock 399 72 102 chain_command_block 1 replace {Command:"tellraw @a {\"text\":\"ayylmao\"}",TrackOutput:0b,auto:1b}
 setblock 385 70 104 repeating_command_block 5 replace {Command:"say rekt",TrackOutput:0b,auto:0b}
 setblock 386 70 104 chain_command_block 5 replace {Command:"say rekt again",TrackOutput:0b,auto:1b}
 setblock 387 70 104 chain_command_block 5 replace {Command:"say abde",TrackOutput:0b,auto:1b}
@@ -379,7 +400,11 @@ setblock 394 84 104 chain_command_block 5 replace {Command:"scoreboard players o
 setblock 395 84 104 chain_command_block 5 replace {Command:"say test2",TrackOutput:0b,auto:1b}
 setblock 396 84 104 chain_command_block 5 replace {Command:"scoreboard players operation @p TEST @p SPtp",TrackOutput:0b,auto:1b}
 setblock 397 84 104 chain_command_block 5 replace {Command:"$test$",TrackOutput:0b,auto:1b}
-setblock 398 84 104 chain_command_block 5 replace {Command:"fill 384 70 104 399 84 104 air 0",TrackOutput:0b,auto:1b}
+setblock 398 84 104 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
+setblock 399 84 104 chain_command_block 1 replace {Command:"say lmao",TrackOutput:0b,auto:1b}
+setblock 399 85 104 chain_command_block 4 replace {Command:"say lmao compared to ayy",TrackOutput:0b,auto:1b}
+setblock 398 85 104 chain_command_block 4 replace {Command:"say lmao compared to ayy",TrackOutput:0b,auto:1b}
+setblock 397 85 104 chain_command_block 4 replace {Command:"fill 384 70 104 399 85 104 air 0",TrackOutput:0b,auto:1b}
 setblock 384 70 96 stonebrick 0
 setblock 384 72 96 stonebrick 0
 setblock 384 74 96 stonebrick 0
