@@ -235,14 +235,14 @@ public class ReadCCUFile {
 			for (int funcIndex = Var_Func.arrayFuncNameSave.size() - 1; funcIndex >= 0; funcIndex--) {
 				if (ccuFileArray.get(i).endsWith(")") && ccuFileArray.get(i).contains("(")) {
 					if (ccuFileArray.get(i).substring(0, ccuFileArray.get(i).indexOf("(")).trim()
-							.equals(Var_Func.arrayFuncNameSave.get(funcIndex))) {
+							.equals(Var_Func.arrayFuncNameSave.get(funcIndex)[2])) {
 
 						Var_Call objCall = new Var_Call(ccuFileArray.get(i), this.tabNum);
 						ccuFileArray.set(i, objCall.getFuncCall());
 						break;
 					}
 				} else {
-					if (ccuFileArray.get(i).trim().equals(Var_Func.arrayFuncNameSave.get(funcIndex))) {
+					if (ccuFileArray.get(i).trim().equals(Var_Func.arrayFuncNameSave.get(funcIndex)[2])) {
 						Var_Call objCall = new Var_Call(ccuFileArray.get(i), this.tabNum);
 						ccuFileArray.set(i, objCall.getFuncCall());
 						break;
@@ -473,12 +473,34 @@ public class ReadCCUFile {
 								resetIndexCalc = false;
 								funcIndex = 0;
 							}
-							if (this.tabNum == Var_Func.arrayFuncTabNumSave.get(funcIndex)) {
+							if (this.tabNum == Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndex)[1])) {
 								resetIndexCalc = true;
 								Var_Func.arrayFuncSave.remove(funcIndex);
 								Var_Func.arrayFuncNameSave.remove(funcIndex);
-								Var_Func.arrayFuncTabNumSave.remove(funcIndex);
-								Var_Func.arrayFuncParamSave.remove(funcIndex);
+							}
+						}
+						
+						// reset all arrays that don't work with the decreasing tab numbers
+						for (int arrayIndex = 0; arrayIndex < Var_Array.singleArrayNameSave.size(); arrayIndex++) {
+							if (resetIndexCalc == true) {
+								resetIndexCalc = false;
+								arrayIndex = 0;
+							}
+							if (this.tabNum == Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1])) {
+								resetIndexCalc = true;
+								Var_Array.singleArraySave.remove(arrayIndex);
+								Var_Array.singleArrayNameSave.remove(arrayIndex);
+							}
+						}
+						for (int arrayIndex = 0; arrayIndex < Var_Array.doubleArrayNameSave.size(); arrayIndex++) {
+							if (resetIndexCalc == true) {
+								resetIndexCalc = false;
+								arrayIndex = 0;
+							}
+							if (this.tabNum == Integer.parseInt(Var_Array.doubleArrayNameSave.get(arrayIndex)[1])) {
+								resetIndexCalc = true;
+								Var_Array.doubleArraySave.remove(arrayIndex);
+								Var_Array.doubleArrayNameSave.remove(arrayIndex);
 							}
 						}
 

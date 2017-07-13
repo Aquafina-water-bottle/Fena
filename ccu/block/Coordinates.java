@@ -19,12 +19,22 @@ public class Coordinates {
 	public Coordinates() {
 		this(0, 0, 0);
 	}
-
+	
 	// Constructor if coordinates are specified
 	public Coordinates(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	// Constructor specifically for relative coordinates
+	public Coordinates(int x, int y, int z, String relativeX, String relativeY, String relativeZ) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.relativeX = relativeX;
+		this.relativeY = relativeY;
+		this.relativeZ = relativeZ;
 	}
 
 	// Seeing if coordinates should be relative
@@ -156,6 +166,27 @@ public class Coordinates {
 			}
 		}
 		return this;
+	}
+	
+	// if the coordinate is relative, it takes the coordinates - given coordinates
+	public Coordinates checkRelative(Coordinates getCoords) {
+		int tempX = this.x + 0;
+		int tempY = this.y + 0;
+		int tempZ = this.z + 0;
+		
+		if (this.relativeX.equals("~")) {
+			tempX = this.x - getCoords.x;
+		}
+		
+		if (this.relativeY.equals("~")) {
+			tempY = this.y - getCoords.y;
+		}
+		
+		if (this.relativeZ.equals("~")) {
+			tempZ = this.z - getCoords.z;
+		}
+		
+		return new Coordinates(tempX, tempY, tempZ, this.relativeX, this.relativeY, this.relativeZ);
 	}
 
 	public int getX() {

@@ -326,11 +326,11 @@ public class Box {
 						for (int nameIndex = 0; nameIndex < Cmd_Group.arrayGroupSave.size(); nameIndex++) {
 							if (k != 0 && splitArrayCalc[k].equals(Cmd_Group.arrayGroupSave.get(nameIndex)[0])) {
 								if (splitArrayCalc[k - 1].equals("setblock")) {
-									splitArrayCalc[k] = groupNameCoordArray[nameIndex].getString();
+									splitArrayCalc[k] = groupNameCoordArray[nameIndex].checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
 								}
 								if (splitArrayCalc[k - 1].equals("fill")) {
-									splitArrayCalc[k] = groupNameCoordArray[nameIndex].getString() + " "
-											+ groupNameFillArray[nameIndex].getString();
+									splitArrayCalc[k] = groupNameCoordArray[nameIndex].checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString() + " "
+											+ groupNameFillArray[nameIndex].checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
 								}
 							}
 						}

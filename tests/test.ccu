@@ -77,30 +77,6 @@ ARRAY {GLOBAL Arr_Test}:
 		say theSecondDouble2
 	}
 
-
-ARRAY {Arr_Test2}:
-	Dog
-	Cat
-	Lips
-	Watermelon
-	Apple
-	Ocean
-	Sword
-	Castle
-	Car *Vroom Vroom Machine*
-	eGO Logo
-	Cake
-	Corgi
-	Winnie the Pooh
-	Waffle
-	Person
-	T-Shirt
-	Computer
-	Airplane
-	Microphone
-	
-	
-
 MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 	Func_test|0|
 	Func_test_A
@@ -114,10 +90,52 @@ MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 		say found loop null |0|
 	say THE
 	
+	ARRAY {GLOBAL Arr_Test2}:
+		Dog
+		Cat
+		Lips
+		Watermelon
+		Apple
+		Ocean
+		Sword
+		Castle
+		Car *Vroom Vroom Machine*
+		eGO Logo
+		Cake
+		Corgi
+		Winnie the Pooh
+		Waffle
+		Person
+		T-Shirt
+		Computer
+		Airplane
+		Microphone
+	
+	
+	
 	Arr_Test[1][1]
 	Arr_Test2[S]
 	LOOP {0 Arr_Test2[L] + 1}:
-		say ayy Arr_Test2[|0|] ;
+		say ayy Arr_Test2[|0|]
+		
+	UNASSIGN {ARRAY Arr_Test2}
+	Arr_Test2[S]
+	
+	ARRAY {Arr_Test2}:
+		a
+		s
+		d
+		f
+		
+	ARRAY {GLOBAL Arr_Test2}:
+		g
+		l
+		o
+		b
+		a
+		l
+		
+	Arr_Test2[S]
 		
 	
 	LOOP {0 Arr_Test[L] + 1}:
@@ -253,6 +271,9 @@ GROUP {Grp_APulse}:
 
 GROUP {PULSE Grp_B}:
 	say b
+	Arr_Test2[S]
+	UNASSIGN {ARRAY Arr_Test2}
+	Arr_Test2[S]
 	
 GROUP {CLOCK Grp_C}:
 	say c

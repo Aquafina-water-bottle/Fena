@@ -31,14 +31,8 @@ public class Var_Func {
 	// FUNC array save
 	public static ArrayList<String[]> arrayFuncSave = new ArrayList<String[]>();
 
-	// Save FUNC name
-	public static ArrayList<String> arrayFuncNameSave = new ArrayList<String>();
-
-	// Save tabNum per func
-	public static ArrayList<Integer> arrayFuncTabNumSave = new ArrayList<Integer>();
-
-	// Save param number
-	public static ArrayList<Integer> arrayFuncParamSave = new ArrayList<Integer>();
+	// Save param number, tabnum and name
+	public static ArrayList<String[]> arrayFuncNameSave = new ArrayList<String[]>();
 
 	// Array calc (removing tab spaces)
 	private String[] arrayFuncCalc = null;
@@ -63,7 +57,6 @@ public class Var_Func {
 		Boolean hasActivated = null;
 		boolean activateConfirm = false;
 		String activatedFunc = null;
-		int paramMaxNum = 0;
 
 		String statementEncase = this.fullLineGet.replaceFirst("FUNC", "").replaceAll("^\\s+", "");
 		if (statementEncase.startsWith("{") && statementEncase.endsWith("}:")) {
@@ -184,18 +177,18 @@ public class Var_Func {
 
 			// checking whether the function name exists
 			if (hasActivated == true) {
-				for (String getFuncName : arrayFuncNameSave) {
-					if (activatedFunc.equals(getFuncName)) {
+				for (int i = 0; i < arrayFuncNameSave.size(); i++) {
+					if (activatedFunc.equals(arrayFuncNameSave.get(i)[2])) {
 						activateConfirm = true;
 						break;
 					}
 				}
 
-				if (activateConfirm == false) {
+				if (activateConfirm) {
+					arrayFuncActivateCalc.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
+				} else {
 					System.out.println("ERROR: Function '" + activatedFunc + "' in line '" + this.fullLineGet + "'does not exist");
 					System.exit(0);
-				} else {
-					arrayFuncActivateCalc.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
 				}
 			}
 
@@ -222,18 +215,18 @@ public class Var_Func {
 			// Checks whether the defineName and tabnum is the same anywhere --> will remove
 			int funcIndex = 0;
 			int tabNumCalc = 0;
-			
+
+			// if it's global, tabNumCalc is already set to 1
 			if (isGlobal == false) {
 				tabNumCalc = this.tabNum - 1;
 			}
-			
+
 			// checks for repeats
 			while (funcIndex < arrayFuncNameSave.size()) {
-				if (arrayFuncNameSave.get(funcIndex).equals(statementArgs) && arrayFuncTabNumSave.get(funcIndex).equals(tabNumCalc)) {
+				if (arrayFuncNameSave.get(funcIndex)[2].equals(statementArgs)
+						&& Integer.parseInt(arrayFuncNameSave.get(funcIndex)[1]) == tabNumCalc) {
 					Var_Func.arrayFuncSave.remove(funcIndex);
 					Var_Func.arrayFuncNameSave.remove(funcIndex);
-					Var_Func.arrayFuncTabNumSave.remove(funcIndex);
-					Var_Func.arrayFuncParamSave.remove(funcIndex);
 				} else {
 					funcIndex++;
 				}
@@ -246,21 +239,19 @@ public class Var_Func {
 				arrayFuncCalc[i] = arrayGet.get(i).substring(this.tabNum);
 			}
 
+			String[] addStringArray = new String[3];
+
 			// Gets param number
-			paramMaxNum = ParamUtils.countParams(arrayGet);
-			arrayFuncParamSave.add(paramMaxNum);
+			addStringArray[0] = ParamUtils.countParams(arrayGet) + "";
 
 			// Adds tab num
-			if (isGlobal == true) {
-				arrayFuncTabNumSave.add(0);
-			} else {
-				arrayFuncTabNumSave.add(this.tabNum - 1);
-			}
-
-			arrayFuncSave.add(arrayFuncCalc);
+			addStringArray[1] = tabNumCalc + "";
 
 			// Adds the name
-			arrayFuncNameSave.add(statementArgs);
+			addStringArray[2] = statementArgs;
+
+			arrayFuncSave.add(arrayFuncCalc);
+			arrayFuncNameSave.add(addStringArray);
 		} else {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 			System.exit(0);

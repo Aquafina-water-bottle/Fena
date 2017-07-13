@@ -31,6 +31,8 @@ setblock 386 78 98 chain_command_block 5 replace {Command:"say b",TrackOutput:0b
 setblock 387 78 98 chain_command_block 5 replace {Command:"function custom:RayCaster/theHunted/test/init",TrackOutput:0b,auto:1b}
 setblock 388 78 98 chain_command_block 5 replace {Command:"setblock 384 78 98 air 0",TrackOutput:0b,auto:1b}
 setblock 385 80 98 command_block 5 replace {Command:"say b",TrackOutput:0b,auto:0b}
+setblock 386 80 98 chain_command_block 5 replace {Command:"g;l;o;b;a;l",TrackOutput:0b,auto:1b}
+setblock 387 80 98 chain_command_block 5 replace {Command:"Arr_Test2[S]",TrackOutput:0b,auto:1b}
 setblock 385 82 98 repeating_command_block 5 replace {Command:"say c",TrackOutput:0b,auto:0b}
 setblock 385 84 98 repeating_command_block 5 replace {Command:"say d",TrackOutput:0b,auto:0b}
 setblock 385 70 100 command_block 5 replace {Command:"say e",TrackOutput:0b,auto:0b}

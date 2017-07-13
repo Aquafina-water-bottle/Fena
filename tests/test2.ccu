@@ -3,7 +3,7 @@
 
 OPTIONS:
 	blockOption glass 0
-	coordsOption 383 69 95
+	coordsOption 552 ~20 194
 ///	Style
 ///	Avaliable options: +X -X +Z -Z (and) height in y
 	styleOption +X 16
@@ -33,6 +33,10 @@ GROUP {Grp_OhFuckYeah}:
 	=//
 	
 	Func_Test
+	
+	setblock Grp_OhFuckYeah air 0
+	fill Grp_OhFuckYeah air 0
+	
 	say 1
 	say 2
 	say 3

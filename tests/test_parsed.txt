@@ -57,6 +57,8 @@ GROUP | Grp_APulse | PULSE		[384 78 98 | stonebrick 0]
 
 GROUP | Grp_B | PULSE		[384 80 98 | stonebrick 0]
 	say b
+	g;l;o;b;a;l
+	Arr_Test2[S]
 
 GROUP | Grp_C | CLOCK		[384 82 98 | stonebrick 0]
 	say c
@@ -646,7 +648,27 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say THE
 	
 	Dog;Cat;Lips;Watermelon;Apple;Ocean;Sword;Castle;Car *Vroom Vroom Machine*;eGO Logo;Cake;Corgi;Winnie the Pooh;Waffle;Person;T-Shirt;Computer;Airplane;Microphone
-	say ayy Dog say ayy Cat say ayy Lips say ayy Watermelon say ayy Apple say ayy Ocean say ayy Sword say ayy Castle say ayy Car *Vroom Vroom Machine* say ayy eGO Logo say ayy Cake say ayy Corgi say ayy Winnie the Pooh say ayy Waffle say ayy Person say ayy T-Shirt say ayy Computer say ayy Airplane say ayy Microphone
+	say ayy Dog
+	say ayy Cat
+	say ayy Lips
+	say ayy Watermelon
+	say ayy Apple
+	say ayy Ocean
+	say ayy Sword
+	say ayy Castle
+	say ayy Car *Vroom Vroom Machine*
+	say ayy eGO Logo
+	say ayy Cake
+	say ayy Corgi
+	say ayy Winnie the Pooh
+	say ayy Waffle
+	say ayy Person
+	say ayy T-Shirt
+	say ayy Computer
+	say ayy Airplane
+	say ayy Microphone
+	Arr_Test2[S]
+	a;s;d;f
 	say 0 -SPLIT- 0
 	say test lol
 	say 0 -SPLIT- 1

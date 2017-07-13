@@ -179,6 +179,48 @@ public class Var_Unassign {
 				System.exit(0);
 			}
 			
+			if (unassignType == 1) {
+				int arrayIndex = Var_Array.singleArrayNameSave.size() - 1;
+				while (arrayIndex >= 0) {
+					if (Var_Array.singleArrayNameSave.get(arrayIndex)[2].equals(statementArgs)) {
+						if (isGlobal == true && Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1]) == tabNum) {
+							Var_Array.singleArraySave.remove(arrayIndex);
+							Var_Array.singleArrayNameSave.remove(arrayIndex);
+							break;
+						} else {
+							if (Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1]) <= tabNum) {
+								Var_Array.singleArraySave.remove(arrayIndex);
+								Var_Array.singleArrayNameSave.remove(arrayIndex);
+								break;
+							}
+							arrayIndex--;
+						}
+					} else {
+						arrayIndex--;
+					}
+				}
+				
+				arrayIndex = Var_Array.doubleArrayNameSave.size() - 1;
+				while (arrayIndex >= 0) {
+					if (Var_Array.doubleArrayNameSave.get(arrayIndex)[2].equals(statementArgs)) {
+						if (isGlobal == true && Integer.parseInt(Var_Array.doubleArrayNameSave.get(arrayIndex)[1]) == tabNum) {
+							Var_Array.doubleArraySave.remove(arrayIndex);
+							Var_Array.doubleArrayNameSave.remove(arrayIndex);
+							break;
+						} else {
+							if (Integer.parseInt(Var_Array.doubleArrayNameSave.get(arrayIndex)[1]) <= tabNum) {
+								Var_Array.doubleArraySave.remove(arrayIndex);
+								Var_Array.doubleArrayNameSave.remove(arrayIndex);
+								break;
+							}
+							arrayIndex--;
+						}
+					} else {
+						arrayIndex--;
+					}
+				}
+			}
+			
 			if (unassignType == 2) {
 				int defIndex = Var_Define.arrayDefineSave.size() - 1;
 				while (defIndex >= 0) {
@@ -202,19 +244,15 @@ public class Var_Unassign {
 			if (unassignType == 3) {
 				int funcIndex = Var_Func.arrayFuncNameSave.size() - 1;
 				while (funcIndex >= 0) {
-					if (Var_Func.arrayFuncNameSave.get(funcIndex).equals(statementArgs)) {
-						if (isGlobal == true && Var_Func.arrayFuncTabNumSave.get(funcIndex) == tabNum) {
+					if (Var_Func.arrayFuncNameSave.get(funcIndex)[2].equals(statementArgs)) {
+						if (isGlobal == true && Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndex)[1]) == tabNum) {
 							Var_Func.arrayFuncSave.remove(funcIndex);
 							Var_Func.arrayFuncNameSave.remove(funcIndex);
-							Var_Func.arrayFuncTabNumSave.remove(funcIndex);
-							Var_Func.arrayFuncParamSave.remove(funcIndex);
 							break;
 						} else {
-							if (Var_Func.arrayFuncTabNumSave.get(funcIndex) <= tabNum) {
+							if (Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndex)[1]) <= tabNum) {
 								Var_Func.arrayFuncSave.remove(funcIndex);
 								Var_Func.arrayFuncNameSave.remove(funcIndex);
-								Var_Func.arrayFuncTabNumSave.remove(funcIndex);
-								Var_Func.arrayFuncParamSave.remove(funcIndex);
 								break;
 							}
 							funcIndex--;

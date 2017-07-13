@@ -1,5 +1,7 @@
-GROUP | Grp_OhFuckYeah | PULSE		[384 70 96 | glass 0]
+GROUP | Grp_OhFuckYeah | PULSE		[553 ~21 195 | glass 0]
 	Func_Test
+	setblock 553 ~0 195 air 0
+	fill 553 ~0 195 568 ~15 196 air 0
 	say 1
 	say 2
 	say 3

@@ -143,7 +143,7 @@ public class Var_Array {
 				}
 				// the end should make 'statementArgs' as the actual use thing (Array name)
 			}
-			
+
 			// ArgUtils.checkCommands(this.arrayGet, tabNum);
 
 			String whiteSpaceCalc = this.fullLineGet.substring(0, this.tabNum - 1);
@@ -172,7 +172,7 @@ public class Var_Array {
 			if (isGlobal == null) {
 				isGlobal = false;
 			}
-			
+
 			if (arrayType == null) {
 				arrayType = 1;
 			}
@@ -192,9 +192,15 @@ public class Var_Array {
 				is2DArray = true;
 			}
 
+			int tabNumCalc = 0;
+
+			if (isGlobal == false) {
+				tabNumCalc = this.tabNum - 1;
+			}
+
 			if (is2DArray) { // splits whenever '} {' is found
 				ArgUtils.checkWhiteSpace(this.arrayGet, tabNum, true);
-				
+
 				ArrayList<String> tempArray = new ArrayList<String>();
 				ArrayList<String[]> tempArrayStorage = new ArrayList<String[]>();
 
@@ -206,7 +212,7 @@ public class Var_Array {
 
 						// creates string array
 						tempArray = ArgUtils.checkCommands(tempArray, tabNum + 1);
-						
+
 						getArrayCalc = new String[tempArray.size()];
 						for (int j = 0; j < tempArray.size(); j++) {
 							getArrayCalc[j] = tempArray.get(j);
@@ -243,7 +249,7 @@ public class Var_Array {
 				// adds general stuff
 				String[] tempArraySave = new String[3];
 				tempArraySave[0] = arrayType + "";
-				tempArraySave[1] = tabNum + "";
+				tempArraySave[1] = tabNumCalc + "";
 				tempArraySave[2] = statementArgs; // name
 				doubleArrayNameSave.add(tempArraySave);
 
@@ -256,13 +262,13 @@ public class Var_Array {
 			} else { // easy part here- just convert everything into String[]
 				ArgUtils.checkWhiteSpace(this.arrayGet, tabNum, false);
 				arrayGet = ArgUtils.checkCommands(arrayGet, tabNum);
-				
+
 				getArrayCalc = new String[arrayGet.size()];
 
 				// adds general stuff
 				String[] tempArraySave = new String[3];
 				tempArraySave[0] = arrayType + "";
-				tempArraySave[1] = tabNum + "";
+				tempArraySave[1] = tabNumCalc + "";
 				tempArraySave[2] = statementArgs; // name
 				singleArrayNameSave.add(tempArraySave);
 
@@ -278,7 +284,7 @@ public class Var_Array {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 			System.exit(0);
 		}
-		
+
 		/*
 		for (String[][] asdf : doubleArraySave) {
 			for (String[] asdf2 : asdf) {
@@ -290,7 +296,7 @@ public class Var_Array {
 			System.out.println("");
 		}
 		*/
-		
+
 		/*
 		for (String[] asdf : singleArraySave) {
 			for (String asdf2 : asdf) {
@@ -299,7 +305,7 @@ public class Var_Array {
 			System.out.println("");
 		}
 		*/
-		
+
 		return null;
 	}
 

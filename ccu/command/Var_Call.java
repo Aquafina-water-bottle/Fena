@@ -66,10 +66,11 @@ public class Var_Call {
 				for (int funcIndex = Var_Func.arrayFuncNameSave.size() - 1; funcIndex >= 0; funcIndex--) {
 
 					// if it matches
-					if (statementArgs.equals(Var_Func.arrayFuncNameSave.get(funcIndex))) {
+					if (statementArgs.equals(Var_Func.arrayFuncNameSave.get(funcIndex)[2])) {
 
-						useParamsCalc = ParamUtils.getParams(getParamCalc, Var_Func.arrayFuncParamSave.get(funcIndex));
-
+						useParamsCalc = ParamUtils.getParams(getParamCalc,
+								Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndex)[0]));
+						
 						for (int i = 0; i < Var_Func.arrayFuncSave.get(funcIndex).length; i++) {
 							lineCalc = whitespaceCalc + Var_Func.arrayFuncSave.get(funcIndex)[i];
 							arrayReturn.add(lineCalc);
@@ -101,7 +102,7 @@ public class Var_Call {
 
 				// replaces params
 				this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc,
-						Var_Func.arrayFuncParamSave.get(funcIndexSave), tabNum);
+						Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndexSave)[0]), tabNum);
 
 				ArgUtils.checkCommands(this.arrayReturn, tabNum);
 				checkFunction.clear();

@@ -32,6 +32,7 @@ public class Main {
 	 * -LOOP - DONE (completely woot)
 	 * -IF - DONE (completely WOOOT)
 	 * -SIN COS TAN CALC - DONE WOOOOOOOOOT
+	 * -ARRAY - DONE WOOOOOOOOOOOOOOOOOOOOOT
 	 * 
 	 * -Repeated definitions - Already works apparently
 	 * -Check whether commands exist - WILL NOT DO
@@ -43,7 +44,6 @@ public class Main {
 	 * 
 	 * General statements
 	 * -INITIALIZE
-	 * -ARRAY
 	 * -OBJADD / OBJREV
 	 * -TEAMADD / TEAMREV
 	 * -FILE
@@ -53,8 +53,6 @@ public class Main {
 	 * -Escaping using '`'
 	 * -Escaping using '/' at the beginning of a line
 	 * 
-	 * Main thing is that all shortcuts will be done when parsing only at GROUP and MFUNC
-	 * GROUP and MFUNC 
 	 */
 
 	// .replaceAll("^\\s+", "") = space to the left
