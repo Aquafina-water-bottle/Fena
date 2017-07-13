@@ -50,6 +50,11 @@ public class MathParser {
 			return arrayCalc;
 
 		} else {
+			// if there are no spaces, it would be thought of a singular string
+			if (getArgs.contains(" ") == false) {
+				return null;
+			}
+			
 			// meaning actual math has to be used lol
 			// 1 10 + 1
 			// (1 * 4) (12 / 6 - 1) - (0.5 + 0.5)
@@ -66,6 +71,10 @@ public class MathParser {
 			 */
 
 			// if arrayCalc has less than 4 arguments --> automatically invalid
+			if (arrayCalc != null && arrayCalc[0].equals("")) {
+				return null;
+			}
+			
 			if (arrayCalc.length < 4) {
 				System.out.println("ERROR: 4 LOOP arguments are required for line '" + fullLineGet + "'");
 				System.exit(0);
@@ -763,13 +772,15 @@ public class MathParser {
 				}
 			} else {
 				if (getString.isEmpty()) {
-					System.out.println("ERROR: The argument '" + getString + "' in line '" + fullLineGet + "' is empty");
-					System.exit(0);
+					if (isStrict) {
+						System.out.println("ERROR: The argument '" + getString + "' in line '" + fullLineGet + "' is empty");
+						System.exit(0);
+					}
 				} else {
 					if (NumberUtils.isNum(getString) == false) {
 						getValue = calcValue(getString, fullLineGet, isStrict);
 						if (getValue.isFloat == null) {
-							if (isStrict == true) {
+							if (isStrict) {
 								System.out
 										.println("ERROR: Arguments in '" + getString + "' in line '" + fullLineGet + "' are invalid");
 								System.exit(0);

@@ -70,6 +70,11 @@ public class Con_Loop {
 					tempCount -= StringUtils.countChars(line, "}");
 
 					if (tempCount == 0) {
+						if (stringCalc.equals("{NULL}")) {
+							stringCalc = "{}";
+						}
+						
+						// substring to get rid of curly brackets
 						loopArray = MathParser.getLoopArray(stringCalc.substring(1, stringCalc.length() - 1), fullLineGet); // gets the math stuff here
 						
 						loopArrayStorage.add(loopArray);
@@ -78,7 +83,7 @@ public class Con_Loop {
 				}
 
 				// checks tab spaces
-				ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
+				ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum, false);
 				
 				for (int i = 0; i < this.arrayGet.size(); i++) {
 					// removes a tab space infront of the line
@@ -99,12 +104,8 @@ public class Con_Loop {
 					arrayLoopReturn.addAll(ParamUtils.replaceParams(this.arrayGet, paramArrayGet, paramNum, tabNum - 1));
 					
 				}
-
-				ReadCCUFile ccuSubsetFile = new ReadCCUFile(arrayLoopReturn, tabNum);
-				ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
-				if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
-					arrayLoopReturn = checkCommandsArray;
-				}
+				
+				ArgUtils.checkCommands(arrayLoopReturn, tabNum - 1);
 
 			} else {
 				System.out.println("ERROR: Curly brackets in line '" + this.fullLineGet + "' are not balanced");

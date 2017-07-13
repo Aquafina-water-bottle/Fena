@@ -24,13 +24,9 @@ public class Con_Cond {
 		 */
 		// System.out.println("LINE " + fullLineGet);
 
-		ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayGet, tabNum);
-		ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
-		if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
-			this.arrayGet = checkCommandsArray;
-		}
+		ArgUtils.checkCommands(this.arrayGet, tabNum);
 		
-		ArgUtils.checkWhiteSpace(this.arrayGet, tabNum);
+		ArgUtils.checkWhiteSpace(this.arrayGet, tabNum, false);
 
 		// Removes "COND " and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("COND", "").replaceAll("^\\s+", "");

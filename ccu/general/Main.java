@@ -53,7 +53,6 @@ public class Main {
 	 * -Escaping using '`'
 	 * -Escaping using '/' at the beginning of a line
 	 * 
-	 * 
 	 * Main thing is that all shortcuts will be done when parsing only at GROUP and MFUNC
 	 * GROUP and MFUNC 
 	 */

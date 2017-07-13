@@ -2,6 +2,7 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.ArgUtils;
 import ccu.general.StringUtils;
 
 public class Con_Use {
@@ -28,11 +29,7 @@ public class Con_Use {
 		 */
 		// System.out.println("LINE " + fullLineGet);
 
-		ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayGet, tabNum);
-		ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
-		if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
-			this.arrayGet = checkCommandsArray;
-		}
+		ArgUtils.checkCommands(this.arrayGet, tabNum);
 
 		// Removes "USE" and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("USE", "").replaceAll("^\\s+", "");
@@ -113,7 +110,13 @@ public class Con_Use {
 			}
 			
 			// Checking tab spaces
+			ArgUtils.checkWhiteSpace(this.arrayGet, tabNum, false);
 			
+			// if it's null
+			if (statementArgs.isEmpty() || statementArgs.equals("NULL")) {
+				noSpace = true;
+				statementArgs = "";
+			}
 			
 			for (int i = 0; i < this.arrayGet.size(); i++) {
 				String newString = null;

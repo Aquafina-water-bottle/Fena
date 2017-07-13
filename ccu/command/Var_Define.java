@@ -3,6 +3,7 @@ package ccu.command;
 import java.util.ArrayList;
 
 import ccu.general.ArgUtils;
+import ccu.general.NumberUtils;
 import ccu.general.ParamUtils;
 
 public class Var_Define {
@@ -17,6 +18,10 @@ public class Var_Define {
 	}
 
 	// list of definitions that CANNOT be definitions because they are used for parameters for other CCU statements
+	// TODO make TELE work with 3, 4 or 5 numbers
+	// if 3, dy / dx returns ~
+	// if 4, dx returns ~
+	// Add seperation of numbers via ;
 
 	// @formatter:off
 	public static String[] exceptionArray = {
@@ -25,9 +30,9 @@ public class Var_Define {
 			"USE", "BEG", "END", "NOSPACE",
 			"FUNC", "ACTIVATE", "CALL", 
 			"MFUNC", "BRANCH",
-			"IMPORT", "LIBRARY", "*",
+			"IMPORT", "LIBRARY", "*", "WITHIN", "GETCOORDS", 
 			"CALC", "SIN", "COS", "TAN", "SELF",
-			"COND", "OPTIONS", "UNASSIGN", "IF", "LOOP",
+			"COND", "OPTIONS", "UNASSIGN", "IF", "LOOP", "NULL",
 			};
 	// @formatter:on
 
@@ -52,28 +57,25 @@ public class Var_Define {
 		 */
 		String[] arrayDefineCalc = new String[5];
 		Integer defineType = null;
+		Boolean isGlobal = null;
+
 		String defineName = null;
 		String defintionGet = null;
-		Boolean isGlobal = null;
 		int paramMaxNum = 0;
 
 		String[] coordsArrayDisp = null;
 		String[] coordsArrayCalc = null;
-		boolean testInt = false;
-		boolean testFloat = false;
 
 		/* defineType
 		 * null = unspecified, will be specified after
 		 * 0 = NULL
 		 * 1 = string
-		 * 2 = int
-		 * 3 = float
 		 * 4 = coords
 		 * 5 = teleport
 		 */
 
 		// Removes "DEF" and for all arguments
-		
+
 		// Checks tab spaces
 		ArgUtils.checkWhiteSpace(this.fullLineGet, this.tabNum);
 
@@ -150,6 +152,11 @@ public class Var_Define {
 					System.exit(0);
 				}
 
+				// turns 'NULL' into nothing
+				if (defintionGet.equals("NULL")) {
+					defintionGet = "";
+				}
+
 				// Checks if the name matches any unacceptable define names
 				for (String checkException : exceptionArray) {
 					if (defineName.equals(checkException)) {
@@ -172,31 +179,18 @@ public class Var_Define {
 			}
 			// detects definition type if not specified
 
+			/*
 			if (defineType == null) {
-				try {
-					Integer.parseInt(defintionGet);
-					testInt = true;
-				} catch (NumberFormatException e) {
-				}
-				if (testInt == true) {
+				if (NumberUtils.isInt(defintionGet)) {
 					// is int
 					defineType = 2;
 				}
-
-				try {
-					Float.parseFloat(defintionGet);
-					testFloat = true;
-				} catch (NumberFormatException e) {
-				}
-				if (testFloat == true && defineType == null) {
+			
+				if (NumberUtils.isFloat(defintionGet)) {
 					// is float
 					defineType = 3;
-					/* This part is to round
-					if (defintionGet.substring(defintionGet.indexOf(".")).length() >= 11) {
-						defintionGet = defintionGet.substring(0, defintionGet.indexOf(".") + 10);
-					}*/
 				}
-			}
+			}*/
 
 			// Sets to string
 			if (defineType == null) {
@@ -210,9 +204,7 @@ public class Var_Define {
 				if (((coordsArrayCalc.length == 3 || coordsArrayCalc.length == 6) && defineType == 4)
 						|| (coordsArrayCalc.length == 5 && defineType == 5)) {
 					for (int i = 0; i < coordsArrayCalc.length; i++) {
-						try {
-							Float.parseFloat(coordsArrayCalc[i]);
-						} catch (NumberFormatException e) {
+						if (NumberUtils.isNum(coordsArrayCalc[i]) == false) {
 							System.out.println(
 									"ERROR: '" + coordsArrayDisp[i] + "' in line '" + this.fullLineGet + "' must be a number");
 							System.exit(0);
@@ -239,9 +231,9 @@ public class Var_Define {
 			arrayDefineCalc[1] = tabNum + "";
 			arrayDefineCalc[2] = defineName;
 			arrayDefineCalc[3] = defintionGet;
-			
+
 			// System.out.println("LOOKUP " + defintionGet);
-			
+
 			arrayDefineCalc[4] = paramMaxNum + "";
 
 			// Checks whether the defineName and tabnum is the same anywhere --> will remove
@@ -253,7 +245,7 @@ public class Var_Define {
 					defIndex++;
 				}
 			}
-			
+
 			arrayDefineSave.add(arrayDefineCalc);
 
 			// System.out.println(arrayDefineCalc[2] + " | " + arrayDefineCalc[1]);
@@ -288,4 +280,252 @@ public class Var_Define {
 		return getLine.length() - statementEncase.length();
 	}
 
+	public static String[] parseDefinition(String getString, String getBegDef, int parseType, int getIndex, String fullLineGet) {
+		/* parseType - 1 == def
+		 * parseType - 2 == array
+		 * parseType - 3 == 2d array
+		 */
+		
+		String getBegString = getBegDef + "";
+		String midStringSave = "";
+		String getParamsString = "";
+		String getEndString = "";
+
+		String definitionCalc = "";
+
+		// 0 - beg
+		// 1 - mid - parsed definition
+		// 2 - end
+		// 3 - midStringSave - test for recurring definition
+		String[] returnString = new String[4];
+
+		Integer begIndexCalc = null;
+		Integer endIndexCalc = null;
+
+		if (parseType == 1) {
+
+			// splits on definition name
+			begIndexCalc = getString.indexOf(Var_Define.arrayDefineSave.get(getIndex)[2]);
+			endIndexCalc = getString.indexOf(Var_Define.arrayDefineSave.get(getIndex)[2])
+					+ Var_Define.arrayDefineSave.get(getIndex)[2].length();
+		}
+
+		if (parseType == 2) {
+
+			// splits on array name
+			begIndexCalc = getString.indexOf(Var_Array.singleArrayNameSave.get(getIndex)[2] + "[");
+			endIndexCalc = getString.indexOf(Var_Array.singleArrayNameSave.get(getIndex)[2] + "[")
+					+ Var_Array.singleArrayNameSave.get(getIndex)[2].length() - 1;
+		}
+
+		if (parseType == 3) {
+
+			// splits on array name
+			begIndexCalc = getString.indexOf(Var_Array.doubleArrayNameSave.get(getIndex)[2] + "[");
+			endIndexCalc = getString.indexOf(Var_Array.doubleArrayNameSave.get(getIndex)[2] + "[")
+					+ Var_Array.doubleArrayNameSave.get(getIndex)[2].length() - 1;
+		}
+
+		// gets everything before the definition
+		getBegString += getString.substring(0, begIndexCalc);
+
+		// gets the definition
+		midStringSave = getString.substring(begIndexCalc, endIndexCalc);
+
+		// gets parameters and anything after the definition
+		getEndString = getString.substring(endIndexCalc);
+
+		// checks if there are parameters in the first place (DEF ONLY)
+		if (parseType == 1) {
+			if (Integer.parseInt(Var_Define.arrayDefineSave.get(getIndex)[4]) > 0) {
+
+				ArrayList<String> useParamsCalc = new ArrayList<String>();
+
+				// if there is stuff past the definition and has () in the correct order
+				if (getEndString.isEmpty() == false && getEndString.startsWith("(") && getEndString.contains(")")
+						&& getEndString.indexOf("(") < getEndString.indexOf(")")) {
+
+					// split params
+					getParamsString = getEndString.substring(getEndString.indexOf("("), getEndString.indexOf(")") + 1);
+					getEndString = getEndString.substring(getEndString.indexOf(")") + 1);
+				}
+
+				useParamsCalc = ParamUtils.getParams(getParamsString, Integer.parseInt(Var_Define.arrayDefineSave.get(getIndex)[4]));
+
+				// replace all params
+				definitionCalc = ParamUtils.replaceParams(Var_Define.arrayDefineSave.get(getIndex)[3], useParamsCalc,
+						Integer.parseInt(Var_Define.arrayDefineSave.get(getIndex)[4]));
+
+			} else {
+
+				// no params
+				definitionCalc = Var_Define.arrayDefineSave.get(getIndex)[3];
+
+			}
+		}
+
+		// Gets specific definition from singleArray
+		if (parseType == 2) {
+			String calcIndexString = null;
+
+			calcIndexString = getEndString.substring(getEndString.indexOf("[") + 1, getEndString.indexOf("]"));
+			getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
+
+			if (NumberUtils.isNum(calcIndexString)) { // regular
+				int indexCalc = Integer.parseInt(calcIndexString);
+
+				// checks whether it's within the index
+				if (Var_Array.singleArraySave.get(getIndex).length - 1 < indexCalc) {
+					System.out.println("ERROR: Index '" + calcIndexString + "' in line '" + fullLineGet + "' is invalid");
+					System.exit(0);
+				}
+
+				definitionCalc = Var_Array.singleArraySave.get(getIndex)[indexCalc] + "";
+				midStringSave += "[" + calcIndexString + "]";
+
+			} else { // if 'S' or 'L'
+				if (calcIndexString.equalsIgnoreCase("S")) { // element1;element2;element3
+					String tempString = null;
+
+					for (int i = 0; i < Var_Array.singleArraySave.get(getIndex).length; i++)
+						if (tempString == null) {
+							tempString = Var_Array.singleArraySave.get(getIndex)[i];
+						} else {
+							tempString += ";" + Var_Array.singleArraySave.get(getIndex)[i];
+						}
+
+					definitionCalc = tempString + "";
+					midStringSave += "[" + calcIndexString + "]";
+
+				} else {
+					if (calcIndexString.equalsIgnoreCase("L")) {
+
+						definitionCalc = (Var_Array.singleArraySave.get(getIndex).length - 1) + "";
+
+					} else {
+						System.out.println("ERROR: Parameters '" + calcIndexString + "' in line '" + fullLineGet + "' are invalid");
+						System.exit(0);
+					}
+				}
+			}
+		}
+
+		// Gets specific definition from doubleArray
+		/* Arr_Name[1][1]
+		 * Arr_Name[1][S]
+		 * Arr_Name[1][L]
+		 * Arr_Name[L][L]
+		 * Arr_Name[L]
+		 */
+		if (parseType == 3) {
+			String calcIndexString = "";
+			String calcIndexString2 = "";
+			boolean parseArray = false;
+
+			calcIndexString = getEndString.substring(getEndString.indexOf("[") + 1, getEndString.indexOf("]"));
+			getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
+
+			if (getEndString.startsWith("[") && getEndString.contains("]")) { // gets calcIndexString2
+				calcIndexString2 = getEndString.substring(getEndString.indexOf("[") + 1, getEndString.indexOf("]"));
+				getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
+
+			} else {
+				if (NumberUtils.isNum(calcIndexString)) {
+					System.out.println(
+							"ERROR: Array call '" + getString + "[" + calcIndexString + "]" + "' in '" + fullLineGet + "' is invalid");
+					System.exit(0);
+				}
+			}
+
+			if (NumberUtils.isNum(calcIndexString)) {
+				int indexCalc = Integer.parseInt(calcIndexString);
+
+				if (NumberUtils.isNum(calcIndexString2)) { // Arr_Name[1][1]
+					int indexCalc2 = Integer.parseInt(calcIndexString2);
+
+					definitionCalc = (Var_Array.doubleArraySave.get(getIndex)[indexCalc][indexCalc2]) + "";
+					midStringSave += "[" + calcIndexString + "][" + calcIndexString2 + "]";
+					parseArray = true;
+				}
+
+				if (calcIndexString2.equalsIgnoreCase("L")) { // Arr_Name[1][L]
+					definitionCalc = (Var_Array.doubleArraySave.get(getIndex)[indexCalc].length - 1) + "";
+					parseArray = true;
+				}
+
+				if (calcIndexString2.equalsIgnoreCase("S")) { // Arr_Name[1][S]
+					String tempString = null;
+
+					for (int i = 0; i < Var_Array.doubleArraySave.get(getIndex)[indexCalc].length; i++)
+						if (tempString == null) {
+							tempString = Var_Array.doubleArraySave.get(getIndex)[indexCalc][i];
+						} else {
+							tempString += ";" + Var_Array.doubleArraySave.get(getIndex)[indexCalc][i];
+						}
+
+					definitionCalc = tempString + "";
+					midStringSave += "[" + calcIndexString + "][" + calcIndexString2 + "]";
+					parseArray = true;
+				}
+			}
+
+			if (calcIndexString.equalsIgnoreCase("L")) {
+				if (calcIndexString2.isEmpty()) { // Arr_Name[L]
+					definitionCalc = (Var_Array.doubleArraySave.get(getIndex).length - 1) + "";
+					parseArray = true;
+				}
+
+				if (calcIndexString2.equalsIgnoreCase("L")) { // Arr_Name[L][L] - why the hell would you use this
+					int calcLength = 0;
+
+					for (int i = 0; i < Var_Array.doubleArraySave.get(getIndex).length; i++) {
+						calcLength += Var_Array.doubleArraySave.get(getIndex)[i].length;
+					}
+
+					definitionCalc = calcLength + "";
+					parseArray = true;
+				}
+			}
+
+			if (parseArray == false) { // fail lol
+				System.out.println("ERROR: Array call '" + getString + "' in line '"
+						+ fullLineGet + "' is invalid");
+				System.exit(0);
+			}
+		}
+
+		int defType = 0;
+
+		if (parseType == 1) {
+			defType = Integer.parseInt(Var_Define.arrayDefineSave.get(getIndex)[0]);
+		}
+
+		if (parseType == 2) {
+			defType = Integer.parseInt(Var_Array.singleArrayNameSave.get(getIndex)[0]);
+		}
+
+		if (parseType == 3) {
+			defType = Integer.parseInt(Var_Array.doubleArrayNameSave.get(getIndex)[0]);
+		}
+
+		// checks whether it is a TELE or COORDS definition with [ and ]
+		if (defType == 4 || defType == 5) {
+
+			// string array to get 2 strings
+			// they have to be seperate because recurring definition tests are done using defintionCalc
+			String[] getStringArray = null;
+
+			getStringArray = ParamUtils.parseCoordinates(getEndString, definitionCalc, defType, fullLineGet);
+
+			definitionCalc = getStringArray[0];
+			getEndString = getStringArray[1];
+		}
+
+		returnString[0] = getBegString;
+		returnString[1] = definitionCalc;
+		returnString[2] = getEndString;
+		returnString[3] = midStringSave;
+
+		return returnString;
+	}
 }

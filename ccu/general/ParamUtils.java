@@ -3,6 +3,9 @@ package ccu.general;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import ccu.command.MathParser;
+import ccu.command.Var_Define;
+
 /* TODO
  * Parameters should be thought of --
  * 	whenever a tab space occurs because of LOOP / FUNC / DEF
@@ -126,22 +129,22 @@ public class ParamUtils {
 
 	// Replaces all parameters in a string
 	public static String replaceParams(String getString, ArrayList<String> getParams, int paramNum) {
-		
+
 		if (paramNum > 0) {
 			for (int paramIndex = 0; paramIndex < paramNum; paramIndex++) {
 				getString = getString.replace(("|" + paramIndex + "|"), getParams.get(paramIndex));
 			}
 		}
-		
+
 		return getString;
 	}
 
 	// Replaces all parameters in an array
 	public static ArrayList<String> replaceParams(ArrayList<String> getArray, ArrayList<String> getParams, int paramNum, int tabNum) {
-		
+
 		String lineCalc = null;
 		ArrayList<String> returnArray = new ArrayList<String>();
-		
+
 		// if there's no params in the first place
 		if (getParams == null || getParams.isEmpty()) {
 			return getArray;
@@ -202,15 +205,15 @@ public class ParamUtils {
 						paramEncapsulateArray.remove(paramEncapsulateArray.size() - 1);
 					}
 				}
-				
+
 				// check if it's a definition - temp increases paramEncapsulate
 				if (lineCalc.trim().startsWith("DEF")) {
 					paramEncapsulateArray.set(paramEncapsulateArray.size() - 1, paramEncapsulate + 1);
 				}
-				
+
 				// only if paramEncapsulate is 0
 				paramEncapsulateGet = paramEncapsulateArray.get(tabNumCalc - tabNum);
-				
+
 				if (paramEncapsulateGet == 0) {
 					for (int paramIndex = 0; paramIndex < paramNum; paramIndex++) {
 						lineCalc = lineCalc.replace(("|" + paramIndex + "|"), getParams.get(paramIndex));
@@ -220,7 +223,7 @@ public class ParamUtils {
 						lineCalc = lineCalc.replace(("|" + paramIndex + ";" + paramEncapsulateGet + "|"), getParams.get(paramIndex));
 					}
 				}
-				
+
 				// check if it's a definition - undos temp increase in paramEncapsulate 
 				if (lineCalc.trim().startsWith("DEF")) {
 					paramEncapsulateArray.set(paramEncapsulateArray.size() - 1, paramEncapsulate - 1);
@@ -229,12 +232,86 @@ public class ParamUtils {
 				returnArray.add(lineCalc);
 			}
 		}
-		
+
 		// System.out.println(getArray);
 		// System.out.println("");
-		
+
 		return returnArray;
+	}
+	
+	public static String[] parseCoordinates(String getString, String getCoords, int coordsType, String fullLineGet) {
+		
+		// getString is getEndString
+		
+		String getParamsString = null;
+		String defineParamCalc = null;
+		String defineParamsCalc[] = null;
+		String getEndString = null;
+		String[] returnStringArray = new String[2];
+		
+		if ((getString.isEmpty() == false && getString.startsWith("[") && getString.contains("]")
+						&& getString.indexOf("[") < getString.indexOf("]"))) {
+
+			getParamsString = getString.substring(getString.indexOf("["), getString.indexOf("]") + 1);
+			getEndString = getString.substring(getString.indexOf("]") + 1);
+
+			// everything within [ and ]
+			defineParamCalc = getParamsString.substring(1, getParamsString.length() - 1);
+
+			// array for coords
+			defineParamsCalc = getCoords.split(" ");
+
+			if (coordsType == 4) {
+
+				if (defineParamCalc.contains("2x")) {
+					defineParamCalc = defineParamCalc.replace("2x", defineParamsCalc[3]);
+				}
+				if (defineParamCalc.contains("2y")) {
+					defineParamCalc = defineParamCalc.replace("2y", defineParamsCalc[4]);
+				}
+				if (defineParamCalc.contains("2z")) {
+					defineParamCalc = defineParamCalc.replace("2z", defineParamsCalc[5]);
+				}
+				if (defineParamCalc.contains("x")) {
+					defineParamCalc = defineParamCalc.replace("x", defineParamsCalc[0]);
+				}
+				if (defineParamCalc.contains("y")) {
+					defineParamCalc = defineParamCalc.replace("y", defineParamsCalc[1]);
+				}
+				if (defineParamCalc.contains("z")) {
+					defineParamCalc = defineParamCalc.replace("z", defineParamsCalc[2]);
+				}
+
+				returnStringArray[0] = MathParser.getOperation(defineParamCalc, fullLineGet, true, 0);
+			}
+
+			if (coordsType == 5) {
+				if (defineParamCalc.contains("ry")) {
+					defineParamCalc = defineParamCalc.replace("ry", defineParamsCalc[3]);
+				}
+				if (defineParamCalc.contains("rx")) {
+					defineParamCalc = defineParamCalc.replace("rx", defineParamsCalc[4]);
+				}
+				if (defineParamCalc.contains("x")) {
+					defineParamCalc = defineParamCalc.replace("x", defineParamsCalc[0]);
+				}
+				if (defineParamCalc.contains("y")) {
+					defineParamCalc = defineParamCalc.replace("y", defineParamsCalc[1]);
+				}
+				if (defineParamCalc.contains("z")) {
+					defineParamCalc = defineParamCalc.replace("z", defineParamsCalc[2]);
+				}
+
+				returnStringArray[0] = MathParser.getOperation(defineParamCalc, fullLineGet, true, 0);
+			}
+			
+			returnStringArray[1] = getEndString;
+		} else {
+			returnStringArray[0] = getCoords;
+			returnStringArray[1] = getString;
+		}
 		
 		
+		return returnStringArray;
 	}
 }

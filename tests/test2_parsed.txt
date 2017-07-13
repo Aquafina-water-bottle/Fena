@@ -1,7 +1,5 @@
-GROUP | Grp_Test|0| | PULSE		[384 70 96 | glass 0]
-	say |0|
-
-GROUP | Grp_OhFuckYeah | PULSE		[384 70 98 | glass 0]
+GROUP | Grp_OhFuckYeah | PULSE		[384 70 96 | glass 0]
+	Func_Test
 	say 1
 	say 2
 	say 3

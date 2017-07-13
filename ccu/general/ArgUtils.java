@@ -17,7 +17,7 @@ public class ArgUtils {
 		return returnArray;
 	}
 
-	public static void checkWhiteSpace(ArrayList<String> getArray, int tabNum) {
+	public static void checkWhiteSpace(ArrayList<String> getArray, int tabNum, boolean isArray) {
 		String whitespaceCalc = null;
 		int tabNumCalc = tabNum + 0;
 		int countTabSpaces = 0;
@@ -38,6 +38,18 @@ public class ArgUtils {
 				if ((i > 0) && getArray.get(i - 1).trim().startsWith(statement)) {
 					tabNumCalc++;
 					break;
+				}
+			}
+
+			if (isArray == true) {
+				// starting { 
+				if (i == 1) {
+					tabNumCalc++;
+				}
+
+				// break } {
+				if ((i > 0) && getArray.get(i - 1).trim().startsWith("} {")) {
+					tabNumCalc++;
 				}
 			}
 
@@ -69,5 +81,59 @@ public class ArgUtils {
 		}
 
 		return whitespaceCalc;
+	}
+
+	public static void checkCoords(String getString, int coordType, String fullLineGet) {
+		String[] calcCoords = null;
+
+		if (coordType == 4) {
+
+			// if it's empty, it's valid lol
+			if (getString.isEmpty() == false) {
+				calcCoords = getString.split(" ");
+				
+				// teleports can be 3, 4 or 5
+				if (calcCoords.length == 3 || calcCoords.length == 4 || calcCoords.length == 5) {
+					
+					// checks whether it's a proper coordinate (while replacing ~ with 0 so it's a number)
+					for (String coords : calcCoords) {
+						if (NumberUtils.isNum(coords.replace("~", "0")) == false) {
+							System.out.println("ERROR: Coordinates '" + getString + "' in line '" + fullLineGet
+									+ "' are invalid (a coordinate can only contain '~' and numbers)");
+							System.exit(0);
+						}
+					}
+				} else {
+					
+					// not 3, 4 or 5 numbers
+					System.out.println("ERROR: Coordinates '" + getString + "' in line '" + fullLineGet
+							+ "' are invalid (it must contain 3, 4 or 5 numbers)");
+					System.exit(0);
+				}
+			}
+		}
+		
+		if (coordType == 5) {
+			
+			// regular coords can be 3 or 6
+			if (calcCoords.length == 3 || calcCoords.length == 6) {
+				
+				// checks whether it's a proper coordinate (while replacing ~ with 0 so it's a number)
+				for (String coords : calcCoords) {
+					if (NumberUtils.isNum(coords.replace("~", "0")) == false) {
+						System.out.println("ERROR: Coordinates '" + getString + "' in line '" + fullLineGet
+								+ "' are invalid (a coordinate can only contain '~' and numbers)");
+						System.exit(0);
+					}
+				}
+			} else {
+				
+				// not 3 or 6 numbers
+				System.out.println("ERROR: Coordinates '" + getString + "' in line '" + fullLineGet
+						+ "' are invalid (it must contain 3 or 6 numbers)");
+				System.exit(0);
+			}
+		}
+
 	}
 }

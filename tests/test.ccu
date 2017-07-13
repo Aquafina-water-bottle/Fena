@@ -65,26 +65,106 @@ LOOP {_A;_B;_C}:
 LOOP {_A;_B;_C}:
 	FUNC {Func_test|0|}:
 		say |0|
+		
+ARRAY {GLOBAL Arr_Test}:
+	{
+		say test lol
+		say double
+		say ayy lmao
+	} {
+		say test2
+		NULL
+		say theSecondDouble2
+	}
 
-MFUNC 		{BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
+
+ARRAY {Arr_Test2}:
+	Dog
+	Cat
+	Lips
+	Watermelon
+	Apple
+	Ocean
+	Sword
+	Castle
+	Car *Vroom Vroom Machine*
+	eGO Logo
+	Cake
+	Corgi
+	Winnie the Pooh
+	Waffle
+	Person
+	T-Shirt
+	Computer
+	Airplane
+	Microphone
+	
+	
+
+MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 	Func_test|0|
 	Func_test_A
 	Func_test_B
 	Func_test_C
 	say THESE
 	say ARE
+	LOOP {}:
+		say found loop null |0|
+	LOOP {NULL}:
+		say found loop null |0|
 	say THE
+	
+	Arr_Test[1][1]
+	Arr_Test2[S]
+	LOOP {0 Arr_Test2[L] + 1}:
+		say ayy Arr_Test2[|0|] ;
+		
+	
+	LOOP {0 Arr_Test[L] + 1}:
+		LOOP {0 Arr_Test[|0|][L] + 1}:
+			say |0;1| -SPLIT- |0|
+			Arr_Test[|0;1|][|0|]
+		say ~SPLIT~
+	
+	
+	LOOP {0 Arr_Test[0][L] + 1}:
+		say |0|
+		Arr_Test[0][|0|]
+		say Arr_Test[0][L] MARKER
+		
+	say Arr_Test_Num Arr_Test[L][L]
+	
+	
 	say GREATEST
 	DEF COMMANDS Dankest |0| memes |1|
 	say COMMANDS(asdf;asdf2) -SPLIT- COMMANDS(more)
 	say COMMANDS()
 	say COMMANDS
+	
+	USE {}:
+		say this
+		say shouldn't
+		say have
+		say any
+		say use
+		say stuff
+	
+	IF { = }:
+		say found null
+		
+	IF { = NULL}:
+		say found null
+		
+	DEF $Null$ NULL
+	IF {$Null$ = NULL}:
+		say found definition null --> $Null$ <--
+	
 	say asdf def1 asdf
 ///	say aRecurringDefinition
 	say WOOOOOOOOOOOO
 	
 	IMPORT {LIBRARY General\utils.ccu}
-	CCU.xpNumber
+	CCU.spawnIDSetting
 	
 	CALL {GetRandFunc1(3;2;10;5), GetRandFunc2, GetRandFunc1, GetRandFunc1()}
 	
@@ -150,7 +230,7 @@ MFUNC 		{BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 		say TAN(45.0) TAN
 		
 		LOOP {1 72 + 1} {15 1080 + 15.0} {195 1260 + 15.0} {5 360 + 5.0}:
-		///	say Tick |0| Angle |2| OppAngle |4| YAngle |6|
+		///	say Tick |0| Angle |1| OppAngle |2| YAngle |3|
 			@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa=|0|] particle happyVillager ~CALC(SIN(|1|) * $mod$) ~CALC(SIN(|3|) * 1.5 + 1.5) ~CALC(COS(|1|) * $mod$) 0 0 0 0 0 force
 			@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa=|0|] particle happyVillager ~CALC(SIN(|2|) * $mod$) ~CALC(SIN(|3|) * 1.5 + 1.5) ~CALC(COS(|2|) * $mod$) 0 0 0 0 0 force
 			
@@ -635,52 +715,4 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 
 	fill Grp_asdf air 0
 	
-	//=
-	LOOP {20 21 + 1}:
-		LOOP {1 2 + 1} {5 7 + 1}:
-			LOOP {10 8 - 1}:
-				say 0--> |0;1| 1--> |1;1| 2--> |0| EXTRA--> |0;2|
 	
-	LOOP {20 21 + 1}:
-		LOOP {1 2 + 1} {5 7 + 1}:
-			say 0--> |0| 1--> |1| 2--> 10 EXTRA--> |0;1|
-			say 0--> |0| 1--> |1| 2--> 9 EXTRA--> |0;1|
-			say 0--> |0| 1--> |1| 2--> 8 EXTRA--> |0;1|
-	
-	LOOP {20 21 + 1}:
-		say 0--> 1 1--> 5 2--> 10 EXTRA--> |0|
-		say 0--> 1 1--> 5 2--> 9 EXTRA--> |0|
-		say 0--> 1 1--> 5 2--> 8 EXTRA--> |0|
-		say 0--> 2 1--> 6 2--> 10 EXTRA--> |0|
-		say 0--> 2 1--> 6 2--> 9 EXTRA--> |0|
-		say 0--> 2 1--> 6 2--> 8 EXTRA--> |0|
-		say 0-->  1--> 7 2--> 10 EXTRA--> |0|
-		say 0-->  1--> 7 2--> 9 EXTRA--> |0|
-		say 0-->  1--> 7 2--> 8 EXTRA--> |0|
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	LOOP 1 2 + 1 () 5 7 + 1
-		LOOP 10 8 - 1
-			say 0--> |0||1| 1--> |2||1| 2--> |0|
-		END
-	END
-	
-	say 0--> 1 1--> 5 2--> 10
-	say 0--> 1 1--> 5 2--> 9
-	say 0--> 1 1--> 5 2--> 8
-	say 0--> 2 1--> 6 2--> 10
-	say 0--> 2 1--> 6 2--> 9
-	say 0--> 2 1--> 6 2--> 8
-	say 0--> 1--> 7 2--> 10
-	say 0--> 1--> 7 2--> 9
-	say 0--> 1--> 7 2--> 8
-	
-	
-	=//

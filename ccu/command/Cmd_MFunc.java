@@ -146,15 +146,11 @@ public class Cmd_MFunc {
 				System.exit(0);
 			}
 
-			// readCommands() recurring method is done down here because the beginning arguments must be gotten first
-			ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayGet, tabNum);
-			ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
-			if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
-				this.arrayGet = checkCommandsArray;
-			}
+			// checkCommands() recurring method is done down here because the beginning arguments must be gotten first
+			ArgUtils.checkCommands(this.arrayGet, tabNum);
 
 			// checks tab spaces
-			ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
+			ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum, false);
 
 			for (int i = 0; i < this.arrayGet.size(); i++) {
 				// Check if "CCU_COND_" is in the front

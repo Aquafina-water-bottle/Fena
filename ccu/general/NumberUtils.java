@@ -9,7 +9,7 @@ public class NumberUtils {
 	public static int getMaxSize(ArrayList<String[]> arrayGet) {
 		int numCalc = 0;
 		
-		if (arrayGet.isEmpty()) {
+		if (arrayGet.isEmpty() || arrayGet.get(0) == null) {
 			return 0;
 		}
 		
@@ -42,6 +42,30 @@ public class NumberUtils {
 				return false;
 			}
 		}
+	}
+	
+	// checks if it's a number (int or float) in an array
+	public static boolean isNum(ArrayList<String> testArray) {
+		if (testArray == null || testArray.isEmpty() || testArray.get(0).equals("")) {
+			return false;
+		}
+		
+		boolean testNum = true;
+		
+		for (String testString : testArray) {
+			try {
+				Integer.parseInt(testString);
+			} catch (NumberFormatException e) {
+				try {
+					Float.parseFloat(testString);
+				} catch (NumberFormatException e2) {
+					testNum = false;
+					break;
+				}
+			}
+		}
+		
+		return testNum;
 	}
 
 	// checks if it's an int and only an int

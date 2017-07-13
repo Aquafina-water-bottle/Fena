@@ -38,15 +38,12 @@ public class Cmd_Group {
 		boolean gotParam = false;
 		String setblockCalc = null;
 		boolean validBlock = false;
-
-		ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayGet, tabNum);
-		ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
-		if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
-			this.arrayGet = checkCommandsArray;
-		}
+		
+		// checkCommands
+		ArgUtils.checkCommands(this.arrayGet, tabNum);
 		
 		// Check tab spaces
-		ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
+		ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum, false);
 
 		// Removes "GROUP " and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("GROUP", "").replaceAll("^\\s+", "");

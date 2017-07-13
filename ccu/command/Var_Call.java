@@ -6,21 +6,19 @@ import ccu.general.ArgUtils;
 import ccu.general.ParamUtils;
 
 public class Var_Call {
+	public static ArrayList<String> checkFunction = new ArrayList<String>();
 
 	private ArrayList<String> arrayReturn = new ArrayList<String>();
-
 	private int tabNum;
 	private String fullLineGet;
-	private String checkFunction;
 
-	public Var_Call(String fullLineGet, int tabNumGet, String checkFunction) {
+	public Var_Call(String fullLineGet, int tabNumGet) {
 		this.tabNum = tabNumGet;
 		this.fullLineGet = fullLineGet;
-		this.checkFunction = checkFunction;
 	}
 
 	public ArrayList<String> getArray() {
-		
+
 		/** It's the exact same as stating a function name
 		 * It just allows you to call multiple functions in the same line
 		 * USAGE:
@@ -71,7 +69,7 @@ public class Var_Call {
 					if (statementArgs.equals(Var_Func.arrayFuncNameSave.get(funcIndex))) {
 
 						useParamsCalc = ParamUtils.getParams(getParamCalc, Var_Func.arrayFuncParamSave.get(funcIndex));
-						
+
 						for (int i = 0; i < Var_Func.arrayFuncSave.get(funcIndex).length; i++) {
 							lineCalc = whitespaceCalc + Var_Func.arrayFuncSave.get(funcIndex)[i];
 							arrayReturn.add(lineCalc);
@@ -88,30 +86,32 @@ public class Var_Call {
 					System.exit(0);
 				}
 
-				if (checkFunction == null) {
-					checkFunction = statementArgs;
-				} else {
-					if (statementArgs.equals(checkFunction)) {
-						System.out.println("ERROR: Recurring function '" + checkFunction + "' at line '" + this.fullLineGet + "'");
-						System.exit(0);
+				// checks duplicates in checkFunction
+				checkFunction.add(statementArgs);
+
+				for (int i = 0; i < checkFunction.size(); i++) {
+					for (int j = 0; j < checkFunction.size(); j++) {
+						if (checkFunction.get(i).equals(checkFunction.get(j)) && i != j) {
+							System.out.println(
+									"ERROR: Recurring function '" + checkFunction.get(i) + "' at line '" + this.fullLineGet + "'");
+							System.exit(0);
+						}
 					}
 				}
 
 				// replaces params
-				this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc, Var_Func.arrayFuncParamSave.get(funcIndexSave), tabNum);
-				
-				ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayReturn, tabNum, checkFunction);
-				ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
-				if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
-					this.arrayReturn = checkCommandsArray;
-				}
+				this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc,
+						Var_Func.arrayFuncParamSave.get(funcIndexSave), tabNum);
+
+				ArgUtils.checkCommands(this.arrayReturn, tabNum);
+				checkFunction.clear();
 			}
 
 		} else {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 			System.exit(0);
 		}
-		
+
 		return this.arrayReturn;
 	}
 

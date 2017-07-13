@@ -2,6 +2,7 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.ArgUtils;
 import ccu.general.NumberUtils;
 import ccu.general.StringUtils;
 
@@ -68,9 +69,20 @@ public class Con_If {
 
 			// gets the actual numeric values on each side
 			splitArgsCalc = statementArgs.split(getOperator);
-
-			splitArgsTemp[0] = MathParser.getOperation(splitArgsCalc[0].trim(), this.fullLineGet, false, 0);
-			splitArgsTemp[1] = MathParser.getOperation(splitArgsCalc[1].trim(), this.fullLineGet, false, 0);
+			
+			for (int i = 0; i < 2; i++) {
+				
+				// removes excess whitespace
+				splitArgsCalc[i] = splitArgsCalc[i].trim();
+				
+				// gets 'NULL' --> nothing
+				if (splitArgsCalc[i].equals("NULL")) {
+					splitArgsCalc[i] = "";
+				}
+				
+				splitArgsTemp[i] = MathParser.getOperation(splitArgsCalc[i], this.fullLineGet, false, 0);
+			}
+			
 			
 			// is number
 			if (NumberUtils.isNum(splitArgsTemp[0]) && NumberUtils.isNum(splitArgsTemp[1])) {
@@ -144,11 +156,7 @@ public class Con_If {
 
 			// To prevent lag, checkCommands() is done ONLY after the first part of the IF command returns true
 			if (calcStatement == true) {
-				ReadCCUFile ccuSubsetFile = new ReadCCUFile(this.arrayGet, tabNum);
-				ArrayList<String> checkCommandsArray = ccuSubsetFile.checkCommands();
-				if (checkCommandsArray != null && checkCommandsArray.isEmpty() == false) {
-					this.arrayGet = checkCommandsArray;
-				}
+				ArgUtils.checkCommands(this.arrayGet, tabNum);
 
 				// gets rid of tab spaces
 				for (int i = 0; i < this.arrayGet.size(); i++) {

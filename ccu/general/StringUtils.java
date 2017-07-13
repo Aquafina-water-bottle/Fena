@@ -45,7 +45,11 @@ public class StringUtils {
 				} else {
 					
 					// trims to get rid of any whitespace in the front of the string
-					calcString += getArray.get(i).trim().substring(0, getArray.get(i).trim().length() - 1);
+					String testString = getArray.get(i).trim().substring(0, getArray.get(i).trim().length()- 1);
+					if (testString.startsWith("CCU_COND_")) {
+						testString = testString.substring(9);
+					}
+					calcString += testString;
 				}
 			} else {
 				if (calcString.isEmpty()) {
@@ -66,8 +70,10 @@ public class StringUtils {
 		String calcString = null;
 		returnString = getString + "";
 		
+		// parses SIN, COS, TAN, CALC
 		returnString = MathParser.parseSecondaryStatements(returnString, getString);
 		
+		// scoreboard shortcuts
 		calcString = Short_Scoreboard.getCommand(returnString);
 		if (calcString != null) {
 			returnString = calcString + "";
@@ -91,7 +97,7 @@ public class StringUtils {
 			returnString = calcString + "";
 		}
 
-		// server override
+		// server override (adding 'minecraft:')
 		calcString = ServerOverride.getCommand(returnString);
 		if (ReadConfig.serverPlugins == true
 				&& (ReadConfig.serverOverrideArray == null || ReadConfig.serverOverrideArray[0].equals("")) == false) {

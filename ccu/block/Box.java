@@ -138,7 +138,7 @@ public class Box {
 
 		// Creating the array
 		int[][] blockArray = new int[GroupStructure.styleOptionY][arrayApprox];
-
+		
 		for (int i = 0; i < GroupStructure.styleOptionY; i++) {
 			Arrays.fill(blockArray[i], 0);
 		}
@@ -285,7 +285,8 @@ public class Box {
 		System.out.println("");
 
 		// get 2nd fill coords, specifically xz length
-		for (int xz = 0; xz < arrayApprox; xz++) {
+		
+		for (int xz = 0; xz < GroupStructure.styleOptionY; xz++) {
 			if (IntStream.of(blockArray[xz]).sum() == 0) {
 				break;
 			} else {

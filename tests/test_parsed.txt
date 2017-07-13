@@ -7,39 +7,39 @@ GROUP | Grp_AyyLmao2_A | PULSE		[384 72 96 | stonebrick 0]
 GROUP | Grp_AyyLmao3_A | PULSE		[384 74 96 | stonebrick 0]
 	say 3 _A
 
-GROUP | Grp_AyyLmao1_B | PULSE		[384 76 96 | stonebrick 0]
+GROUP | Grp_MainGroup_A | PULSE		[384 76 96 | stonebrick 0]
+	say 1
+	say 2 > 1
+	say 2
+	say 3 > 1
+	say 3
+	say okay
+
+GROUP | Grp_AyyLmao1_B | PULSE		[384 78 96 | stonebrick 0]
 	say 1 _B
 
-GROUP | Grp_AyyLmao2_B | PULSE		[384 78 96 | stonebrick 0]
+GROUP | Grp_AyyLmao2_B | PULSE		[384 80 96 | stonebrick 0]
 	say 2 _B
 
-GROUP | Grp_AyyLmao3_B | PULSE		[384 80 96 | stonebrick 0]
+GROUP | Grp_AyyLmao3_B | PULSE		[384 82 96 | stonebrick 0]
 	say 3 _B
 
-GROUP | Grp_AyyLmao1_C | PULSE		[384 82 96 | stonebrick 0]
+GROUP | Grp_MainGroup_B | PULSE		[384 84 96 | stonebrick 0]
+	say 1
+	say 2 > 1
+	say 2
+	say 3 > 1
+	say 3
+	say okay
+
+GROUP | Grp_AyyLmao1_C | PULSE		[384 70 98 | stonebrick 0]
 	say 1 _C
 
-GROUP | Grp_AyyLmao2_C | PULSE		[384 84 96 | stonebrick 0]
+GROUP | Grp_AyyLmao2_C | PULSE		[384 72 98 | stonebrick 0]
 	say 2 _C
 
-GROUP | Grp_AyyLmao3_C | PULSE		[384 70 98 | stonebrick 0]
+GROUP | Grp_AyyLmao3_C | PULSE		[384 74 98 | stonebrick 0]
 	say 3 _C
-
-GROUP | Grp_MainGroup_A | PULSE		[384 72 98 | stonebrick 0]
-	say 1
-	say 2 > 1
-	say 2
-	say 3 > 1
-	say 3
-	say okay
-
-GROUP | Grp_MainGroup_B | PULSE		[384 74 98 | stonebrick 0]
-	say 1
-	say 2 > 1
-	say 2
-	say 3 > 1
-	say 3
-	say okay
 
 GROUP | Grp_MainGroup_C | PULSE		[384 76 98 | stonebrick 0]
 	say 1
@@ -87,7 +87,7 @@ GROUP | Grp_Test | PULSE		[384 78 100 | stonebrick 0]
 	say LiterallyAbortMission
 	lmao
 	fill 384 80 100 399 82 100 air 0
-	say not_yas
+	say yas
 
 GROUP | Grp_AyyLmao | PULSE		[384 80 100 | stonebrick 0]
 	setblock 384 80 100 air 0
@@ -445,7 +445,7 @@ GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
 	say @a[score_OMG_WORK_min=4,score_OMG_WORK=5] @a[score_OMG_WORK_min=4,score_OMG_WORK=4] @a[score_OMG_WORK_min=4]
 	say @a[score_OMG_WORK=4,score_OMG_WORK_min=3] @a[score_OMG_WORK=4,score_OMG_WORK_min=4] @a[score_OMG_WORK=2]
 	scoreboard players operation @p TEST @p SPtp
-	say test2
+	scoreboard players operation @p TEST @p SPtp
 	scoreboard players operation @p TEST @p SPtp
 	$test$
 	say ayy
@@ -644,13 +644,51 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say THESE
 	say ARE
 	say THE
+	
+	Dog;Cat;Lips;Watermelon;Apple;Ocean;Sword;Castle;Car *Vroom Vroom Machine*;eGO Logo;Cake;Corgi;Winnie the Pooh;Waffle;Person;T-Shirt;Computer;Airplane;Microphone
+	say ayy Dog say ayy Cat say ayy Lips say ayy Watermelon say ayy Apple say ayy Ocean say ayy Sword say ayy Castle say ayy Car *Vroom Vroom Machine* say ayy eGO Logo say ayy Cake say ayy Corgi say ayy Winnie the Pooh say ayy Waffle say ayy Person say ayy T-Shirt say ayy Computer say ayy Airplane say ayy Microphone
+	say 0 -SPLIT- 0
+	say test lol
+	say 0 -SPLIT- 1
+	say double
+	say 0 -SPLIT- 2
+	say ayy lmao
+	say ~SPLIT~
+	say 1 -SPLIT- 0
+	say test2
+	say 1 -SPLIT- 1
+	
+	say 1 -SPLIT- 2
+	say theSecondDouble2
+	say ~SPLIT~
+	say 0
+	say test lol
+	say 2 MARKER
+	say 1
+	say double
+	say 2 MARKER
+	say 2
+	say ayy lmao
+	say 2 MARKER
+	say Arr_Test_Num 6
 	say GREATEST
 	say Dankest asdf memes asdf2 -SPLIT- Dankest more memes
 	say Dankest  memes
 	say Dankest  memes
+	say this
+	say shouldn't
+	say have
+	say any
+	say use
+	say stuff
+	say found null
+	say found null
+	say found definition null -->  <--
 	say asdf def3 asdf
 	say WOOOOOOOOOOOO
-	CCU.xpNumber
+	scoreboard players add @a[tag=$SA$] SPid 0
+	execute @a[tag=$SA$,SPid<-$SPid$] ~ ~ ~ SPid = $SPid$
+	execute @a[tag=$SA$,SPid>-$SPid$] ~ ~ ~ SPid = $SPid$
 	say 1
 	say 3
 	say 10

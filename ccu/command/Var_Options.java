@@ -60,7 +60,7 @@ public class Var_Options {
 		}
 
 		// checks tab spaces
-		ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum);
+		ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum, false);
 
 		for (String line : this.arrayGet) {
 			// now actually starts detecting the options lol
