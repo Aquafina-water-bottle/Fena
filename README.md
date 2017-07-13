@@ -1,3 +1,5 @@
+**Full download will be coming shortly**
+
 SO **this is incomplete** but so far it has features like:
 * support for command blocks (groups, conditional, combiners)
 * general mcfunction support (nicknames and file encapsulation visualized by number of tab spaces)
