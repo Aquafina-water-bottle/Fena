@@ -1,5 +1,5 @@
 //(Pictionary)
-///	C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\PC - Pictionary\Pictionary.ccu
+///	C:\Users\Austin\Documents\Austin\powder game code\eGO\CCU Events\PC - Pictionary\Pictionary.ccu
 
 //<General Definitions
 DEF $SA$ x=110,y=3,z=148,dx=64,dy=15,dz=64
@@ -97,8 +97,6 @@ OPTIONS:
 //>
 
 //<General Scoreboard Start
-
-
 FUNC {Func_GeneralScoreboardStart}:
 	USE {ScOA}:
 		CCU_NumberObjAdd
