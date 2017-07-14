@@ -21,6 +21,13 @@ public class Short_Execute {
 		boolean shortcutDataTag = false;
 		boolean changedLine = false;
 		boolean useShortcut = true;
+		
+		String allDataTypes = "*";
+		
+		// if the server version is 1.10.2 --> "*" is turned into "-1"
+		if (ReadConfig.mcVersion == 1) {
+			allDataTypes = "-1";
+		}
 
 		// Execute shortcuts
 		// NOTICE: Execute shortcuts will be IGNORED if found in data tags
@@ -281,7 +288,7 @@ public class Short_Execute {
 						// takes the coords, adds it behind the block and adds "detect" behind all
 						// also adds "*" at the end
 						shortcutCalcArray[j] = "detect " + shortcutCalcArray[j + 1] + " " + shortcutCalcArray[j + 2] + " "
-								+ shortcutCalcArray[j + 3] + " " + shortcutCalcArray[j] + " *";
+								+ shortcutCalcArray[j + 3] + " " + shortcutCalcArray[j] + " " + allDataTypes;
 						shortcutCalcArray[j + 1] = "";
 						shortcutCalcArray[j + 2] = "";
 						shortcutCalcArray[j + 3] = "";
@@ -291,7 +298,7 @@ public class Short_Execute {
 					// if the future one is execute, selector or command
 					if (j + 1 < shortcutCalcArray.length && (shortcutTypeArray[j + 1] == EXECUTE
 							|| shortcutTypeArray[j + 1] == SELECTOR || shortcutTypeArray[j + 1] == COMMAND)) {
-						shortcutCalcArray[j] = "detect ~ ~ ~ " + shortcutCalcArray[j] + " *";
+						shortcutCalcArray[j] = "detect ~ ~ ~ " + shortcutCalcArray[j] + " " + allDataTypes;
 						changedLine = true;
 					}
 

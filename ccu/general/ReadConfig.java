@@ -70,7 +70,15 @@ public class ReadConfig {
 	public static String[] targetSelectorArray = null;
 
 	public static void getConfigOptions() {
-		GeneralFile configFile = new GeneralFile("CCU.ini");
+
+		GeneralFile configFile = null;
+
+		if (Main.getJarFile == null) {
+			configFile = new GeneralFile("CCU.ini");
+		} else {
+			configFile = new GeneralFile(Main.getJarFile.getParent() + "/" + "CCU.ini");
+		}
+
 		ArrayList<String> temp = GeneralFile.removeComment(configFile.getFileArray(), "#");
 		for (String line : temp) {
 			if (line.contains("=")) {
@@ -92,9 +100,11 @@ public class ReadConfig {
 					break;
 
 				case "regFilePath":
-					regFilePath = new File(tempInput);
+					if (regFilePath == null) {
+						regFilePath = new File(tempInput);
+					}
 					break;
-					
+
 				case "globalCombinerFilePath":
 					globalCombinerFilePath = new File(tempInput);
 					break;

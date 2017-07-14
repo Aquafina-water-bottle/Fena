@@ -12,6 +12,7 @@ import ccu.command.Cmd_Group;
 import ccu.command.Cmd_MFunc;
 import ccu.command.Var_Options;
 import ccu.general.GeneralFile;
+import ccu.general.ParamUtils;
 import ccu.general.ReadConfig;
 
 public class Box {
@@ -138,7 +139,7 @@ public class Box {
 
 		// Creating the array
 		int[][] blockArray = new int[GroupStructure.styleOptionY][arrayApprox];
-		
+
 		for (int i = 0; i < GroupStructure.styleOptionY; i++) {
 			Arrays.fill(blockArray[i], 0);
 		}
@@ -285,7 +286,7 @@ public class Box {
 		System.out.println("");
 
 		// get 2nd fill coords, specifically xz length
-		
+
 		for (int xz = 0; xz < GroupStructure.styleOptionY; xz++) {
 			if (IntStream.of(blockArray[xz]).sum() == 0) {
 				break;
@@ -299,12 +300,16 @@ public class Box {
 				.addCoordinates(Var_Options.coordsOption);
 	}
 
-	private static void replaceCoords(ArrayList<String[]> arrayList) {
+	private static void replaceCoords(ArrayList<String[]> arrayList, boolean isFunction) {
 		/** Any setblock/fill [groupname] will have their coords placed here
 		 * eg. fill Grp_asdf air 0 --> "Grp_asdf" will be replaced with coords
 		 */
 		String[] splitArrayCalc = null;
-		String recombineCommand = null;
+		boolean validFunctionCoords = true;
+
+		if (isFunction && Var_Options.coordsOption.isRelative()) {
+			validFunctionCoords = false;
+		}
 
 		// get group command array
 		for (int i = 0; i < arrayList.size(); i++) {
@@ -312,46 +317,113 @@ public class Box {
 			// get actual commands
 			for (int j = 0; j < arrayList.get(i).length; j++) {
 
+				// if isFunction - skips 1st line
+				if (isFunction && j == 0) {
+					j = 1;
+				}
+
 				// if the command contains setblock or fill
-				if (arrayList.get(i)[j].contains("setblock") || arrayList.get(i)[j].contains("fill")) {
 
-					// splits the command
-					splitArrayCalc = arrayList.get(i)[j].split(" ");
-					recombineCommand = null;
+				// splits the command
+				splitArrayCalc = arrayList.get(i)[j].split(" ");
 
-					// iterating through the command
-					for (int k = 0; k < splitArrayCalc.length; k++) {
+				// recombineCommand is to return the full command array when parsed
+				String recombineCommandString = null;
+				boolean recombineCommands = false;
 
-						// iterating through group names
-						for (int nameIndex = 0; nameIndex < Cmd_Group.arrayGroupSave.size(); nameIndex++) {
-							if (k != 0 && splitArrayCalc[k].equals(Cmd_Group.arrayGroupSave.get(nameIndex)[0])) {
-								if (splitArrayCalc[k - 1].equals("setblock")) {
-									splitArrayCalc[k] = groupNameCoordArray[nameIndex].checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
+				// iterating through the command
+				for (int k = 0; k < splitArrayCalc.length; k++) {
+
+					// iterating through group names
+					// keep in mind Grp_Name[x, 5 + y, z] and {"value":"fill Grp_Name air 0"}
+
+					for (int nameIndex = 0; nameIndex < Cmd_Group.arrayGroupSave.size(); nameIndex++) {
+
+						String coordsCalc = null;
+						String paramsCalc = null;
+						String[] getArrayCalc = null;
+						boolean foundCoords = false;
+
+						if (splitArrayCalc[k].startsWith(Cmd_Group.arrayGroupSave.get(nameIndex)[0])) {
+							foundCoords = true;
+							recombineCommands = true;
+
+							if (validFunctionCoords == false) {
+								System.out.println("ERROR: '" + splitArrayCalc[k] + "' in line '" + arrayList.get(i)[j]
+										+ "' cannot be parsed because it is a within a function and coordsOption is relative");
+								System.exit(0);
+							}
+
+							paramsCalc = splitArrayCalc[k]
+									.substring(splitArrayCalc[k].indexOf(Cmd_Group.arrayGroupSave.get(nameIndex)[0])
+											+ Cmd_Group.arrayGroupSave.get(nameIndex)[0].length());
+
+							if (isFunction) {
+								coordsCalc = groupNameCoordArray[nameIndex].getString();
+								if (k != 0 && (splitArrayCalc[k - 1].endsWith("fill") || splitArrayCalc[k - 1].endsWith("clone"))) {
+									coordsCalc += " " + groupNameFillArray[nameIndex].getString();
 								}
-								if (splitArrayCalc[k - 1].equals("fill")) {
-									splitArrayCalc[k] = groupNameCoordArray[nameIndex].checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString() + " "
-											+ groupNameFillArray[nameIndex].checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
+							} else {
+								coordsCalc = groupNameCoordArray[nameIndex].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
+										.getString();
+								if (k != 0 && (splitArrayCalc[k - 1].endsWith("fill") || splitArrayCalc[k - 1].endsWith("clone"))) {
+									coordsCalc += " " + groupNameFillArray[nameIndex]
+											.checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
 								}
 							}
 						}
-						
-						if (k != 0 && splitArrayCalc[k].equals("SELF")) {
-							if (splitArrayCalc[k - 1].equals("setblock")) {
-								splitArrayCalc[k] = groupNameCoordArray[i].getString();
+
+						String selfReference = "SELF";
+
+						if (splitArrayCalc[k].startsWith(selfReference)) {
+							foundCoords = true;
+							recombineCommands = true;
+
+							if (validFunctionCoords == false) {
+								System.out.println("ERROR: '" + splitArrayCalc[k] + "' in line '" + arrayList.get(i)[j]
+										+ "' cannot be parsed because it is a within a function and coordsOption is relative");
+								System.exit(0);
 							}
-							if (splitArrayCalc[k - 1].equals("fill")) {
-								splitArrayCalc[k] = groupNameCoordArray[i].getString() + " "
-										+ groupNameFillArray[i].getString();
+
+							paramsCalc = splitArrayCalc[k]
+									.substring(splitArrayCalc[k].indexOf(selfReference) + selfReference.length());
+
+							if (isFunction) {
+								coordsCalc = groupNameCoordArray[i].getString();
+								if (k != 0 && (splitArrayCalc[k - 1].endsWith("fill") || splitArrayCalc[k - 1].endsWith("clone"))) {
+									coordsCalc += " " + groupNameFillArray[i].getString();
+								}
+							} else {
+								coordsCalc = groupNameCoordArray[i].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
+										.getString();
+								if (k != 0 && (splitArrayCalc[k - 1].endsWith("fill") || splitArrayCalc[k - 1].endsWith("clone"))) {
+									coordsCalc += " " + groupNameFillArray[i].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
+											.getString();
+								}
 							}
 						}
-						
-						if (recombineCommand == null) {
-							recombineCommand = splitArrayCalc[k];
-						} else {
-							recombineCommand = recombineCommand + " " + splitArrayCalc[k];
+
+						if (foundCoords) {
+							
+							System.out.println(paramsCalc + " | " + coordsCalc);
+							
+							getArrayCalc = ParamUtils.parseCoordinates(paramsCalc, coordsCalc, 4, arrayList.get(i)[j]);
+							splitArrayCalc[k] = getArrayCalc[0] + getArrayCalc[1];
+							System.out.println(getArrayCalc[0] + " TEST " + getArrayCalc[1]);
 						}
 					}
-					arrayList.get(i)[j] = recombineCommand;
+				}
+
+				if (recombineCommands) {
+					for (int k = 0; k < splitArrayCalc.length; k++) {
+						if (recombineCommandString == null) {
+							recombineCommandString = splitArrayCalc[k];
+						} else {
+							recombineCommandString = recombineCommandString + " " + splitArrayCalc[k];
+						}
+
+						arrayList.get(i)[j] = recombineCommandString;
+					}
 				}
 			}
 		}
@@ -416,7 +488,7 @@ public class Box {
 		writer.close();
 
 		// Replaces the coords for the commands
-		replaceCoords(GroupStructure.groupCommandsArray);
-		replaceCoords(Cmd_MFunc.arrayMFuncSave);
+		replaceCoords(GroupStructure.groupCommandsArray, false);
+		replaceCoords(Cmd_MFunc.arrayMFuncSave, true);
 	}
 }

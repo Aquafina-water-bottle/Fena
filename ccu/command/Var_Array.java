@@ -11,6 +11,7 @@ public class Var_Array {
 	 * GLOBAL can be added to affect all and not just within the encapsulation
 	 * COORDS --> set of 3 or 6 numbers
 	 * TELE --> set of 5 numbers
+	 * ACTIVATE (Name) --> Literally the exact same as the function one 
 	 * 
 	 * if :
 	 * ARRAY {GLOBAL Arr_Name}:
@@ -42,7 +43,6 @@ public class Var_Array {
 	 * 			say asdf_2
 	 * 		}
 	 * 
-	 * TODO check for coordinates - make a seperate method for checking for both arrays and defines
 	 */
 
 	// 2D array save
@@ -52,6 +52,9 @@ public class Var_Array {
 	// Normal array save
 	public static ArrayList<String[]> singleArraySave = new ArrayList<String[]>();
 	public static ArrayList<String[]> singleArrayNameSave = new ArrayList<String[]>();
+	
+	// Get ACTIVATE func
+	private ArrayList<String> arrayFuncActivateCalc = new ArrayList<String>();
 
 	private ArrayList<String> arrayGet = new ArrayList<String>();
 	private int tabNum;
@@ -68,6 +71,10 @@ public class Var_Array {
 		boolean is2DArray = false;
 		Integer arrayType = null;
 		Boolean isGlobal = null;
+
+		Boolean hasActivated = null;
+		String activatedFunc = null;
+		boolean activateConfirm = false;
 
 		String[] getArrayCalc = null;
 		String[][] get2DArrayCalc = null;
@@ -99,10 +106,121 @@ public class Var_Array {
 					arrayType = 5;
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					break;
+
+				case "ACTIVATE":
+					// removes ACTIVATE
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					hasActivated = true;
+
+					if (statementArgs.contains(" ") == false) {
+						System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+
+					activatedFunc = statementArgs.substring(0, statementArgs.indexOf(" "));
+
+					// testing if it has parameters and does not have an ending bracket
+					while (true) {
+						if (activatedFunc.contains("(") && activatedFunc.endsWith(")") == false) {
+							if (statementArgs.contains(" ")) {
+
+								// removes current
+								statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+								activatedFunc += " " + statementArgs.substring(0, statementArgs.indexOf(" "));
+							} else {
+								System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+								System.exit(0);
+							}
+						} else {
+							break;
+						}
+					}
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					break;
+				}
+			}
+			
+			// Gets second parameters
+			if (statementArgs.contains(" ")) {
+				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
+				case "GLOBAL":
+					if (isGlobal == null) {
+						isGlobal = true;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes GLOBAL
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+					
+				case "COORDS":
+					if (arrayType == null) {
+						arrayType = 4;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes COORDS
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+					
+				case "TELE":
+					if (arrayType == null) {
+						arrayType = 5;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes TELE
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+					
+				case "ACTIVATE":
+					if (hasActivated == null) {
+						// removes ACTIVATE
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						hasActivated = true;
+						
+						if (statementArgs.contains(" ") == false) {
+							System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+							System.exit(0);
+						}
+						
+						activatedFunc = statementArgs.substring(0, statementArgs.indexOf(" "));
+						
+						// testing if it has parameters and does not have an ending bracket
+						while (true) {
+							if (activatedFunc.contains("(") && activatedFunc.endsWith(")") == false) {
+								if (statementArgs.contains(" ")) {
+									
+									// removes current
+									statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+									activatedFunc += " " + statementArgs.substring(0, statementArgs.indexOf(" "));
+								} else {
+									System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+									System.exit(0);
+								}
+							} else {
+								break;
+							}
+						}
+						
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
 				}
 			}
 
-			// Gets second parameters
+			// Gets third parameters
 			if (statementArgs.contains(" ")) {
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
 				case "GLOBAL":
@@ -140,11 +258,72 @@ public class Var_Array {
 					// removes TELE
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
 					break;
-				}
-				// the end should make 'statementArgs' as the actual use thing (Array name)
-			}
 
-			// ArgUtils.checkCommands(this.arrayGet, tabNum);
+				case "ACTIVATE":
+					if (hasActivated == null) {
+						// removes ACTIVATE
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						hasActivated = true;
+
+						if (statementArgs.contains(" ") == false) {
+							System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+							System.exit(0);
+						}
+
+						activatedFunc = statementArgs.substring(0, statementArgs.indexOf(" "));
+
+						// testing if it has parameters and does not have an ending bracket
+						while (true) {
+							if (activatedFunc.contains("(") && activatedFunc.endsWith(")") == false) {
+								if (statementArgs.contains(" ")) {
+
+									// removes current
+									statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+									activatedFunc += " " + statementArgs.substring(0, statementArgs.indexOf(" "));
+								} else {
+									System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+									System.exit(0);
+								}
+							} else {
+								break;
+							}
+						}
+
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+				}
+			}
+			
+			// the end should make 'statementArgs' as the actual use thing (Array name)
+			
+			// sets activate settings
+						if (hasActivated == null) {
+							hasActivated = false;
+						}
+
+						// checking whether the function name exists
+						if (hasActivated == true) {
+							for (int i = 0; i < Var_Func.arrayFuncNameSave.size(); i++) {
+								if (activatedFunc.equals(Var_Func.arrayFuncNameSave.get(i)[2])) {
+									activateConfirm = true;
+									break;
+								}
+							}
+
+							if (activateConfirm) {
+								arrayFuncActivateCalc.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
+							} else {
+								System.out.println("ERROR: Function '" + activatedFunc + "' in line '" + this.fullLineGet + "'does not exist");
+								System.exit(0);
+							}
+						}
+			
 
 			String whiteSpaceCalc = this.fullLineGet.substring(0, this.tabNum - 1);
 
@@ -154,7 +333,7 @@ public class Var_Array {
 				System.exit(0);
 			}
 
-			// a function name cannot be anything in the exceptionArray
+			// an array name cannot be anything in the exceptionArray
 			for (String checkException : Var_Define.exceptionArray) {
 				if (statementArgs.equals(checkException)) {
 					System.out.println("ERROR: A function cannot be '" + statementArgs + "' in line '" + this.fullLineGet + "'");
@@ -196,6 +375,30 @@ public class Var_Array {
 
 			if (isGlobal == false) {
 				tabNumCalc = this.tabNum - 1;
+			}
+
+			// checks for repeats
+			int arrayIndex = 0;
+			if (is2DArray) {
+				while (arrayIndex < doubleArrayNameSave.size()) {
+					if (doubleArrayNameSave.get(arrayIndex)[2].equals(statementArgs)
+							&& Integer.parseInt(doubleArrayNameSave.get(arrayIndex)[1]) == tabNumCalc) {
+						Var_Array.doubleArraySave.remove(arrayIndex);
+						Var_Array.doubleArrayNameSave.remove(arrayIndex);
+					} else {
+						arrayIndex++;
+					}
+				}
+			} else {
+				while (arrayIndex < singleArrayNameSave.size()) {
+					if (singleArrayNameSave.get(arrayIndex)[2].equals(statementArgs)
+							&& Integer.parseInt(singleArrayNameSave.get(arrayIndex)[1]) == tabNumCalc) {
+						Var_Array.singleArraySave.remove(arrayIndex);
+						Var_Array.singleArrayNameSave.remove(arrayIndex);
+					} else {
+						arrayIndex++;
+					}
+				}
 			}
 
 			if (is2DArray) { // splits whenever '} {' is found
@@ -306,7 +509,11 @@ public class Var_Array {
 		}
 		*/
 
-		return null;
+		if (activateConfirm) {
+			return arrayFuncActivateCalc;
+		} else {
+			return null;
+		}
 	}
 
 }

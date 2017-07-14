@@ -242,6 +242,7 @@ public class ParamUtils {
 	public static String[] parseCoordinates(String getString, String getCoords, int coordsType, String fullLineGet) {
 		
 		// getString is getEndString
+		// coordsType - 4 = coords, 5 = tele
 		
 		String getParamsString = null;
 		String defineParamCalc = null;
@@ -281,8 +282,24 @@ public class ParamUtils {
 				if (defineParamCalc.contains("z")) {
 					defineParamCalc = defineParamCalc.replace("z", defineParamsCalc[2]);
 				}
-
-				returnStringArray[0] = MathParser.getOperation(defineParamCalc, fullLineGet, true, 0);
+				
+				String[] tempStringArray = null;
+				if (defineParamCalc.contains(",")) {
+					tempStringArray = defineParamCalc.split(",");
+					
+					for (int i = 0; i < tempStringArray.length; i++) {
+						tempStringArray[i] = MathParser.getOperation(tempStringArray[i].trim(), fullLineGet, true, 0);
+						if (i == 0) {
+							returnStringArray[0] = tempStringArray[i];
+						} else {
+							returnStringArray[0] += " " + tempStringArray[i];
+						}
+					}
+					
+				} else {
+					returnStringArray[0] = MathParser.getOperation(defineParamCalc, fullLineGet, true, 0);
+				}
+				
 			}
 
 			if (coordsType == 5) {
@@ -302,7 +319,22 @@ public class ParamUtils {
 					defineParamCalc = defineParamCalc.replace("z", defineParamsCalc[2]);
 				}
 
-				returnStringArray[0] = MathParser.getOperation(defineParamCalc, fullLineGet, true, 0);
+				String[] tempStringArray = null;
+				if (defineParamCalc.contains(",")) {
+					tempStringArray = defineParamCalc.split(",");
+					
+					for (int i = 0; i < tempStringArray.length; i++) {
+						tempStringArray[i] = MathParser.getOperation(tempStringArray[i].trim(), fullLineGet, true, 0);
+						if (i == 0) {
+							returnStringArray[0] = tempStringArray[i];
+						} else {
+							returnStringArray[0] += " " + tempStringArray[i];
+						}
+					}
+					
+				} else {
+					returnStringArray[0] = MathParser.getOperation(defineParamCalc, fullLineGet, true, 0);
+				}
 			}
 			
 			returnStringArray[1] = getEndString;

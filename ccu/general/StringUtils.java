@@ -51,6 +51,12 @@ public class StringUtils {
 					}
 					calcString += testString;
 				}
+				
+				// if the document ended
+				if (i == getArray.size() - 1) {
+					returnArray.add(calcString);
+				}
+				
 			} else {
 				if (calcString.isEmpty()) {
 					returnArray.add(getArray.get(i));

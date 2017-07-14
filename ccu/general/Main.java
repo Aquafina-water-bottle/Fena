@@ -1,6 +1,8 @@
 package ccu.general;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import ccu.block.Box;
 import ccu.block.GroupStructure;
@@ -58,8 +60,19 @@ public class Main {
 	// .replaceAll("^\\s+", "") = space to the left
 	// .replaceAll("\\s+$", "") = space to the right
 
-	public static void main(String[] args) {
+	public static File getJarFile = null;
 
+	public static void main(String[] args) {
+		
+		// for CCU_NPP.bat
+		if (args.length == 1) {
+			getJarFile = new File(args[0]);
+		}
+		if (args.length == 2) {
+			ReadConfig.regFilePath = new File(args[0]);
+			getJarFile = new File(args[1]);
+		}
+		
 		/*
 		String ayylmao = null;
 		
@@ -137,65 +150,62 @@ public class Main {
 		ayylmao = "1 5 + 0";
 		MathParser.getLoopArray(ayylmao, ayylmao);
 		*/
-		
+
 		// String asdf = "this is a CALC(1 + SIN((1 - 2.0)) * (13 - 3)) asdf)";
 		// MathParser.parseSecondaryStatements(asdf, asdf);
-		
-		
 
-		
 		// Reads the .ini file and gets the options
 		ReadConfig.getConfigOptions();
-		
+
 		if (ReadConfig.regFilePath.toString().endsWith(".ccu") == false) {
 			System.out.println("ERROR: File does not end with '.ccu'");
 			System.exit(0);
 		}
-		
+
 		// Reads the file stated in the .ini file
 		ReadCCUFile ccuFile = new ReadCCUFile(ReadConfig.regFilePath);
-		
+
 		// Parses all CCU statements including defines
 		ArrayList<String> getCommandsArray = ccuFile.checkCommands();
-		
+
 		// Checks if any options are left blank, and sets them to a default value if they are
 		Var_Options.checkOptions();
-		
-		
+
 		// for (String asdf : getCommandsArray) {
 		//	System.out.println(asdf);
 		// }
-		
+
 		// This pretty much only runs if something isn't encapsulated with MFUNC or GROUP
 		if (getCommandsArray != null && getCommandsArray.isEmpty() == false) {
-			
+
 			System.out.println("\tERROR: Unnused commands in lines:");
 			for (String line : getCommandsArray) {
 				System.out.println("'" + line + "'");
 			}
 			System.exit(0);
 		}
-		
+
 		// Get the structures for each command block group
 		GroupStructure.getGroupStructures();
-		
+
 		// Gets the full arrangement of structures
 		Box.getBox();
-		
+
 		// Finalizes all commands with "setblock groupName" and "fill groupName"
 		// Also writes the name_dat.ccu file
 		Box.finalizeCoords();
-		
+
 		// Writes the mcfunction files since it's literally the easiest thing to do lmao
 		WriteFile.writeMCFunction();
-		
+
 		// Writes the _commands, _parsed, and _combiner files
 		Setblock.getCommands();
-		
+
 		// Writes the global Combiner file under globalCombinerFilePath
-		
+
 		// RCON
 		// MinecraftRcon.useRcon();
-		
+
+		System.out.println("\nSuccessfully compiled the file: " + ReadConfig.regFilePath.getName());
 	}
 }

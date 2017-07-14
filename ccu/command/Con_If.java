@@ -32,7 +32,7 @@ public class Con_If {
 		float[] splitArgsFloat = new float[2];
 		Boolean calcStatement = null;
 
-		final String[] operatorArray = {">=", "<=", ">", "<", "="};
+		final String[] operatorArray = {">=", "<=", ">", "<", "!=", "="};
 
 		// Removes "IF" and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("IF", "").replaceAll("^\\s+", "");
@@ -123,9 +123,17 @@ public class Con_If {
 						calcStatement = false;
 					}
 					break;
-
+					
 				case ">=":
 					if (splitArgsFloat[0] >= splitArgsFloat[1]) {
+						calcStatement = true;
+					} else {
+						calcStatement = false;
+					}
+					break;
+
+				case "!=":
+					if (splitArgsFloat[0] != splitArgsFloat[1]) {
 						calcStatement = true;
 					} else {
 						calcStatement = false;
@@ -141,9 +149,17 @@ public class Con_If {
 						calcStatement = false;
 					}
 				} else {
-					System.out.println("ERROR: Operator '" + getOperator + "' for comparing string is not recognized for line '"
-							+ this.fullLineGet + "'");
-					System.exit(0);
+					if (getOperator.equals("!=")) {
+						if (splitArgsTemp[0].equals(splitArgsTemp[1])) {
+							calcStatement = false;
+						} else {
+							calcStatement = true;
+						}
+					} else {
+						System.out.println("ERROR: Operator '" + getOperator + "' for comparing string is not recognized for line '"
+								+ this.fullLineGet + "'");
+						System.exit(0);
+					}
 				}
 			}
 

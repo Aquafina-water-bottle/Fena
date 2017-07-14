@@ -30,7 +30,7 @@ public class Var_Define {
 			"USE", "BEG", "END", "NOSPACE",
 			"FUNC", "ACTIVATE", "CALL", 
 			"MFUNC", "BRANCH",
-			"IMPORT", "LIBRARY", "*", "WITHIN", "GETCOORDS", 
+			"IMPORT", "LIBRARY", "GETDIR", "WITHIN", "GETCOORDS", 
 			"CALC", "SIN", "COS", "TAN", "SELF",
 			"COND", "OPTIONS", "UNASSIGN", "IF", "LOOP", "NULL",
 			};
@@ -315,7 +315,7 @@ public class Var_Define {
 			// splits on array name
 			begIndexCalc = getString.indexOf(Var_Array.singleArrayNameSave.get(getIndex)[2] + "[");
 			endIndexCalc = getString.indexOf(Var_Array.singleArrayNameSave.get(getIndex)[2] + "[")
-					+ Var_Array.singleArrayNameSave.get(getIndex)[2].length() - 1;
+					+ Var_Array.singleArrayNameSave.get(getIndex)[2].length();
 		}
 
 		if (parseType == 3) {
@@ -323,7 +323,7 @@ public class Var_Define {
 			// splits on array name
 			begIndexCalc = getString.indexOf(Var_Array.doubleArrayNameSave.get(getIndex)[2] + "[");
 			endIndexCalc = getString.indexOf(Var_Array.doubleArrayNameSave.get(getIndex)[2] + "[")
-					+ Var_Array.doubleArrayNameSave.get(getIndex)[2].length() - 1;
+					+ Var_Array.doubleArrayNameSave.get(getIndex)[2].length();
 		}
 
 		// gets everything before the definition
@@ -334,7 +334,7 @@ public class Var_Define {
 
 		// gets parameters and anything after the definition
 		getEndString = getString.substring(endIndexCalc);
-
+		
 		// checks if there are parameters in the first place (DEF ONLY)
 		if (parseType == 1) {
 			if (Integer.parseInt(Var_Define.arrayDefineSave.get(getIndex)[4]) > 0) {
@@ -438,9 +438,23 @@ public class Var_Define {
 			}
 
 			if (NumberUtils.isNum(calcIndexString)) {
+				
+				// checks index
+				if (Var_Array.doubleArraySave.get(getIndex).length - 1 < Integer.parseInt(calcIndexString)) {
+					System.out.println("ERROR: Index '" + calcIndexString + "' in line '" + fullLineGet + "' is invalid");
+					System.exit(0);
+				}
+				
 				int indexCalc = Integer.parseInt(calcIndexString);
 
 				if (NumberUtils.isNum(calcIndexString2)) { // Arr_Name[1][1]
+					
+					// checks index
+					if (Var_Array.doubleArraySave.get(getIndex)[indexCalc].length - 1 < Integer.parseInt(calcIndexString)) {
+						System.out.println("ERROR: Index '" + calcIndexString + "' in line '" + fullLineGet + "' is invalid");
+						System.exit(0);
+					}
+					
 					int indexCalc2 = Integer.parseInt(calcIndexString2);
 
 					definitionCalc = (Var_Array.doubleArraySave.get(getIndex)[indexCalc][indexCalc2]) + "";
@@ -455,7 +469,7 @@ public class Var_Define {
 
 				if (calcIndexString2.equalsIgnoreCase("S")) { // Arr_Name[1][S]
 					String tempString = null;
-
+					
 					for (int i = 0; i < Var_Array.doubleArraySave.get(getIndex)[indexCalc].length; i++)
 						if (tempString == null) {
 							tempString = Var_Array.doubleArraySave.get(getIndex)[indexCalc][i];

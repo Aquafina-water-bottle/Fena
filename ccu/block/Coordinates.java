@@ -168,6 +168,14 @@ public class Coordinates {
 		return this;
 	}
 	
+	public boolean isRelative() {
+		if (this.relativeX.equals("~") || this.relativeY.equals("~") || this.relativeZ.equals("~")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	// if the coordinate is relative, it takes the coordinates - given coordinates
 	public Coordinates checkRelative(Coordinates getCoords) {
 		int tempX = this.x + 0;

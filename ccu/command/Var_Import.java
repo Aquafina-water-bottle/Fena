@@ -9,17 +9,18 @@ import ccu.general.ReadConfig;
 
 public class Var_Import {
 	/** Avaliable parameters:
-	 * * - to specify that it's a directory rather than a ccu file
+	 * GETDIR - to specify that it's a directory rather than a ccu file
 	 * LIBRARY- to import from a specific library folder (specified in the ini file) - a special 'DIRECTORY'
 	 * WITHIN - an import file is either within the folder or a folder above
-	 * GROUPCOORDS - to import only group coordinates from the name_dat.ccu files
+	 * GETCOORDS - to import only group coordinates from the name_dat.ccu files
 	 * Defaults to LIBRARY
 	 * 
 	 * LIBRARY cannot work with WITHIN
 	 * 
-	 * LIBRARY + * --> All of the library is imported
-	 * WITHIN + * --> All files within the same folder as the main are imported
-	 * NORMAL + * --> All files in the given directory stated (AS WELL AS FOLDERS WITHIN IT) are imported
+	 * LIBRARY + GETDIR + Input --> Directory that starts from the library gets imported
+	 * LIBRARY + GETDIR --> All of the library is imported
+	 * WITHIN + GETDIR --> All files within the same folder as the main are imported
+	 * NORMAL + GETDIR --> All files in the given directory stated (AS WELL AS FOLDERS WITHIN IT) are imported
 	 * LIBRARY --> Library file path with the given path will be imported
 	 * WITHIN --> Tests if the file is either within the folder or a folder up (prioritizes the file within the folder) and imports that
 	 * NORMAL --> The file specified is imported 
@@ -82,13 +83,13 @@ public class Var_Import {
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					break;
 
-				case "*":
+				case "GETDIR":
 					importDirectory = true;
 					// removes *
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					break;
 
-				case "GROUPCOORDS":
+				case "GETCOORDS":
 					importType = 2;
 					// removes GROUPCOORDS
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
@@ -122,7 +123,7 @@ public class Var_Import {
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					break;
 
-				case "*":
+				case "GETDIR":
 					if (importDirectory == null) {
 						importDirectory = true;
 					} else {
@@ -134,7 +135,7 @@ public class Var_Import {
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					break;
 
-				case "GROUPCOORDS":
+				case "GETCOORDS":
 					if (importType == null) {
 						importType = 2;
 					} else {
@@ -170,7 +171,7 @@ public class Var_Import {
 					statementArgs = null;
 					break;
 
-				case "*":
+				case "GETDIR":
 					if (importDirectory == null) {
 						importDirectory = true;
 					} else {
@@ -181,7 +182,7 @@ public class Var_Import {
 					statementArgs = null;
 					break;
 
-				case "GROUPCOORDS":
+				case "GETCOORDS":
 					if (importType == null) {
 						importType = 2;
 					} else {
@@ -256,7 +257,15 @@ public class Var_Import {
 							if (importType == 1) { // normal ccu files
 
 								// library, full directory, normal
-								File importFile = ReadConfig.importLibraryPath;
+								// works with or without input
+
+								File importFile = null;
+								if (statementArgs == null) {
+									importFile = ReadConfig.importLibraryPath;
+								} else {
+									importFile = new File(ReadConfig.importLibraryPath.toString() + "/" + statementArgs);
+								}
+
 								if (importFile.isDirectory()) {
 									getFileArray = GeneralFile.getAllFiles(importFile, ".ccu");
 									for (File filesInArray : getFileArray) {
@@ -267,7 +276,7 @@ public class Var_Import {
 									}
 
 								} else {
-									System.out.println("ERROR: directory '" + ReadConfig.importLibraryPath + "' in line '"
+									System.out.println("ERROR: directory '" + importFile.toString() + "' in line '"
 											+ this.fullLineGet + "' does not exist");
 									System.exit(0);
 								}

@@ -15,6 +15,7 @@ public class Var_Options {
 	// to have different options
 	public static String blockOption = null;
 	public static Coordinates coordsOption = new Coordinates(0, 0, 0);
+	public static Boolean coordsOptionTest = null;
 	public static String styleOption = null;
 	public static Boolean parseOption = null;
 	public static Boolean commandOption = null;
@@ -77,6 +78,7 @@ public class Var_Options {
 
 					if (optionName == "coordsOption") {
 						Var_Options.coordsOption.setCoordinates(tempInput);
+						coordsOptionTest = true;
 						lineUsed = true;
 					}
 
@@ -164,8 +166,9 @@ public class Var_Options {
 			System.out.println("WARNING: 'blockOption' field is empty - defaults to 'air 0'");
 			blockOption = "air 0";
 		}
-		if (coordsOption == null) {
-			System.out.println("WARNING: 'coordsOption' field is empty - defaults to '0, 0, 0'");
+		if (coordsOptionTest == null) {
+			System.out.println("WARNING: 'coordsOption' field is empty - defaults to '~5, ~5, ~5'");
+			coordsOption = new Coordinates(5, 5, 5, "~", "~", "~");
 		}
 		if (styleOption == null) {
 			System.out.println("WARNING: 'styleOption' field is empty - defaults to 'X+ 16'");
@@ -181,7 +184,7 @@ public class Var_Options {
 		}
 		if (combinerOption == null) {
 			System.out.println("WARNING: 'combinerOption' field is empty - defaults to 'true'");
-			Var_Options.parseOption = true;
+			Var_Options.combinerOption = true;
 		}
 		if (filePathFuncOption == null || filePathFuncOption.toString().length() == 0) {
 			System.out.println("WARNING: 'filePathFuncOption' field is empty - will be an issue if mcfunctions are used");
