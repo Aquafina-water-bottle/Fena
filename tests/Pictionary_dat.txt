@@ -1,8 +1,8 @@
-79 9 175 96 26 179
-Grp_MainStart=80 10 176
-Grp_FillBoardPulse=80 15 176
-Grp_SelectsPlayerTFClock=80 18 176
-Grp_TimerTFClock=80 21 176
-Grp_MainClock=80 10 178
-Grp_MainEnd=80 24 176
-Grp_cmdSave=80 14 178
+79 9 175 96 26 190
+Grp_MainStart;80 10 176;95 13 176
+Grp_FillBoardPulse;80 15 176;95 15 176
+Grp_SelectsPlayerTFClock;80 17 176;95 18 176
+Grp_TimerTFClock;80 20 176;95 20 176
+Grp_MainClock;80 22 176;95 24 176
+Grp_MainEnd;80 10 178;95 11 178
+Grp_cmdSave;80 13 178;95 13 178
