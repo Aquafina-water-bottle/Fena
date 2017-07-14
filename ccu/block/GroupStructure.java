@@ -104,23 +104,18 @@ public class GroupStructure {
 						&& Cmd_Group.arrayGroupSave.get(i)[j].substring(0, 9).equals("CCU_COND_") == false)) {
 
 					//detects 2nd norm, 3rd cond
-					if (((j < Cmd_Group.arrayGroupSave.get(i).length - 1)
-							&& ((Cmd_Group.arrayGroupSave.get(i)[j + 1].length() < 9)
-									|| (Cmd_Group.arrayGroupSave.get(i)[j + 1].length() >= 9
-											&& Cmd_Group.arrayGroupSave.get(i)[j + 1].substring(0, 9)
-													.equals("CCU_COND_") == false)))
-							&& (j + 2 < Cmd_Group.arrayGroupSave.get(i).length
-									&& Cmd_Group.arrayGroupSave.get(i)[j + 2].length() >= 9
+					if (((j < Cmd_Group.arrayGroupSave.get(i).length - 1) && ((Cmd_Group.arrayGroupSave.get(i)[j + 1].length() < 9)
+							|| (Cmd_Group.arrayGroupSave.get(i)[j + 1].length() >= 9
+									&& Cmd_Group.arrayGroupSave.get(i)[j + 1].substring(0, 9).equals("CCU_COND_") == false)))
+							&& (j + 2 < Cmd_Group.arrayGroupSave.get(i).length && Cmd_Group.arrayGroupSave.get(i)[j + 2].length() >= 9
 									&& Cmd_Group.arrayGroupSave.get(i)[j + 2].substring(0, 9).equals("CCU_COND_"))) {
 						condState = 1;
 					}
 
 					// detects -1 cond, 1 cond
-					if ((j - 1 < Cmd_Group.arrayGroupSave.get(i).length
-							&& Cmd_Group.arrayGroupSave.get(i)[j - 1].length() >= 9
+					if ((j - 1 < Cmd_Group.arrayGroupSave.get(i).length && Cmd_Group.arrayGroupSave.get(i)[j - 1].length() >= 9
 							&& Cmd_Group.arrayGroupSave.get(i)[j - 1].substring(0, 9).equals("CCU_COND_"))
-							&& (j + 1 < Cmd_Group.arrayGroupSave.get(i).length
-									&& Cmd_Group.arrayGroupSave.get(i)[j + 1].length() >= 9
+							&& (j + 1 < Cmd_Group.arrayGroupSave.get(i).length && Cmd_Group.arrayGroupSave.get(i)[j + 1].length() >= 9
 									&& Cmd_Group.arrayGroupSave.get(i)[j + 1].substring(0, 9).equals("CCU_COND_"))) {
 						condState = 2;
 					}
@@ -133,7 +128,8 @@ public class GroupStructure {
 					condNum = 0;
 					while (true) {
 						condCalc++;
-						if (condCalc < Cmd_Group.arrayGroupSave.get(i).length && Cmd_Group.arrayGroupSave.get(i)[condCalc].length() >= 9
+						if (condCalc < Cmd_Group.arrayGroupSave.get(i).length
+								&& Cmd_Group.arrayGroupSave.get(i)[condCalc].length() >= 9
 								&& Cmd_Group.arrayGroupSave.get(i)[condCalc].substring(0, 9).equals("CCU_COND_")) {
 							condNum++;
 						} else {
@@ -179,7 +175,7 @@ public class GroupStructure {
 
 					// condState as 2
 					if (condState == 2) {
-						if (cmdLength % 16 <= 8) {
+						if (cmdLength % 16 <= 8 && cmdLength % 16 >= 1) {
 							if (14 - (cmdLength % 16) >= condNum) {
 								// Stay with normal layout
 								condState = 0;
@@ -190,17 +186,19 @@ public class GroupStructure {
 							}
 						}
 
-						if (cmdLength % 16 > 8) {
-							if ((14 - (cmdLength % 16)) >= condNum) {
+						if (cmdLength % 16 > 8 || cmdLength % 16 == 0) {
+							if ((14 - (cmdLength % 16)) >= condNum && (cmdLength % 16) != 0) {
 								// Stay with normal layout
 								condState = 0;
 							} else {
-								if ((cmdLength % 16) - 2 >= condNum) {
+								if ((cmdLength % 16) - 2 >= condNum || (cmdLength % 16) == 0) {
 									groupCommandsArrayCalc.add("");
 									groupConditionalArrayCalc.add(false);
 									Coordinates coordObj = new Coordinates(coordTempX, coordTempY, coordTempZ);
 									groupCoordsArrayCalc.add(coordObj);
-									directionMoveXZ *= -1;
+									if (cmdLength % 16 != 0) {
+										directionMoveXZ *= -1;
+									}
 
 									cmdLengthCalc = 0;
 									if (cmdLengthCalc2 >= (16 * styleOptionY) - 16) {
@@ -261,12 +259,12 @@ public class GroupStructure {
 				}
 
 				if (cmdLengthCalc == 0) {
-					
+
 					// only adds to the line if 
 					if (j != Cmd_Group.arrayGroupSave.get(i).length - 1) {
 						groupLineCalc++;
 					}
-					
+
 					if (cmdLengthCalc2 == 0) {
 						groupDirectionArrayCalc.add("SIDEWAYS");
 						coordTempZ++;
@@ -301,7 +299,7 @@ public class GroupStructure {
 				if (cmdLengthCalc2 == 0) {
 					directionMoveY *= -1;
 				}
-				
+
 				/*
 				System.out.println(groupCommandsArrayCalc.get(j - 1) + " | " + coordObj.getString() + " | "
 						+ groupDirectionArrayCalc.get(j - 1) + " | " + groupConditionalArrayCalc.get(j - 1) + " | "
@@ -334,7 +332,7 @@ public class GroupStructure {
 				groupConditionalOriginalArray[getArray] = groupConditionalArrayCalc.get(getArray);
 			}
 			groupConditionalArray.add(groupConditionalOriginalArray);
-			
+
 			groupLineArray.add(groupLineCalc + 1);
 
 			/*groupCommandsArrayCalc.clear();

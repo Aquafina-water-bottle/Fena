@@ -97,13 +97,15 @@ public class Short_Selector {
 		boolean lessThan = false; // <
 		boolean equalTo = false; // =
 		boolean changedLine = false;
+		boolean changedFullLine = false;
 		boolean isScore = false;
 
 		shortcutCalc = fullLineGet.trim();
 		shortcutCalcArray = shortcutCalc.split("@");
 
 		// Essentially anything except the first line will be a possible selector
-
+		
+		changedFullLine = false;
 		for (int i = 1; i < shortcutCalcArray.length; i++) {
 			changedLine = false;
 
@@ -205,6 +207,11 @@ public class Short_Selector {
 									if (isScore == true) {
 										shortcutSelectorArray[j] = "score_" + selectorBeg + "=" + selectorEnd + ",score_" + selectorBeg
 												+ "_min=" + selectorEnd;
+										if (fullLineGet.length() >= 30) {
+											// System.out.println(fullLineGet.substring(0, 30));
+											// System.out.println(shortcutSelectorArray[j]);
+										}
+										
 									}
 									changedLine = true;
 								}
@@ -300,13 +307,14 @@ public class Short_Selector {
 
 				// if the selector matches
 				if (changedLine == true) {
+					changedFullLine = true;
 					break;
 				}
 			}
 
 			// if something changed
 			if (changedLine == true) {
-
+				
 				for (int j = 0; j < shortcutSelectorArray.length; j++) {
 					if (j == 0) {
 						shortcutResultCalc = shortcutSelectorArray[j];
@@ -314,7 +322,7 @@ public class Short_Selector {
 					if (j >= 1 && j - 1 < shortcutSelectorArray.length)
 						shortcutResultCalc += "," + shortcutSelectorArray[j];
 
-					if (j - 1 == shortcutSelectorArray.length) {
+					if (j == shortcutSelectorArray.length - 1) {
 						if (j != 0) {
 							shortcutResultCalc += "," + shortcutSelectorArray[j];
 						}
@@ -327,7 +335,7 @@ public class Short_Selector {
 			}
 		}
 
-		if (changedLine == true) {
+		if (changedFullLine == true) {
 			for (int i = 0; i < shortcutCalcArray.length; i++) {
 				if (i == 0) {
 					shortcutFinalResultCalc = shortcutCalcArray[i];

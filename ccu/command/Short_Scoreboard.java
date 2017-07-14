@@ -49,6 +49,13 @@ public class Short_Scoreboard {
 		shortcutCalc = getString.trim();
 		shortcutCalcArray = shortcutCalc.split(" ");
 		shortcutTypeArray = new int[shortcutCalcArray.length];
+		
+		String testCond = "";
+		if (shortcutCalcArray[0].startsWith("CCU_COND_")) {
+			testCond = "CCU_COND_";
+			shortcutCalcArray[0] = shortcutCalcArray[0].substring(9);
+		}
+
 		for (int j = 0; j < shortcutCalcArray.length; j++) {
 
 			// if it's a data tag --> 3 (DATATAG)
@@ -62,7 +69,7 @@ public class Short_Scoreboard {
 
 			// if it is literally any command - breaks because a scoreboard shortcut cannot be done here
 			for (String cmdGet : ReadConfig.minecraftCommandsArray) {
-				if (shortcutCalcArray[j].endsWith(cmdGet)) {
+				if (shortcutCalcArray[j].equals(cmdGet)) {
 					if (cmdGet.equals("execute") == false) {
 						containsScoreboard = true;
 						break;
@@ -203,8 +210,8 @@ public class Short_Scoreboard {
 							&& j + 1 < shortcutCalcArray.length && (shortcutTypeArray[j - 1] == (STRING)
 									|| shortcutTypeArray[j - 1] == (INT) || shortcutTypeArray[j - 1] == (SELECTOR))
 							&& shortcutTypeArray[j + 1] == STRING) {
-						shortcutCalcArray[j - 1] = "scoreboard players " + shortcutCalcArray[j] + " " + shortcutCalcArray[j - 1] + " "
-								+ shortcutCalcArray[j + 1];
+						shortcutCalcArray[j - 1] = "scoreboard players " + shortcutCalcArray[j] + " "
+								+ shortcutCalcArray[j - 1] + " " + shortcutCalcArray[j + 1];
 						shortcutCalcArray[j - 0] = "";
 						shortcutCalcArray[j + 1] = "";
 						changedLine = true;
@@ -260,7 +267,7 @@ public class Short_Scoreboard {
 		if (changedLine == true) {
 			for (int j = 0; j < shortcutCalcArray.length; j++)
 				if (j == 0) {
-					shortcutResultCalc = shortcutCalcArray[j];
+					shortcutResultCalc = testCond + shortcutCalcArray[j];
 				} else {
 					if (shortcutCalcArray[j].equals("") == false) {
 						shortcutResultCalc += " " + shortcutCalcArray[j];

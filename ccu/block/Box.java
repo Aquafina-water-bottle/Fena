@@ -427,7 +427,6 @@ public class Box {
 								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
 									coordsCalc += " " + importFillCoordArray.get(i)
 											.checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
-									System.out.println(coordsCalc);
 								}
 							}
 						}

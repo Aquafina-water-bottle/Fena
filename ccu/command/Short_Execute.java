@@ -48,6 +48,13 @@ public class Short_Execute {
 		shortcutCalc = getString.trim();
 		shortcutCalcArray = shortcutCalc.split(" ");
 		shortcutTypeArray = new int[shortcutCalcArray.length];
+		
+		String testCond = "";
+		if (shortcutCalcArray[0].startsWith("CCU_COND_")) {
+			testCond = "CCU_COND_";
+			shortcutCalcArray[0] = shortcutCalcArray[0].substring(9);
+		}
+		
 		for (int j = 0; j < shortcutCalcArray.length; j++) {
 
 			// if it's a data tag --> 3 (DATATAG)
@@ -325,7 +332,7 @@ public class Short_Execute {
 		if (changedLine == true) {
 			for (int j = 0; j < shortcutCalcArray.length; j++)
 				if (j == 0) {
-					shortcutResultCalc = shortcutCalcArray[j];
+					shortcutResultCalc = testCond + shortcutCalcArray[j];
 				} else {
 					if (shortcutCalcArray[j].equals("") == false) {
 						shortcutResultCalc += " " + shortcutCalcArray[j];

@@ -450,8 +450,8 @@ public class Var_Define {
 				if (NumberUtils.isNum(calcIndexString2)) { // Arr_Name[1][1]
 					
 					// checks index
-					if (Var_Array.doubleArraySave.get(getIndex)[indexCalc].length - 1 < Integer.parseInt(calcIndexString)) {
-						System.out.println("ERROR: Index '" + calcIndexString + "' in line '" + fullLineGet + "' is invalid");
+					if (Var_Array.doubleArraySave.get(getIndex)[indexCalc].length - 1 < Integer.parseInt(calcIndexString2)) {
+						System.out.println("ERROR: Index '" + calcIndexString2 + "' in line '" + fullLineGet + "' is invalid");
 						System.exit(0);
 					}
 					
