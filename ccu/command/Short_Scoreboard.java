@@ -3,10 +3,10 @@ package ccu.command;
 import ccu.general.ReadConfig;
 
 public class Short_Scoreboard {
-	private final static int STRING = 0;
-	private final static int INT = 1;
-	private final static int SELECTOR = 2;
-	private final static int DATATAG = 3;
+	private static final int STRING = 0;
+	private static final int INT = 1;
+	private static final int SELECTOR = 2;
+	private static final int DATATAG = 3;
 
 	public static String getCommand(String getString) {
 		String shortcutCalc = null;
@@ -60,10 +60,15 @@ public class Short_Scoreboard {
 				continue;
 			}
 
-			// if it is 'scoreboard' - breaks because a scoreboard shortcut cannot be done here
-			if (shortcutCalcArray[j].startsWith("scoreboard")) {
-				containsScoreboard = true;
-				break;
+			// if it is literally any command - breaks because a scoreboard shortcut cannot be done here
+			for (String cmdGet : ReadConfig.minecraftCommandsArray) {
+				if (shortcutCalcArray[j].endsWith(cmdGet)) {
+					if (cmdGet.equals("execute") == false) {
+						containsScoreboard = true;
+						break;
+					}
+
+				}
 			}
 
 			// if it's a number (as int) --> 1 (INT)

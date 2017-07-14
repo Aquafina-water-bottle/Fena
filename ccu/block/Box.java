@@ -304,8 +304,8 @@ public class Box {
 		/** Any setblock/fill [groupname] will have their coords placed here
 		 * eg. fill Grp_asdf air 0 --> "Grp_asdf" will be replaced with coords
 		 */
-		String[] splitArrayCalc = null;
 		boolean validFunctionCoords = true;
+		boolean foundCoords = false;
 
 		if (isFunction && Var_Options.coordsOption.isRelative()) {
 			validFunctionCoords = false;
@@ -322,116 +322,126 @@ public class Box {
 					j = 1;
 				}
 
-				// if the command contains setblock or fill
-
-				// splits the command
-				splitArrayCalc = arrayList.get(i)[j].split(" ");
-
-				// recombineCommand is to return the full command array when parsed
-				String recombineCommandString = null;
-				boolean recombineCommands = false;
-
-				// iterating through the command
-				for (int k = 0; k < splitArrayCalc.length; k++) {
-
-					// iterating through group names
-					// keep in mind Grp_Name[x, 5 + y, z] and {"value":"fill Grp_Name air 0"}
+				// iterating through group names
+				// keep in mind Grp_Name[x, 5 + y, z] and {"value":"fill Grp_Name air 0"}
+				do {
+					// needs the do {} while bit because of 'fill'
 
 					for (int nameIndex = 0; nameIndex < Cmd_Group.arrayGroupSave.size(); nameIndex++) {
 
+						String begStringCalc = null;
 						String coordsCalc = null;
 						String paramsCalc = null;
 						String[] getArrayCalc = null;
-						boolean foundCoords = false;
 
-						if (splitArrayCalc[k].startsWith(Cmd_Group.arrayGroupSave.get(nameIndex)[0])) {
+						Integer begIndex = null;
+						Integer endIndex = null;
+
+						foundCoords = false;
+
+						if (arrayList.get(i)[j].contains(Cmd_Group.arrayGroupSave.get(nameIndex)[0])) {
 							foundCoords = true;
-							recombineCommands = true;
 
 							if (validFunctionCoords == false) {
-								System.out.println("ERROR: '" + splitArrayCalc[k] + "' in line '" + arrayList.get(i)[j]
-										+ "' cannot be parsed because it is a within a function and coordsOption is relative");
+								System.out.println(
+										"ERROR: '" + Cmd_Group.arrayGroupSave.get(nameIndex)[0] + "' in line '" + arrayList.get(i)[j]
+												+ "' cannot be parsed because it is a within a function and coordsOption is relative");
 								System.exit(0);
 							}
 
-							paramsCalc = splitArrayCalc[k]
-									.substring(splitArrayCalc[k].indexOf(Cmd_Group.arrayGroupSave.get(nameIndex)[0])
-											+ Cmd_Group.arrayGroupSave.get(nameIndex)[0].length());
+							begIndex = arrayList.get(i)[j].indexOf(Cmd_Group.arrayGroupSave.get(nameIndex)[0]);
+							endIndex = arrayList.get(i)[j].indexOf(Cmd_Group.arrayGroupSave.get(nameIndex)[0])
+									+ Cmd_Group.arrayGroupSave.get(nameIndex)[0].length();
+
+							// gets everything before the coords
+							begStringCalc = arrayList.get(i)[j].substring(0, begIndex);
+
+							// gets parameters and anything after the coords
+							paramsCalc = arrayList.get(i)[j].substring(endIndex);
 
 							if (isFunction) {
 								coordsCalc = groupNameCoordArray[nameIndex].getString();
-								if (k != 0 && (splitArrayCalc[k - 1].endsWith("fill") || splitArrayCalc[k - 1].endsWith("clone"))) {
+								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
 									coordsCalc += " " + groupNameFillArray[nameIndex].getString();
 								}
 							} else {
 								coordsCalc = groupNameCoordArray[nameIndex].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
 										.getString();
-								if (k != 0 && (splitArrayCalc[k - 1].endsWith("fill") || splitArrayCalc[k - 1].endsWith("clone"))) {
+								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
 									coordsCalc += " " + groupNameFillArray[nameIndex]
 											.checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
 								}
 							}
 						}
 
-						String selfReference = "SELF";
+						if (foundCoords) {
 
-						if (splitArrayCalc[k].startsWith(selfReference)) {
+							if (paramsCalc.startsWith("[")) {
+								getArrayCalc = ParamUtils.parseCoordinates(paramsCalc, coordsCalc, 4, arrayList.get(i)[j]);
+								coordsCalc = getArrayCalc[0];
+								paramsCalc = getArrayCalc[1];
+							}
+
+							arrayList.get(i)[j] = begStringCalc + coordsCalc + paramsCalc;
+							break;
+						}
+
+						String selfReference = "GSELF";
+						if (arrayList.get(i)[j].contains(selfReference)) {
 							foundCoords = true;
-							recombineCommands = true;
 
 							if (validFunctionCoords == false) {
-								System.out.println("ERROR: '" + splitArrayCalc[k] + "' in line '" + arrayList.get(i)[j]
+								System.out.println("ERROR: '" + selfReference + "' in line '" + arrayList.get(i)[j]
 										+ "' cannot be parsed because it is a within a function and coordsOption is relative");
 								System.exit(0);
 							}
 
-							paramsCalc = splitArrayCalc[k]
-									.substring(splitArrayCalc[k].indexOf(selfReference) + selfReference.length());
+							begIndex = arrayList.get(i)[j].indexOf(selfReference);
+							endIndex = arrayList.get(i)[j].indexOf(selfReference) + selfReference.length();
+
+							// gets everything before the coords
+							begStringCalc = arrayList.get(i)[j].substring(0, begIndex);
+
+							// gets parameters and anything after the coords
+							paramsCalc = arrayList.get(i)[j].substring(endIndex);
 
 							if (isFunction) {
 								coordsCalc = groupNameCoordArray[i].getString();
-								if (k != 0 && (splitArrayCalc[k - 1].endsWith("fill") || splitArrayCalc[k - 1].endsWith("clone"))) {
+								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
 									coordsCalc += " " + groupNameFillArray[i].getString();
 								}
 							} else {
 								coordsCalc = groupNameCoordArray[i].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
 										.getString();
-								if (k != 0 && (splitArrayCalc[k - 1].endsWith("fill") || splitArrayCalc[k - 1].endsWith("clone"))) {
+								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
 									coordsCalc += " " + groupNameFillArray[i].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
 											.getString();
+									System.out.println(coordsCalc);
 								}
 							}
 						}
 
 						if (foundCoords) {
 							
-							System.out.println(paramsCalc + " | " + coordsCalc);
-							
-							getArrayCalc = ParamUtils.parseCoordinates(paramsCalc, coordsCalc, 4, arrayList.get(i)[j]);
-							splitArrayCalc[k] = getArrayCalc[0] + getArrayCalc[1];
-							System.out.println(getArrayCalc[0] + " TEST " + getArrayCalc[1]);
-						}
-					}
-				}
+							if (paramsCalc.startsWith("[")) {
+								getArrayCalc = ParamUtils.parseCoordinates(paramsCalc, coordsCalc, 4, arrayList.get(i)[j]);
+								coordsCalc = getArrayCalc[0];
+								paramsCalc = getArrayCalc[1];
+							}
 
-				if (recombineCommands) {
-					for (int k = 0; k < splitArrayCalc.length; k++) {
-						if (recombineCommandString == null) {
-							recombineCommandString = splitArrayCalc[k];
-						} else {
-							recombineCommandString = recombineCommandString + " " + splitArrayCalc[k];
+							arrayList.get(i)[j] = begStringCalc + coordsCalc + paramsCalc;
+							break;
 						}
-
-						arrayList.get(i)[j] = recombineCommandString;
+						
 					}
-				}
+				} while (foundCoords);
 			}
 		}
 	}
 
 	public static void finalizeCoords() {
 		/** Get coordinates in commands
-		//		 * TODO: This must also include imported name_dat.txt files
+		 * TODO: This must also include imported name_dat.txt files
 		 * 
 		 * Use stringbuilder --> split array, detect whether any match exactly with group name
 		 * - detects whether i - 1 is exactly "setblock" or "fill", then do coords accordingly

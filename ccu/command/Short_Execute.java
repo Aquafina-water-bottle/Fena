@@ -3,14 +3,14 @@ package ccu.command;
 import ccu.general.ReadConfig;
 
 public class Short_Execute {
-	private final static int STRING = 0;
-	private final static int INT = 1;
-	private final static int SELECTOR = 2;
-	private final static int DATATAG = 3;
-	private final static int COMMAND = 4;
-	private final static int COORDS = 5;
-	private final static int EXECUTE = 6;
-	private final static int BLOCK = 7;
+	private static final int STRING = 0;
+	private static final int INT = 1;
+	private static final int SELECTOR = 2;
+	private static final int DATATAG = 3;
+	private static final int COMMAND = 4;
+	private static final int COORDS = 5;
+	private static final int EXECUTE = 6;
+	private static final int BLOCK = 7;
 
 	public static String getCommand(String getString) {
 
