@@ -7,7 +7,7 @@ import ccu.general.StringUtils;
 
 public class Var_Array {
 	/** Array stuff
-	 * Parameters:
+	 * Arguments:
 	 * GLOBAL can be added to affect all and not just within the encapsulation
 	 * COORDS --> set of 3 or 6 numbers
 	 * TELE --> set of 5 numbers
@@ -52,7 +52,7 @@ public class Var_Array {
 	// Normal array save
 	public static ArrayList<String[]> singleArraySave = new ArrayList<String[]>();
 	public static ArrayList<String[]> singleArrayNameSave = new ArrayList<String[]>();
-	
+
 	// Get ACTIVATE func
 	private ArrayList<String> arrayFuncActivateCalc = new ArrayList<String>();
 
@@ -139,7 +139,7 @@ public class Var_Array {
 					break;
 				}
 			}
-			
+
 			// Gets second parameters
 			if (statementArgs.contains(" ")) {
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
@@ -154,7 +154,7 @@ public class Var_Array {
 					// removes GLOBAL
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
 					break;
-					
+
 				case "COORDS":
 					if (arrayType == null) {
 						arrayType = 4;
@@ -166,7 +166,7 @@ public class Var_Array {
 					// removes COORDS
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
 					break;
-					
+
 				case "TELE":
 					if (arrayType == null) {
 						arrayType = 5;
@@ -178,25 +178,25 @@ public class Var_Array {
 					// removes TELE
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
 					break;
-					
+
 				case "ACTIVATE":
 					if (hasActivated == null) {
 						// removes ACTIVATE
 						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 						hasActivated = true;
-						
+
 						if (statementArgs.contains(" ") == false) {
 							System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
 							System.exit(0);
 						}
-						
+
 						activatedFunc = statementArgs.substring(0, statementArgs.indexOf(" "));
-						
+
 						// testing if it has parameters and does not have an ending bracket
 						while (true) {
 							if (activatedFunc.contains("(") && activatedFunc.endsWith(")") == false) {
 								if (statementArgs.contains(" ")) {
-									
+
 									// removes current
 									statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 									activatedFunc += " " + statementArgs.substring(0, statementArgs.indexOf(" "));
@@ -208,9 +208,9 @@ public class Var_Array {
 								break;
 							}
 						}
-						
+
 						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
-						
+
 					} else {
 						System.out.println(
 								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
@@ -299,51 +299,52 @@ public class Var_Array {
 					break;
 				}
 			}
-			
+
 			// the end should make 'statementArgs' as the actual use thing (Array name)
 			
+			/*
 			// sets activate settings
-						if (hasActivated == null) {
-							hasActivated = false;
-						}
+			if (hasActivated == null) {
+				hasActivated = false;
+			}
 
-						// checking whether the function name exists
-						if (hasActivated == true) {
-							for (int i = 0; i < Var_Func.arrayFuncNameSave.size(); i++) {
-								if (activatedFunc.equals(Var_Func.arrayFuncNameSave.get(i)[2])) {
-									activateConfirm = true;
-									break;
-								}
-							}
-
-							if (activateConfirm) {
-								arrayFuncActivateCalc.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
-							} else {
-								System.out.println("ERROR: Function '" + activatedFunc + "' in line '" + this.fullLineGet + "'does not exist");
-								System.exit(0);
-							}
-						}
+			// checking whether the function name exists
 			
+			if (hasActivated == true) {
+				for (int i = 0; i < Var_Func.arrayFuncNameSave.size(); i++) {
+					if (activatedFunc.equals(Var_Func.arrayFuncNameSave.get(i)[2])) {
+						activateConfirm = true;
+						break;
+					}
+				}
+
+				if (activateConfirm) {
+					arrayFuncActivateCalc.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
+				} else {
+					System.out.println("ERROR: Function '" + activatedFunc + "' in line '" + this.fullLineGet + "'does not exist");
+					System.exit(0);
+				}
+			}*/
 
 			String whiteSpaceCalc = this.fullLineGet.substring(0, this.tabNum - 1);
 
-			// Checks if the function name is literally nothing
+			// Checks if the array name is literally nothing
 			if (statementArgs.trim().length() == 0) {
-				System.out.println("ERROR: Function name at '" + this.fullLineGet + "' is blank");
+				System.out.println("ERROR: Array name at '" + this.fullLineGet + "' is blank");
 				System.exit(0);
 			}
 
 			// an array name cannot be anything in the exceptionArray
 			for (String checkException : Var_Define.exceptionArray) {
 				if (statementArgs.equals(checkException)) {
-					System.out.println("ERROR: A function cannot be '" + statementArgs + "' in line '" + this.fullLineGet + "'");
+					System.out.println("ERROR: An array cannot be '" + statementArgs + "' in line '" + this.fullLineGet + "'");
 					System.exit(0);
 				}
 			}
 
-			// Checks if the function has spaces
+			// Checks if the array has spaces
 			if (statementArgs.trim().contains(" ")) {
-				System.out.println("ERROR: Function name at '" + this.fullLineGet + "' contains spaces");
+				System.out.println("ERROR: Array name at '" + this.fullLineGet + "' contains spaces");
 				System.exit(0);
 			}
 
@@ -510,6 +511,7 @@ public class Var_Array {
 		*/
 
 		if (activateConfirm) {
+			arrayFuncActivateCalc.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
 			return arrayFuncActivateCalc;
 		} else {
 			return null;

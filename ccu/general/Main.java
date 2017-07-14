@@ -35,6 +35,7 @@ public class Main {
 	 * -IF - DONE (completely WOOOT)
 	 * -SIN COS TAN CALC - DONE WOOOOOOOOOT
 	 * -ARRAY - DONE WOOOOOOOOOOOOOOOOOOOOOT
+	 * -SPLIT - DONE AS FUCK
 	 * 
 	 * -Repeated definitions - Already works apparently
 	 * -Check whether commands exist - WILL NOT DO
@@ -43,11 +44,10 @@ public class Main {
 	 * -Combiner options using .mcfunction - do when multiparse works
 	 * -Save coords option
 	 * -Multiparse
+	 * -Recurring imports
 	 * 
 	 * General statements
 	 * -INITIALIZE
-	 * -OBJADD / OBJREV
-	 * -TEAMADD / TEAMREV
 	 * -FILE
 	 * 
 	 * Other

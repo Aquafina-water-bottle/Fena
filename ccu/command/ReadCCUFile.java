@@ -45,10 +45,7 @@ public class ReadCCUFile {
 			"UNASSIGN",
 			"CALL", 
 			"ARRAY",
-			// "OBJADD",
-			// "OBJREV",
-			// "TEAMADD",
-			// "TEAMREV",
+			"SPLIT",
 			"OPTIONS",
 			"LOOP",
 			"IF",
@@ -63,11 +60,11 @@ public class ReadCCUFile {
 	 * reoccuring method for checkCommands()
 	 * 
 	 * 3 types of statements:
-	 * CMD - Holds commands (GROUP, MFUNC)
+	 * CMD - Holds commands (GROUP, COND, MFUNC)
 	 * 		-These always return NULL once ran
-	 * CON - Control flow (USE, IF, ELIF, ELSE, LOOP, COND)
+	 * CON - Control flow (USE, IF, LOOP)
 	 * 		-These normally return statements once ran
-	 * VAR - Variables (ARRAY, DEF, FUNC, OBJADD, OBJREV, TEAMADD, TEAMREV, OPTIONS)
+	 * VAR - Variables (ARRAY, DEF, FUNC, OBJADD, OBJSET, OBJDEL, TEAMADD, TEAMSET, TEAMDEL, OPTIONS)
 	 * 		-These always returns NULL once ran
 	 * 
 	 * Eg:
@@ -100,7 +97,7 @@ public class ReadCCUFile {
 		String giveDefString = "";
 		String getBegDef = "";
 		String[] getDefinitionArray = null;
-		
+
 		// ccuFileArray.get(i) while calculating through the definitions
 		String getLineCalc = "";
 		boolean changedLineOnce = false;
@@ -111,7 +108,6 @@ public class ReadCCUFile {
 		ArrayList<String> subListTopArray = new ArrayList<String>();
 		ArrayList<String> subListBottomArray = new ArrayList<String>();
 
-		// TODO
 		// Implements any defines, functions, arrays here with the only exceptions being / at the beginning and inside definitions
 		// ResetIndex and break from the loop if defines / functions / arrays / imports are found
 
@@ -167,12 +163,12 @@ public class ReadCCUFile {
 						definitionCalc = getDefinitionArray[1] + "";
 					}
 				}
-				
+
 				// iterates through all single arrays
 				// starts at the negative end to prioritize the more tabulated array
 				for (int arrayIndex = Var_Array.singleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
 					giveDefString = getLineCalc;
-					
+
 					// if an array matches up (cannot be with UNASSIGN or ARRAY)
 					if (giveDefString.trim().contains(Var_Array.singleArrayNameSave.get(arrayIndex)[2] + "[")
 							&& this.tabNum >= Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1])
@@ -180,7 +176,7 @@ public class ReadCCUFile {
 							&& giveDefString.trim().startsWith("ARRAY") == false) {
 						recheckLine = true;
 						changedLineOnce = true;
-						
+
 						getDefinitionArray = Var_Define.parseDefinition(giveDefString, "", 2, arrayIndex, getLineCalc);
 						definitionCalc = getDefinitionArray[1] + "";
 					}
@@ -223,7 +219,7 @@ public class ReadCCUFile {
 				}
 
 			} while (recheckLine);
-			
+
 			// if changedLineOnce is set to true, it finally sets the array
 			if (changedLineOnce) {
 				ccuFileArray.set(i, getLineCalc);
@@ -259,7 +255,7 @@ public class ReadCCUFile {
 
 					// gets statement
 					String statementTest = ccuFileArray.get(i).substring(this.tabNum, statement.length() + this.tabNum);
-					// TODO: Will gather DEF, IMPORT, TEAMREV, OBJREV in this area
+					// Will gather DEF, IMPORT, TEAMREV, OBJREV in this area
 					// This is to get the array for said statement
 
 					switch (statementTest) {
@@ -291,10 +287,12 @@ public class ReadCCUFile {
 						singleLineStatement = true;
 						break;
 
-					// case "OBJREV":
-
-					// case "TEAMREV":
-
+					case "SPLIT":
+						Var_Split objSplit = new Var_Split(ccuFileArray.get(i), this.tabNum);
+						getCalcArray = objSplit.getArray();
+						resetArray = true;
+						singleLineStatement = true;
+						break;
 					}
 
 					// only one line
@@ -404,7 +402,7 @@ public class ReadCCUFile {
 							break;
 
 						case "COND":
-							Con_Cond objCond = new Con_Cond(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							Cmd_Cond objCond = new Cmd_Cond(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objCond.getArray();
 							resetArray = true;
 							break;
@@ -432,6 +430,7 @@ public class ReadCCUFile {
 							getCalcArray = objArray.getArray();
 							resetArray = true;
 							break;
+
 						}
 					}
 				}
@@ -479,7 +478,7 @@ public class ReadCCUFile {
 								Var_Func.arrayFuncNameSave.remove(funcIndex);
 							}
 						}
-						
+
 						// reset all arrays that don't work with the decreasing tab numbers
 						for (int arrayIndex = 0; arrayIndex < Var_Array.singleArrayNameSave.size(); arrayIndex++) {
 							if (resetIndexCalc == true) {

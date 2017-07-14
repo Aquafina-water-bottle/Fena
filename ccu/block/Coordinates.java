@@ -2,6 +2,7 @@ package ccu.block;
 
 import ccu.command.Var_Options;
 import ccu.general.GeneralFile;
+import ccu.general.NumberUtils;
 
 public class Coordinates {
 	// Okay technically I copied/pasted this class from CBP
@@ -19,7 +20,7 @@ public class Coordinates {
 	public Coordinates() {
 		this(0, 0, 0);
 	}
-	
+
 	// Constructor if coordinates are specified
 	public Coordinates(int x, int y, int z) {
 		this.x = x;
@@ -35,6 +36,50 @@ public class Coordinates {
 		this.relativeX = relativeX;
 		this.relativeY = relativeY;
 		this.relativeZ = relativeZ;
+	}
+
+	// Constructor for string
+	public Coordinates(String getCoords) {
+		String[] calcArray = null;
+		calcArray = getCoords.split(" ");
+
+		if (calcArray.length == 3) {
+			for (int i = 0; i < calcArray.length; i++) {
+				if (calcArray[i].contains("~")) {
+					
+					if (i == 0) {
+						this.relativeX = "~";
+					}
+					if (i == 1) {
+						this.relativeY = "~";
+					}
+					if (i == 2) {
+						this.relativeZ = "~";
+					}
+					
+					calcArray[i] = calcArray[i].replace("~", "");
+				}
+				if (NumberUtils.isNum(calcArray[i])) {
+					if (i == 0) {
+						this.x = Integer.parseInt(calcArray[i]);
+					}
+					if (i == 1) {
+						this.y = Integer.parseInt(calcArray[i]);
+					}
+					if (i == 2) {
+						this.z = Integer.parseInt(calcArray[i]);
+					}
+					
+				} else {
+					System.out.println("ERROR: Coordinates '" + getCoords + "' have to be a set of 3 numbers");
+					System.exit(0);
+				}
+			}
+
+		} else {
+			System.out.println("ERROR: Coordinates '" + getCoords + "' have to be a set of 3 numbers");
+			System.exit(0);
+		}
 	}
 
 	// Seeing if coordinates should be relative
@@ -167,7 +212,7 @@ public class Coordinates {
 		}
 		return this;
 	}
-	
+
 	public boolean isRelative() {
 		if (this.relativeX.equals("~") || this.relativeY.equals("~") || this.relativeZ.equals("~")) {
 			return true;
@@ -175,25 +220,25 @@ public class Coordinates {
 			return false;
 		}
 	}
-	
+
 	// if the coordinate is relative, it takes the coordinates - given coordinates
 	public Coordinates checkRelative(Coordinates getCoords) {
 		int tempX = this.x + 0;
 		int tempY = this.y + 0;
 		int tempZ = this.z + 0;
-		
+
 		if (this.relativeX.equals("~")) {
 			tempX = this.x - getCoords.x;
 		}
-		
+
 		if (this.relativeY.equals("~")) {
 			tempY = this.y - getCoords.y;
 		}
-		
+
 		if (this.relativeZ.equals("~")) {
 			tempZ = this.z - getCoords.z;
 		}
-		
+
 		return new Coordinates(tempX, tempY, tempZ, this.relativeX, this.relativeY, this.relativeZ);
 	}
 

@@ -81,14 +81,21 @@ public class GeneralFile {
 				// success
 				// System.out.println("File created: '" + fileGet + "'");
 			} else {
-				String fileTypeTemp = fileGet.substring(fileGet.lastIndexOf("."));
-				if (fileGet.lastIndexOf("/") > fileGet.lastIndexOf(".")) {
-					fileGet += fileExtension;
-					// System.out.println("File created: " + fileGet + fileExtension);
+
+				// to make sure if fileExtension actually doesn't contain ".name"
+				if (fileExtension.substring(0, fileExtension.indexOf(".")).isEmpty() == false && fileGet.endsWith(fileExtension)) {
+					// success
 				} else {
-					System.out.println(
-							"WARNING: File '" + fileGet + "' ends with '" + fileTypeTemp + "' instead of '" + fileExtension + "'");
-					fileGet = fileGet.substring(0, fileGet.length() - fileTypeTemp.length()) + fileExtension;
+					String fileTypeTemp = fileGet.substring(fileGet.lastIndexOf("."));
+
+					if (fileGet.lastIndexOf("/") > fileGet.lastIndexOf(".")) {
+						fileGet += fileExtension;
+						// System.out.println("File created: " + fileGet + fileExtension);
+					} else {
+						System.out.println(
+								"WARNING: File '" + fileGet + "' ends with '" + fileTypeTemp + "' instead of '" + fileExtension + "'");
+						fileGet = fileGet.substring(0, fileGet.length() - fileTypeTemp.length()) + fileExtension;
+					}
 				}
 			}
 		} else {
@@ -156,7 +163,7 @@ public class GeneralFile {
 				lineCalc = null;
 				continue;
 			}
-			
+
 			if (line.trim().length() >= midSkip.length() && line.trim().substring(0, midSkip.length()).equals(midSkip)) {
 				doc.add(lineCalc);
 				lineCalc = null;

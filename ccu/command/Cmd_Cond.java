@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import ccu.general.ArgUtils;
 import ccu.general.StringUtils;
 
-public class Con_Cond {
+public class Cmd_Cond {
 	private ArrayList<String> arrayCondReturn = new ArrayList<String>();
 	private ArrayList<String> arrayGet = new ArrayList<String>();
 	private int tabNum;
 	private String fullLineGet;
 
-	public Con_Cond(ArrayList<String> arrayGet, int tabNumGet, String fullLineGet) {
+	public Cmd_Cond(ArrayList<String> arrayGet, int tabNumGet, String fullLineGet) {
 		this.arrayGet = arrayGet;
 		this.tabNum = tabNumGet;
 		this.fullLineGet = fullLineGet;

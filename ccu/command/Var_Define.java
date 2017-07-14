@@ -25,7 +25,7 @@ public class Var_Define {
 
 	// @formatter:off
 	public static String[] exceptionArray = {
-			"DEF", "ARRAY", "GLOBAL", "COORDS", "TELE",
+			"DEF", "ARRAY", "SPLIT", "GLOBAL", "COORDS", "TELE",
 			"GROUP", "PULSE", "CLOCK", "BLOCK",
 			"USE", "BEG", "END", "NOSPACE",
 			"FUNC", "ACTIVATE", "CALL", 

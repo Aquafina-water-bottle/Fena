@@ -3,6 +3,7 @@ package ccu.command;
 import java.io.File;
 import java.util.ArrayList;
 
+import ccu.block.Coordinates;
 import ccu.general.ArgUtils;
 import ccu.general.GeneralFile;
 import ccu.general.ReadConfig;
@@ -31,6 +32,12 @@ public class Var_Import {
 	 * IMPORT {LIBRARY General/utils.ccu}
 	 * 
 	 */
+	
+	// storage for _dat files
+	public static ArrayList<String> datCoordNameArray = new ArrayList<String>();
+	public static ArrayList<Coordinates> datCoordArray = new ArrayList<Coordinates>();
+	public static ArrayList<Coordinates> datCoordFillArray = new ArrayList<Coordinates>();
+	
 
 	private ArrayList<String> arrayReturn = new ArrayList<String>();
 
@@ -249,6 +256,11 @@ public class Var_Import {
 						} else { // dat files
 
 							// direct, not directory, dat files
+							String importFile = GeneralFile.checkFileExtension(statementArgs, "_dat.txt");
+							GeneralFile importFileCalc = new GeneralFile(importFile);
+							
+							File fileNameCalc = new File(importFile);
+							datCoordFillArray(importFileCalc.getFileArray(), fileNameCalc.getName().replace("_dat.txt",""));
 						}
 					}
 				} else {
@@ -375,5 +387,19 @@ public class Var_Import {
 		}
 
 		return arrayReturn;
+	}
+	
+	private static void datCoordFillArray(ArrayList<String> getArray, String fileName) {
+		String[] calcArray = null;
+		
+		for (int i = 1; i < getArray.size(); i++) {
+			calcArray = getArray.get(i).split(";");
+			
+			System.out.println(fileName + "." + calcArray[0] + " MARKER");
+			
+			datCoordNameArray.add(fileName + "." + calcArray[0]);
+			datCoordArray.add(new Coordinates(calcArray[1]));
+			datCoordFillArray.add(new Coordinates(calcArray[2]));
+		}
 	}
 }

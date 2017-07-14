@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 
 import ccu.command.Cmd_Group;
 import ccu.command.Cmd_MFunc;
+import ccu.command.Var_Import;
 import ccu.command.Var_Options;
 import ccu.general.GeneralFile;
 import ccu.general.ParamUtils;
@@ -27,6 +28,11 @@ public class Box {
 	public static Coordinates[] groupNameFillArray = new Coordinates[Cmd_Group.arrayGroupSave.size()];
 	public static Coordinates fillCoords1 = new Coordinates();
 	public static Coordinates fillCoords2 = new Coordinates();
+
+	// calc array to combine imported arrays
+	private static ArrayList<String> importNameCoordArray = new ArrayList<String>();
+	private static ArrayList<Coordinates> importCoordArray = new ArrayList<Coordinates>();
+	private static ArrayList<Coordinates> importFillCoordArray = new ArrayList<Coordinates>();
 
 	private static int[][] removeArrayInt(int[][] blockArrayGet, int getY, int getXZ, int replaceIn, int replaceWith) {
 		for (int i = 0; i < getXZ; i++) {
@@ -326,8 +332,13 @@ public class Box {
 				// keep in mind Grp_Name[x, 5 + y, z] and {"value":"fill Grp_Name air 0"}
 				do {
 					// needs the do {} while bit because of 'fill'
+					/*
+					importNameCoordArray.add(Cmd_Group.arrayGroupSave.get(i)[0]);
+					importCoordArray.add(groupNameCoordArray[i]);
+					importFillCoordArray.add(groupNameFillArray[i]);
+					 */
 
-					for (int nameIndex = 0; nameIndex < Cmd_Group.arrayGroupSave.size(); nameIndex++) {
+					for (int nameIndex = 0; nameIndex < importNameCoordArray.size(); nameIndex++) {
 
 						String begStringCalc = null;
 						String coordsCalc = null;
@@ -339,19 +350,19 @@ public class Box {
 
 						foundCoords = false;
 
-						if (arrayList.get(i)[j].contains(Cmd_Group.arrayGroupSave.get(nameIndex)[0])) {
+						if (arrayList.get(i)[j].contains(importNameCoordArray.get(nameIndex))) {
 							foundCoords = true;
 
 							if (validFunctionCoords == false) {
-								System.out.println(
-										"ERROR: '" + Cmd_Group.arrayGroupSave.get(nameIndex)[0] + "' in line '" + arrayList.get(i)[j]
+								System.out
+										.println("ERROR: '" + importNameCoordArray.get(nameIndex) + "' in line '" + arrayList.get(i)[j]
 												+ "' cannot be parsed because it is a within a function and coordsOption is relative");
 								System.exit(0);
 							}
 
-							begIndex = arrayList.get(i)[j].indexOf(Cmd_Group.arrayGroupSave.get(nameIndex)[0]);
-							endIndex = arrayList.get(i)[j].indexOf(Cmd_Group.arrayGroupSave.get(nameIndex)[0])
-									+ Cmd_Group.arrayGroupSave.get(nameIndex)[0].length();
+							begIndex = arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex));
+							endIndex = arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex))
+									+ importNameCoordArray.get(nameIndex).length();
 
 							// gets everything before the coords
 							begStringCalc = arrayList.get(i)[j].substring(0, begIndex);
@@ -360,15 +371,15 @@ public class Box {
 							paramsCalc = arrayList.get(i)[j].substring(endIndex);
 
 							if (isFunction) {
-								coordsCalc = groupNameCoordArray[nameIndex].getString();
+								coordsCalc = importCoordArray.get(nameIndex).getString();
 								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
-									coordsCalc += " " + groupNameFillArray[nameIndex].getString();
+									coordsCalc += " " + importFillCoordArray.get(nameIndex).getString();
 								}
 							} else {
-								coordsCalc = groupNameCoordArray[nameIndex].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
+								coordsCalc = importCoordArray.get(nameIndex).checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
 										.getString();
 								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
-									coordsCalc += " " + groupNameFillArray[nameIndex]
+									coordsCalc += " " + importFillCoordArray.get(nameIndex)
 											.checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
 								}
 							}
@@ -406,23 +417,23 @@ public class Box {
 							paramsCalc = arrayList.get(i)[j].substring(endIndex);
 
 							if (isFunction) {
-								coordsCalc = groupNameCoordArray[i].getString();
+								coordsCalc = importCoordArray.get(i).getString();
 								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
-									coordsCalc += " " + groupNameFillArray[i].getString();
+									coordsCalc += " " + importFillCoordArray.get(i).getString();
 								}
 							} else {
-								coordsCalc = groupNameCoordArray[i].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
+								coordsCalc = importCoordArray.get(i).checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
 										.getString();
 								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
-									coordsCalc += " " + groupNameFillArray[i].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
-											.getString();
+									coordsCalc += " " + importFillCoordArray.get(i)
+											.checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
 									System.out.println(coordsCalc);
 								}
 							}
 						}
 
 						if (foundCoords) {
-							
+
 							if (paramsCalc.startsWith("[")) {
 								getArrayCalc = ParamUtils.parseCoordinates(paramsCalc, coordsCalc, 4, arrayList.get(i)[j]);
 								coordsCalc = getArrayCalc[0];
@@ -432,7 +443,7 @@ public class Box {
 							arrayList.get(i)[j] = begStringCalc + coordsCalc + paramsCalc;
 							break;
 						}
-						
+
 					}
 				} while (foundCoords);
 			}
@@ -493,9 +504,21 @@ public class Box {
 
 		// Write out coords for each group name
 		for (int i = 0; i < Cmd_Group.arrayGroupSave.size(); i++) {
-			writer.println(Cmd_Group.arrayGroupSave.get(i)[0] + "=" + groupNameCoordArray[i].getString());
+			writer.println(Cmd_Group.arrayGroupSave.get(i)[0] + ";" + groupNameCoordArray[i].getString() + ";"
+					+ groupNameFillArray[i].getString());
 		}
 		writer.close();
+
+		// Combines existing groups with imported groups
+		importNameCoordArray.addAll(Var_Import.datCoordNameArray);
+		importCoordArray.addAll(Var_Import.datCoordArray);
+		importFillCoordArray.addAll(Var_Import.datCoordFillArray);
+
+		for (int i = 0; i < Cmd_Group.arrayGroupSave.size(); i++) {
+			importNameCoordArray.add(Cmd_Group.arrayGroupSave.get(i)[0]);
+			importCoordArray.add(groupNameCoordArray[i]);
+			importFillCoordArray.add(groupNameFillArray[i]);
+		}
 
 		// Replaces the coords for the commands
 		replaceCoords(GroupStructure.groupCommandsArray, false);
