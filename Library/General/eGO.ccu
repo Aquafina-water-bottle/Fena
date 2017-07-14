@@ -1,0 +1,54 @@
+
+///	eGO related definitions / functions are shown here
+///	General/eGO.ccu
+
+//<Defines
+DEF CCU_ExecuteSpawnStand @e[type=ArmorStand,SpawnStand,SPgam=0]
+DEF CCU_FinalSpawnStand @e[type=ArmorStand,SpawnStand,SPgam=0] SPgam = $SPid$
+DEF CCU_NumberObjAdd Number dummy
+//>
+
+//<Number Adding
+//=
+ARRAY {ACTIVATE CCU.iterateNumbers ARGS}:
+	num
+	bers
+=//
+
+FUNC {GLOBAL CCU.iterateNumbers}:
+	LOOP {ARGS[S]}:
+		|0| Number = |0|
+	
+	UNASSIGN {ARRAY ARGS}
+
+//>
+
+//<SpawnPoint System
+FUNC {GLOBAL CCU.spawnIDSetting}:
+	@a[$SA$] SPid + 0
+	@a[$SA$,SPid<-$SPid$] SPid = $SPid$
+	@a[$SA$,SPid>-$SPid$] SPid = $SPid$
+
+FUNC {GLOBAL CCU.spawnStandStart}:
+	@e[type=ArmorStand,SpawnStand] SPtp = $SPid$
+	@e[type=ArmorStand,SpawnStand] SPpvp = $SPpvp$
+	@e[type=ArmorStand,SpawnStand] SPsat = $SPsat$
+	@e[type=ArmorStand,SpawnStand] SPgmd = 1
+	@e[type=ArmorStand,SpawnStand,SPgam>=1] SPgac = 1
+
+FUNC {GLOBAL CCU.spawnStandEnd}:
+	@e[type=ArmorStand,SpawnStand] SPtp = 0
+	@e[type=ArmorStand,SpawnStand] SPpvp = 0
+	@e[type=ArmorStand,SpawnStand] SPsat = 1
+	@e[type=ArmorStand,SpawnStand] SPgmd = 1
+	@e[type=ArmorStand,SpawnStand,SPgam=$SPid$] SPgam = 0
+	@e[type=ArmorStand,SpawnStand] SPwea = 0
+
+FUNC {GLOBAL CCU.spawnStandEdit}:
+	@e[type=ArmorStand,SpawnStand] SPtp = |0|
+	@e[type=ArmorStand,SpawnStand] SPpvp = |1|
+	@e[type=ArmorStand,SpawnStand] SPsat = |2|
+	@e[type=ArmorStand,SpawnStand] SPgmd = |3|
+	@e[type=ArmorStand,SpawnStand,SPgam>=1] SPgac = 1
+	@e[type=ArmorStand,SpawnStand] SPwea = |4|
+//>

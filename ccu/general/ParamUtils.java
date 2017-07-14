@@ -210,7 +210,7 @@ public class ParamUtils {
 				if (lineCalc.trim().startsWith("DEF")) {
 					paramEncapsulateArray.set(paramEncapsulateArray.size() - 1, paramEncapsulate + 1);
 				}
-
+				
 				// only if paramEncapsulate is 0
 				paramEncapsulateGet = paramEncapsulateArray.get(tabNumCalc - tabNum);
 
@@ -225,8 +225,9 @@ public class ParamUtils {
 				}
 
 				// check if it's a definition - undos temp increase in paramEncapsulate 
+				
 				if (lineCalc.trim().startsWith("DEF")) {
-					paramEncapsulateArray.set(paramEncapsulateArray.size() - 1, paramEncapsulate - 1);
+					paramEncapsulateArray.set(paramEncapsulateArray.size() - 1, paramEncapsulate + 0);
 				}
 
 				returnArray.add(lineCalc);

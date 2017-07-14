@@ -74,7 +74,6 @@ public class Var_Array {
 
 		Boolean hasActivated = null;
 		String activatedFunc = null;
-		boolean activateConfirm = false;
 
 		String[] getArrayCalc = null;
 		String[][] get2DArrayCalc = null;
@@ -510,7 +509,7 @@ public class Var_Array {
 		}
 		*/
 
-		if (activateConfirm) {
+		if (hasActivated != null && hasActivated) {
 			arrayFuncActivateCalc.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
 			return arrayFuncActivateCalc;
 		} else {

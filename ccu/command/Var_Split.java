@@ -198,8 +198,9 @@ public class Var_Split {
 			// checks for repeats
 			int arrayIndex = 0;
 			while (arrayIndex < Var_Array.singleArrayNameSave.size()) {
-				if (Var_Array.singleArrayNameSave.get(arrayIndex)[2].equals(statementArgs)
+				if (Var_Array.singleArrayNameSave.get(arrayIndex)[2].equals(getArrayName)
 						&& Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1]) == tabNumCalc) {
+					
 					Var_Array.singleArraySave.remove(arrayIndex);
 					Var_Array.singleArrayNameSave.remove(arrayIndex);
 				} else {
@@ -241,6 +242,7 @@ public class Var_Split {
 			tempArraySave[0] = arrayType + "";
 			tempArraySave[1] = tabNumCalc + "";
 			tempArraySave[2] = getArrayName; // name
+			
 			Var_Array.singleArrayNameSave.add(tempArraySave);
 
 			for (int i = 0; i < calcSplit.size(); i++) {

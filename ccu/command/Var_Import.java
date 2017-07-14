@@ -395,8 +395,6 @@ public class Var_Import {
 		for (int i = 1; i < getArray.size(); i++) {
 			calcArray = getArray.get(i).split(";");
 			
-			System.out.println(fileName + "." + calcArray[0] + " MARKER");
-			
 			datCoordNameArray.add(fileName + "." + calcArray[0]);
 			datCoordArray.add(new Coordinates(calcArray[1]));
 			datCoordFillArray.add(new Coordinates(calcArray[2]));
