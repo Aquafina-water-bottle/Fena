@@ -10,9 +10,12 @@ DEF CCU_NumberObjAdd Number dummy
 
 //<Number Adding
 //=
+USE {ScOA}:
+	CCU_NumberObjAdd
+
 ARRAY {ACTIVATE CCU.iterateNumbers ARGS}:
-	num
-	bers
+	-1
+	20
 =//
 
 FUNC {GLOBAL CCU.iterateNumbers}:
@@ -20,7 +23,6 @@ FUNC {GLOBAL CCU.iterateNumbers}:
 		|0| Number = |0|
 	
 	UNASSIGN {ARRAY ARGS}
-
 //>
 
 //<SpawnPoint System

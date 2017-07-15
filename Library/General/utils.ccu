@@ -28,7 +28,7 @@ DEF Snd_Explode minecraft:entity.generic.explode
 
 //<Objective and Team lists
 //=
-ARRAY {ACTIVATE CCU.ObjectiveAdd(Arr_GeneralScoreboardStart) Arr_GeneralScoreboardStart}:
+ARRAY {GLOBAL ACTIVATE CCU.ObjectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
 	RRti dummy Royal Rumble Timer
 	RRpl dummy Royal Rumble Player List
 
@@ -36,20 +36,19 @@ ARRAY {ACTIVATE CCU.ObjectiveAdd(Arr_GeneralScoreboardStart) Arr_GeneralScoreboa
 CCU.ObjectiveRemove(Arr_GeneralScoreboardStart)
 =//
 
-FUNC {GLOBAL CCU.ObjectiveAdd}:
+FUNC {GLOBAL CCU.objectiveAdd}:
 	LOOP {|0|[S]}:
 		scoreboard objectives add |0|
 
-FUNC {GLOBAL CCU.ObjectiveRemove}:
+FUNC {GLOBAL CCU.objectiveRemove}:
 	LOOP {|0|[S]}:
 		SPLIT {Arr_Temp |0|} { }
 		scoreboard objectives remove Arr_Temp[0]
 	UNASSIGN {ARRAY Arr_Temp}
 
 //=
-ARRAY {ACTIVATE CCU.TeamAdd(Arr_GeneralScoreboardStart) Arr_GeneralScoreboardStart}:
-
 ///	OPT in the beginning means it's an option
+ARRAY {GLOBAL ACTIVATE CCU.TeamAdd(Team_GeneralScoreboardStart) Team_GeneralScoreboardStart}:
 	RRg Royal Rumble Green
 	OPT color green
 	OPT friendlyfire false
@@ -58,7 +57,7 @@ ARRAY {ACTIVATE CCU.TeamAdd(Arr_GeneralScoreboardStart) Arr_GeneralScoreboardSta
 CCU.TeamRemove(Arr_GeneralScoreboardStart)
 =//
 
-FUNC {GLOBAL CCU.TeamAdd}:
+FUNC {GLOBAL CCU.teamAdd}:
 	LOOP {|0|[S]}:
 		SPLIT {Arr_Temp |0|} { }
 		IF {Arr_Temp[0] = OPT}:
@@ -68,15 +67,13 @@ FUNC {GLOBAL CCU.TeamAdd}:
 			scoreboard teams add |0|
 			DEF GLOBAL $TeamStorage$ Arr_Temp[0]
 			
-	UNASSIGN {ARRAY Arr_Temp}
 	UNASSIGN {DEF $TeamStorage$}
 
-FUNC {GLOBAL CCU.TeamRemove}:
+FUNC {GLOBAL CCU.teamRemove}:
 	LOOP {|0|[S]}:
 		SPLIT {Arr_Temp |0|} { }
 		IF {Arr_Temp[0] != OPT}:
 			scoreboard teams remove Arr_Temp[0]
-	UNASSIGN {ARRAY Arr_Temp}
 //>
 
 //<Directional based defines
