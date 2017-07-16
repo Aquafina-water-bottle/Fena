@@ -286,15 +286,17 @@ public class Box {
 			}
 		}
 		
-		
-		System.out.println("");
-		for (int asdf = 0; asdf < arrayApprox; asdf++) {
-			for (int asfd = 0; asfd < GroupStructure.styleOptionY; asfd++) {
-				System.out.print(blockArray[asfd][asdf] + " ");
+		if (arrayApprox != 0) {
+			System.out.println("");
+			for (int asdf = 0; asdf < arrayApprox; asdf++) {
+				for (int asfd = 0; asfd < GroupStructure.styleOptionY; asfd++) {
+					System.out.print(blockArray[asfd][asdf] + " ");
+				}
+				System.out.println("");
 			}
 			System.out.println("");
 		}
-		System.out.println("");
+		
 
 		// get 2nd fill coords, specifically xz length
 
@@ -511,6 +513,7 @@ public class Box {
 			writer.println(Cmd_Group.arrayGroupSave.get(i)[0] + ";" + groupNameCoordArray[i].getString() + ";"
 					+ groupNameFillArray[i].getString());
 		}
+		// writer.println("\u221a");
 		writer.close();
 
 		// Combines existing groups with imported groups

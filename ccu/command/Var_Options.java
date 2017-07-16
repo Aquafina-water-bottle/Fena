@@ -190,10 +190,10 @@ public class Var_Options {
 			System.out.println("WARNING: 'filePathFuncOption' field is empty - will be an issue if mcfunctions are used");
 			Var_Options.filePathFuncOption = null;
 		} else {
-			if (filePathFuncOption.isDirectory() == false) {
+			/*if (filePathFuncOption.isDirectory() == false) {
 				System.out.println("ERROR: " + filePathFuncOption.toString() + " is not a directory");
 				System.exit(0);
-			}
+			}*/
 		}
 		if (keepCoordsOption == null) {
 			System.out.println("WARNING: 'keepCoordsOption' field is empty - defaults to 'false'");

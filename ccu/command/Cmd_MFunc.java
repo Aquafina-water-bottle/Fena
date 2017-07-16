@@ -96,6 +96,8 @@ public class Cmd_MFunc {
 						branchCalc += "/" + fileMFuncBranchSave.get(i);
 					}
 				}
+			} else {
+				branchCalc = Var_Options.filePathFuncOption.toString();
 			}
 
 			// Sees if there's a nickname

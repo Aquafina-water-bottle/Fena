@@ -405,14 +405,14 @@ GROUP | Grp_MainStart | PULSE		[-128 4 406 | stonebrick 0]
 	scoreboard teams option RRd_a color aqua
 	scoreboard teams add RRd_y RR Display Yellow
 	scoreboard teams option RRd_y color yellow
-	summon AreaEffectCloud -40 29 335 {Duration:1000000,Tags:["RRFirework1","RRFirework"]}
-	summon AreaEffectCloud -40 29 339 {Duration:1000000,Tags:["RRFirework1","RRFirework"]}
-	summon AreaEffectCloud -44 29 339 {Duration:1000000,Tags:["RRFirework1","RRFirework"]}
-	summon AreaEffectCloud -44 29 335 {Duration:1000000,Tags:["RRFirework1","RRFirework"]}
-	summon AreaEffectCloud -119 23 328 {Duration:1000000,Tags:["RRFirework2","RRFirework"]}
-	summon AreaEffectCloud -115 23 328 {Duration:1000000,Tags:["RRFirework2","RRFirework"]}
-	summon AreaEffectCloud -115 23 332 {Duration:1000000,Tags:["RRFirework2","RRFirework"]}
-	summon AreaEffectCloud -119 23 332 {Duration:1000000,Tags:["RRFirework2","RRFirework"]}
+	summon AreaEffectCloud -40 29 335 {Duration:2147483647,Tags:["RRFirework1","RRFirework"]}
+	summon AreaEffectCloud -40 29 339 {Duration:2147483647,Tags:["RRFirework1","RRFirework"]}
+	summon AreaEffectCloud -44 29 339 {Duration:2147483647,Tags:["RRFirework1","RRFirework"]}
+	summon AreaEffectCloud -44 29 335 {Duration:2147483647,Tags:["RRFirework1","RRFirework"]}
+	summon AreaEffectCloud -119 23 328 {Duration:2147483647,Tags:["RRFirework2","RRFirework"]}
+	summon AreaEffectCloud -115 23 328 {Duration:2147483647,Tags:["RRFirework2","RRFirework"]}
+	summon AreaEffectCloud -115 23 332 {Duration:2147483647,Tags:["RRFirework2","RRFirework"]}
+	summon AreaEffectCloud -119 23 332 {Duration:2147483647,Tags:["RRFirework2","RRFirework"]}
 	summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:["RRCustom","RRCountdown","RREasterEgg","RRSandGenerator"]}
 	summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:["RRCustom","RRPoint1","RRTimer1","RRPoint","RRTimer"],CustomName:"point 1"}
 	summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:["RRCustom","RRPoint2","RRTimer2","RRPoint","RRTimer"],CustomName:"point 2"}
@@ -463,35 +463,35 @@ GROUP | Grp_MainStart | PULSE		[-128 4 406 | stonebrick 0]
 	scoreboard objectives add RRtpo dummy RR Teleport Toggle
 	scoreboard objectives add RRpat dummy RR Particle Type
 	scoreboard objectives add RRpa dummy RR Particles
-	summon AreaEffectCloud -62.5 14.8 422.2 {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport1"],CustomName:"Teleporter 1"}
-	summon AreaEffectCloud -62.43 14 421.6 {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport1"],CustomName:"Teleporter 1"}
+	summon AreaEffectCloud -62.5 14.8 422.2 {Duration:2147483647,Tags:["RRTeleporter","RRTeleport","RRTeleport1"],CustomName:"Teleporter 1"}
+	summon AreaEffectCloud -62.43 14 421.6 {Duration:2147483647,Tags:["RRTeleporter","RRParticle","RRTeleport1"],CustomName:"Teleporter 1"}
 	scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport1] RRtpi 1
-	summon AreaEffectCloud -64.5 14.8 422.2 {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport2"],CustomName:"Teleporter 2"}
-	summon AreaEffectCloud -64.43 14 421.6 {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport2"],CustomName:"Teleporter 2"}
+	summon AreaEffectCloud -64.5 14.8 422.2 {Duration:2147483647,Tags:["RRTeleporter","RRTeleport","RRTeleport2"],CustomName:"Teleporter 2"}
+	summon AreaEffectCloud -64.43 14 421.6 {Duration:2147483647,Tags:["RRTeleporter","RRParticle","RRTeleport2"],CustomName:"Teleporter 2"}
 	scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport2] RRtpi 2
-	summon AreaEffectCloud -66.5 14.8 422.2 {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport3"],CustomName:"Teleporter 3"}
-	summon AreaEffectCloud -66.43 14 421.6 {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport3"],CustomName:"Teleporter 3"}
+	summon AreaEffectCloud -66.5 14.8 422.2 {Duration:2147483647,Tags:["RRTeleporter","RRTeleport","RRTeleport3"],CustomName:"Teleporter 3"}
+	summon AreaEffectCloud -66.43 14 421.6 {Duration:2147483647,Tags:["RRTeleporter","RRParticle","RRTeleport3"],CustomName:"Teleporter 3"}
 	scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport3] RRtpi 3
-	summon AreaEffectCloud -68.5 14.8 422.2 {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport4"],CustomName:"Teleporter 4"}
-	summon AreaEffectCloud -68.43 14 421.6 {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport4"],CustomName:"Teleporter 4"}
+	summon AreaEffectCloud -68.5 14.8 422.2 {Duration:2147483647,Tags:["RRTeleporter","RRTeleport","RRTeleport4"],CustomName:"Teleporter 4"}
+	summon AreaEffectCloud -68.43 14 421.6 {Duration:2147483647,Tags:["RRTeleporter","RRParticle","RRTeleport4"],CustomName:"Teleporter 4"}
 	scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport4] RRtpi 4
-	summon AreaEffectCloud -68.5 14.8 414.8 {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport5"],CustomName:"Teleporter 5"}
-	summon AreaEffectCloud -68.4 14 415.6 {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport5"],CustomName:"Teleporter 5"}
+	summon AreaEffectCloud -68.5 14.8 414.8 {Duration:2147483647,Tags:["RRTeleporter","RRTeleport","RRTeleport5"],CustomName:"Teleporter 5"}
+	summon AreaEffectCloud -68.4 14 415.6 {Duration:2147483647,Tags:["RRTeleporter","RRParticle","RRTeleport5"],CustomName:"Teleporter 5"}
 	scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport5] RRtpi 5
-	summon AreaEffectCloud -66.5 14.8 414.8 {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport6"],CustomName:"Teleporter 6"}
-	summon AreaEffectCloud -66.4 14 415.6 {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport6"],CustomName:"Teleporter 6"}
+	summon AreaEffectCloud -66.5 14.8 414.8 {Duration:2147483647,Tags:["RRTeleporter","RRTeleport","RRTeleport6"],CustomName:"Teleporter 6"}
+	summon AreaEffectCloud -66.4 14 415.6 {Duration:2147483647,Tags:["RRTeleporter","RRParticle","RRTeleport6"],CustomName:"Teleporter 6"}
 	scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport6] RRtpi 6
-	summon AreaEffectCloud -64.5 14.8 414.8 {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport7"],CustomName:"Teleporter 7"}
-	summon AreaEffectCloud -64.4 14 415.6 {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport7"],CustomName:"Teleporter 7"}
+	summon AreaEffectCloud -64.5 14.8 414.8 {Duration:2147483647,Tags:["RRTeleporter","RRTeleport","RRTeleport7"],CustomName:"Teleporter 7"}
+	summon AreaEffectCloud -64.4 14 415.6 {Duration:2147483647,Tags:["RRTeleporter","RRParticle","RRTeleport7"],CustomName:"Teleporter 7"}
 	scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport7] RRtpi 7
-	summon AreaEffectCloud -62.5 14.8 414.8 {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport8"],CustomName:"Teleporter 8"}
-	summon AreaEffectCloud -62.4 14 415.6 {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport8"],CustomName:"Teleporter 8"}
+	summon AreaEffectCloud -62.5 14.8 414.8 {Duration:2147483647,Tags:["RRTeleporter","RRTeleport","RRTeleport8"],CustomName:"Teleporter 8"}
+	summon AreaEffectCloud -62.4 14 415.6 {Duration:2147483647,Tags:["RRTeleporter","RRParticle","RRTeleport8"],CustomName:"Teleporter 8"}
 	scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport8] RRtpi 8
-	summon AreaEffectCloud -13.5 27.1 313.5 {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport9"],CustomName:"Teleporter 9"}
-	summon AreaEffectCloud -13.43 28 313.6 {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport9"],CustomName:"Teleporter 9"}
+	summon AreaEffectCloud -13.5 27.1 313.5 {Duration:2147483647,Tags:["RRTeleporter","RRTeleport","RRTeleport9"],CustomName:"Teleporter 9"}
+	summon AreaEffectCloud -13.43 28 313.6 {Duration:2147483647,Tags:["RRTeleporter","RRParticle","RRTeleport9"],CustomName:"Teleporter 9"}
 	scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport9] RRtpi 9
-	summon AreaEffectCloud -137.5 26.1 315.5 {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport10"],CustomName:"Teleporter 10"}
-	summon AreaEffectCloud -137.43 27 315.6 {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport10"],CustomName:"Teleporter 10"}
+	summon AreaEffectCloud -137.5 26.1 315.5 {Duration:2147483647,Tags:["RRTeleporter","RRTeleport","RRTeleport10"],CustomName:"Teleporter 10"}
+	summon AreaEffectCloud -137.43 27 315.6 {Duration:2147483647,Tags:["RRTeleporter","RRParticle","RRTeleport10"],CustomName:"Teleporter 10"}
 	scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport10] RRtpi 10
 	scoreboard players add @e[type=AreaEffectCloud,tag=RRTeleporter] RRtpo 0
 	scoreboard players add @e[type=AreaEffectCloud,tag=RRTeleporter] RRpa 0

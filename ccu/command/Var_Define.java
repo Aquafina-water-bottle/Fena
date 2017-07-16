@@ -31,7 +31,7 @@ public class Var_Define {
 			"FUNC", "ACTIVATE", "CALL", 
 			"MFUNC", "BRANCH",
 			"IMPORT", "LIBRARY", "GETDIR", "WITHIN", "GETCOORDS", 
-			"CALC", "SIN", "COS", "TAN", "GSELF",
+			"CALC", "SIN", "COS", "TAN", "INT", "FLOAT", "GSELF",
 			"COND", "OPTIONS", "UNASSIGN", "IF", "LOOP", "NULL",
 			};
 	// @formatter:on

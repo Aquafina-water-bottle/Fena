@@ -104,12 +104,17 @@ public class NumberUtils {
 			}
 		}
 	}
-
+	
 	public static String roundFloat(float getFloat) {
 		String roundCalc = new DecimalFormat("#.#####").format(getFloat);
 		if (roundCalc.contains(".") == false) {
 			roundCalc += ".0";
 		}
+		return roundCalc;
+	}
+
+	public static String roundFloatToInt(float getFloat) {
+		String roundCalc = new DecimalFormat("#").format(getFloat);
 		return roundCalc;
 	}
 

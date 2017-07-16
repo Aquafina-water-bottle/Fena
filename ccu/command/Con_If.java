@@ -80,6 +80,7 @@ public class Con_If {
 					splitArgsCalc[i] = "";
 				}
 				
+				splitArgsCalc[i] = MathParser.parseSecondaryStatements(splitArgsCalc[i], this.fullLineGet);
 				splitArgsTemp[i] = MathParser.getOperation(splitArgsCalc[i], this.fullLineGet, false, 0);
 			}
 			

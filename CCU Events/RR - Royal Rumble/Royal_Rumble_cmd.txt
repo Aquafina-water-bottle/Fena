@@ -377,14 +377,14 @@ setblock -120 9 406 chain_command_block 4 replace {Command:"scoreboard teams add
 setblock -121 9 406 chain_command_block 4 replace {Command:"scoreboard teams option RRd_a color aqua",TrackOutput:0b,auto:1b}
 setblock -122 9 406 chain_command_block 4 replace {Command:"scoreboard teams add RRd_y RR Display Yellow",TrackOutput:0b,auto:1b}
 setblock -123 9 406 chain_command_block 4 replace {Command:"scoreboard teams option RRd_y color yellow",TrackOutput:0b,auto:1b}
-setblock -124 9 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -40 29 335 {Duration:1000000,Tags:[\"RRFirework1\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
-setblock -125 9 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -40 29 339 {Duration:1000000,Tags:[\"RRFirework1\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
-setblock -126 9 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -44 29 339 {Duration:1000000,Tags:[\"RRFirework1\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
-setblock -127 9 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -44 29 335 {Duration:1000000,Tags:[\"RRFirework1\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
-setblock -128 9 406 chain_command_block 1 replace {Command:"summon AreaEffectCloud -119 23 328 {Duration:1000000,Tags:[\"RRFirework2\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
-setblock -128 10 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -115 23 328 {Duration:1000000,Tags:[\"RRFirework2\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
-setblock -127 10 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -115 23 332 {Duration:1000000,Tags:[\"RRFirework2\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
-setblock -126 10 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -119 23 332 {Duration:1000000,Tags:[\"RRFirework2\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
+setblock -124 9 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -40 29 335 {Duration:2147483647,Tags:[\"RRFirework1\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
+setblock -125 9 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -40 29 339 {Duration:2147483647,Tags:[\"RRFirework1\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
+setblock -126 9 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -44 29 339 {Duration:2147483647,Tags:[\"RRFirework1\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
+setblock -127 9 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -44 29 335 {Duration:2147483647,Tags:[\"RRFirework1\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
+setblock -128 9 406 chain_command_block 1 replace {Command:"summon AreaEffectCloud -119 23 328 {Duration:2147483647,Tags:[\"RRFirework2\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
+setblock -128 10 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -115 23 328 {Duration:2147483647,Tags:[\"RRFirework2\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
+setblock -127 10 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -115 23 332 {Duration:2147483647,Tags:[\"RRFirework2\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
+setblock -126 10 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -119 23 332 {Duration:2147483647,Tags:[\"RRFirework2\",\"RRFirework\"]}",TrackOutput:0b,auto:1b}
 setblock -125 10 406 chain_command_block 5 replace {Command:"summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:[\"RRCustom\",\"RRCountdown\",\"RREasterEgg\",\"RRSandGenerator\"]}",TrackOutput:0b,auto:1b}
 setblock -124 10 406 chain_command_block 5 replace {Command:"summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:[\"RRCustom\",\"RRPoint1\",\"RRTimer1\",\"RRPoint\",\"RRTimer\"],CustomName:\"point 1\"}",TrackOutput:0b,auto:1b}
 setblock -123 10 406 chain_command_block 5 replace {Command:"summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:[\"RRCustom\",\"RRPoint2\",\"RRTimer2\",\"RRPoint\",\"RRTimer\"],CustomName:\"point 2\"}",TrackOutput:0b,auto:1b}
@@ -435,35 +435,35 @@ setblock -114 13 406 chain_command_block 4 replace {Command:"scoreboard objectiv
 setblock -115 13 406 chain_command_block 4 replace {Command:"scoreboard objectives add RRtpo dummy RR Teleport Toggle",TrackOutput:0b,auto:1b}
 setblock -116 13 406 chain_command_block 4 replace {Command:"scoreboard objectives add RRpat dummy RR Particle Type",TrackOutput:0b,auto:1b}
 setblock -117 13 406 chain_command_block 4 replace {Command:"scoreboard objectives add RRpa dummy RR Particles",TrackOutput:0b,auto:1b}
-setblock -118 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -62.5 14.8 422.2 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport1\"],CustomName:\"Teleporter 1\"}",TrackOutput:0b,auto:1b}
-setblock -119 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -62.43 14 421.6 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport1\"],CustomName:\"Teleporter 1\"}",TrackOutput:0b,auto:1b}
+setblock -118 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -62.5 14.8 422.2 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport1\"],CustomName:\"Teleporter 1\"}",TrackOutput:0b,auto:1b}
+setblock -119 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -62.43 14 421.6 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport1\"],CustomName:\"Teleporter 1\"}",TrackOutput:0b,auto:1b}
 setblock -120 13 406 chain_command_block 4 replace {Command:"scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport1] RRtpi 1",TrackOutput:0b,auto:1b}
-setblock -121 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -64.5 14.8 422.2 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport2\"],CustomName:\"Teleporter 2\"}",TrackOutput:0b,auto:1b}
-setblock -122 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -64.43 14 421.6 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport2\"],CustomName:\"Teleporter 2\"}",TrackOutput:0b,auto:1b}
+setblock -121 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -64.5 14.8 422.2 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport2\"],CustomName:\"Teleporter 2\"}",TrackOutput:0b,auto:1b}
+setblock -122 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -64.43 14 421.6 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport2\"],CustomName:\"Teleporter 2\"}",TrackOutput:0b,auto:1b}
 setblock -123 13 406 chain_command_block 4 replace {Command:"scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport2] RRtpi 2",TrackOutput:0b,auto:1b}
-setblock -124 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -66.5 14.8 422.2 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport3\"],CustomName:\"Teleporter 3\"}",TrackOutput:0b,auto:1b}
-setblock -125 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -66.43 14 421.6 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport3\"],CustomName:\"Teleporter 3\"}",TrackOutput:0b,auto:1b}
+setblock -124 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -66.5 14.8 422.2 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport3\"],CustomName:\"Teleporter 3\"}",TrackOutput:0b,auto:1b}
+setblock -125 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -66.43 14 421.6 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport3\"],CustomName:\"Teleporter 3\"}",TrackOutput:0b,auto:1b}
 setblock -126 13 406 chain_command_block 4 replace {Command:"scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport3] RRtpi 3",TrackOutput:0b,auto:1b}
-setblock -127 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -68.5 14.8 422.2 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport4\"],CustomName:\"Teleporter 4\"}",TrackOutput:0b,auto:1b}
-setblock -128 13 406 chain_command_block 1 replace {Command:"summon AreaEffectCloud -68.43 14 421.6 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport4\"],CustomName:\"Teleporter 4\"}",TrackOutput:0b,auto:1b}
+setblock -127 13 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -68.5 14.8 422.2 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport4\"],CustomName:\"Teleporter 4\"}",TrackOutput:0b,auto:1b}
+setblock -128 13 406 chain_command_block 1 replace {Command:"summon AreaEffectCloud -68.43 14 421.6 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport4\"],CustomName:\"Teleporter 4\"}",TrackOutput:0b,auto:1b}
 setblock -128 14 406 chain_command_block 5 replace {Command:"scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport4] RRtpi 4",TrackOutput:0b,auto:1b}
-setblock -127 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -68.5 14.8 414.8 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport5\"],CustomName:\"Teleporter 5\"}",TrackOutput:0b,auto:1b}
-setblock -126 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -68.4 14 415.6 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport5\"],CustomName:\"Teleporter 5\"}",TrackOutput:0b,auto:1b}
+setblock -127 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -68.5 14.8 414.8 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport5\"],CustomName:\"Teleporter 5\"}",TrackOutput:0b,auto:1b}
+setblock -126 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -68.4 14 415.6 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport5\"],CustomName:\"Teleporter 5\"}",TrackOutput:0b,auto:1b}
 setblock -125 14 406 chain_command_block 5 replace {Command:"scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport5] RRtpi 5",TrackOutput:0b,auto:1b}
-setblock -124 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -66.5 14.8 414.8 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport6\"],CustomName:\"Teleporter 6\"}",TrackOutput:0b,auto:1b}
-setblock -123 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -66.4 14 415.6 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport6\"],CustomName:\"Teleporter 6\"}",TrackOutput:0b,auto:1b}
+setblock -124 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -66.5 14.8 414.8 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport6\"],CustomName:\"Teleporter 6\"}",TrackOutput:0b,auto:1b}
+setblock -123 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -66.4 14 415.6 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport6\"],CustomName:\"Teleporter 6\"}",TrackOutput:0b,auto:1b}
 setblock -122 14 406 chain_command_block 5 replace {Command:"scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport6] RRtpi 6",TrackOutput:0b,auto:1b}
-setblock -121 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -64.5 14.8 414.8 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport7\"],CustomName:\"Teleporter 7\"}",TrackOutput:0b,auto:1b}
-setblock -120 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -64.4 14 415.6 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport7\"],CustomName:\"Teleporter 7\"}",TrackOutput:0b,auto:1b}
+setblock -121 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -64.5 14.8 414.8 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport7\"],CustomName:\"Teleporter 7\"}",TrackOutput:0b,auto:1b}
+setblock -120 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -64.4 14 415.6 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport7\"],CustomName:\"Teleporter 7\"}",TrackOutput:0b,auto:1b}
 setblock -119 14 406 chain_command_block 5 replace {Command:"scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport7] RRtpi 7",TrackOutput:0b,auto:1b}
-setblock -118 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -62.5 14.8 414.8 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport8\"],CustomName:\"Teleporter 8\"}",TrackOutput:0b,auto:1b}
-setblock -117 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -62.4 14 415.6 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport8\"],CustomName:\"Teleporter 8\"}",TrackOutput:0b,auto:1b}
+setblock -118 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -62.5 14.8 414.8 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport8\"],CustomName:\"Teleporter 8\"}",TrackOutput:0b,auto:1b}
+setblock -117 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -62.4 14 415.6 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport8\"],CustomName:\"Teleporter 8\"}",TrackOutput:0b,auto:1b}
 setblock -116 14 406 chain_command_block 5 replace {Command:"scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport8] RRtpi 8",TrackOutput:0b,auto:1b}
-setblock -115 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -13.5 27.1 313.5 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport9\"],CustomName:\"Teleporter 9\"}",TrackOutput:0b,auto:1b}
-setblock -114 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -13.43 28 313.6 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport9\"],CustomName:\"Teleporter 9\"}",TrackOutput:0b,auto:1b}
+setblock -115 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -13.5 27.1 313.5 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport9\"],CustomName:\"Teleporter 9\"}",TrackOutput:0b,auto:1b}
+setblock -114 14 406 chain_command_block 5 replace {Command:"summon AreaEffectCloud -13.43 28 313.6 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport9\"],CustomName:\"Teleporter 9\"}",TrackOutput:0b,auto:1b}
 setblock -113 14 406 chain_command_block 1 replace {Command:"scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport9] RRtpi 9",TrackOutput:0b,auto:1b}
-setblock -113 15 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -137.5 26.1 315.5 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport10\"],CustomName:\"Teleporter 10\"}",TrackOutput:0b,auto:1b}
-setblock -114 15 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -137.43 27 315.6 {Duration:1000000,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport10\"],CustomName:\"Teleporter 10\"}",TrackOutput:0b,auto:1b}
+setblock -113 15 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -137.5 26.1 315.5 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRTeleport\",\"RRTeleport10\"],CustomName:\"Teleporter 10\"}",TrackOutput:0b,auto:1b}
+setblock -114 15 406 chain_command_block 4 replace {Command:"summon AreaEffectCloud -137.43 27 315.6 {Duration:2147483647,Tags:[\"RRTeleporter\",\"RRParticle\",\"RRTeleport10\"],CustomName:\"Teleporter 10\"}",TrackOutput:0b,auto:1b}
 setblock -115 15 406 chain_command_block 4 replace {Command:"scoreboard players set @e[type=AreaEffectCloud,tag=RRTeleport10] RRtpi 10",TrackOutput:0b,auto:1b}
 setblock -116 15 406 chain_command_block 4 replace {Command:"scoreboard players add @e[type=AreaEffectCloud,tag=RRTeleporter] RRtpo 0",TrackOutput:0b,auto:1b}
 setblock -117 15 406 chain_command_block 4 replace {Command:"scoreboard players add @e[type=AreaEffectCloud,tag=RRTeleporter] RRpa 0",TrackOutput:0b,auto:1b}

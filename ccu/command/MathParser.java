@@ -52,10 +52,10 @@ public class MathParser {
 			// if there are no spaces, it would be thought of a singular string
 			if (getArgs.contains(" ") == false) {
 				arrayCalc = new String[1];
-				arrayCalc[0] = getArgs; 
+				arrayCalc[0] = getArgs;
 				return arrayCalc;
 			}
-			
+
 			// meaning actual math has to be used lol
 			// 1 10 + 1
 			// (1 * 4) (12 / 6 - 1) - (0.5 + 0.5)
@@ -75,11 +75,11 @@ public class MathParser {
 			if (arrayCalc[0].equals("")) {
 				return null;
 			}
-			
+
 			if (arrayCalc.length < 4) {
 				// defaults to outputting the string
 				arrayCalc = new String[1];
-				arrayCalc[0] = getArgs; 
+				arrayCalc[0] = getArgs;
 				return arrayCalc;
 			}
 
@@ -103,7 +103,7 @@ public class MathParser {
 
 								if (foundOperator == false) {
 									arrayCalc = new String[1];
-									arrayCalc[0] = getArgs; 
+									arrayCalc[0] = getArgs;
 									return arrayCalc;
 								}
 							}
@@ -162,7 +162,7 @@ public class MathParser {
 								// if the operator wasn't found
 								if (foundOperator == false) {
 									arrayCalc = new String[1];
-									arrayCalc[0] = getArgs; 
+									arrayCalc[0] = getArgs;
 									return arrayCalc;
 								}
 								calcArray.add(arrayCalc[i]);
@@ -832,9 +832,16 @@ public class MathParser {
 							getValue.getFloat = (float) Math.tan(Math.toRadians(getValue.getFloat));
 							break;
 						}
-						
-						getString = NumberUtils.roundFloat(getValue.getFloat) + "";
-						
+
+						// turns into int because INT()
+						if (calcType == 4) {
+							getString = NumberUtils.roundFloatToInt(getValue.getFloat);
+							
+						} else {
+							// normal
+							getString = NumberUtils.roundFloat(getValue.getFloat) + "";
+						}
+
 					} else {
 						switch (calcType) {
 						case 1:
@@ -849,9 +856,15 @@ public class MathParser {
 							getValue.getInt = (int) Math.tan(Math.toRadians(getValue.getInt));
 							break;
 						}
-						
-						getString = getValue.getInt + "";
-						
+
+						// turns into float because FLOAT()
+						if (calcType == 5) {
+							getString = NumberUtils.roundFloat(getValue.getInt) + "";
+						} else {
+							// normal
+							getString = getValue.getInt + "";
+						}
+
 					}
 				}
 				return getString;
@@ -861,7 +874,7 @@ public class MathParser {
 			System.out.println("ERROR: Unbalanced brackets in '" + getString + "' in line '" + fullLineGet + "'");
 			System.exit(0);
 		}
-		
+
 		if (getValue.isFloat != null) {
 			if (getValue.isFloat) {
 				switch (calcType) {
@@ -877,9 +890,16 @@ public class MathParser {
 					getValue.getFloat = (float) Math.tan(Math.toRadians(getValue.getFloat));
 					break;
 				}
-				
-				getString = NumberUtils.roundFloat(getValue.getFloat) + "";
-				
+
+				// turns into int because INT()
+				if (calcType == 4) {
+					getString = NumberUtils.roundFloatToInt(getValue.getFloat);
+					
+				} else {
+					// normal
+					getString = NumberUtils.roundFloat(getValue.getFloat) + "";
+				}
+
 			} else {
 				switch (calcType) {
 				case 1:
@@ -894,8 +914,14 @@ public class MathParser {
 					getValue.getInt = (int) Math.tan(Math.toRadians(getValue.getInt));
 					break;
 				}
-				
-				getString = getValue.getInt + "";
+
+				// turns into float because FLOAT()
+				if (calcType == 5) {
+					getString = NumberUtils.roundFloat(getValue.getInt) + "";
+				} else {
+					// normal
+					getString = getValue.getInt + "";
+				}
 			}
 		}
 
@@ -1209,7 +1235,7 @@ public class MathParser {
 		// getCommand is like SIN, COS, TAN, CALC
 		// SIN, COS and TAN can be like CALC except the final value returns the sin/cos/tan version
 
-		final String[] secondaryStatementArray = {"SIN", "COS", "TAN", "CALC"};
+		final String[] secondaryStatementArray = {"SIN", "COS", "TAN", "CALC", "INT", "FLOAT"};
 
 		// if getStatement is true, then keeps going
 		String calcString = null;
@@ -1242,6 +1268,14 @@ public class MathParser {
 
 				case "TAN":
 					calcType = 3;
+					break;
+
+				case "INT":
+					calcType = 4;
+					break;
+
+				case "FLOAT":
+					calcType = 5;
 					break;
 				}
 
@@ -1287,7 +1321,8 @@ public class MathParser {
 
 			// checks if there were any 'SIN', 'COS', 'TAN' - recurring function
 
-			if (testBracketString.contains("SIN") || testBracketString.contains("COS") || testBracketString.contains("TAN")) {
+			if (testBracketString.contains("SIN") || testBracketString.contains("COS") || testBracketString.contains("TAN")
+					|| testBracketString.contains("INT") || testBracketString.contains("FLOAT")) {
 				testBracketString = parseSecondaryStatements(testBracketString, fullLineGet);
 			}
 

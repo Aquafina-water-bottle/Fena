@@ -50,10 +50,23 @@ public class ParamUtils {
 				int paramIndex = 0;
 
 				while (paramIndex < paramsCalc.length) {
-					if (NumberUtils.isInt(paramsCalc[paramIndex])) {
-						if (paramMaxNum == null || paramMaxNum < Integer.parseInt(paramsCalc[paramIndex])) {
-							paramMaxNum = Integer.parseInt(paramsCalc[paramIndex]);
+					Integer calcInt = null;
+					
+					if (paramsCalc[paramIndex].contains(";")) {
+						String[] testParams = paramsCalc[paramIndex].split(";");
+						if (testParams.length == 2 && NumberUtils.isInt(testParams[0])) {
+							calcInt = Integer.parseInt(testParams[0]);
 						}
+					} else {
+						if (NumberUtils.isInt(paramsCalc[paramIndex])) {
+							calcInt = Integer.parseInt(paramsCalc[paramIndex]);
+						}
+					}
+					if (calcInt != null) {
+						if (paramMaxNum == null || paramMaxNum < calcInt) {
+							paramMaxNum = calcInt + 0;
+						}
+						
 						paramIndex += 2;
 						continue;
 					}

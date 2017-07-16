@@ -61,9 +61,10 @@ public class Main {
 	public static File getJarFile = null;
 
 	public static void main(String[] args) {
-		
-		System.out.println("Build 1\n");
-		
+		long startTime = System.nanoTime();
+
+		System.out.println("Build 2\n");
+
 		// for CCU_NPP.bat
 		if (args.length == 1) {
 			getJarFile = new File(args[0]);
@@ -72,7 +73,7 @@ public class Main {
 			ReadConfig.regFilePath = new File(args[0]);
 			getJarFile = new File(args[1]);
 		}
-		
+
 		/*
 		String ayylmao = null;
 		
@@ -206,6 +207,8 @@ public class Main {
 		// RCON
 		MinecraftRcon.useRcon();
 
-		System.out.println("\nSuccessfully compiled the file: " + ReadConfig.regFilePath.getName());
+		long endTime = System.nanoTime();
+		System.out.println("\nSuccessfully compiled the file '" + ReadConfig.regFilePath.getName() + "' in "
+				+ ((endTime - startTime) / 1e9) + " seconds");
 	}
 }

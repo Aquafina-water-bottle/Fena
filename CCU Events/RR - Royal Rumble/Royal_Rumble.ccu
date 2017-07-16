@@ -41,6 +41,15 @@ OPTIONS:
 //<Random comments
 //=
 
+-Get coordinates and rotations for all horses
+-Get coordinates for display armor stands
+-Lag fixing using $SA$ to score
+-Combine multiple groups to use RRop as an option TFClock 
+-Transfer all specific coordinates to definitions
+-Record pig and cow names at point 2
+
+
+
 Horses:
 West: 
 summon EntityHorse ~-0.2 ~-0.4 ~ {ActiveEffects:[{Id:14b,Duration:10000000,ShowParticles:0b}],Rotation:[90f,0f],NoAI:1,NoGravity:1,Invulnerable:1,Silent:1,PersistenceRequired:1,Tags:["RRHorse"],Team:"NoPush"}
@@ -1160,7 +1169,7 @@ FUNC {Func_ControlPointStart}:
 	
 	LOOP {1;2}:
 		LOOP {Arr_FireworkPos|0|[S]}:
-			summon AreaEffectCloud |0| {Duration:1000000,Tags:["RRFirework|0;1|","RRFirework"]}
+			summon AreaEffectCloud |0| {$Duration$,Tags:["RRFirework|0;1|","RRFirework"]}
 	
 	summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:["RRCustom","RRCountdown","RREasterEgg","RRSandGenerator"]}
 	
@@ -1428,8 +1437,8 @@ FUNC {Func_TeleporterStart}:
 
 ///	Particles & Teleporter
 	LOOP {0 Arr_TPParticle[L] + 1} {1 (Arr_TPParticle[L] + 1) + 1}:
-		summon AreaEffectCloud Arr_TPTeleportFrom[|0|] {Duration:1000000,Tags:["RRTeleporter","RRTeleport","RRTeleport|1|"],CustomName:"Teleporter |1|"}
-		summon AreaEffectCloud Arr_TPParticle[|0|] {Duration:1000000,Tags:["RRTeleporter","RRParticle","RRTeleport|1|"],CustomName:"Teleporter |1|"}
+		summon AreaEffectCloud Arr_TPTeleportFrom[|0|] {$Duration$,Tags:["RRTeleporter","RRTeleport","RRTeleport|1|"],CustomName:"Teleporter |1|"}
+		summon AreaEffectCloud Arr_TPParticle[|0|] {$Duration$,Tags:["RRTeleporter","RRParticle","RRTeleport|1|"],CustomName:"Teleporter |1|"}
 		@e[type=AreaEffectCloud,RRTeleport|1|] RRtpi = |1|
 	
 	@e[type=AreaEffectCloud,RRTeleporter] RRtpo + 0
