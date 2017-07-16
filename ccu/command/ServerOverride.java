@@ -20,6 +20,13 @@ public class ServerOverride {
 			if (shortcutCalcArray[j].startsWith("{")) {
 				shortcutDataTag = true;
 			}
+			
+			for (String cmdGet : ReadConfig.minecraftCommandsArray) {
+				if (j >= 1 && shortcutCalcArray[j - 1].equals(cmdGet) && shortcutCalcArray[j - 1].equals("execute") == false) {
+					shortcutDataTag = true;
+				}
+			}
+			
 			if (shortcutDataTag == false) {
 				for (String cmdGet : ReadConfig.serverOverrideArray) {
 					if (shortcutCalcArray[j].equals(cmdGet)) {

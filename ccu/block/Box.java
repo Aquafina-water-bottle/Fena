@@ -140,7 +140,7 @@ public class Box {
 		// Approximation for array creation
 		int arrayApprox = (int) Math
 				.ceil(((GroupStructure.groupLineArray.stream().mapToInt(Integer::intValue).sum() * 5) / GroupStructure.styleOptionY));
-
+		
 		// GroupStructure.groupLineArray.stream().mapToInt(Integer::intValue).sum();
 
 		// Creating the array
@@ -192,6 +192,10 @@ public class Box {
 								} catch (ArrayIndexOutOfBoundsException e) {
 									System.out.println(
 											"ERROR: The developer goofed up when trying to make the box (REPORT IMMEDIATELY)");
+									
+									System.out.println(coordsCalcY + " | " + coordsCalcXZ);
+									System.out.println(GroupStructure.styleOptionY + " | " + arrayApprox);
+									
 									System.exit(0);
 								}
 
@@ -247,7 +251,7 @@ public class Box {
 
 								// tests if y length is correct: negative direction
 								if (coordsCalcY == -1) {
-									if (lengthCalc % GroupStructure.styleOptionY == 0) {
+									if (lengthCalc % GroupStructure.styleOptionY == 1) {
 										directionMoveY = 1;
 										coordsCalcY++;
 										coordsCalcXZ++;
@@ -281,7 +285,8 @@ public class Box {
 				}
 			}
 		}
-
+		
+		
 		System.out.println("");
 		for (int asdf = 0; asdf < arrayApprox; asdf++) {
 			for (int asfd = 0; asfd < GroupStructure.styleOptionY; asfd++) {
@@ -417,15 +422,15 @@ public class Box {
 							paramsCalc = arrayList.get(i)[j].substring(endIndex);
 
 							if (isFunction) {
-								coordsCalc = importCoordArray.get(i).getString();
+								coordsCalc = groupNameCoordArray[i].getString();
 								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
 									coordsCalc += " " + importFillCoordArray.get(i).getString();
 								}
 							} else {
-								coordsCalc = importCoordArray.get(i).checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
+								coordsCalc = groupNameCoordArray[i].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
 										.getString();
 								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
-									coordsCalc += " " + importFillCoordArray.get(i)
+									coordsCalc += " " + groupNameFillArray[i]
 											.checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
 								}
 							}

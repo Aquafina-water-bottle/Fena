@@ -319,14 +319,14 @@ public class Short_Selector {
 					if (j == 0) {
 						shortcutResultCalc = shortcutSelectorArray[j];
 					}
-					if (j >= 1 && j - 1 < shortcutSelectorArray.length)
+					if (j >= 1 && j - 1 < shortcutSelectorArray.length) {
 						shortcutResultCalc += "," + shortcutSelectorArray[j];
-
-					if (j == shortcutSelectorArray.length - 1) {
+					}
+					/*if (j == shortcutSelectorArray.length - 1) {
 						if (j != 0) {
 							shortcutResultCalc += "," + shortcutSelectorArray[j];
 						}
-					}
+					}*/
 				}
 				shortcutCalcArray[i] = getSelectorSave + "[" + shortcutResultCalc + "]" + shortcutEndCalc;
 

@@ -46,13 +46,14 @@ public class MathParser {
 		// meaning the list is already given and no math is required
 		if (getArgs.contains(";")) {
 			arrayCalc = getArgs.split(";");
-
 			return arrayCalc;
 
 		} else {
 			// if there are no spaces, it would be thought of a singular string
 			if (getArgs.contains(" ") == false) {
-				return null;
+				arrayCalc = new String[1];
+				arrayCalc[0] = getArgs; 
+				return arrayCalc;
 			}
 			
 			// meaning actual math has to be used lol
@@ -71,13 +72,15 @@ public class MathParser {
 			 */
 
 			// if arrayCalc has less than 4 arguments --> automatically invalid
-			if (arrayCalc != null && arrayCalc[0].equals("")) {
+			if (arrayCalc[0].equals("")) {
 				return null;
 			}
 			
 			if (arrayCalc.length < 4) {
-				System.out.println("ERROR: 4 LOOP arguments are required for line '" + fullLineGet + "'");
-				System.exit(0);
+				// defaults to outputting the string
+				arrayCalc = new String[1];
+				arrayCalc[0] = getArgs; 
+				return arrayCalc;
 			}
 
 			// if bracket numbers equal and that there are brackets
@@ -99,9 +102,9 @@ public class MathParser {
 								}
 
 								if (foundOperator == false) {
-									System.out.println("ERROR: The argument '" + arrayCalc[i] + "' in line '" + fullLineGet
-											+ "' is not an operator");
-									System.exit(0);
+									arrayCalc = new String[1];
+									arrayCalc[0] = getArgs; 
+									return arrayCalc;
 								}
 							}
 
@@ -158,9 +161,9 @@ public class MathParser {
 
 								// if the operator wasn't found
 								if (foundOperator == false) {
-									System.out.println("ERROR: The argument '" + arrayCalc[i] + "' in line '" + fullLineGet
-											+ "' is not an operator");
-									System.exit(0);
+									arrayCalc = new String[1];
+									arrayCalc[0] = getArgs; 
+									return arrayCalc;
 								}
 								calcArray.add(arrayCalc[i]);
 

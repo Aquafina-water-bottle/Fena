@@ -2,12 +2,10 @@ package ccu.general;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import ccu.block.Box;
 import ccu.block.GroupStructure;
 import ccu.block.Setblock;
-import ccu.command.MathParser;
 import ccu.command.ReadCCUFile;
 import ccu.command.Var_Options;
 import ccu.mcfunction.WriteFile;
@@ -63,6 +61,8 @@ public class Main {
 	public static File getJarFile = null;
 
 	public static void main(String[] args) {
+		
+		System.out.println("Build 1\n");
 		
 		// for CCU_NPP.bat
 		if (args.length == 1) {
@@ -204,7 +204,7 @@ public class Main {
 		// Writes the global Combiner file under globalCombinerFilePath
 
 		// RCON
-		// MinecraftRcon.useRcon();
+		MinecraftRcon.useRcon();
 
 		System.out.println("\nSuccessfully compiled the file: " + ReadConfig.regFilePath.getName());
 	}

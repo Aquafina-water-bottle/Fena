@@ -26,6 +26,7 @@ DEF $StyleDirection$ +X
 DEF COORDS $CoordsOption$ 351 7 111
 
 IMPORT {LIBRARY GETDIR General}
+IMPORT {GETCOORDS C:\Users\Austin\Documents\Austin\powder game code\eGO\CCU Events\PC - Pictionary\Pictionary_dat.txt}
 
 OPTIONS:
 	blockOption stonebrick 0
@@ -46,8 +47,13 @@ DEF $NotMM$ x=77,y=5,z=42,rm=40
 DEF $MM$ x=77,y=5,z=42,r=40
 DEF $Dim$ Dimension:0
 
+/*
+DEF $TSTokenTextStart$ 
+	{"text":"","extra":[{"text":"[","color":"gray"},{"text":"TS","color":"dark_aqua","bold":"true",
+	"hoverEvent":{"action":"show_text","value":{"text":"Teamspeak Token","color":"dark_aqua"}}},
+	{"text":"]","color":"gray"},{"text":": "},
+*/
 DEF $TSSelect$ x=544,y=19,z=37,dx=10,dy=5,dz=10
-DEF $TSTokenTextStart$ {"text":"","extra":[{"text":"[","color":"gray"},{"text":"TS","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Teamspeak Token","color":"dark_aqua"}}},{"text":"]","color":"gray"},{"text":": "},
 DEF COORDS $TSWorldedit$ 549 17 49
 DEF COORDS $TSTokenGlass$ 548 14 47
 DEF COORDS $TSTokenClear$ 550 14 47
@@ -68,212 +74,255 @@ ARRAY {Arr_Spawnpoint}:
 	///	teleport coords
 		49 36 -45 -90 0
 		
+	///	full display name
+		Ice Race
+		
 	///	display name
 		Ice Race
 		
-	///	shortcut
-		ir
-		
 	///	color
 		aqua
+		
+	///	shortcut
+		ir
 	} {
 		75 7 -80
 		75 7 -80 90 0
 		Slow Race
-		sr
+		Slow Race
 		gray
+		sr
 	} {
 		73 7 -102
 		73 7 -102 90 0
 		Nether Race
-		nr
+		Nether Race
 		red
+		nr
 	} {
 		23 7 -133
 		23 7 -133 -90 0
 		Evil Race
-		evilr
+		Evil Race
 		gray
+		evilr
 	} {
 		218 18 -37
 		218 18 -37 -90 0
 		Diamond Race
-		dr
+		Diamond Race
 		aqua
+		dr
 	} {
 		276 17 -96
 		276 17 -96 90 0
 		Emerald Race
-		er
+		Emerald Race
 		green
+		er
 	} {
 		-349 94 191
 		-349 94 191 -90 0
 		NvS
-		nvs
+		NvS
 		red
+		nvs
 	} {
 		229 8 -157
 		229 8 -157 -90 0
 		Quartz Race
-		qr
+		Quartz Race
 		white
+		qr
 	} {
 		77 5 41
 		77 5 41 0 -15
 		Mastermind
-		mm
+		Mastermind
 		gold
+		mm
 	} {
 		-105 25 200
 		-105 25 200 -135 0
 		The Pit 3
-		tpl3
+		The Pit 3
 		green
+		tpl3
 	} {
 		242 26 -222
 		242 26 -222 -90 0
 		1.8 Race
-		18r
+		1.8 Race
 		gold
+		18r
 	} {
 		424 12 -122
 		424 12 -122 -90 0
 		Epic Race
-		epicr
+		Epic Race
 		gold
+		epicr
 	} {
 		467 8 -33
 		467 8 -33 -90 0
 		Salt Race
-		saltr
+		Salt Race
 		gray
+		saltr
 	} {
 		-250 25 18
 		-250 25 18 -90 0
 		Sand Tomb
-		st
+		Sand Tomb
 		yellow
+		st
 	} {
 		397 17 61
 		397 17 61 90 0
 		Spawn
-		spawn
+		Spawn
 		dark_red
+		spawn
 	} {
 		-77 56 -85
 		-77 56 -85 -45 0
 		Virus 2
-		virus2
+		Virus 2
 		yellow
+		virus2
 	} {
 		-85 45 -241
 		-85 45 -241 -45 0
 		Virus 1
-		virus1
+		Virus 1
 		yellow
+		virus1
 	} {
 		549 20 42
 		549 20 42
 		Teamspeak Token
-		tstoken
+		Teamspeak Token
 		dark_aqua
+		tstoken
 	} {
 		517 11 -827
 		517 11 -827 90 0
 		Frostburn Run
-		fbr
+		Frostburn Run
 		aqua
+		fbr
 	} {
 		460 3 -331
 		460 3 -331 -90 0
 		EverChanging Race
-		ecr
+		EverChanging Race
 		yellow
+		ecr
 	} {
 		-16 5 87
 		-16 5 87 90 0
 		Anvil Drop
-		ad
+		Anvil Drop
 		green
+		ad
 	} {
 		31 20 -240
 		31 20 -240 -45 0
 		Death Run
-		deathr
+		Death Run
 		red
+		deathr
 	} {
 		329 24 171
 		329 24.065 171 90 0
 		The Minigame Hub
-		mghub
+		The Minigame Hub
 		green
+		mghub
 	} {
 		385 15 159
 		385 15 159 180 0
 		The PVP hub
-		pvphub
+		The PVP hub
 		light_purple
+		pvphub
 	} {
 		329 24 154
 		329 24.065 154 90 0
 		The Mastermind Hub
-		mmhub
+		The Mastermind Hub
 		gold
+		mmhub
 	} {
 		329 24 137
 		329 24.076 137 90 0
 		The Race Hub
-		racehub
+		The Race Hub
 		dark_aqua
+		racehub
 	} {
 		348 4 114
 		348 4 114 -90 0
 		Spawnpoint System
-		cmd
+		Spawnpoint System
 		yellow
+		cmd
 	} {
 		-268 49 -39
 		-268 49 -39 -90 0
 		PVP: Old CTF
-		oldctf
+		PVP: Old CTF
 		red
+		oldctf
 	} {
 		-187 24 96
 		-187 24 96 -90 0
 		Death Pit
-		dp
+		Death Pit
 		red
+		dp
 	} {
 		214 27 334
 		214 27 334 -90 0
 		Rabbit Ball
+		Rabbit; ;Ball
+		red;white;blue
 		rb
-		white
 	} {
 		23 15 -189
 		23 15 -189.0 -90 0
 		Dirt Race
-		dirtr
+		Dirt Race
 		gray
+		dirtr
 	} {
 		445 68 -669
 		445 68 -669.0 -90 0
 		Mycelium Race
-		mr
+		Mycelium Race
 		dark_purple
+		mr
 	} {
 		558 107 159
 		558 107 159.0 90 0
 		Capture the flag
+		Capture; the ;flag
+		red;white;blue
 		ctf
-		dark_aqua
 	} {
 		161 4 180
 		161 4 180 90 0
 		Pictionary
+		P;i;c;t;i;o;n;a;r;y
+		light_purple;red;gold;yellow;green;dark_green;blue;dark_aqua;aqua;white
 		pc
-		dark_aqua
+	} {
+		-103 19 480
+		-103 19 480 -180 0
+		Royal Rumble
+		Royal; ;Rumble
+		blue;white;dark_green
+		rr
 	}
 //>
 
@@ -1386,9 +1435,9 @@ FUNC {Func_Book_Pictionary}:
 			{\"text\":\"\n\"},
 			
 			{\"text\":\"Arena: \",\"color\":\"black\"},
-			{\"text\":\"Start\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/setblock 80 10 176 redstone_block 0\"}},
+			{\"text\":\"Start\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/setblock Pictionary.Grp_MainStart redstone_block 0\"}},
 			{\"text\":\" / \",\"color\":\"black\"},
-			{\"text\":\"Stop\n\",\"color\":\"red\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/setblock 80 24 176 redstone_block 0\"}},
+			{\"text\":\"Stop\n\",\"color\":\"red\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/setblock Pictionary.Grp_MainEnd redstone_block 0\"}},
 			
 			{\"text\":\"Time: \",\"color\":\"dark_gray\"},
 			{\"text\":\"[+]\",\"color\":\"dark_green\",
@@ -1472,7 +1521,7 @@ FUNC {Func_GeneralScoreboardStart}:
 		-1
 	
 	LOOP {0 Arr_Spawnpoint[L] + 1} {1 (Arr_Spawnpoint[L] + 1) + 1}:
-		Arr_Spawnpoint[|0|][3] SPna = |1|
+		Arr_Spawnpoint[|0|][5] SPna = |1|
 	
 	kill @e[type=ArmorStand,SpawnStand]
 	summon ArmorStand $SpawnStand$ {Tags:["SpawnStand"],Invulnerable:1,PersistenceRequired:1,Invisible:1,Marker:1,NoGravity:1}
@@ -1504,7 +1553,7 @@ FUNC {Func_AddingScoreboardsPulse}:
 		Health health
 	
 	CCU.objectiveAdd(Obj_AddingScoreboardsPulse)
-	ScSS list Health
+	ScOS list Health
 	
 	ARRAY {GLOBAL ACTIVATE CCU.teamAdd(Team_AddingScoreboardsPulse) Team_AddingScoreboardsPulse}:
 		NoPush
@@ -1660,11 +1709,17 @@ FUNC {Func_SpawnpointTFClock}:
 		tellraw @a[SPid=|1|] $TextStart$
 		{"text":"Your spawnpoint has been set to ","color":"gray"},
 		{"text":"Arr_Spawnpoint[|0|][0]","color":"yellow","bold":"true"},
-		{"text":" at ","color":"gray"},
-		{"text":"Arr_Spawnpoint[|0|][2]","color":"Arr_Spawnpoint[|0|][4]","bold":"true",
-			"clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |1|"},
-			"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Arr_Spawnpoint[|0|][2]","color":"Arr_Spawnpoint[|0|][4]"}}
-		},
+		{"text":" at ","color":"gray"},;
+		*/
+	///	2 = full name = |0|, 3 = name = |1|, 4 = color = |2|
+		LOOP {Arr_Spawnpoint[|0|][3]} {Arr_Spawnpoint[|0|][4]}:
+			/*
+			{"text":"|0|","color":"|1|","bold":"true",
+				"clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |1;1|"},
+				"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Arr_Spawnpoint[|0;1|][2]","color":"|1|"}}
+			},;
+			*/
+		/*
 		{"text":"!","color":"gray"}]}
 		*/
 	
@@ -1684,11 +1739,17 @@ FUNC {Func_TeleportTFClock}:
 		tellraw @a[SPtp=|1|] $TextStart$
 		{"text":"You have been teleported to ","color":"gray"},
 		{"text":"Arr_Spawnpoint[|0|][0]","color":"yellow","bold":"true"},
-		{"text":" at ","color":"gray"},
-		{"text":"Arr_Spawnpoint[|0|][2]","color":"Arr_Spawnpoint[|0|][4]","bold":"true",
-			"clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |1|"},
-			"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Arr_Spawnpoint[|0|][2]","color":"Arr_Spawnpoint[|0|][4]"}}
-		},
+		{"text":" at ","color":"gray"},;
+		*/
+	///	2 = full name = |0|, 3 = name = |1|, 4 = color = |2|
+		LOOP {Arr_Spawnpoint[|0|][3]} {Arr_Spawnpoint[|0|][4]}:
+			/*
+			{"text":"|0|","color":"|1|","bold":"true",
+				"clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |1;1|"},
+				"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Arr_Spawnpoint[|0;1|][2]","color":"|1|"}}
+			},;
+			*/
+		/*
 		{"text":"!","color":"gray"}]}
 		*/
 	
@@ -1705,11 +1766,17 @@ FUNC {Func_GameStartTellrawTFClock}:
 	LOOP {0 Arr_Spawnpoint[L] + 1} {1 (Arr_Spawnpoint[L] + 1) + 1}:
 		/*
 		@e[type=ArmorStand,SpawnStand,SPgac>=1,SPgam=|1|] tellraw @a[EC=0] $TextStart$
-		{"text":"Warning: ","color":"red"},
-		{"text":"Arr_Spawnpoint[|0|][2]","color":"Arr_Spawnpoint[|0|][4]","bold":"true",
-			"clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |1|"},
-			"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Arr_Spawnpoint[|0|][2]","color":"Arr_Spawnpoint[|0|][4]"}}
-		},
+		{"text":"Warning: ","color":"red"},;
+		*/
+	///	2 = full name = |0|, 3 = name = |1|, 4 = color = |2|
+		LOOP {Arr_Spawnpoint[|0|][3]} {Arr_Spawnpoint[|0|][4]}:
+			/*
+			{"text":"|0|","color":"|1|","bold":"true",
+				"clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp |1;1|"},
+				"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Arr_Spawnpoint[|0;1|][2]","color":"|1|"}}
+			},;
+			*/
+		/*
 		{"text":" must be turned off before another game can start.","color":"gray"}
 		]}
 		*/
@@ -1792,8 +1859,8 @@ FUNC {Func_ResetTimerTFClock}:
 	testfor @e[type=ArmorStand,SpawnStand,SPeti>=2<=4]
 	CCU_SetblockTestfor
 	
-	@e[type=ArmorStand,SpawnStand,SPeti=2] ScSS sidebar SPetm
-	@e[type=ArmorStand,SpawnStand,SPeti=3] ScSS sidebar
+	@e[type=ArmorStand,SpawnStand,SPeti=2] ScSS SPetm
+	@e[type=ArmorStand,SpawnStand,SPeti=3] ScSS
 	@e[type=ArmorStand,SpawnStand,SPeti=3] SPeti = 1
 	
 	@e[type=ArmorStand,SpawnStand,SPeti=4] + SpawnStandReset
@@ -1889,10 +1956,10 @@ FUNC {Func_TSTokenOptionsTFClock}:
 	
 	@e[type=ArmorStand,SpawnStand,SPtso>=64] SPtso - 64
 
-	@e[type=ArmorStand,SpawnStand,SPtso>=32] $ObjR$ TSToken
-	@e[type=ArmorStand,SpawnStand,SPtso>=32] $ObjA$ TSToken trigger
-	@e[type=ArmorStand,SpawnStand,SPtso>=32] $ObjR$ SPts
-	@e[type=ArmorStand,SpawnStand,SPtso>=32] $ObjA$ SPts dummy TSToken
+	@e[type=ArmorStand,SpawnStand,SPtso>=32] ScOR TSToken
+	@e[type=ArmorStand,SpawnStand,SPtso>=32] ScOA TSToken trigger
+	@e[type=ArmorStand,SpawnStand,SPtso>=32] ScOR SPts
+	@e[type=ArmorStand,SpawnStand,SPtso>=32] ScOA SPts dummy TSToken
 	@e[type=ArmorStand,SpawnStand,SPtso>=32] * reset SPtsi
 	@e[type=ArmorStand,SpawnStand,SPtso>=32] * reset SPtsn
 	@e[type=ArmorStand,SpawnStand,SPtso>=32] * reset SPtss
@@ -1904,7 +1971,7 @@ FUNC {Func_TSTokenOptionsTFClock}:
 	@e[type=ArmorStand,SpawnStand,SPtso>=8] fill $TSTokenFloor$ stained_hardened_clay 5 replace coal_block 0
 	@e[type=ArmorStand,SpawnStand,SPtso>=8] SPtso - 8
 	
-	@e[type=ArmorStand,SpawnStand,SPtso>=4] ScSS sidebar SPts
+	@e[type=ArmorStand,SpawnStand,SPtso>=4] ScSS SPts
 	@e[type=ArmorStand,SpawnStand,SPtso>=4] setblock $TSTokenGlass$ redstone_block 0
 	@e[type=ArmorStand,SpawnStand,SPtso>=4] SPtso - 4
 	

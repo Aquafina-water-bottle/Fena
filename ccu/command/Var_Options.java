@@ -171,8 +171,8 @@ public class Var_Options {
 			coordsOption = new Coordinates(5, 5, 5, "~", "~", "~");
 		}
 		if (styleOption == null) {
-			System.out.println("WARNING: 'styleOption' field is empty - defaults to 'X+ 16'");
-			Var_Options.styleOption = "X+ 16";
+			System.out.println("WARNING: 'styleOption' field is empty - defaults to '+X 16'");
+			Var_Options.styleOption = "+X 16";
 		}
 		if (parseOption == null) {
 			System.out.println("WARNING: 'parseOption' field is empty - defaults to 'true'");

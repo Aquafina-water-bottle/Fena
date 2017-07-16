@@ -4,28 +4,28 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class NumberUtils {
-	
+
 	// get max number
 	public static int getMaxSize(ArrayList<String[]> arrayGet) {
 		int numCalc = 0;
-		
+
 		if (arrayGet.isEmpty() || arrayGet.get(0) == null) {
 			return 0;
 		}
-		
+
 		if (arrayGet.size() == 1) {
 			return arrayGet.get(0).length;
 		}
-		
+
 		for (int i = 0; i < arrayGet.size(); i++) {
-			if (arrayGet.get(i).length > numCalc) {
+			if (arrayGet.get(i) != null && arrayGet.get(i).length > numCalc) {
 				numCalc = arrayGet.get(i).length;
 			}
 		}
-		
+
 		return numCalc;
 	}
-	
+
 	// checks if it's a number (int or float)
 	public static boolean isNum(String testNum) {
 		if (testNum == null) {
@@ -43,15 +43,15 @@ public class NumberUtils {
 			}
 		}
 	}
-	
+
 	// checks if it's a number (int or float) in an array
 	public static boolean isNum(ArrayList<String> testArray) {
 		if (testArray == null || testArray.isEmpty() || testArray.get(0).equals("")) {
 			return false;
 		}
-		
+
 		boolean testNum = true;
-		
+
 		for (String testString : testArray) {
 			try {
 				Integer.parseInt(testString);
@@ -64,7 +64,7 @@ public class NumberUtils {
 				}
 			}
 		}
-		
+
 		return testNum;
 	}
 

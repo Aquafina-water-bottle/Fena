@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import ccu.command.MathParser;
-import ccu.command.Var_Define;
 
 /* TODO
  * Parameters should be thought of --
