@@ -26,7 +26,7 @@ public class NumberUtils {
 		return numCalc;
 	}
 
-	// checks if it's a number (int or float)
+	// checks if it's a number (int or double)
 	public static boolean isNum(String testNum) {
 		if (testNum == null) {
 			return false;
@@ -36,7 +36,7 @@ public class NumberUtils {
 			return true;
 		} catch (NumberFormatException e) {
 			try {
-				Float.parseFloat(testNum);
+				Double.parseDouble(testNum);
 				return true;
 			} catch (NumberFormatException e2) {
 				return false;
@@ -44,7 +44,7 @@ public class NumberUtils {
 		}
 	}
 
-	// checks if it's a number (int or float) in an array
+	// checks if it's a number (int or double) in an array
 	public static boolean isNum(ArrayList<String> testArray) {
 		if (testArray == null || testArray.isEmpty() || testArray.get(0).equals("")) {
 			return false;
@@ -57,7 +57,7 @@ public class NumberUtils {
 				Integer.parseInt(testString);
 			} catch (NumberFormatException e) {
 				try {
-					Float.parseFloat(testString);
+					Double.parseDouble(testString);
 				} catch (NumberFormatException e2) {
 					testNum = false;
 					break;
@@ -82,18 +82,18 @@ public class NumberUtils {
 		}
 	}
 
-	// checks if it's a float and only a float
-	public static boolean isFloat(String testFloat) {
-		if (testFloat == null) {
+	// checks if it's a double and only a double
+	public static boolean isDouble(String testDouble) {
+		if (testDouble == null) {
 			return false;
 		} else {
 			try {
-				// if it's a float
-				Float.parseFloat(testFloat);
+				// if it's a double
+				Double.parseDouble(testDouble);
 				try {
 
-					// cannot be a float if it works as an int
-					Integer.parseInt(testFloat);
+					// cannot be a double if it works as an int
+					Integer.parseInt(testDouble);
 					return false;
 
 				} catch (NumberFormatException e) {
@@ -104,21 +104,22 @@ public class NumberUtils {
 			}
 		}
 	}
-	
-	public static String roundFloat(float getFloat) {
-		String roundCalc = new DecimalFormat("#.#####").format(getFloat);
+
+	public static String roundDouble(double getDouble) {
+		String roundCalc = new DecimalFormat("#.##############").format(getDouble);
+		// String roundCalc = getDouble + "";
 		if (roundCalc.contains(".") == false) {
 			roundCalc += ".0";
 		}
 		return roundCalc;
 	}
 
-	public static String roundFloatToInt(float getFloat) {
-		String roundCalc = new DecimalFormat("#").format(getFloat);
+	public static String roundDoubleToInt(double getDouble) {
+		String roundCalc = new DecimalFormat("#").format(getDouble);
 		return roundCalc;
 	}
 
-	public static boolean checkSameSign(float x, float y) {
+	public static boolean checkSameSign(double x, double y) {
 		if ((x >= 0 && y >= 0) || (x < 0 && y < 0)) {
 			return true;
 		} else {

@@ -31,7 +31,7 @@ public class Var_Define {
 			"FUNC", "ACTIVATE", "CALL", 
 			"MFUNC", "BRANCH",
 			"IMPORT", "LIBRARY", "GETDIR", "WITHIN", "GETCOORDS", 
-			"CALC", "SIN", "COS", "TAN", "INT", "FLOAT", "GSELF",
+			"CALC", "SIN", "COS", "TAN", "INT", "DOUBLE", "GSELF",
 			"COND", "OPTIONS", "UNASSIGN", "IF", "LOOP", "NULL",
 			};
 	// @formatter:on
@@ -186,8 +186,8 @@ public class Var_Define {
 					defineType = 2;
 				}
 			
-				if (NumberUtils.isFloat(defintionGet)) {
-					// is float
+				if (NumberUtils.isDouble(defintionGet)) {
+					// is double
 					defineType = 3;
 				}
 			}*/
@@ -370,6 +370,11 @@ public class Var_Define {
 
 			calcIndexString = getEndString.substring(getEndString.indexOf("[") + 1, getEndString.indexOf("]"));
 			getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
+			
+			if (NumberUtils.isNum(calcIndexString) == false) {
+				calcIndexString = MathParser.parseSecondaryStatements(calcIndexString, fullLineGet);
+				calcIndexString = MathParser.getOperation(calcIndexString, fullLineGet, false, 0);
+			}
 
 			if (NumberUtils.isNum(calcIndexString)) { // regular
 				int indexCalc = Integer.parseInt(calcIndexString);
@@ -435,6 +440,16 @@ public class Var_Define {
 							"ERROR: Array call '" + getString + "[" + calcIndexString + "]" + "' in '" + fullLineGet + "' is invalid");
 					System.exit(0);
 				}
+			}
+			
+			if (NumberUtils.isNum(calcIndexString) == false) {
+				calcIndexString = MathParser.parseSecondaryStatements(calcIndexString, fullLineGet);
+				calcIndexString = MathParser.getOperation(calcIndexString, fullLineGet, false, 0);
+			}
+			
+			if (NumberUtils.isNum(calcIndexString2) == false) {
+				calcIndexString2 = MathParser.parseSecondaryStatements(calcIndexString2, fullLineGet);
+				calcIndexString2 = MathParser.getOperation(calcIndexString2, fullLineGet, false, 0);
 			}
 
 			if (NumberUtils.isNum(calcIndexString)) {

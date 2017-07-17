@@ -1,3 +1,7 @@
+//(Testing)
+///	C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\CCU - Command Combiner Unlimited\tests\test.ccu
+
+//<Definitions
 DEF ASDF DANK
 DEF DANK MEMES 5
 DEF GLOBAL aFloat 3333333333.1111111111111111111111
@@ -26,10 +30,12 @@ FUNC {GetRandFunc2}:
 	say 4
 	say 5
 	say 6
-	
+//>
+
+//<Options	
 OPTIONS:
 	blockOption stonebrick 0
-	coordsOption 383 69 95
+///	coordsOption 383 69 95
 
 OPTIONS:
 ///	Style
@@ -43,8 +49,9 @@ OPTIONS:
 ///	Filepath to MCFunctions
 /// Preserve coordinates for each group
 	keepCoordsOption false
+//>
 
-///	C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\CCU - Command Combiner Unlimited\tests\test.ccu
+//<Part A
 
 //=
 FUNC {ARGS ACTIVATE CCU.xpNumber}
@@ -61,7 +68,9 @@ LOOP {_A;_B;_C}:
 				say |0| |0;1|
 			say |0|
 		say okay
+//>
 
+//<Part B
 LOOP {_A;_B;_C}:
 	FUNC {Func_test|0|}:
 		say |0|
@@ -152,6 +161,34 @@ MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 		
 	say Arr_Test_Num Arr_Test[L][L]
 	
+	ARRAY {COORDS Arr_Coords}:
+		-62.43 14 421.6
+		-64.43 14 421.6
+		-66.43 14 421.6
+		-68.43 14 421.6
+		-68.4 14 415.6
+		-66.4 14 415.6
+		-64.4 14 415.6
+		-62.4 14 415.6
+		-13.43 28 313.6
+		-137.43 27 315.6
+		
+	say random coords Arr_Coords[3][x]
+	
+	//=
+	ARRAY {Arr_Recurring}:
+		this
+		is
+		a
+		recurring
+		Arr_Recurring[4]
+		array
+		recurring_asdf
+	=//
+		
+///	say recurring Arr_Recurring[4]
+///	say recurring_asdf
+	
 	
 	say GREATEST
 	DEF COMMANDS Dankest |0| memes |1|
@@ -211,7 +248,7 @@ MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 			say MyBoyAsdf
 		IF {asdf = notAsdf}:
 			say MyBoyNotAsdf
-		
+			
 	MFUNC {BRANCH test init MFunc_InitTest}:
 		say asdf
 		say asdf
@@ -261,13 +298,15 @@ MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 		say theRealAsdf
 	
 	say YESSSSSSSSSSSSSSSSS
-	setblock Grp_APulse air 0
+///	setblock Grp_APulse air 0
+//>
 
+//<Part C
 GROUP {Grp_APulse}:
 	say a
 	say b
 	function MFunc_InitTest
-	setblock SELF air 0
+	setblock GSELF air 0
 
 GROUP {PULSE Grp_B}:
 	say b
@@ -387,7 +426,9 @@ GROUP {Grp_AyyLmao}:
 	say 19
 	say 20
 	say 21
-	
+//>
+
+//<Part D
 GROUP {Grp_TheBestGroup}:
 	say a
 	say b
@@ -484,7 +525,9 @@ GROUP {Grp_TheGreatestGroup}:
 	
 	
 	tellraw @a {"text":"ayylmao"}
-	
+//>
+
+//<Part E
 GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	say rekt
 	say rekt again
@@ -733,7 +776,148 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 ///	say @a[name<=3<5]
 ///	say @a[name>5>=3]
 ///	say @a[name<5<=3]
+	
+	SPLIT {GLOBAL Arr_RandName Strin g asd fsf} { } {s}
+	say Arr_RandName[S]
+	
+	ARRAY {ACTIVATE CCU.ObjectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
+		RRti dummy Royal Rumble Timer
+		RRpl dummy Royal Rumble Player List
+		
+///	CCU.ObjectiveAdd(Arr_GeneralScoreboardStart)
+	say test
+	
+	CCU.ObjectiveRemove(Obj_GeneralScoreboardStart)
+	
+	ARRAY {ACTIVATE CCU.TeamAdd(Team_GeneralScoreboardStart) Team_GeneralScoreboardStart}:
+		RRg RR Green
+		OPT RRg color green
+		OPT RRg nametagVisibility hideForOtherTeams
+		OPT RRg friendlyfire false
+	
+		RRb RR Blue
+		OPT RRb color blue
+		OPT RRb nametagVisibility hideForOtherTeams
+		OPT RRb friendlyfire false
+		
+	CCU.TeamRemove(Team_GeneralScoreboardStart)
 
 	fill Grp_asdf air 0
+//>
+
+//<Part F
+GROUP {Grp_TestingDocumentation}:
+	ARRAY {COORDS Arr_Name}:
+		-62.43 14 421.6
+		-64.43 14 421.6
+		-66.43 14 421.6
+		-68.43 14 421.6
+		-68.4 14 415.6
+		-66.4 14 415.6
+		-64.4 14 415.6
+		
+///	Gets '-68.43 14 421.6'
+	say Arr_Name[3]
+
+///	Gets '-62.43 14 421.6;-64.43 14 421.6;-66.43 14 421.6;-68.43 14 421.6;-68.4 14 415.6;-66.4 14 415.6;-64.4 14 415.6'
+	say Arr_Name[S]
+
+///	Gets '7'
+	say Arr_Name[L]
+
+
+	ARRAY {GLOBAL Arr_Test}:
+		{
+			element1
+			element2
+			element3
+		} {
+			element1_1
+			NULL
+			element1_3
+		}
+
+///	Gets 'element1_3'
+	say Arr_Test[1][2]
+	
+///	Returns 'element1_1;;element1_3'
+	say Arr_Test[1][S]
+	
+///	Returns '2'
+	say Arr_Test[0][L]
+	
+///	Returns '6'
+	say Arr_Test[L][L]
+	
+///	Returns '1'
+	say Arr_Test[L]
+	
+	LOOP {1 10 + 1}:
+		IF {|0| = 1}:
+			say |0| ;
+		IF {|0| > 1}:
+			|0| ;
+	LOOP {1 10 + 1}:
+		IF {|0| != 5}:
+			say |0| != 5
+	IF {asdf != asdf}:
+		say asdf != asdf
+	IF {asdf != asdf2}:
+		say asdf != asdf2
 	
 	
+	IMPORT {GETCOORDS C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\PC - Pictionary\Pictionary_dat.txt}
+	setblock Pictionary.Grp_MainStart redstone_block 0
+	
+//>
+
+//<Part sqrt(G)
+//= King cat made a lookup table for square roots up to score 39800 --> 199 so I'm going to try to replicate that
+scoreboard players set @s[score_KCC.sqrt.sqrt_min=1,score_KCC.sqrt.sqrt=2] KCC.sqrt.sqre 1
+scoreboard players set @s[score_KCC.sqrt.sqrt_min=3,score_KCC.sqrt.sqrt=6] KCC.sqrt.sqre 2
+scoreboard players set @s[score_KCC.sqrt.sqrt_min=7,score_KCC.sqrt.sqrt=12] KCC.sqrt.sqre 3
+scoreboard players set @s[score_KCC.sqrt.sqrt_min=13,score_KCC.sqrt.sqrt=20] KCC.sqrt.sqre 4
+scoreboard players set @s[score_KCC.sqrt.sqrt_min=21,score_KCC.sqrt.sqrt=30] KCC.sqrt.sqre 5
+scoreboard players set @s[score_KCC.sqrt.sqrt_min=31,score_KCC.sqrt.sqrt=42] KCC.sqrt.sqre 6
+scoreboard players set @s[score_KCC.sqrt.sqrt_min=43,score_KCC.sqrt.sqrt=56] KCC.sqrt.sqre 7
+scoreboard players set @s[score_KCC.sqrt.sqrt_min=57,score_KCC.sqrt.sqrt=72] KCC.sqrt.sqre 8
+scoreboard players set @s[score_KCC.sqrt.sqrt_min=73,score_KCC.sqrt.sqrt=90] KCC.sqrt.sqre 9
+=//
+
+//=
+GROUP {Grp_TestingSqrt}:
+///	Custom min / max score
+	DEF GLOBAL $GetMin$ 1
+	DEF GLOBAL $GetMax$ 40000
+	
+///	For calculations
+	DEF GLOBAL $CurrentResult$ $GetMin$
+	DEF GLOBAL $PreviousMinScore$ $GetMin$
+	
+	LOOP {$GetMin$ $GetMax$ + 1}:
+		
+		DEF GLOBAL $PreviousResult$ $CurrentResult$
+		DEF GLOBAL $CurrentResult$ INT(|0;1| ^ 0.5)
+		
+		IF {$CurrentResult$ > $PreviousResult$}:
+			@s[KCC.sqrt.sqrt>=$PreviousMinScore$<|0|] KCC.sqrt.sqre = $PreviousResult$
+			DEF GLOBAL $PreviousMinScore$ |0;1|
+		
+		
+=//
+//>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

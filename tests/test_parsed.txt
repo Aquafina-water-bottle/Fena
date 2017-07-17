@@ -1,13 +1,13 @@
-GROUP | Grp_AyyLmao1_A | PULSE		[384 70 96 | stonebrick 0]
+GROUP | Grp_AyyLmao1_A | PULSE		[~6 ~6 ~6 | stonebrick 0]
 	say 1 _A
 
-GROUP | Grp_AyyLmao2_A | PULSE		[384 72 96 | stonebrick 0]
+GROUP | Grp_AyyLmao2_A | PULSE		[~6 ~8 ~6 | stonebrick 0]
 	say 2 _A
 
-GROUP | Grp_AyyLmao3_A | PULSE		[384 74 96 | stonebrick 0]
+GROUP | Grp_AyyLmao3_A | PULSE		[~6 ~10 ~6 | stonebrick 0]
 	say 3 _A
 
-GROUP | Grp_MainGroup_A | PULSE		[384 76 96 | stonebrick 0]
+GROUP | Grp_MainGroup_A | PULSE		[~6 ~12 ~6 | stonebrick 0]
 	say 1
 	say 2 > 1
 	say 2
@@ -15,16 +15,16 @@ GROUP | Grp_MainGroup_A | PULSE		[384 76 96 | stonebrick 0]
 	say 3
 	say okay
 
-GROUP | Grp_AyyLmao1_B | PULSE		[384 78 96 | stonebrick 0]
+GROUP | Grp_AyyLmao1_B | PULSE		[~6 ~14 ~6 | stonebrick 0]
 	say 1 _B
 
-GROUP | Grp_AyyLmao2_B | PULSE		[384 80 96 | stonebrick 0]
+GROUP | Grp_AyyLmao2_B | PULSE		[~6 ~16 ~6 | stonebrick 0]
 	say 2 _B
 
-GROUP | Grp_AyyLmao3_B | PULSE		[384 82 96 | stonebrick 0]
+GROUP | Grp_AyyLmao3_B | PULSE		[~6 ~18 ~6 | stonebrick 0]
 	say 3 _B
 
-GROUP | Grp_MainGroup_B | PULSE		[384 84 96 | stonebrick 0]
+GROUP | Grp_MainGroup_B | PULSE		[~6 ~20 ~6 | stonebrick 0]
 	say 1
 	say 2 > 1
 	say 2
@@ -32,16 +32,16 @@ GROUP | Grp_MainGroup_B | PULSE		[384 84 96 | stonebrick 0]
 	say 3
 	say okay
 
-GROUP | Grp_AyyLmao1_C | PULSE		[384 70 98 | stonebrick 0]
+GROUP | Grp_AyyLmao1_C | PULSE		[~6 ~6 ~8 | stonebrick 0]
 	say 1 _C
 
-GROUP | Grp_AyyLmao2_C | PULSE		[384 72 98 | stonebrick 0]
+GROUP | Grp_AyyLmao2_C | PULSE		[~6 ~8 ~8 | stonebrick 0]
 	say 2 _C
 
-GROUP | Grp_AyyLmao3_C | PULSE		[384 74 98 | stonebrick 0]
+GROUP | Grp_AyyLmao3_C | PULSE		[~6 ~10 ~8 | stonebrick 0]
 	say 3 _C
 
-GROUP | Grp_MainGroup_C | PULSE		[384 76 98 | stonebrick 0]
+GROUP | Grp_MainGroup_C | PULSE		[~6 ~12 ~8 | stonebrick 0]
 	say 1
 	say 2 > 1
 	say 2
@@ -49,33 +49,33 @@ GROUP | Grp_MainGroup_C | PULSE		[384 76 98 | stonebrick 0]
 	say 3
 	say okay
 
-GROUP | Grp_APulse | PULSE		[384 78 98 | stonebrick 0]
+GROUP | Grp_APulse | PULSE		[~6 ~14 ~8 | stonebrick 0]
 	say a
 	say b
 	function custom:RayCaster/theHunted/test/init
-	setblock 384 78 98 air 0
+	setblock ~-4 ~0 ~0 air 0
 
-GROUP | Grp_B | PULSE		[384 80 98 | stonebrick 0]
+GROUP | Grp_B | PULSE		[~6 ~16 ~8 | stonebrick 0]
 	say b
 	g;l;o;b;a;l
 	Arr_Test2[S]
 
-GROUP | Grp_C | CLOCK		[384 82 98 | stonebrick 0]
+GROUP | Grp_C | CLOCK		[~6 ~18 ~8 | stonebrick 0]
 	say c
 
-GROUP | Grp_DClock | CLOCK		[384 84 98 | stonebrick 0]
+GROUP | Grp_DClock | CLOCK		[~6 ~20 ~8 | stonebrick 0]
 	say d
 
-GROUP | Grp_E | PULSE		[384 70 100 | stonebrick 0]
+GROUP | Grp_E | PULSE		[~6 ~6 ~10 | stonebrick 0]
 	say e
 
-GROUP | Grp_F | PULSE		[384 72 100 | stonebrick 0]
+GROUP | Grp_F | PULSE		[~6 ~8 ~10 | stonebrick 0]
 	say f
 
-GROUP | Grp_G | PULSE		[384 74 100 | stonebrick 0]
+GROUP | Grp_G | PULSE		[~6 ~10 ~10 | stonebrick 0]
 	say g
 
-GROUP | Grp_Test2 | PULSE		[384 76 100 | stonebrick 0]
+GROUP | Grp_Test2 | PULSE		[~6 ~12 ~10 | stonebrick 0]
 	say test
 	say ABORTMISSION
 	say hell yeah
@@ -83,16 +83,16 @@ GROUP | Grp_Test2 | PULSE		[384 76 100 | stonebrick 0]
 	lmao
 	ayy
 
-GROUP | Grp_Test | PULSE		[384 78 100 | stonebrick 0]
+GROUP | Grp_Test | PULSE		[~6 ~14 ~10 | stonebrick 0]
 	say $SA$
 	ayy
 	say LiterallyAbortMission
 	lmao
-	fill 384 80 100 399 82 100 air 0
+	fill ~-5 ~2 ~0 ~10 ~4 ~0 air 0
 	say yas
 
-GROUP | Grp_AyyLmao | PULSE		[384 80 100 | stonebrick 0]
-	setblock 384 80 100 air 0
+GROUP | Grp_AyyLmao | PULSE		[~6 ~16 ~10 | stonebrick 0]
+	setblock ~-1 ~0 ~0 air 0
 	say MEMES 5
 	say -301 MARKER
 	say -582 RandCalc
@@ -140,7 +140,7 @@ GROUP | Grp_AyyLmao | PULSE		[384 80 100 | stonebrick 0]
 	say 20
 	say 21
 
-GROUP | Grp_TheBestGroup | PULSE		[384 84 100 | stonebrick 0]
+GROUP | Grp_TheBestGroup | PULSE		[~6 ~20 ~10 | stonebrick 0]
 	say a
 	say b
 	say c
@@ -163,7 +163,7 @@ GROUP | Grp_TheBestGroup | PULSE		[384 84 100 | stonebrick 0]
 	 | say s
 	 L say t
 
-GROUP | Grp_TheGreatestGroup | PULSE		[384 70 102 | stonebrick 0]
+GROUP | Grp_TheGreatestGroup | PULSE		[~6 ~6 ~12 | stonebrick 0]
 	say 1
 	say 2 asdfasdf
 	say 3 asdfasdf
@@ -209,10 +209,9 @@ GROUP | Grp_TheGreatestGroup | PULSE		[384 70 102 | stonebrick 0]
 	say 30
 	say 31
 	say 32
-	say 33 34 35 36 37 38 39 40
-	tellraw @a {"text":"ayylmao"}
+	say 33 34 35 36 37 38 39 40 tellraw @a {"text":"ayylmao"}
 
-GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
+GROUP | Grp_asdf | CLOCK		[~6 ~6 ~14 | stained_hardened_clay 11]
 	say rekt
 	say rekt again
 	say abde
@@ -347,16 +346,16 @@ GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
-	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
+	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick -1 say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
-	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
+	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick -1 say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
-	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
+	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick -1 execute @a ~ ~ ~ detect ~ ~ ~ stonebrick -1 say test
 	execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test
 	execute @a ~ ~ ~ say test
 	execute @a ~ ~ ~ not_a_block 0 say test
@@ -381,23 +380,23 @@ GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
 	minecraft:tp @a[score_SPtp=1,score_SPtp_min=1] 49 36 -45 -90 0
 	tellraw @a[score_SPtp=1,score_SPtp_min=1]
 	tellraw @a[m=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
-	tellraw @a[SPtp=1] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"49 36 -45","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Ice Race","color":"aqua","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 1"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Ice Race","color":"aqua"}}},{"text":"!","color":"gray"}]}
+	tellraw @a[score_SPtp=1,score_SPtp_min=1] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"49 36 -45","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Ice Race","color":"aqua","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 1"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Ice Race","color":"aqua"}}},{"text":"!","color":"gray"}]}
 	minecraft:tp @a[score_SPtp=2,score_SPtp_min=2] 75 7 -80 90 0
 	tellraw @a[score_SPtp=2,score_SPtp_min=2]
 	tellraw @a[m=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
-	tellraw @a[SPtp=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"75 7 -80","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Slow Race","color":"gray","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 2"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Slow Race","color":"gray"}}},{"text":"!","color":"gray"}]}
+	tellraw @a[score_SPtp=2,score_SPtp_min=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"75 7 -80","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Slow Race","color":"gray","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 2"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Slow Race","color":"gray"}}},{"text":"!","color":"gray"}]}
 	minecraft:tp @a[score_SPtp=3,score_SPtp_min=3] 73 7 -102 90 0
 	tellraw @a[score_SPtp=3,score_SPtp_min=3]
 	tellraw @a[m=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
-	tellraw @a[SPtp=3] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"73 7 -102","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Nether Race","color":"red","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 3"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Nether Race","color":"red"}}},{"text":"!","color":"gray"}]}
+	tellraw @a[score_SPtp=3,score_SPtp_min=3] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"73 7 -102","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Nether Race","color":"red","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 3"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Nether Race","color":"red"}}},{"text":"!","color":"gray"}]}
 	minecraft:tp @a[score_SPtp=4,score_SPtp_min=4] 23 7 -133 -90 0
 	tellraw @a[score_SPtp=4,score_SPtp_min=4]
 	tellraw @a[m=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
-	tellraw @a[SPtp=4] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"23 7 -133","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Evil Race","color":"gray","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 4"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Evil Race","color":"gray"}}},{"text":"!","color":"gray"}]}
+	tellraw @a[score_SPtp=4,score_SPtp_min=4] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"23 7 -133","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Evil Race","color":"gray","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 4"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Evil Race","color":"gray"}}},{"text":"!","color":"gray"}]}
 	minecraft:tp @a[score_SPtp=5,score_SPtp_min=5] 218 18 -37 -90 0
 	tellraw @a[score_SPtp=5,score_SPtp_min=5]
 	tellraw @a[m=2] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},
-	tellraw @a[SPtp=5] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"218 18 -37","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Diamond Race","color":"aqua","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 5"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Diamond Race","color":"aqua"}}},{"text":"!","color":"gray"}]}
+	tellraw @a[score_SPtp=5,score_SPtp_min=5] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"SP","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"SpawnPoint System","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players operation @p SPtp = cmd SPna"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"218 18 -37","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Diamond Race","color":"aqua","bold":"true","clickEvent":{"action":"run_command","value":"/scoreboard players set @p SPtp 5"},"hoverEvent":{"action":"show_text","value":{"text":"Teleport to Diamond Race","color":"aqua"}}},{"text":"!","color":"gray"}]}
 	execute @a[score_SPtp_min=1] ~ ~ ~ playsound minecraft:entity.experience_orb.touch voice @a[c=1,score_SPtp_min=1]
 	scoreboard players set @a[score_SPtp_min=1] SPtp 0
 	say @a[m=2]
@@ -454,7 +453,235 @@ GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
 	say lmao
 	say lmao compared to ayy
 	say lmao compared to ayy
-	fill 384 70 104 399 85 104 air 0
+	say Strin;g;a;d;f;f
+	CCU.ObjectiveAdd(Obj_GeneralScoreboardStart)
+	say test
+	CCU.ObjectiveRemove(Obj_GeneralScoreboardStart)
+	CCU.TeamAdd(Team_GeneralScoreboardStart)
+	CCU.TeamRemove(Team_GeneralScoreboardStart)
+	fill ~-7 ~-15 ~0 ~8 ~0 ~0 air 0
+
+GROUP | Grp_TestingDocumentation | PULSE		[~6 ~10 ~12 | stonebrick 0]
+	say -68.43 14 421.6
+	say -62.43 14 421.6;-64.43 14 421.6;-66.43 14 421.6;-68.43 14 421.6;-68.4 14 415.6;-66.4 14 415.6;-64.4 14 415.6
+	say 6
+	say element1_3
+	say element1_1;;element1_3
+	say 2
+	say 6
+	say 1
+	say 1 2 3 4 5 6 7 8 9 10 say 1 != 5
+	say 2 != 5
+	say 3 != 5
+	say 4 != 5
+	say 6 != 5
+	say 7 != 5
+	say 8 != 5
+	say 9 != 5
+	say 10 != 5
+	say asdf != asdf2
+	setblock 80 10 176 redstone_block 0
+
+GROUP | Grp_TestingSqrt | PULSE		[~6 ~6 ~16 | stonebrick 0]
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1,score_KCC.sqrt.sqrt=2] KCC.sqrt.sqre 1
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=3,score_KCC.sqrt.sqrt=6] KCC.sqrt.sqre 2
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=7,score_KCC.sqrt.sqrt=12] KCC.sqrt.sqre 3
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=13,score_KCC.sqrt.sqrt=20] KCC.sqrt.sqre 4
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=21,score_KCC.sqrt.sqrt=30] KCC.sqrt.sqre 5
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=31,score_KCC.sqrt.sqrt=42] KCC.sqrt.sqre 6
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=43,score_KCC.sqrt.sqrt=56] KCC.sqrt.sqre 7
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=57,score_KCC.sqrt.sqrt=72] KCC.sqrt.sqre 8
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=73,score_KCC.sqrt.sqrt=90] KCC.sqrt.sqre 9
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=91,score_KCC.sqrt.sqrt=110] KCC.sqrt.sqre 10
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=111,score_KCC.sqrt.sqrt=132] KCC.sqrt.sqre 11
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=133,score_KCC.sqrt.sqrt=156] KCC.sqrt.sqre 12
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=157,score_KCC.sqrt.sqrt=182] KCC.sqrt.sqre 13
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=183,score_KCC.sqrt.sqrt=210] KCC.sqrt.sqre 14
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=211,score_KCC.sqrt.sqrt=240] KCC.sqrt.sqre 15
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=241,score_KCC.sqrt.sqrt=272] KCC.sqrt.sqre 16
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=273,score_KCC.sqrt.sqrt=306] KCC.sqrt.sqre 17
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=307,score_KCC.sqrt.sqrt=342] KCC.sqrt.sqre 18
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=343,score_KCC.sqrt.sqrt=380] KCC.sqrt.sqre 19
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=381,score_KCC.sqrt.sqrt=420] KCC.sqrt.sqre 20
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=421,score_KCC.sqrt.sqrt=462] KCC.sqrt.sqre 21
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=463,score_KCC.sqrt.sqrt=506] KCC.sqrt.sqre 22
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=507,score_KCC.sqrt.sqrt=552] KCC.sqrt.sqre 23
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=553,score_KCC.sqrt.sqrt=600] KCC.sqrt.sqre 24
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=601,score_KCC.sqrt.sqrt=650] KCC.sqrt.sqre 25
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=651,score_KCC.sqrt.sqrt=702] KCC.sqrt.sqre 26
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=703,score_KCC.sqrt.sqrt=756] KCC.sqrt.sqre 27
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=757,score_KCC.sqrt.sqrt=812] KCC.sqrt.sqre 28
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=813,score_KCC.sqrt.sqrt=870] KCC.sqrt.sqre 29
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=871,score_KCC.sqrt.sqrt=930] KCC.sqrt.sqre 30
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=931,score_KCC.sqrt.sqrt=992] KCC.sqrt.sqre 31
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=993,score_KCC.sqrt.sqrt=1056] KCC.sqrt.sqre 32
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1057,score_KCC.sqrt.sqrt=1122] KCC.sqrt.sqre 33
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1123,score_KCC.sqrt.sqrt=1190] KCC.sqrt.sqre 34
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1191,score_KCC.sqrt.sqrt=1260] KCC.sqrt.sqre 35
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1261,score_KCC.sqrt.sqrt=1332] KCC.sqrt.sqre 36
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1333,score_KCC.sqrt.sqrt=1406] KCC.sqrt.sqre 37
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1407,score_KCC.sqrt.sqrt=1482] KCC.sqrt.sqre 38
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1483,score_KCC.sqrt.sqrt=1560] KCC.sqrt.sqre 39
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1561,score_KCC.sqrt.sqrt=1640] KCC.sqrt.sqre 40
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1641,score_KCC.sqrt.sqrt=1722] KCC.sqrt.sqre 41
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1723,score_KCC.sqrt.sqrt=1806] KCC.sqrt.sqre 42
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1807,score_KCC.sqrt.sqrt=1892] KCC.sqrt.sqre 43
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1893,score_KCC.sqrt.sqrt=1980] KCC.sqrt.sqre 44
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=1981,score_KCC.sqrt.sqrt=2070] KCC.sqrt.sqre 45
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=2071,score_KCC.sqrt.sqrt=2162] KCC.sqrt.sqre 46
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=2163,score_KCC.sqrt.sqrt=2256] KCC.sqrt.sqre 47
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=2257,score_KCC.sqrt.sqrt=2352] KCC.sqrt.sqre 48
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=2353,score_KCC.sqrt.sqrt=2450] KCC.sqrt.sqre 49
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=2451,score_KCC.sqrt.sqrt=2550] KCC.sqrt.sqre 50
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=2551,score_KCC.sqrt.sqrt=2652] KCC.sqrt.sqre 51
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=2653,score_KCC.sqrt.sqrt=2756] KCC.sqrt.sqre 52
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=2757,score_KCC.sqrt.sqrt=2862] KCC.sqrt.sqre 53
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=2863,score_KCC.sqrt.sqrt=2970] KCC.sqrt.sqre 54
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=2971,score_KCC.sqrt.sqrt=3080] KCC.sqrt.sqre 55
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=3081,score_KCC.sqrt.sqrt=3192] KCC.sqrt.sqre 56
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=3193,score_KCC.sqrt.sqrt=3306] KCC.sqrt.sqre 57
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=3307,score_KCC.sqrt.sqrt=3422] KCC.sqrt.sqre 58
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=3423,score_KCC.sqrt.sqrt=3540] KCC.sqrt.sqre 59
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=3541,score_KCC.sqrt.sqrt=3660] KCC.sqrt.sqre 60
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=3661,score_KCC.sqrt.sqrt=3782] KCC.sqrt.sqre 61
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=3783,score_KCC.sqrt.sqrt=3906] KCC.sqrt.sqre 62
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=3907,score_KCC.sqrt.sqrt=4032] KCC.sqrt.sqre 63
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=4033,score_KCC.sqrt.sqrt=4160] KCC.sqrt.sqre 64
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=4161,score_KCC.sqrt.sqrt=4290] KCC.sqrt.sqre 65
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=4291,score_KCC.sqrt.sqrt=4422] KCC.sqrt.sqre 66
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=4423,score_KCC.sqrt.sqrt=4556] KCC.sqrt.sqre 67
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=4557,score_KCC.sqrt.sqrt=4692] KCC.sqrt.sqre 68
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=4693,score_KCC.sqrt.sqrt=4830] KCC.sqrt.sqre 69
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=4831,score_KCC.sqrt.sqrt=4970] KCC.sqrt.sqre 70
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=4971,score_KCC.sqrt.sqrt=5112] KCC.sqrt.sqre 71
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=5113,score_KCC.sqrt.sqrt=5256] KCC.sqrt.sqre 72
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=5257,score_KCC.sqrt.sqrt=5402] KCC.sqrt.sqre 73
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=5403,score_KCC.sqrt.sqrt=5550] KCC.sqrt.sqre 74
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=5551,score_KCC.sqrt.sqrt=5700] KCC.sqrt.sqre 75
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=5701,score_KCC.sqrt.sqrt=5852] KCC.sqrt.sqre 76
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=5853,score_KCC.sqrt.sqrt=6006] KCC.sqrt.sqre 77
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=6007,score_KCC.sqrt.sqrt=6162] KCC.sqrt.sqre 78
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=6163,score_KCC.sqrt.sqrt=6320] KCC.sqrt.sqre 79
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=6321,score_KCC.sqrt.sqrt=6480] KCC.sqrt.sqre 80
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=6481,score_KCC.sqrt.sqrt=6642] KCC.sqrt.sqre 81
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=6643,score_KCC.sqrt.sqrt=6806] KCC.sqrt.sqre 82
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=6807,score_KCC.sqrt.sqrt=6972] KCC.sqrt.sqre 83
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=6973,score_KCC.sqrt.sqrt=7140] KCC.sqrt.sqre 84
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=7141,score_KCC.sqrt.sqrt=7310] KCC.sqrt.sqre 85
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=7311,score_KCC.sqrt.sqrt=7482] KCC.sqrt.sqre 86
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=7483,score_KCC.sqrt.sqrt=7656] KCC.sqrt.sqre 87
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=7657,score_KCC.sqrt.sqrt=7832] KCC.sqrt.sqre 88
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=7833,score_KCC.sqrt.sqrt=8010] KCC.sqrt.sqre 89
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=8011,score_KCC.sqrt.sqrt=8190] KCC.sqrt.sqre 90
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=8191,score_KCC.sqrt.sqrt=8372] KCC.sqrt.sqre 91
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=8373,score_KCC.sqrt.sqrt=8556] KCC.sqrt.sqre 92
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=8557,score_KCC.sqrt.sqrt=8742] KCC.sqrt.sqre 93
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=8743,score_KCC.sqrt.sqrt=8930] KCC.sqrt.sqre 94
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=8931,score_KCC.sqrt.sqrt=9120] KCC.sqrt.sqre 95
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=9121,score_KCC.sqrt.sqrt=9312] KCC.sqrt.sqre 96
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=9313,score_KCC.sqrt.sqrt=9506] KCC.sqrt.sqre 97
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=9507,score_KCC.sqrt.sqrt=9702] KCC.sqrt.sqre 98
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=9703,score_KCC.sqrt.sqrt=9900] KCC.sqrt.sqre 99
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=9901,score_KCC.sqrt.sqrt=10100] KCC.sqrt.sqre 100
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=10101,score_KCC.sqrt.sqrt=10302] KCC.sqrt.sqre 101
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=10303,score_KCC.sqrt.sqrt=10506] KCC.sqrt.sqre 102
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=10507,score_KCC.sqrt.sqrt=10712] KCC.sqrt.sqre 103
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=10713,score_KCC.sqrt.sqrt=10920] KCC.sqrt.sqre 104
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=10921,score_KCC.sqrt.sqrt=11130] KCC.sqrt.sqre 105
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=11131,score_KCC.sqrt.sqrt=11342] KCC.sqrt.sqre 106
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=11343,score_KCC.sqrt.sqrt=11556] KCC.sqrt.sqre 107
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=11557,score_KCC.sqrt.sqrt=11772] KCC.sqrt.sqre 108
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=11773,score_KCC.sqrt.sqrt=11990] KCC.sqrt.sqre 109
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=11991,score_KCC.sqrt.sqrt=12210] KCC.sqrt.sqre 110
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=12211,score_KCC.sqrt.sqrt=12432] KCC.sqrt.sqre 111
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=12433,score_KCC.sqrt.sqrt=12656] KCC.sqrt.sqre 112
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=12657,score_KCC.sqrt.sqrt=12882] KCC.sqrt.sqre 113
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=12883,score_KCC.sqrt.sqrt=13110] KCC.sqrt.sqre 114
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=13111,score_KCC.sqrt.sqrt=13340] KCC.sqrt.sqre 115
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=13341,score_KCC.sqrt.sqrt=13572] KCC.sqrt.sqre 116
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=13573,score_KCC.sqrt.sqrt=13806] KCC.sqrt.sqre 117
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=13807,score_KCC.sqrt.sqrt=14042] KCC.sqrt.sqre 118
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=14043,score_KCC.sqrt.sqrt=14280] KCC.sqrt.sqre 119
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=14281,score_KCC.sqrt.sqrt=14520] KCC.sqrt.sqre 120
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=14521,score_KCC.sqrt.sqrt=14762] KCC.sqrt.sqre 121
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=14763,score_KCC.sqrt.sqrt=15006] KCC.sqrt.sqre 122
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=15007,score_KCC.sqrt.sqrt=15252] KCC.sqrt.sqre 123
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=15253,score_KCC.sqrt.sqrt=15500] KCC.sqrt.sqre 124
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=15501,score_KCC.sqrt.sqrt=15750] KCC.sqrt.sqre 125
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=15751,score_KCC.sqrt.sqrt=16002] KCC.sqrt.sqre 126
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=16003,score_KCC.sqrt.sqrt=16256] KCC.sqrt.sqre 127
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=16257,score_KCC.sqrt.sqrt=16512] KCC.sqrt.sqre 128
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=16513,score_KCC.sqrt.sqrt=16770] KCC.sqrt.sqre 129
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=16771,score_KCC.sqrt.sqrt=17030] KCC.sqrt.sqre 130
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=17031,score_KCC.sqrt.sqrt=17292] KCC.sqrt.sqre 131
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=17293,score_KCC.sqrt.sqrt=17556] KCC.sqrt.sqre 132
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=17557,score_KCC.sqrt.sqrt=17822] KCC.sqrt.sqre 133
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=17823,score_KCC.sqrt.sqrt=18090] KCC.sqrt.sqre 134
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=18091,score_KCC.sqrt.sqrt=18360] KCC.sqrt.sqre 135
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=18361,score_KCC.sqrt.sqrt=18632] KCC.sqrt.sqre 136
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=18633,score_KCC.sqrt.sqrt=18906] KCC.sqrt.sqre 137
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=18907,score_KCC.sqrt.sqrt=19182] KCC.sqrt.sqre 138
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=19183,score_KCC.sqrt.sqrt=19460] KCC.sqrt.sqre 139
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=19461,score_KCC.sqrt.sqrt=19740] KCC.sqrt.sqre 140
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=19741,score_KCC.sqrt.sqrt=20022] KCC.sqrt.sqre 141
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=20023,score_KCC.sqrt.sqrt=20306] KCC.sqrt.sqre 142
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=20307,score_KCC.sqrt.sqrt=20592] KCC.sqrt.sqre 143
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=20593,score_KCC.sqrt.sqrt=20880] KCC.sqrt.sqre 144
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=20881,score_KCC.sqrt.sqrt=21170] KCC.sqrt.sqre 145
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=21171,score_KCC.sqrt.sqrt=21462] KCC.sqrt.sqre 146
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=21463,score_KCC.sqrt.sqrt=21756] KCC.sqrt.sqre 147
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=21757,score_KCC.sqrt.sqrt=22052] KCC.sqrt.sqre 148
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=22053,score_KCC.sqrt.sqrt=22350] KCC.sqrt.sqre 149
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=22351,score_KCC.sqrt.sqrt=22650] KCC.sqrt.sqre 150
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=22651,score_KCC.sqrt.sqrt=22952] KCC.sqrt.sqre 151
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=22953,score_KCC.sqrt.sqrt=23256] KCC.sqrt.sqre 152
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=23257,score_KCC.sqrt.sqrt=23562] KCC.sqrt.sqre 153
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=23563,score_KCC.sqrt.sqrt=23870] KCC.sqrt.sqre 154
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=23871,score_KCC.sqrt.sqrt=24180] KCC.sqrt.sqre 155
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=24181,score_KCC.sqrt.sqrt=24492] KCC.sqrt.sqre 156
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=24493,score_KCC.sqrt.sqrt=24806] KCC.sqrt.sqre 157
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=24807,score_KCC.sqrt.sqrt=25122] KCC.sqrt.sqre 158
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=25123,score_KCC.sqrt.sqrt=25440] KCC.sqrt.sqre 159
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=25441,score_KCC.sqrt.sqrt=25760] KCC.sqrt.sqre 160
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=25761,score_KCC.sqrt.sqrt=26082] KCC.sqrt.sqre 161
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=26083,score_KCC.sqrt.sqrt=26406] KCC.sqrt.sqre 162
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=26407,score_KCC.sqrt.sqrt=26732] KCC.sqrt.sqre 163
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=26733,score_KCC.sqrt.sqrt=27060] KCC.sqrt.sqre 164
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=27061,score_KCC.sqrt.sqrt=27390] KCC.sqrt.sqre 165
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=27391,score_KCC.sqrt.sqrt=27722] KCC.sqrt.sqre 166
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=27723,score_KCC.sqrt.sqrt=28056] KCC.sqrt.sqre 167
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=28057,score_KCC.sqrt.sqrt=28392] KCC.sqrt.sqre 168
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=28393,score_KCC.sqrt.sqrt=28730] KCC.sqrt.sqre 169
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=28731,score_KCC.sqrt.sqrt=29070] KCC.sqrt.sqre 170
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=29071,score_KCC.sqrt.sqrt=29412] KCC.sqrt.sqre 171
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=29413,score_KCC.sqrt.sqrt=29756] KCC.sqrt.sqre 172
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=29757,score_KCC.sqrt.sqrt=30102] KCC.sqrt.sqre 173
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=30103,score_KCC.sqrt.sqrt=30450] KCC.sqrt.sqre 174
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=30451,score_KCC.sqrt.sqrt=30800] KCC.sqrt.sqre 175
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=30801,score_KCC.sqrt.sqrt=31152] KCC.sqrt.sqre 176
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=31153,score_KCC.sqrt.sqrt=31506] KCC.sqrt.sqre 177
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=31507,score_KCC.sqrt.sqrt=31862] KCC.sqrt.sqre 178
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=31863,score_KCC.sqrt.sqrt=32220] KCC.sqrt.sqre 179
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=32221,score_KCC.sqrt.sqrt=32580] KCC.sqrt.sqre 180
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=32581,score_KCC.sqrt.sqrt=32942] KCC.sqrt.sqre 181
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=32943,score_KCC.sqrt.sqrt=33306] KCC.sqrt.sqre 182
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=33307,score_KCC.sqrt.sqrt=33672] KCC.sqrt.sqre 183
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=33673,score_KCC.sqrt.sqrt=34040] KCC.sqrt.sqre 184
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=34041,score_KCC.sqrt.sqrt=34410] KCC.sqrt.sqre 185
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=34411,score_KCC.sqrt.sqrt=34782] KCC.sqrt.sqre 186
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=34783,score_KCC.sqrt.sqrt=35156] KCC.sqrt.sqre 187
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=35157,score_KCC.sqrt.sqrt=35532] KCC.sqrt.sqre 188
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=35533,score_KCC.sqrt.sqrt=35910] KCC.sqrt.sqre 189
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=35911,score_KCC.sqrt.sqrt=36290] KCC.sqrt.sqre 190
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=36291,score_KCC.sqrt.sqrt=36672] KCC.sqrt.sqre 191
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=36673,score_KCC.sqrt.sqrt=37056] KCC.sqrt.sqre 192
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=37057,score_KCC.sqrt.sqrt=37442] KCC.sqrt.sqre 193
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=37443,score_KCC.sqrt.sqrt=37830] KCC.sqrt.sqre 194
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=37831,score_KCC.sqrt.sqrt=38220] KCC.sqrt.sqre 195
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=38221,score_KCC.sqrt.sqrt=38612] KCC.sqrt.sqre 196
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=38613,score_KCC.sqrt.sqrt=39006] KCC.sqrt.sqre 197
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=39007,score_KCC.sqrt.sqrt=39402] KCC.sqrt.sqre 198
+	scoreboard players set @s[score_KCC.sqrt.sqrt_min=39403,score_KCC.sqrt.sqrt=39800] KCC.sqrt.sqre 199
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -645,6 +872,8 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say
 	say THESE
 	say ARE
+	say found loop null
+	say found loop null
 	say THE
 	
 	Dog;Cat;Lips;Watermelon;Apple;Ocean;Sword;Castle;Car *Vroom Vroom Machine*;eGO Logo;Cake;Corgi;Winnie the Pooh;Waffle;Person;T-Shirt;Computer;Airplane;Microphone
@@ -693,6 +922,7 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say ayy lmao
 	say 2 MARKER
 	say Arr_Test_Num 6
+	say random coords -68.43
 	say GREATEST
 	say Dankest asdf memes asdf2 -SPLIT- Dankest more memes
 	say Dankest  memes
@@ -708,9 +938,7 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say found definition null -->  <--
 	say asdf def3 asdf
 	say WOOOOOOOOOOOO
-	scoreboard players add @a[tag=$SA$] SPid 0
-	execute @a[tag=$SA$,SPid<-$SPid$] ~ ~ ~ SPid = $SPid$
-	execute @a[tag=$SA$,SPid>-$SPid$] ~ ~ ~ SPid = $SPid$
+	CCU.spawnIDSetting
 	say 1
 	say 3
 	say 10
@@ -724,4 +952,3 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say
 	say
 	say YESSSSSSSSSSSSSSSSS
-	setblock 384 78 98 air 0

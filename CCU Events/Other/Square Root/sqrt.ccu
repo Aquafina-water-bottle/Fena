@@ -19,14 +19,12 @@ MFUNC {KCC.compass/getSqrt}:
 	DEF GLOBAL $GetMax$ 40000
 	
 ///	For calculations
-	DEF GLOBAL $CurrentResult$ $GetMin$
+	DEF GLOBAL $PreviousResult$ $GetMin$
 	DEF GLOBAL $PreviousMinScore$ $GetMin$
 	
 	LOOP {$GetMin$ $GetMax$ + 1}:
 		
-		DEF GLOBAL $PreviousResult$ $CurrentResult$
-		DEF GLOBAL $CurrentResult$ INT(|0;1| ^ 0.5)
-		
-		IF {$CurrentResult$ > $PreviousResult$}:
+		IF {INT(|0| ^ 0.5) > $PreviousResult$}:
 			@s[KCC.sqrt.sqrt>=$PreviousMinScore$<|0|] KCC.sqrt.sqre = $PreviousResult$
 			DEF GLOBAL $PreviousMinScore$ |0;1|
+			DEF GLOBAL $PreviousResult$ INT(|0;1| ^ 0.5)

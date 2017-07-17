@@ -16,7 +16,7 @@ DEF $CMDSizeZ$ 16
 DEF $TextStart$ {"text":"","extra":[{"text":"[","color":"gray","bold":true},{"text":"R","color":"blue","bold":true},{"text":"R","color":"dark_green","bold":true},{"text":"]:","color":"gray","bold":true},{"text":" "},
 
 DEF $StyleDirection$ +X
-DEF COORDS $CoordsOption$ -129 3 399
+DEF COORDS $CoordsOption$ -65 64 399
 
 IMPORT {LIBRARY GETDIR General}
 //>
@@ -484,8 +484,9 @@ ARRAY {Arr_EasterEggs}:
 	-3 22 324
 
 DEF $mod$ 0.4
-DEF $SpawnG$ -64 17 431
-DEF $SpawnB$ -138 26 330
+DEF COORDS $SpawnG$ -64 17 431
+DEF COORDS $SpawnB$ -138 26 330
+DEF COORDS $SpawnAnimals$ -111 17 330
 
 DEF $Firework$ FireworksRocketEntity ~ ~ ~ {LifeTime:20,FireworksItem:{id:fireworks,Count:1,tag:{Fireworks:{Explosions:[{Type:0,Flicker:1,Trail:0,Colors:[41728,65280],FadeColors:[2883328]}]}}}}
 DEF COORDS $SandLine$ -89 24 315 -89 24 345
@@ -496,6 +497,98 @@ DEF COORDS $CPBlock2$ -117 16 330
 
 DEF $GreenPortal$ x=-112,y=19,z=471,dx=1,dy=3
 DEF $BluePortal$ x=-95,y=19,z=471,dx=1,dy=3
+
+///	Green spawn selection for killing arrows
+ARRAY {Arr_GreenSpawnArrow}:
+	{
+	///	RRap1 = 1
+	///	Particle effects
+	///	x y z xd yd zd spd count
+		-57.0 27.0 410 1.5 1 0 0 1
+	
+	///	Selection
+		x=-60,y=25,z=410,dx=5,dy=2,dz=3
+		
+	} {
+		-47 23 425 0 1 1 0 1
+		x=-47,y=21,z=423,dx=-3,dy=4,dz=4
+	}
+	
+	
+	
+ARRAY {Arr_BlueSpawnArrow}:
+	{
+	///	RRap2 = 1
+		-132 28.5 320 0 1.5 1.5 0 7
+		x=-132,y=26,z=318,dy=5,dz=4
+	} {
+		-132 28.5 330 0 1.5 1.5 0 7
+		x=-132,y=26,z=328,dy=5,dz=4
+	} {
+		-132 28.5 340 0 1.5 1.5 0 7
+		x=-132,y=26,z=338,dy=5,dz=4
+	} {
+		-133 28 344 0.25 0.75 0 0 2
+		-133 28 316 0.25 0.75 0 0 2
+		x=-133,y=26,z=316,dy=5,dz=28
+	}
+	
+ARRAY {Arr_BlueMansionArrow}:
+	{
+	///	RRap3 = 1
+		-42 30 320 5 2 0 0 30
+		-73 29 313 0 0.5 0.25 0 2
+		x=-73,y=27,z=313,dx=41,dy=6,dz=7
+	}
+	
+ARRAY {Arr_FoodPlacement}:
+	3 porkchop -49 18.0 419
+	5 beef -50 18.0 418
+	2 rabbit -49 18.0 417
+	4 mutton -51 18.0 419
+	4 chicken -51 18.0 417
+	
+ARRAY {Arr_FoodPlacementRelative}:
+	~-0.275 ~-2.3 ~
+	~-0.275 ~-2.7 ~
+	~-0.275 ~-3.1 ~
+	~-0.275 ~-3.5 ~
+	~-0.275 ~-3.9 ~
+	
+ARRAY {Arr_HorsePlacement}:
+///	-0.5 for x and z
+///	- 0.9 for y
+///	0.2 in normal direction
+///	-83.5 18.1 368.7
+
+///	computer in library
+	SOUTH -84 19 386
+///	Empty room by library
+	WEST -65 24 388
+	
+///	Building 1
+	WEST -15 24 421
+	WEST -13 24 425
+	
+///	Building 2
+	WEST -21 25 344
+	SOUTH -20 25 347
+	WEST -17 25 349
+	NORTH -20 25 351
+	EAST -23 25 349
+	
+///	Jadeofalltrades
+	SOUTH -26 8 449
+	
+///	idk_lobsters
+	WEST -24 8 457
+	
+///	FirezFury
+	NORTH -16 8 454
+	SOUTH -16 8 452
+	
+	NORTH -16 8 458
+	SOUTH -16 8 456
 //>
 
 //<Class specific + item defines
@@ -550,16 +643,16 @@ DEF CCItem_EngieDestruct carrot_on_a_stick 1 0 {Unbreakable:1,HideFlags:127,CanD
 
 /*
 DEF CCItem_EngieEggG spawn_egg 1 0 {HideFlags:127,CanDestroy:["minecraft:sand"],display:{Name:"Dispenser Pig",Lore:["Oink"]},
-EntityTag:{id:"Pig",Invulnerable:1,Health:4.0f,CustomName:"Dispenser Pig - Green",CustomNameVisible:0,Tags:["RRPigDispenser","RRPig","RRPigGreen"],
-NoAI:1,DeathLootTable:"",ActiveEffects:[{Ambient:0b,ShowParticles:0b,Duration:1000000,Id:10b,Amplifier:1b}],Attributes:[{Name:"generic.knockbackResistance",Base:1}]},
-CanPlaceOn:[$PlaceOn$]}
+	EntityTag:{id:"Pig",Invulnerable:1,Health:4.0f,CustomName:"Dispenser Pig - Green",CustomNameVisible:0,Tags:["RRPigDispenser","RRPig","RRPigGreen"],
+	NoAI:1,DeathLootTable:"",ActiveEffects:[{Ambient:0b,ShowParticles:0b,Duration:1000000,Id:10b,Amplifier:1b}],Attributes:[{Name:"generic.knockbackResistance",Base:1}]},
+	CanPlaceOn:[$PlaceOn$]}
 
 -/-
 
 DEF CCItem_EngieEggB spawn_egg 1 0 {HideFlags:127,CanDestroy:["minecraft:sand"],display:{Name:"Dispenser Pig",Lore:["Oink"]},
-EntityTag:{id:"Pig",Invulnerable:1,Health:4.0f,CustomName:"Dispenser Pig - Blue",CustomNameVisible:0,Tags:["RRPigDispenser","RRPig","RRPigBlue"],
-NoAI:1,DeathLootTable:"",ActiveEffects:[{Ambient:0b,ShowParticles:0b,Duration:1000000,Id:10b,Amplifier:1b}],Attributes:[{Name:"generic.knockbackResistance",Base:1}]},
-CanPlaceOn:[$PlaceOn$]}
+	EntityTag:{id:"Pig",Invulnerable:1,Health:4.0f,CustomName:"Dispenser Pig - Blue",CustomNameVisible:0,Tags:["RRPigDispenser","RRPig","RRPigBlue"],
+	NoAI:1,DeathLootTable:"",ActiveEffects:[{Ambient:0b,ShowParticles:0b,Duration:1000000,Id:10b,Amplifier:1b}],Attributes:[{Name:"generic.knockbackResistance",Base:1}]},
+	CanPlaceOn:[$PlaceOn$]}
 
 -/-
 
@@ -618,8 +711,9 @@ DEF $EngiePickupDelay$ 60
 //>
 
 
-//<Arrowproof Green Spawn
+//<Arrowproof Green Spawn Clock
 FUNC {Func_ArrowproofGreenSpawnClock}:
+///	RRka = 2
 	particle happyVillager -57.0 27.0 410 1.5 1 0 0 1 force @a
 	@e[x=-60,y=25,z=410,dx=5,dy=2,dz=3,type=Arrow,RRat=2] playsound Snd_Item voice @a[r=10]
 	kill @e[x=-60,y=25,z=410,dx=5,dy=2,dz=3,type=Arrow,RRat=2]
@@ -694,10 +788,12 @@ FUNC {Func_ParticleTFClock}:
 	
 	@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa>=0<=71] RRpa + 1
 	@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa>=72] RRpa = 1
+	
 	LOOP {1 72 + 1} {15 1080 + 15.0} {195 1260 + 15.0} {5 360 + 5.0}:
 		///	say Tick |0| Angle |1| OppAngle |2| YAngle |3|
 		@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa=|0|] particle happyVillager ~CALC(SIN(|1|) * $mod$) ~CALC(SIN(|3|) * 1.5 + 1.5) ~CALC(COS(|1|) * $mod$) 0 0 0 0 0 force
 		@e[type=AreaEffectCloud,RRParticle,RRtpo=2,RRpa=|0|] particle happyVillager ~CALC(SIN(|2|) * $mod$) ~CALC(SIN(|3|) * 1.5 + 1.5) ~CALC(COS(|2|) * $mod$) 0 0 0 0 0 force
+	
 //>
 
 //<Simple Particle Testfor Clock
@@ -742,8 +838,8 @@ FUNC {Func_SwitchTeamsPulse}:
 	ScTA RRs_b Switch to blue
 	RRs_b J> @a[team=RRg]
 	RRs_g J> @a[team=RRb]
-	E> RRg
-	E> RRb
+	RRg E>
+	RRb E>
 	RRb J> @a[team=RRs_b]
 	RRg J> @a[team=RRs_g]
 	clear @a[m=2,RRpi>=0]
@@ -830,6 +926,10 @@ FUNC {Func_GeneralScoreboardStart}:
 		RRcn dummy RR Coin
 		RRdt dummy RR Death Timer
 		RRjd dummy RR Jade
+		RRka dummy RR Kill Arrow
+		RRap1 dummy RR Arrow Proof Green
+		RRap2 dummy RR Arrow Proof Blue Spawn
+		RRap3 dummy RR Arrow Proof Blue Mansion
 		
 	ARRAY {GLOBAL ACTIVATE CCU.teamAdd(Team_GeneralScoreboardStart) Team_GeneralScoreboardStart}:
 	///	Change collisionRule if bug MC-87984 is fixed
@@ -838,6 +938,7 @@ FUNC {Func_GeneralScoreboardStart}:
 		OPT nametagVisibility hideForOtherTeams
 		OPT friendlyfire false
 		OPT collisionRule pushOwnTeam
+		
 		RRb RR Blue
 		OPT color blue
 		OPT nametagVisibility hideForOtherTeams
@@ -866,7 +967,7 @@ FUNC {Func_GeneralScoreboardStart}:
 	@e[type=ArmorStand,RRJade] RRjd + 0
 	
 ///	Book for EC (RRBook)
-	setblock -128 1 400 redstone_block 0
+///	setblock -128 1 400 redstone_block 0
 	
 	ARRAY {ACTIVATE CCU.iterateNumbers ARGS}:
 		2
@@ -1169,12 +1270,12 @@ FUNC {Func_ControlPointStart}:
 	
 	LOOP {1;2}:
 		LOOP {Arr_FireworkPos|0|[S]}:
-			summon AreaEffectCloud |0| {$Duration$,Tags:["RRFirework|0;1|","RRFirework"]}
+			summon AreaEffectCloud |0| {$Duration$,Tags:["RREntity","RRFirework|0;1|","RRFirework"]}
 	
-	summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:["RRCustom","RRCountdown","RREasterEgg","RRSandGenerator"]}
+	summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:["RREntity","RRStand","RRCustom","RRCountdown","RREasterEgg","RRSandGenerator"]}
 	
-	summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:["RRCustom","RRPoint1","RRTimer1","RRPoint","RRTimer"],CustomName:"point 1"}
-	summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:["RRCustom","RRPoint2","RRTimer2","RRPoint","RRTimer"],CustomName:"point 2"}
+	summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:["RREntity","RRCustom","RRPoint1","RRTimer1","RRPoint","RRTimer"],CustomName:"point 1"}
+	summon ArmorStand ~ ~ ~ {Invulnerable:1,NoGravity:1,Invisible:1,Marker:1b,Tags:["RREntity","RRCustom","RRPoint2","RRTimer2","RRPoint","RRTimer"],CustomName:"point 2"}
 	
 	@e[type=ArmorStand,RRPoint] RRcpt + 0
 	@e[type=ArmorStand,RRPoint] RRcpot + 0
@@ -1279,6 +1380,7 @@ FUNC {Func_ControlPointClock}:
 		{"text":"Blue","color":"blue"},
 		{"text":" won!","color":"gray"}]}
 	*/
+	
 	@e[type=ArmorStand,RRTimer1,RRti=0,RRti2=0] title @a title {"text":"Blue won!","color":"blue"}
 	@e[type=ArmorStand,RRTimer1,RRti=0,RRti2=0] setblock $CPBlock1$ glass 0
 	@e[type=ArmorStand,RRTimer1,RRti=0,RRti2=0] setblock $CPBlock2$ glass 0
@@ -1919,10 +2021,10 @@ FUNC {Func_ArcherClock}:
 	@a[RRar>=1] RRar = 0
 	@e[type=Pig,RRar>=1] RRar = 0
 	@a[RRbu>=1] RRbu = 0
-	@e[type=Arrow,RRar=3] + RRCanKillArrow
-	@e[type=Arrow,RRar=2,RRai>=1<=2] + RRCanKillArrow
-	kill @e[type=Arrow,RRCanKillArrow]
-
+	
+///	Adds to kill arrows
+	@e[type=Arrow,RRar=3] RRka = 1
+	@e[type=Arrow,RRar=2,RRai>=1<=2] RRka = 1
 //>
 
 //<Archer End
@@ -2335,261 +2437,315 @@ FUNC {Func_EngineerCC}:
 //>
 
 
-//<Summon Asthetics Pulse
+//<Summon Asthetics Pulse - Class Armor Stands
 FUNC {Func_SummonAstheticsPulse}:
-
+	kill @e[RRDisplay]
 /*
 ///	Stealth (Green)
-	/summon ArmorStand -58.6 17.75 433.5 
-	{Tags:["RREntity","RRDisplayStand"],
-	DisabledSlots:2096896,
-	NoGravity:1,
-	NoBasePlate:1,
-	ShowArms:1,
-	Small:0,
-	Invulnerable:1,
-	PersistenceRequired:1,
-	Invisible:0,
-	Rotation:[90f,0f],
-	Pose:{
-		Body:[0f,0f,0f],
-		Head:[5f,0f,0f],
-		LeftArm:[40f,0f,0f],
-		RightArm:[-50f,0f,0f],
-		LeftLeg:[-40f,0f,0f],
-		RightLeg:[60f,0f,0f]
-		},
-	ArmorItems:
-	[
-		{},
-		{},
-		{},
-		{id:wool,Count:1,Damage:5}
-	],
-	HandItems:
-	[
-		{id:redstone_block,Count:1b,tag:{ench:[{id:0,lvl:1}]}},
-		{id:firework_charge,Count:1,tag:{ench:[{id:0,lvl:1}]}}
-	]
-	}
+	summon ArmorStand -58.6 17.75 433.5 
+		{Tags:["RREntity","RRDisplay","RRDisplayStand"],
+		DisabledSlots:2096896,
+		NoGravity:1,
+		NoBasePlate:1,
+		ShowArms:1,
+		Small:0,
+		Invulnerable:1,
+		PersistenceRequired:1,
+		Invisible:0,
+		Rotation:[90f,0f],
+		Pose:{
+			Body:[0f,0f,0f],
+			Head:[5f,0f,0f],
+			LeftArm:[40f,0f,0f],
+			RightArm:[-50f,0f,0f],
+			LeftLeg:[-40f,0f,0f],
+			RightLeg:[60f,0f,0f]
+			},
+		ArmorItems:
+		[
+			{},
+			{},
+			{},
+			{id:wool,Count:1,Damage:5}
+		],
+		HandItems:
+		[
+			{id:redstone_block,Count:1b,tag:{ench:[{id:0,lvl:1}]}},
+			{id:firework_charge,Count:1,tag:{ench:[{id:0,lvl:1}]}}
+		]
+		}
 	
 -/-
 ///	Warrior (Green)
-	/summon ArmorStand -64.5 17.0 436.5 
-	{Tags:["RREntity","RRDisplayStand"],
-	DisabledSlots:2096896,
-	Marker:1,
-	NoGravity:1,
-	NoBasePlate:1,
-	ShowArms:1,
-	Small:0,
-	Invulnerable:1,
-	PersistenceRequired:1,
-	Invisible:0,
-	Rotation:[180f,0f],
-	Pose:{
-		Body:[0f,0f,0f],
-		Head:[0f,0f,0f],
-		LeftArm:[0f,20f,0f],
-		RightArm:[-50f,0f,0f],
-		LeftLeg:[0f,0f,-5f],
-		RightLeg:[0f,0f,5f]
-		},
-	ArmorItems:
-	[
-		{id:chainmail_boots,Count:1},
-		{id:chainmail_leggings,Count:1},
-		{id:iron_chestplate,Count:1},
-		{id:iron_helmet,Count:1}
-	],
-	HandItems:
-	[
-		{id:iron_sword,Count:1b},
-		{id:shield,Count:1,tag:{BlockEntityTag:{Patterns:[],Base:10}},Damage:10s}
-	]
-	}
+	summon ArmorStand -64.5 17.0 436.5 
+		{Tags:["RREntity","RRDisplay","RRDisplayStand"],
+		DisabledSlots:2096896,
+		Marker:1,
+		NoGravity:1,
+		NoBasePlate:1,
+		ShowArms:1,
+		Small:0,
+		Invulnerable:1,
+		PersistenceRequired:1,
+		Invisible:0,
+		Rotation:[180f,0f],
+		Pose:{
+			Body:[0f,0f,0f],
+			Head:[0f,0f,0f],
+			LeftArm:[0f,20f,0f],
+			RightArm:[-50f,0f,0f],
+			LeftLeg:[0f,0f,-5f],
+			RightLeg:[0f,0f,5f]
+			},
+		ArmorItems:
+		[
+			{id:chainmail_boots,Count:1},
+			{id:chainmail_leggings,Count:1},
+			{id:iron_chestplate,Count:1},
+			{id:iron_helmet,Count:1}
+		],
+		HandItems:
+		[
+			{id:iron_sword,Count:1b},
+			{id:shield,Count:1,tag:{BlockEntityTag:{Patterns:[],Base:10}},Damage:10s}
+		]
+		}
 	
 -/-
 ///	Warrior (Blue)
-	/summon ArmorStand -142.5 26.0 339.5 
-	{Tags:["RREntity","RRDisplayStand"],
-	DisabledSlots:2096896,
-	Marker:1,
-	NoGravity:1,
-	NoBasePlate:1,
-	ShowArms:1,
-	Small:0,
-	Invulnerable:1,
-	PersistenceRequired:1,
-	Invisible:0,
-	Rotation:[-90f,0f],
-	Pose:{
-		Body:[0f,0f,0f],
-		Head:[0f,0f,0f],
-		LeftArm:[0f,20f,0f],
-		RightArm:[-50f,0f,0f],
-		LeftLeg:[0f,0f,-5f],
-		RightLeg:[0f,0f,5f]
-		},
-	ArmorItems:
-	[
-		{id:chainmail_boots,Count:1},
-		{id:chainmail_leggings,Count:1},
-		{id:iron_chestplate,Count:1},
-		{id:iron_helmet,Count:1}
-	],
-	HandItems:
-	[
-		{id:iron_sword,Count:1b},
-		{id:shield,Count:1,tag:{BlockEntityTag:{Patterns:[],Base:12}},Damage:10s}
-	]
-	}
+	summon ArmorStand -142.5 26.0 339.5 
+		{Tags:["RREntity","RRDisplay","RRDisplayStand"],
+		DisabledSlots:2096896,
+		Marker:1,
+		NoGravity:1,
+		NoBasePlate:1,
+		ShowArms:1,
+		Small:0,
+		Invulnerable:1,
+		PersistenceRequired:1,
+		Invisible:0,
+		Rotation:[-90f,0f],
+		Pose:{
+			Body:[0f,0f,0f],
+			Head:[0f,0f,0f],
+			LeftArm:[0f,20f,0f],
+			RightArm:[-50f,0f,0f],
+			LeftLeg:[0f,0f,-5f],
+			RightLeg:[0f,0f,5f]
+			},
+		ArmorItems:
+		[
+			{id:chainmail_boots,Count:1},
+			{id:chainmail_leggings,Count:1},
+			{id:iron_chestplate,Count:1},
+			{id:iron_helmet,Count:1}
+		],
+		HandItems:
+		[
+			{id:iron_sword,Count:1b},
+			{id:shield,Count:1,tag:{BlockEntityTag:{Patterns:[],Base:12}},Damage:10s}
+		]
+		}
 	
 -/-
 ///	Archer (Green)
-	/summon ArmorStand -68.5 18.0 436.5 
-	{Tags:["RREntity","RRDisplayStand"],
-	DisabledSlots:2096896,
-	Marker:1,
-	NoGravity:1,
-	NoBasePlate:1,
-	ShowArms:1,
-	Small:0,
-	Invulnerable:1,
-	PersistenceRequired:1,
-	Invisible:0,
-	Rotation:[180f,0f],
-	Pose:{
-		Body:[0f,0f,0f],
-		Head:[0f,0f,0f],
-		LeftArm:[-80f,55f,0f],
-		RightArm:[-80f,-15f,0f],
-		LeftLeg:[-10f,0f,-5f],
-		RightLeg:[10f,0f,5f]
-		},
-	ArmorItems:
-	[
-		{id:chainmail_boots,Count:1},
-		{id:chainmail_leggings,Count:1},
-		{id:chainmail_chestplate,Count:1},
-		{id:leather_helmet,Count:1,tag:{display:{color:2490112}}}
-	],
-	HandItems:
-	[
-		{id:bow,Count:1,tag:{ench:[{id:0,lvl:1}]}},
-		{}
-	]
-	}
+	summon ArmorStand -68.5 18.0 436.5 
+		{Tags:["RREntity","RRDisplay","RRDisplayStand"],
+		DisabledSlots:2096896,
+		Marker:1,
+		NoGravity:1,
+		NoBasePlate:1,
+		ShowArms:1,
+		Small:0,
+		Invulnerable:1,
+		PersistenceRequired:1,
+		Invisible:0,
+		Rotation:[180f,0f],
+		Pose:{
+			Body:[0f,0f,0f],
+			Head:[0f,0f,0f],
+			LeftArm:[-80f,55f,0f],
+			RightArm:[-80f,-15f,0f],
+			LeftLeg:[-10f,0f,-5f],
+			RightLeg:[10f,0f,5f]
+			},
+		ArmorItems:
+		[
+			{id:chainmail_boots,Count:1},
+			{id:chainmail_leggings,Count:1},
+			{id:chainmail_chestplate,Count:1},
+			{id:leather_helmet,Count:1,tag:{display:{color:2490112}}}
+		],
+		HandItems:
+		[
+			{id:bow,Count:1,tag:{ench:[{id:0,lvl:1}]}},
+			{}
+		]
+		}
 	
 -/-
 ///	Archer (Blue)
-	/summon ArmorStand -142.5 26.0 329.5 
-	{Tags:["RREntity","RRDisplayStand"],
-	DisabledSlots:2096896,
-	Marker:1,
-	NoGravity:1,
-	NoBasePlate:1,
-	ShowArms:1,
-	Small:0,
-	Invulnerable:1,
-	PersistenceRequired:1,
-	Invisible:0,
-	Rotation:[-90f,0f],
-	Pose:{
-		Body:[0f,0f,0f],
-		Head:[0f,0f,0f],
-		LeftArm:[-80f,55f,0f],
-		RightArm:[-80f,-15f,0f],
-		LeftLeg:[-10f,0f,-5f],
-		RightLeg:[10f,0f,5f]
-		},
-	ArmorItems:
-	[
-		{id:chainmail_boots,Count:1},
-		{id:chainmail_leggings,Count:1},
-		{id:chainmail_chestplate,Count:1},
-		{id:leather_helmet,Count:1,tag:{display:{color:6724056}}}
-	],
-	HandItems:
-	[
-		{id:bow,Count:1,tag:{ench:[{id:0,lvl:1}]}},
-		{}
-	]
-	}
+	summon ArmorStand -142.5 26.0 329.5 
+		{Tags:["RREntity","RRDisplay","RRDisplayStand"],
+		DisabledSlots:2096896,
+		Marker:1,
+		NoGravity:1,
+		NoBasePlate:1,
+		ShowArms:1,
+		Small:0,
+		Invulnerable:1,
+		PersistenceRequired:1,
+		Invisible:0,
+		Rotation:[-90f,0f],
+		Pose:{
+			Body:[0f,0f,0f],
+			Head:[0f,0f,0f],
+			LeftArm:[-80f,55f,0f],
+			RightArm:[-80f,-15f,0f],
+			LeftLeg:[-10f,0f,-5f],
+			RightLeg:[10f,0f,5f]
+			},
+		ArmorItems:
+		[
+			{id:chainmail_boots,Count:1},
+			{id:chainmail_leggings,Count:1},
+			{id:chainmail_chestplate,Count:1},
+			{id:leather_helmet,Count:1,tag:{display:{color:6724056}}}
+		],
+		HandItems:
+		[
+			{id:bow,Count:1,tag:{ench:[{id:0,lvl:1}]}},
+			{}
+		]
+		}
 	
 -/-
 ///	Engineer (Green)
-	/summon ArmorStand -70.5 17.9 428.5 
-	{Tags:["RREntity","RRDisplayStand"],
-	DisabledSlots:2096896,
-	NoGravity:1,
-	NoBasePlate:1,
-	ShowArms:1,
-	Small:0,
-	Invulnerable:1,
-	PersistenceRequired:1,
-	Invisible:0,
-	Rotation:[270f,0f],
-	Pose:{
-		Body:[0f,0f,0f],
-		Head:[0f,0f,0f],
-		LeftArm:[-20f,0f,0f],
-		RightArm:[20f,0f,0f],
-		LeftLeg:[-20f,0f,f],
-		RightLeg:[25f,0f,f]
-		},
-	ArmorItems:
-	[
-		{id:leather_boots,Count:1,tag:{display:{color:2490112}}},
-		{id:leather_leggings,Count:1,tag:{display:{color:2490112}}},
-		{id:leather_chestplate,Count:1,tag:{display:{color:2490112}}},
-		{id:leather_helmet,Count:1,tag:{display:{color:2490112}}}
-	],
-	HandItems:
-	[
-		{id:diamond_pickaxe,Count:1,tag:{ench:[{id:0,lvl:1}]}},
-		{id:redstone_block,Count:1,tag:{ench:[{id:0,lvl:1}]}}
-	]
-	}
-	
+	summon ArmorStand -70.5 17.9 428.5 
+		{Tags:["RREntity","RRDisplay","RRDisplayStand"],
+		DisabledSlots:2096896,
+		NoGravity:1,
+		NoBasePlate:1,
+		ShowArms:1,
+		Small:0,
+		Invulnerable:1,
+		PersistenceRequired:1,
+		Invisible:0,
+		Rotation:[270f,0f],
+		Pose:{
+			Body:[0f,0f,0f],
+			Head:[0f,0f,0f],
+			LeftArm:[-20f,0f,0f],
+			RightArm:[20f,0f,0f],
+			LeftLeg:[-20f,0f,f],
+			RightLeg:[25f,0f,f]
+			},
+		ArmorItems:
+		[
+			{id:leather_boots,Count:1,tag:{display:{color:2490112}}},
+			{id:leather_leggings,Count:1,tag:{display:{color:2490112}}},
+			{id:leather_chestplate,Count:1,tag:{display:{color:2490112}}},
+			{id:leather_helmet,Count:1,tag:{display:{color:2490112}}}
+		],
+		HandItems:
+		[
+			{id:diamond_pickaxe,Count:1,tag:{ench:[{id:0,lvl:1}]}},
+			{id:redstone_block,Count:1,tag:{ench:[{id:0,lvl:1}]}}
+		]
+		}
+		
 -/-
 ///	Engineer (Blue)
-	/summon ArmorStand -142.5 25.9 319.5 
-	{DisabledSlots:2096896,
-	NoGravity:1,
-	NoBasePlate:1,
-	ShowArms:1,
-	Small:0,
-	Invulnerable:1,
-	PersistenceRequired:1,
-	Invisible:0,
-	Rotation:[-90f,0f],
-	Pose:{
-		Body:[0f,0f,0f],
-		Head:[0f,0f,0f],
-		LeftArm:[-20f,0f,0f],
-		RightArm:[20f,0f,0f],
-		LeftLeg:[-20f,0f,f],
-		RightLeg:[25f,0f,f]
-		},
-	ArmorItems:
-	[
-		{id:leather_boots,Count:1,tag:{display:{color:6724056}}},
-		{id:leather_leggings,Count:1,tag:{display:{color:6724056}}},
-		{id:leather_chestplate,Count:1,tag:{display:{color:6724056}}},
-		{id:leather_helmet,Count:1,tag:{display:{color:6724056}}}
-	],
-	HandItems:
-	[
-		{id:diamond_pickaxe,Count:1,tag:{ench:[{id:0,lvl:1}]}},
-		{id:redstone_block,Count:1,tag:{ench:[{id:0,lvl:1}]}}
-	]
-	}
+	summon ArmorStand -142.5 25.9 319.5 
+		{Tags:["RREntity","RRDisplay","RRDisplayStand"],
+		DisabledSlots:2096896,
+		NoGravity:1,
+		NoBasePlate:1,
+		ShowArms:1,
+		Small:0,
+		Invulnerable:1,
+		PersistenceRequired:1,
+		Invisible:0,
+		Rotation:[-90f,0f],
+		Pose:{
+			Body:[0f,0f,0f],
+			Head:[0f,0f,0f],
+			LeftArm:[-20f,0f,0f],
+			RightArm:[20f,0f,0f],
+			LeftLeg:[-20f,0f,f],
+			RightLeg:[25f,0f,f]
+			},
+		ArmorItems:
+		[
+			{id:leather_boots,Count:1,tag:{display:{color:6724056}}},
+			{id:leather_leggings,Count:1,tag:{display:{color:6724056}}},
+			{id:leather_chestplate,Count:1,tag:{display:{color:6724056}}},
+			{id:leather_helmet,Count:1,tag:{display:{color:6724056}}}
+		],
+		HandItems:
+		[
+			{id:diamond_pickaxe,Count:1,tag:{ench:[{id:0,lvl:1}]}},
+			{id:redstone_block,Count:1,tag:{ench:[{id:0,lvl:1}]}}
+		]
+		}
 */
+//>
+
+//<Summon Asthetics Pulse - Food and animals
+///	food in green spawn
+	LOOP {Arr_FoodPlacement[S]}:
+		SPLIT {Arr_Temp |0|} { }
+		summon AreaEffectCloud Arr_Temp[2] Arr_Temp[3] Arr_Temp[4] {Tags:["RRFoodTemp"],Duration:5}
+		LOOP {1 Arr_Temp[0] + 1}:
+			/*
+			@e[type=AreaEffectCloud,RRFoodTemp] Arr_FoodPlacementRelative[|0| - 1] summon ArmorStand ~ ~ ~  
+			{Tags:["RREntity","RRDisplay","RRDisplayStand"],
+			DisabledSlots:2096896,NoGravity:1,Invulnerable:1,PersistenceRequired:1,Invisible:1,Rotation:[90f,0f],
+			ArmorItems:[{},{},{},{id:Arr_Temp[1],Count:1b}]}
+			*/
+		kill @e[type=AreaEffectCloud,RRFoodTemp]
+		
+		UNASSIGN {ARRAY Arr_Temp}
+
+/// animals in blue spawn
+	summon Pig $SpawnAnimals$ {Tags:["RREntity","RRDisplay","RRDisplayAnimal","RRDisplayPig"],Saddle:1b,CustomName:"Porkchop",CustomNameVisible:1,Invulnerable:1,$NoLoot$}
+	summon Pig $SpawnAnimals$ {Tags:["RREntity","RRDisplay","RRDisplayAnimal","RRDisplayPig"],Saddle:1b,CustomName:"Bacon",CustomNameVisible:1,Invulnerable:1,$NoLoot$}
+	summon Pig $SpawnAnimals$ {Tags:["RREntity","RRDisplay","RRDisplayAnimal","RRDisplayPig"],Saddle:1b,CustomName:"Spider Pig",CustomNameVisible:1,Invulnerable:1,$NoLoot$}
+	summon Cow $SpawnAnimals$ {Tags:["RREntity","RRDisplay","RRDisplayAnimal","RRDisplayCow"],CustomName:"idk_moosters",CustomNameVisible:1,Invulnerable:1,$NoLoot$}
+	
+	LOOP {Arr_HorsePlacement[S]}:
+		SPLIT {Arr_Temp |0|} { }
+		
+		IF {Arr_Temp[0] = NORTH}:
+			DEF GLOBAL $TempCoords$ CALC(Arr_Temp[1] - 0.5) CALC(Arr_Temp[2] - 0.9) CALC(Arr_Temp[3] - 0.5 - 0.2)
+
+		IF {Arr_Temp[0] = SOUTH}:
+			DEF GLOBAL $TempCoords$ CALC(Arr_Temp[1] - 0.5) CALC(Arr_Temp[2] - 0.9) CALC(Arr_Temp[3] - 0.5 + 0.2)
+
+		IF {Arr_Temp[0] = EAST}:
+			DEF GLOBAL $TempCoords$ CALC(Arr_Temp[1] - 0.5 + 0.2) CALC(Arr_Temp[2] - 0.9) CALC(Arr_Temp[3] - 0.5)
+
+		IF {Arr_Temp[0] = WEST}:
+			DEF GLOBAL $TempCoords$ CALC(Arr_Temp[1] - 0.5 - 0.2) CALC(Arr_Temp[2] - 0.9) CALC(Arr_Temp[3] - 0.5)
+		
+		/*
+		summon EntityHorse $TempCoords$ 
+			{Tags:["RREntity","RRDisplay","RRDisplayAnimal","RRDisplayHorse","RRDisplayInvis"],ActiveEffects:[{Id:14b,Duration:10000000,ShowParticles:0b}],
+			Rotation:[90f,0f],NoAI:1,NoGravity:1,Invulnerable:1,Silent:1,PersistenceRequired:1}
+		*/
+		
+		UNASSIGN {DEF $TempCoords$}
+		UNASSIGN {ARRAY Arr_Temp}
+		
+///	-0.5 for x and z
+///	- 0.9 for y
+///	0.2 in normal direction
+///	-83.5 18.1 368.7
 //>
 
 
 //<Groups
+//=
 GROUP {Grp_ArrowproofGreenSpawnClock}:
 	Func_ArrowproofGreenSpawnClock
 
@@ -2729,7 +2885,15 @@ LOOP {Stealth;Warrior;Archer;Engineer} {0;1;2;3}:
 		
 		@a[$SA$,RRTarget|1|] - RRTarget|1|
 
+=//
+
+
+GROUP {Grp_SummonAstheticsPulse}:
+	CCU_Deactivate(GSELF)
+	Func_SummonAstheticsPulse
+
 CCU.cmdSave()
+
 //>
 
 

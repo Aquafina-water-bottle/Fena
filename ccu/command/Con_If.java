@@ -29,7 +29,7 @@ public class Con_If {
 		String getOperator = null;
 		String[] splitArgsCalc = null;
 		String[] splitArgsTemp = new String[2];
-		float[] splitArgsFloat = new float[2];
+		double[] splitArgsDouble = new double[2];
 		Boolean calcStatement = null;
 
 		final String[] operatorArray = {">=", "<=", ">", "<", "!=", "="};
@@ -69,32 +69,31 @@ public class Con_If {
 
 			// gets the actual numeric values on each side
 			splitArgsCalc = statementArgs.split(getOperator);
-			
+
 			for (int i = 0; i < 2; i++) {
-				
+
 				// removes excess whitespace
 				splitArgsCalc[i] = splitArgsCalc[i].trim();
-				
+
 				// gets 'NULL' --> nothing
 				if (splitArgsCalc[i].equals("NULL")) {
 					splitArgsCalc[i] = "";
 				}
-				
+
 				splitArgsCalc[i] = MathParser.parseSecondaryStatements(splitArgsCalc[i], this.fullLineGet);
 				splitArgsTemp[i] = MathParser.getOperation(splitArgsCalc[i], this.fullLineGet, false, 0);
 			}
-			
-			
+
 			// is number
 			if (NumberUtils.isNum(splitArgsTemp[0]) && NumberUtils.isNum(splitArgsTemp[1])) {
-				
-				splitArgsFloat[0] = Float.parseFloat(splitArgsTemp[0]);
-				splitArgsFloat[1] = Float.parseFloat(splitArgsTemp[1]);
-				
+
+				splitArgsDouble[0] = Double.parseDouble(splitArgsTemp[0]);
+				splitArgsDouble[1] = Double.parseDouble(splitArgsTemp[1]);
+
 				// calculates whether it should accept the array or not (with calcStatement)
 				switch (getOperator) {
 				case "=":
-					if (splitArgsFloat[0] == splitArgsFloat[1]) {
+					if (splitArgsDouble[0] == splitArgsDouble[1]) {
 						calcStatement = true;
 					} else {
 						calcStatement = false;
@@ -102,7 +101,7 @@ public class Con_If {
 					break;
 
 				case "<":
-					if (splitArgsFloat[0] < splitArgsFloat[1]) {
+					if (splitArgsDouble[0] < splitArgsDouble[1]) {
 						calcStatement = true;
 					} else {
 						calcStatement = false;
@@ -110,7 +109,7 @@ public class Con_If {
 					break;
 
 				case ">":
-					if (splitArgsFloat[0] > splitArgsFloat[1]) {
+					if (splitArgsDouble[0] > splitArgsDouble[1]) {
 						calcStatement = true;
 					} else {
 						calcStatement = false;
@@ -118,15 +117,15 @@ public class Con_If {
 					break;
 
 				case "<=":
-					if (splitArgsFloat[0] <= splitArgsFloat[1]) {
+					if (splitArgsDouble[0] <= splitArgsDouble[1]) {
 						calcStatement = true;
 					} else {
 						calcStatement = false;
 					}
 					break;
-					
+
 				case ">=":
-					if (splitArgsFloat[0] >= splitArgsFloat[1]) {
+					if (splitArgsDouble[0] >= splitArgsDouble[1]) {
 						calcStatement = true;
 					} else {
 						calcStatement = false;
@@ -134,14 +133,14 @@ public class Con_If {
 					break;
 
 				case "!=":
-					if (splitArgsFloat[0] != splitArgsFloat[1]) {
+					if (splitArgsDouble[0] != splitArgsDouble[1]) {
 						calcStatement = true;
 					} else {
 						calcStatement = false;
 					}
 					break;
 				}
-				
+
 			} else { // if string
 				if (getOperator.equals("=")) {
 					if (splitArgsTemp[0].equals(splitArgsTemp[1])) {

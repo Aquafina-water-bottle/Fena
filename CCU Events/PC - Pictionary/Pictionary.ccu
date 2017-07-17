@@ -101,7 +101,7 @@ FUNC {Func_GeneralScoreboardStart}:
 	USE {ScOA}:
 		CCU_NumberObjAdd
 	
-	ARRAY {GLOBAL ACTIVATE CCU.ObjectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
+	ARRAY {GLOBAL ACTIVATE CCU.objectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
 		PC dummy Pictionary!
 		PCti dummy Pictionary Timer (ticks)
 		PCti2 dummy Pictionary Timer (seconds)
@@ -111,9 +111,9 @@ FUNC {Func_GeneralScoreboardStart}:
 		PCaf dummy Pictionary Affected Items
 	
 	
-	ARRAY {GLOBAL ACTIVATE CCU.TeamAdd(Team_GeneralScoreboardStart) Team_GeneralScoreboardStart}:
+	ARRAY {GLOBAL ACTIVATE CCU.teamAdd(Team_GeneralScoreboardStart) Team_GeneralScoreboardStart}:
 		PC Pictionary
-		OPT RRg color green
+		OPT color green
 		OPT friendlyfire false
 		OPT collisionRule never
 	
@@ -207,6 +207,7 @@ FUNC {Func_GeneralScoreboardClock}:
 	PC J> @a[$SA$,m=2,PCpl=0]
 	@a[$SA$,m=2,PCpl=0] stats entity @a[r=0,c=1,m=2,PCpl=0] set AffectedItems @a[r=0,c=1] PCaf
 	@a[$SA$,m=2,PCpl=0] PCss = 0
+	@a[$SA$,m=2,PCpl=0] PCaf = 0
 	
 ///	Normal: PCpl = 1
 	@a[$SA$,m=2,PCpl=0] PCpl = 1
@@ -252,6 +253,7 @@ FUNC {Func_TimerTFClock}:
 	@e[type=ArmorStand,PCStand,PCti2=0,PCti>=0] clear @a[$SA$,m=2,PCpl=3]
 	@e[type=ArmorStand,PCStand,PCti2=0,PCti>=0] @a[$SA$,m=2,PCpl=3,EC=0] SPbk = $SPid$
 	@e[type=ArmorStand,PCStand,PCti2=0,PCti>=0] tp @a[$SA$,m=2,PCpl=3] $AudienceTP$
+	@e[type=ArmorStand,PCStand,PCti2=0,PCti>=0] @a[$SA$,m=2,PCpl=3] reset PCaf
 	@e[type=ArmorStand,PCStand,PCti2=0,PCti>=0] @a[$SA$,m=2,PCpl=3] PCpl = 1
 	
 ///	Resets all
@@ -261,8 +263,8 @@ FUNC {Func_TimerTFClock}:
 
 //<General Scoreboard End
 FUNC {Func_GeneralScoreboardEnd}:
-	CCU.ObjectiveRemove(Obj_GeneralScoreboardStart)
-	CCU.TeamRemove(Team_GeneralScoreboardStart)
+	CCU.objectiveRemove(Obj_GeneralScoreboardStart)
+	CCU.teamRemove(Team_GeneralScoreboardStart)
 	
 	effect @a[$SA$,m=2] clear
 	clear @a[$SA$,m=2]

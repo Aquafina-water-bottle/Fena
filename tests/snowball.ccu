@@ -1,0 +1,64 @@
+//(Name)
+///	Full file name
+
+//<General Definitions
+DEF $CMDName$ Snowball
+DEF $CMDSizeX$ 16
+DEF $CMDSizeY$ 16
+DEF $CMDSizeZ$ 16
+
+IMPORT {LIBRARY GETDIR General}
+//>
+
+//<Options
+OPTIONS:
+	blockOption stonebrick 0
+	parseOption true
+	commandOption true
+	combinerOption true
+///	filePathFuncOption 
+	keepCoordsOption false
+//>
+
+
+//<General Scoreboard Start
+FUNC {Func_GeneralScoreboardStart}:
+	ARRAY {GLOBAL ACTIVATE CCU.objectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
+		SNti dummy Snowball Timer
+//>
+
+//<General Scoreboard Clock
+FUNC {Func_GeneralScoreboardClock}:
+	DEF $mod$ 1
+	DEF $mod2$ 2
+	
+	@a SNti + 1
+	@a[SNti>=24] SNti = 1
+	
+	LOOP {1 24 + 1} {15 360 + 15.0}:
+		@a[SNti=|0|] summon Snowball ~CALC(SIN(|1|) * $mod$) ~1 ~CALC(COS(|1|) * $mod$) {Motion:[CALC(SIN(|1|) * $mod2$)d,0d,CALC(COS(|1|) * $mod2$)d]}
+		
+//>
+
+//<General Scoreboard End
+FUNC {Func_GeneralScoreboardEnd}:
+	CCU.objectiveRemove(Obj_GeneralScoreboardStart)
+//>
+
+
+//<Groups
+GROUP {Grp_MainStart}:
+	CCU_Deactivate(GSELF)
+	Func_GeneralScoreboardStart()
+	CCU_Activate(Grp_MainClock)
+
+GROUP {Grp_MainClock}:
+	Func_GeneralScoreboardClock()
+
+GROUP {Grp_MainEnd}:
+	CCU_Deactivate(GSELF)
+	Func_GeneralScoreboardEnd()
+	CCU_Deactivate(Grp_MainClock)
+
+/// CCU.cmdSave()
+//>

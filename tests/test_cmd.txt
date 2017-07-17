@@ -1,434 +1,659 @@
-fill 383 69 95 400 86 110 air 0
-setblock 385 70 96 command_block 5 replace {Command:"say 1 _A",TrackOutput:0b,auto:0b}
-setblock 385 72 96 command_block 5 replace {Command:"say 2 _A",TrackOutput:0b,auto:0b}
-setblock 385 74 96 command_block 5 replace {Command:"say 3 _A",TrackOutput:0b,auto:0b}
-setblock 385 76 96 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
-setblock 386 76 96 chain_command_block 5 replace {Command:"say 2 > 1",TrackOutput:0b,auto:1b}
-setblock 387 76 96 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
-setblock 388 76 96 chain_command_block 5 replace {Command:"say 3 > 1",TrackOutput:0b,auto:1b}
-setblock 389 76 96 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 390 76 96 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
-setblock 385 78 96 command_block 5 replace {Command:"say 1 _B",TrackOutput:0b,auto:0b}
-setblock 385 80 96 command_block 5 replace {Command:"say 2 _B",TrackOutput:0b,auto:0b}
-setblock 385 82 96 command_block 5 replace {Command:"say 3 _B",TrackOutput:0b,auto:0b}
-setblock 385 84 96 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
-setblock 386 84 96 chain_command_block 5 replace {Command:"say 2 > 1",TrackOutput:0b,auto:1b}
-setblock 387 84 96 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
-setblock 388 84 96 chain_command_block 5 replace {Command:"say 3 > 1",TrackOutput:0b,auto:1b}
-setblock 389 84 96 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 390 84 96 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
-setblock 385 70 98 command_block 5 replace {Command:"say 1 _C",TrackOutput:0b,auto:0b}
-setblock 385 72 98 command_block 5 replace {Command:"say 2 _C",TrackOutput:0b,auto:0b}
-setblock 385 74 98 command_block 5 replace {Command:"say 3 _C",TrackOutput:0b,auto:0b}
-setblock 385 76 98 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
-setblock 386 76 98 chain_command_block 5 replace {Command:"say 2 > 1",TrackOutput:0b,auto:1b}
-setblock 387 76 98 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
-setblock 388 76 98 chain_command_block 5 replace {Command:"say 3 > 1",TrackOutput:0b,auto:1b}
-setblock 389 76 98 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 390 76 98 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
-setblock 385 78 98 command_block 5 replace {Command:"say a",TrackOutput:0b,auto:0b}
-setblock 386 78 98 chain_command_block 5 replace {Command:"say b",TrackOutput:0b,auto:1b}
-setblock 387 78 98 chain_command_block 5 replace {Command:"function custom:RayCaster/theHunted/test/init",TrackOutput:0b,auto:1b}
-setblock 388 78 98 chain_command_block 5 replace {Command:"setblock 384 78 98 air 0",TrackOutput:0b,auto:1b}
-setblock 385 80 98 command_block 5 replace {Command:"say b",TrackOutput:0b,auto:0b}
-setblock 386 80 98 chain_command_block 5 replace {Command:"g;l;o;b;a;l",TrackOutput:0b,auto:1b}
-setblock 387 80 98 chain_command_block 5 replace {Command:"Arr_Test2[S]",TrackOutput:0b,auto:1b}
-setblock 385 82 98 repeating_command_block 5 replace {Command:"say c",TrackOutput:0b,auto:0b}
-setblock 385 84 98 repeating_command_block 5 replace {Command:"say d",TrackOutput:0b,auto:0b}
-setblock 385 70 100 command_block 5 replace {Command:"say e",TrackOutput:0b,auto:0b}
-setblock 385 72 100 command_block 5 replace {Command:"say f",TrackOutput:0b,auto:0b}
-setblock 385 74 100 command_block 5 replace {Command:"say g",TrackOutput:0b,auto:0b}
-setblock 385 76 100 command_block 5 replace {Command:"say test",TrackOutput:0b,auto:0b}
-setblock 386 76 100 chain_command_block 5 replace {Command:"say ABORTMISSION",TrackOutput:0b,auto:1b}
-setblock 387 76 100 chain_command_block 5 replace {Command:"say hell yeah",TrackOutput:0b,auto:1b}
-setblock 388 76 100 chain_command_block 5 replace {Command:"say LiterallyAbortMission",TrackOutput:0b,auto:1b}
-setblock 389 76 100 chain_command_block 5 replace {Command:"lmao",TrackOutput:0b,auto:1b}
-setblock 390 76 100 chain_command_block 5 replace {Command:"ayy",TrackOutput:0b,auto:1b}
-setblock 385 78 100 command_block 5 replace {Command:"say $SA$",TrackOutput:0b,auto:0b}
-setblock 386 78 100 chain_command_block 5 replace {Command:"ayy",TrackOutput:0b,auto:1b}
-setblock 387 78 100 chain_command_block 5 replace {Command:"say LiterallyAbortMission",TrackOutput:0b,auto:1b}
-setblock 388 78 100 chain_command_block 5 replace {Command:"lmao",TrackOutput:0b,auto:1b}
-setblock 389 78 100 chain_command_block 5 replace {Command:"fill 384 80 100 399 82 100 air 0",TrackOutput:0b,auto:1b}
-setblock 390 78 100 chain_command_block 5 replace {Command:"say yas",TrackOutput:0b,auto:1b}
-setblock 385 80 100 command_block 5 replace {Command:"setblock 384 80 100 air 0",TrackOutput:0b,auto:0b}
-setblock 386 80 100 chain_command_block 5 replace {Command:"say MEMES 5",TrackOutput:0b,auto:1b}
-setblock 387 80 100 chain_command_block 5 replace {Command:"say -301 MARKER",TrackOutput:0b,auto:1b}
-setblock 388 80 100 chain_command_block 5 replace {Command:"say -582 RandCalc",TrackOutput:0b,auto:1b}
-setblock 389 80 100 chain_command_block 5 replace {Command:"say 51 MARKER",TrackOutput:0b,auto:1b}
-setblock 390 80 100 chain_command_block 5 replace {Command:"say 930.0 MARKER",TrackOutput:0b,auto:1b}
-setblock 391 80 100 chain_command_block 5 replace {Command:"say 40 MARKER",TrackOutput:0b,auto:1b}
-setblock 392 80 100 chain_command_block 5 replace {Command:"say 0 MARKER",TrackOutput:0b,auto:1b}
-setblock 393 80 100 chain_command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:1b}
-setblock 394 80 100 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
-setblock 395 80 100 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 396 80 100 chain_command_block 5 replace {Command:"minecraft:kill @a[score_anobjective=3,score_anobjective_min=3]",TrackOutput:0b,auto:1b}
-setblock 397 80 100 chain_command_block 13 replace {Command:"testCond",TrackOutput:0b,auto:1b}
-setblock 398 80 100 chain_command_block 13 replace {Command:"testCond2",TrackOutput:0b,auto:1b}
-setblock 399 80 100 chain_command_block 1 replace {Command:"say 4",TrackOutput:0b,auto:1b}
-setblock 399 81 100 chain_command_block 4 replace {Command:"say 5",TrackOutput:0b,auto:1b}
-setblock 398 81 100 chain_command_block 4 replace {Command:"say 6",TrackOutput:0b,auto:1b}
-setblock 397 81 100 chain_command_block 4 replace {Command:"say 7",TrackOutput:0b,auto:1b}
-setblock 396 81 100 chain_command_block 4 replace {Command:"say 8",TrackOutput:0b,auto:1b}
-setblock 395 81 100 chain_command_block 4 replace {Command:"say 9",TrackOutput:0b,auto:1b}
-setblock 394 81 100 chain_command_block 12 replace {Command:"say LiterallyAbortMission",TrackOutput:0b,auto:1b}
-setblock 393 81 100 chain_command_block 12 replace {Command:"say $SA$",TrackOutput:0b,auto:1b}
-setblock 392 81 100 chain_command_block 12 replace {Command:"say yas",TrackOutput:0b,auto:1b}
-setblock 391 81 100 chain_command_block 12 replace {Command:"say 11",TrackOutput:0b,auto:1b}
-setblock 390 81 100 chain_command_block 12 replace {Command:"say 12",TrackOutput:0b,auto:1b}
-setblock 389 81 100 chain_command_block 12 replace {Command:"say 13",TrackOutput:0b,auto:1b}
-setblock 388 81 100 chain_command_block 12 replace {Command:"say 14",TrackOutput:0b,auto:1b}
-setblock 387 81 100 chain_command_block 4 replace {Command:"say 15",TrackOutput:0b,auto:1b}
-setblock 386 81 100 chain_command_block 4 replace {Command:"say 16",TrackOutput:0b,auto:1b}
-setblock 385 81 100 chain_command_block 4 replace {Command:"say 17",TrackOutput:0b,auto:1b}
-setblock 384 81 100 chain_command_block 1 replace {Command:"say Ye",TrackOutput:0b,auto:1b}
-setblock 384 82 100 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
-setblock 385 82 100 chain_command_block 5 replace {Command:"say lmao",TrackOutput:0b,auto:1b}
-setblock 386 82 100 chain_command_block 5 replace {Command:"TheGreatestARGS (shouldn't be considered a function)",TrackOutput:0b,auto:1b}
-setblock 387 82 100 chain_command_block 5 replace {Command:"say 18",TrackOutput:0b,auto:1b}
-setblock 388 82 100 chain_command_block 5 replace {Command:"say Ye",TrackOutput:0b,auto:1b}
-setblock 389 82 100 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
-setblock 390 82 100 chain_command_block 5 replace {Command:"say lmao",TrackOutput:0b,auto:1b}
-setblock 391 82 100 chain_command_block 5 replace {Command:"TheGreatestARGS (shouldn't be considered a function)",TrackOutput:0b,auto:1b}
-setblock 392 82 100 chain_command_block 5 replace {Command:"asdfasdfsaf",TrackOutput:0b,auto:1b}
-setblock 393 82 100 chain_command_block 5 replace {Command:"asdfae564rwe",TrackOutput:0b,auto:1b}
-setblock 394 82 100 chain_command_block 5 replace {Command:"d45e",TrackOutput:0b,auto:1b}
-setblock 395 82 100 chain_command_block 5 replace {Command:"78y65re7",TrackOutput:0b,auto:1b}
-setblock 396 82 100 chain_command_block 5 replace {Command:"6756re",TrackOutput:0b,auto:1b}
-setblock 397 82 100 chain_command_block 5 replace {Command:"say 19",TrackOutput:0b,auto:1b}
-setblock 398 82 100 chain_command_block 5 replace {Command:"say 20",TrackOutput:0b,auto:1b}
-setblock 399 82 100 chain_command_block 1 replace {Command:"say 21",TrackOutput:0b,auto:1b}
-setblock 385 84 100 command_block 5 replace {Command:"say a",TrackOutput:0b,auto:0b}
-setblock 386 84 100 chain_command_block 5 replace {Command:"say b",TrackOutput:0b,auto:1b}
-setblock 387 84 100 chain_command_block 5 replace {Command:"say c",TrackOutput:0b,auto:1b}
-setblock 388 84 100 chain_command_block 5 replace {Command:"say d",TrackOutput:0b,auto:1b}
-setblock 389 84 100 chain_command_block 5 replace {Command:"say e",TrackOutput:0b,auto:1b}
-setblock 390 84 100 chain_command_block 5 replace {Command:"say f",TrackOutput:0b,auto:1b}
-setblock 391 84 100 chain_command_block 5 replace {Command:"say g",TrackOutput:0b,auto:1b}
-setblock 392 84 100 chain_command_block 13 replace {Command:"say h",TrackOutput:0b,auto:1b}
-setblock 393 84 100 chain_command_block 13 replace {Command:"say i",TrackOutput:0b,auto:1b}
-setblock 394 84 100 chain_command_block 13 replace {Command:"say j",TrackOutput:0b,auto:1b}
-setblock 395 84 100 chain_command_block 13 replace {Command:"say k",TrackOutput:0b,auto:1b}
-setblock 396 84 100 chain_command_block 1 replace {Command:"",TrackOutput:0b,auto:1b}
-setblock 396 85 100 chain_command_block 4 replace {Command:"say l",TrackOutput:0b,auto:1b}
-setblock 395 85 100 chain_command_block 12 replace {Command:"say m",TrackOutput:0b,auto:1b}
-setblock 394 85 100 chain_command_block 12 replace {Command:"say n",TrackOutput:0b,auto:1b}
-setblock 393 85 100 chain_command_block 12 replace {Command:"say o",TrackOutput:0b,auto:1b}
-setblock 392 85 100 chain_command_block 12 replace {Command:"say p",TrackOutput:0b,auto:1b}
-setblock 391 85 100 chain_command_block 12 replace {Command:"say q",TrackOutput:0b,auto:1b}
-setblock 390 85 100 chain_command_block 12 replace {Command:"say r",TrackOutput:0b,auto:1b}
-setblock 389 85 100 chain_command_block 12 replace {Command:"say s",TrackOutput:0b,auto:1b}
-setblock 388 85 100 chain_command_block 12 replace {Command:"say t",TrackOutput:0b,auto:1b}
-setblock 385 70 102 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
-setblock 386 70 102 chain_command_block 5 replace {Command:"say 2 asdfasdf",TrackOutput:0b,auto:1b}
-setblock 387 70 102 chain_command_block 5 replace {Command:"say 3 asdfasdf",TrackOutput:0b,auto:1b}
-setblock 388 70 102 chain_command_block 5 replace {Command:"say 4 asdfasdf",TrackOutput:0b,auto:1b}
-setblock 389 70 102 chain_command_block 5 replace {Command:"say 5 asdfasdf",TrackOutput:0b,auto:1b}
-setblock 390 70 102 chain_command_block 5 replace {Command:"asdfasdfsaf asdfasdf",TrackOutput:0b,auto:1b}
-setblock 391 70 102 chain_command_block 5 replace {Command:"asdfae564rwe asdfasdf",TrackOutput:0b,auto:1b}
-setblock 392 70 102 chain_command_block 5 replace {Command:"d45e asdfasdf",TrackOutput:0b,auto:1b}
-setblock 393 70 102 chain_command_block 5 replace {Command:"78y65re7 asdfasdf",TrackOutput:0b,auto:1b}
-setblock 394 70 102 chain_command_block 5 replace {Command:"6756re asdfasdf",TrackOutput:0b,auto:1b}
-setblock 395 70 102 chain_command_block 5 replace {Command:"say 6 asdfasdf",TrackOutput:0b,auto:1b}
-setblock 396 70 102 chain_command_block 5 replace {Command:"asdfasdf say 7",TrackOutput:0b,auto:1b}
-setblock 397 70 102 chain_command_block 5 replace {Command:"asdfasdf say 8",TrackOutput:0b,auto:1b}
-setblock 398 70 102 chain_command_block 5 replace {Command:"asdfasdf say 9",TrackOutput:0b,auto:1b}
-setblock 399 70 102 chain_command_block 1 replace {Command:"asdfasdf say 10",TrackOutput:0b,auto:1b}
-setblock 399 71 102 chain_command_block 4 replace {Command:"asdfasdf say 11",TrackOutput:0b,auto:1b}
-setblock 398 71 102 chain_command_block 4 replace {Command:"say 12asdfasdf",TrackOutput:0b,auto:1b}
-setblock 397 71 102 chain_command_block 4 replace {Command:"say 13asdfasdf",TrackOutput:0b,auto:1b}
-setblock 396 71 102 chain_command_block 4 replace {Command:"say 14asdfasdf",TrackOutput:0b,auto:1b}
-setblock 395 71 102 chain_command_block 4 replace {Command:"say 15asdfasdf",TrackOutput:0b,auto:1b}
-setblock 394 71 102 chain_command_block 4 replace {Command:"say 16asdfasdf",TrackOutput:0b,auto:1b}
-setblock 393 71 102 chain_command_block 4 replace {Command:"asdfasdfsay 17",TrackOutput:0b,auto:1b}
-setblock 392 71 102 chain_command_block 4 replace {Command:"asdfasdfsay 18",TrackOutput:0b,auto:1b}
-setblock 391 71 102 chain_command_block 4 replace {Command:"asdfasdfEncapsulatedUse say 19",TrackOutput:0b,auto:1b}
-setblock 390 71 102 chain_command_block 4 replace {Command:"asdfasdfEncapsulatedUse say 20",TrackOutput:0b,auto:1b}
-setblock 389 71 102 chain_command_block 4 replace {Command:"asdfasdfsay 21",TrackOutput:0b,auto:1b}
-setblock 388 71 102 chain_command_block 4 replace {Command:"say 22",TrackOutput:0b,auto:1b}
-setblock 387 71 102 chain_command_block 4 replace {Command:"say 23",TrackOutput:0b,auto:1b}
-setblock 386 71 102 chain_command_block 4 replace {Command:"say 24",TrackOutput:0b,auto:1b}
-setblock 385 71 102 chain_command_block 4 replace {Command:"say 25",TrackOutput:0b,auto:1b}
-setblock 384 71 102 chain_command_block 1 replace {Command:"say 26",TrackOutput:0b,auto:1b}
-setblock 384 72 102 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
-setblock 385 72 102 chain_command_block 5 replace {Command:"say asdf",TrackOutput:0b,auto:1b}
-setblock 386 72 102 chain_command_block 5 replace {Command:"say (first 15) (second 526)",TrackOutput:0b,auto:1b}
-setblock 387 72 102 chain_command_block 5 replace {Command:"say FIRST",TrackOutput:0b,auto:1b}
-setblock 388 72 102 chain_command_block 5 replace {Command:"say 5 10 SECOND",TrackOutput:0b,auto:1b}
-setblock 389 72 102 chain_command_block 5 replace {Command:"say 1 2 FIRST",TrackOutput:0b,auto:1b}
-setblock 390 72 102 chain_command_block 5 replace {Command:"say test",TrackOutput:0b,auto:1b}
-setblock 391 72 102 chain_command_block 5 replace {Command:"Func_TestDefinition",TrackOutput:0b,auto:1b}
-setblock 392 72 102 chain_command_block 5 replace {Command:"say 27",TrackOutput:0b,auto:1b}
-setblock 393 72 102 chain_command_block 5 replace {Command:"say 28",TrackOutput:0b,auto:1b}
-setblock 394 72 102 chain_command_block 5 replace {Command:"say 29",TrackOutput:0b,auto:1b}
-setblock 395 72 102 chain_command_block 5 replace {Command:"say 30",TrackOutput:0b,auto:1b}
-setblock 396 72 102 chain_command_block 5 replace {Command:"say 31",TrackOutput:0b,auto:1b}
-setblock 397 72 102 chain_command_block 5 replace {Command:"say 32",TrackOutput:0b,auto:1b}
-setblock 398 72 102 chain_command_block 5 replace {Command:"say 33 34 35 36 37 38 39 40",TrackOutput:0b,auto:1b}
-setblock 399 72 102 chain_command_block 1 replace {Command:"tellraw @a {\"text\":\"ayylmao\"}",TrackOutput:0b,auto:1b}
-setblock 385 70 104 repeating_command_block 5 replace {Command:"say rekt",TrackOutput:0b,auto:0b}
-setblock 386 70 104 chain_command_block 5 replace {Command:"say rekt again",TrackOutput:0b,auto:1b}
-setblock 387 70 104 chain_command_block 5 replace {Command:"say abde",TrackOutput:0b,auto:1b}
-setblock 388 70 104 chain_command_block 5 replace {Command:"say 1  |  8.0  |  4096  ~",TrackOutput:0b,auto:1b}
-setblock 389 70 104 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 390 70 104 chain_command_block 5 replace {Command:"say Previous 1  |  8.0  |  4096",TrackOutput:0b,auto:1b}
-setblock 391 70 104 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 392 70 104 chain_command_block 5 replace {Command:"say Previous 1  |  8.0  |  4096",TrackOutput:0b,auto:1b}
-setblock 393 70 104 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 394 70 104 chain_command_block 5 replace {Command:"say Previous 1  |  8.0  |  4096",TrackOutput:0b,auto:1b}
-setblock 395 70 104 chain_command_block 5 replace {Command:"say 2  |  7.5  |  2048  ~",TrackOutput:0b,auto:1b}
-setblock 396 70 104 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 397 70 104 chain_command_block 5 replace {Command:"say Previous 2  |  7.5  |  2048",TrackOutput:0b,auto:1b}
-setblock 398 70 104 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 399 70 104 chain_command_block 1 replace {Command:"say Previous 2  |  7.5  |  2048",TrackOutput:0b,auto:1b}
-setblock 399 71 104 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 398 71 104 chain_command_block 4 replace {Command:"say Previous 2  |  7.5  |  2048",TrackOutput:0b,auto:1b}
-setblock 397 71 104 chain_command_block 4 replace {Command:"say 3  |  7.0  |  1024  ~",TrackOutput:0b,auto:1b}
-setblock 396 71 104 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 395 71 104 chain_command_block 4 replace {Command:"say Previous 3  |  7.0  |  1024",TrackOutput:0b,auto:1b}
-setblock 394 71 104 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 393 71 104 chain_command_block 4 replace {Command:"say Previous 3  |  7.0  |  1024",TrackOutput:0b,auto:1b}
-setblock 392 71 104 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 391 71 104 chain_command_block 4 replace {Command:"say Previous 3  |  7.0  |  1024",TrackOutput:0b,auto:1b}
-setblock 390 71 104 chain_command_block 4 replace {Command:"say 4  |  6.5  |  512  ~",TrackOutput:0b,auto:1b}
-setblock 389 71 104 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 388 71 104 chain_command_block 4 replace {Command:"say Previous 4  |  6.5  |  512",TrackOutput:0b,auto:1b}
-setblock 387 71 104 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 386 71 104 chain_command_block 4 replace {Command:"say Previous 4  |  6.5  |  512",TrackOutput:0b,auto:1b}
-setblock 385 71 104 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 384 71 104 chain_command_block 1 replace {Command:"say Previous 4  |  6.5  |  512",TrackOutput:0b,auto:1b}
-setblock 384 72 104 chain_command_block 5 replace {Command:"say 5  |  6.0  |  256  ~",TrackOutput:0b,auto:1b}
-setblock 385 72 104 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 386 72 104 chain_command_block 5 replace {Command:"say Previous 5  |  6.0  |  256",TrackOutput:0b,auto:1b}
-setblock 387 72 104 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 388 72 104 chain_command_block 5 replace {Command:"say Previous 5  |  6.0  |  256",TrackOutput:0b,auto:1b}
-setblock 389 72 104 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 390 72 104 chain_command_block 5 replace {Command:"say Previous 5  |  6.0  |  256",TrackOutput:0b,auto:1b}
-setblock 391 72 104 chain_command_block 5 replace {Command:"say 6  |  5.5  |  128  ~",TrackOutput:0b,auto:1b}
-setblock 392 72 104 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 393 72 104 chain_command_block 5 replace {Command:"say Previous 6  |  5.5  |  128",TrackOutput:0b,auto:1b}
-setblock 394 72 104 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 395 72 104 chain_command_block 5 replace {Command:"say Previous 6  |  5.5  |  128",TrackOutput:0b,auto:1b}
-setblock 396 72 104 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 397 72 104 chain_command_block 5 replace {Command:"say Previous 6  |  5.5  |  128",TrackOutput:0b,auto:1b}
-setblock 398 72 104 chain_command_block 5 replace {Command:"say 7  |  5.0  |  64  ~",TrackOutput:0b,auto:1b}
-setblock 399 72 104 chain_command_block 1 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 399 73 104 chain_command_block 4 replace {Command:"say Previous 7  |  5.0  |  64",TrackOutput:0b,auto:1b}
-setblock 398 73 104 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 397 73 104 chain_command_block 4 replace {Command:"say Previous 7  |  5.0  |  64",TrackOutput:0b,auto:1b}
-setblock 396 73 104 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 395 73 104 chain_command_block 4 replace {Command:"say Previous 7  |  5.0  |  64",TrackOutput:0b,auto:1b}
-setblock 394 73 104 chain_command_block 4 replace {Command:"say 8  |  4.5  |  32  ~",TrackOutput:0b,auto:1b}
-setblock 393 73 104 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 392 73 104 chain_command_block 4 replace {Command:"say Previous 8  |  4.5  |  32",TrackOutput:0b,auto:1b}
-setblock 391 73 104 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 390 73 104 chain_command_block 4 replace {Command:"say Previous 8  |  4.5  |  32",TrackOutput:0b,auto:1b}
-setblock 389 73 104 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 388 73 104 chain_command_block 4 replace {Command:"say Previous 8  |  4.5  |  32",TrackOutput:0b,auto:1b}
-setblock 387 73 104 chain_command_block 4 replace {Command:"say 9  |  4.0  |  16  ~",TrackOutput:0b,auto:1b}
-setblock 386 73 104 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 385 73 104 chain_command_block 4 replace {Command:"say Previous 9  |  4.0  |  16",TrackOutput:0b,auto:1b}
-setblock 384 73 104 chain_command_block 1 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 384 74 104 chain_command_block 5 replace {Command:"say Previous 9  |  4.0  |  16",TrackOutput:0b,auto:1b}
-setblock 385 74 104 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 386 74 104 chain_command_block 5 replace {Command:"say Previous 9  |  4.0  |  16",TrackOutput:0b,auto:1b}
-setblock 387 74 104 chain_command_block 5 replace {Command:"say 10  |  3.5  |  8  ~",TrackOutput:0b,auto:1b}
-setblock 388 74 104 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 389 74 104 chain_command_block 5 replace {Command:"say Previous 10  |  3.5  |  8",TrackOutput:0b,auto:1b}
-setblock 390 74 104 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 391 74 104 chain_command_block 5 replace {Command:"say Previous 10  |  3.5  |  8",TrackOutput:0b,auto:1b}
-setblock 392 74 104 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 393 74 104 chain_command_block 5 replace {Command:"say Previous 10  |  3.5  |  8",TrackOutput:0b,auto:1b}
-setblock 394 74 104 chain_command_block 5 replace {Command:"say 11  |  3.0  |  4  ~",TrackOutput:0b,auto:1b}
-setblock 395 74 104 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 396 74 104 chain_command_block 5 replace {Command:"say Previous 11  |  3.0  |  4",TrackOutput:0b,auto:1b}
-setblock 397 74 104 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 398 74 104 chain_command_block 5 replace {Command:"say Previous 11  |  3.0  |  4",TrackOutput:0b,auto:1b}
-setblock 399 74 104 chain_command_block 1 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 399 75 104 chain_command_block 4 replace {Command:"say Previous 11  |  3.0  |  4",TrackOutput:0b,auto:1b}
-setblock 398 75 104 chain_command_block 4 replace {Command:"say 12  |  2.5  |  2  ~",TrackOutput:0b,auto:1b}
-setblock 397 75 104 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 396 75 104 chain_command_block 4 replace {Command:"say Previous 12  |  2.5  |  2",TrackOutput:0b,auto:1b}
-setblock 395 75 104 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 394 75 104 chain_command_block 4 replace {Command:"say Previous 12  |  2.5  |  2",TrackOutput:0b,auto:1b}
-setblock 393 75 104 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 392 75 104 chain_command_block 4 replace {Command:"say Previous 12  |  2.5  |  2",TrackOutput:0b,auto:1b}
-setblock 391 75 104 chain_command_block 4 replace {Command:"say 13  |  2.0  |  1  ~",TrackOutput:0b,auto:1b}
-setblock 390 75 104 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 389 75 104 chain_command_block 4 replace {Command:"say Previous 13  |  2.0  |  1",TrackOutput:0b,auto:1b}
-setblock 388 75 104 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 387 75 104 chain_command_block 4 replace {Command:"say Previous 13  |  2.0  |  1",TrackOutput:0b,auto:1b}
-setblock 386 75 104 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 385 75 104 chain_command_block 4 replace {Command:"say Previous 13  |  2.0  |  1",TrackOutput:0b,auto:1b}
-setblock 384 75 104 chain_command_block 1 replace {Command:"say 14  |  1.5  |    ~",TrackOutput:0b,auto:1b}
-setblock 384 76 104 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 385 76 104 chain_command_block 5 replace {Command:"say Previous 14  |  1.5  |",TrackOutput:0b,auto:1b}
-setblock 386 76 104 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 387 76 104 chain_command_block 5 replace {Command:"say Previous 14  |  1.5  |",TrackOutput:0b,auto:1b}
-setblock 388 76 104 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 389 76 104 chain_command_block 5 replace {Command:"say Previous 14  |  1.5  |",TrackOutput:0b,auto:1b}
-setblock 390 76 104 chain_command_block 5 replace {Command:"say 15  |  1.0  |    ~",TrackOutput:0b,auto:1b}
-setblock 391 76 104 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 392 76 104 chain_command_block 5 replace {Command:"say Previous 15  |  1.0  |",TrackOutput:0b,auto:1b}
-setblock 393 76 104 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 394 76 104 chain_command_block 5 replace {Command:"say Previous 15  |  1.0  |",TrackOutput:0b,auto:1b}
-setblock 395 76 104 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 396 76 104 chain_command_block 5 replace {Command:"say Previous 15  |  1.0  |",TrackOutput:0b,auto:1b}
-setblock 397 76 104 chain_command_block 5 replace {Command:"say 16  |    |    ~",TrackOutput:0b,auto:1b}
-setblock 398 76 104 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 399 76 104 chain_command_block 1 replace {Command:"say Previous 16  |    |",TrackOutput:0b,auto:1b}
-setblock 399 77 104 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 398 77 104 chain_command_block 4 replace {Command:"say Previous 16  |    |",TrackOutput:0b,auto:1b}
-setblock 397 77 104 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 396 77 104 chain_command_block 4 replace {Command:"say Previous 16  |    |",TrackOutput:0b,auto:1b}
-setblock 395 77 104 chain_command_block 4 replace {Command:"say 17  |    |    ~",TrackOutput:0b,auto:1b}
-setblock 394 77 104 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
-setblock 393 77 104 chain_command_block 4 replace {Command:"say Previous 17  |    |",TrackOutput:0b,auto:1b}
-setblock 392 77 104 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
-setblock 391 77 104 chain_command_block 4 replace {Command:"say Previous 17  |    |",TrackOutput:0b,auto:1b}
-setblock 390 77 104 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
-setblock 389 77 104 chain_command_block 4 replace {Command:"say Previous 17  |    |",TrackOutput:0b,auto:1b}
-setblock 388 77 104 chain_command_block 4 replace {Command:"execute @p ~ ~ ~ execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ detect ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick * say @a",TrackOutput:0b,auto:1b}
-setblock 387 77 104 chain_command_block 4 replace {Command:"execute @p ~ ~ ~ execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ detect ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick * say @a",TrackOutput:0b,auto:1b}
-setblock 386 77 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
-setblock 385 77 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
-setblock 384 77 104 chain_command_block 1 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
-setblock 384 78 104 chain_command_block 5 replace {Command:"execute @s ~ ~ ~ execute @s ~ ~ ~ execute @s ~ ~ ~ minecraft:kill @a[score_RRti_min=1,tag=testTag,score_kek_min=1,score_kek=3]",TrackOutput:0b,auto:1b}
-setblock 385 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
-setblock 386 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
-setblock 387 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
-setblock 388 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
-setblock 389 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
-setblock 390 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
-setblock 391 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
-setblock 392 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
-setblock 393 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
-setblock 394 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
-setblock 395 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
-setblock 396 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
-setblock 397 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
-setblock 398 78 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
-setblock 399 78 104 chain_command_block 1 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
-setblock 399 79 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
-setblock 398 79 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
-setblock 397 79 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
-setblock 396 79 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ not_a_block 0 say test",TrackOutput:0b,auto:1b}
-setblock 395 79 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
-setblock 394 79 104 chain_command_block 4 replace {Command:"execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti2",TrackOutput:0b,auto:1b}
-setblock 393 79 104 chain_command_block 4 replace {Command:"execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = 3 Number",TrackOutput:0b,auto:1b}
-setblock 392 79 104 chain_command_block 4 replace {Command:"scoreboard players add @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
-setblock 391 79 104 chain_command_block 4 replace {Command:"scoreboard players remove @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
-setblock 390 79 104 chain_command_block 4 replace {Command:"scoreboard players set @e[type=ArmorStand,tag=RRStand] RRti 10 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
-setblock 389 79 104 chain_command_block 4 replace {Command:"scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 5",TrackOutput:0b,auto:1b}
-setblock 388 79 104 chain_command_block 4 replace {Command:"scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 0 10",TrackOutput:0b,auto:1b}
-setblock 387 79 104 chain_command_block 4 replace {Command:"scoreboard players reset @e[type=ArmorStand,tag=RRStand] RRti",TrackOutput:0b,auto:1b}
-setblock 386 79 104 chain_command_block 4 replace {Command:"scoreboard players enable @e[type=ArmorStand,tag=RRStand] RRti",TrackOutput:0b,auto:1b}
-setblock 385 79 104 chain_command_block 4 replace {Command:"scoreboard players tag @e[type=ArmorStand,tag=RRStand] add RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
-setblock 384 79 104 chain_command_block 1 replace {Command:"scoreboard players tag @e[type=ArmorStand,tag=RRStand] remove RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
-setblock 384 80 104 chain_command_block 5 replace {Command:"scoreboard teams join RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
-setblock 385 80 104 chain_command_block 5 replace {Command:"scoreboard teams leave RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
-setblock 386 80 104 chain_command_block 5 replace {Command:"scoreboard teams empty RRd_y",TrackOutput:0b,auto:1b}
-setblock 387 80 104 chain_command_block 5 replace {Command:"say Test",TrackOutput:0b,auto:1b}
-setblock 388 80 104 chain_command_block 5 replace {Command:"say String",TrackOutput:0b,auto:1b}
-setblock 389 80 104 chain_command_block 5 replace {Command:"say Yee",TrackOutput:0b,auto:1b}
-setblock 390 80 104 chain_command_block 5 replace {Command:"minecraft:tp @a[score_SPtp=1,score_SPtp_min=1] 49 36 -45 -90 0",TrackOutput:0b,auto:1b}
-setblock 391 80 104 chain_command_block 5 replace {Command:"tellraw @a[score_SPtp=1,score_SPtp_min=1]",TrackOutput:0b,auto:1b}
-setblock 392 80 104 chain_command_block 5 replace {Command:"tellraw @a[m=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
-setblock 393 80 104 chain_command_block 5 replace {Command:"tellraw @a[SPtp=1] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"49 36 -45\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"Ice Race\",\"color\":\"aqua\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp 1\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to Ice Race\",\"color\":\"aqua\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
-setblock 394 80 104 chain_command_block 5 replace {Command:"minecraft:tp @a[score_SPtp=2,score_SPtp_min=2] 75 7 -80 90 0",TrackOutput:0b,auto:1b}
-setblock 395 80 104 chain_command_block 5 replace {Command:"tellraw @a[score_SPtp=2,score_SPtp_min=2]",TrackOutput:0b,auto:1b}
-setblock 396 80 104 chain_command_block 5 replace {Command:"tellraw @a[m=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
-setblock 397 80 104 chain_command_block 5 replace {Command:"tellraw @a[SPtp=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"75 7 -80\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"Slow Race\",\"color\":\"gray\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp 2\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to Slow Race\",\"color\":\"gray\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
-setblock 398 80 104 chain_command_block 5 replace {Command:"minecraft:tp @a[score_SPtp=3,score_SPtp_min=3] 73 7 -102 90 0",TrackOutput:0b,auto:1b}
-setblock 399 80 104 chain_command_block 1 replace {Command:"tellraw @a[score_SPtp=3,score_SPtp_min=3]",TrackOutput:0b,auto:1b}
-setblock 399 81 104 chain_command_block 4 replace {Command:"tellraw @a[m=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
-setblock 398 81 104 chain_command_block 4 replace {Command:"tellraw @a[SPtp=3] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"73 7 -102\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"Nether Race\",\"color\":\"red\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp 3\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to Nether Race\",\"color\":\"red\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
-setblock 397 81 104 chain_command_block 4 replace {Command:"minecraft:tp @a[score_SPtp=4,score_SPtp_min=4] 23 7 -133 -90 0",TrackOutput:0b,auto:1b}
-setblock 396 81 104 chain_command_block 4 replace {Command:"tellraw @a[score_SPtp=4,score_SPtp_min=4]",TrackOutput:0b,auto:1b}
-setblock 395 81 104 chain_command_block 4 replace {Command:"tellraw @a[m=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
-setblock 394 81 104 chain_command_block 4 replace {Command:"tellraw @a[SPtp=4] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"23 7 -133\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"Evil Race\",\"color\":\"gray\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp 4\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to Evil Race\",\"color\":\"gray\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
-setblock 393 81 104 chain_command_block 4 replace {Command:"minecraft:tp @a[score_SPtp=5,score_SPtp_min=5] 218 18 -37 -90 0",TrackOutput:0b,auto:1b}
-setblock 392 81 104 chain_command_block 4 replace {Command:"tellraw @a[score_SPtp=5,score_SPtp_min=5]",TrackOutput:0b,auto:1b}
-setblock 391 81 104 chain_command_block 4 replace {Command:"tellraw @a[m=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
-setblock 390 81 104 chain_command_block 4 replace {Command:"tellraw @a[SPtp=5] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"218 18 -37\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"Diamond Race\",\"color\":\"aqua\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp 5\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to Diamond Race\",\"color\":\"aqua\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
-setblock 389 81 104 chain_command_block 4 replace {Command:"execute @a[score_SPtp_min=1] ~ ~ ~ playsound minecraft:entity.experience_orb.touch voice @a[c=1,score_SPtp_min=1]",TrackOutput:0b,auto:1b}
-setblock 388 81 104 chain_command_block 4 replace {Command:"scoreboard players set @a[score_SPtp_min=1] SPtp 0",TrackOutput:0b,auto:1b}
-setblock 387 81 104 chain_command_block 4 replace {Command:"say @a[m=2]",TrackOutput:0b,auto:1b}
-setblock 386 81 104 chain_command_block 4 replace {Command:"say @a[c=2]",TrackOutput:0b,auto:1b}
-setblock 385 81 104 chain_command_block 4 replace {Command:"say @a[name=2]",TrackOutput:0b,auto:1b}
-setblock 384 81 104 chain_command_block 1 replace {Command:"say @a[score_test=2,score_test_min=2]",TrackOutput:0b,auto:1b}
-setblock 384 82 104 chain_command_block 5 replace {Command:"say",TrackOutput:0b,auto:1b}
-setblock 385 82 104 chain_command_block 5 replace {Command:"say",TrackOutput:0b,auto:1b}
-setblock 386 82 104 chain_command_block 5 replace {Command:"say",TrackOutput:0b,auto:1b}
-setblock 387 82 104 chain_command_block 5 replace {Command:"tellraw @a {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
-setblock 388 82 104 chain_command_block 5 replace {Command:"tellraw @a {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"$Coords|0|$\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"$Event|0|$\",\"color\":\"$EventC|0|$\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp |0|\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to $Event|0|$\",\"color\":\"$EventC|0|$\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
-setblock 389 82 104 chain_command_block 5 replace {Command:"execute @a {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
-setblock 390 82 104 chain_command_block 5 replace {Command:"execute @a {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"$Coords|0|$\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"$Event|0|$\",\"color\":\"$EventC|0|$\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp |0|\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to $Event|0|$\",\"color\":\"$EventC|0|$\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
-setblock 391 82 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti2",TrackOutput:0b,auto:1b}
-setblock 392 82 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = 3 Number",TrackOutput:0b,auto:1b}
-setblock 393 82 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players add @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
-setblock 394 82 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players remove @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
-setblock 395 82 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players set @e[type=ArmorStand,tag=RRStand] RRti 10 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
-setblock 396 82 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 5",TrackOutput:0b,auto:1b}
-setblock 397 82 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 0 10",TrackOutput:0b,auto:1b}
-setblock 398 82 104 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players reset @e[type=ArmorStand,tag=RRStand] RRti",TrackOutput:0b,auto:1b}
-setblock 399 82 104 chain_command_block 1 replace {Command:"execute @a ~ ~ ~ scoreboard players enable @e[type=ArmorStand,tag=RRStand] RRti",TrackOutput:0b,auto:1b}
-setblock 399 83 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard players tag @e[type=ArmorStand,tag=RRStand] add RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
-setblock 398 83 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard players tag @e[type=ArmorStand,tag=RRStand] remove RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
-setblock 397 83 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard teams join RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
-setblock 396 83 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard teams leave RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
-setblock 395 83 104 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard teams empty RRd_y",TrackOutput:0b,auto:1b}
-setblock 394 83 104 chain_command_block 4 replace {Command:"scoreboard players add ayylmao RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
-setblock 393 83 104 chain_command_block 4 replace {Command:"scoreboard players remove ayylmao RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
-setblock 392 83 104 chain_command_block 4 replace {Command:"scoreboard players set ayylmao RRti 10 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
-setblock 391 83 104 chain_command_block 4 replace {Command:"scoreboard players test ayylmao RRti 3",TrackOutput:0b,auto:1b}
-setblock 390 83 104 chain_command_block 4 replace {Command:"scoreboard players test ayylmao RRti 0 10",TrackOutput:0b,auto:1b}
-setblock 389 83 104 chain_command_block 4 replace {Command:"scoreboard players reset ayylmao RRti",TrackOutput:0b,auto:1b}
-setblock 388 83 104 chain_command_block 4 replace {Command:"scoreboard players enable ayylmao RRti",TrackOutput:0b,auto:1b}
-setblock 387 83 104 chain_command_block 4 replace {Command:"scoreboard players tag ayylmao add RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
-setblock 386 83 104 chain_command_block 4 replace {Command:"scoreboard players tag ayylmao remove RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
-setblock 385 83 104 chain_command_block 4 replace {Command:"scoreboard teams join RRd_y ayylmao",TrackOutput:0b,auto:1b}
-setblock 384 83 104 chain_command_block 1 replace {Command:"scoreboard teams leave RRd_y ayylmao",TrackOutput:0b,auto:1b}
-setblock 384 84 104 chain_command_block 5 replace {Command:"scoreboard teams empty RRd_y",TrackOutput:0b,auto:1b}
-setblock 385 84 104 chain_command_block 5 replace {Command:"tellraw @a[score_TSToken_min=1,score_SPtsc=1,score_SPtsn=10,score_SPtsn_min=10] {\"text\":\"\",\"extra\"[{\"text\":\"You have submitted 10 incorrect answers, and have 0 tries left.\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
-setblock 386 84 104 chain_command_block 5 replace {Command:"scoreboard players operation @p SPtp = 3 Number",TrackOutput:0b,auto:1b}
-setblock 387 84 104 chain_command_block 5 replace {Command:"tellraw @a {\"selector\":\"@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,score_asdf=5,score_asdf_min=5]\"}",TrackOutput:0b,auto:1b}
-setblock 388 84 104 chain_command_block 5 replace {Command:"effect @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRci=0,score_RRci_min=0,score_RRar=1,score_RRar_min=1] 11 1 0 true",TrackOutput:0b,auto:1b}
-setblock 389 84 104 chain_command_block 5 replace {Command:"effect @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRci=0,score_RRci_min=0,score_RRar_min=1,score_RRar=2] 7 1 1 true",TrackOutput:0b,auto:1b}
-setblock 390 84 104 chain_command_block 5 replace {Command:"say @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRar_min=3,score_RRar=5] @a[score_OMG_WORK_min=3,score_OMG_WORK=4] @a[score_OMG_WORK_min=3] 3",TrackOutput:0b,auto:1b}
-setblock 391 84 104 chain_command_block 5 replace {Command:"say @a[score_OMG_WORK=5,score_OMG_WORK_min=3] @a[score_OMG_WORK=5,score_OMG_WORK_min=4] @a[score_OMG_WORK=3]",TrackOutput:0b,auto:1b}
-setblock 392 84 104 chain_command_block 5 replace {Command:"say @a[score_OMG_WORK_min=4,score_OMG_WORK=5] @a[score_OMG_WORK_min=4,score_OMG_WORK=4] @a[score_OMG_WORK_min=4]",TrackOutput:0b,auto:1b}
-setblock 393 84 104 chain_command_block 5 replace {Command:"say @a[score_OMG_WORK=4,score_OMG_WORK_min=3] @a[score_OMG_WORK=4,score_OMG_WORK_min=4] @a[score_OMG_WORK=2]",TrackOutput:0b,auto:1b}
-setblock 394 84 104 chain_command_block 5 replace {Command:"scoreboard players operation @p TEST @p SPtp",TrackOutput:0b,auto:1b}
-setblock 395 84 104 chain_command_block 5 replace {Command:"scoreboard players operation @p TEST @p SPtp",TrackOutput:0b,auto:1b}
-setblock 396 84 104 chain_command_block 5 replace {Command:"scoreboard players operation @p TEST @p SPtp",TrackOutput:0b,auto:1b}
-setblock 397 84 104 chain_command_block 5 replace {Command:"$test$",TrackOutput:0b,auto:1b}
-setblock 398 84 104 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
-setblock 399 84 104 chain_command_block 1 replace {Command:"say lmao",TrackOutput:0b,auto:1b}
-setblock 399 85 104 chain_command_block 4 replace {Command:"say lmao compared to ayy",TrackOutput:0b,auto:1b}
-setblock 398 85 104 chain_command_block 4 replace {Command:"say lmao compared to ayy",TrackOutput:0b,auto:1b}
-setblock 397 85 104 chain_command_block 4 replace {Command:"fill 384 70 104 399 85 104 air 0",TrackOutput:0b,auto:1b}
-setblock 384 70 96 stonebrick 0
-setblock 384 72 96 stonebrick 0
-setblock 384 74 96 stonebrick 0
-setblock 384 76 96 stonebrick 0
-setblock 384 78 96 stonebrick 0
-setblock 384 80 96 stonebrick 0
-setblock 384 82 96 stonebrick 0
-setblock 384 84 96 stonebrick 0
-setblock 384 70 98 stonebrick 0
-setblock 384 72 98 stonebrick 0
-setblock 384 74 98 stonebrick 0
-setblock 384 76 98 stonebrick 0
-setblock 384 78 98 stonebrick 0
-setblock 384 80 98 stonebrick 0
-setblock 384 82 98 stonebrick 0
-setblock 384 84 98 stonebrick 0
-setblock 384 70 100 stonebrick 0
-setblock 384 72 100 stonebrick 0
-setblock 384 74 100 stonebrick 0
-setblock 384 76 100 stonebrick 0
-setblock 384 78 100 stonebrick 0
-setblock 384 80 100 stonebrick 0
-setblock 384 84 100 stonebrick 0
-setblock 384 70 102 stonebrick 0
-setblock 384 70 104 stained_hardened_clay 11
+fill ~5 ~5 ~5 ~22 ~22 ~20 air 0
+setblock ~7 ~6 ~6 command_block 5 replace {Command:"say 1 _A",TrackOutput:0b,auto:0b}
+setblock ~7 ~8 ~6 command_block 5 replace {Command:"say 2 _A",TrackOutput:0b,auto:0b}
+setblock ~7 ~10 ~6 command_block 5 replace {Command:"say 3 _A",TrackOutput:0b,auto:0b}
+setblock ~7 ~12 ~6 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
+setblock ~8 ~12 ~6 chain_command_block 5 replace {Command:"say 2 > 1",TrackOutput:0b,auto:1b}
+setblock ~9 ~12 ~6 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
+setblock ~10 ~12 ~6 chain_command_block 5 replace {Command:"say 3 > 1",TrackOutput:0b,auto:1b}
+setblock ~11 ~12 ~6 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
+setblock ~12 ~12 ~6 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
+setblock ~7 ~14 ~6 command_block 5 replace {Command:"say 1 _B",TrackOutput:0b,auto:0b}
+setblock ~7 ~16 ~6 command_block 5 replace {Command:"say 2 _B",TrackOutput:0b,auto:0b}
+setblock ~7 ~18 ~6 command_block 5 replace {Command:"say 3 _B",TrackOutput:0b,auto:0b}
+setblock ~7 ~20 ~6 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
+setblock ~8 ~20 ~6 chain_command_block 5 replace {Command:"say 2 > 1",TrackOutput:0b,auto:1b}
+setblock ~9 ~20 ~6 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
+setblock ~10 ~20 ~6 chain_command_block 5 replace {Command:"say 3 > 1",TrackOutput:0b,auto:1b}
+setblock ~11 ~20 ~6 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
+setblock ~12 ~20 ~6 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
+setblock ~7 ~6 ~8 command_block 5 replace {Command:"say 1 _C",TrackOutput:0b,auto:0b}
+setblock ~7 ~8 ~8 command_block 5 replace {Command:"say 2 _C",TrackOutput:0b,auto:0b}
+setblock ~7 ~10 ~8 command_block 5 replace {Command:"say 3 _C",TrackOutput:0b,auto:0b}
+setblock ~7 ~12 ~8 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
+setblock ~8 ~12 ~8 chain_command_block 5 replace {Command:"say 2 > 1",TrackOutput:0b,auto:1b}
+setblock ~9 ~12 ~8 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
+setblock ~10 ~12 ~8 chain_command_block 5 replace {Command:"say 3 > 1",TrackOutput:0b,auto:1b}
+setblock ~11 ~12 ~8 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
+setblock ~12 ~12 ~8 chain_command_block 5 replace {Command:"say okay",TrackOutput:0b,auto:1b}
+setblock ~7 ~14 ~8 command_block 5 replace {Command:"say a",TrackOutput:0b,auto:0b}
+setblock ~8 ~14 ~8 chain_command_block 5 replace {Command:"say b",TrackOutput:0b,auto:1b}
+setblock ~9 ~14 ~8 chain_command_block 5 replace {Command:"function custom:RayCaster/theHunted/test/init",TrackOutput:0b,auto:1b}
+setblock ~10 ~14 ~8 chain_command_block 5 replace {Command:"setblock ~-4 ~0 ~0 air 0",TrackOutput:0b,auto:1b}
+setblock ~7 ~16 ~8 command_block 5 replace {Command:"say b",TrackOutput:0b,auto:0b}
+setblock ~8 ~16 ~8 chain_command_block 5 replace {Command:"g;l;o;b;a;l",TrackOutput:0b,auto:1b}
+setblock ~9 ~16 ~8 chain_command_block 5 replace {Command:"Arr_Test2[S]",TrackOutput:0b,auto:1b}
+setblock ~7 ~18 ~8 repeating_command_block 5 replace {Command:"say c",TrackOutput:0b,auto:0b}
+setblock ~7 ~20 ~8 repeating_command_block 5 replace {Command:"say d",TrackOutput:0b,auto:0b}
+setblock ~7 ~6 ~10 command_block 5 replace {Command:"say e",TrackOutput:0b,auto:0b}
+setblock ~7 ~8 ~10 command_block 5 replace {Command:"say f",TrackOutput:0b,auto:0b}
+setblock ~7 ~10 ~10 command_block 5 replace {Command:"say g",TrackOutput:0b,auto:0b}
+setblock ~7 ~12 ~10 command_block 5 replace {Command:"say test",TrackOutput:0b,auto:0b}
+setblock ~8 ~12 ~10 chain_command_block 5 replace {Command:"say ABORTMISSION",TrackOutput:0b,auto:1b}
+setblock ~9 ~12 ~10 chain_command_block 5 replace {Command:"say hell yeah",TrackOutput:0b,auto:1b}
+setblock ~10 ~12 ~10 chain_command_block 5 replace {Command:"say LiterallyAbortMission",TrackOutput:0b,auto:1b}
+setblock ~11 ~12 ~10 chain_command_block 5 replace {Command:"lmao",TrackOutput:0b,auto:1b}
+setblock ~12 ~12 ~10 chain_command_block 5 replace {Command:"ayy",TrackOutput:0b,auto:1b}
+setblock ~7 ~14 ~10 command_block 5 replace {Command:"say $SA$",TrackOutput:0b,auto:0b}
+setblock ~8 ~14 ~10 chain_command_block 5 replace {Command:"ayy",TrackOutput:0b,auto:1b}
+setblock ~9 ~14 ~10 chain_command_block 5 replace {Command:"say LiterallyAbortMission",TrackOutput:0b,auto:1b}
+setblock ~10 ~14 ~10 chain_command_block 5 replace {Command:"lmao",TrackOutput:0b,auto:1b}
+setblock ~11 ~14 ~10 chain_command_block 5 replace {Command:"fill ~-5 ~2 ~0 ~10 ~4 ~0 air 0",TrackOutput:0b,auto:1b}
+setblock ~12 ~14 ~10 chain_command_block 5 replace {Command:"say yas",TrackOutput:0b,auto:1b}
+setblock ~7 ~16 ~10 command_block 5 replace {Command:"setblock ~-1 ~0 ~0 air 0",TrackOutput:0b,auto:0b}
+setblock ~8 ~16 ~10 chain_command_block 5 replace {Command:"say MEMES 5",TrackOutput:0b,auto:1b}
+setblock ~9 ~16 ~10 chain_command_block 5 replace {Command:"say -301 MARKER",TrackOutput:0b,auto:1b}
+setblock ~10 ~16 ~10 chain_command_block 5 replace {Command:"say -582 RandCalc",TrackOutput:0b,auto:1b}
+setblock ~11 ~16 ~10 chain_command_block 5 replace {Command:"say 51 MARKER",TrackOutput:0b,auto:1b}
+setblock ~12 ~16 ~10 chain_command_block 5 replace {Command:"say 930.0 MARKER",TrackOutput:0b,auto:1b}
+setblock ~13 ~16 ~10 chain_command_block 5 replace {Command:"say 40 MARKER",TrackOutput:0b,auto:1b}
+setblock ~14 ~16 ~10 chain_command_block 5 replace {Command:"say 0 MARKER",TrackOutput:0b,auto:1b}
+setblock ~15 ~16 ~10 chain_command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:1b}
+setblock ~16 ~16 ~10 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
+setblock ~17 ~16 ~10 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
+setblock ~18 ~16 ~10 chain_command_block 5 replace {Command:"minecraft:kill @a[score_anobjective=3,score_anobjective_min=3]",TrackOutput:0b,auto:1b}
+setblock ~19 ~16 ~10 chain_command_block 13 replace {Command:"testCond",TrackOutput:0b,auto:1b}
+setblock ~20 ~16 ~10 chain_command_block 13 replace {Command:"testCond2",TrackOutput:0b,auto:1b}
+setblock ~21 ~16 ~10 chain_command_block 1 replace {Command:"say 4",TrackOutput:0b,auto:1b}
+setblock ~21 ~17 ~10 chain_command_block 4 replace {Command:"say 5",TrackOutput:0b,auto:1b}
+setblock ~20 ~17 ~10 chain_command_block 4 replace {Command:"say 6",TrackOutput:0b,auto:1b}
+setblock ~19 ~17 ~10 chain_command_block 4 replace {Command:"say 7",TrackOutput:0b,auto:1b}
+setblock ~18 ~17 ~10 chain_command_block 4 replace {Command:"say 8",TrackOutput:0b,auto:1b}
+setblock ~17 ~17 ~10 chain_command_block 4 replace {Command:"say 9",TrackOutput:0b,auto:1b}
+setblock ~16 ~17 ~10 chain_command_block 12 replace {Command:"say LiterallyAbortMission",TrackOutput:0b,auto:1b}
+setblock ~15 ~17 ~10 chain_command_block 12 replace {Command:"say $SA$",TrackOutput:0b,auto:1b}
+setblock ~14 ~17 ~10 chain_command_block 12 replace {Command:"say yas",TrackOutput:0b,auto:1b}
+setblock ~13 ~17 ~10 chain_command_block 12 replace {Command:"say 11",TrackOutput:0b,auto:1b}
+setblock ~12 ~17 ~10 chain_command_block 12 replace {Command:"say 12",TrackOutput:0b,auto:1b}
+setblock ~11 ~17 ~10 chain_command_block 12 replace {Command:"say 13",TrackOutput:0b,auto:1b}
+setblock ~10 ~17 ~10 chain_command_block 12 replace {Command:"say 14",TrackOutput:0b,auto:1b}
+setblock ~9 ~17 ~10 chain_command_block 4 replace {Command:"say 15",TrackOutput:0b,auto:1b}
+setblock ~8 ~17 ~10 chain_command_block 4 replace {Command:"say 16",TrackOutput:0b,auto:1b}
+setblock ~7 ~17 ~10 chain_command_block 4 replace {Command:"say 17",TrackOutput:0b,auto:1b}
+setblock ~6 ~17 ~10 chain_command_block 1 replace {Command:"say Ye",TrackOutput:0b,auto:1b}
+setblock ~6 ~18 ~10 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
+setblock ~7 ~18 ~10 chain_command_block 5 replace {Command:"say lmao",TrackOutput:0b,auto:1b}
+setblock ~8 ~18 ~10 chain_command_block 5 replace {Command:"TheGreatestARGS (shouldn't be considered a function)",TrackOutput:0b,auto:1b}
+setblock ~9 ~18 ~10 chain_command_block 5 replace {Command:"say 18",TrackOutput:0b,auto:1b}
+setblock ~10 ~18 ~10 chain_command_block 5 replace {Command:"say Ye",TrackOutput:0b,auto:1b}
+setblock ~11 ~18 ~10 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
+setblock ~12 ~18 ~10 chain_command_block 5 replace {Command:"say lmao",TrackOutput:0b,auto:1b}
+setblock ~13 ~18 ~10 chain_command_block 5 replace {Command:"TheGreatestARGS (shouldn't be considered a function)",TrackOutput:0b,auto:1b}
+setblock ~14 ~18 ~10 chain_command_block 5 replace {Command:"asdfasdfsaf",TrackOutput:0b,auto:1b}
+setblock ~15 ~18 ~10 chain_command_block 5 replace {Command:"asdfae564rwe",TrackOutput:0b,auto:1b}
+setblock ~16 ~18 ~10 chain_command_block 5 replace {Command:"d45e",TrackOutput:0b,auto:1b}
+setblock ~17 ~18 ~10 chain_command_block 5 replace {Command:"78y65re7",TrackOutput:0b,auto:1b}
+setblock ~18 ~18 ~10 chain_command_block 5 replace {Command:"6756re",TrackOutput:0b,auto:1b}
+setblock ~19 ~18 ~10 chain_command_block 5 replace {Command:"say 19",TrackOutput:0b,auto:1b}
+setblock ~20 ~18 ~10 chain_command_block 5 replace {Command:"say 20",TrackOutput:0b,auto:1b}
+setblock ~21 ~18 ~10 chain_command_block 1 replace {Command:"say 21",TrackOutput:0b,auto:1b}
+setblock ~7 ~20 ~10 command_block 5 replace {Command:"say a",TrackOutput:0b,auto:0b}
+setblock ~8 ~20 ~10 chain_command_block 5 replace {Command:"say b",TrackOutput:0b,auto:1b}
+setblock ~9 ~20 ~10 chain_command_block 5 replace {Command:"say c",TrackOutput:0b,auto:1b}
+setblock ~10 ~20 ~10 chain_command_block 5 replace {Command:"say d",TrackOutput:0b,auto:1b}
+setblock ~11 ~20 ~10 chain_command_block 5 replace {Command:"say e",TrackOutput:0b,auto:1b}
+setblock ~12 ~20 ~10 chain_command_block 5 replace {Command:"say f",TrackOutput:0b,auto:1b}
+setblock ~13 ~20 ~10 chain_command_block 5 replace {Command:"say g",TrackOutput:0b,auto:1b}
+setblock ~14 ~20 ~10 chain_command_block 13 replace {Command:"say h",TrackOutput:0b,auto:1b}
+setblock ~15 ~20 ~10 chain_command_block 13 replace {Command:"say i",TrackOutput:0b,auto:1b}
+setblock ~16 ~20 ~10 chain_command_block 13 replace {Command:"say j",TrackOutput:0b,auto:1b}
+setblock ~17 ~20 ~10 chain_command_block 13 replace {Command:"say k",TrackOutput:0b,auto:1b}
+setblock ~18 ~20 ~10 chain_command_block 1 replace {Command:"",TrackOutput:0b,auto:1b}
+setblock ~18 ~21 ~10 chain_command_block 4 replace {Command:"say l",TrackOutput:0b,auto:1b}
+setblock ~17 ~21 ~10 chain_command_block 12 replace {Command:"say m",TrackOutput:0b,auto:1b}
+setblock ~16 ~21 ~10 chain_command_block 12 replace {Command:"say n",TrackOutput:0b,auto:1b}
+setblock ~15 ~21 ~10 chain_command_block 12 replace {Command:"say o",TrackOutput:0b,auto:1b}
+setblock ~14 ~21 ~10 chain_command_block 12 replace {Command:"say p",TrackOutput:0b,auto:1b}
+setblock ~13 ~21 ~10 chain_command_block 12 replace {Command:"say q",TrackOutput:0b,auto:1b}
+setblock ~12 ~21 ~10 chain_command_block 12 replace {Command:"say r",TrackOutput:0b,auto:1b}
+setblock ~11 ~21 ~10 chain_command_block 12 replace {Command:"say s",TrackOutput:0b,auto:1b}
+setblock ~10 ~21 ~10 chain_command_block 12 replace {Command:"say t",TrackOutput:0b,auto:1b}
+setblock ~7 ~6 ~12 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
+setblock ~8 ~6 ~12 chain_command_block 5 replace {Command:"say 2 asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~9 ~6 ~12 chain_command_block 5 replace {Command:"say 3 asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~10 ~6 ~12 chain_command_block 5 replace {Command:"say 4 asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~11 ~6 ~12 chain_command_block 5 replace {Command:"say 5 asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~12 ~6 ~12 chain_command_block 5 replace {Command:"asdfasdfsaf asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~13 ~6 ~12 chain_command_block 5 replace {Command:"asdfae564rwe asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~14 ~6 ~12 chain_command_block 5 replace {Command:"d45e asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~15 ~6 ~12 chain_command_block 5 replace {Command:"78y65re7 asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~16 ~6 ~12 chain_command_block 5 replace {Command:"6756re asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~17 ~6 ~12 chain_command_block 5 replace {Command:"say 6 asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~18 ~6 ~12 chain_command_block 5 replace {Command:"asdfasdf say 7",TrackOutput:0b,auto:1b}
+setblock ~19 ~6 ~12 chain_command_block 5 replace {Command:"asdfasdf say 8",TrackOutput:0b,auto:1b}
+setblock ~20 ~6 ~12 chain_command_block 5 replace {Command:"asdfasdf say 9",TrackOutput:0b,auto:1b}
+setblock ~21 ~6 ~12 chain_command_block 1 replace {Command:"asdfasdf say 10",TrackOutput:0b,auto:1b}
+setblock ~21 ~7 ~12 chain_command_block 4 replace {Command:"asdfasdf say 11",TrackOutput:0b,auto:1b}
+setblock ~20 ~7 ~12 chain_command_block 4 replace {Command:"say 12asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~19 ~7 ~12 chain_command_block 4 replace {Command:"say 13asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~18 ~7 ~12 chain_command_block 4 replace {Command:"say 14asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~17 ~7 ~12 chain_command_block 4 replace {Command:"say 15asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~16 ~7 ~12 chain_command_block 4 replace {Command:"say 16asdfasdf",TrackOutput:0b,auto:1b}
+setblock ~15 ~7 ~12 chain_command_block 4 replace {Command:"asdfasdfsay 17",TrackOutput:0b,auto:1b}
+setblock ~14 ~7 ~12 chain_command_block 4 replace {Command:"asdfasdfsay 18",TrackOutput:0b,auto:1b}
+setblock ~13 ~7 ~12 chain_command_block 4 replace {Command:"asdfasdfEncapsulatedUse say 19",TrackOutput:0b,auto:1b}
+setblock ~12 ~7 ~12 chain_command_block 4 replace {Command:"asdfasdfEncapsulatedUse say 20",TrackOutput:0b,auto:1b}
+setblock ~11 ~7 ~12 chain_command_block 4 replace {Command:"asdfasdfsay 21",TrackOutput:0b,auto:1b}
+setblock ~10 ~7 ~12 chain_command_block 4 replace {Command:"say 22",TrackOutput:0b,auto:1b}
+setblock ~9 ~7 ~12 chain_command_block 4 replace {Command:"say 23",TrackOutput:0b,auto:1b}
+setblock ~8 ~7 ~12 chain_command_block 4 replace {Command:"say 24",TrackOutput:0b,auto:1b}
+setblock ~7 ~7 ~12 chain_command_block 4 replace {Command:"say 25",TrackOutput:0b,auto:1b}
+setblock ~6 ~7 ~12 chain_command_block 1 replace {Command:"say 26",TrackOutput:0b,auto:1b}
+setblock ~6 ~8 ~12 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
+setblock ~7 ~8 ~12 chain_command_block 5 replace {Command:"say asdf",TrackOutput:0b,auto:1b}
+setblock ~8 ~8 ~12 chain_command_block 5 replace {Command:"say (first 15) (second 526)",TrackOutput:0b,auto:1b}
+setblock ~9 ~8 ~12 chain_command_block 5 replace {Command:"say FIRST",TrackOutput:0b,auto:1b}
+setblock ~10 ~8 ~12 chain_command_block 5 replace {Command:"say 5 10 SECOND",TrackOutput:0b,auto:1b}
+setblock ~11 ~8 ~12 chain_command_block 5 replace {Command:"say 1 2 FIRST",TrackOutput:0b,auto:1b}
+setblock ~12 ~8 ~12 chain_command_block 5 replace {Command:"say test",TrackOutput:0b,auto:1b}
+setblock ~13 ~8 ~12 chain_command_block 5 replace {Command:"Func_TestDefinition",TrackOutput:0b,auto:1b}
+setblock ~14 ~8 ~12 chain_command_block 5 replace {Command:"say 27",TrackOutput:0b,auto:1b}
+setblock ~15 ~8 ~12 chain_command_block 5 replace {Command:"say 28",TrackOutput:0b,auto:1b}
+setblock ~16 ~8 ~12 chain_command_block 5 replace {Command:"say 29",TrackOutput:0b,auto:1b}
+setblock ~17 ~8 ~12 chain_command_block 5 replace {Command:"say 30",TrackOutput:0b,auto:1b}
+setblock ~18 ~8 ~12 chain_command_block 5 replace {Command:"say 31",TrackOutput:0b,auto:1b}
+setblock ~19 ~8 ~12 chain_command_block 5 replace {Command:"say 32",TrackOutput:0b,auto:1b}
+setblock ~20 ~8 ~12 chain_command_block 5 replace {Command:"say 33 34 35 36 37 38 39 40 tellraw @a {\"text\":\"ayylmao\"}",TrackOutput:0b,auto:1b}
+setblock ~7 ~6 ~14 repeating_command_block 5 replace {Command:"say rekt",TrackOutput:0b,auto:0b}
+setblock ~8 ~6 ~14 chain_command_block 5 replace {Command:"say rekt again",TrackOutput:0b,auto:1b}
+setblock ~9 ~6 ~14 chain_command_block 5 replace {Command:"say abde",TrackOutput:0b,auto:1b}
+setblock ~10 ~6 ~14 chain_command_block 5 replace {Command:"say 1  |  8.0  |  4096  ~",TrackOutput:0b,auto:1b}
+setblock ~11 ~6 ~14 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~12 ~6 ~14 chain_command_block 5 replace {Command:"say Previous 1  |  8.0  |  4096",TrackOutput:0b,auto:1b}
+setblock ~13 ~6 ~14 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~14 ~6 ~14 chain_command_block 5 replace {Command:"say Previous 1  |  8.0  |  4096",TrackOutput:0b,auto:1b}
+setblock ~15 ~6 ~14 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~16 ~6 ~14 chain_command_block 5 replace {Command:"say Previous 1  |  8.0  |  4096",TrackOutput:0b,auto:1b}
+setblock ~17 ~6 ~14 chain_command_block 5 replace {Command:"say 2  |  7.5  |  2048  ~",TrackOutput:0b,auto:1b}
+setblock ~18 ~6 ~14 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~19 ~6 ~14 chain_command_block 5 replace {Command:"say Previous 2  |  7.5  |  2048",TrackOutput:0b,auto:1b}
+setblock ~20 ~6 ~14 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~21 ~6 ~14 chain_command_block 1 replace {Command:"say Previous 2  |  7.5  |  2048",TrackOutput:0b,auto:1b}
+setblock ~21 ~7 ~14 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~20 ~7 ~14 chain_command_block 4 replace {Command:"say Previous 2  |  7.5  |  2048",TrackOutput:0b,auto:1b}
+setblock ~19 ~7 ~14 chain_command_block 4 replace {Command:"say 3  |  7.0  |  1024  ~",TrackOutput:0b,auto:1b}
+setblock ~18 ~7 ~14 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~17 ~7 ~14 chain_command_block 4 replace {Command:"say Previous 3  |  7.0  |  1024",TrackOutput:0b,auto:1b}
+setblock ~16 ~7 ~14 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~15 ~7 ~14 chain_command_block 4 replace {Command:"say Previous 3  |  7.0  |  1024",TrackOutput:0b,auto:1b}
+setblock ~14 ~7 ~14 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~13 ~7 ~14 chain_command_block 4 replace {Command:"say Previous 3  |  7.0  |  1024",TrackOutput:0b,auto:1b}
+setblock ~12 ~7 ~14 chain_command_block 4 replace {Command:"say 4  |  6.5  |  512  ~",TrackOutput:0b,auto:1b}
+setblock ~11 ~7 ~14 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~10 ~7 ~14 chain_command_block 4 replace {Command:"say Previous 4  |  6.5  |  512",TrackOutput:0b,auto:1b}
+setblock ~9 ~7 ~14 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~8 ~7 ~14 chain_command_block 4 replace {Command:"say Previous 4  |  6.5  |  512",TrackOutput:0b,auto:1b}
+setblock ~7 ~7 ~14 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~6 ~7 ~14 chain_command_block 1 replace {Command:"say Previous 4  |  6.5  |  512",TrackOutput:0b,auto:1b}
+setblock ~6 ~8 ~14 chain_command_block 5 replace {Command:"say 5  |  6.0  |  256  ~",TrackOutput:0b,auto:1b}
+setblock ~7 ~8 ~14 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~8 ~8 ~14 chain_command_block 5 replace {Command:"say Previous 5  |  6.0  |  256",TrackOutput:0b,auto:1b}
+setblock ~9 ~8 ~14 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~10 ~8 ~14 chain_command_block 5 replace {Command:"say Previous 5  |  6.0  |  256",TrackOutput:0b,auto:1b}
+setblock ~11 ~8 ~14 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~12 ~8 ~14 chain_command_block 5 replace {Command:"say Previous 5  |  6.0  |  256",TrackOutput:0b,auto:1b}
+setblock ~13 ~8 ~14 chain_command_block 5 replace {Command:"say 6  |  5.5  |  128  ~",TrackOutput:0b,auto:1b}
+setblock ~14 ~8 ~14 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~15 ~8 ~14 chain_command_block 5 replace {Command:"say Previous 6  |  5.5  |  128",TrackOutput:0b,auto:1b}
+setblock ~16 ~8 ~14 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~17 ~8 ~14 chain_command_block 5 replace {Command:"say Previous 6  |  5.5  |  128",TrackOutput:0b,auto:1b}
+setblock ~18 ~8 ~14 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~19 ~8 ~14 chain_command_block 5 replace {Command:"say Previous 6  |  5.5  |  128",TrackOutput:0b,auto:1b}
+setblock ~20 ~8 ~14 chain_command_block 5 replace {Command:"say 7  |  5.0  |  64  ~",TrackOutput:0b,auto:1b}
+setblock ~21 ~8 ~14 chain_command_block 1 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~21 ~9 ~14 chain_command_block 4 replace {Command:"say Previous 7  |  5.0  |  64",TrackOutput:0b,auto:1b}
+setblock ~20 ~9 ~14 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~19 ~9 ~14 chain_command_block 4 replace {Command:"say Previous 7  |  5.0  |  64",TrackOutput:0b,auto:1b}
+setblock ~18 ~9 ~14 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~17 ~9 ~14 chain_command_block 4 replace {Command:"say Previous 7  |  5.0  |  64",TrackOutput:0b,auto:1b}
+setblock ~16 ~9 ~14 chain_command_block 4 replace {Command:"say 8  |  4.5  |  32  ~",TrackOutput:0b,auto:1b}
+setblock ~15 ~9 ~14 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~14 ~9 ~14 chain_command_block 4 replace {Command:"say Previous 8  |  4.5  |  32",TrackOutput:0b,auto:1b}
+setblock ~13 ~9 ~14 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~12 ~9 ~14 chain_command_block 4 replace {Command:"say Previous 8  |  4.5  |  32",TrackOutput:0b,auto:1b}
+setblock ~11 ~9 ~14 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~10 ~9 ~14 chain_command_block 4 replace {Command:"say Previous 8  |  4.5  |  32",TrackOutput:0b,auto:1b}
+setblock ~9 ~9 ~14 chain_command_block 4 replace {Command:"say 9  |  4.0  |  16  ~",TrackOutput:0b,auto:1b}
+setblock ~8 ~9 ~14 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~7 ~9 ~14 chain_command_block 4 replace {Command:"say Previous 9  |  4.0  |  16",TrackOutput:0b,auto:1b}
+setblock ~6 ~9 ~14 chain_command_block 1 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~6 ~10 ~14 chain_command_block 5 replace {Command:"say Previous 9  |  4.0  |  16",TrackOutput:0b,auto:1b}
+setblock ~7 ~10 ~14 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~8 ~10 ~14 chain_command_block 5 replace {Command:"say Previous 9  |  4.0  |  16",TrackOutput:0b,auto:1b}
+setblock ~9 ~10 ~14 chain_command_block 5 replace {Command:"say 10  |  3.5  |  8  ~",TrackOutput:0b,auto:1b}
+setblock ~10 ~10 ~14 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~11 ~10 ~14 chain_command_block 5 replace {Command:"say Previous 10  |  3.5  |  8",TrackOutput:0b,auto:1b}
+setblock ~12 ~10 ~14 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~13 ~10 ~14 chain_command_block 5 replace {Command:"say Previous 10  |  3.5  |  8",TrackOutput:0b,auto:1b}
+setblock ~14 ~10 ~14 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~15 ~10 ~14 chain_command_block 5 replace {Command:"say Previous 10  |  3.5  |  8",TrackOutput:0b,auto:1b}
+setblock ~16 ~10 ~14 chain_command_block 5 replace {Command:"say 11  |  3.0  |  4  ~",TrackOutput:0b,auto:1b}
+setblock ~17 ~10 ~14 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~18 ~10 ~14 chain_command_block 5 replace {Command:"say Previous 11  |  3.0  |  4",TrackOutput:0b,auto:1b}
+setblock ~19 ~10 ~14 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~20 ~10 ~14 chain_command_block 5 replace {Command:"say Previous 11  |  3.0  |  4",TrackOutput:0b,auto:1b}
+setblock ~21 ~10 ~14 chain_command_block 1 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~21 ~11 ~14 chain_command_block 4 replace {Command:"say Previous 11  |  3.0  |  4",TrackOutput:0b,auto:1b}
+setblock ~20 ~11 ~14 chain_command_block 4 replace {Command:"say 12  |  2.5  |  2  ~",TrackOutput:0b,auto:1b}
+setblock ~19 ~11 ~14 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~18 ~11 ~14 chain_command_block 4 replace {Command:"say Previous 12  |  2.5  |  2",TrackOutput:0b,auto:1b}
+setblock ~17 ~11 ~14 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~16 ~11 ~14 chain_command_block 4 replace {Command:"say Previous 12  |  2.5  |  2",TrackOutput:0b,auto:1b}
+setblock ~15 ~11 ~14 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~14 ~11 ~14 chain_command_block 4 replace {Command:"say Previous 12  |  2.5  |  2",TrackOutput:0b,auto:1b}
+setblock ~13 ~11 ~14 chain_command_block 4 replace {Command:"say 13  |  2.0  |  1  ~",TrackOutput:0b,auto:1b}
+setblock ~12 ~11 ~14 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~11 ~11 ~14 chain_command_block 4 replace {Command:"say Previous 13  |  2.0  |  1",TrackOutput:0b,auto:1b}
+setblock ~10 ~11 ~14 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~9 ~11 ~14 chain_command_block 4 replace {Command:"say Previous 13  |  2.0  |  1",TrackOutput:0b,auto:1b}
+setblock ~8 ~11 ~14 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~7 ~11 ~14 chain_command_block 4 replace {Command:"say Previous 13  |  2.0  |  1",TrackOutput:0b,auto:1b}
+setblock ~6 ~11 ~14 chain_command_block 1 replace {Command:"say 14  |  1.5  |    ~",TrackOutput:0b,auto:1b}
+setblock ~6 ~12 ~14 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~7 ~12 ~14 chain_command_block 5 replace {Command:"say Previous 14  |  1.5  |",TrackOutput:0b,auto:1b}
+setblock ~8 ~12 ~14 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~9 ~12 ~14 chain_command_block 5 replace {Command:"say Previous 14  |  1.5  |",TrackOutput:0b,auto:1b}
+setblock ~10 ~12 ~14 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~11 ~12 ~14 chain_command_block 5 replace {Command:"say Previous 14  |  1.5  |",TrackOutput:0b,auto:1b}
+setblock ~12 ~12 ~14 chain_command_block 5 replace {Command:"say 15  |  1.0  |    ~",TrackOutput:0b,auto:1b}
+setblock ~13 ~12 ~14 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~14 ~12 ~14 chain_command_block 5 replace {Command:"say Previous 15  |  1.0  |",TrackOutput:0b,auto:1b}
+setblock ~15 ~12 ~14 chain_command_block 5 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~16 ~12 ~14 chain_command_block 5 replace {Command:"say Previous 15  |  1.0  |",TrackOutput:0b,auto:1b}
+setblock ~17 ~12 ~14 chain_command_block 5 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~18 ~12 ~14 chain_command_block 5 replace {Command:"say Previous 15  |  1.0  |",TrackOutput:0b,auto:1b}
+setblock ~19 ~12 ~14 chain_command_block 5 replace {Command:"say 16  |    |    ~",TrackOutput:0b,auto:1b}
+setblock ~20 ~12 ~14 chain_command_block 5 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~21 ~12 ~14 chain_command_block 1 replace {Command:"say Previous 16  |    |",TrackOutput:0b,auto:1b}
+setblock ~21 ~13 ~14 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~20 ~13 ~14 chain_command_block 4 replace {Command:"say Previous 16  |    |",TrackOutput:0b,auto:1b}
+setblock ~19 ~13 ~14 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~18 ~13 ~14 chain_command_block 4 replace {Command:"say Previous 16  |    |",TrackOutput:0b,auto:1b}
+setblock ~17 ~13 ~14 chain_command_block 4 replace {Command:"say 17  |    |    ~",TrackOutput:0b,auto:1b}
+setblock ~16 ~13 ~14 chain_command_block 4 replace {Command:"say Current 1",TrackOutput:0b,auto:1b}
+setblock ~15 ~13 ~14 chain_command_block 4 replace {Command:"say Previous 17  |    |",TrackOutput:0b,auto:1b}
+setblock ~14 ~13 ~14 chain_command_block 4 replace {Command:"say Current 2",TrackOutput:0b,auto:1b}
+setblock ~13 ~13 ~14 chain_command_block 4 replace {Command:"say Previous 17  |    |",TrackOutput:0b,auto:1b}
+setblock ~12 ~13 ~14 chain_command_block 4 replace {Command:"say Current 3",TrackOutput:0b,auto:1b}
+setblock ~11 ~13 ~14 chain_command_block 4 replace {Command:"say Previous 17  |    |",TrackOutput:0b,auto:1b}
+setblock ~10 ~13 ~14 chain_command_block 4 replace {Command:"execute @p ~ ~ ~ execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ detect ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick * say @a",TrackOutput:0b,auto:1b}
+setblock ~9 ~13 ~14 chain_command_block 4 replace {Command:"execute @p ~ ~ ~ execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ detect ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick * say @a",TrackOutput:0b,auto:1b}
+setblock ~8 ~13 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
+setblock ~7 ~13 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
+setblock ~6 ~13 ~14 chain_command_block 1 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
+setblock ~6 ~14 ~14 chain_command_block 5 replace {Command:"execute @s ~ ~ ~ execute @s ~ ~ ~ execute @s ~ ~ ~ minecraft:kill @a[score_RRti_min=1,tag=testTag,score_kek_min=1,score_kek=3]",TrackOutput:0b,auto:1b}
+setblock ~7 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
+setblock ~8 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
+setblock ~9 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
+setblock ~10 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
+setblock ~11 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
+setblock ~12 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
+setblock ~13 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick -1 say test",TrackOutput:0b,auto:1b}
+setblock ~14 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
+setblock ~15 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick -1 say test",TrackOutput:0b,auto:1b}
+setblock ~16 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
+setblock ~17 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
+setblock ~18 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
+setblock ~19 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
+setblock ~20 ~14 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
+setblock ~21 ~14 ~14 chain_command_block 1 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test",TrackOutput:0b,auto:1b}
+setblock ~21 ~15 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick -1 execute @a ~ ~ ~ detect ~ ~ ~ stonebrick -1 say test",TrackOutput:0b,auto:1b}
+setblock ~20 ~15 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
+setblock ~19 ~15 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ say test",TrackOutput:0b,auto:1b}
+setblock ~18 ~15 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ not_a_block 0 say test",TrackOutput:0b,auto:1b}
+setblock ~17 ~15 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ detect ~ ~ ~ detect ~ ~ ~ stonebrick 0 say test",TrackOutput:0b,auto:1b}
+setblock ~16 ~15 ~14 chain_command_block 4 replace {Command:"execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti2",TrackOutput:0b,auto:1b}
+setblock ~15 ~15 ~14 chain_command_block 4 replace {Command:"execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = 3 Number",TrackOutput:0b,auto:1b}
+setblock ~14 ~15 ~14 chain_command_block 4 replace {Command:"scoreboard players add @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
+setblock ~13 ~15 ~14 chain_command_block 4 replace {Command:"scoreboard players remove @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
+setblock ~12 ~15 ~14 chain_command_block 4 replace {Command:"scoreboard players set @e[type=ArmorStand,tag=RRStand] RRti 10 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
+setblock ~11 ~15 ~14 chain_command_block 4 replace {Command:"scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 5",TrackOutput:0b,auto:1b}
+setblock ~10 ~15 ~14 chain_command_block 4 replace {Command:"scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 0 10",TrackOutput:0b,auto:1b}
+setblock ~9 ~15 ~14 chain_command_block 4 replace {Command:"scoreboard players reset @e[type=ArmorStand,tag=RRStand] RRti",TrackOutput:0b,auto:1b}
+setblock ~8 ~15 ~14 chain_command_block 4 replace {Command:"scoreboard players enable @e[type=ArmorStand,tag=RRStand] RRti",TrackOutput:0b,auto:1b}
+setblock ~7 ~15 ~14 chain_command_block 4 replace {Command:"scoreboard players tag @e[type=ArmorStand,tag=RRStand] add RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
+setblock ~6 ~15 ~14 chain_command_block 1 replace {Command:"scoreboard players tag @e[type=ArmorStand,tag=RRStand] remove RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
+setblock ~6 ~16 ~14 chain_command_block 5 replace {Command:"scoreboard teams join RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
+setblock ~7 ~16 ~14 chain_command_block 5 replace {Command:"scoreboard teams leave RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
+setblock ~8 ~16 ~14 chain_command_block 5 replace {Command:"scoreboard teams empty RRd_y",TrackOutput:0b,auto:1b}
+setblock ~9 ~16 ~14 chain_command_block 5 replace {Command:"say Test",TrackOutput:0b,auto:1b}
+setblock ~10 ~16 ~14 chain_command_block 5 replace {Command:"say String",TrackOutput:0b,auto:1b}
+setblock ~11 ~16 ~14 chain_command_block 5 replace {Command:"say Yee",TrackOutput:0b,auto:1b}
+setblock ~12 ~16 ~14 chain_command_block 5 replace {Command:"minecraft:tp @a[score_SPtp=1,score_SPtp_min=1] 49 36 -45 -90 0",TrackOutput:0b,auto:1b}
+setblock ~13 ~16 ~14 chain_command_block 5 replace {Command:"tellraw @a[score_SPtp=1,score_SPtp_min=1]",TrackOutput:0b,auto:1b}
+setblock ~14 ~16 ~14 chain_command_block 5 replace {Command:"tellraw @a[m=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
+setblock ~15 ~16 ~14 chain_command_block 5 replace {Command:"tellraw @a[score_SPtp=1,score_SPtp_min=1] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"49 36 -45\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"Ice Race\",\"color\":\"aqua\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp 1\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to Ice Race\",\"color\":\"aqua\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
+setblock ~16 ~16 ~14 chain_command_block 5 replace {Command:"minecraft:tp @a[score_SPtp=2,score_SPtp_min=2] 75 7 -80 90 0",TrackOutput:0b,auto:1b}
+setblock ~17 ~16 ~14 chain_command_block 5 replace {Command:"tellraw @a[score_SPtp=2,score_SPtp_min=2]",TrackOutput:0b,auto:1b}
+setblock ~18 ~16 ~14 chain_command_block 5 replace {Command:"tellraw @a[m=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
+setblock ~19 ~16 ~14 chain_command_block 5 replace {Command:"tellraw @a[score_SPtp=2,score_SPtp_min=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"75 7 -80\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"Slow Race\",\"color\":\"gray\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp 2\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to Slow Race\",\"color\":\"gray\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
+setblock ~20 ~16 ~14 chain_command_block 5 replace {Command:"minecraft:tp @a[score_SPtp=3,score_SPtp_min=3] 73 7 -102 90 0",TrackOutput:0b,auto:1b}
+setblock ~21 ~16 ~14 chain_command_block 1 replace {Command:"tellraw @a[score_SPtp=3,score_SPtp_min=3]",TrackOutput:0b,auto:1b}
+setblock ~21 ~17 ~14 chain_command_block 4 replace {Command:"tellraw @a[m=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
+setblock ~20 ~17 ~14 chain_command_block 4 replace {Command:"tellraw @a[score_SPtp=3,score_SPtp_min=3] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"73 7 -102\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"Nether Race\",\"color\":\"red\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp 3\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to Nether Race\",\"color\":\"red\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
+setblock ~19 ~17 ~14 chain_command_block 4 replace {Command:"minecraft:tp @a[score_SPtp=4,score_SPtp_min=4] 23 7 -133 -90 0",TrackOutput:0b,auto:1b}
+setblock ~18 ~17 ~14 chain_command_block 4 replace {Command:"tellraw @a[score_SPtp=4,score_SPtp_min=4]",TrackOutput:0b,auto:1b}
+setblock ~17 ~17 ~14 chain_command_block 4 replace {Command:"tellraw @a[m=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
+setblock ~16 ~17 ~14 chain_command_block 4 replace {Command:"tellraw @a[score_SPtp=4,score_SPtp_min=4] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"23 7 -133\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"Evil Race\",\"color\":\"gray\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp 4\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to Evil Race\",\"color\":\"gray\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
+setblock ~15 ~17 ~14 chain_command_block 4 replace {Command:"minecraft:tp @a[score_SPtp=5,score_SPtp_min=5] 218 18 -37 -90 0",TrackOutput:0b,auto:1b}
+setblock ~14 ~17 ~14 chain_command_block 4 replace {Command:"tellraw @a[score_SPtp=5,score_SPtp_min=5]",TrackOutput:0b,auto:1b}
+setblock ~13 ~17 ~14 chain_command_block 4 replace {Command:"tellraw @a[m=2] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
+setblock ~12 ~17 ~14 chain_command_block 4 replace {Command:"tellraw @a[score_SPtp=5,score_SPtp_min=5] {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"218 18 -37\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"Diamond Race\",\"color\":\"aqua\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp 5\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to Diamond Race\",\"color\":\"aqua\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
+setblock ~11 ~17 ~14 chain_command_block 4 replace {Command:"execute @a[score_SPtp_min=1] ~ ~ ~ playsound minecraft:entity.experience_orb.touch voice @a[c=1,score_SPtp_min=1]",TrackOutput:0b,auto:1b}
+setblock ~10 ~17 ~14 chain_command_block 4 replace {Command:"scoreboard players set @a[score_SPtp_min=1] SPtp 0",TrackOutput:0b,auto:1b}
+setblock ~9 ~17 ~14 chain_command_block 4 replace {Command:"say @a[m=2]",TrackOutput:0b,auto:1b}
+setblock ~8 ~17 ~14 chain_command_block 4 replace {Command:"say @a[c=2]",TrackOutput:0b,auto:1b}
+setblock ~7 ~17 ~14 chain_command_block 4 replace {Command:"say @a[name=2]",TrackOutput:0b,auto:1b}
+setblock ~6 ~17 ~14 chain_command_block 1 replace {Command:"say @a[score_test=2,score_test_min=2]",TrackOutput:0b,auto:1b}
+setblock ~6 ~18 ~14 chain_command_block 5 replace {Command:"say",TrackOutput:0b,auto:1b}
+setblock ~7 ~18 ~14 chain_command_block 5 replace {Command:"say",TrackOutput:0b,auto:1b}
+setblock ~8 ~18 ~14 chain_command_block 5 replace {Command:"say",TrackOutput:0b,auto:1b}
+setblock ~9 ~18 ~14 chain_command_block 5 replace {Command:"tellraw @a {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
+setblock ~10 ~18 ~14 chain_command_block 5 replace {Command:"tellraw @a {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"$Coords|0|$\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"$Event|0|$\",\"color\":\"$EventC|0|$\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp |0|\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to $Event|0|$\",\"color\":\"$EventC|0|$\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
+setblock ~11 ~18 ~14 chain_command_block 5 replace {Command:"execute @a {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},",TrackOutput:0b,auto:1b}
+setblock ~12 ~18 ~14 chain_command_block 5 replace {Command:"execute @a {\"text\":\"\",\"extra\":[{\"text\":\"[\",\"color\":\"gray\"},{\"text\":\"SP\",\"color\":\"yellow\",\"bold\":\"true\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"SpawnPoint System\",\"color\":\"yellow\"}},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players operation @p SPtp = cmd SPna\"}},{\"text\":\"]\",\"color\":\"gray\"},{\"text\":\": \"},{\"text\":\"You have been teleported to \",\"color\":\"gray\"},{\"text\":\"$Coords|0|$\",\"color\":\"yellow\",\"bold\":\"true\"},{\"text\":\" at \",\"color\":\"gray\"},{\"text\":\"$Event|0|$\",\"color\":\"$EventC|0|$\",\"bold\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/scoreboard players set @p SPtp |0|\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Teleport to $Event|0|$\",\"color\":\"$EventC|0|$\"}}},{\"text\":\"!\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
+setblock ~13 ~18 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti2",TrackOutput:0b,auto:1b}
+setblock ~14 ~18 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=ArmorStand,tag=RRStand] RRti = 3 Number",TrackOutput:0b,auto:1b}
+setblock ~15 ~18 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players add @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
+setblock ~16 ~18 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players remove @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
+setblock ~17 ~18 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players set @e[type=ArmorStand,tag=RRStand] RRti 10 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
+setblock ~18 ~18 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 5",TrackOutput:0b,auto:1b}
+setblock ~19 ~18 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 0 10",TrackOutput:0b,auto:1b}
+setblock ~20 ~18 ~14 chain_command_block 5 replace {Command:"execute @a ~ ~ ~ scoreboard players reset @e[type=ArmorStand,tag=RRStand] RRti",TrackOutput:0b,auto:1b}
+setblock ~21 ~18 ~14 chain_command_block 1 replace {Command:"execute @a ~ ~ ~ scoreboard players enable @e[type=ArmorStand,tag=RRStand] RRti",TrackOutput:0b,auto:1b}
+setblock ~21 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard players tag @e[type=ArmorStand,tag=RRStand] add RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
+setblock ~20 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard players tag @e[type=ArmorStand,tag=RRStand] remove RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
+setblock ~19 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard teams join RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
+setblock ~18 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard teams leave RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
+setblock ~17 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard teams empty RRd_y",TrackOutput:0b,auto:1b}
+setblock ~16 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players add ayylmao RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
+setblock ~15 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players remove ayylmao RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
+setblock ~14 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players set ayylmao RRti 10 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
+setblock ~13 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players test ayylmao RRti 3",TrackOutput:0b,auto:1b}
+setblock ~12 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players test ayylmao RRti 0 10",TrackOutput:0b,auto:1b}
+setblock ~11 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players reset ayylmao RRti",TrackOutput:0b,auto:1b}
+setblock ~10 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players enable ayylmao RRti",TrackOutput:0b,auto:1b}
+setblock ~9 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players tag ayylmao add RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
+setblock ~8 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players tag ayylmao remove RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
+setblock ~7 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard teams join RRd_y ayylmao",TrackOutput:0b,auto:1b}
+setblock ~6 ~19 ~14 chain_command_block 1 replace {Command:"scoreboard teams leave RRd_y ayylmao",TrackOutput:0b,auto:1b}
+setblock ~6 ~20 ~14 chain_command_block 5 replace {Command:"scoreboard teams empty RRd_y",TrackOutput:0b,auto:1b}
+setblock ~7 ~20 ~14 chain_command_block 5 replace {Command:"tellraw @a[score_TSToken_min=1,score_SPtsc=1,score_SPtsn=10,score_SPtsn_min=10] {\"text\":\"\",\"extra\"[{\"text\":\"You have submitted 10 incorrect answers, and have 0 tries left.\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
+setblock ~8 ~20 ~14 chain_command_block 5 replace {Command:"scoreboard players operation @p SPtp = 3 Number",TrackOutput:0b,auto:1b}
+setblock ~9 ~20 ~14 chain_command_block 5 replace {Command:"tellraw @a {\"selector\":\"@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,score_asdf=5,score_asdf_min=5]\"}",TrackOutput:0b,auto:1b}
+setblock ~10 ~20 ~14 chain_command_block 5 replace {Command:"effect @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRci=0,score_RRci_min=0,score_RRar=1,score_RRar_min=1] 11 1 0 true",TrackOutput:0b,auto:1b}
+setblock ~11 ~20 ~14 chain_command_block 5 replace {Command:"effect @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRci=0,score_RRci_min=0,score_RRar_min=1,score_RRar=2] 7 1 1 true",TrackOutput:0b,auto:1b}
+setblock ~12 ~20 ~14 chain_command_block 5 replace {Command:"say @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRar_min=3,score_RRar=5] @a[score_OMG_WORK_min=3,score_OMG_WORK=4] @a[score_OMG_WORK_min=3] 3",TrackOutput:0b,auto:1b}
+setblock ~13 ~20 ~14 chain_command_block 5 replace {Command:"say @a[score_OMG_WORK=5,score_OMG_WORK_min=3] @a[score_OMG_WORK=5,score_OMG_WORK_min=4] @a[score_OMG_WORK=3]",TrackOutput:0b,auto:1b}
+setblock ~14 ~20 ~14 chain_command_block 5 replace {Command:"say @a[score_OMG_WORK_min=4,score_OMG_WORK=5] @a[score_OMG_WORK_min=4,score_OMG_WORK=4] @a[score_OMG_WORK_min=4]",TrackOutput:0b,auto:1b}
+setblock ~15 ~20 ~14 chain_command_block 5 replace {Command:"say @a[score_OMG_WORK=4,score_OMG_WORK_min=3] @a[score_OMG_WORK=4,score_OMG_WORK_min=4] @a[score_OMG_WORK=2]",TrackOutput:0b,auto:1b}
+setblock ~16 ~20 ~14 chain_command_block 5 replace {Command:"scoreboard players operation @p TEST @p SPtp",TrackOutput:0b,auto:1b}
+setblock ~17 ~20 ~14 chain_command_block 5 replace {Command:"scoreboard players operation @p TEST @p SPtp",TrackOutput:0b,auto:1b}
+setblock ~18 ~20 ~14 chain_command_block 5 replace {Command:"scoreboard players operation @p TEST @p SPtp",TrackOutput:0b,auto:1b}
+setblock ~19 ~20 ~14 chain_command_block 5 replace {Command:"$test$",TrackOutput:0b,auto:1b}
+setblock ~20 ~20 ~14 chain_command_block 5 replace {Command:"say ayy",TrackOutput:0b,auto:1b}
+setblock ~21 ~20 ~14 chain_command_block 1 replace {Command:"say lmao",TrackOutput:0b,auto:1b}
+setblock ~21 ~21 ~14 chain_command_block 4 replace {Command:"say lmao compared to ayy",TrackOutput:0b,auto:1b}
+setblock ~20 ~21 ~14 chain_command_block 4 replace {Command:"say lmao compared to ayy",TrackOutput:0b,auto:1b}
+setblock ~19 ~21 ~14 chain_command_block 4 replace {Command:"say Strin;g;a;d;f;f",TrackOutput:0b,auto:1b}
+setblock ~18 ~21 ~14 chain_command_block 4 replace {Command:"CCU.ObjectiveAdd(Obj_GeneralScoreboardStart)",TrackOutput:0b,auto:1b}
+setblock ~17 ~21 ~14 chain_command_block 4 replace {Command:"say test",TrackOutput:0b,auto:1b}
+setblock ~16 ~21 ~14 chain_command_block 4 replace {Command:"CCU.ObjectiveRemove(Obj_GeneralScoreboardStart)",TrackOutput:0b,auto:1b}
+setblock ~15 ~21 ~14 chain_command_block 4 replace {Command:"CCU.TeamAdd(Team_GeneralScoreboardStart)",TrackOutput:0b,auto:1b}
+setblock ~14 ~21 ~14 chain_command_block 4 replace {Command:"CCU.TeamRemove(Team_GeneralScoreboardStart)",TrackOutput:0b,auto:1b}
+setblock ~13 ~21 ~14 chain_command_block 4 replace {Command:"fill ~-7 ~-15 ~0 ~8 ~0 ~0 air 0",TrackOutput:0b,auto:1b}
+setblock ~7 ~10 ~12 command_block 5 replace {Command:"say -68.43 14 421.6",TrackOutput:0b,auto:0b}
+setblock ~8 ~10 ~12 chain_command_block 5 replace {Command:"say -62.43 14 421.6;-64.43 14 421.6;-66.43 14 421.6;-68.43 14 421.6;-68.4 14 415.6;-66.4 14 415.6;-64.4 14 415.6",TrackOutput:0b,auto:1b}
+setblock ~9 ~10 ~12 chain_command_block 5 replace {Command:"say 6",TrackOutput:0b,auto:1b}
+setblock ~10 ~10 ~12 chain_command_block 5 replace {Command:"say element1_3",TrackOutput:0b,auto:1b}
+setblock ~11 ~10 ~12 chain_command_block 5 replace {Command:"say element1_1;;element1_3",TrackOutput:0b,auto:1b}
+setblock ~12 ~10 ~12 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
+setblock ~13 ~10 ~12 chain_command_block 5 replace {Command:"say 6",TrackOutput:0b,auto:1b}
+setblock ~14 ~10 ~12 chain_command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:1b}
+setblock ~15 ~10 ~12 chain_command_block 5 replace {Command:"say 1 2 3 4 5 6 7 8 9 10 say 1 != 5",TrackOutput:0b,auto:1b}
+setblock ~16 ~10 ~12 chain_command_block 5 replace {Command:"say 2 != 5",TrackOutput:0b,auto:1b}
+setblock ~17 ~10 ~12 chain_command_block 5 replace {Command:"say 3 != 5",TrackOutput:0b,auto:1b}
+setblock ~18 ~10 ~12 chain_command_block 5 replace {Command:"say 4 != 5",TrackOutput:0b,auto:1b}
+setblock ~19 ~10 ~12 chain_command_block 5 replace {Command:"say 6 != 5",TrackOutput:0b,auto:1b}
+setblock ~20 ~10 ~12 chain_command_block 5 replace {Command:"say 7 != 5",TrackOutput:0b,auto:1b}
+setblock ~21 ~10 ~12 chain_command_block 1 replace {Command:"say 8 != 5",TrackOutput:0b,auto:1b}
+setblock ~21 ~11 ~12 chain_command_block 4 replace {Command:"say 9 != 5",TrackOutput:0b,auto:1b}
+setblock ~20 ~11 ~12 chain_command_block 4 replace {Command:"say 10 != 5",TrackOutput:0b,auto:1b}
+setblock ~19 ~11 ~12 chain_command_block 4 replace {Command:"say asdf != asdf2",TrackOutput:0b,auto:1b}
+setblock ~18 ~11 ~12 chain_command_block 4 replace {Command:"setblock 80 10 176 redstone_block 0",TrackOutput:0b,auto:1b}
+setblock ~7 ~6 ~16 command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1,score_KCC.sqrt.sqrt=2] KCC.sqrt.sqre 1",TrackOutput:0b,auto:0b}
+setblock ~8 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=3,score_KCC.sqrt.sqrt=6] KCC.sqrt.sqre 2",TrackOutput:0b,auto:1b}
+setblock ~9 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=7,score_KCC.sqrt.sqrt=12] KCC.sqrt.sqre 3",TrackOutput:0b,auto:1b}
+setblock ~10 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=13,score_KCC.sqrt.sqrt=20] KCC.sqrt.sqre 4",TrackOutput:0b,auto:1b}
+setblock ~11 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=21,score_KCC.sqrt.sqrt=30] KCC.sqrt.sqre 5",TrackOutput:0b,auto:1b}
+setblock ~12 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=31,score_KCC.sqrt.sqrt=42] KCC.sqrt.sqre 6",TrackOutput:0b,auto:1b}
+setblock ~13 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=43,score_KCC.sqrt.sqrt=56] KCC.sqrt.sqre 7",TrackOutput:0b,auto:1b}
+setblock ~14 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=57,score_KCC.sqrt.sqrt=72] KCC.sqrt.sqre 8",TrackOutput:0b,auto:1b}
+setblock ~15 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=73,score_KCC.sqrt.sqrt=90] KCC.sqrt.sqre 9",TrackOutput:0b,auto:1b}
+setblock ~16 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=91,score_KCC.sqrt.sqrt=110] KCC.sqrt.sqre 10",TrackOutput:0b,auto:1b}
+setblock ~17 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=111,score_KCC.sqrt.sqrt=132] KCC.sqrt.sqre 11",TrackOutput:0b,auto:1b}
+setblock ~18 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=133,score_KCC.sqrt.sqrt=156] KCC.sqrt.sqre 12",TrackOutput:0b,auto:1b}
+setblock ~19 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=157,score_KCC.sqrt.sqrt=182] KCC.sqrt.sqre 13",TrackOutput:0b,auto:1b}
+setblock ~20 ~6 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=183,score_KCC.sqrt.sqrt=210] KCC.sqrt.sqre 14",TrackOutput:0b,auto:1b}
+setblock ~21 ~6 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=211,score_KCC.sqrt.sqrt=240] KCC.sqrt.sqre 15",TrackOutput:0b,auto:1b}
+setblock ~21 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=241,score_KCC.sqrt.sqrt=272] KCC.sqrt.sqre 16",TrackOutput:0b,auto:1b}
+setblock ~20 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=273,score_KCC.sqrt.sqrt=306] KCC.sqrt.sqre 17",TrackOutput:0b,auto:1b}
+setblock ~19 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=307,score_KCC.sqrt.sqrt=342] KCC.sqrt.sqre 18",TrackOutput:0b,auto:1b}
+setblock ~18 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=343,score_KCC.sqrt.sqrt=380] KCC.sqrt.sqre 19",TrackOutput:0b,auto:1b}
+setblock ~17 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=381,score_KCC.sqrt.sqrt=420] KCC.sqrt.sqre 20",TrackOutput:0b,auto:1b}
+setblock ~16 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=421,score_KCC.sqrt.sqrt=462] KCC.sqrt.sqre 21",TrackOutput:0b,auto:1b}
+setblock ~15 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=463,score_KCC.sqrt.sqrt=506] KCC.sqrt.sqre 22",TrackOutput:0b,auto:1b}
+setblock ~14 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=507,score_KCC.sqrt.sqrt=552] KCC.sqrt.sqre 23",TrackOutput:0b,auto:1b}
+setblock ~13 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=553,score_KCC.sqrt.sqrt=600] KCC.sqrt.sqre 24",TrackOutput:0b,auto:1b}
+setblock ~12 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=601,score_KCC.sqrt.sqrt=650] KCC.sqrt.sqre 25",TrackOutput:0b,auto:1b}
+setblock ~11 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=651,score_KCC.sqrt.sqrt=702] KCC.sqrt.sqre 26",TrackOutput:0b,auto:1b}
+setblock ~10 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=703,score_KCC.sqrt.sqrt=756] KCC.sqrt.sqre 27",TrackOutput:0b,auto:1b}
+setblock ~9 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=757,score_KCC.sqrt.sqrt=812] KCC.sqrt.sqre 28",TrackOutput:0b,auto:1b}
+setblock ~8 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=813,score_KCC.sqrt.sqrt=870] KCC.sqrt.sqre 29",TrackOutput:0b,auto:1b}
+setblock ~7 ~7 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=871,score_KCC.sqrt.sqrt=930] KCC.sqrt.sqre 30",TrackOutput:0b,auto:1b}
+setblock ~6 ~7 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=931,score_KCC.sqrt.sqrt=992] KCC.sqrt.sqre 31",TrackOutput:0b,auto:1b}
+setblock ~6 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=993,score_KCC.sqrt.sqrt=1056] KCC.sqrt.sqre 32",TrackOutput:0b,auto:1b}
+setblock ~7 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1057,score_KCC.sqrt.sqrt=1122] KCC.sqrt.sqre 33",TrackOutput:0b,auto:1b}
+setblock ~8 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1123,score_KCC.sqrt.sqrt=1190] KCC.sqrt.sqre 34",TrackOutput:0b,auto:1b}
+setblock ~9 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1191,score_KCC.sqrt.sqrt=1260] KCC.sqrt.sqre 35",TrackOutput:0b,auto:1b}
+setblock ~10 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1261,score_KCC.sqrt.sqrt=1332] KCC.sqrt.sqre 36",TrackOutput:0b,auto:1b}
+setblock ~11 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1333,score_KCC.sqrt.sqrt=1406] KCC.sqrt.sqre 37",TrackOutput:0b,auto:1b}
+setblock ~12 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1407,score_KCC.sqrt.sqrt=1482] KCC.sqrt.sqre 38",TrackOutput:0b,auto:1b}
+setblock ~13 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1483,score_KCC.sqrt.sqrt=1560] KCC.sqrt.sqre 39",TrackOutput:0b,auto:1b}
+setblock ~14 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1561,score_KCC.sqrt.sqrt=1640] KCC.sqrt.sqre 40",TrackOutput:0b,auto:1b}
+setblock ~15 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1641,score_KCC.sqrt.sqrt=1722] KCC.sqrt.sqre 41",TrackOutput:0b,auto:1b}
+setblock ~16 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1723,score_KCC.sqrt.sqrt=1806] KCC.sqrt.sqre 42",TrackOutput:0b,auto:1b}
+setblock ~17 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1807,score_KCC.sqrt.sqrt=1892] KCC.sqrt.sqre 43",TrackOutput:0b,auto:1b}
+setblock ~18 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1893,score_KCC.sqrt.sqrt=1980] KCC.sqrt.sqre 44",TrackOutput:0b,auto:1b}
+setblock ~19 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=1981,score_KCC.sqrt.sqrt=2070] KCC.sqrt.sqre 45",TrackOutput:0b,auto:1b}
+setblock ~20 ~8 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=2071,score_KCC.sqrt.sqrt=2162] KCC.sqrt.sqre 46",TrackOutput:0b,auto:1b}
+setblock ~21 ~8 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=2163,score_KCC.sqrt.sqrt=2256] KCC.sqrt.sqre 47",TrackOutput:0b,auto:1b}
+setblock ~21 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=2257,score_KCC.sqrt.sqrt=2352] KCC.sqrt.sqre 48",TrackOutput:0b,auto:1b}
+setblock ~20 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=2353,score_KCC.sqrt.sqrt=2450] KCC.sqrt.sqre 49",TrackOutput:0b,auto:1b}
+setblock ~19 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=2451,score_KCC.sqrt.sqrt=2550] KCC.sqrt.sqre 50",TrackOutput:0b,auto:1b}
+setblock ~18 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=2551,score_KCC.sqrt.sqrt=2652] KCC.sqrt.sqre 51",TrackOutput:0b,auto:1b}
+setblock ~17 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=2653,score_KCC.sqrt.sqrt=2756] KCC.sqrt.sqre 52",TrackOutput:0b,auto:1b}
+setblock ~16 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=2757,score_KCC.sqrt.sqrt=2862] KCC.sqrt.sqre 53",TrackOutput:0b,auto:1b}
+setblock ~15 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=2863,score_KCC.sqrt.sqrt=2970] KCC.sqrt.sqre 54",TrackOutput:0b,auto:1b}
+setblock ~14 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=2971,score_KCC.sqrt.sqrt=3080] KCC.sqrt.sqre 55",TrackOutput:0b,auto:1b}
+setblock ~13 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=3081,score_KCC.sqrt.sqrt=3192] KCC.sqrt.sqre 56",TrackOutput:0b,auto:1b}
+setblock ~12 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=3193,score_KCC.sqrt.sqrt=3306] KCC.sqrt.sqre 57",TrackOutput:0b,auto:1b}
+setblock ~11 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=3307,score_KCC.sqrt.sqrt=3422] KCC.sqrt.sqre 58",TrackOutput:0b,auto:1b}
+setblock ~10 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=3423,score_KCC.sqrt.sqrt=3540] KCC.sqrt.sqre 59",TrackOutput:0b,auto:1b}
+setblock ~9 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=3541,score_KCC.sqrt.sqrt=3660] KCC.sqrt.sqre 60",TrackOutput:0b,auto:1b}
+setblock ~8 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=3661,score_KCC.sqrt.sqrt=3782] KCC.sqrt.sqre 61",TrackOutput:0b,auto:1b}
+setblock ~7 ~9 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=3783,score_KCC.sqrt.sqrt=3906] KCC.sqrt.sqre 62",TrackOutput:0b,auto:1b}
+setblock ~6 ~9 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=3907,score_KCC.sqrt.sqrt=4032] KCC.sqrt.sqre 63",TrackOutput:0b,auto:1b}
+setblock ~6 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=4033,score_KCC.sqrt.sqrt=4160] KCC.sqrt.sqre 64",TrackOutput:0b,auto:1b}
+setblock ~7 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=4161,score_KCC.sqrt.sqrt=4290] KCC.sqrt.sqre 65",TrackOutput:0b,auto:1b}
+setblock ~8 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=4291,score_KCC.sqrt.sqrt=4422] KCC.sqrt.sqre 66",TrackOutput:0b,auto:1b}
+setblock ~9 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=4423,score_KCC.sqrt.sqrt=4556] KCC.sqrt.sqre 67",TrackOutput:0b,auto:1b}
+setblock ~10 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=4557,score_KCC.sqrt.sqrt=4692] KCC.sqrt.sqre 68",TrackOutput:0b,auto:1b}
+setblock ~11 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=4693,score_KCC.sqrt.sqrt=4830] KCC.sqrt.sqre 69",TrackOutput:0b,auto:1b}
+setblock ~12 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=4831,score_KCC.sqrt.sqrt=4970] KCC.sqrt.sqre 70",TrackOutput:0b,auto:1b}
+setblock ~13 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=4971,score_KCC.sqrt.sqrt=5112] KCC.sqrt.sqre 71",TrackOutput:0b,auto:1b}
+setblock ~14 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=5113,score_KCC.sqrt.sqrt=5256] KCC.sqrt.sqre 72",TrackOutput:0b,auto:1b}
+setblock ~15 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=5257,score_KCC.sqrt.sqrt=5402] KCC.sqrt.sqre 73",TrackOutput:0b,auto:1b}
+setblock ~16 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=5403,score_KCC.sqrt.sqrt=5550] KCC.sqrt.sqre 74",TrackOutput:0b,auto:1b}
+setblock ~17 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=5551,score_KCC.sqrt.sqrt=5700] KCC.sqrt.sqre 75",TrackOutput:0b,auto:1b}
+setblock ~18 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=5701,score_KCC.sqrt.sqrt=5852] KCC.sqrt.sqre 76",TrackOutput:0b,auto:1b}
+setblock ~19 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=5853,score_KCC.sqrt.sqrt=6006] KCC.sqrt.sqre 77",TrackOutput:0b,auto:1b}
+setblock ~20 ~10 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=6007,score_KCC.sqrt.sqrt=6162] KCC.sqrt.sqre 78",TrackOutput:0b,auto:1b}
+setblock ~21 ~10 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=6163,score_KCC.sqrt.sqrt=6320] KCC.sqrt.sqre 79",TrackOutput:0b,auto:1b}
+setblock ~21 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=6321,score_KCC.sqrt.sqrt=6480] KCC.sqrt.sqre 80",TrackOutput:0b,auto:1b}
+setblock ~20 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=6481,score_KCC.sqrt.sqrt=6642] KCC.sqrt.sqre 81",TrackOutput:0b,auto:1b}
+setblock ~19 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=6643,score_KCC.sqrt.sqrt=6806] KCC.sqrt.sqre 82",TrackOutput:0b,auto:1b}
+setblock ~18 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=6807,score_KCC.sqrt.sqrt=6972] KCC.sqrt.sqre 83",TrackOutput:0b,auto:1b}
+setblock ~17 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=6973,score_KCC.sqrt.sqrt=7140] KCC.sqrt.sqre 84",TrackOutput:0b,auto:1b}
+setblock ~16 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=7141,score_KCC.sqrt.sqrt=7310] KCC.sqrt.sqre 85",TrackOutput:0b,auto:1b}
+setblock ~15 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=7311,score_KCC.sqrt.sqrt=7482] KCC.sqrt.sqre 86",TrackOutput:0b,auto:1b}
+setblock ~14 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=7483,score_KCC.sqrt.sqrt=7656] KCC.sqrt.sqre 87",TrackOutput:0b,auto:1b}
+setblock ~13 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=7657,score_KCC.sqrt.sqrt=7832] KCC.sqrt.sqre 88",TrackOutput:0b,auto:1b}
+setblock ~12 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=7833,score_KCC.sqrt.sqrt=8010] KCC.sqrt.sqre 89",TrackOutput:0b,auto:1b}
+setblock ~11 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=8011,score_KCC.sqrt.sqrt=8190] KCC.sqrt.sqre 90",TrackOutput:0b,auto:1b}
+setblock ~10 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=8191,score_KCC.sqrt.sqrt=8372] KCC.sqrt.sqre 91",TrackOutput:0b,auto:1b}
+setblock ~9 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=8373,score_KCC.sqrt.sqrt=8556] KCC.sqrt.sqre 92",TrackOutput:0b,auto:1b}
+setblock ~8 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=8557,score_KCC.sqrt.sqrt=8742] KCC.sqrt.sqre 93",TrackOutput:0b,auto:1b}
+setblock ~7 ~11 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=8743,score_KCC.sqrt.sqrt=8930] KCC.sqrt.sqre 94",TrackOutput:0b,auto:1b}
+setblock ~6 ~11 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=8931,score_KCC.sqrt.sqrt=9120] KCC.sqrt.sqre 95",TrackOutput:0b,auto:1b}
+setblock ~6 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=9121,score_KCC.sqrt.sqrt=9312] KCC.sqrt.sqre 96",TrackOutput:0b,auto:1b}
+setblock ~7 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=9313,score_KCC.sqrt.sqrt=9506] KCC.sqrt.sqre 97",TrackOutput:0b,auto:1b}
+setblock ~8 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=9507,score_KCC.sqrt.sqrt=9702] KCC.sqrt.sqre 98",TrackOutput:0b,auto:1b}
+setblock ~9 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=9703,score_KCC.sqrt.sqrt=9900] KCC.sqrt.sqre 99",TrackOutput:0b,auto:1b}
+setblock ~10 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=9901,score_KCC.sqrt.sqrt=10100] KCC.sqrt.sqre 100",TrackOutput:0b,auto:1b}
+setblock ~11 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=10101,score_KCC.sqrt.sqrt=10302] KCC.sqrt.sqre 101",TrackOutput:0b,auto:1b}
+setblock ~12 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=10303,score_KCC.sqrt.sqrt=10506] KCC.sqrt.sqre 102",TrackOutput:0b,auto:1b}
+setblock ~13 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=10507,score_KCC.sqrt.sqrt=10712] KCC.sqrt.sqre 103",TrackOutput:0b,auto:1b}
+setblock ~14 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=10713,score_KCC.sqrt.sqrt=10920] KCC.sqrt.sqre 104",TrackOutput:0b,auto:1b}
+setblock ~15 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=10921,score_KCC.sqrt.sqrt=11130] KCC.sqrt.sqre 105",TrackOutput:0b,auto:1b}
+setblock ~16 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=11131,score_KCC.sqrt.sqrt=11342] KCC.sqrt.sqre 106",TrackOutput:0b,auto:1b}
+setblock ~17 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=11343,score_KCC.sqrt.sqrt=11556] KCC.sqrt.sqre 107",TrackOutput:0b,auto:1b}
+setblock ~18 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=11557,score_KCC.sqrt.sqrt=11772] KCC.sqrt.sqre 108",TrackOutput:0b,auto:1b}
+setblock ~19 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=11773,score_KCC.sqrt.sqrt=11990] KCC.sqrt.sqre 109",TrackOutput:0b,auto:1b}
+setblock ~20 ~12 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=11991,score_KCC.sqrt.sqrt=12210] KCC.sqrt.sqre 110",TrackOutput:0b,auto:1b}
+setblock ~21 ~12 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=12211,score_KCC.sqrt.sqrt=12432] KCC.sqrt.sqre 111",TrackOutput:0b,auto:1b}
+setblock ~21 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=12433,score_KCC.sqrt.sqrt=12656] KCC.sqrt.sqre 112",TrackOutput:0b,auto:1b}
+setblock ~20 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=12657,score_KCC.sqrt.sqrt=12882] KCC.sqrt.sqre 113",TrackOutput:0b,auto:1b}
+setblock ~19 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=12883,score_KCC.sqrt.sqrt=13110] KCC.sqrt.sqre 114",TrackOutput:0b,auto:1b}
+setblock ~18 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=13111,score_KCC.sqrt.sqrt=13340] KCC.sqrt.sqre 115",TrackOutput:0b,auto:1b}
+setblock ~17 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=13341,score_KCC.sqrt.sqrt=13572] KCC.sqrt.sqre 116",TrackOutput:0b,auto:1b}
+setblock ~16 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=13573,score_KCC.sqrt.sqrt=13806] KCC.sqrt.sqre 117",TrackOutput:0b,auto:1b}
+setblock ~15 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=13807,score_KCC.sqrt.sqrt=14042] KCC.sqrt.sqre 118",TrackOutput:0b,auto:1b}
+setblock ~14 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=14043,score_KCC.sqrt.sqrt=14280] KCC.sqrt.sqre 119",TrackOutput:0b,auto:1b}
+setblock ~13 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=14281,score_KCC.sqrt.sqrt=14520] KCC.sqrt.sqre 120",TrackOutput:0b,auto:1b}
+setblock ~12 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=14521,score_KCC.sqrt.sqrt=14762] KCC.sqrt.sqre 121",TrackOutput:0b,auto:1b}
+setblock ~11 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=14763,score_KCC.sqrt.sqrt=15006] KCC.sqrt.sqre 122",TrackOutput:0b,auto:1b}
+setblock ~10 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=15007,score_KCC.sqrt.sqrt=15252] KCC.sqrt.sqre 123",TrackOutput:0b,auto:1b}
+setblock ~9 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=15253,score_KCC.sqrt.sqrt=15500] KCC.sqrt.sqre 124",TrackOutput:0b,auto:1b}
+setblock ~8 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=15501,score_KCC.sqrt.sqrt=15750] KCC.sqrt.sqre 125",TrackOutput:0b,auto:1b}
+setblock ~7 ~13 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=15751,score_KCC.sqrt.sqrt=16002] KCC.sqrt.sqre 126",TrackOutput:0b,auto:1b}
+setblock ~6 ~13 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=16003,score_KCC.sqrt.sqrt=16256] KCC.sqrt.sqre 127",TrackOutput:0b,auto:1b}
+setblock ~6 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=16257,score_KCC.sqrt.sqrt=16512] KCC.sqrt.sqre 128",TrackOutput:0b,auto:1b}
+setblock ~7 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=16513,score_KCC.sqrt.sqrt=16770] KCC.sqrt.sqre 129",TrackOutput:0b,auto:1b}
+setblock ~8 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=16771,score_KCC.sqrt.sqrt=17030] KCC.sqrt.sqre 130",TrackOutput:0b,auto:1b}
+setblock ~9 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=17031,score_KCC.sqrt.sqrt=17292] KCC.sqrt.sqre 131",TrackOutput:0b,auto:1b}
+setblock ~10 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=17293,score_KCC.sqrt.sqrt=17556] KCC.sqrt.sqre 132",TrackOutput:0b,auto:1b}
+setblock ~11 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=17557,score_KCC.sqrt.sqrt=17822] KCC.sqrt.sqre 133",TrackOutput:0b,auto:1b}
+setblock ~12 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=17823,score_KCC.sqrt.sqrt=18090] KCC.sqrt.sqre 134",TrackOutput:0b,auto:1b}
+setblock ~13 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=18091,score_KCC.sqrt.sqrt=18360] KCC.sqrt.sqre 135",TrackOutput:0b,auto:1b}
+setblock ~14 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=18361,score_KCC.sqrt.sqrt=18632] KCC.sqrt.sqre 136",TrackOutput:0b,auto:1b}
+setblock ~15 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=18633,score_KCC.sqrt.sqrt=18906] KCC.sqrt.sqre 137",TrackOutput:0b,auto:1b}
+setblock ~16 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=18907,score_KCC.sqrt.sqrt=19182] KCC.sqrt.sqre 138",TrackOutput:0b,auto:1b}
+setblock ~17 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=19183,score_KCC.sqrt.sqrt=19460] KCC.sqrt.sqre 139",TrackOutput:0b,auto:1b}
+setblock ~18 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=19461,score_KCC.sqrt.sqrt=19740] KCC.sqrt.sqre 140",TrackOutput:0b,auto:1b}
+setblock ~19 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=19741,score_KCC.sqrt.sqrt=20022] KCC.sqrt.sqre 141",TrackOutput:0b,auto:1b}
+setblock ~20 ~14 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=20023,score_KCC.sqrt.sqrt=20306] KCC.sqrt.sqre 142",TrackOutput:0b,auto:1b}
+setblock ~21 ~14 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=20307,score_KCC.sqrt.sqrt=20592] KCC.sqrt.sqre 143",TrackOutput:0b,auto:1b}
+setblock ~21 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=20593,score_KCC.sqrt.sqrt=20880] KCC.sqrt.sqre 144",TrackOutput:0b,auto:1b}
+setblock ~20 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=20881,score_KCC.sqrt.sqrt=21170] KCC.sqrt.sqre 145",TrackOutput:0b,auto:1b}
+setblock ~19 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=21171,score_KCC.sqrt.sqrt=21462] KCC.sqrt.sqre 146",TrackOutput:0b,auto:1b}
+setblock ~18 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=21463,score_KCC.sqrt.sqrt=21756] KCC.sqrt.sqre 147",TrackOutput:0b,auto:1b}
+setblock ~17 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=21757,score_KCC.sqrt.sqrt=22052] KCC.sqrt.sqre 148",TrackOutput:0b,auto:1b}
+setblock ~16 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=22053,score_KCC.sqrt.sqrt=22350] KCC.sqrt.sqre 149",TrackOutput:0b,auto:1b}
+setblock ~15 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=22351,score_KCC.sqrt.sqrt=22650] KCC.sqrt.sqre 150",TrackOutput:0b,auto:1b}
+setblock ~14 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=22651,score_KCC.sqrt.sqrt=22952] KCC.sqrt.sqre 151",TrackOutput:0b,auto:1b}
+setblock ~13 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=22953,score_KCC.sqrt.sqrt=23256] KCC.sqrt.sqre 152",TrackOutput:0b,auto:1b}
+setblock ~12 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=23257,score_KCC.sqrt.sqrt=23562] KCC.sqrt.sqre 153",TrackOutput:0b,auto:1b}
+setblock ~11 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=23563,score_KCC.sqrt.sqrt=23870] KCC.sqrt.sqre 154",TrackOutput:0b,auto:1b}
+setblock ~10 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=23871,score_KCC.sqrt.sqrt=24180] KCC.sqrt.sqre 155",TrackOutput:0b,auto:1b}
+setblock ~9 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=24181,score_KCC.sqrt.sqrt=24492] KCC.sqrt.sqre 156",TrackOutput:0b,auto:1b}
+setblock ~8 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=24493,score_KCC.sqrt.sqrt=24806] KCC.sqrt.sqre 157",TrackOutput:0b,auto:1b}
+setblock ~7 ~15 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=24807,score_KCC.sqrt.sqrt=25122] KCC.sqrt.sqre 158",TrackOutput:0b,auto:1b}
+setblock ~6 ~15 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=25123,score_KCC.sqrt.sqrt=25440] KCC.sqrt.sqre 159",TrackOutput:0b,auto:1b}
+setblock ~6 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=25441,score_KCC.sqrt.sqrt=25760] KCC.sqrt.sqre 160",TrackOutput:0b,auto:1b}
+setblock ~7 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=25761,score_KCC.sqrt.sqrt=26082] KCC.sqrt.sqre 161",TrackOutput:0b,auto:1b}
+setblock ~8 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=26083,score_KCC.sqrt.sqrt=26406] KCC.sqrt.sqre 162",TrackOutput:0b,auto:1b}
+setblock ~9 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=26407,score_KCC.sqrt.sqrt=26732] KCC.sqrt.sqre 163",TrackOutput:0b,auto:1b}
+setblock ~10 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=26733,score_KCC.sqrt.sqrt=27060] KCC.sqrt.sqre 164",TrackOutput:0b,auto:1b}
+setblock ~11 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=27061,score_KCC.sqrt.sqrt=27390] KCC.sqrt.sqre 165",TrackOutput:0b,auto:1b}
+setblock ~12 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=27391,score_KCC.sqrt.sqrt=27722] KCC.sqrt.sqre 166",TrackOutput:0b,auto:1b}
+setblock ~13 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=27723,score_KCC.sqrt.sqrt=28056] KCC.sqrt.sqre 167",TrackOutput:0b,auto:1b}
+setblock ~14 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=28057,score_KCC.sqrt.sqrt=28392] KCC.sqrt.sqre 168",TrackOutput:0b,auto:1b}
+setblock ~15 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=28393,score_KCC.sqrt.sqrt=28730] KCC.sqrt.sqre 169",TrackOutput:0b,auto:1b}
+setblock ~16 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=28731,score_KCC.sqrt.sqrt=29070] KCC.sqrt.sqre 170",TrackOutput:0b,auto:1b}
+setblock ~17 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=29071,score_KCC.sqrt.sqrt=29412] KCC.sqrt.sqre 171",TrackOutput:0b,auto:1b}
+setblock ~18 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=29413,score_KCC.sqrt.sqrt=29756] KCC.sqrt.sqre 172",TrackOutput:0b,auto:1b}
+setblock ~19 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=29757,score_KCC.sqrt.sqrt=30102] KCC.sqrt.sqre 173",TrackOutput:0b,auto:1b}
+setblock ~20 ~16 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=30103,score_KCC.sqrt.sqrt=30450] KCC.sqrt.sqre 174",TrackOutput:0b,auto:1b}
+setblock ~21 ~16 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=30451,score_KCC.sqrt.sqrt=30800] KCC.sqrt.sqre 175",TrackOutput:0b,auto:1b}
+setblock ~21 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=30801,score_KCC.sqrt.sqrt=31152] KCC.sqrt.sqre 176",TrackOutput:0b,auto:1b}
+setblock ~20 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=31153,score_KCC.sqrt.sqrt=31506] KCC.sqrt.sqre 177",TrackOutput:0b,auto:1b}
+setblock ~19 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=31507,score_KCC.sqrt.sqrt=31862] KCC.sqrt.sqre 178",TrackOutput:0b,auto:1b}
+setblock ~18 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=31863,score_KCC.sqrt.sqrt=32220] KCC.sqrt.sqre 179",TrackOutput:0b,auto:1b}
+setblock ~17 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=32221,score_KCC.sqrt.sqrt=32580] KCC.sqrt.sqre 180",TrackOutput:0b,auto:1b}
+setblock ~16 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=32581,score_KCC.sqrt.sqrt=32942] KCC.sqrt.sqre 181",TrackOutput:0b,auto:1b}
+setblock ~15 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=32943,score_KCC.sqrt.sqrt=33306] KCC.sqrt.sqre 182",TrackOutput:0b,auto:1b}
+setblock ~14 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=33307,score_KCC.sqrt.sqrt=33672] KCC.sqrt.sqre 183",TrackOutput:0b,auto:1b}
+setblock ~13 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=33673,score_KCC.sqrt.sqrt=34040] KCC.sqrt.sqre 184",TrackOutput:0b,auto:1b}
+setblock ~12 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=34041,score_KCC.sqrt.sqrt=34410] KCC.sqrt.sqre 185",TrackOutput:0b,auto:1b}
+setblock ~11 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=34411,score_KCC.sqrt.sqrt=34782] KCC.sqrt.sqre 186",TrackOutput:0b,auto:1b}
+setblock ~10 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=34783,score_KCC.sqrt.sqrt=35156] KCC.sqrt.sqre 187",TrackOutput:0b,auto:1b}
+setblock ~9 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=35157,score_KCC.sqrt.sqrt=35532] KCC.sqrt.sqre 188",TrackOutput:0b,auto:1b}
+setblock ~8 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=35533,score_KCC.sqrt.sqrt=35910] KCC.sqrt.sqre 189",TrackOutput:0b,auto:1b}
+setblock ~7 ~17 ~16 chain_command_block 4 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=35911,score_KCC.sqrt.sqrt=36290] KCC.sqrt.sqre 190",TrackOutput:0b,auto:1b}
+setblock ~6 ~17 ~16 chain_command_block 1 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=36291,score_KCC.sqrt.sqrt=36672] KCC.sqrt.sqre 191",TrackOutput:0b,auto:1b}
+setblock ~6 ~18 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=36673,score_KCC.sqrt.sqrt=37056] KCC.sqrt.sqre 192",TrackOutput:0b,auto:1b}
+setblock ~7 ~18 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=37057,score_KCC.sqrt.sqrt=37442] KCC.sqrt.sqre 193",TrackOutput:0b,auto:1b}
+setblock ~8 ~18 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=37443,score_KCC.sqrt.sqrt=37830] KCC.sqrt.sqre 194",TrackOutput:0b,auto:1b}
+setblock ~9 ~18 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=37831,score_KCC.sqrt.sqrt=38220] KCC.sqrt.sqre 195",TrackOutput:0b,auto:1b}
+setblock ~10 ~18 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=38221,score_KCC.sqrt.sqrt=38612] KCC.sqrt.sqre 196",TrackOutput:0b,auto:1b}
+setblock ~11 ~18 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=38613,score_KCC.sqrt.sqrt=39006] KCC.sqrt.sqre 197",TrackOutput:0b,auto:1b}
+setblock ~12 ~18 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=39007,score_KCC.sqrt.sqrt=39402] KCC.sqrt.sqre 198",TrackOutput:0b,auto:1b}
+setblock ~13 ~18 ~16 chain_command_block 5 replace {Command:"scoreboard players set @s[score_KCC.sqrt.sqrt_min=39403,score_KCC.sqrt.sqrt=39800] KCC.sqrt.sqre 199",TrackOutput:0b,auto:1b}
+setblock ~6 ~6 ~6 stonebrick 0
+setblock ~6 ~8 ~6 stonebrick 0
+setblock ~6 ~10 ~6 stonebrick 0
+setblock ~6 ~12 ~6 stonebrick 0
+setblock ~6 ~14 ~6 stonebrick 0
+setblock ~6 ~16 ~6 stonebrick 0
+setblock ~6 ~18 ~6 stonebrick 0
+setblock ~6 ~20 ~6 stonebrick 0
+setblock ~6 ~6 ~8 stonebrick 0
+setblock ~6 ~8 ~8 stonebrick 0
+setblock ~6 ~10 ~8 stonebrick 0
+setblock ~6 ~12 ~8 stonebrick 0
+setblock ~6 ~14 ~8 stonebrick 0
+setblock ~6 ~16 ~8 stonebrick 0
+setblock ~6 ~18 ~8 stonebrick 0
+setblock ~6 ~20 ~8 stonebrick 0
+setblock ~6 ~6 ~10 stonebrick 0
+setblock ~6 ~8 ~10 stonebrick 0
+setblock ~6 ~10 ~10 stonebrick 0
+setblock ~6 ~12 ~10 stonebrick 0
+setblock ~6 ~14 ~10 stonebrick 0
+setblock ~6 ~16 ~10 stonebrick 0
+setblock ~6 ~20 ~10 stonebrick 0
+setblock ~6 ~6 ~12 stonebrick 0
+setblock ~6 ~6 ~14 stained_hardened_clay 11
+setblock ~6 ~10 ~12 stonebrick 0
+setblock ~6 ~6 ~16 stonebrick 0
