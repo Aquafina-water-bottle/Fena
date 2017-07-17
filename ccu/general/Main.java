@@ -1,7 +1,14 @@
 package ccu.general;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import ccu.block.Box;
 import ccu.block.GroupStructure;
@@ -62,8 +69,34 @@ public class Main {
 
 	public static void main(String[] args) {
 		long startTime = System.nanoTime();
+		
+		// checks version
+		// tbh i should try threading this
+		
+		String currentVersion = "Build 5";
+		System.out.println("Current: " + currentVersion);
+		
+		try {
+			URL url;
+			url = new URL("https://raw.githubusercontent.com/Aquafina-water-bottle/Command-Compiler-Unlimited/master/CCUVersion.txt");
 
-		System.out.println("Build 4\n");
+			URLConnection con = url.openConnection();
+			InputStream is = con.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			String getVersion = br.readLine();
+
+			if (currentVersion.equals(getVersion) == false) {
+				System.out.println("An update is avaliable for CCU (" + getVersion
+						+ ") at 'https://github.com/Aquafina-water-bottle/Command-Compiler-Unlimited/releases'");
+				TimeUnit.SECONDS.sleep(1);
+			}
+		} catch (IOException e) {
+			System.out.println("WARNING: URL to check versions cannot be found");
+		} catch (InterruptedException e) {
+			GeneralFile.dispError(e);
+		}
+		
+		System.out.println("");
 
 		// for CCU_NPP.bat
 		if (args.length == 1) {
@@ -73,84 +106,6 @@ public class Main {
 			ReadConfig.regFilePath = new File(args[0]);
 			getJarFile = new File(args[1]);
 		}
-
-		/*
-		String ayylmao = null;
-		
-		ayylmao = "((3) * 4 ^ 2) (3 + 0) + -(1.5 - 0.5)";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "((3) * 4 ^ 2) (3 + 0) - (1.5 - 0.5)";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "230 2 ^ 0.9";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "3 10 + 0.7";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "(-10.5 + 0.5) (-115) * (1.1 + .9)";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "(-10) (-115) * (2.0)";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "(-10) (2 + (-115)) * (2.0)";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "-10 -115.0 * 0";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "-10 -115.0 * 1";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "100 5 - 5.0";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "256 1 / 2.0";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		*/
-
-		/*
-		ayylmao = "(3 * 4 ^ 2) (3 + 0) + -(2 - 1)";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "((3) * 4 ^ 2) (3 + 0) - (2 - 1)";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "2 2345678 ^ 2";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "3 10 + 2";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "(-11 + 1) (-115) * (1 + 1)";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "(-10) (-115) * (2)";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "(-10) (2 + (-115)) * (2)";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "-10 -115 * 0";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "-10 -115 * 1";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "100 5 - 5";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "256 1 / 2";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "1 1 + 5";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		
-		ayylmao = "1 5 + 0";
-		MathParser.getLoopArray(ayylmao, ayylmao);
-		*/
 
 		// String asdf = "this is a CALC(1 + SIN((1 - 2.0)) * (13 - 3)) asdf)";
 		// MathParser.parseSecondaryStatements(asdf, asdf);
