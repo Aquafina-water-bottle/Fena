@@ -27,7 +27,7 @@ public class StringUtils {
 		return returnString;
 	}
 
-	public static ArrayList<String> skipLine(ArrayList<String> getArray) {
+	public static ArrayList<String> skipLine(ArrayList<String> getArray, String getChar) {
 		ArrayList<String> returnArray = new ArrayList<String>();
 		String calcString = "";
 		boolean skipLine = false;
@@ -35,7 +35,7 @@ public class StringUtils {
 		for (int i = 0; i < getArray.size(); i++) {
 
 			skipLine = false;
-			if (getArray.get(i).endsWith(";")) {
+			if (getArray.get(i).endsWith(getChar)) {
 				skipLine = true;
 			}
 
@@ -68,7 +68,6 @@ public class StringUtils {
 				}
 			}
 		}
-
 		return returnArray;
 	}
 

@@ -124,8 +124,8 @@ MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 	
 	Arr_Test[1][1]
 	Arr_Test2[S]
-	LOOP {0 Arr_Test2[L] + 1}:
-		say ayy Arr_Test2[|0|]
+	LOOP {0 Arr_Test2[-1] + 1} {1 Arr_Test2[L] + 1}:
+		say ayy Arr_Test2[|0|] |1|
 		
 	UNASSIGN {ARRAY Arr_Test2}
 	Arr_Test2[S]
@@ -147,15 +147,15 @@ MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
 	Arr_Test2[S]
 		
 	
-	LOOP {0 Arr_Test[L] + 1}:
-		LOOP {0 Arr_Test[|0|][L] + 1}:
-			say |0;1| -SPLIT- |0|
+	LOOP {0 Arr_Test[-1] + 1}:
+		LOOP {0 Arr_Test[|0|][-1] + 1} {1 Arr_Test[|0|][L] + 1}:
+			say |0;1| -SPLIT- |0| -SPLIT- |1|
 			Arr_Test[|0;1|][|0|]
 		say ~SPLIT~
 	
 	
-	LOOP {0 Arr_Test[0][L] + 1}:
-		say |0|
+	LOOP {0 Arr_Test[0][-1] + 1} {1 Arr_Test[0][L] + 1}:
+		say |0| |1|
 		Arr_Test[0][|0|]
 		say Arr_Test[0][L] MARKER
 		
@@ -529,6 +529,12 @@ GROUP {Grp_TheGreatestGroup}:
 
 //<Part E
 GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
+	DEF $TestSkipLine$ asdf \
+		asdf \
+		asdf \
+		more asdf
+		
+	say $TestSkipLine$
 	say rekt
 	say rekt again
 	
@@ -780,16 +786,16 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	SPLIT {GLOBAL Arr_RandName Strin g asd fsf} { } {s}
 	say Arr_RandName[S]
 	
-	ARRAY {ACTIVATE CCU.ObjectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
+	ARRAY {ACTIVATE CCU.objectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
 		RRti dummy Royal Rumble Timer
 		RRpl dummy Royal Rumble Player List
 		
-///	CCU.ObjectiveAdd(Arr_GeneralScoreboardStart)
+///	CCU.objectiveAdd(Arr_GeneralScoreboardStart)
 	say test
 	
-	CCU.ObjectiveRemove(Obj_GeneralScoreboardStart)
+	CCU.objectiveRemove(Obj_GeneralScoreboardStart)
 	
-	ARRAY {ACTIVATE CCU.TeamAdd(Team_GeneralScoreboardStart) Team_GeneralScoreboardStart}:
+	ARRAY {ACTIVATE CCU.teamAdd(Team_GeneralScoreboardStart) Team_GeneralScoreboardStart}:
 		RRg RR Green
 		OPT RRg color green
 		OPT RRg nametagVisibility hideForOtherTeams
@@ -800,7 +806,7 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 		OPT RRb nametagVisibility hideForOtherTeams
 		OPT RRb friendlyfire false
 		
-	CCU.TeamRemove(Team_GeneralScoreboardStart)
+	CCU.teamRemove(Team_GeneralScoreboardStart)
 
 	fill Grp_asdf air 0
 //>

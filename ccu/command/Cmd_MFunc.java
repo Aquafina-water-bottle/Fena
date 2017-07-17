@@ -164,7 +164,7 @@ public class Cmd_MFunc {
 				}
 			}
 			
-			this.arrayGet = StringUtils.skipLine(this.arrayGet);
+			this.arrayGet = StringUtils.skipLine(this.arrayGet, ";");
 
 			// Creates the string array, and puts it in the arraylist
 			// Notice how the first element in each array is the mfunc name and not a valid command

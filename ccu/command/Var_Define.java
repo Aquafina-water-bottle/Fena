@@ -285,7 +285,7 @@ public class Var_Define {
 		 * parseType - 2 == array
 		 * parseType - 3 == 2d array
 		 */
-		
+
 		String getBegString = getBegDef + "";
 		String midStringSave = "";
 		String getParamsString = "";
@@ -334,7 +334,7 @@ public class Var_Define {
 
 		// gets parameters and anything after the definition
 		getEndString = getString.substring(endIndexCalc);
-		
+
 		// checks if there are parameters in the first place (DEF ONLY)
 		if (parseType == 1) {
 			if (Integer.parseInt(Var_Define.arrayDefineSave.get(getIndex)[4]) > 0) {
@@ -365,12 +365,16 @@ public class Var_Define {
 		}
 
 		// Gets specific definition from singleArray
+		// Arr_Name[Index]
+		// Arr_Name[-1]
+		// Arr_Name[L]
+		// Arr_Name[S]
 		if (parseType == 2) {
 			String calcIndexString = null;
 
 			calcIndexString = getEndString.substring(getEndString.indexOf("[") + 1, getEndString.indexOf("]"));
 			getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
-			
+
 			if (NumberUtils.isNum(calcIndexString) == false) {
 				calcIndexString = MathParser.parseSecondaryStatements(calcIndexString, fullLineGet);
 				calcIndexString = MathParser.getOperation(calcIndexString, fullLineGet, false, 0);
@@ -379,14 +383,20 @@ public class Var_Define {
 			if (NumberUtils.isNum(calcIndexString)) { // regular
 				int indexCalc = Integer.parseInt(calcIndexString);
 
-				// checks whether it's within the index
-				if (Var_Array.singleArraySave.get(getIndex).length - 1 < indexCalc) {
-					System.out.println("ERROR: Index '" + calcIndexString + "' in line '" + fullLineGet + "' is invalid");
-					System.exit(0);
-				}
+				// if it's -1, returns length - 1
+				if (indexCalc == -1) {
+					definitionCalc = (Var_Array.singleArraySave.get(getIndex).length - 1) + "";
+				} else {
 
-				definitionCalc = Var_Array.singleArraySave.get(getIndex)[indexCalc] + "";
-				midStringSave += "[" + calcIndexString + "]";
+					// checks whether it's within the index
+					if (Var_Array.singleArraySave.get(getIndex).length - 1 < indexCalc) {
+						System.out.println("ERROR: Index '" + calcIndexString + "' in line '" + fullLineGet + "' is invalid");
+						System.exit(0);
+					}
+
+					definitionCalc = Var_Array.singleArraySave.get(getIndex)[indexCalc] + "";
+					midStringSave += "[" + calcIndexString + "]";
+				}
 
 			} else { // if 'S' or 'L'
 				if (calcIndexString.equalsIgnoreCase("S")) { // element1;element2;element3
@@ -404,8 +414,7 @@ public class Var_Define {
 
 				} else {
 					if (calcIndexString.equalsIgnoreCase("L")) {
-
-						definitionCalc = (Var_Array.singleArraySave.get(getIndex).length - 1) + "";
+						definitionCalc = (Var_Array.singleArraySave.get(getIndex).length) + "";
 
 					} else {
 						System.out.println("ERROR: Parameters '" + calcIndexString + "' in line '" + fullLineGet + "' are invalid");
@@ -419,8 +428,10 @@ public class Var_Define {
 		/* Arr_Name[1][1]
 		 * Arr_Name[1][S]
 		 * Arr_Name[1][L]
+		 * Arr_Name[1][-1]
 		 * Arr_Name[L][L]
 		 * Arr_Name[L]
+		 * Arr_Name[-1]
 		 */
 		if (parseType == 3) {
 			String calcIndexString = "";
@@ -435,41 +446,54 @@ public class Var_Define {
 				getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
 
 			} else {
-				if (NumberUtils.isNum(calcIndexString)) {
+				if (NumberUtils.isNum(calcIndexString) && calcIndexString.equals("-1") == false) {
 					System.out.println(
 							"ERROR: Array call '" + getString + "[" + calcIndexString + "]" + "' in '" + fullLineGet + "' is invalid");
 					System.exit(0);
 				}
 			}
-			
+
 			if (NumberUtils.isNum(calcIndexString) == false) {
 				calcIndexString = MathParser.parseSecondaryStatements(calcIndexString, fullLineGet);
 				calcIndexString = MathParser.getOperation(calcIndexString, fullLineGet, false, 0);
 			}
-			
+
 			if (NumberUtils.isNum(calcIndexString2) == false) {
 				calcIndexString2 = MathParser.parseSecondaryStatements(calcIndexString2, fullLineGet);
 				calcIndexString2 = MathParser.getOperation(calcIndexString2, fullLineGet, false, 0);
 			}
 
 			if (NumberUtils.isNum(calcIndexString)) {
-				
+
 				// checks index
-				if (Var_Array.doubleArraySave.get(getIndex).length - 1 < Integer.parseInt(calcIndexString)) {
+				if (Var_Array.doubleArraySave.get(getIndex).length - 1 < Integer.parseInt(calcIndexString)
+						&& Integer.parseInt(calcIndexString) != -1) {
 					System.out.println("ERROR: Index '" + calcIndexString + "' in line '" + fullLineGet + "' is invalid");
 					System.exit(0);
 				}
-				
+
 				int indexCalc = Integer.parseInt(calcIndexString);
 
-				if (NumberUtils.isNum(calcIndexString2)) { // Arr_Name[1][1]
-					
+				if (indexCalc == -1) { // Arr_Name[-1]
+					if (calcIndexString2.isEmpty()) {
+						definitionCalc = (Var_Array.doubleArraySave.get(getIndex).length - 1) + "";
+						parseArray = true;
+					}
+				}
+
+				if (calcIndexString2.equals("-1")) { // Arr_Name[1][-1]
+					definitionCalc = (Var_Array.doubleArraySave.get(getIndex)[indexCalc].length - 1) + "";
+					parseArray = true;
+				}
+
+				if (NumberUtils.isNum(calcIndexString2) && calcIndexString2.equals("-1") == false) { // Arr_Name[1][1]
+
 					// checks index
 					if (Var_Array.doubleArraySave.get(getIndex)[indexCalc].length - 1 < Integer.parseInt(calcIndexString2)) {
 						System.out.println("ERROR: Index '" + calcIndexString2 + "' in line '" + fullLineGet + "' is invalid");
 						System.exit(0);
 					}
-					
+
 					int indexCalc2 = Integer.parseInt(calcIndexString2);
 
 					definitionCalc = (Var_Array.doubleArraySave.get(getIndex)[indexCalc][indexCalc2]) + "";
@@ -478,13 +502,13 @@ public class Var_Define {
 				}
 
 				if (calcIndexString2.equalsIgnoreCase("L")) { // Arr_Name[1][L]
-					definitionCalc = (Var_Array.doubleArraySave.get(getIndex)[indexCalc].length - 1) + "";
+					definitionCalc = (Var_Array.doubleArraySave.get(getIndex)[indexCalc].length) + "";
 					parseArray = true;
 				}
 
 				if (calcIndexString2.equalsIgnoreCase("S")) { // Arr_Name[1][S]
 					String tempString = null;
-					
+
 					for (int i = 0; i < Var_Array.doubleArraySave.get(getIndex)[indexCalc].length; i++)
 						if (tempString == null) {
 							tempString = Var_Array.doubleArraySave.get(getIndex)[indexCalc][i];
@@ -500,7 +524,7 @@ public class Var_Define {
 
 			if (calcIndexString.equalsIgnoreCase("L")) {
 				if (calcIndexString2.isEmpty()) { // Arr_Name[L]
-					definitionCalc = (Var_Array.doubleArraySave.get(getIndex).length - 1) + "";
+					definitionCalc = (Var_Array.doubleArraySave.get(getIndex).length) + "";
 					parseArray = true;
 				}
 
@@ -517,8 +541,7 @@ public class Var_Define {
 			}
 
 			if (parseArray == false) { // fail lol
-				System.out.println("ERROR: Array call '" + getString + "' in line '"
-						+ fullLineGet + "' is invalid");
+				System.out.println("ERROR: Array call '" + getString + "' in line '" + fullLineGet + "' is invalid");
 				System.exit(0);
 			}
 		}

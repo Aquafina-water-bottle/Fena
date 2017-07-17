@@ -71,7 +71,8 @@ public class GeneralFile {
 
 	public static ArrayList<String> parseCCU(ArrayList<String> getArray) {
 		ArrayList<String> returnArray = GeneralFile.removeSkipLineBlock(
-				GeneralFile.removeComment(GeneralFile.removeCommentBlock(getArray, "//=", "=//"), "//"), "/*", "*/", "-/-");
+				StringUtils.skipLine(GeneralFile.removeComment(GeneralFile.removeCommentBlock(getArray, "//=", "=//"), "//"), "\\"),
+				"/*", "*/", "-/-");
 		return returnArray;
 	}
 

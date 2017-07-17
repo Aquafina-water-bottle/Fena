@@ -45,6 +45,7 @@ public class Var_Options {
 	}
 
 	public ArrayList<String> getArray() {
+		
 		if (fullLineGet.endsWith(":") == false) {
 			System.out.println("Incorrect syntax at line '" + fullLineGet + "' (doesn't end with ':')");
 			System.exit(0);

@@ -141,6 +141,9 @@ public class Box {
 		int arrayApprox = (int) Math
 				.ceil(((GroupStructure.groupLineArray.stream().mapToInt(Integer::intValue).sum() * 5) / GroupStructure.styleOptionY));
 		
+		if (arrayApprox == 0) {
+			arrayApprox = 1;
+		}
 		// GroupStructure.groupLineArray.stream().mapToInt(Integer::intValue).sum();
 
 		// Creating the array
@@ -217,7 +220,7 @@ public class Box {
 									Coordinates groupNameCoordsObj = new Coordinates(0, coordsSaveY, coordsSaveXZ);
 									groupNameCoordArray[i] = groupNameCoordsObj.addCoordinates(1, 1, 1).switchDirection()
 											.addCoordinates(Var_Options.coordsOption);
-
+									
 									// Get secondary fill block coords (mostly for removing the group)
 									groupNameCoordsObj = new Coordinates(0, coordsSaveY, coordsSaveXZ);
 									if (GroupStructure.groupLineArray.get(i) <= 16) {

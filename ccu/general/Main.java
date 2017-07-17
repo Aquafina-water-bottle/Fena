@@ -63,7 +63,7 @@ public class Main {
 	public static void main(String[] args) {
 		long startTime = System.nanoTime();
 
-		System.out.println("Build 3\n");
+		System.out.println("Build 4\n");
 
 		// for CCU_NPP.bat
 		if (args.length == 1) {

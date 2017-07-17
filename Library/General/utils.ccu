@@ -33,12 +33,12 @@ DEF Snd_Primed minecraft:entity.tnt.primed
 
 //<Objective and Team lists
 //=
-ARRAY {GLOBAL ACTIVATE CCU.ObjectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
+ARRAY {GLOBAL ACTIVATE CCU.objectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
 	RRti dummy Royal Rumble Timer
 	RRpl dummy Royal Rumble Player List
 
 
-CCU.ObjectiveRemove(Arr_GeneralScoreboardStart)
+CCU.objectiveRemove(Arr_GeneralScoreboardStart)
 =//
 
 FUNC {GLOBAL CCU.objectiveAdd}:
@@ -53,13 +53,13 @@ FUNC {GLOBAL CCU.objectiveRemove}:
 
 //=
 ///	OPT in the beginning means it's an option
-ARRAY {GLOBAL ACTIVATE CCU.TeamAdd(Team_GeneralScoreboardStart) Team_GeneralScoreboardStart}:
+ARRAY {GLOBAL ACTIVATE CCU.teamAdd(Team_GeneralScoreboardStart) Team_GeneralScoreboardStart}:
 	RRg Royal Rumble Green
 	OPT color green
 	OPT friendlyfire false
 
 
-CCU.TeamRemove(Arr_GeneralScoreboardStart)
+CCU.teamRemove(Arr_GeneralScoreboardStart)
 =//
 
 FUNC {GLOBAL CCU.teamAdd}:

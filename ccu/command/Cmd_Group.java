@@ -236,7 +236,7 @@ public class Cmd_Group {
 
 			
 			
-			this.arrayGet = StringUtils.skipLine(this.arrayGet);
+			this.arrayGet = StringUtils.skipLine(this.arrayGet, ";");
 			
 			String[] arrayGroup = new String[this.arrayGet.size() + 1];
 			arrayGroup[0] = statementArgs;
