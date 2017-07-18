@@ -1,4 +1,5 @@
 fill ~5 ~5 ~5 ~22 ~22 ~20 air 0
+fill ~5 ~5 ~5 ~22 ~22 ~15 air 0
 setblock ~7 ~6 ~6 command_block 5 replace {Command:"say 1 _A",TrackOutput:0b,auto:0b}
 setblock ~7 ~8 ~6 command_block 5 replace {Command:"say 2 _A",TrackOutput:0b,auto:0b}
 setblock ~7 ~10 ~6 command_block 5 replace {Command:"say 3 _A",TrackOutput:0b,auto:0b}
@@ -325,7 +326,7 @@ setblock ~7 ~15 ~14 chain_command_block 4 replace {Command:"scoreboard players e
 setblock ~6 ~15 ~14 chain_command_block 1 replace {Command:"scoreboard players tag @e[type=ArmorStand,tag=RRStand] add RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
 setblock ~6 ~16 ~14 chain_command_block 5 replace {Command:"scoreboard players tag @e[type=ArmorStand,tag=RRStand] remove RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
 setblock ~7 ~16 ~14 chain_command_block 5 replace {Command:"scoreboard teams join RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
-setblock ~8 ~16 ~14 chain_command_block 5 replace {Command:"scoreboard teams leave RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
+setblock ~8 ~16 ~14 chain_command_block 5 replace {Command:"scoreboard teams leave @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
 setblock ~9 ~16 ~14 chain_command_block 5 replace {Command:"scoreboard teams empty RRd_y",TrackOutput:0b,auto:1b}
 setblock ~10 ~16 ~14 chain_command_block 5 replace {Command:"say Test",TrackOutput:0b,auto:1b}
 setblock ~11 ~16 ~14 chain_command_block 5 replace {Command:"say String",TrackOutput:0b,auto:1b}
@@ -375,7 +376,7 @@ setblock ~21 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ sc
 setblock ~20 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard players tag @e[type=ArmorStand,tag=RRStand] add RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
 setblock ~19 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard players tag @e[type=ArmorStand,tag=RRStand] remove RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
 setblock ~18 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard teams join RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
-setblock ~17 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard teams leave RRd_y @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
+setblock ~17 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard teams leave @e[type=ArmorStand,tag=RRStand]",TrackOutput:0b,auto:1b}
 setblock ~16 ~19 ~14 chain_command_block 4 replace {Command:"execute @a ~ ~ ~ scoreboard teams empty RRd_y",TrackOutput:0b,auto:1b}
 setblock ~15 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players add ayylmao RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
 setblock ~14 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players remove ayylmao RRti 1 {DisabledSlots:2096896}",TrackOutput:0b,auto:1b}
@@ -387,7 +388,7 @@ setblock ~9 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players e
 setblock ~8 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players tag ayylmao add RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
 setblock ~7 ~19 ~14 chain_command_block 4 replace {Command:"scoreboard players tag ayylmao remove RRTimer {Marker:1b}",TrackOutput:0b,auto:1b}
 setblock ~6 ~19 ~14 chain_command_block 1 replace {Command:"scoreboard teams join RRd_y ayylmao",TrackOutput:0b,auto:1b}
-setblock ~6 ~20 ~14 chain_command_block 5 replace {Command:"scoreboard teams leave RRd_y ayylmao",TrackOutput:0b,auto:1b}
+setblock ~6 ~20 ~14 chain_command_block 5 replace {Command:"scoreboard teams leave ayylmao",TrackOutput:0b,auto:1b}
 setblock ~7 ~20 ~14 chain_command_block 5 replace {Command:"scoreboard teams empty RRd_y",TrackOutput:0b,auto:1b}
 setblock ~8 ~20 ~14 chain_command_block 5 replace {Command:"tellraw @a[score_TSToken_min=1,score_SPtsc=1,score_SPtsn=10,score_SPtsn_min=10] {\"text\":\"\",\"extra\"[{\"text\":\"You have submitted 10 incorrect answers, and have 0 tries left.\",\"color\":\"gray\"}]}",TrackOutput:0b,auto:1b}
 setblock ~9 ~20 ~14 chain_command_block 5 replace {Command:"scoreboard players operation @p SPtp = 3 Number",TrackOutput:0b,auto:1b}

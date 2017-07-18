@@ -13,7 +13,7 @@
             <Keywords name="Numbers, suffix1"></Keywords>
             <Keywords name="Numbers, suffix2"></Keywords>
             <Keywords name="Numbers, range"></Keywords>
-            <Keywords name="Operators1">( ) { } [ ] ; : = &quot;</Keywords>
+            <Keywords name="Operators1">( ) { } [ ] ; : = &quot; \</Keywords>
             <Keywords name="Operators2"></Keywords>
             <Keywords name="Folders in code1, open">//&lt;</Keywords>
             <Keywords name="Folders in code1, middle"></Keywords>
@@ -31,7 +31,7 @@
             <Keywords name="Keywords5">ARGS&#x000D;&#x000A;Grp_&#x000D;&#x000A;MFunc_</Keywords>
             <Keywords name="Keywords6">CCItem_&#x000D;&#x000A;SMob_&#x000D;&#x000A;Snd_&#x000D;&#x000A;CCU_</Keywords>
             <Keywords name="Keywords7">Arr_&#x000D;&#x000A;Obj_&#x000D;&#x000A;Team_</Keywords>
-            <Keywords name="Keywords8">ScTA&#x000D;&#x000A;ScTO&#x000D;&#x000A;ScTR&#x000D;&#x000A;ScOA&#x000D;&#x000A;ScSS&#x000D;&#x000A;ScOS&#x000D;&#x000A;ScOR&#x000D;&#x000A;ScOP&#x000D;&#x000A;&#x000D;&#x000A;/*&#x000D;&#x000A;-/-&#x000D;&#x000A;*/&#x000D;&#x000A;&#x000D;&#x000A;GLOBAL&#x000D;&#x000A;COORDS&#x000D;&#x000A;TELE&#x000D;&#x000A;PULSE&#x000D;&#x000A;CLOCK&#x000D;&#x000A;BLOCK&#x000D;&#x000A;BEG&#x000D;&#x000A;END&#x000D;&#x000A;NOSPACE&#x000D;&#x000A;ACTIVATE&#x000D;&#x000A;BRANCH&#x000D;&#x000A;LIBRARY&#x000D;&#x000A;WITHIN&#x000D;&#x000A;GETCOORDS&#x000D;&#x000A;GETDIR&#x000D;&#x000A;CALC&#x000D;&#x000A;SIN&#x000D;&#x000A;COS&#x000D;&#x000A;TAN&#x000D;&#x000A;INT&#x000D;&#x000A;FLOAT&#x000D;&#x000A;GSELF&#x000D;&#x000A;NULL&#x000D;&#x000A;&#x000D;&#x000A;</Keywords>
+            <Keywords name="Keywords8">ScTA&#x000D;&#x000A;ScTO&#x000D;&#x000A;ScTR&#x000D;&#x000A;ScOA&#x000D;&#x000A;ScSS&#x000D;&#x000A;ScOS&#x000D;&#x000A;ScOR&#x000D;&#x000A;ScOP&#x000D;&#x000A;&#x000D;&#x000A;/*&#x000D;&#x000A;-/-&#x000D;&#x000A;*/&#x000D;&#x000A;&#x000D;&#x000A;GLOBAL&#x000D;&#x000A;COORDS&#x000D;&#x000A;TELE&#x000D;&#x000A;PULSE&#x000D;&#x000A;CLOCK&#x000D;&#x000A;BLOCK&#x000D;&#x000A;BEG&#x000D;&#x000A;END&#x000D;&#x000A;NOSPACE&#x000D;&#x000A;ACTIVATE&#x000D;&#x000A;BRANCH&#x000D;&#x000A;LIBRARY&#x000D;&#x000A;WITHIN&#x000D;&#x000A;GETCOORDS&#x000D;&#x000A;GETDIR&#x000D;&#x000A;CALC&#x000D;&#x000A;SIN&#x000D;&#x000A;COS&#x000D;&#x000A;TAN&#x000D;&#x000A;INT&#x000D;&#x000A;DOUBLE&#x000D;&#x000A;GSELF&#x000D;&#x000A;NULL&#x000D;&#x000A;&#x000D;&#x000A;</Keywords>
             <Keywords name="Delimiters">00| 01 02| 03$ 04 05$ 06 07 08 09//( 10 11) 12 13 14 15 16 17 18//= 19 20=// 21 22 23</Keywords>
         </KeywordLists>
         <Styles>

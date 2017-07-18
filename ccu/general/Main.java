@@ -73,7 +73,7 @@ public class Main {
 		long startTime = System.nanoTime();
 		
 		// checks version
-		String currentVersion = "Build 6";
+		String currentVersion = "Build 7";
 		System.out.println("Current: " + currentVersion);
 		
 		try {
@@ -90,6 +90,7 @@ public class Main {
 						+ ") at 'https://github.com/Aquafina-water-bottle/Command-Compiler-Unlimited/releases'");
 				TimeUnit.SECONDS.sleep(1);
 			}
+			
 		} catch (IOException e) {
 			System.out.println("WARNING: URL to check versions cannot be found");
 		} catch (InterruptedException e) {

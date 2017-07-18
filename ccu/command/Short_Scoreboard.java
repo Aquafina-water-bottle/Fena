@@ -32,9 +32,9 @@ public class Short_Scoreboard {
 		 * scoreboard players enable: @e[type=ArmorStand,RRStand] enable RRti
 		 * scoreboard players tag @x add: @e[type=ArmorStand,RRStand] + RRTimer {Marker:1b}
 		 * scoreboard players tag @x remove: @e[type=ArmorStand,RRStand] - RRTimer {Marker:1b}
-		 * scoreboard teams join: RRd_y J> @e[type=ArmorStand,RRStand]
-		 * scoreboard teams leave: RRd_y L> @e[type=ArmorStand,RRStand]
-		 * scoreboard teams empty: RRd_y E>
+		 * scoreboard teams join: J> RRd_y @e[type=ArmorStand,RRStand]
+		 * scoreboard teams leave: L> @e[type=ArmorStand,RRStand]
+		 * scoreboard teams empty: E> RRd_y 
 		 */
 
 		/* shortcutSelectorArray
@@ -49,7 +49,7 @@ public class Short_Scoreboard {
 		shortcutCalc = getString.trim();
 		shortcutCalcArray = shortcutCalc.split(" ");
 		shortcutTypeArray = new int[shortcutCalcArray.length];
-		
+
 		String testCond = "";
 		if (shortcutCalcArray[0].startsWith("CCU_COND_")) {
 			testCond = "CCU_COND_";
@@ -78,7 +78,7 @@ public class Short_Scoreboard {
 				}
 			}
 
-			// if it's a number (as int) --> 1 (INT)
+			// if it's a number (as int) --> 1 INT
 			try {
 				Integer.parseInt(shortcutCalcArray[j]);
 				shortcutTypeArray[j] = INT;
@@ -86,7 +86,7 @@ public class Short_Scoreboard {
 			} catch (NumberFormatException e) {
 			}
 
-			// if it is a selector --> 2 (SELECTOR)
+			// if it is a selector --> 2 SELECTOR
 			for (String selectorGet : ReadConfig.selectorArray) {
 				if (shortcutCalcArray[j].startsWith(selectorGet)) {
 					shortcutTypeArray[j] = SELECTOR;
@@ -112,8 +112,8 @@ public class Short_Scoreboard {
 
 					// scoreboard players add
 					if (j >= 2 && j + 1 < shortcutCalcArray.length
-							&& (shortcutTypeArray[j - 2] == (STRING) || shortcutTypeArray[j - 2] == (INT)
-									|| shortcutTypeArray[j - 2] == (SELECTOR))
+							&& (shortcutTypeArray[j - 2] == STRING || shortcutTypeArray[j - 2] == INT
+									|| shortcutTypeArray[j - 2] == SELECTOR)
 							&& shortcutTypeArray[j - 1] == STRING && shortcutTypeArray[j + 1] == INT) {
 						shortcutCalcArray[j - 2] = "scoreboard players add " + shortcutCalcArray[j - 2] + " "
 								+ shortcutCalcArray[j - 1] + " " + shortcutCalcArray[j + 1];
@@ -125,8 +125,8 @@ public class Short_Scoreboard {
 					}
 
 					// scoreboard players tag name add
-					if (j >= 1 && j + 1 < shortcutCalcArray.length && shortcutTypeArray[j - 1] == (STRING)
-							|| shortcutTypeArray[j - 1] == (SELECTOR) && shortcutTypeArray[j + 1] == STRING) {
+					if (j >= 1 && j + 1 < shortcutCalcArray.length && shortcutTypeArray[j - 1] == STRING
+							|| shortcutTypeArray[j - 1] == SELECTOR && shortcutTypeArray[j + 1] == STRING) {
 						shortcutCalcArray[j - 1] = "scoreboard players tag " + shortcutCalcArray[j - 1] + " add "
 								+ shortcutCalcArray[j + 1];
 						shortcutCalcArray[j - 0] = "";
@@ -141,8 +141,8 @@ public class Short_Scoreboard {
 
 					// scoreboard players remove
 					if (j >= 2 && j + 1 < shortcutCalcArray.length
-							&& (shortcutTypeArray[j - 2] == (STRING) || shortcutTypeArray[j - 2] == (INT)
-									|| shortcutTypeArray[j - 2] == (SELECTOR))
+							&& (shortcutTypeArray[j - 2] == STRING || shortcutTypeArray[j - 2] == INT
+									|| shortcutTypeArray[j - 2] == SELECTOR)
 							&& shortcutTypeArray[j - 1] == STRING && shortcutTypeArray[j + 1] == INT) {
 						shortcutCalcArray[j - 2] = "scoreboard players remove " + shortcutCalcArray[j - 2] + " "
 								+ shortcutCalcArray[j - 1] + " " + shortcutCalcArray[j + 1];
@@ -155,7 +155,7 @@ public class Short_Scoreboard {
 
 					// scoreboard players tag name remove
 					if (j >= 1 && j + 1 < shortcutCalcArray.length
-							&& (shortcutTypeArray[j - 1] == (STRING) || shortcutTypeArray[j - 1] == (SELECTOR))
+							&& (shortcutTypeArray[j - 1] == STRING || shortcutTypeArray[j - 1] == SELECTOR)
 							&& shortcutTypeArray[j + 1] == STRING) {
 						shortcutCalcArray[j - 1] = "scoreboard players tag " + shortcutCalcArray[j - 1] + " remove "
 								+ shortcutCalcArray[j + 1];
@@ -171,8 +171,8 @@ public class Short_Scoreboard {
 
 					// scoreboard players set
 					if (j >= 2 && j + 1 < shortcutCalcArray.length
-							&& (shortcutTypeArray[j - 2] == (STRING) || shortcutTypeArray[j - 2] == (INT)
-									|| shortcutTypeArray[j - 2] == (SELECTOR))
+							&& (shortcutTypeArray[j - 2] == STRING || shortcutTypeArray[j - 2] == INT
+									|| shortcutTypeArray[j - 2] == SELECTOR)
 							&& shortcutTypeArray[j - 1] == STRING && shortcutTypeArray[j + 1] == INT) {
 						shortcutCalcArray[j - 2] = "scoreboard players set " + shortcutCalcArray[j - 2] + " "
 								+ shortcutCalcArray[j - 1] + " " + shortcutCalcArray[j + 1];
@@ -189,8 +189,8 @@ public class Short_Scoreboard {
 
 					// scoreboard players test
 					if (j >= 2 && j + 1 < shortcutCalcArray.length
-							&& (shortcutTypeArray[j - 2] == (STRING) || shortcutTypeArray[j - 2] == (INT)
-									|| shortcutTypeArray[j - 2] == (SELECTOR))
+							&& (shortcutTypeArray[j - 2] == STRING || shortcutTypeArray[j - 2] == INT
+									|| shortcutTypeArray[j - 2] == SELECTOR)
 							&& shortcutTypeArray[j - 1] == STRING && shortcutTypeArray[j + 1] == INT) {
 						shortcutCalcArray[j - 2] = "scoreboard players test " + shortcutCalcArray[j - 2] + " "
 								+ shortcutCalcArray[j - 1] + " " + shortcutCalcArray[j + 1];
@@ -207,11 +207,11 @@ public class Short_Scoreboard {
 
 					// scoreboard players reset or enable
 					if (j >= 1
-							&& j + 1 < shortcutCalcArray.length && (shortcutTypeArray[j - 1] == (STRING)
-									|| shortcutTypeArray[j - 1] == (INT) || shortcutTypeArray[j - 1] == (SELECTOR))
+							&& j + 1 < shortcutCalcArray.length && (shortcutTypeArray[j - 1] == STRING
+									|| shortcutTypeArray[j - 1] == INT || shortcutTypeArray[j - 1] == SELECTOR)
 							&& shortcutTypeArray[j + 1] == STRING) {
-						shortcutCalcArray[j - 1] = "scoreboard players " + shortcutCalcArray[j] + " "
-								+ shortcutCalcArray[j - 1] + " " + shortcutCalcArray[j + 1];
+						shortcutCalcArray[j - 1] = "scoreboard players " + shortcutCalcArray[j] + " " + shortcutCalcArray[j - 1] + " "
+								+ shortcutCalcArray[j + 1];
 						shortcutCalcArray[j - 0] = "";
 						shortcutCalcArray[j + 1] = "";
 						changedLine = true;
@@ -219,17 +219,15 @@ public class Short_Scoreboard {
 					}
 				}
 
-				// if it contains 'J>'
+				// if it contains 'J>' 
 				if (shortcutCalcArray[j].equals("J>") && shortcutTypeArray[j] == STRING) {
 
-					// scoreboard teams join
-					if (j >= 1 && j + 1 < shortcutCalcArray.length && shortcutTypeArray[j - 1] == STRING
-							&& shortcutTypeArray[j + 1] == (STRING) || shortcutTypeArray[j + 1] == (INT)
-							|| shortcutTypeArray[j + 1] == (SELECTOR)) {
-						shortcutCalcArray[j - 1] = "scoreboard teams join " + shortcutCalcArray[j - 1] + " "
-								+ shortcutCalcArray[j + 1];
-						shortcutCalcArray[j - 0] = "";
-						shortcutCalcArray[j + 1] = "";
+					// J> <teamName> <anything else>
+					// scoreboard teams join 
+					if (j + 2 < shortcutCalcArray.length && (shortcutTypeArray[j + 1] == STRING || shortcutTypeArray[j + 1] == INT)
+							&& (shortcutTypeArray[j + 2] == STRING || shortcutTypeArray[j + 2] == INT
+									|| shortcutTypeArray[j + 2] == SELECTOR)) {
+						shortcutCalcArray[j + 0] = "scoreboard teams join";
 						changedLine = true;
 						break;
 					}
@@ -239,13 +237,9 @@ public class Short_Scoreboard {
 				if (shortcutCalcArray[j].equals("L>") && shortcutTypeArray[j] == STRING) {
 
 					// scoreboard teams leave
-					if (j >= 1 && j + 1 < shortcutCalcArray.length && shortcutTypeArray[j - 1] == STRING
-							&& (shortcutTypeArray[j + 1] == (STRING) || shortcutTypeArray[j + 1] == (INT)
-									|| shortcutTypeArray[j + 1] == (SELECTOR))) {
-						shortcutCalcArray[j - 1] = "scoreboard teams leave " + shortcutCalcArray[j - 1] + " "
-								+ shortcutCalcArray[j + 1];
-						shortcutCalcArray[j - 0] = "";
-						shortcutCalcArray[j + 1] = "";
+					if (j + 1 < shortcutCalcArray.length && (shortcutTypeArray[j + 1] == STRING || shortcutTypeArray[j + 1] == INT
+							|| shortcutTypeArray[j + 1] == SELECTOR)) {
+						shortcutCalcArray[j + 0] = "scoreboard teams leave";
 						changedLine = true;
 						break;
 					}
@@ -254,9 +248,8 @@ public class Short_Scoreboard {
 				// if it contains 'E>'
 				if (shortcutCalcArray[j].equals("E>") && shortcutTypeArray[j] == STRING) {
 					// scoreboard teams leave
-					if (j >= 1 && shortcutTypeArray[j - 1] == STRING) {
-						shortcutCalcArray[j - 1] = "scoreboard teams empty " + shortcutCalcArray[j - 1];
-						shortcutCalcArray[j - 0] = "";
+					if (j + 1 < shortcutCalcArray.length && (shortcutTypeArray[j + 1] == STRING || shortcutTypeArray[j + 1] == INT)) {
+						shortcutCalcArray[j + 0] = "scoreboard teams empty";
 						changedLine = true;
 						break;
 					}

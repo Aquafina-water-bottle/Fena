@@ -687,9 +687,9 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	@e[type=ArmorStand,RRStand] enable RRti
 	@e[type=ArmorStand,RRStand] + RRTimer {Marker:1b}
 	@e[type=ArmorStand,RRStand] - RRTimer {Marker:1b}
-	RRd_y J> @e[type=ArmorStand,RRStand]
-	RRd_y L> @e[type=ArmorStand,RRStand]
-	RRd_y E>
+	J> RRd_y @e[type=ArmorStand,RRStand]
+	L> @e[type=ArmorStand,RRStand]
+	E> RRd_y
 	
 	Func_SpawnpointSystem
 ///	Func_TestDefinitions
@@ -722,9 +722,9 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 		@e[type=ArmorStand,RRStand] enable RRti
 		@e[type=ArmorStand,RRStand] + RRTimer {Marker:1b}
 		@e[type=ArmorStand,RRStand] - RRTimer {Marker:1b}
-		RRd_y J> @e[type=ArmorStand,RRStand]
-		RRd_y L> @e[type=ArmorStand,RRStand]
-		RRd_y E>
+		J> RRd_y @e[type=ArmorStand,RRStand]
+		L> @e[type=ArmorStand,RRStand]
+		E> RRd_y
 	
 	ayylmao RRti + 1 {DisabledSlots:2096896}
 	ayylmao RRti - 1 {DisabledSlots:2096896}
@@ -735,9 +735,9 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	ayylmao enable RRti
 	ayylmao + RRTimer {Marker:1b}
 	ayylmao - RRTimer {Marker:1b}
-	RRd_y J> ayylmao
-	RRd_y L> ayylmao
-	RRd_y E>
+	J> RRd_y ayylmao
+	L> ayylmao
+	E> RRd_y
 	
 	tellraw @a[TSToken>=1,SPtsc<=1,SPtsn=10] {"text":"","extra"[{"text":"You have submitted 10 incorrect answers, and have 0 tries left.","color":"gray"}]}
 	scoreboard players operation @p SPtp = 3 Number
