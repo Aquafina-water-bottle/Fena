@@ -49,13 +49,15 @@ public class Main {
 	 * -Combiner options using .mcfunction - do when multiparse works
 	 * -Save coords option
 	 * -Multiparse
-	 * -Recurring imports
+	 * -Fix Recurring imports
+	 * -Multithreading when checking for the version
+	 * -Making DEF only use COORDS (and remove tele), and detect whether it's 3, 4, 5 or 6 numbers
 	 * 
 	 * General statements
 	 * -INITIALIZE
 	 * -FILE
 	 * 
-	 * Other
+
 	 * -PARSE
 	 * -Escaping using '`'
 	 * -Escaping using '/' at the beginning of a line
@@ -71,9 +73,7 @@ public class Main {
 		long startTime = System.nanoTime();
 		
 		// checks version
-		// tbh i should try threading this
-		
-		String currentVersion = "Build 5";
+		String currentVersion = "Build 6";
 		System.out.println("Current: " + currentVersion);
 		
 		try {

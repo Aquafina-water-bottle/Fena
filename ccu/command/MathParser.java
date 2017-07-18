@@ -836,7 +836,7 @@ public class MathParser {
 						// turns into int because INT()
 						if (calcType == 4) {
 							getString = NumberUtils.roundDoubleToInt(getValue.getDouble);
-							
+
 						} else {
 							// normal
 							getString = NumberUtils.roundDouble(getValue.getDouble) + "";
@@ -894,7 +894,7 @@ public class MathParser {
 				// turns into int because INT()
 				if (calcType == 4) {
 					getString = NumberUtils.roundDoubleToInt(getValue.getDouble);
-					
+
 				} else {
 					// normal
 					getString = NumberUtils.roundDouble(getValue.getDouble) + "";
@@ -1126,7 +1126,8 @@ public class MathParser {
 
 								if (arrayOperatorType.get(arrayIndex) == true) {
 
-									if (arrayNumType.get(arrayIndex - 1) && arrayNumType.get(arrayIndex + 1)) {
+									if (arrayIndex - 1 >= 0 && arrayIndex + 1 < arrayNumType.size() && arrayNumType.get(arrayIndex - 1)
+											&& arrayNumType.get(arrayIndex + 1)) {
 										switch (arrayListCalc.get(arrayIndex)) {
 
 										case "^":
@@ -1135,8 +1136,7 @@ public class MathParser {
 														arrayDouble.get(arrayIndex + 1));
 												arrayDouble.set(arrayIndex, calcDouble);
 											} else {
-												calcInt = (int) Math.pow(arrayInt.get(arrayIndex - 1),
-														arrayInt.get(arrayIndex + 1));
+												calcInt = (int) Math.pow(arrayInt.get(arrayIndex - 1), arrayInt.get(arrayIndex + 1));
 												arrayInt.set(arrayIndex, calcInt);
 											}
 											break;
@@ -1337,7 +1337,7 @@ public class MathParser {
 				totalString = parseSecondaryStatements(totalString, fullLineGet);
 			}
 		}
-		
+
 		return totalString;
 	}
 }

@@ -51,7 +51,7 @@ public class ParamUtils {
 
 				while (paramIndex < paramsCalc.length) {
 					Integer calcInt = null;
-					
+
 					if (paramsCalc[paramIndex].contains(";")) {
 						String[] testParams = paramsCalc[paramIndex].split(";");
 						if (testParams.length == 2 && NumberUtils.isInt(testParams[0])) {
@@ -66,7 +66,7 @@ public class ParamUtils {
 						if (paramMaxNum == null || paramMaxNum < calcInt) {
 							paramMaxNum = calcInt + 0;
 						}
-						
+
 						paramIndex += 2;
 						continue;
 					}
@@ -186,10 +186,17 @@ public class ParamUtils {
 			if (paramNum > 0) {
 
 				lineCalc = getArray.get(funcIndex);
+				
+				// System.out.println(tabNumCalc + " | " + tabNumPrevious);
 
 				// gets tab number
 				tabNumPrevious = tabNumCalc + 0;
+				
+				// System.out.println(tabNumCalc + " | " + tabNumPrevious);
+				
 				tabNumCalc = StringUtils.countChars(lineCalc, "\t");
+				
+				// System.out.println(tabNumCalc + " | " + tabNumPrevious + " | " + paramEncapsulateArray + " | " + paramEncapsulate);
 
 				// meaning tabnum went up - check if previous was FUNC or LOOP
 				if (tabNumCalc > tabNumPrevious) {
@@ -214,6 +221,10 @@ public class ParamUtils {
 
 					// removes previous number of however many there were
 					for (int i = 0; i < (tabNumPrevious - tabNumCalc); i++) {
+						if (paramEncapsulateArray.size() >= 1
+								&& paramEncapsulateArray.get(paramEncapsulateArray.size() - 2) < paramEncapsulate) {
+							paramEncapsulate = paramEncapsulateArray.get(paramEncapsulateArray.size() - 2);
+						}
 						paramEncapsulateArray.remove(paramEncapsulateArray.size() - 1);
 					}
 				}
@@ -222,7 +233,7 @@ public class ParamUtils {
 				if (lineCalc.trim().startsWith("DEF")) {
 					paramEncapsulateArray.set(paramEncapsulateArray.size() - 1, paramEncapsulate + 1);
 				}
-				
+
 				// only if paramEncapsulate is 0
 				paramEncapsulateGet = paramEncapsulateArray.get(tabNumCalc - tabNum);
 
@@ -237,34 +248,36 @@ public class ParamUtils {
 				}
 
 				// check if it's a definition - undos temp increase in paramEncapsulate 
-				
+
 				if (lineCalc.trim().startsWith("DEF")) {
 					paramEncapsulateArray.set(paramEncapsulateArray.size() - 1, paramEncapsulate + 0);
 				}
 
 				returnArray.add(lineCalc);
+				/*
+				System.out.println(tabNumCalc + " | " + tabNumPrevious + " | " + paramEncapsulateArray + " | " + paramEncapsulate);
+				System.out.println(getArray.get(funcIndex));
+				System.out.println(lineCalc);
+				System.out.println("");*/
 			}
 		}
 
-		// System.out.println(getArray);
-		// System.out.println("");
-
 		return returnArray;
 	}
-	
+
 	public static String[] parseCoordinates(String getString, String getCoords, int coordsType, String fullLineGet) {
-		
+
 		// getString is getEndString
 		// coordsType - 4 = coords, 5 = tele
-		
+
 		String getParamsString = null;
 		String defineParamCalc = null;
 		String defineParamsCalc[] = null;
 		String getEndString = null;
 		String[] returnStringArray = new String[2];
-		
+
 		if ((getString.isEmpty() == false && getString.startsWith("[") && getString.contains("]")
-						&& getString.indexOf("[") < getString.indexOf("]"))) {
+				&& getString.indexOf("[") < getString.indexOf("]"))) {
 
 			getParamsString = getString.substring(getString.indexOf("["), getString.indexOf("]") + 1);
 			getEndString = getString.substring(getString.indexOf("]") + 1);
@@ -295,11 +308,11 @@ public class ParamUtils {
 				if (defineParamCalc.contains("z")) {
 					defineParamCalc = defineParamCalc.replace("z", defineParamsCalc[2]);
 				}
-				
+
 				String[] tempStringArray = null;
 				if (defineParamCalc.contains(",")) {
 					tempStringArray = defineParamCalc.split(",");
-					
+
 					for (int i = 0; i < tempStringArray.length; i++) {
 						tempStringArray[i] = MathParser.getOperation(tempStringArray[i].trim(), fullLineGet, true, 0);
 						if (i == 0) {
@@ -308,11 +321,11 @@ public class ParamUtils {
 							returnStringArray[0] += " " + tempStringArray[i];
 						}
 					}
-					
+
 				} else {
 					returnStringArray[0] = MathParser.getOperation(defineParamCalc, fullLineGet, true, 0);
 				}
-				
+
 			}
 
 			if (coordsType == 5) {
@@ -335,7 +348,7 @@ public class ParamUtils {
 				String[] tempStringArray = null;
 				if (defineParamCalc.contains(",")) {
 					tempStringArray = defineParamCalc.split(",");
-					
+
 					for (int i = 0; i < tempStringArray.length; i++) {
 						tempStringArray[i] = MathParser.getOperation(tempStringArray[i].trim(), fullLineGet, true, 0);
 						if (i == 0) {
@@ -344,19 +357,18 @@ public class ParamUtils {
 							returnStringArray[0] += " " + tempStringArray[i];
 						}
 					}
-					
+
 				} else {
 					returnStringArray[0] = MathParser.getOperation(defineParamCalc, fullLineGet, true, 0);
 				}
 			}
-			
+
 			returnStringArray[1] = getEndString;
 		} else {
 			returnStringArray[0] = getCoords;
 			returnStringArray[1] = getString;
 		}
-		
-		
+
 		return returnStringArray;
 	}
 }

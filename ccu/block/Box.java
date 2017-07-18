@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 import ccu.command.Cmd_Group;
 import ccu.command.Cmd_MFunc;
@@ -140,8 +139,8 @@ public class Box {
 		// Approximation for array creation
 		int arrayApprox = (int) Math
 				.ceil(((GroupStructure.groupLineArray.stream().mapToInt(Integer::intValue).sum() * 5) / GroupStructure.styleOptionY));
-		
-		if (arrayApprox == 0) {
+
+		if (arrayApprox == 0 && GroupStructure.groupLineArray.get(0) > 0) {
 			arrayApprox = 1;
 		}
 		// GroupStructure.groupLineArray.stream().mapToInt(Integer::intValue).sum();
@@ -195,10 +194,10 @@ public class Box {
 								} catch (ArrayIndexOutOfBoundsException e) {
 									System.out.println(
 											"ERROR: The developer goofed up when trying to make the box (REPORT IMMEDIATELY)");
-									
+
 									System.out.println(coordsCalcY + " | " + coordsCalcXZ);
 									System.out.println(GroupStructure.styleOptionY + " | " + arrayApprox);
-									
+
 									System.exit(0);
 								}
 
@@ -220,7 +219,7 @@ public class Box {
 									Coordinates groupNameCoordsObj = new Coordinates(0, coordsSaveY, coordsSaveXZ);
 									groupNameCoordArray[i] = groupNameCoordsObj.addCoordinates(1, 1, 1).switchDirection()
 											.addCoordinates(Var_Options.coordsOption);
-									
+
 									// Get secondary fill block coords (mostly for removing the group)
 									groupNameCoordsObj = new Coordinates(0, coordsSaveY, coordsSaveXZ);
 									if (GroupStructure.groupLineArray.get(i) <= 16) {
@@ -288,7 +287,7 @@ public class Box {
 				}
 			}
 		}
-		
+
 		if (arrayApprox != 0) {
 			System.out.println("");
 			for (int asdf = 0; asdf < arrayApprox; asdf++) {
@@ -299,15 +298,26 @@ public class Box {
 			}
 			System.out.println("");
 		}
-		
 
 		// get 2nd fill coords, specifically xz length
 
-		for (int xz = 0; xz < GroupStructure.styleOptionY; xz++) {
-			if (IntStream.of(blockArray[xz]).sum() == 0) {
-				break;
-			} else {
-				fillCoordsCalc++;
+		if (arrayApprox != 0) {
+			int fillCoordsArrayCalc = 0;
+
+			for (int xz = 0; xz < arrayApprox; xz++) {
+				fillCoordsArrayCalc = 0;
+
+				for (int y = 0; y < GroupStructure.styleOptionY; y++) {
+					fillCoordsArrayCalc += blockArray[y][xz];
+					if (fillCoordsArrayCalc > 0) {
+						fillCoordsCalc++;
+						break;
+					}
+				}
+
+				if (fillCoordsArrayCalc == 0) {
+					break;
+				}
 			}
 		}
 
@@ -361,36 +371,61 @@ public class Box {
 						foundCoords = false;
 
 						if (arrayList.get(i)[j].contains(importNameCoordArray.get(nameIndex))) {
-							foundCoords = true;
 
-							if (validFunctionCoords == false) {
-								System.out
-										.println("ERROR: '" + importNameCoordArray.get(nameIndex) + "' in line '" + arrayList.get(i)[j]
-												+ "' cannot be parsed because it is a within a function and coordsOption is relative");
-								System.exit(0);
+							String testGroupName = arrayList.get(i)[j].substring(
+									arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex)) - 1,
+									arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex))
+											+ importNameCoordArray.get(nameIndex).length() + 1);
+
+							boolean properGroupName = false;
+
+							// if it's a direct group name
+							if (testGroupName.trim().equals(importNameCoordArray.get(nameIndex))) {
+								properGroupName = true;
 							}
 
-							begIndex = arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex));
-							endIndex = arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex))
-									+ importNameCoordArray.get(nameIndex).length();
+							// if the group name has [ after it
+							if (testGroupName.endsWith("[") && testGroupName.trim().substring(0, testGroupName.trim().length() - 2)
+									.equals(importNameCoordArray.get(nameIndex))) {
+								properGroupName = true;
+							}
 
-							// gets everything before the coords
-							begStringCalc = arrayList.get(i)[j].substring(0, begIndex);
+							if (properGroupName) {
+								/*
+								String testSetblockAsdf = testSetblock.substring(testSetblock.indexOf("Grp_GeneralOptionsTFClock") - 1,
+								testSetblock.indexOf("Grp_GeneralOptionsTFClock") + "Grp_GeneralOptionsTFClock".length() + 1);
+								 */
+								foundCoords = true;
 
-							// gets parameters and anything after the coords
-							paramsCalc = arrayList.get(i)[j].substring(endIndex);
-
-							if (isFunction) {
-								coordsCalc = importCoordArray.get(nameIndex).getString();
-								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
-									coordsCalc += " " + importFillCoordArray.get(nameIndex).getString();
+								if (validFunctionCoords == false) {
+									System.out.println("ERROR: '" + importNameCoordArray.get(nameIndex) + "' in line '"
+											+ arrayList.get(i)[j]
+											+ "' cannot be parsed because it is a within a function and coordsOption is relative");
+									System.exit(0);
 								}
-							} else {
-								coordsCalc = importCoordArray.get(nameIndex).checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
-										.getString();
-								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
-									coordsCalc += " " + importFillCoordArray.get(nameIndex)
+
+								begIndex = arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex));
+								endIndex = arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex))
+										+ importNameCoordArray.get(nameIndex).length();
+
+								// gets everything before the coords
+								begStringCalc = arrayList.get(i)[j].substring(0, begIndex);
+
+								// gets parameters and anything after the coords
+								paramsCalc = arrayList.get(i)[j].substring(endIndex);
+
+								if (isFunction) {
+									coordsCalc = importCoordArray.get(nameIndex).getString();
+									if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
+										coordsCalc += " " + importFillCoordArray.get(nameIndex).getString();
+									}
+								} else {
+									coordsCalc = importCoordArray.get(nameIndex)
 											.checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
+									if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
+										coordsCalc += " " + importFillCoordArray.get(nameIndex)
+												.checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
+									}
 								}
 							}
 						}
@@ -435,8 +470,8 @@ public class Box {
 								coordsCalc = groupNameCoordArray[i].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
 										.getString();
 								if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
-									coordsCalc += " " + groupNameFillArray[i]
-											.checkRelative(GroupStructure.groupCoordsArray.get(i)[j]).getString();
+									coordsCalc += " " + groupNameFillArray[i].checkRelative(GroupStructure.groupCoordsArray.get(i)[j])
+											.getString();
 								}
 							}
 						}
@@ -452,7 +487,6 @@ public class Box {
 							arrayList.get(i)[j] = begStringCalc + coordsCalc + paramsCalc;
 							break;
 						}
-
 					}
 				} while (foundCoords);
 			}
