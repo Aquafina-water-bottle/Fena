@@ -95,6 +95,16 @@ DEF COORDS $CoordsOption$ 79 9 175
 ///	Positive X
 IF {$StyleDirection$ = +X}:
 	DEF GLOBAL CCU_SetblockTestfor setblock ~ ~ ~ repeating_command_block 13 replace {TrackOutput:0b,auto:1b}
+	DEF GLOBAL CCU_TFActivate blockdata |0|[x + 2, y, z] {auto:1b}
+	DEF GLOBAL CCU_TFDeactivate blockdata |0|[x + 2, y, z] {auto:0b}
+	
+	FUNC {GLOBAL CCU.tfActivate}:
+		CCU_TFActivate(|0|)
+		CCU_Activate(|0|)
+	
+	FUNC {GLOBAL CCU.tfDeactivate}:
+		CCU_TFDeactivate(|0|)
+		CCU_Deactivate(|0|)
 
 	FUNC {GLOBAL CCU.cmdSave}:
 		GROUP {CLOCK BLOCK redstone_block Grp_cmdSave}:
@@ -111,7 +121,17 @@ IF {$StyleDirection$ = +X}:
 ///	Negative X
 IF {$StyleDirection$ = -X}:
 	DEF GLOBAL CCU_SetblockTestfor setblock ~ ~ ~ repeating_command_block 12 replace {TrackOutput:0b,auto:1b}
-
+	DEF GLOBAL CCU_TFActivate blockdata |0|[x - 2, y, z] {auto:1b}
+	DEF GLOBAL CCU_TFDeactivate blockdata |0|[x - 2, y, z] {auto:0b}
+	
+	FUNC {GLOBAL CCU.tfActivate}:
+		CCU_TFActivate(|0|)
+		CCU_Activate(|0|)
+	
+	FUNC {GLOBAL CCU.tfDeactivate}:
+		CCU_TFDeactivate(|0|)
+		CCU_Deactivate(|0|)
+	
 	FUNC {GLOBAL CCU.cmdSave}:
 		GROUP {CLOCK BLOCK redstone_block Grp_cmdSave}:
 			fill $CoordsOption$[x + 16, y - 1, z + 16, x + 13, y - 3, z + 13] air 0
@@ -127,6 +147,16 @@ IF {$StyleDirection$ = -X}:
 ///	Positive Z
 IF {$StyleDirection$ = +Z}:
 	DEF GLOBAL CCU_SetblockTestfor setblock ~ ~ ~ repeating_command_block 11 replace {TrackOutput:0b,auto:1b}
+	DEF GLOBAL CCU_TFActivate blockdata |0|[x, y, z + 2] {auto:1b}
+	DEF GLOBAL CCU_TFDeactivate blockdata |0|[x, y, z + 2] {auto:0b}
+	
+	FUNC {GLOBAL CCU.tfActivate}:
+		CCU_TFActivate(|0|)
+		CCU_Activate(|0|)
+	
+	FUNC {GLOBAL CCU.tfDeactivate}:
+		CCU_TFDeactivate(|0|)
+		CCU_Deactivate(|0|)
 
 	FUNC {GLOBAL CCU.cmdSave}:
 		GROUP {CLOCK BLOCK redstone_block Grp_cmdSave}:
@@ -143,6 +173,16 @@ IF {$StyleDirection$ = +Z}:
 ///	Negative Z
 IF {$StyleDirection$ = -Z}:
 	DEF GLOBAL CCU_SetblockTestfor setblock ~ ~ ~ repeating_command_block 10 replace {TrackOutput:0b,auto:1b}
+	DEF GLOBAL CCU_TFActivate blockdata |0|[x, y, z - 2] {auto:1b}
+	DEF GLOBAL CCU_TFDeactivate blockdata |0|[x, y, z - 2] {auto:0b}
+	
+	FUNC {GLOBAL CCU.tfActivate}:
+		CCU_TFActivate(|0|)
+		CCU_Activate(|0|)
+	
+	FUNC {GLOBAL CCU.tfDeactivate}:
+		CCU_TFDeactivate(|0|)
+		CCU_Deactivate(|0|)
 
 	FUNC {GLOBAL CCU.cmdSave}:
 		GROUP {CLOCK BLOCK redstone_block Grp_cmdSave}:
