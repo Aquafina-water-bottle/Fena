@@ -212,6 +212,11 @@ GROUP | Grp_TheGreatestGroup | PULSE		[~6 ~6 ~12 | stonebrick 0]
 	say 33 34 35 36 37 38 39 40 tellraw @a {"text":"ayylmao"}
 
 GROUP | Grp_asdf | CLOCK		[~6 ~6 ~14 | stained_hardened_clay 11]
+	 | minecraft:kill @p
+	 L minecraft:clear @p
+	say 2147483648
+	say 2214592512
+	say 26
 	say asdf asdf asdf more asdf
 	say rekt
 	say rekt again
@@ -470,7 +475,7 @@ GROUP | Grp_asdf | CLOCK		[~6 ~6 ~14 | stained_hardened_clay 11]
 	scoreboard teams option RRb RRb friendlyfire
 	scoreboard teams remove RRg
 	scoreboard teams remove RRb
-	fill ~-3 ~-15 ~-1 ~12 ~0 ~0 air 0
+	fill ~-8 ~-15 ~-1 ~7 ~0 ~0 air 0
 
 GROUP | Grp_TestingDocumentation | PULSE		[~6 ~10 ~12 | stonebrick 0]
 	say -68.43 14 421.6
@@ -492,6 +497,8 @@ GROUP | Grp_TestingDocumentation | PULSE		[~6 ~10 ~12 | stonebrick 0]
 	say 10 != 5
 	say asdf != asdf2
 	setblock 80 10 176 redstone_block 0
+	say This;is;a;ran;om;string
+	say 6
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

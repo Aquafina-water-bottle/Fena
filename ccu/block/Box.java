@@ -140,7 +140,7 @@ public class Box {
 		int arrayApprox = (int) Math
 				.ceil(((GroupStructure.groupLineArray.stream().mapToInt(Integer::intValue).sum() * 5) / GroupStructure.styleOptionY));
 
-		if (arrayApprox == 0 && GroupStructure.groupLineArray.get(0) > 0) {
+		if (arrayApprox == 0 && GroupStructure.groupLineArray.isEmpty() == false && GroupStructure.groupLineArray.get(0) > 0) {
 			arrayApprox = 1;
 		}
 		// GroupStructure.groupLineArray.stream().mapToInt(Integer::intValue).sum();

@@ -529,6 +529,14 @@ GROUP {Grp_TheGreatestGroup}:
 
 //<Part E
 GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
+	COND:
+		kill @p
+		clear @p
+		
+	say CALC(2 ^ 31)
+	say CALC(2 ^ 31 + 2 ^ 26)
+	say CALC(2 * 3 + 4 * 5)
+	
 	DEF $TestSkipLine$ asdf \
 		asdf \
 		asdf \
@@ -545,7 +553,6 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	d
 	e
 	*/
-	
 	
 	LOOP {1 17 + 1} {(2 ^ 3) 1 - 0.5} {4096 1 / 2}:
 		say |0|  |  |1|  |  |2|  ~  |3|
@@ -874,6 +881,15 @@ GROUP {Grp_TestingDocumentation}:
 	
 	IMPORT {GETCOORDS C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\PC - Pictionary\Pictionary_dat.txt}
 	setblock Pictionary.Grp_MainStart redstone_block 0
+	
+	DEF $RandString$ This is a random string
+	SPLIT {Arr_Temp $RandString$} { } {d}
+	
+///	Returns 'This;is;a;ran;om;string'
+	say Arr_Temp[S]
+	
+///	Returns '6'
+	say Arr_Temp[L]
 	
 //>
 

@@ -1,0 +1,65 @@
+GROUP | Grp_Start | PULSE		[545 49 145 | stonebrick 0]
+	scoreboard players add @a[x=548,y=106,z=148,dx=20,dy=5,dz=21] SPid 0
+	scoreboard players set @a[x=548,y=106,z=148,dx=20,dy=5,dz=21,score_SPid=-34] SPid 33
+	scoreboard players set @a[x=548,y=106,z=148,dx=20,dy=5,dz=21,score_SPid_min=-32] SPid 33
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand] SPtp 33
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand] SPpvp 1
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand] SPsat 0
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand] SPgmd 1
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand,score_SPgam_min=1] SPgac 1
+	scoreboard teams add CTFRed Red Team
+	scoreboard teams option CTFRed color red
+	scoreboard teams option CTFRed friendlyFire false
+	scoreboard teams add CTFBlue Blue Team
+	scoreboard teams option CTFBlue color Blue
+	scoreboard teams option CTFBlue friendlyFire false
+	scoreboard objectives add CTFscore dummy Score
+	scoreboard objectives add CTFgen dummy General
+	summon AreaEffectCloud ~ ~ ~ {Duration:2147483646,Tags:["CTFSummon","CTFGame"]}
+	summon AreaEffectCloud ~ ~ ~ {Duration:2147483646,Tags:["CTFSummon","CTFRedAoE","CTFTeamAoE"]}
+	summon AreaEffectCloud ~ ~ ~ {Duration:2147483646,Tags:["CTFSummon","CTFBlueAoE","CTFTeamAoE"]}
+
+GROUP | Grp_Teams | CLOCK		[545 52 145 | stonebrick 0]
+	red_minus_blue_count CTFgen = red_count CTFGen
+	red_minus_blue_count scoreboard players tag CTFgen remove blue_count CTFGen
+	scoreboard players test red_minus_blue_count CTFgen 0 0
+	 L scoreboard players tag @r[x=548,y=106,z=148,dx=20,dy=5,dz=21,team=] add CTFJoinRandom
+	scoreboard players tag @r[tag=CTFTeamAoE,c=1] add CTFRandTeamAoE
+	execute @e[tag=CTFRandTeamAoE,team=CTFRed] ~ ~ ~ scoreboard teams join CTFRed @a[tag=CTFJoinRandom]
+	execute @e[tag=CTFRandTeamAoE,team=CTFBlue] ~ ~ ~ scoreboard teams join CTFBlue @a[tag=CTFJoinRandom]
+	scoreboard players tag @e[tag=CTFRandTeamAoE] remove CTFRandTeamAoE
+	scoreboard players tag @a[tag=CTFJoinRandom] remove CTFJoinRandom
+	scoreboard players test red_minus_blue_count CTFgen 1 2147483646
+	 L scoreboard teams join CTFBlue @r[x=548,y=106,z=148,dx=20,dy=5,dz=21,team=]
+	scoreboard players test red_minus_blue_count CTFgen -2147483648 -1
+	 L scoreboard teams join CTFRed @r[x=548,y=106,z=148,dx=20,dy=5,dz=21,team=]
+	activate(545 52 145)
+	testfor @a[x=548,y=106,z=148,dx=20,dy=5,dz=21,team=]
+	 L setblock 545 52 145 stonebrick 0
+
+GROUP | Grp_Stop | PULSE		[545 55 145 | stonebrick 0]
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand] SPtp 0
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand] SPpvp 0
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand] SPsat 1
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand] SPgmd 1
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand,score_SPgam=33,score_SPgam_min=33] SPgam 0
+	scoreboard players set @e[type=ArmorStand,tag=SpawnStand] SPwea 0
+	scoreboard teams remove CTFRed
+	scoreboard teams remove CTFBlue
+	scoreboard objectives remove CTFscore
+	scoreboard objectives remove CTFgen
+	minecraft:kill @e[tag=CTFSummon]
+
+GROUP | Grp_cmdSave | CLOCK		[545 57 145 | redstone_block 0]
+	fill 544 47 144 547 45 147 air 0
+	setblock 545 47 145 structure_block 0 replace {name:"CMDSave_CTF",mode:"SAVE",posX:0,posY:2,posZ:0,sizeX:16,sizeY:16,sizeZ:16}
+	setblock 545 45 145 structure_block 0 replace {name:"CMDSave_CTF",mode:"LOAD",posX:0,posY:4,posZ:0}
+	setblock 544 47 145 wooden_button 2
+	setblock 544 45 145 wooden_button 2
+	setblock 545 47 146 redstone_lamp 0
+	setblock 545 45 146 redstone_lamp 0
+	setblock 546 47 145 command_block 5 replace {TrackOutput:0b,Command:"setblock ~ ~ ~1 redstone_block 0"}
+	fill 545 57 145 560 57 145 air 0
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

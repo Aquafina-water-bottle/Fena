@@ -1,0 +1,10 @@
+GROUP | Grp_Asdf | PULSE		[~6 ~6 ~6 | null]
+	setblock Test redstone_block
+	say test
+	say test2
+	pictionary minecraft:clear
+	pictionary execute @a ~ ~ ~ say test
+	summon AreaEffectCloud ~ ~ ~ {Duration:2147483646}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

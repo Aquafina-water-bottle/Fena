@@ -2,6 +2,20 @@
 ///	General/utils.ccu
 
 //<Regular defines
+//=
+DEF $BlockOption$ stonebrick 0
+
+OPTIONS:
+	blockOption $BlockOption$
+=//
+
+///	if BlockOption is set to a redstone block
+SPLIT {Arr_Temp $BlockOption$} { }
+IF {Arr_Temp[0] = redstone_block}:
+	UNASSIGN {DEF $BlockOption$}
+	DEF GLOBAL $BlockOption$ stonebrick 0
+UNASSIGN {ARRAY Arr_Temp}
+
 ///	For area effect clouds lol
 DEF $Duration$ Duration:2147483647
 
@@ -18,7 +32,7 @@ DEF ScOR scoreboard objectives remove
 DEF ScOP scoreboard players operation
 
 DEF CCU_Activate setblock |0| redstone_block 0
-DEF CCU_Deactivate setblock |0| stonebrick 0
+DEF CCU_Deactivate setblock |0| $BlockOption$
 
 DEF Snd_Pling minecraft:block.note.pling
 DEF Snd_XP minecraft:entity.experience_orb.touch
@@ -82,14 +96,19 @@ FUNC {GLOBAL CCU.teamRemove}:
 //>
 
 //<Directional based defines
-//=
+//= Required if you want an auto-saving structure block area, and repeating conditional command blocks with proper deactivation
 DEF $CMDName$ PC
 DEF $CMDSizeX$ 5
 DEF $CMDSizeY$ 16
 DEF $CMDSizeZ$ 16
 
+DEF $BlockOption$ stonebrick 0
 DEF $StyleDirection$ +X
 DEF COORDS $CoordsOption$ 79 9 175
+
+OPTIONS:
+	coordsOption $CoordsOption$
+	styleOption $StyleDirection$ 16
 =//
 
 ///	Positive X

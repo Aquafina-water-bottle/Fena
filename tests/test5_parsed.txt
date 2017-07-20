@@ -1,0 +1,54 @@
+GROUP | Grp_MainStart | PULSE		[-68 66 -1122 | stonebrick 0]
+	scoreboard objectives add AOV dummy Attack on Virus
+	scoreboard objectives add AOVG dummy AOV Gate
+	scoreboard objectives add AOVT dummy AOVTitan
+	scoreboard objectives add AOVS dummy AOVIngot
+	scoreboard objectives add AOVC dummy AOVCountdown
+
+GROUP | Grp_GateClock | CLOCK		[-68 68 -1122 | stonebrick 0]
+	scoreboard players add @e[Type=ArmorStand,tag=DankMemes3,score_AOVC_min=0] AOVC 1
+	execute @e[type=ArmorStand,tag=DankMemes3,score_AOVC_min=100] ~ ~ ~ scoreboard players set @e[type=ArmorStand,tag=DankMemes3,score_AOVC_min=100,score_AOVC=100] AOVC 0
+
+GROUP | Grp_Ingot | PULSE		[-68 70 -1122 | stonebrick 0]
+	scoreboard players add @e[Type=ArmorStand,tag=DankMemes2,score_AOVS_min=0] AOVS 1
+	execute @e[type=ArmorStand,tag=DankMemes2,score_AOVS_min=300] ~ ~ ~ scoreboard players set @e[type=ArmorStand,tag=DankMemes2,score_AOVS_min=300,score_AOVS=300] AOVS 0
+	execute @e[type=ArmorStand,tag=DankMemes2,score_AOVS_min=0,score_AOVS=0] ~ ~ ~ scoreboard players add TIS AOVS 1
+	 | summon Item -28 14 -1042 {Item:{id:gold_ingot,Count:1}}
+	 | summon Item -96 26 -1009 {Item:{id:gold_ingot,Count:1}}
+	 | summon Item -56 14 -1006 {Item:{id:gold_ingot,Count:1}}
+	 | summon Item -42 14 -1099 {Item:{id:gold_ingot,Count:1}}
+	 | summon Item -42 14 -926 {Item:{id:gold_ingot,Count:1}}
+	 L summon Item -67 14 -1009 {Item:{id:gold_ingot,Count:1}}
+	summon ArmorStand ~ ~ ~ {Tags:["DankMemes2"]}
+	execute @e[type=ArmorStand,tag=DankMemes2] ~ ~ ~ AOVS 0
+
+GROUP | Grp_TitanStart | PULSE		[-68 72 -1122 | stonebrick 0]
+	scoreboard players set @r[x=-79,y=13,z=-917,dx=8,dy=8,dz=8] AOVT 0
+	minecraft:tp @a[score_AOVT=0,x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061] -82 76 -916
+	tellraw @a[x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"AOV","color":"dark_red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Attack on Titan","color":"dark_aqua"}}},{"text":"]","color":"gray"},{"text":": "},{"selector":"@a[x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061,m=2,score_AOVT=0]"},{"text":" is the Titan.","color":"gray"}]}
+	effect @a[score_AOVT=0,x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061] strength 3 90  true
+	effect @a[score_AOVT=0,x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061] glowing 3  true
+	effect @a[score_AOVT=0,x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061] instant_health 3  true
+	effect @a[score_AOVT=0,x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061] resistance 3 10 true
+	setblock -68 72 -1122 $BlockOption$
+
+GROUP | Grp_TitanEffect | PULSE		[-68 74 -1122 | stonebrick 0]
+	effect @a[score_AOVT=0,x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061] strength 3 90  true
+	effect @a[score_AOVT=0,x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061] glowing 3  true
+	effect @a[score_AOVT=0,x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061] instant_health 3  true
+	effect @a[score_AOVT=0,x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061] resistance 3 10 true
+	setblock -68 74 -1122 $BlockOption$
+
+GROUP | Grp_cmdSave | CLOCK		[-68 76 -1122 | redstone_block 0]
+	fill -67 64 -1121 -70 62 -1124 air 0
+	setblock -68 64 -1122 structure_block 0 replace {name:"CMDSave_AOV",mode:"SAVE",posX:-15,posY:2,posZ:-4,sizeX:16,sizeY:16,sizeZ:5}
+	setblock -68 62 -1122 structure_block 0 replace {name:"CMDSave_AOV",mode:"LOAD",posX:-15,posY:4,posZ:-4}
+	setblock -68 64 -1121 wooden_button 3
+	setblock -68 62 -1121 wooden_button 3
+	setblock -69 64 -1122 redstone_lamp 0
+	setblock -69 62 -1122 redstone_lamp 0
+	setblock -68 64 -1123 command_block 2 replace {TrackOutput:0b,Command:"setblock ~-1 ~ ~ redstone_block 0"}
+	fill -68 76 -1122 -68 76 -1137 air 0
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

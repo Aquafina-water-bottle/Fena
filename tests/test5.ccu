@@ -1,0 +1,130 @@
+//(Attack on Virus)
+///
+
+//<General Definitions
+DEF $SA$ x=16,y=70,z=-922,dx=-194,dy=-56,dz=-1061
+DEF $Spawn$ x=-79,y=13,z=-917,dx=8,dy=8,dz=8
+DEF $VTP$ -82 76 -916
+DEF $SPid$ 36
+DEF $SPpvp$ 0
+DEF $SPsat$ 1
+DEF $SAME$ ~ ~ ~
+DEF $Obj$ scoreboard objectives add
+
+DEF $CMDName$ AOV
+DEF $CMDSizeX$ 16
+DEF $CMDSizeY$ 16
+DEF $CMDSizeZ$ 5
+
+DEF $StyleDirection$ -Z
+DEF COORDS $CoordsOption$ -83 65 -1137
+
+DEF $TextStart$ {"text":"","extra":[{"text":"[","color":"gray"},{"text":"AOV","color":"dark_red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Attack on Titan","color":"dark_aqua"}}},{"text":"]","color":"gray"},{"text":": "},
+
+sincIMPORT {LIBRARY GETDIR General}
+//>
+
+//<Options
+OPTIONS:
+	blockOption stonebrick 0
+	coordsOption $CoordsOption$
+	styleOption $StyleDirection$ 16
+	parseOption true
+	commandOption true
+	combinerOption true
+///	filePathFuncOption 
+	keepCoordsOption false
+//>
+
+//<Scoreboards
+FUNC {Func_ScoreboardStart}:
+	ARRAY {GLOBAL ACTIVATE CCU.objectiveAdd(Obj_ScoreboardStart) Obj_ScoreboardStart}:
+		AOV dummy Attack on Virus
+		AOVG dummy AOV Gate
+		AOVT dummy AOVTitan
+		AOVS dummy AOVIngot
+		AOVC dummy AOVCountdown
+//>
+
+
+//<Virus Clock
+FUNC {Func_GateOpen}:
+	summon ArmorStand ~ ~ ~ {Tags:["DankMemes3"]}
+	
+FUNC {Func_GateClock}:
+	@e[Type=ArmorStand,tag=DankMemes3,score_AOVC_min=0] AOVC + 1
+	execute @e[type=ArmorStand,tag=DankMemes3,score_AOVC_min=100] ~ ~ ~ scoreboard players set @e[type=ArmorStand,tag=DankMemes3,score_AOVC_min=100,score_AOVC=100] AOVC 0
+
+//>
+
+
+//<IngotSpawn
+FUNC {Func_AOVIngotStart}:
+	summon ArmorStand ~ ~ ~ {Tags:["DankMemes2"]}
+	@e[type=ArmorStand,tag=DankMemes2] AOVS 0
+
+FUNC {Func_AOVIngotClock}:
+	@e[Type=ArmorStand,tag=DankMemes2,score_AOVS_min=0] AOVS + 1
+	execute @e[type=ArmorStand,tag=DankMemes2,score_AOVS_min=300] ~ ~ ~ scoreboard players set @e[type=ArmorStand,tag=DankMemes2,score_AOVS_min=300,score_AOVS=300] AOVS 0
+	execute @e[type=ArmorStand,tag=DankMemes2,score_AOVS_min=0,score_AOVS=0] ~ ~ ~ scoreboard players add TIS AOVS 1
+	COND:
+		summon Item -28 14 -1042 {Item:{id:gold_ingot,Count:1}}
+		summon Item -96 26 -1009 {Item:{id:gold_ingot,Count:1}}
+		summon Item -56 14 -1006 {Item:{id:gold_ingot,Count:1}}
+		summon Item -42 14 -1099 {Item:{id:gold_ingot,Count:1}}
+		summon Item -42 14 -926 {Item:{id:gold_ingot,Count:1}}
+		summon Item -67 14 -1009 {Item:{id:gold_ingot,Count:1}}
+//>
+
+
+//<Countdown
+FUNC {Func_AOVCount}:
+	@e[Type=ArmorStand,tag=DankMemes2,score_AOVS_min=0] AOVS + 1
+		
+//>
+
+
+//<Choose Titan/Broadcast/Tp/Effect
+FUNC {Func_TitanChoose}:
+	@r[$Spawn$] AOVT = 0
+	tp @a[score_AOVT=0,$SA$] $VTP$
+	tellraw @a[$SA$] $TextStart${"selector":"@a[$SA$,m=2,score_AOVT=0]"},{"text":" is the Titan.","color":"gray"}]}
+	
+FUNC {Func_TitanEffect}:
+	effect @a[score_AOVT=0,$SA$] strength 3 90  true
+	effect @a[score_AOVT=0,$SA$] glowing 3  true
+	effect @a[score_AOVT=0,$SA$] instant_health 3  true
+	effect @a[score_AOVT=0,$SA$] resistance 3 10 true
+//>
+
+//<Groups
+GROUP {Grp_MainStart}:
+	Func_ScoreboardStart()
+	
+GROUP {Grp_GateClock}:
+	Func_GateClock()
+	
+GROUP {Grp_Ingot}:
+	Func_AOVIngotClock()
+	Func_AOVIngotStart()
+	
+	
+GROUP {Grp_TitanStart}:
+	Func_TitanChoose()
+	Func_TitanEffect()
+	CCU_Deactivate(GSELF)
+
+GROUP {Grp_TitanEffect}:
+	Func_TitanEffect()
+	CCU_Deactivate(GSELF)
+
+CCU.cmdSave()
+//>
+
+
+
+
+
+
+
+

@@ -242,7 +242,7 @@ public class Var_Func {
 			String[] addStringArray = new String[3];
 
 			// Gets param number
-			addStringArray[0] = ParamUtils.countParams(arrayGet) + "";
+			addStringArray[0] = ParamUtils.countParams(arrayGet, this.fullLineGet) + "";
 
 			// Adds tab num
 			addStringArray[1] = tabNumCalc + "";

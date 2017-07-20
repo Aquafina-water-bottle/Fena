@@ -91,7 +91,7 @@ public class Con_Loop {
 				}
 
 				// gets param num within the encapsulated array
-				paramNum = ParamUtils.countParams(arrayGet);
+				paramNum = ParamUtils.countParams(arrayGet, this.fullLineGet);
 
 				// makes sure it loops through all arrays
 				loopNum = NumberUtils.getMaxSize(loopArrayStorage);

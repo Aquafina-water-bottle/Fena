@@ -41,7 +41,7 @@ public class ParamUtils {
 	}
 
 	// count number of params in an array list
-	public static int countParams(ArrayList<String> getParamsArray) {
+	public static int countParams(ArrayList<String> getParamsArray, String temp) {
 		Integer paramMaxNum = null;
 
 		for (int i = 0; i < getParamsArray.size(); i++) {
@@ -74,6 +74,8 @@ public class ParamUtils {
 				}
 			}
 		}
+		
+		// System.out.println("MARKER: " + temp.trim() + " | " + paramMaxNum);
 
 		if (paramMaxNum == null) {
 			return 0;

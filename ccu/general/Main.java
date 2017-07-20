@@ -52,12 +52,15 @@ public class Main {
 	 * -Fix Recurring imports
 	 * -Multithreading when checking for the version
 	 * -Making DEF only use COORDS (and remove tele), and detect whether it's 3, 4, 5 or 6 numbers
+	 * -get param numbers working and use PARAM()
+	 * -func getArray within call
 	 * 
 	 * General statements
 	 * -INITIALIZE
 	 * -FILE
+	 * -ELSE
+	 * -SET for setting arrays
 	 * 
-
 	 * -PARSE
 	 * -Escaping using '`'
 	 * -Escaping using '/' at the beginning of a line
@@ -73,7 +76,7 @@ public class Main {
 		long startTime = System.nanoTime();
 		
 		// checks version
-		String currentVersion = "Build 7";
+		String currentVersion = "Build 8";
 		System.out.println("Current: " + currentVersion);
 		
 		try {

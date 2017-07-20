@@ -7,7 +7,7 @@ import ccu.general.StringUtils;
 
 class storeValueType {
 	public Boolean isDouble = null;
-	Integer getInt = null;
+	Long getLong = null;
 	Double getDouble = null;
 	String getString = null;
 
@@ -25,7 +25,7 @@ class storeValueType {
 		if (isDouble) {
 			this.getDouble = getNum;
 		} else {
-			this.getInt = (int) getNum;
+			this.getLong = (long) getNum;
 		}
 	}
 }
@@ -459,13 +459,13 @@ public class MathParser {
 			}
 
 		} else { // calculates int array
-			int[] numCalcArray = new int[4];
+			long[] numCalcArray = new long[4];
 
 			for (int i = 0; i < calcArray.size(); i++) {
-				numCalcArray[i] = Integer.parseInt(calcArray.get(i));
+				numCalcArray[i] = (int) Long.parseLong(calcArray.get(i));
 			}
 
-			int calcNum = numCalcArray[0];
+			long calcNum = numCalcArray[0];
 			returnArray.add(calcNum + "");
 
 			switch (Math.round(numCalcArray[2])) {
@@ -483,8 +483,8 @@ public class MathParser {
 				}
 
 				while (true) {
-					calcNum = (int) Math.pow(calcNum, numCalcArray[3]);
-					/*if (Integer.isNaN(calcNum)) {
+					calcNum = (long) Math.pow(calcNum, numCalcArray[3]);
+					/*if (Long.isNaN(calcNum)) {
 						System.out.println("ERROR: Math error resulted in an undefined number in line '" + fullLineGet + "'");
 						System.exit(0);
 					}*/
@@ -496,8 +496,8 @@ public class MathParser {
 					}
 
 					// detects ending by checking whether finalNum - previous and finalNum - current are different signs
-					if (NumberUtils.checkSameSign(numCalcArray[1] - Integer.parseInt(returnArray.get(returnArray.size() - 2)),
-							numCalcArray[1] - Integer.parseInt(returnArray.get(returnArray.size() - 1))) == false) {
+					if (NumberUtils.checkSameSign(numCalcArray[1] - Long.parseLong(returnArray.get(returnArray.size() - 2)),
+							numCalcArray[1] - Long.parseLong(returnArray.get(returnArray.size() - 1))) == false) {
 						returnArray.remove(returnArray.size() - 1);
 						break;
 					}
@@ -558,8 +558,8 @@ public class MathParser {
 					}
 
 					// detects ending by checking whether finalNum - previous and finalNum - current are different signs
-					if (NumberUtils.checkSameSign(numCalcArray[1] - Integer.parseInt(returnArray.get(returnArray.size() - 2)),
-							numCalcArray[1] - Integer.parseInt(returnArray.get(returnArray.size() - 1))) == false) {
+					if (NumberUtils.checkSameSign(numCalcArray[1] - Long.parseLong(returnArray.get(returnArray.size() - 2)),
+							numCalcArray[1] - Long.parseLong(returnArray.get(returnArray.size() - 1))) == false) {
 						returnArray.remove(returnArray.size() - 1);
 						break;
 					}
@@ -620,8 +620,8 @@ public class MathParser {
 					}
 
 					// detects ending by checking whether finalNum - previous and finalNum - current are different signs
-					if (NumberUtils.checkSameSign(numCalcArray[1] - Integer.parseInt(returnArray.get(returnArray.size() - 2)),
-							numCalcArray[1] - Integer.parseInt(returnArray.get(returnArray.size() - 1))) == false) {
+					if (NumberUtils.checkSameSign(numCalcArray[1] - Long.parseLong(returnArray.get(returnArray.size() - 2)),
+							numCalcArray[1] - Long.parseLong(returnArray.get(returnArray.size() - 1))) == false) {
 						returnArray.remove(returnArray.size() - 1);
 						break;
 					}
@@ -660,8 +660,8 @@ public class MathParser {
 					}
 
 					// detects ending by checking whether finalNum - previous and finalNum - current are different signs
-					if (NumberUtils.checkSameSign(numCalcArray[1] - Integer.parseInt(returnArray.get(returnArray.size() - 2)),
-							numCalcArray[1] - Integer.parseInt(returnArray.get(returnArray.size() - 1))) == false) {
+					if (NumberUtils.checkSameSign(numCalcArray[1] - Long.parseLong(returnArray.get(returnArray.size() - 2)),
+							numCalcArray[1] - Long.parseLong(returnArray.get(returnArray.size() - 1))) == false) {
 						returnArray.remove(returnArray.size() - 1);
 						break;
 					}
@@ -699,8 +699,8 @@ public class MathParser {
 					}
 
 					// detects ending by checking whether finalNum - previous and finalNum - current are different signs
-					if (NumberUtils.checkSameSign(numCalcArray[1] - Integer.parseInt(returnArray.get(returnArray.size() - 2)),
-							numCalcArray[1] - Integer.parseInt(returnArray.get(returnArray.size() - 1))) == false) {
+					if (NumberUtils.checkSameSign(numCalcArray[1] - Long.parseLong(returnArray.get(returnArray.size() - 2)),
+							numCalcArray[1] - Long.parseLong(returnArray.get(returnArray.size() - 1))) == false) {
 						returnArray.remove(returnArray.size() - 1);
 						break;
 					}
@@ -763,7 +763,7 @@ public class MathParser {
 						if (getValue.isDouble) {
 							midString = getValue.getDouble + "";
 						} else {
-							midString = getValue.getInt + "";
+							midString = getValue.getLong + "";
 						}
 
 						getString = begString + midString + endString;
@@ -793,7 +793,7 @@ public class MathParser {
 								getString = getValue.getDouble + "";
 
 							} else {
-								getString = getValue.getInt + "";
+								getString = getValue.getLong + "";
 							}
 						}
 					} else {
@@ -810,7 +810,7 @@ public class MathParser {
 									getString = getValue.getDouble + "";
 
 								} else {
-									getString = getValue.getInt + "";
+									getString = getValue.getLong + "";
 								}
 							}
 						}
@@ -833,7 +833,7 @@ public class MathParser {
 							break;
 						}
 
-						// turns into int because INT()
+						// turns into long because INT()
 						if (calcType == 4) {
 							getString = NumberUtils.roundDoubleToInt(getValue.getDouble);
 
@@ -845,24 +845,24 @@ public class MathParser {
 					} else {
 						switch (calcType) {
 						case 1:
-							getValue.getInt = (int) Math.sin(Math.toRadians(getValue.getInt));
+							getValue.getLong = (long) Math.sin(Math.toRadians(getValue.getLong));
 							break;
 
 						case 2:
-							getValue.getInt = (int) Math.cos(Math.toRadians(getValue.getInt));
+							getValue.getLong = (long) Math.cos(Math.toRadians(getValue.getLong));
 							break;
 
 						case 3:
-							getValue.getInt = (int) Math.tan(Math.toRadians(getValue.getInt));
+							getValue.getLong = (long) Math.tan(Math.toRadians(getValue.getLong));
 							break;
 						}
 
 						// turns into double because DOUBLE()
 						if (calcType == 5) {
-							getString = NumberUtils.roundDouble(getValue.getInt) + "";
+							getString = NumberUtils.roundDouble(getValue.getLong) + "";
 						} else {
 							// normal
-							getString = getValue.getInt + "";
+							getString = getValue.getLong + "";
 						}
 
 					}
@@ -891,7 +891,7 @@ public class MathParser {
 					break;
 				}
 
-				// turns into int because INT()
+				// turns into long because INT()
 				if (calcType == 4) {
 					getString = NumberUtils.roundDoubleToInt(getValue.getDouble);
 
@@ -903,24 +903,24 @@ public class MathParser {
 			} else {
 				switch (calcType) {
 				case 1:
-					getValue.getInt = (int) Math.sin(Math.toRadians(getValue.getInt));
+					getValue.getLong = (long) Math.sin(Math.toRadians(getValue.getLong));
 					break;
 
 				case 2:
-					getValue.getInt = (int) Math.cos(Math.toRadians(getValue.getInt));
+					getValue.getLong = (long) Math.cos(Math.toRadians(getValue.getLong));
 					break;
 
 				case 3:
-					getValue.getInt = (int) Math.tan(Math.toRadians(getValue.getInt));
+					getValue.getLong = (long) Math.tan(Math.toRadians(getValue.getLong));
 					break;
 				}
 
 				// turns into double because DOUBLE()
 				if (calcType == 5) {
-					getString = NumberUtils.roundDouble(getValue.getInt) + "";
+					getString = NumberUtils.roundDouble(getValue.getLong) + "";
 				} else {
 					// normal
-					getString = getValue.getInt + "";
+					getString = getValue.getLong + "";
 				}
 			}
 		}
@@ -961,7 +961,7 @@ public class MathParser {
 						if (getValue.isDouble) {
 							midString = getValue.getDouble + "";
 						} else {
-							midString = getValue.getInt + "";
+							midString = getValue.getLong + "";
 						}
 
 						getString = begString + midString + endString;
@@ -1015,11 +1015,11 @@ public class MathParser {
 		// Priority: ^, *, /, %, +, -
 
 		double calcDouble = 0;
-		int calcInt = 0;
+		long calcLong = 0;
 		String[] arrayCalc = null;
 
 		ArrayList<String> arrayListCalc = new ArrayList<String>();
-		ArrayList<Integer> arrayInt = new ArrayList<Integer>();
+		ArrayList<Long> arrayLong = new ArrayList<Long>();
 		ArrayList<Double> arrayDouble = new ArrayList<Double>();
 		ArrayList<Boolean> arrayNumType = new ArrayList<Boolean>();
 		ArrayList<Boolean> arrayOperatorType = new ArrayList<Boolean>();
@@ -1081,10 +1081,10 @@ public class MathParser {
 							// adds to arrayNumType only if it's a number
 							// adds number to arrayDouble, is null if operator
 							if (NumberUtils.isNum(line)) {
-								arrayInt.add(Integer.parseInt(line));
+								arrayLong.add(Long.parseLong(line));
 								arrayNumType.add(true);
 							} else {
-								arrayInt.add(null);
+								arrayLong.add(null);
 								arrayNumType.add(false);
 							}
 						}
@@ -1136,8 +1136,8 @@ public class MathParser {
 														arrayDouble.get(arrayIndex + 1));
 												arrayDouble.set(arrayIndex, calcDouble);
 											} else {
-												calcInt = (int) Math.pow(arrayInt.get(arrayIndex - 1), arrayInt.get(arrayIndex + 1));
-												arrayInt.set(arrayIndex, calcInt);
+												calcLong = (long) Math.pow(arrayLong.get(arrayIndex - 1), arrayLong.get(arrayIndex + 1));
+												arrayLong.set(arrayIndex, calcLong);
 											}
 											break;
 
@@ -1146,8 +1146,8 @@ public class MathParser {
 												calcDouble = arrayDouble.get(arrayIndex - 1) * arrayDouble.get(arrayIndex + 1);
 												arrayDouble.set(arrayIndex, calcDouble);
 											} else {
-												calcInt = arrayInt.get(arrayIndex - 1) * arrayInt.get(arrayIndex + 1);
-												arrayInt.set(arrayIndex, calcInt);
+												calcLong = arrayLong.get(arrayIndex - 1) * arrayLong.get(arrayIndex + 1);
+												arrayLong.set(arrayIndex, calcLong);
 											}
 											break;
 
@@ -1156,8 +1156,8 @@ public class MathParser {
 												calcDouble = arrayDouble.get(arrayIndex - 1) / arrayDouble.get(arrayIndex + 1);
 												arrayDouble.set(arrayIndex, calcDouble);
 											} else {
-												calcInt = arrayInt.get(arrayIndex - 1) / arrayInt.get(arrayIndex + 1);
-												arrayInt.set(arrayIndex, calcInt);
+												calcLong = arrayLong.get(arrayIndex - 1) / arrayLong.get(arrayIndex + 1);
+												arrayLong.set(arrayIndex, calcLong);
 											}
 											break;
 
@@ -1166,8 +1166,8 @@ public class MathParser {
 												calcDouble = arrayDouble.get(arrayIndex - 1) % arrayDouble.get(arrayIndex + 1);
 												arrayDouble.set(arrayIndex, calcDouble);
 											} else {
-												calcInt = arrayInt.get(arrayIndex - 1) % arrayInt.get(arrayIndex + 1);
-												arrayInt.set(arrayIndex, calcInt);
+												calcLong = arrayLong.get(arrayIndex - 1) % arrayLong.get(arrayIndex + 1);
+												arrayLong.set(arrayIndex, calcLong);
 											}
 											break;
 
@@ -1176,8 +1176,8 @@ public class MathParser {
 												calcDouble = arrayDouble.get(arrayIndex - 1) + arrayDouble.get(arrayIndex + 1);
 												arrayDouble.set(arrayIndex, calcDouble);
 											} else {
-												calcInt = arrayInt.get(arrayIndex - 1) + arrayInt.get(arrayIndex + 1);
-												arrayInt.set(arrayIndex, calcInt);
+												calcLong = arrayLong.get(arrayIndex - 1) + arrayLong.get(arrayIndex + 1);
+												arrayLong.set(arrayIndex, calcLong);
 											}
 											break;
 
@@ -1186,20 +1186,20 @@ public class MathParser {
 												calcDouble = arrayDouble.get(arrayIndex - 1) - arrayDouble.get(arrayIndex + 1);
 												arrayDouble.set(arrayIndex, calcDouble);
 											} else {
-												calcInt = arrayInt.get(arrayIndex - 1) - arrayInt.get(arrayIndex + 1);
-												arrayInt.set(arrayIndex, calcInt);
+												calcLong = arrayLong.get(arrayIndex - 1) - arrayLong.get(arrayIndex + 1);
+												arrayLong.set(arrayIndex, calcLong);
 											}
 											break;
 										}
-
+										
 										if (isDouble) {
 											arrayDouble.remove(arrayIndex + 1);
 											arrayDouble.remove(arrayIndex - 1);
 										} else {
-											arrayInt.remove(arrayIndex + 1);
-											arrayInt.remove(arrayIndex - 1);
+											arrayLong.remove(arrayIndex + 1);
+											arrayLong.remove(arrayIndex - 1);
 										}
-
+										
 										arrayNumType.set(arrayIndex, true);
 										arrayListCalc.set(arrayIndex, "Num");
 
@@ -1207,6 +1207,9 @@ public class MathParser {
 										arrayNumType.remove(arrayIndex - 1);
 										arrayListCalc.remove(arrayIndex + 1);
 										arrayListCalc.remove(arrayIndex - 1);
+										arrayOperatorType.set(arrayIndex, false);
+										arrayOperatorType.remove(arrayIndex + 1);
+										arrayOperatorType.remove(arrayIndex - 1);
 
 									} else {
 										System.out
@@ -1226,7 +1229,7 @@ public class MathParser {
 			storeValueType returnValue = new storeValueType(arrayDouble.get(0), true);
 			return returnValue;
 		} else {
-			storeValueType returnValue = new storeValueType(arrayInt.get(0), false);
+			storeValueType returnValue = new storeValueType(arrayLong.get(0), false);
 			return returnValue;
 		}
 	}
@@ -1290,7 +1293,7 @@ public class MathParser {
 
 		} else {
 			// finds brackets
-			int bracketNum = StringUtils.countChars(calcString, ")");
+			long bracketNum = StringUtils.countChars(calcString, ")");
 
 			for (int i = 0; i < bracketNum; i++) {
 				if (i == 0) {
