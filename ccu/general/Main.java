@@ -20,31 +20,6 @@ import ccu.rcon.MinecraftRcon;
 
 public class Main {
 	/* TODO
-	 * For the program
-	 * -Combiners - DONE
-	 * -Scoreboard shortcuts - DONE
-	 * -Execute shortcuts - DONE
-	 * -Selector shortcuts - DONE
-	 * -Definitions working with COORDS and TELE - DONE
-	 * -Definitions within definitions - DONE
-	 * -Usage of BRANCH via MFUNC - DONE
-	 * -MFUNC nicknames - DONE
-	 * -Server override using 'minecraft:' when detecing commands exist - DONE
-	 * -Putting MFUNC into the parsed file - DONE
-	 * -Skipping lines using ';' - DONE
-	 * 
-	 * -FUNC - DONE (now with proper future params)
-	 * -IMPORT - DONE (without importing .dat files)
-	 * -UNASSIGN - DONE (since arrays, team lists and objective lists aren't a thing yet)
-	 * -LOOP - DONE (completely woot)
-	 * -IF - DONE (completely WOOOT)
-	 * -SIN COS TAN CALC - DONE WOOOOOOOOOT
-	 * -ARRAY - DONE WOOOOOOOOOOOOOOOOOOOOOT
-	 * -SPLIT - DONE AS FUCK
-	 * 
-	 * -Repeated definitions - Already works apparently
-	 * -Check whether commands exist - WILL NOT DO
-	 * 
 	 * -Better RCON usage - do when multiparse works
 	 * -Combiner options using .mcfunction - do when multiparse works
 	 * -Save coords option
@@ -52,7 +27,6 @@ public class Main {
 	 * -Fix Recurring imports
 	 * -Multithreading when checking for the version
 	 * -Making DEF only use COORDS (and remove tele), and detect whether it's 3, 4, 5 or 6 numbers
-	 * -get param numbers working and use PARAM()
 	 * -func getArray within call
 	 * 
 	 * General statements
@@ -61,10 +35,11 @@ public class Main {
 	 * -ELSE
 	 * -SET for setting arrays
 	 * 
-	 * -PARSE
-	 * -Escaping using '`'
-	 * -Escaping using '/' at the beginning of a line
-	 * 
+	 * Secondary statements
+	 * -ROUND
+	 * -Escaping (eg. `test` and ` `)
+	 * -Escaping using '/' at the beginning of a line & PARSE
+	 * -PARAM
 	 */
 
 	// .replaceAll("^\\s+", "") = space to the left
@@ -76,7 +51,7 @@ public class Main {
 		long startTime = System.nanoTime();
 		
 		// checks version
-		String currentVersion = "Build 8";
+		String currentVersion = "Build 9";
 		System.out.println("Current: " + currentVersion);
 		
 		try {

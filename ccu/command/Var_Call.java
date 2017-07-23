@@ -42,12 +42,12 @@ public class Var_Call {
 			statementArgs = statementEncase.substring(1, statementEncase.length() - 1);
 
 			// if it contains multiple functions - returns normal func names in seperate lines
-			if (statementArgs.contains(",")) {
+			/*if (statementArgs.contains(",")) {
 				String[] statementArgsArray = statementArgs.split(",");
 				for (int i = 0; i < statementArgsArray.length; i++) {
 					arrayReturn.add(whitespaceCalc + "CALL {" + statementArgsArray[i].trim() + "}");
 				}
-			} else {
+			} else {*/
 				// check for params
 				if (statementArgs.contains("(") && statementArgs.endsWith(")")
 						&& statementArgs.indexOf("(") < statementArgs.indexOf(")")) {
@@ -64,7 +64,9 @@ public class Var_Call {
 
 				// does the actual thing
 				for (int funcIndex = Var_Func.arrayFuncNameSave.size() - 1; funcIndex >= 0; funcIndex--) {
-
+					
+					
+					
 					// if it matches
 					if (statementArgs.equals(Var_Func.arrayFuncNameSave.get(funcIndex)[2])) {
 
@@ -106,7 +108,7 @@ public class Var_Call {
 				
 				ArgUtils.checkCommands(this.arrayReturn, tabNum);
 				checkFunction.clear();
-			}
+			//}
 
 		} else {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");

@@ -45,6 +45,27 @@ public class Box {
 		return blockArrayGet;
 	}
 
+	private static void printArray(int[][] blockArray, int xz, int y) {
+		if (xz != 0) {
+			System.out.println("");
+			for (int asdf = 0; asdf < xz; asdf++) {
+				for (int asfd = 0; asfd < y; asfd++) {
+					if (blockArray[asfd][asdf] == 1) {
+						System.out.print("# ");
+					} else {
+						if (blockArray[asfd][asdf] == 2 || blockArray[asfd][asdf] == 0) {
+							System.out.print("- ");
+						} else {
+							System.out.print("E ");
+						}
+					}
+				}
+				System.out.println("");
+			}
+			System.out.println("");
+		}
+	}
+
 	private static int[][] surroundingArrayInt(int[][] blockArrayGet, int getY, int getXZ, int detectInt, int surroundInt) {
 		/** When it detects number 'detectInt', it replaces the surrounding numbers with 'surroundInt'
 		 * - assuming the surrounding number is 0
@@ -162,6 +183,7 @@ public class Box {
 		int[][] blockArrayCalc;
 		boolean foundCmd = false;
 		int fillCoordsCalc = 0;
+		int fillCoordsCalcY = 0;
 
 		for (int i = 0; i < GroupStructure.groupLineArray.size(); i++) {
 			coordsSaveY = 0;
@@ -190,6 +212,12 @@ public class Box {
 							// does while loop to test if the position works
 							while (true) {
 								try {
+									if (blockArrayCalc[coordsCalcY][coordsCalcXZ] != 0) {
+										lengthCalc = 0;
+										blockArray = removeArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox,
+												10, 0);
+										break;
+									}
 									blockArrayCalc[coordsCalcY][coordsCalcXZ] = 10;
 								} catch (ArrayIndexOutOfBoundsException e) {
 									System.out.println(
@@ -205,6 +233,9 @@ public class Box {
 								if (lengthCalc == GroupStructure.groupLineArray.get(i)) {
 									blockArrayCalc = surroundingArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY,
 											arrayApprox, 10, 2);
+
+									// printArray(blockArray, arrayApprox, GroupStructure.styleOptionY);
+									// System.out.println("ASDF");
 
 									blockArray = removeArrayInt(blockArrayCalc.clone(), GroupStructure.styleOptionY, arrayApprox, 10,
 											1);
@@ -288,19 +319,10 @@ public class Box {
 			}
 		}
 
-		if (arrayApprox != 0) {
-			System.out.println("");
-			for (int asdf = 0; asdf < arrayApprox; asdf++) {
-				for (int asfd = 0; asfd < GroupStructure.styleOptionY; asfd++) {
-					System.out.print(blockArray[asfd][asdf] + " ");
-				}
-				System.out.println("");
-			}
-			System.out.println("");
-		}
+		boolean foundEmptyLineXZ = false;
+		boolean foundEmptyLineY = false;
 
-		// get 2nd fill coords, specifically xz length
-
+		// get 2nd fill xz length
 		if (arrayApprox != 0) {
 			int fillCoordsArrayCalc = 0;
 
@@ -310,19 +332,51 @@ public class Box {
 				for (int y = 0; y < GroupStructure.styleOptionY; y++) {
 					fillCoordsArrayCalc += blockArray[y][xz];
 					if (fillCoordsArrayCalc > 0) {
+						// fillCoordsCalc is always 1 line ahead because it counts "2"s
 						fillCoordsCalc++;
 						break;
 					}
 				}
 
 				if (fillCoordsArrayCalc == 0) {
+					foundEmptyLineXZ = true;
+					break;
+				}
+			}
+			
+			// gets 2nd fill y length
+			for (int y = 0; y < GroupStructure.styleOptionY; y++) {
+				fillCoordsArrayCalc = 0;
+
+				for (int xz = 0; xz < arrayApprox; xz++) {
+					fillCoordsArrayCalc += blockArray[y][xz];
+					if (fillCoordsArrayCalc > 0) {
+						// fillCoordsCalc is always 1 line ahead because it counts "2"s
+						fillCoordsCalcY++;
+						break;
+					}
+				}
+
+				if (fillCoordsArrayCalc == 0) {
+					foundEmptyLineY = true;
 					break;
 				}
 			}
 		}
-
+		
+		// System.out.println(fillCoordsCalcY + " | " + fillCoordsCalc);
+		printArray(blockArray, fillCoordsCalc, fillCoordsCalcY);
+		
+		if (foundEmptyLineXZ == true) {
+			fillCoordsCalc--;
+		}
+		
+		if (foundEmptyLineY == true) {
+			fillCoordsCalcY--;
+		}
+		
 		fillCoords1.switchDirection().addCoordinates(Var_Options.coordsOption);
-		fillCoords2.addCoordinates(17, GroupStructure.styleOptionY + 1, fillCoordsCalc - 1).switchDirection()
+		fillCoords2.addCoordinates(17, fillCoordsCalcY + 1, fillCoordsCalc + 1).switchDirection()
 				.addCoordinates(Var_Options.coordsOption);
 	}
 
@@ -385,7 +439,7 @@ public class Box {
 							}
 
 							// if the group name has [ after it
-							if (testGroupName.endsWith("[") && testGroupName.trim().substring(0, testGroupName.trim().length() - 2)
+							if (testGroupName.endsWith("[") && testGroupName.trim().substring(0, testGroupName.trim().length() - 1)
 									.equals(importNameCoordArray.get(nameIndex))) {
 								properGroupName = true;
 							}

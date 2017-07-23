@@ -163,6 +163,16 @@ public class Setblock {
 				System.exit(0);
 			}
 
+			// initial commands
+			if ((initialCommands == null && initialCommands.isEmpty()) == false) {
+				writer.println("INITIALIZE");
+				for (int i = 0; i < initialCommands.size(); i++) {
+					writer.println("\t" + initialCommands.get(i));
+				}
+
+				writer.println("");
+			}
+
 			for (int i = 0; i < GroupStructure.groupCommandsArray.size(); i++) {
 				for (int j = 0; j < GroupStructure.groupCommandsArray.get(i).length; j++) {
 
@@ -202,7 +212,19 @@ public class Setblock {
 				}
 			}
 
-			writer.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+			// initial commands
+			if ((finalCommands == null && finalCommands.isEmpty()) == false) {
+				writer.println("\nFINALIZE");
+				for (int i = 0; i < finalCommands.size(); i++) {
+					writer.println("\t" + finalCommands.get(i));
+				}
+
+				writer.println("");
+			}
+			
+			if (Cmd_MFunc.arrayMFuncSave.size() > 0 && GroupStructure.groupCommandsArray.size() > 0) {
+				writer.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+			}
 
 			for (int i = 0; i < Cmd_MFunc.arrayMFuncSave.size(); i++) {
 				for (int j = 0; j < Cmd_MFunc.arrayMFuncSave.get(i).length; j++) {

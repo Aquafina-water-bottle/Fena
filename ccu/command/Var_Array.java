@@ -126,6 +126,7 @@ public class Var_Array {
 								// removes current
 								statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 								activatedFunc += " " + statementArgs.substring(0, statementArgs.indexOf(" "));
+								
 							} else {
 								System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
 								System.exit(0);

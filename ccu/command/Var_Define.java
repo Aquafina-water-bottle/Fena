@@ -32,7 +32,7 @@ public class Var_Define {
 			"MFUNC", "BRANCH",
 			"IMPORT", "LIBRARY", "GETDIR", "WITHIN", "GETCOORDS", 
 			"CALC", "SIN", "COS", "TAN", "INT", "DOUBLE", "GSELF",
-			"COND", "OPTIONS", "UNASSIGN", "IF", "LOOP", "NULL",
+			"COND", "OPTIONS", "UNASSIGN", "IF", "LOOP", "PRINT", "NULL",
 			};
 	// @formatter:on
 

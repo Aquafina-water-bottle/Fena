@@ -50,7 +50,8 @@ public class ReadCCUFile {
 			"LOOP",
 			"IF",
 			"USE",
-			"COND"
+			"COND",
+			"PRINT"
 			};
 	// @formatter:on
 
@@ -286,10 +287,18 @@ public class ReadCCUFile {
 						resetArray = true;
 						singleLineStatement = true;
 						break;
-
+						
 					case "SPLIT":
 						Var_Split objSplit = new Var_Split(ccuFileArray.get(i), this.tabNum);
 						getCalcArray = objSplit.getArray();
+						resetArray = true;
+						singleLineStatement = true;
+						break;
+
+					case "PRINT":
+						String printString = ccuFileArray.get(i).replaceFirst("PRINT", "");
+						System.out.println("PRINT:\t\t" + printString.replaceAll("^\\s+", ""));
+						getCalcArray = null;
 						resetArray = true;
 						singleLineStatement = true;
 						break;
