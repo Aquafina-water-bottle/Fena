@@ -528,7 +528,53 @@ GROUP {Grp_TheGreatestGroup}:
 //>
 
 //<Part E
+INITIALIZE:
+	say test
+	say test2
+	IF {1 = 1}:
+		say 1 = 1
+	ELSE:
+		say 1 != 1 first
+
+FINALIZE:
+	say test
+	say test2
+	IF {1 = 1}:
+		say 1 = 1
+	ELSE:
+		say 1 != 1 first
+
 GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
+	IF {1 = 1}:
+		say 1 = 1
+	ELSE:
+		say 1 != 1 first
+	$testIf$
+	DEF $testIf$ say testIf
+	IF {1 = 2}:
+		say 1 = 2
+	$testIf$
+	
+	IF {1 = 2}:
+		say 1 = 2
+	ELSE:
+		say 1 != 2
+		
+	IF {1 = 2}:
+		say 1 = 2
+	ELIF {2 = 5}:
+		say 2 = 5
+	ELSE:
+		say 2 != 5
+		
+/// ELSE:
+///		say 1 != 2
+	
+///	ELIF {2 = 2}:
+///		say 2 = 2
+	
+	
+	
 	COND:
 		kill @p
 		clear @p

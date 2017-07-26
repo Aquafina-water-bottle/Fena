@@ -10,11 +10,13 @@ public class Con_If {
 	private ArrayList<String> arrayGet = new ArrayList<String>();
 	private int tabNum;
 	private String fullLineGet;
+	private boolean isIf;
 
-	public Con_If(ArrayList<String> arrayGet, int tabNumGet, String fullLineGet) {
+	public Con_If(ArrayList<String> arrayGet, int tabNumGet, String fullLineGet, boolean isIf) {
 		this.arrayGet = arrayGet;
 		this.tabNum = tabNumGet;
 		this.fullLineGet = fullLineGet;
+		this.isIf = isIf;
 	}
 
 	public ArrayList<String> getArray() {
@@ -24,7 +26,8 @@ public class Con_If {
 		 * To tone it down a bit, OR / AND will not be included (maybe later, but not now since that's too insane for me atm)
 		 * It will simply be seperated by =, >, <, >=, <= or only = if not numbers
 		 */
-
+		
+		ArrayList<String> returnArray = new ArrayList<String>();
 		Boolean foundOperator = null;
 		String getOperator = null;
 		String[] splitArgsCalc = null;
@@ -35,7 +38,13 @@ public class Con_If {
 		final String[] operatorArray = {">=", "<=", ">", "<", "!=", "="};
 
 		// Removes "IF" and isolates for the arguments with brackets
-		String statementEncase = this.fullLineGet.replaceFirst("IF", "").replaceAll("^\\s+", "");
+		String statementEncase = null;
+		if (isIf) {
+			statementEncase = this.fullLineGet.replaceFirst("IF", "").replaceAll("^\\s+", "");
+		} else {
+			statementEncase = this.fullLineGet.replaceFirst("ELIF", "").replaceAll("^\\s+", "");
+		}
+		
 		if (statementEncase.startsWith("{") && statementEncase.endsWith("}:")) {
 			String statementArgs = statementEncase.substring(1, statementEncase.length() - 2);
 
@@ -62,7 +71,7 @@ public class Con_If {
 				}
 			}
 
-			if (foundOperator == false) {
+			if (foundOperator == null || foundOperator == false) {
 				System.out.println("ERROR: An operator for '" + this.fullLineGet + "' has not been found");
 				System.exit(0);
 			}
@@ -176,12 +185,15 @@ public class Con_If {
 
 				// gets rid of tab spaces
 				for (int i = 0; i < this.arrayGet.size(); i++) {
-					this.arrayGet.set(i, this.arrayGet.get(i).substring(1));
+					returnArray.add(i, this.arrayGet.get(i).substring(1));
 				}
-
-				return this.arrayGet;
+				
+				returnArray.add("CCU_ReturnTrue");
+				
+				return returnArray;
 			} else {
-				return null;
+				returnArray.add(this.fullLineGet.substring(0, tabNum - 1) + "CCU_ReturnFalse");
+				return returnArray;
 			}
 
 		} else {

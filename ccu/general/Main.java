@@ -22,7 +22,7 @@ public class Main {
 	/* TODO
 	 * -Better RCON usage - do when multiparse works
 	 * -Combiner options using .mcfunction - do when multiparse works
-	 * -Save coords option
+	 * -Parse changes only option
 	 * -Multiparse
 	 * -Fix Recurring imports
 	 * -Multithreading when checking for the version
@@ -30,15 +30,12 @@ public class Main {
 	 * -func getArray within call
 	 * 
 	 * General statements
-	 * -INITIALIZE
 	 * -FILE
-	 * -ELSE
 	 * -SET for setting arrays
 	 * 
 	 * Secondary statements
 	 * -ROUND
 	 * -Escaping (eg. `test` and ` `)
-	 * -Escaping using '/' at the beginning of a line & PARSE
 	 * -PARAM
 	 */
 
@@ -51,7 +48,7 @@ public class Main {
 		long startTime = System.nanoTime();
 		
 		// checks version
-		String currentVersion = "Build 9";
+		String currentVersion = "Build 10";
 		System.out.println("Current: " + currentVersion);
 		
 		try {
