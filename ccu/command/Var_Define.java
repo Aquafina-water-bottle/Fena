@@ -31,8 +31,8 @@ public class Var_Define {
 			"FUNC", "ACTIVATE", "CALL", 
 			"MFUNC", "BRANCH",
 			"IMPORT", "LIBRARY", "GETDIR", "WITHIN", "GETCOORDS", 
-			"CALC", "SIN", "COS", "TAN", "INT", "DOUBLE", "GSELF",
-			"COND", "OPTIONS", "UNASSIGN", "IF", "LOOP", "PRINT", "NULL",
+			"CALC", "SIN", "COS", "TAN", "INT", "DOUBLE", "GSELF", "NULL",
+			"COND", "OPTIONS", "UNASSIGN", "IF", "ELSE", "ELIF", "LOOP", "PRINT", "INITIALIZE", "FINALIZE"
 			};
 	// @formatter:on
 
@@ -577,6 +577,8 @@ public class Var_Define {
 		returnString[1] = definitionCalc;
 		returnString[2] = getEndString;
 		returnString[3] = midStringSave;
+		
+		// System.out.println(getBegString + " | " + definitionCalc + " | " + getEndString + " | " + midStringSave);
 
 		return returnString;
 	}

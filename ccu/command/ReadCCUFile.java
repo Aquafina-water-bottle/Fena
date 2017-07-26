@@ -49,9 +49,13 @@ public class ReadCCUFile {
 			"OPTIONS",
 			"LOOP",
 			"IF",
+			"ELSE",
+			"ELIF",
 			"USE",
 			"COND",
-			"PRINT"
+			"PRINT",
+			"INITIALIZE",
+			"FINALIZE"
 			};
 	// @formatter:on
 
@@ -93,6 +97,7 @@ public class ReadCCUFile {
 		boolean resetIndexCalc = false;
 		String definitionCalc = null;
 		boolean getStatement = false;
+		Boolean checkElse = null;
 
 		// Gets beginning 'DEF' part if it exists, and just gets the whole line if it doesn't
 		String giveDefString = "";
@@ -117,6 +122,8 @@ public class ReadCCUFile {
 		int i = -1;
 		while (i < this.ccuFileArray.size()) {
 
+			checkElse = null;
+
 			// Resets getStatement
 			getStatement = false;
 
@@ -132,6 +139,21 @@ public class ReadCCUFile {
 			usedDefinitionArray.clear();
 			getLineCalc = ccuFileArray.get(i) + "";
 			changedLineOnce = false;
+
+			// If the previous line is "CCU_ReturnFalse"
+			if (i > 0) {
+				String checkElseString = this.ccuFileArray.get(i - 1).trim();
+				if (checkElseString.equals("CCU_ReturnFalse")) {
+					checkElse = true;
+					this.ccuFileArray.remove(i - 1);
+					i--;
+				}
+				if (checkElseString.equals("CCU_ReturnTrue")) {
+					checkElse = false;
+					this.ccuFileArray.remove(i - 1);
+					i--;
+				}
+			}
 
 			do {
 				definitionCalc = null;
@@ -287,7 +309,7 @@ public class ReadCCUFile {
 						resetArray = true;
 						singleLineStatement = true;
 						break;
-						
+
 					case "SPLIT":
 						Var_Split objSplit = new Var_Split(ccuFileArray.get(i), this.tabNum);
 						getCalcArray = objSplit.getArray();
@@ -429,7 +451,7 @@ public class ReadCCUFile {
 							break;
 
 						case "IF":
-							Con_If objIf = new Con_If(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							Con_If objIf = new Con_If(encapsulateArray, this.tabNum, ccuFileArray.get(i), true);
 							getCalcArray = objIf.getArray();
 							resetArray = true;
 							break;
@@ -440,6 +462,29 @@ public class ReadCCUFile {
 							resetArray = true;
 							break;
 
+						case "ELSE":
+							Con_Else objElse = new Con_Else(encapsulateArray, this.tabNum, ccuFileArray.get(i), checkElse);
+							getCalcArray = objElse.getArray();
+							resetArray = true;
+							break;
+
+						case "ELIF":
+							Con_Elif objElif = new Con_Elif(encapsulateArray, this.tabNum, ccuFileArray.get(i), checkElse);
+							getCalcArray = objElif.getArray();
+							resetArray = true;
+							break;
+
+						case "INITIALIZE":
+							Cmd_Initialize objInitialize = new Cmd_Initialize(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							getCalcArray = objInitialize.getArray();
+							resetArray = true;
+							break;
+
+						case "FINALIZE":
+							Cmd_Finalize objFinalize = new Cmd_Finalize(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							getCalcArray = objFinalize.getArray();
+							resetArray = true;
+							break;
 						}
 					}
 				}

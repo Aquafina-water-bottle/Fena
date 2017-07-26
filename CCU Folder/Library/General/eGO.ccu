@@ -13,7 +13,7 @@ DEF CCU_NumberObjAdd Number dummy
 USE {ScOA}:
 	CCU_NumberObjAdd
 
-ARRAY {ACTIVATE CCU.iterateNumbers ARGS}:
+ARRAY {ACTIVATE CCU.iterateNumbers() ARGS}:
 	-1
 	20
 =//

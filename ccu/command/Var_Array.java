@@ -419,7 +419,7 @@ public class Var_Array {
 
 						getArrayCalc = new String[tempArray.size()];
 						for (int j = 0; j < tempArray.size(); j++) {
-							getArrayCalc[j] = tempArray.get(j);
+							getArrayCalc[j] = tempArray.get(j).trim();
 							if (getArrayCalc[j].equals("NULL")) {
 								getArrayCalc[j] = "";
 							}
@@ -433,7 +433,11 @@ public class Var_Array {
 
 					// end
 					if (arrayGet.size() - 1 == i) {
+
+						// creates string array
+						tempArray = ArgUtils.checkCommands(tempArray, tabNum + 1);
 						getArrayCalc = new String[tempArray.size()];
+						
 						for (int j = 0; j < tempArray.size(); j++) {
 							getArrayCalc[j] = tempArray.get(j).trim();
 							if (getArrayCalc[j].equals("NULL")) {
@@ -445,7 +449,7 @@ public class Var_Array {
 						tempArrayStorage.add(getArrayCalc);
 					}
 
-					tempArray.add(arrayGet.get(i).trim());
+					tempArray.add(arrayGet.get(i));
 				}
 
 				get2DArrayCalc = new String[tempArrayStorage.size()][];

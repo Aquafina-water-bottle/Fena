@@ -27,7 +27,7 @@ public class GeneralFile {
 
 	// just general stuff really
 	public static void dispError(Exception e) {
-		System.out.println("ERROR: Unknown");
+		System.out.println("UNKNOWN ERROR:");
 		e.printStackTrace();
 	}
 

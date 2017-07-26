@@ -96,6 +96,37 @@ FUNC {GLOBAL CCU.teamRemove}:
 			scoreboard teams remove Arr_Temp[0]
 //>
 
+//<Villager offers
+//=
+ARRAY {ACTIVATE CCU.getVillagerOffers() ARGS}:
+	{
+	///	buying then selling
+	///	item id
+	///	item count
+	///	item damage value
+	///	item tag
+	///	only the item id is necessary
+		pumpkin_pie
+		20
+	} {
+		diamond_helmet
+	} {
+		pumpkin_pie
+		50
+	} {
+		diamond_helmet
+		1
+		0
+		{ench:[{id:0,lvl:1}]}
+	}
+returns with $GetVillagerTag$
+=//
+
+///	FUNC {CCU.getVillagerOffers}:
+	
+	
+//>
+
 //<Directional based defines
 //= Required if you want an auto-saving structure block area, and repeating conditional command blocks with proper deactivation
 DEF $CMDName$ PC
