@@ -158,7 +158,7 @@ IF {$StyleDirection$ = +X}:
 		CCU_Deactivate(|0|)
 
 	FUNC {GLOBAL CCU.cmdSave}:
-		GROUP {CLOCK BLOCK redstone_block Grp_cmdSave}:
+		FINALIZE:
 			fill $CoordsOption$[x, y - 1, z, x + 3, y - 3, z + 3] air 0
 			setblock $CoordsOption$[x + 1, y - 1, z + 1] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"SAVE",posX:0,posY:2,posZ:0,sizeX:$CMDSizeX$,sizeY:$CMDSizeY$,sizeZ:$CMDSizeZ$}
 			setblock $CoordsOption$[x + 1, y - 3, z + 1] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"LOAD",posX:0,posY:4,posZ:0}
@@ -167,7 +167,6 @@ IF {$StyleDirection$ = +X}:
 			setblock $CoordsOption$[x + 1, y - 1, z + 2] redstone_lamp 0
 			setblock $CoordsOption$[x + 1, y - 3, z + 2] redstone_lamp 0
 			setblock $CoordsOption$[x + 2, y - 1, z + 1] command_block 5 replace {TrackOutput:0b,Command:"setblock ~ ~ ~1 redstone_block 0"}
-			fill GSELF air 0
 
 ///	Negative X
 IF {$StyleDirection$ = -X}:
@@ -184,7 +183,7 @@ IF {$StyleDirection$ = -X}:
 		CCU_Deactivate(|0|)
 	
 	FUNC {GLOBAL CCU.cmdSave}:
-		GROUP {CLOCK BLOCK redstone_block Grp_cmdSave}:
+		FINALIZE:
 			fill $CoordsOption$[x + 16, y - 1, z + 16, x + 13, y - 3, z + 13] air 0
 			setblock $CoordsOption$[x + 15, y - 1, z + 15] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"SAVE",posX:CALC(1 - $CMDSizeX$),posY:2,posZ:CALC(1 - $CMDSizeZ$),sizeX:$CMDSizeX$,sizeY:$CMDSizeY$,sizeZ:$CMDSizeZ$}
 			setblock $CoordsOption$[x + 15, y - 3, z + 15] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"LOAD",posX:CALC(1 - $CMDSizeX$),posY:4,posZ:CALC(1 - $CMDSizeZ$)}
@@ -193,7 +192,6 @@ IF {$StyleDirection$ = -X}:
 			setblock $CoordsOption$[x + 15, y - 1, z + 14] redstone_lamp 0
 			setblock $CoordsOption$[x + 15, y - 3, z + 14] redstone_lamp 0
 			setblock $CoordsOption$[x + 14, y - 1, z + 15] command_block 4 replace {TrackOutput:0b,Command:"setblock ~ ~ ~-1 redstone_block 0"}
-			fill GSELF air 0
 	
 ///	Positive Z
 IF {$StyleDirection$ = +Z}:
@@ -210,7 +208,7 @@ IF {$StyleDirection$ = +Z}:
 		CCU_Deactivate(|0|)
 
 	FUNC {GLOBAL CCU.cmdSave}:
-		GROUP {CLOCK BLOCK redstone_block Grp_cmdSave}:
+		FINALIZE:
 			fill $CoordsOption$[x, y - 1, z, x + 3, y - 3, z + 3] air 0
 			setblock $CoordsOption$[x + 1, y - 1, z + 1] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"SAVE",posX:0,posY:2,posZ:0,sizeX:$CMDSizeX$,sizeY:$CMDSizeY$,sizeZ:$CMDSizeZ$}
 			setblock $CoordsOption$[x + 1, y - 3, z + 1] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"LOAD",posX:0,posY:4,posZ:0}
@@ -219,7 +217,6 @@ IF {$StyleDirection$ = +Z}:
 			setblock $CoordsOption$[x + 2, y - 1, z + 1] redstone_lamp 0
 			setblock $CoordsOption$[x + 2, y - 3, z + 1] redstone_lamp 0
 			setblock $CoordsOption$[x + 1, y - 1, z + 2] command_block 3 replace {TrackOutput:0b,Command:"setblock ~1 ~ ~ redstone_block 0"}
-			fill GSELF air 0
 
 ///	Negative Z
 IF {$StyleDirection$ = -Z}:
@@ -236,7 +233,7 @@ IF {$StyleDirection$ = -Z}:
 		CCU_Deactivate(|0|)
 
 	FUNC {GLOBAL CCU.cmdSave}:
-		GROUP {CLOCK BLOCK redstone_block Grp_cmdSave}:
+		FINALIZE:
 			fill $CoordsOption$[x + 16, y - 1, z + 16, x + 13, y - 3, z + 13] air 0
 			setblock $CoordsOption$[x + 15, y - 1, z + 15] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"SAVE",posX:CALC(1 - $CMDSizeX$),posY:2,posZ:CALC(1 - $CMDSizeZ$),sizeX:$CMDSizeX$,sizeY:$CMDSizeY$,sizeZ:$CMDSizeZ$}
 			setblock $CoordsOption$[x + 15, y - 3, z + 15] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"LOAD",posX:CALC(1 - $CMDSizeX$),posY:4,posZ:CALC(1 - $CMDSizeZ$)}
@@ -245,7 +242,6 @@ IF {$StyleDirection$ = -Z}:
 			setblock $CoordsOption$[x + 14, y - 1, z + 15] redstone_lamp 0
 			setblock $CoordsOption$[x + 14, y - 3, z + 15] redstone_lamp 0
 			setblock $CoordsOption$[x + 15, y - 1, z + 14] command_block 2 replace {TrackOutput:0b,Command:"setblock ~-1 ~ ~ redstone_block 0"}
-			fill GSELF air 0
 //>
 
 
