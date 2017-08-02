@@ -24,6 +24,7 @@ public class Main {
 	 * -Better RCON usage
 	 * -Combiner options using .mcfunction
 	 * -Multithreading when checking for the version
+	 * -Config file for library set to default library folder if unspecified
 	 * 
 	 * General statements
 	 * -FILE
@@ -39,7 +40,7 @@ public class Main {
 		long startTime = System.nanoTime();
 
 		// checks version
-		String currentVersion = "Build 10";
+		String currentVersion = "Build 11";
 		System.out.println("Current: " + currentVersion);
 
 		try {
