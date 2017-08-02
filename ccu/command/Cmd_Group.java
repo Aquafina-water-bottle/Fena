@@ -3,6 +3,7 @@ package ccu.command;
 import java.util.ArrayList;
 
 import ccu.general.ArgUtils;
+import ccu.general.GeneralFile;
 import ccu.general.ReadConfig;
 import ccu.general.StringUtils;
 
@@ -38,10 +39,10 @@ public class Cmd_Group {
 		boolean gotParam = false;
 		String setblockCalc = null;
 		boolean validBlock = false;
-		
+
 		// checkCommands
 		ArgUtils.checkCommands(this.arrayGet, tabNum);
-		
+
 		// Check tab spaces
 		ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum, false);
 
@@ -227,24 +228,21 @@ public class Cmd_Group {
 			}
 
 			if (gotParam == false) {
-				System.out.println("WARNING: Group " + statementArgs + " contains no indicator for group type (defaults to PULSE)");
 				arrayBlockTypeSave.add("command_block");
 			}
 
 			// Creates the string array, and puts it in the arraylist
 			// Notice how the first element in each array is the group name and not a valid command
 
-			
-			
-			this.arrayGet = StringUtils.skipLine(this.arrayGet, ";");
-			
+			this.arrayGet = GeneralFile.combineLine(this.arrayGet, ";");
+
 			String[] arrayGroup = new String[this.arrayGet.size() + 1];
 			arrayGroup[0] = statementArgs;
 
 			for (int i = 0; i < this.arrayGet.size(); i++) {
 				arrayGroup[i + 1] = StringUtils.generalParse(this.arrayGet.get(i).trim());
 			}
-			
+
 			arrayGroupSave.add(arrayGroup);
 
 		} else {

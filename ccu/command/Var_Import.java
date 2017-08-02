@@ -32,12 +32,11 @@ public class Var_Import {
 	 * IMPORT {LIBRARY General/utils.ccu}
 	 * 
 	 */
-	
+
 	// storage for _dat files
 	public static ArrayList<String> datCoordNameArray = new ArrayList<String>();
 	public static ArrayList<Coordinates> datCoordArray = new ArrayList<Coordinates>();
 	public static ArrayList<Coordinates> datCoordFillArray = new ArrayList<Coordinates>();
-	
 
 	private ArrayList<String> arrayReturn = new ArrayList<String>();
 
@@ -48,7 +47,7 @@ public class Var_Import {
 		this.tabNum = tabNumGet;
 		this.fullLineGet = fullLineGet;
 	}
-
+	
 	public ArrayList<String> getArray() {
 
 		// import lookup type (LIBRARY = 1, WITHIN = 2)
@@ -243,24 +242,41 @@ public class Var_Import {
 
 						} else { // dat files
 							// direct, full directory, dat files
+							File importFile = new File(statementArgs);
+							if (importFile.isDirectory()) {
+
+								// Get all files within the directory and directories inside
+								getFileArray = GeneralFile.getAllFiles(importFile, "_dat.txt");
+								for (File filesInArray : getFileArray) {
+									if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+										GeneralFile importFileCalc = new GeneralFile(filesInArray);
+										datCoordFillArray(importFileCalc.getFileArray(),
+												filesInArray.getName().replace("_dat.txt", ""));
+									}
+								}
+							} else {
+								System.out.println(
+										"ERROR: Directory '" + statementArgs + "' in line '" + this.fullLineGet + "' does not exist");
+								System.exit(0);
+							}
 
 						}
 					} else { // not directory
 						if (importType == 1) { // normal ccu files
 
 							// direct, not directory, normal files
-							String importFile = GeneralFile.checkFileExtension(statementArgs, ".ccu");
+							String importFile = GeneralFile.checkFileExtension(statementArgs, ".ccu", false, true);
 							GeneralFile importFileCalc = new GeneralFile(importFile);
 							arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
 
 						} else { // dat files
 
 							// direct, not directory, dat files
-							String importFile = GeneralFile.checkFileExtension(statementArgs, "_dat.txt");
+							String importFile = GeneralFile.checkFileExtension(statementArgs, "_dat.txt", false, false);
 							GeneralFile importFileCalc = new GeneralFile(importFile);
-							
+
 							File fileNameCalc = new File(importFile);
-							datCoordFillArray(importFileCalc.getFileArray(), fileNameCalc.getName().replace("_dat.txt",""));
+							datCoordFillArray(importFileCalc.getFileArray(), fileNameCalc.getName().replace("_dat.txt", ""));
 						}
 					}
 				} else {
@@ -288,26 +304,56 @@ public class Var_Import {
 									}
 
 								} else {
-									System.out.println("ERROR: directory '" + importFile.toString() + "' in line '"
-											+ this.fullLineGet + "' does not exist");
+									System.out.println("ERROR: Directory '" + importFile.toString() + "' in line '" + this.fullLineGet
+											+ "' does not exist");
 									System.exit(0);
 								}
 
 							} else { // dat files
 								// library, full directory, dat files
 
+								File importFile = null;
+								if (statementArgs == null) {
+									importFile = ReadConfig.importLibraryPath;
+								} else {
+									importFile = new File(ReadConfig.importLibraryPath.toString() + "/" + statementArgs);
+								}
+
+								if (importFile.isDirectory()) {
+									getFileArray = GeneralFile.getAllFiles(importFile, "_dat.txt");
+									for (File filesInArray : getFileArray) {
+										if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+											GeneralFile importFileCalc = new GeneralFile(filesInArray);
+											datCoordFillArray(importFileCalc.getFileArray(),
+													filesInArray.getName().replace("_dat.txt", ""));
+										}
+									}
+
+								} else {
+									System.out.println("ERROR: Directory '" + importFile.toString() + "' in line '" + this.fullLineGet
+											+ "' does not exist");
+									System.exit(0);
+								}
+
 							}
 
 						} else { // not directory
 							if (importType == 1) { // normal ccu files
 								// library, not directory, ccu files
-								String importFile = GeneralFile
-										.checkFileExtension(ReadConfig.importLibraryPath.toString() + "/" + statementArgs, ".ccu");
+								String importFile = GeneralFile.checkFileExtension(
+										ReadConfig.importLibraryPath.toString() + "/" + statementArgs, ".ccu", false, true);
 								GeneralFile importFileCalc = new GeneralFile(importFile);
 								arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
 
 							} else { // dat files
 								// library, not directory, dat files
+
+								String importFile = GeneralFile.checkFileExtension(
+										ReadConfig.importLibraryPath.toString() + "/" + statementArgs, "_dat.txt", false, false);
+								GeneralFile importFileCalc = new GeneralFile(importFile);
+
+								File fileNameCalc = new File(importFile);
+								datCoordFillArray(importFileCalc.getFileArray(), fileNameCalc.getName().replace("_dat.txt", ""));
 
 							}
 						}
@@ -317,7 +363,13 @@ public class Var_Import {
 
 								// within, full directory, normal ccu file
 								// gets all files all within the same folder EXCEPT the normal one
-								File importFile = ReadConfig.regFilePath.getParentFile();
+								// If it has arguments, gets that directory and tries either within same parent folder or one above
+
+								if (statementArgs.isEmpty() == false) {
+									statementArgs = "/" + statementArgs;
+								}
+
+								File importFile = new File(ReadConfig.regFilePath.getParentFile() + statementArgs);
 								if (importFile.isDirectory()) {
 									getFileArray = GeneralFile.getFilesInFolder(importFile, ".ccu");
 									for (File filesInArray : getFileArray) {
@@ -328,12 +380,58 @@ public class Var_Import {
 									}
 
 								} else {
-									System.out.println("ERROR: directory '" + ReadConfig.importLibraryPath + "' in line '"
-											+ this.fullLineGet + "' does not exist");
-									System.exit(0);
+									importFile = new File(ReadConfig.regFilePath.getParentFile().getParentFile() + statementArgs);
+									if (importFile.isDirectory()) {
+										getFileArray = GeneralFile.getFilesInFolder(importFile, ".ccu");
+										for (File filesInArray : getFileArray) {
+											if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+												GeneralFile importFileCalc = new GeneralFile(filesInArray);
+												arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+											}
+										}
+
+									} else {
+										System.out.println("ERROR: Directory '" + ReadConfig.regFilePath.getParentFile()
+												+ statementArgs + "' in line '" + this.fullLineGet + "' does not exist");
+										System.exit(0);
+									}
 								}
 							} else { // imports dat files
-								// within, full direcctory, dat files
+								// within, full directory, dat files
+
+								if (statementArgs.isEmpty() == false) {
+									statementArgs = "/" + statementArgs;
+								}
+
+								File importFile = new File(ReadConfig.regFilePath.getParentFile() + statementArgs);
+								if (importFile.isDirectory()) {
+									getFileArray = GeneralFile.getFilesInFolder(importFile, "_dat.txt");
+									for (File filesInArray : getFileArray) {
+										if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+											GeneralFile importFileCalc = new GeneralFile(filesInArray);
+											datCoordFillArray(importFileCalc.getFileArray(),
+													filesInArray.getName().replace("_dat.txt", ""));
+										}
+									}
+
+								} else {
+									importFile = new File(ReadConfig.regFilePath.getParentFile().getParentFile() + statementArgs);
+									if (importFile.isDirectory()) {
+										getFileArray = GeneralFile.getFilesInFolder(importFile, "_dat.txt");
+										for (File filesInArray : getFileArray) {
+											if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+												GeneralFile importFileCalc = new GeneralFile(filesInArray);
+												datCoordFillArray(importFileCalc.getFileArray(),
+														filesInArray.getName().replace("_dat.txt", ""));
+											}
+										}
+
+									} else {
+										System.out.println("ERROR: Directory '" + ReadConfig.regFilePath.getParentFile()
+												+ statementArgs + "' in line '" + this.fullLineGet + "' does not exist");
+										System.exit(0);
+									}
+								}
 
 							}
 						} else { // not a full directory
@@ -341,14 +439,14 @@ public class Var_Import {
 
 								// within, not directory, normal ccu files
 								File importFile = new File(GeneralFile.checkFileExtension(
-										ReadConfig.regFilePath.getParentFile().toString() + "/" + statementArgs, ".ccu"));
+										ReadConfig.regFilePath.getParentFile().toString() + "/" + statementArgs, ".ccu", false, true));
 								if (importFile.isFile()) {
 									GeneralFile importFileCalc = new GeneralFile(importFile);
 									arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
 								} else {
 									importFile = new File(GeneralFile.checkFileExtension(
 											ReadConfig.regFilePath.getParentFile().getParentFile().toString() + "/" + statementArgs,
-											".ccu"));
+											".ccu", false, true));
 									if (importFile.isFile()) {
 										GeneralFile importFileCalc = new GeneralFile(importFile);
 										arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
@@ -361,7 +459,25 @@ public class Var_Import {
 
 							} else { // imports dat files
 								// within, not directory, dat files
-
+								File importFile = new File(GeneralFile.checkFileExtension(
+										ReadConfig.regFilePath.getParentFile().toString() + "/" + statementArgs, "_dat.txt", false, false));
+								if (importFile.isFile()) {
+									GeneralFile importFileCalc = new GeneralFile(importFile);
+									datCoordFillArray(importFileCalc.getFileArray(), importFile.getName().replace("_dat.txt", ""));
+								} else {
+									importFile = new File(GeneralFile.checkFileExtension(
+											ReadConfig.regFilePath.getParentFile().getParentFile().toString() + "/" + statementArgs,
+											"_dat.txt", false, false));
+									if (importFile.isFile()) {
+										GeneralFile importFileCalc = new GeneralFile(importFile);
+										datCoordFillArray(importFileCalc.getFileArray(), importFile.getName().replace("_dat.txt", ""));
+									} else {
+										System.out.println("ERROR: File '" + statementArgs + "' under line '" + this.fullLineGet
+												+ "' cannot be found");
+										System.exit(0);
+									}
+								}
+								
 							}
 						}
 					}
@@ -388,13 +504,13 @@ public class Var_Import {
 
 		return arrayReturn;
 	}
-	
+
 	private static void datCoordFillArray(ArrayList<String> getArray, String fileName) {
 		String[] calcArray = null;
-		
+
 		for (int i = 1; i < getArray.size(); i++) {
 			calcArray = getArray.get(i).split(";");
-			
+
 			datCoordNameArray.add(fileName + "." + calcArray[0]);
 			datCoordArray.add(new Coordinates(calcArray[1]));
 			datCoordFillArray.add(new Coordinates(calcArray[2]));

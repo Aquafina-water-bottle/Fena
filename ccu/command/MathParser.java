@@ -1136,7 +1136,8 @@ public class MathParser {
 														arrayDouble.get(arrayIndex + 1));
 												arrayDouble.set(arrayIndex, calcDouble);
 											} else {
-												calcLong = (long) Math.pow(arrayLong.get(arrayIndex - 1), arrayLong.get(arrayIndex + 1));
+												calcLong = (long) Math.pow(arrayLong.get(arrayIndex - 1),
+														arrayLong.get(arrayIndex + 1));
 												arrayLong.set(arrayIndex, calcLong);
 											}
 											break;
@@ -1191,7 +1192,7 @@ public class MathParser {
 											}
 											break;
 										}
-										
+
 										if (isDouble) {
 											arrayDouble.remove(arrayIndex + 1);
 											arrayDouble.remove(arrayIndex - 1);
@@ -1199,7 +1200,7 @@ public class MathParser {
 											arrayLong.remove(arrayIndex + 1);
 											arrayLong.remove(arrayIndex - 1);
 										}
-										
+
 										arrayNumType.set(arrayIndex, true);
 										arrayListCalc.set(arrayIndex, "Num");
 

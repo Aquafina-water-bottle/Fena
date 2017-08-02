@@ -25,7 +25,7 @@ public class Var_Define {
 
 	// @formatter:off
 	public static String[] exceptionArray = {
-			"DEF", "ARRAY", "SPLIT", "GLOBAL", "COORDS", "TELE",
+			"DEF", "ARRAY", "SPLIT", "GLOBAL", "COORDS", 
 			"GROUP", "PULSE", "CLOCK", "BLOCK",
 			"USE", "BEG", "END", "NOSPACE",
 			"FUNC", "ACTIVATE", "CALL", 
@@ -41,12 +41,10 @@ public class Var_Define {
 		 * Normal:
 		 * DEF $Test$ asdf
 		 * GLOBAL can be added to affect all and not just within the encapsulation
-		 * COORDS --> set of 3 or 6 numbers
-		 * TELE --> set of 5 numbers
+		 * COORDS --> set of 3, 4, 5 or 6 numbers
 		 * 
 		 * TODO
 		 * If COORDS --> name[x] gets x, name[y] gets y, name[z] gets z
-		 * If TELE --> All above and name[yr] and name[xr]
 		 */
 
 		/* arrayDefineCalc will include:
@@ -92,12 +90,6 @@ public class Var_Define {
 			// removes COORDS
 			statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
 			break;
-
-		case "TELE":
-			defineType = 5;
-			// removes TELE
-			statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
-			break;
 		}
 
 		// Gets second parameters
@@ -124,18 +116,6 @@ public class Var_Define {
 					System.exit(0);
 				}
 				// removes COORDS
-				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
-				break;
-
-			case "TELE":
-				if (defineType == null) {
-					defineType = 5;
-				} else {
-					System.out.println(
-							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
-					System.exit(0);
-				}
-				// removes TELE
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 				break;
 			}
@@ -198,11 +178,10 @@ public class Var_Define {
 			}
 
 			// tests whether coords works
-			if (defineType == 4 || defineType == 5) {
+			if (defineType == 4) {
 				coordsArrayDisp = defintionGet.split(" ");
 				coordsArrayCalc = defintionGet.replace("~", "0").split(" ");
-				if (((coordsArrayCalc.length == 3 || coordsArrayCalc.length == 6) && defineType == 4)
-						|| (coordsArrayCalc.length == 5 && defineType == 5)) {
+				if (coordsArrayCalc.length >= 3 && coordsArrayCalc.length <= 6) {
 					for (int i = 0; i < coordsArrayCalc.length; i++) {
 						if (NumberUtils.isNum(coordsArrayCalc[i]) == false) {
 							System.out.println(
@@ -210,15 +189,16 @@ public class Var_Define {
 							System.exit(0);
 						}
 					}
-				} else {
-					if (defineType == 4) {
-						System.out.println("ERROR: Coordinates must be a set of 3 or 6 numbers in line '" + this.fullLineGet + "'");
-					} else {
-						System.out
-								.println("ERROR: Teleport coordinates must be a set of 5 numbers in line '" + this.fullLineGet + "'");
-					}
-					System.exit(0);
+				}
 
+				// makes the type for teleporting
+				if (coordsArrayCalc.length == 4 || coordsArrayCalc.length == 5) {
+					defineType = 5;
+				}
+
+				// adds an additional ~ to fill up the gap
+				if (coordsArrayCalc.length == 4) {
+					defintionGet += " ~";
 				}
 			}
 
@@ -577,7 +557,7 @@ public class Var_Define {
 		returnString[1] = definitionCalc;
 		returnString[2] = getEndString;
 		returnString[3] = midStringSave;
-		
+
 		// System.out.println(getBegString + " | " + definitionCalc + " | " + getEndString + " | " + midStringSave);
 
 		return returnString;

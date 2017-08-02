@@ -74,7 +74,7 @@ public class ParamUtils {
 				}
 			}
 		}
-		
+
 		// System.out.println("MARKER: " + temp.trim() + " | " + paramMaxNum);
 
 		if (paramMaxNum == null) {
@@ -102,7 +102,7 @@ public class ParamUtils {
 			} else {
 
 				// add all existing parameters, even if there's more than enough
-				getParamsCalc = getParams.substring(1, getParams.length() - 1).split(";");
+				getParamsCalc = getParams.substring(1, getParams.length() - 1).split(";(?!`)");
 				for (int i = 0; i < getParamsCalc.length; i++) {
 					useParamsCalc.add(getParamsCalc[i]);
 				}
@@ -188,16 +188,16 @@ public class ParamUtils {
 			if (paramNum > 0) {
 
 				lineCalc = getArray.get(funcIndex);
-				
+
 				// System.out.println(tabNumCalc + " | " + tabNumPrevious);
 
 				// gets tab number
 				tabNumPrevious = tabNumCalc + 0;
-				
+
 				// System.out.println(tabNumCalc + " | " + tabNumPrevious);
-				
+
 				tabNumCalc = StringUtils.countChars(lineCalc, "\t");
-				
+
 				// System.out.println(tabNumCalc + " | " + tabNumPrevious + " | " + paramEncapsulateArray + " | " + paramEncapsulate);
 
 				// meaning tabnum went up - check if previous was FUNC or LOOP
@@ -312,22 +312,26 @@ public class ParamUtils {
 				}
 
 				String[] tempStringArray = null;
-				if (defineParamCalc.contains(",")) {
-					tempStringArray = defineParamCalc.split(",");
+				tempStringArray = defineParamCalc.split(",");
 
-					for (int i = 0; i < tempStringArray.length; i++) {
-						tempStringArray[i] = MathParser.getOperation(tempStringArray[i].trim(), fullLineGet, true, 0);
-						if (i == 0) {
-							returnStringArray[0] = tempStringArray[i];
-						} else {
-							returnStringArray[0] += " " + tempStringArray[i];
-						}
+				for (int i = 0; i < tempStringArray.length; i++) {
+					boolean isRelative = false;
+					if (tempStringArray[i].contains("~")) {
+						tempStringArray[i] = tempStringArray[i].replace("~", "");
+						isRelative = true;
 					}
 
-				} else {
-					returnStringArray[0] = MathParser.getOperation(defineParamCalc, fullLineGet, true, 0);
-				}
+					tempStringArray[i] = MathParser.getOperation(tempStringArray[i].trim(), fullLineGet, true, 0);
+					if (isRelative) {
+						tempStringArray[i] = "~" + tempStringArray[i];
+					}
 
+					if (i == 0) {
+						returnStringArray[0] = tempStringArray[i];
+					} else {
+						returnStringArray[0] += " " + tempStringArray[i];
+					}
+				}
 			}
 
 			if (coordsType == 5) {
@@ -348,20 +352,25 @@ public class ParamUtils {
 				}
 
 				String[] tempStringArray = null;
-				if (defineParamCalc.contains(",")) {
-					tempStringArray = defineParamCalc.split(",");
+				tempStringArray = defineParamCalc.split(",");
 
-					for (int i = 0; i < tempStringArray.length; i++) {
-						tempStringArray[i] = MathParser.getOperation(tempStringArray[i].trim(), fullLineGet, true, 0);
-						if (i == 0) {
-							returnStringArray[0] = tempStringArray[i];
-						} else {
-							returnStringArray[0] += " " + tempStringArray[i];
-						}
+				for (int i = 0; i < tempStringArray.length; i++) {
+					boolean isRelative = false;
+					if (tempStringArray[i].contains("~")) {
+						tempStringArray[i] = tempStringArray[i].replace("~", "");
+						isRelative = true;
 					}
 
-				} else {
-					returnStringArray[0] = MathParser.getOperation(defineParamCalc, fullLineGet, true, 0);
+					tempStringArray[i] = MathParser.getOperation(tempStringArray[i].trim(), fullLineGet, true, 0);
+					if (isRelative) {
+						tempStringArray[i] = "~" + tempStringArray[i];
+					}
+
+					if (i == 0) {
+						returnStringArray[0] = tempStringArray[i];
+					} else {
+						returnStringArray[0] += " " + tempStringArray[i];
+					}
 				}
 			}
 

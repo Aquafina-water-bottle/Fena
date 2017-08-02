@@ -1,7 +1,6 @@
 package ccu.command;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 import ccu.general.ArgUtils;
 import ccu.general.GeneralFile;
@@ -47,6 +46,8 @@ public class Cmd_MFunc {
 		 * 	MFUNC {BRANCH french_man/asdf AyyLmao Nickname}:
 		 * that means all including AyyLmao nickname is going to be within the branch
 		 */
+		
+		String tempMFuncNameSave = "";
 
 		// Removes "MFUNC" and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("MFUNC", "").replaceAll("^\\s+", "");
@@ -91,38 +92,32 @@ public class Cmd_MFunc {
 				// branchCalc fileMFuncCommandSave
 				for (int i = 0; i < fileMFuncBranchSave.size(); i++) {
 					if (i == 0) {
-						branchCalc = Var_Options.filePathFuncOption.toString() + "/" + fileMFuncBranchSave.get(i);
+						branchCalc = fileMFuncBranchSave.get(i);
 					} else {
 						branchCalc += "/" + fileMFuncBranchSave.get(i);
 					}
 				}
 			} else {
-				branchCalc = Var_Options.filePathFuncOption.toString();
+				branchCalc = "";
+				// branchCalc = Var_Options.filePathFuncOption.toString();
+			}
+			
+			// if branchCalc is not empty, adds "/"
+			if (branchCalc.isEmpty() == false) {
+				branchCalc += "/";
 			}
 
 			// Sees if there's a nickname
 			if (statementArgs.contains(" ")) {
-				arrayMFuncNameSave.add(statementArgs.substring(statementArgs.indexOf(" ") + 1));
-				branchCalc += "/" + statementArgs.substring(0, statementArgs.indexOf(" "));
+				tempMFuncNameSave = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+				branchCalc += statementArgs.substring(0, statementArgs.indexOf(" "));
 
 			} else {
-				arrayMFuncNameSave.add("");
-				branchCalc += "/" + statementArgs;
+				branchCalc += statementArgs;
 			}
 
 			// replaces all \ with /
 			branchCalc = branchCalc.replace("\\", "/");
-
-			// test for any duplicate names for all function nicknames
-			for (int i = 0; i < arrayMFuncNameSave.size(); i++) {
-				for (int j = 0; j < arrayMFuncNameSave.size(); j++) {
-					if (i != j && arrayMFuncNameSave.get(i).equals(arrayMFuncNameSave.get(j))) {
-						System.out.println("ERROR: '" + arrayMFuncNameSave.get(j)
-								+ "' is repeated as a MFunc nickname detected in line '" + this.fullLineGet + "'");
-						System.exit(0);
-					}
-				}
-			}
 
 			/* spellchecks for the file extension
 			 * if file is asdf.notmcfunction
@@ -134,10 +129,11 @@ public class Cmd_MFunc {
 			 *  -does nothing woot woot
 			 */
 
-			branchCalc = GeneralFile.checkFileExtension(branchCalc, ".mcfunction");
+			// branchCalc = GeneralFile.checkFileExtension(branchCalc, ".mcfunction", true, true);
 
-			System.out.println("File created: '" + branchCalc + "'");
-
+			// System.out.println("File created: '" + branchCalc + "'");
+			
+			/*
 			// Gets replacement for definitions via fileMFuncCommandSave
 			// if there is no '\functions\' file, you ded af
 			if (branchCalc.contains("/functions/")) {
@@ -146,13 +142,25 @@ public class Cmd_MFunc {
 			} else {
 				System.out.println("ERROR: '" + branchCalc + "' is not in a 'functions' folder");
 				System.exit(0);
-			}
+			}*/
 
 			// checkCommands() recurring method is done down here because the beginning arguments must be gotten first
 			ArgUtils.checkCommands(this.arrayGet, tabNum);
 
 			// checks tab spaces
 			ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum, false);
+			
+			arrayMFuncNameSave.add(tempMFuncNameSave);
+			// test for any duplicate names for all function nicknames
+			for (int i = 0; i < arrayMFuncNameSave.size(); i++) {
+				for (int j = 0; j < arrayMFuncNameSave.size(); j++) {
+					if (i != j && arrayMFuncNameSave.get(i).equals(arrayMFuncNameSave.get(j))) {
+						System.out.println("ERROR: '" + arrayMFuncNameSave.get(j)
+								+ "' is repeated as a MFunc nickname detected in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+				}
+			}
 
 			for (int i = 0; i < this.arrayGet.size(); i++) {
 				// Check if "CCU_COND_" is in the front
@@ -164,7 +172,7 @@ public class Cmd_MFunc {
 				}
 			}
 			
-			this.arrayGet = StringUtils.skipLine(this.arrayGet, ";");
+			this.arrayGet = GeneralFile.combineLine(this.arrayGet, ";");
 
 			// Creates the string array, and puts it in the arraylist
 			// Notice how the first element in each array is the mfunc name and not a valid command

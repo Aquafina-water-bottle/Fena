@@ -2,11 +2,13 @@
 ///	C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\CCU - Command Combiner Unlimited\tests\test.ccu
 
 //<Definitions
+IMPORT {GETDIR GETCOORDS C:\Users\Austin\Documents\Austin\powder game code\eGO\CCU Events}
+
 DEF ASDF DANK
 DEF DANK MEMES 5
 DEF GLOBAL aFloat 3333333333.1111111111111111111111
 DEF GLOBAL COORDS $DankCoords$ 3.11 ~ 0.0000
-DEF GLOBAL TELE $DankCoords$ -301 51 930.0 40 0
+DEF GLOBAL COORDS $DankCoords$ -301 51 930.0 40 0
 DEF RandNum 5
 DEF ScOP scoreboard players operation
 DEF $test$ ScOP @p TEST
@@ -35,7 +37,7 @@ FUNC {GetRandFunc2}:
 //<Options	
 OPTIONS:
 	blockOption stonebrick 0
-///	coordsOption 383 69 95
+	coordsOption 383 69 95
 
 OPTIONS:
 ///	Style
@@ -48,7 +50,7 @@ OPTIONS:
 	filePathFuncOption C:\Users\Austin\Documents\Austin\powder game code\eGO\Server Stuff\1.12\world\data\functions\custom
 ///	Filepath to MCFunctions
 /// Preserve coordinates for each group
-	keepCoordsOption false
+	parseChangesOption false
 //>
 
 //<Part A
@@ -529,13 +531,20 @@ GROUP {Grp_TheGreatestGroup}:
 
 //<Part E
 INITIALIZE:
+	DEF COORDS $TeleCoords$ 1 2 3 0 ~1
+	say $TeleCoords$[ry]
+	say $TeleCoords$[rx]
+	
 	say test
 	say test2
 	IF {1 = 1}:
 		say 1 = 1
 	ELSE:
 		say 1 != 1 first
-
+		
+	`				say test`
+	setblock Grp_asdf air 0
+	
 FINALIZE:
 	say test
 	say test2
@@ -549,6 +558,9 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 		say 1 = 1
 	ELSE:
 		say 1 != 1 first
+	
+	say this has been changed asdf
+	
 	$testIf$
 	DEF $testIf$ say testIf
 	IF {1 = 2}:
@@ -573,6 +585,12 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 ///	ELIF {2 = 2}:
 ///		say 2 = 2
 	
+	DEF $EscapeTest$ ``
+	say --> $EscapeTest$ <--
+	
+	DEF $EscapeTest$ say escape test
+	$EscapeTest$
+	`$EscapeTest$`
 	
 	
 	COND:
@@ -611,31 +629,31 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 		DEF $Num$ 5
 
 		DEF COORDS $Coords1$ 49 36 -45
-		DEF TELE $CoordsTP1$ 49 36 -45 -90 0
+		DEF COORDS $CoordsTP1$ 49 36 -45 -90 0
 		DEF $Event1$ Ice Race
 		DEF $EventShort1$ ir
 		DEF $EventC1$ aqua
 
 		DEF COORDS $Coords2$ 75 7 -80
-		DEF TELE $CoordsTP2$ 75 7 -80 90 0
+		DEF COORDS $CoordsTP2$ 75 7 -80 90 0
 		DEF $Event2$ Slow Race
 		DEF $EventShort2$ sr
 		DEF $EventC2$ gray
 
 		DEF COORDS $Coords3$ 73 7 -102
-		DEF TELE $CoordsTP3$ 73 7 -102 90 0
+		DEF COORDS $CoordsTP3$ 73 7 -102 90 0
 		DEF $Event3$ Nether Race
 		DEF $EventShort3$ nr
 		DEF $EventC3$ red
 
 		DEF COORDS $Coords4$ 23 7 -133
-		DEF TELE $CoordsTP4$ 23 7 -133 -90 0
+		DEF COORDS $CoordsTP4$ 23 7 -133 -90 0
 		DEF $Event4$ Evil Race
 		DEF $EventShort4$ evilr
 		DEF $EventC4$ gray
 
 		DEF COORDS $Coords5$ 218 18 -37
-		DEF TELE $CoordsTP5$ 218 18 -37 -90 0
+		DEF COORDS $CoordsTP5$ 218 18 -37 -90 0
 		DEF $Event5$ Diamond Race
 		DEF $EventShort5$ dr
 		DEF $EventC5$ aqua
@@ -680,7 +698,7 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 		DEF GLOBAL $Num$ 5
 
 		DEF COORDS $Coords1$ 49 36 -45
-		DEF TELE $CoordsTP1$ 49 36 -45 -90 0
+		DEF COORDS $CoordsTP1$ 49 36 -45 -90 0
 		DEF $Event1$ Ice Race
 		DEF $EventShort1$ ir
 		DEF $EventC1$ aqua
@@ -862,6 +880,8 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 	CCU.teamRemove(Team_GeneralScoreboardStart)
 
 	fill Grp_asdf air 0
+	say Pictionary.Grp_MainStart
+	Royal_Rumble.Grp_MainStart
 //>
 
 //<Part F
@@ -925,7 +945,9 @@ GROUP {Grp_TestingDocumentation}:
 		say asdf != asdf2
 	
 	
-	IMPORT {GETCOORDS C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\PC - Pictionary\Pictionary_dat.txt}
+///	IMPORT {GETDIR GETCOORDS WITHIN}
+	IMPORT {GETDIR WITHIN test2}
+	say $ThisIsAsdf$
 	setblock Pictionary.Grp_MainStart redstone_block 0
 	
 	DEF $RandString$ This is a random string
@@ -935,7 +957,7 @@ GROUP {Grp_TestingDocumentation}:
 	say Arr_Temp[S]
 	
 ///	Returns '6'
-	say Arr_Temp[L]
+	say Arr_Temp[L] aSdFmarker // aSdFmarker
 	
 //>
 
@@ -975,7 +997,19 @@ GROUP {Grp_TestingSqrt}:
 =//
 //>
 
+//<Part H
+MFUNC {functionTest MFunc_TestName}:
+	say test
+	function MFunc_TestName if @a[TPpl=1]
+	function MFunc_TestName2 if @a[TPpl=1]
+	
+MFUNC {functionTest2 MFunc_TestName2}:
+	say test
+	function MFunc_TestName if @a[TPpl=1]
+	function MFunc_TestName2 if @a[TPpl=1]
 
+
+//>
 
 
 

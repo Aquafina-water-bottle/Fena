@@ -1,19 +1,23 @@
 INITIALIZE
+	say 0
+	say ~1
 	say test
 	say test2
 	say 1 = 1
-	fill ~5 ~5 ~5 ~22 ~22 ~16 air 0
+					say test
+	setblock 384 70 104 air 0
+	fill 383 69 95 400 86 106 air 0
 
-GROUP | Grp_AyyLmao1_A | PULSE		[~6 ~6 ~6 | stonebrick 0]
+GROUP | Grp_AyyLmao1_A | PULSE		[384 70 96 | stonebrick 0]
 	say 1 _A
 
-GROUP | Grp_AyyLmao2_A | PULSE		[~6 ~8 ~6 | stonebrick 0]
+GROUP | Grp_AyyLmao2_A | PULSE		[384 72 96 | stonebrick 0]
 	say 2 _A
 
-GROUP | Grp_AyyLmao3_A | PULSE		[~6 ~10 ~6 | stonebrick 0]
+GROUP | Grp_AyyLmao3_A | PULSE		[384 74 96 | stonebrick 0]
 	say 3 _A
 
-GROUP | Grp_MainGroup_A | PULSE		[~6 ~12 ~6 | stonebrick 0]
+GROUP | Grp_MainGroup_A | PULSE		[384 76 96 | stonebrick 0]
 	say 1
 	say 2 > 1
 	say 2
@@ -21,16 +25,16 @@ GROUP | Grp_MainGroup_A | PULSE		[~6 ~12 ~6 | stonebrick 0]
 	say 3
 	say okay
 
-GROUP | Grp_AyyLmao1_B | PULSE		[~6 ~14 ~6 | stonebrick 0]
+GROUP | Grp_AyyLmao1_B | PULSE		[384 78 96 | stonebrick 0]
 	say 1 _B
 
-GROUP | Grp_AyyLmao2_B | PULSE		[~6 ~16 ~6 | stonebrick 0]
+GROUP | Grp_AyyLmao2_B | PULSE		[384 80 96 | stonebrick 0]
 	say 2 _B
 
-GROUP | Grp_AyyLmao3_B | PULSE		[~6 ~18 ~6 | stonebrick 0]
+GROUP | Grp_AyyLmao3_B | PULSE		[384 82 96 | stonebrick 0]
 	say 3 _B
 
-GROUP | Grp_MainGroup_B | PULSE		[~6 ~20 ~6 | stonebrick 0]
+GROUP | Grp_MainGroup_B | PULSE		[384 84 96 | stonebrick 0]
 	say 1
 	say 2 > 1
 	say 2
@@ -38,16 +42,16 @@ GROUP | Grp_MainGroup_B | PULSE		[~6 ~20 ~6 | stonebrick 0]
 	say 3
 	say okay
 
-GROUP | Grp_AyyLmao1_C | PULSE		[~6 ~6 ~8 | stonebrick 0]
+GROUP | Grp_AyyLmao1_C | PULSE		[384 70 98 | stonebrick 0]
 	say 1 _C
 
-GROUP | Grp_AyyLmao2_C | PULSE		[~6 ~8 ~8 | stonebrick 0]
+GROUP | Grp_AyyLmao2_C | PULSE		[384 72 98 | stonebrick 0]
 	say 2 _C
 
-GROUP | Grp_AyyLmao3_C | PULSE		[~6 ~10 ~8 | stonebrick 0]
+GROUP | Grp_AyyLmao3_C | PULSE		[384 74 98 | stonebrick 0]
 	say 3 _C
 
-GROUP | Grp_MainGroup_C | PULSE		[~6 ~12 ~8 | stonebrick 0]
+GROUP | Grp_MainGroup_C | PULSE		[384 76 98 | stonebrick 0]
 	say 1
 	say 2 > 1
 	say 2
@@ -55,33 +59,33 @@ GROUP | Grp_MainGroup_C | PULSE		[~6 ~12 ~8 | stonebrick 0]
 	say 3
 	say okay
 
-GROUP | Grp_APulse | PULSE		[~6 ~14 ~8 | stonebrick 0]
+GROUP | Grp_APulse | PULSE		[384 78 98 | stonebrick 0]
 	say a
 	say b
 	function custom:RayCaster/theHunted/test/init
-	setblock ~-4 ~0 ~0 air 0
+	setblock 384 78 98 air 0
 
-GROUP | Grp_B | PULSE		[~6 ~16 ~8 | stonebrick 0]
+GROUP | Grp_B | PULSE		[384 80 98 | stonebrick 0]
 	say b
 	g;l;o;b;a;l
 	Arr_Test2[S]
 
-GROUP | Grp_C | CLOCK		[~6 ~18 ~8 | stonebrick 0]
+GROUP | Grp_C | CLOCK		[384 82 98 | stonebrick 0]
 	say c
 
-GROUP | Grp_DClock | CLOCK		[~6 ~20 ~8 | stonebrick 0]
+GROUP | Grp_DClock | CLOCK		[384 84 98 | stonebrick 0]
 	say d
 
-GROUP | Grp_E | PULSE		[~6 ~6 ~10 | stonebrick 0]
+GROUP | Grp_E | PULSE		[384 70 100 | stonebrick 0]
 	say e
 
-GROUP | Grp_F | PULSE		[~6 ~8 ~10 | stonebrick 0]
+GROUP | Grp_F | PULSE		[384 72 100 | stonebrick 0]
 	say f
 
-GROUP | Grp_G | PULSE		[~6 ~10 ~10 | stonebrick 0]
+GROUP | Grp_G | PULSE		[384 74 100 | stonebrick 0]
 	say g
 
-GROUP | Grp_Test2 | PULSE		[~6 ~12 ~10 | stonebrick 0]
+GROUP | Grp_Test2 | PULSE		[384 76 100 | stonebrick 0]
 	say test
 	say ABORTMISSION
 	say hell yeah
@@ -89,16 +93,16 @@ GROUP | Grp_Test2 | PULSE		[~6 ~12 ~10 | stonebrick 0]
 	lmao
 	ayy
 
-GROUP | Grp_Test | PULSE		[~6 ~14 ~10 | stonebrick 0]
+GROUP | Grp_Test | PULSE		[384 78 100 | stonebrick 0]
 	say $SA$
 	ayy
 	say LiterallyAbortMission
 	lmao
-	fill ~-5 ~2 ~0 ~10 ~4 ~0 air 0
+	fill 384 80 100 399 82 100 air 0
 	say yas
 
-GROUP | Grp_AyyLmao | PULSE		[~6 ~16 ~10 | stonebrick 0]
-	setblock ~-1 ~0 ~0 air 0
+GROUP | Grp_AyyLmao | PULSE		[384 80 100 | stonebrick 0]
+	setblock 384 80 100 air 0
 	say MEMES 5
 	say -301 MARKER
 	say -582 RandCalc
@@ -146,7 +150,7 @@ GROUP | Grp_AyyLmao | PULSE		[~6 ~16 ~10 | stonebrick 0]
 	say 20
 	say 21
 
-GROUP | Grp_TheBestGroup | PULSE		[~6 ~20 ~10 | stonebrick 0]
+GROUP | Grp_TheBestGroup | PULSE		[384 84 100 | stonebrick 0]
 	say a
 	say b
 	say c
@@ -169,7 +173,7 @@ GROUP | Grp_TheBestGroup | PULSE		[~6 ~20 ~10 | stonebrick 0]
 	 | say s
 	 L say t
 
-GROUP | Grp_TheGreatestGroup | PULSE		[~6 ~6 ~12 | stonebrick 0]
+GROUP | Grp_TheGreatestGroup | PULSE		[384 70 102 | stonebrick 0]
 	say 1
 	say 2 asdfasdf
 	say 3 asdfasdf
@@ -217,12 +221,16 @@ GROUP | Grp_TheGreatestGroup | PULSE		[~6 ~6 ~12 | stonebrick 0]
 	say 32
 	say 33 34 35 36 37 38 39 40 tellraw @a {"text":"ayylmao"}
 
-GROUP | Grp_asdf | CLOCK		[~6 ~6 ~14 | stained_hardened_clay 11]
+GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
 	say 1 = 1
+	say this has been changed asdf
 	$testIf$
 	say testIf
 	say 1 != 2
 	say 2 != 5
+	say -->  <--
+	say escape test
+	$EscapeTest$
 	 | minecraft:kill @p
 	 L minecraft:clear @p
 	say 2147483648
@@ -486,9 +494,11 @@ GROUP | Grp_asdf | CLOCK		[~6 ~6 ~14 | stained_hardened_clay 11]
 	scoreboard teams option RRb RRb friendlyfire
 	scoreboard teams remove RRg
 	scoreboard teams remove RRb
-	fill ~-13 ~-15 ~-1 ~2 ~0 ~0 air 0
+	fill 384 70 104 399 85 105 air 0
+	say 94 10 190
+	-128 7 410
 
-GROUP | Grp_TestingDocumentation | PULSE		[~6 ~10 ~12 | stonebrick 0]
+GROUP | Grp_TestingDocumentation | PULSE		[384 74 102 | stonebrick 0]
 	say -68.43 14 421.6
 	say -62.43 14 421.6;-64.43 14 421.6;-66.43 14 421.6;-68.43 14 421.6;-68.4 14 415.6;-66.4 14 415.6;-64.4 14 415.6
 	say 7
@@ -507,60 +517,60 @@ GROUP | Grp_TestingDocumentation | PULSE		[~6 ~10 ~12 | stonebrick 0]
 	say 9 != 5
 	say 10 != 5
 	say asdf != asdf2
-	setblock 80 10 176 redstone_block 0
+	say the real asdf
+	setblock 94 10 190 redstone_block 0
 	say This;is;a;ran;om;string
-	say 6
+	say 6 aSdFmarker
 
 FINALIZE
 	say test
 	say test2
 	say 1 = 1
-	setblock ~6 ~6 ~6 stonebrick 0
-	setblock ~6 ~8 ~6 stonebrick 0
-	setblock ~6 ~10 ~6 stonebrick 0
-	setblock ~6 ~12 ~6 stonebrick 0
-	setblock ~6 ~14 ~6 stonebrick 0
-	setblock ~6 ~16 ~6 stonebrick 0
-	setblock ~6 ~18 ~6 stonebrick 0
-	setblock ~6 ~20 ~6 stonebrick 0
-	setblock ~6 ~6 ~8 stonebrick 0
-	setblock ~6 ~8 ~8 stonebrick 0
-	setblock ~6 ~10 ~8 stonebrick 0
-	setblock ~6 ~12 ~8 stonebrick 0
-	setblock ~6 ~14 ~8 stonebrick 0
-	setblock ~6 ~16 ~8 stonebrick 0
-	setblock ~6 ~18 ~8 stonebrick 0
-	setblock ~6 ~20 ~8 stonebrick 0
-	setblock ~6 ~6 ~10 stonebrick 0
-	setblock ~6 ~8 ~10 stonebrick 0
-	setblock ~6 ~10 ~10 stonebrick 0
-	setblock ~6 ~12 ~10 stonebrick 0
-	setblock ~6 ~14 ~10 stonebrick 0
-	setblock ~6 ~16 ~10 stonebrick 0
-	setblock ~6 ~20 ~10 stonebrick 0
-	setblock ~6 ~6 ~12 stonebrick 0
-	setblock ~6 ~6 ~14 stained_hardened_clay 11
-	setblock ~6 ~10 ~12 stonebrick 0
+	setblock 384 70 96 stonebrick 0
+	setblock 384 72 96 stonebrick 0
+	setblock 384 74 96 stonebrick 0
+	setblock 384 76 96 stonebrick 0
+	setblock 384 78 96 stonebrick 0
+	setblock 384 80 96 stonebrick 0
+	setblock 384 82 96 stonebrick 0
+	setblock 384 84 96 stonebrick 0
+	setblock 384 70 98 stonebrick 0
+	setblock 384 72 98 stonebrick 0
+	setblock 384 74 98 stonebrick 0
+	setblock 384 76 98 stonebrick 0
+	setblock 384 78 98 stonebrick 0
+	setblock 384 80 98 stonebrick 0
+	setblock 384 82 98 stonebrick 0
+	setblock 384 84 98 stonebrick 0
+	setblock 384 70 100 stonebrick 0
+	setblock 384 72 100 stonebrick 0
+	setblock 384 74 100 stonebrick 0
+	setblock 384 76 100 stonebrick 0
+	setblock 384 78 100 stonebrick 0
+	setblock 384 80 100 stonebrick 0
+	setblock 384 84 100 stonebrick 0
+	setblock 384 70 102 stonebrick 0
+	setblock 384 70 104 stained_hardened_clay 11
+	setblock 384 74 102 stonebrick 0
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-MFUNC | MFunc_MainRaycaster | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/init.mcfunction
+MFUNC | MFunc_MainInit | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/init.mcfunction
 	say test
 	say test
 	say test
 	say 1 = 1
 	say test
 	say MyBoyAsdf
-	CCU_ReturnFalse
 
-MFUNC | MFunc_MainInit | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/test/init.mcfunction
+MFUNC | MFunc_InitTest | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/test/init.mcfunction
 	say asdf
 	say asdf
 	say asdf
 	say asdf
 
-MFUNC | MFunc_InitTest | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/test.mcfunction
+MFUNC | MFunc_Test | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/test.mcfunction
 	say asdf2
 	say asdf2
 	say asdf2
@@ -723,10 +733,10 @@ MFUNC | MFunc_InitTest | C:/Users/Austin/Documents/Austin/powder game code/eGO/S
 	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=72,score_RRpa_min=72] ~ ~ ~ particle happyVillager ~-0.0 ~1.5 ~0.4 0 0 0 0 0 force
 	execute @e[type=AreaEffectCloud,tag=RRParticle,score_RRtpo=2,score_RRtpo_min=2,score_RRpa=72,score_RRpa_min=72] ~ ~ ~ particle happyVillager ~0.0 ~1.5 ~-0.4 0 0 0 0 0 force
 
-MFUNC | MFunc_Test | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/asdf.mcfunction
+MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/asdf.mcfunction
 	say theRealAsdf
 
-MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/Main.mcfunction
+MFUNC | MFunc_MainRaycaster | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/RayCaster/theHunted/Main.mcfunction
 	Func_test|0|
 	say
 	say
@@ -804,3 +814,13 @@ MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/
 	say 3
 	say 10
 	say YESSSSSSSSSSSSSSSSS
+
+MFUNC | MFunc_TestName | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/functionTest.mcfunction
+	say test
+	function custom:functionTest if @a[score_TPpl=1,score_TPpl_min=1]
+	function custom:functionTest2 if @a[score_TPpl=1,score_TPpl_min=1]
+
+MFUNC | MFunc_TestName2 | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/functionTest2.mcfunction
+	say test
+	function custom:functionTest if @a[score_TPpl=1,score_TPpl_min=1]
+	function custom:functionTest2 if @a[score_TPpl=1,score_TPpl_min=1]

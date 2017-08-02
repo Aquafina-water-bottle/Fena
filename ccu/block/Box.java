@@ -343,7 +343,7 @@ public class Box {
 					break;
 				}
 			}
-			
+
 			// gets 2nd fill y length
 			for (int y = 0; y < GroupStructure.styleOptionY; y++) {
 				fillCoordsArrayCalc = 0;
@@ -363,24 +363,163 @@ public class Box {
 				}
 			}
 		}
-		
+
 		// System.out.println(fillCoordsCalcY + " | " + fillCoordsCalc);
 		printArray(blockArray, fillCoordsCalc, fillCoordsCalcY);
-		
+
 		if (foundEmptyLineXZ == true) {
 			fillCoordsCalc--;
 		}
-		
+
 		if (foundEmptyLineY == true) {
 			fillCoordsCalcY--;
 		}
-		
+
 		fillCoords1.switchDirection().addCoordinates(Var_Options.coordsOption);
 		fillCoords2.addCoordinates(17, fillCoordsCalcY + 1, fillCoordsCalc + 1).switchDirection()
 				.addCoordinates(Var_Options.coordsOption);
 	}
 
-	private static void replaceCoords(ArrayList<String[]> arrayList, boolean isFunction) {
+	private static void replaceCoordsSingle(ArrayList<String> arrayList, boolean isFunction, int startInt) {
+		/** Any setblock/fill [groupname] will have their coords placed here
+		 * eg. fill Grp_asdf air 0 --> "Grp_asdf" will be replaced with coords
+		 */
+		boolean validFunctionCoords = true;
+		boolean foundCoords = false;
+
+		if (isFunction && Var_Options.coordsOption.isRelative()) {
+			validFunctionCoords = false;
+		}
+
+		// get group command array
+		for (int i = 0; i < arrayList.size(); i++) {
+
+			// iterating through group names
+			// keep in mind Grp_Name[x, 5 + y, z] and {"value":"fill Grp_Name air 0"}
+			do {
+				// needs the do {} while bit because of 'fill'
+				/*
+				importNameCoordArray.add(Cmd_Group.arrayGroupSave.get(i)[0]);
+				importCoordArray.add(groupNameCoordArray[i]);
+				importFillCoordArray.add(groupNameFillArray[i]);
+				 */
+
+				for (int nameIndex = 0; nameIndex < importNameCoordArray.size(); nameIndex++) {
+
+					String begStringCalc = null;
+					String coordsCalc = null;
+					String paramsCalc = null;
+					String[] getArrayCalc = null;
+
+					Integer begIndex = null;
+					Integer endIndex = null;
+
+					foundCoords = false;
+
+					if (arrayList.get(i).contains(importNameCoordArray.get(nameIndex))) {
+
+						String testGroupName = arrayList.get(i).substring(
+								arrayList.get(i).indexOf(importNameCoordArray.get(nameIndex)) - 1,
+								arrayList.get(i).indexOf(importNameCoordArray.get(nameIndex))
+										+ importNameCoordArray.get(nameIndex).length() + 1);
+
+						boolean properGroupName = false;
+
+						// if it's a direct group name
+						if (testGroupName.trim().equals(importNameCoordArray.get(nameIndex))) {
+							properGroupName = true;
+						}
+
+						// if the group name has [ after it
+						if (testGroupName.endsWith("[") && testGroupName.trim().substring(0, testGroupName.trim().length() - 1)
+								.equals(importNameCoordArray.get(nameIndex))) {
+							properGroupName = true;
+						}
+
+						if (properGroupName) {
+							/*
+							String testSetblockAsdf = testSetblock.substring(testSetblock.indexOf("Grp_GeneralOptionsTFClock") - 1,
+							testSetblock.indexOf("Grp_GeneralOptionsTFClock") + "Grp_GeneralOptionsTFClock".length() + 1);
+							 */
+							foundCoords = true;
+
+							if (validFunctionCoords == false) {
+								System.out.println("ERROR: '" + importNameCoordArray.get(nameIndex) + "' in line '" + arrayList.get(i)
+										+ "' cannot be parsed because it is a within a function and coordsOption is relative");
+								System.exit(0);
+							}
+
+							begIndex = arrayList.get(i).indexOf(importNameCoordArray.get(nameIndex));
+							endIndex = arrayList.get(i).indexOf(importNameCoordArray.get(nameIndex))
+									+ importNameCoordArray.get(nameIndex).length();
+
+							// gets everything before the coords
+							begStringCalc = arrayList.get(i).substring(0, begIndex);
+
+							// gets parameters and anything after the coords
+							paramsCalc = arrayList.get(i).substring(endIndex);
+
+							coordsCalc = importCoordArray.get(nameIndex).getString();
+							if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
+								coordsCalc += " " + importFillCoordArray.get(nameIndex).getString();
+							}
+						}
+					}
+
+					if (foundCoords) {
+
+						if (paramsCalc.startsWith("[")) {
+							getArrayCalc = ParamUtils.parseCoordinates(paramsCalc, coordsCalc, 4, arrayList.get(i));
+							coordsCalc = getArrayCalc[0];
+							paramsCalc = getArrayCalc[1];
+						}
+
+						arrayList.set(i, begStringCalc + coordsCalc + paramsCalc);
+						break;
+					}
+
+					String selfReference = "GSELF";
+					if (arrayList.get(i).contains(selfReference)) {
+						foundCoords = true;
+
+						if (validFunctionCoords == false) {
+							System.out.println("ERROR: '" + selfReference + "' in line '" + arrayList.get(i)
+									+ "' cannot be parsed because it is a within a function and coordsOption is relative");
+							System.exit(0);
+						}
+
+						begIndex = arrayList.get(i).indexOf(selfReference);
+						endIndex = arrayList.get(i).indexOf(selfReference) + selfReference.length();
+
+						// gets everything before the coords
+						begStringCalc = arrayList.get(i).substring(0, begIndex);
+
+						// gets parameters and anything after the coords
+						paramsCalc = arrayList.get(i).substring(endIndex);
+
+						coordsCalc = groupNameCoordArray[i].getString();
+						if (begStringCalc.endsWith("fill ") || begStringCalc.endsWith("clone ")) {
+							coordsCalc += " " + importFillCoordArray.get(i).getString();
+						}
+					}
+
+					if (foundCoords) {
+
+						if (paramsCalc.startsWith("[")) {
+							getArrayCalc = ParamUtils.parseCoordinates(paramsCalc, coordsCalc, 4, arrayList.get(i));
+							coordsCalc = getArrayCalc[0];
+							paramsCalc = getArrayCalc[1];
+						}
+
+						arrayList.set(i, begStringCalc + coordsCalc + paramsCalc);
+						break;
+					}
+				}
+			} while (foundCoords);
+		}
+	}
+
+	private static void replaceCoords(ArrayList<String[]> arrayList, boolean isFunction, int startInt) {
 		/** Any setblock/fill [groupname] will have their coords placed here
 		 * eg. fill Grp_asdf air 0 --> "Grp_asdf" will be replaced with coords
 		 */
@@ -395,12 +534,7 @@ public class Box {
 		for (int i = 0; i < arrayList.size(); i++) {
 
 			// get actual commands
-			for (int j = 0; j < arrayList.get(i).length; j++) {
-
-				// if isFunction - skips 1st line
-				if (isFunction && j == 0) {
-					j = 1;
-				}
+			for (int j = startInt; j < arrayList.get(i).length; j++) {
 
 				// iterating through group names
 				// keep in mind Grp_Name[x, 5 + y, z] and {"value":"fill Grp_Name air 0"}
@@ -426,11 +560,23 @@ public class Box {
 
 						if (arrayList.get(i)[j].contains(importNameCoordArray.get(nameIndex))) {
 
-							String testGroupName = arrayList.get(i)[j].substring(
-									arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex)) - 1,
-									arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex))
-											+ importNameCoordArray.get(nameIndex).length() + 1);
+							int begCoordIndex = 0;
+							int endCoordIndex = 0;
 
+							// test if you can properly substring it lol
+							begCoordIndex = arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex)) - 1;
+							if (begCoordIndex < 0) {
+								begCoordIndex = 0;
+							}
+
+							endCoordIndex = arrayList.get(i)[j].indexOf(importNameCoordArray.get(nameIndex))
+									+ importNameCoordArray.get(nameIndex).length() + 1;
+
+							if (endCoordIndex > arrayList.get(i)[j].length() - 1) {
+								endCoordIndex = arrayList.get(i)[j].length();
+							}
+
+							String testGroupName = arrayList.get(i)[j].substring(begCoordIndex, endCoordIndex);
 							boolean properGroupName = false;
 
 							// if it's a direct group name
@@ -619,7 +765,9 @@ public class Box {
 		}
 
 		// Replaces the coords for the commands
-		replaceCoords(GroupStructure.groupCommandsArray, false);
-		replaceCoords(Cmd_MFunc.arrayMFuncSave, true);
+		replaceCoords(GroupStructure.groupCommandsArray, false, 0);
+		replaceCoords(Cmd_MFunc.arrayMFuncSave, true, 1);
+		replaceCoordsSingle(Setblock.initialCommands, true, 0);
+		replaceCoordsSingle(Setblock.finalCommands, true, 0);
 	}
 }

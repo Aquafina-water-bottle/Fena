@@ -1,0 +1,19 @@
+GROUP {PULSE Grp_MainStart}:
+	say 1
+	say 2
+	say 3
+
+GROUP {CLOCK Grp_MainClock}:
+	@e[type=ArmorStand,CWStand] CWGenTime + 1
+	@e[type=ArmorStand,CWStand,CWGenTime=40] @e[name=CWCookieDroper] give @p[r=1,m=2] cookie 1 0
+	@e[type=ArmorStand,CWStand,CWGenTime=40] CWGenTime = 0
+
+GROUP {CLOCK Grp_MainEnd}:
+	@e[type=ArmorStand,CWStand] CWGenTime - 1
+	@e[type=ArmorStand,CWStand,CWGenTime>=40] say test
+	@e[type=ArmorStand,CWStand,CWGenTime<=40] say test
+	@e[type=ArmorStand,CWStand,CWGenTime>40] say test
+	@e[type=ArmorStand,CWStand,CWGenTime<40] say test
+	
+	@e[type=ArmorStand,CWStand,CWGenTime>=40<=80] say test
+	@e[type=ArmorStand,CWStand,CWGenTime>40<80] say test

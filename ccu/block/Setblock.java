@@ -23,6 +23,9 @@ public class Setblock {
 	// final commands are the setblock commands for non-command blocks
 	public static ArrayList<String> finalCommands = new ArrayList<String>();
 
+	// only commands that were detected to be different
+	public static ArrayList<String> changedCommands = new ArrayList<String>();
+
 	// the command blocks except with added backslashes to work with the combiner
 	public static ArrayList<String> combinerSetblockCommands = new ArrayList<String>();
 
@@ -121,12 +124,33 @@ public class Setblock {
 			}
 		}
 
+		String cmdFileCalc = ReadConfig.regFilePath.getName().toString().substring(0,
+				ReadConfig.regFilePath.getName().toString().indexOf(".ccu")) + "_cmd.txt";
+		File writeCmdFile = new File(ReadConfig.regFilePath.getParentFile().toString() + "//" + cmdFileCalc);
+
+		// if parseChanges is true: reads name_cmd.txt file if it exists, then copies over only different commands
+		if (Var_Options.parseChanges && writeCmdFile.isFile()) {
+			GeneralFile configFile = new GeneralFile(writeCmdFile);
+			ArrayList<String> readCmdFile = configFile.getFileArray();
+			for (int i = 0; i < setblockCommands.size(); i++) {
+				boolean differentCommand = true;
+
+				for (int j = 0; j < readCmdFile.size(); j++) {
+					if (setblockCommands.get(i).equals(readCmdFile.get(j))) {
+						differentCommand = false;
+						break;
+					}
+				}
+
+				if (differentCommand) {
+					changedCommands.add(setblockCommands.get(i));
+					setblockCommands.set(i, "CHANGED " + setblockCommands.get(i));
+				}
+			}
+		}
+
 		// writes the name_cmd.txt file
 		if (Var_Options.commandOption == true) {
-			String cmdFileCalc = ReadConfig.regFilePath.getName().toString().substring(0,
-					ReadConfig.regFilePath.getName().toString().indexOf(".ccu")) + "_cmd.txt";
-			File writeCmdFile = new File(ReadConfig.regFilePath.getParentFile().toString() + "//" + cmdFileCalc);
-
 			PrintWriter writer = null;
 			try {
 				writer = new PrintWriter(writeCmdFile, "UTF-8");
@@ -221,7 +245,7 @@ public class Setblock {
 
 				writer.println("");
 			}
-			
+
 			if (Cmd_MFunc.arrayMFuncSave.size() > 0 && GroupStructure.groupCommandsArray.size() > 0) {
 				writer.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 			}
@@ -324,33 +348,21 @@ public class Setblock {
 		// creates the array for the combiner commands and the server combiner commands (accounts for kicking)
 		// includes the initial commands array
 
-		for (int i = 0; i < initialCommands.size(); i++) {
-			combinerSetblockCommands.add(initialCommands.get(i).replace("\\", "\\\\").replace("\"", "\\\""));
-			if (ReadConfig.preventServerKick == true) {
-				combinerCommandLengths.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).replace("\\", "AA")
-						.replace("\"", "AA").replace("=", "AAAAAA").length());
-			} else {
-				combinerCommandLengths.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).length());
-			}
-
+		ArrayList<String> combinerArray = new ArrayList<String>();
+		
+		combinerArray.addAll(initialCommands);
+		if (Var_Options.parseChanges) {
+			combinerArray = changedCommands;
+		} else {
+			combinerArray = setblockCommands;
 		}
+		combinerArray.addAll(finalCommands);
 
-		for (int i = 0; i < setblockCommands.size(); i++) {
-			combinerSetblockCommands.add(setblockCommands.get(i).replace("\\", "\\\\").replace("\"", "\\\""));
+		for (int i = 0; i < combinerArray.size(); i++) {
+			combinerSetblockCommands.add(combinerArray.get(i).replace("\\", "\\\\").replace("\"", "\\\""));
 			if (ReadConfig.preventServerKick == true) {
 				combinerCommandLengths.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).replace("\\", "AA")
 						.replace("\"", "AA").replace("=", "AAAAAA").length());
-			} else {
-				combinerCommandLengths.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).length());
-			}
-		}
-
-		for (int i = 0; i < finalCommands.size(); i++) {
-			combinerSetblockCommands.add(finalCommands.get(i).replace("\\", "\\\\").replace("\"", "\\\""));
-			if (ReadConfig.preventServerKick == true) {
-				combinerCommandLengths.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).replace("\\", "AA")
-						.replace("\"", "AA").replace("=", "AAAAAA").length());
-
 			} else {
 				combinerCommandLengths.add(combinerSetblockCommands.get(combinerSetblockCommands.size() - 1).length());
 			}
@@ -362,58 +374,62 @@ public class Setblock {
 		 * The non-server sticks at 32500
 		 */
 
-		// server
-		// initialization
-		combinerLengthCalc += combinerBegLength + combinerEndLength;
+		// if combinerSetblockCommands is empty lol
+		if (combinerArray.isEmpty()) {
+			fullCombinerCommands.add("EMPTY");
+		} else {
+			// initialization
+			combinerLengthCalc += combinerBegLength + combinerEndLength;
 
-		for (int i = 0; i < combinerSetblockCommands.size(); i++) {
+			for (int i = 0; i < combinerSetblockCommands.size(); i++) {
 
-			// adds commands to list
-			combinerArrayCalc.add(combinerSetblockCommands.get(i));
+				// adds commands to list
+				combinerArrayCalc.add(combinerSetblockCommands.get(i));
 
-			combinerLengthCalc += combinerCommandLengths.get(i);
-			combinerLengthCalc += combinerMidLength;
+				combinerLengthCalc += combinerCommandLengths.get(i);
+				combinerLengthCalc += combinerMidLength;
 
-			// if it is the end
-			if (i == combinerSetblockCommands.size() - 1) {
-				finalCommand = true;
-			}
-
-			// regular detection
-			if (finalCommand == true || (combinerLengthCalc + combinerMidLength + combinerCommandLengths.get(i + 1)) >= 32500) {
-
-				// singular command
-				if (combinerLengthCalc >= 32500) {
-					fullCombinerCommands.add(combinerSetblockCommands.get(i).replace("\\\\", "\\").replace("\\\"", "\""));
-				} else {
-
-					// singular command within a combiner
-					if (combinerArrayCalc.size() == 1) {
-						fullCombinerCommands.add(combinerBeg + combinerSetblockCommands.get(i) + combinerEnd);
-					} else {
-
-						// normal combiner
-						combinerCmdCalc = combinerBeg;
-						for (int j = 0; j < combinerArrayCalc.size(); j++) {
-							combinerCmdCalc += combinerArrayCalc.get(j);
-							if (j < combinerArrayCalc.size() - 1) {
-								combinerCmdCalc += combinerMid;
-							}
-						}
-						combinerCmdCalc += combinerEnd;
-						fullCombinerCommands.add(combinerCmdCalc);
-						if (i < combinerSetblockCommands.size() - 1) {
-						}
-					}
+				// if it is the end
+				if (i == combinerSetblockCommands.size() - 1) {
+					finalCommand = true;
 				}
 
-				combinerLengthCalc = combinerBegLength + combinerEndLength;
-				combinerArrayCalc.clear();
-				combinerCmdCalc = null;
+				// regular detection
+				if (finalCommand == true || (combinerLengthCalc + combinerMidLength + combinerCommandLengths.get(i + 1)) >= 32500) {
+
+					// singular command
+					if (combinerLengthCalc >= 32500) {
+						fullCombinerCommands.add(combinerSetblockCommands.get(i).replace("\\\\", "\\").replace("\\\"", "\""));
+					} else {
+
+						// singular command within a combiner
+						if (combinerArrayCalc.size() == 1) {
+							fullCombinerCommands.add(combinerBeg + combinerSetblockCommands.get(i) + combinerEnd);
+						} else {
+
+							// normal combiner
+							combinerCmdCalc = combinerBeg;
+							for (int j = 0; j < combinerArrayCalc.size(); j++) {
+								combinerCmdCalc += combinerArrayCalc.get(j);
+								if (j < combinerArrayCalc.size() - 1) {
+									combinerCmdCalc += combinerMid;
+								}
+							}
+							combinerCmdCalc += combinerEnd;
+							fullCombinerCommands.add(combinerCmdCalc);
+							if (i < combinerSetblockCommands.size() - 1) {
+							}
+						}
+					}
+
+					combinerLengthCalc = combinerBegLength + combinerEndLength;
+					combinerArrayCalc.clear();
+					combinerCmdCalc = null;
+				}
 			}
 		}
-
-		// writes the name_cmd.txt file
+		
+		// writes the name_combiner.txt file
 		if (Var_Options.combinerOption == true) {
 			String combinerFileCalc = ReadConfig.regFilePath.getName().toString().substring(0,
 					ReadConfig.regFilePath.getName().toString().indexOf(".ccu")) + "_combiner.txt";

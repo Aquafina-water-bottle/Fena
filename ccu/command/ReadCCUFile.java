@@ -132,6 +132,10 @@ public class ReadCCUFile {
 
 			// makes sure stuff doesn't happen
 			if (this.ccuFileArray.size() - 1 < i) {
+				if (i != 0 && (this.ccuFileArray.get(i - 1).trim().equals("CCU_ReturnFalse")
+						|| this.ccuFileArray.get(i - 1).trim().equals("CCU_ReturnTrue"))) {
+					this.ccuFileArray.remove(i - 1);
+				}
 				break;
 			}
 

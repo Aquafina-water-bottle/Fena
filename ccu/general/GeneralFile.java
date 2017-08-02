@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class GeneralFile {
 	private File fileName = null;
@@ -42,7 +43,7 @@ public class GeneralFile {
 			System.out.println("ERROR: Could not find the file: \n" + e);
 			System.exit(0);
 		} catch (Exception e) {
-			System.out.println("(Unknown) ERROR: Could not find the file: \n" + e);
+			System.out.println("UNKNOWN ERROR: Could not find the file: \n" + e);
 			System.exit(0);
 		}
 
@@ -70,43 +71,127 @@ public class GeneralFile {
 	}
 
 	public static ArrayList<String> parseCCU(ArrayList<String> getArray) {
-		ArrayList<String> returnArray = GeneralFile.removeSkipLineBlock(
-				StringUtils.skipLine(GeneralFile.removeComment(GeneralFile.removeCommentBlock(getArray, "//=", "=//"), "//"), "\\"),
+		ArrayList<String> returnArray = GeneralFile.removeSkipLineBlock(GeneralFile.combineLine(
+				GeneralFile.removeComment(GeneralFile.removeCommentBlock(escapeLine(getArray, "`"), "//=", "=//"), "//", true), "\\"),
 				"/*", "*/", "-/-");
 		return returnArray;
 	}
 
-	public static String checkFileExtension(String fileGet, String fileExtension) {
-		if (fileGet.contains(".")) {
-			if (fileGet.substring(fileGet.lastIndexOf(".")).equals(fileExtension)) {
-				// success
-				// System.out.println("File created: '" + fileGet + "'");
-			} else {
+	public static ArrayList<String> combineLine(ArrayList<String> getArray, String getChar) {
+		ArrayList<String> returnArray = new ArrayList<String>();
+		String calcString = "";
+		boolean combineLine = false;
 
-				// to make sure if fileExtension actually doesn't contain ".name"
-				if (fileExtension.substring(0, fileExtension.indexOf(".")).isEmpty() == false && fileGet.endsWith(fileExtension)) {
-					// success
+		for (int i = 0; i < getArray.size(); i++) {
+
+			combineLine = false;
+			if (getArray.get(i).endsWith(getChar)) {
+				combineLine = true;
+			}
+
+			if (combineLine == true) {
+				if (calcString.isEmpty()) {
+					calcString += getArray.get(i).substring(0, getArray.get(i).length() - 1);
 				} else {
-					String fileTypeTemp = fileGet.substring(fileGet.lastIndexOf("."));
 
-					if (fileGet.lastIndexOf("/") > fileGet.lastIndexOf(".")) {
-						fileGet += fileExtension;
-						// System.out.println("File created: " + fileGet + fileExtension);
-					} else {
-						System.out.println(
-								"WARNING: File '" + fileGet + "' ends with '" + fileTypeTemp + "' instead of '" + fileExtension + "'");
-						fileGet = fileGet.substring(0, fileGet.length() - fileTypeTemp.length()) + fileExtension;
+					// trims to get rid of any whitespace in the front of the string
+					String testString = getArray.get(i).trim().substring(0, getArray.get(i).trim().length() - 1);
+					if (testString.startsWith("CCU_COND_")) {
+						testString = testString.substring(9);
 					}
+					calcString += testString;
+				}
+
+				// if the document ended
+				if (i == getArray.size() - 1) {
+					returnArray.add(calcString);
+				}
+
+			} else {
+				if (calcString.isEmpty()) {
+					returnArray.add(getArray.get(i));
+				} else {
+					String testString = getArray.get(i).trim().substring(0, getArray.get(i).trim().length());
+					calcString += testString;
+					returnArray.add(calcString);
+					calcString = "";
 				}
 			}
-		} else {
-			fileGet += fileExtension;
+		}
+		return returnArray;
+	}
+
+	public static ArrayList<String> escapeLine(ArrayList<String> arrayGet, String escapeChar) {
+
+		ArrayList<String> returnArray = new ArrayList<String>();
+
+		for (String line : arrayGet) {
+			StringBuilder sb = new StringBuilder();
+			String[] splitEscape = line.split(Pattern.quote(escapeChar));
+
+			for (int i = 0; i < splitEscape.length; i++) {
+				if (i % 2 == 1) {
+					String[] splitArray = splitEscape[i].split("|");
+					for (String charInArray : splitArray) {
+						sb.append(escapeChar + charInArray);
+					}
+					sb.append("`");
+				} else {
+					sb.append(splitEscape[i]);
+				}
+			}
+			returnArray.add(sb + "");
 		}
 
+		return returnArray;
+	}
+
+	public static String checkFileExtension(String fileGet, String fileExtension, boolean createFile, boolean isStrict) {
+		// isStrict means if the fileExtension is just '.ccu' (strict) or '_dat.txt' (not strict)
+		// aka whether it's a "." at the beginning or not apparently idk why i made this
+
+		if (isStrict) {
+			if (fileGet.contains(".")) {
+				if (fileGet.substring(fileGet.lastIndexOf(".")).equals(fileExtension)) {
+					// success
+					// System.out.println("File created: '" + fileGet + "'");
+				} else {
+					if (createFile) {
+						String fileTypeTemp = fileGet.substring(fileGet.lastIndexOf("."));
+
+						if (fileGet.lastIndexOf("/") > fileGet.lastIndexOf(".")) {
+							fileGet += fileExtension;
+							// System.out.println("File created: " + fileGet + fileExtension);
+						} else {
+							System.out.println("WARNING: File '" + fileGet + "' ends with '" + fileTypeTemp + "' instead of '"
+									+ fileExtension + "'");
+							fileGet = fileGet.substring(0, fileGet.length() - fileTypeTemp.length()) + fileExtension;
+						}
+					} else {
+						// cannot create the file
+						System.out.println("ERROR: File '" + fileGet + "' cannot be found");
+						System.exit(0);
+					}
+				}
+			} else {
+				fileGet += fileExtension;
+			}
+		} else {
+			// meaning if it just ends with it lol
+			if (fileGet.endsWith(fileExtension) == false) {
+				if (createFile) {
+					fileGet += fileExtension;
+				} else {
+					// cannot create the file
+					System.out.println("ERROR: File '" + fileGet + "' cannot be found");
+					System.exit(0);
+				}
+			}
+		}
 		return fileGet;
 	}
 
-	public static ArrayList<String> removeComment(ArrayList<String> fileArrayList, String startComment) {
+	public static ArrayList<String> removeComment(ArrayList<String> fileArrayList, String startComment, boolean commentAnywhere) {
 		ArrayList<String> doc = new ArrayList<String>();
 		for (String line : fileArrayList) {
 
@@ -118,11 +203,14 @@ public class GeneralFile {
 
 			// removes whitespace to test for a comment, but returns with
 			// whitespace
-			String lineSave = line;
-			line = line.trim();
 
-			if (line.length() >= startComment.length() && line.substring(0, startComment.length()).equals(startComment) == false) {
-				doc.add(lineSave);
+			if (line.trim().startsWith(startComment) == false) { // doesn't start with a comment
+				if (commentAnywhere == true && line.contains(startComment)) { // has comment within
+					line = line.substring(0, line.indexOf(startComment));
+					doc.add(line);
+				} else { // no presense of the comment
+					doc.add(line);
+				}
 			}
 		}
 		return doc;

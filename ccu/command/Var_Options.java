@@ -21,7 +21,7 @@ public class Var_Options {
 	public static Boolean commandOption = null;
 	public static Boolean combinerOption = null;
 	public static File filePathFuncOption = null;
-	public static Boolean keepCoordsOption = null;
+	public static Boolean parseChanges = null;
 
 	// @formatter:off
 	private final String[] optionArray = {
@@ -32,7 +32,7 @@ public class Var_Options {
 			"commandOption",
 			"combinerOption",
 			"filePathFuncOption",
-			"keepCoordsOption",
+			"parseChangesOption",
 			"A"
 			};
 	// @formatter:on
@@ -72,23 +72,23 @@ public class Var_Options {
 				if (line.contains(optionName) && line.trim().substring(0, optionName.length()).equals(optionName)) {
 					String tempInput = line.substring(line.indexOf(optionName) + optionName.length() + 1).trim();
 
-					if (optionName == "blockOption") {
+					if (optionName.equals("blockOption")) {
 						Var_Options.blockOption = tempInput;
 						lineUsed = true;
 					}
 
-					if (optionName == "coordsOption") {
+					if (optionName.equals("coordsOption")) {
 						Var_Options.coordsOption.setCoordinates(tempInput);
 						coordsOptionTest = true;
 						lineUsed = true;
 					}
 
-					if (optionName == "styleOption") {
+					if (optionName.equals("styleOption")) {
 						Var_Options.styleOption = tempInput;
 						lineUsed = true;
 					}
 
-					if (optionName == "parseOption") {
+					if (optionName.equals("parseOption")) {
 						if (tempInput.equalsIgnoreCase("true")) {
 							Var_Options.parseOption = true;
 						} else {
@@ -99,7 +99,7 @@ public class Var_Options {
 						lineUsed = true;
 					}
 
-					if (optionName == "commandOption") {
+					if (optionName.equals("commandOption")) {
 						if (tempInput.equalsIgnoreCase("true")) {
 							Var_Options.commandOption = true;
 						} else {
@@ -110,7 +110,7 @@ public class Var_Options {
 						lineUsed = true;
 					}
 
-					if (optionName == "combinerOption") {
+					if (optionName.equals("combinerOption")) {
 						if (tempInput.equalsIgnoreCase("true")) {
 							Var_Options.combinerOption = true;
 						} else {
@@ -121,23 +121,23 @@ public class Var_Options {
 						lineUsed = true;
 					}
 
-					if (optionName == "filePathFuncOption") {
+					if (optionName.equals("filePathFuncOption")) {
 						Var_Options.filePathFuncOption = new File(tempInput);
 						lineUsed = true;
 					}
 
-					if (optionName == "keepCoordsOption") {
+					if (optionName.equals("parseChangesOption")) {
 						if (tempInput.equalsIgnoreCase("true")) {
-							Var_Options.keepCoordsOption = true;
+							Var_Options.parseChanges = true;
 						} else {
 							if (tempInput.equalsIgnoreCase("false")) {
-								Var_Options.keepCoordsOption = false;
+								Var_Options.parseChanges = false;
 							}
 						}
 						lineUsed = true;
 					}
 
-					if (optionName == "A") {
+					if (optionName.equals("A")) {
 						if (tempInput.equals("well kept secret")) {
 							RickRoll.lyrics();
 						}
@@ -162,7 +162,6 @@ public class Var_Options {
 		 * Method ran at the end of reading the document to
 		 */
 
-		// GeneralFile.dirCheckError(filePathFuncOption, "filePathFuncOption");
 		if (blockOption == null) {
 			System.out.println("WARNING: 'blockOption' field is empty - defaults to 'air 0'");
 			blockOption = "air 0";
@@ -190,15 +189,10 @@ public class Var_Options {
 		if (filePathFuncOption == null || filePathFuncOption.toString().length() == 0) {
 			System.out.println("WARNING: 'filePathFuncOption' field is empty - will be an issue if mcfunctions are used");
 			Var_Options.filePathFuncOption = null;
-		} else {
-			/*if (filePathFuncOption.isDirectory() == false) {
-				System.out.println("ERROR: " + filePathFuncOption.toString() + " is not a directory");
-				System.exit(0);
-			}*/
 		}
-		if (keepCoordsOption == null) {
-			System.out.println("WARNING: 'keepCoordsOption' field is empty - defaults to 'false'");
-			Var_Options.keepCoordsOption = false;
+		if (parseChanges == null) {
+			System.out.println("WARNING: 'parseChanges' field is empty - defaults to 'false'");
+			Var_Options.parseChanges = false;
 		}
 	}
 

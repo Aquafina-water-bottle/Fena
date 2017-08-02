@@ -1,13 +1,10 @@
 package ccu.general;
 
-import java.util.ArrayList;
-
 import ccu.command.MathParser;
 import ccu.command.ServerOverride;
 import ccu.command.Short_Execute;
 import ccu.command.Short_Scoreboard;
 import ccu.command.Short_Selector;
-import ccu.mcfunction.FunctionNick;
 
 public class StringUtils {
 	public static int countChars(String getString, String replaceChar) {
@@ -25,50 +22,6 @@ public class StringUtils {
 		returnString = getString.substring(0, StringUtils.countChars(getString, "\t"));
 
 		return returnString;
-	}
-
-	public static ArrayList<String> skipLine(ArrayList<String> getArray, String getChar) {
-		ArrayList<String> returnArray = new ArrayList<String>();
-		String calcString = "";
-		boolean skipLine = false;
-
-		for (int i = 0; i < getArray.size(); i++) {
-
-			skipLine = false;
-			if (getArray.get(i).endsWith(getChar)) {
-				skipLine = true;
-			}
-
-			if (skipLine == true) {
-				if (calcString.isEmpty()) {
-					calcString += getArray.get(i).substring(0, getArray.get(i).length() - 1);
-				} else {
-
-					// trims to get rid of any whitespace in the front of the string
-					String testString = getArray.get(i).trim().substring(0, getArray.get(i).trim().length() - 1);
-					if (testString.startsWith("CCU_COND_")) {
-						testString = testString.substring(9);
-					}
-					calcString += testString;
-				}
-
-				// if the document ended
-				if (i == getArray.size() - 1) {
-					returnArray.add(calcString);
-				}
-
-			} else {
-				if (calcString.isEmpty()) {
-					returnArray.add(getArray.get(i));
-				} else {
-					String testString = getArray.get(i).trim().substring(0, getArray.get(i).trim().length());
-					calcString += testString;
-					returnArray.add(calcString);
-					calcString = "";
-				}
-			}
-		}
-		return returnArray;
 	}
 
 	public static String generalParse(String getString) {
@@ -97,11 +50,12 @@ public class StringUtils {
 			returnString = calcString + "";
 		}
 
-		// function shortcuts
+		// function shortcuts - obsolete, will be done after all is parsed
+		/*
 		calcString = FunctionNick.getCommand(returnString);
 		if (calcString != null) {
 			returnString = calcString + "";
-		}
+		}*/
 
 		// server override (adding 'minecraft:')
 		calcString = ServerOverride.getCommand(returnString);
@@ -112,6 +66,7 @@ public class StringUtils {
 			}
 		}
 
+		returnString = returnString.replace("`", "");
 		return returnString;
 	}
 }

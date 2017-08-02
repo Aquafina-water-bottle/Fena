@@ -79,7 +79,7 @@ public class ReadConfig {
 			configFile = new GeneralFile(Main.getJarFile.getParent() + "/" + "CCU.ini");
 		}
 
-		ArrayList<String> temp = GeneralFile.removeComment(configFile.getFileArray(), "#");
+		ArrayList<String> temp = GeneralFile.removeComment(configFile.getFileArray(), "#", false);
 		for (String line : temp) {
 			if (line.contains("=")) {
 				// returns 1st var
@@ -257,17 +257,6 @@ public class ReadConfig {
 		}
 
 		if (rconEnable == true) {
-			if (rconFunction == null) {
-				System.out.println("WARNING: 'rconFunction' field is empty - defaults to 'false'");
-				rconFunction = false;
-			}
-
-			if (rconDouble == null) {
-				System.out.println("WARNING: 'rconFunction' field is empty - defaults to 'false'");
-				System.exit(0);
-				rconDouble = false;
-			}
-
 			if (rconIP == null) {
 				System.out.println("ERROR: 'rconIP' field is empty although 'rconEnable' is set to true");
 				System.exit(0);
@@ -279,6 +268,17 @@ public class ReadConfig {
 			if (rconPassword == null) {
 				System.out.println("ERROR: 'rconPassword' field is empty although 'rconEnable' is set to true");
 				System.exit(0);
+			}
+
+			if (rconFunction == null) {
+				System.out.println("WARNING: 'rconFunction' field is empty - defaults to 'false'");
+				rconFunction = false;
+			}
+
+			if (rconDouble == null) {
+				System.out.println("WARNING: 'rconFunction' field is empty - defaults to 'false'");
+				System.exit(0);
+				rconDouble = false;
 			}
 		}
 

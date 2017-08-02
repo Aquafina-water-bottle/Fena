@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ccu.block.Setblock;
 import ccu.general.ArgUtils;
+import ccu.general.GeneralFile;
 import ccu.general.StringUtils;
 
 public class Cmd_Initialize {
@@ -31,7 +32,7 @@ public class Cmd_Initialize {
 		String statementEncase = this.fullLineGet.replaceFirst("INITIALIZE", "").replaceAll("^\\s+", "");
 		if (statementEncase.endsWith(":")) {
 
-			this.arrayGet = StringUtils.skipLine(this.arrayGet, ";");
+			this.arrayGet = GeneralFile.combineLine(this.arrayGet, ";");
 			for (String cmd : this.arrayGet) {
 				Setblock.initialCommands.add(StringUtils.generalParse(cmd.trim()));
 			}

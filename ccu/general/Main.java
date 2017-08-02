@@ -15,28 +15,19 @@ import ccu.block.GroupStructure;
 import ccu.block.Setblock;
 import ccu.command.ReadCCUFile;
 import ccu.command.Var_Options;
+import ccu.mcfunction.FunctionNick;
 import ccu.mcfunction.WriteFile;
 import ccu.rcon.MinecraftRcon;
 
 public class Main {
 	/* TODO
-	 * -Better RCON usage - do when multiparse works
-	 * -Combiner options using .mcfunction - do when multiparse works
-	 * -Parse changes only option
-	 * -Multiparse
-	 * -Fix Recurring imports
+	 * -Better RCON usage
+	 * -Combiner options using .mcfunction
 	 * -Multithreading when checking for the version
-	 * -Making DEF only use COORDS (and remove tele), and detect whether it's 3, 4, 5 or 6 numbers
-	 * -func getArray within call
 	 * 
 	 * General statements
 	 * -FILE
 	 * -SET for setting arrays
-	 * 
-	 * Secondary statements
-	 * -ROUND
-	 * -Escaping (eg. `test` and ` `)
-	 * -PARAM
 	 */
 
 	// .replaceAll("^\\s+", "") = space to the left
@@ -46,11 +37,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		long startTime = System.nanoTime();
-		
+
 		// checks version
 		String currentVersion = "Build 10";
 		System.out.println("Current: " + currentVersion);
-		
+
 		try {
 			URL url;
 			url = new URL("https://raw.githubusercontent.com/Aquafina-water-bottle/Command-Compiler-Unlimited/master/CCUVersion.txt");
@@ -65,13 +56,13 @@ public class Main {
 						+ ") at 'https://github.com/Aquafina-water-bottle/Command-Compiler-Unlimited/releases'");
 				TimeUnit.SECONDS.sleep(1);
 			}
-			
+
 		} catch (IOException e) {
 			System.out.println("WARNING: URL to check versions cannot be found");
 		} catch (InterruptedException e) {
 			GeneralFile.dispError(e);
 		}
-		
+
 		System.out.println("");
 
 		// for CCU_NPP.bat
@@ -126,6 +117,9 @@ public class Main {
 		// Finalizes all commands with "setblock groupName" and "fill groupName"
 		// Also writes the name_dat.ccu file
 		Box.finalizeCoords();
+
+		// Gets the function nicknames and uses the filePathFuncOption option
+		FunctionNick.setFunctionNicks();
 
 		// Writes the mcfunction files since it's literally the easiest thing to do lmao
 		WriteFile.writeMCFunction();

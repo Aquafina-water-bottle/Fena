@@ -6,7 +6,7 @@ import ccu.general.ArgUtils;
 import ccu.general.ParamUtils;
 
 public class Var_Call {
-	public static ArrayList<String> checkFunction = new ArrayList<String>();
+	// public static ArrayList<String> checkFunction = new ArrayList<String>();
 
 	private ArrayList<String> arrayReturn = new ArrayList<String>();
 	private int tabNum;
@@ -48,67 +48,63 @@ public class Var_Call {
 					arrayReturn.add(whitespaceCalc + "CALL {" + statementArgsArray[i].trim() + "}");
 				}
 			} else {*/
-				// check for params
-				if (statementArgs.contains("(") && statementArgs.endsWith(")")
-						&& statementArgs.indexOf("(") < statementArgs.indexOf(")")) {
-					getParamCalc = statementArgs.substring(statementArgs.indexOf("("));
-					statementArgs = statementArgs.substring(0, statementArgs.indexOf("("));
+			// check for params
+			if (statementArgs.contains("(") && statementArgs.endsWith(")")
+					&& statementArgs.indexOf("(") < statementArgs.indexOf(")")) {
+				getParamCalc = statementArgs.substring(statementArgs.indexOf("("));
+				statementArgs = statementArgs.substring(0, statementArgs.indexOf("("));
+			}
+
+			// checks if it has spaces
+			if (statementArgs.contains(" ") || statementArgs.contains("\t")) {
+				System.out.println("ERROR: Function '" + statementArgs + "' in line '" + this.fullLineGet + "' cannot have spaces");
+				System.exit(0);
+			}
+
+			// does the actual thing
+			for (int funcIndex = Var_Func.arrayFuncNameSave.size() - 1; funcIndex >= 0; funcIndex--) {
+
+				// if it matches
+				if (statementArgs.equals(Var_Func.arrayFuncNameSave.get(funcIndex)[2])) {
+
+					useParamsCalc = ParamUtils.getParams(getParamCalc, Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndex)[0]));
+
+					for (int i = 0; i < Var_Func.arrayFuncSave.get(funcIndex).length; i++) {
+						lineCalc = whitespaceCalc + Var_Func.arrayFuncSave.get(funcIndex)[i];
+						arrayReturn.add(lineCalc);
+					}
+
+					functionExists = true;
+					funcIndexSave = funcIndex;
+					break;
 				}
+			}
 
-				// checks if it has spaces
-				if (statementArgs.contains(" ") || statementArgs.contains("\t")) {
-					System.out
-							.println("ERROR: Function '" + statementArgs + "' in line '" + this.fullLineGet + "' cannot have spaces");
-					System.exit(0);
-				}
+			if (functionExists == false) {
+				System.out.println("ERROR: Function '" + statementArgs + "' in line '" + this.fullLineGet + "' does not exist");
+				System.exit(0);
+			}
 
-				// does the actual thing
-				for (int funcIndex = Var_Func.arrayFuncNameSave.size() - 1; funcIndex >= 0; funcIndex--) {
-					
-					
-					
-					// if it matches
-					if (statementArgs.equals(Var_Func.arrayFuncNameSave.get(funcIndex)[2])) {
+			// checks duplicates in checkFunction
+			/*
+			checkFunction.add(statementArgs);
 
-						useParamsCalc = ParamUtils.getParams(getParamCalc,
-								Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndex)[0]));
-						
-						for (int i = 0; i < Var_Func.arrayFuncSave.get(funcIndex).length; i++) {
-							lineCalc = whitespaceCalc + Var_Func.arrayFuncSave.get(funcIndex)[i];
-							arrayReturn.add(lineCalc);
-						}
-
-						functionExists = true;
-						funcIndexSave = funcIndex;
-						break;
+			for (int i = 0; i < checkFunction.size(); i++) {
+				for (int j = 0; j < checkFunction.size(); j++) {
+					if (checkFunction.get(i).equals(checkFunction.get(j)) && i != j) {
+						System.out.println(
+								"ERROR: Recurring function '" + checkFunction.get(i) + "' at line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 				}
+			}*/
 
-				if (functionExists == false) {
-					System.out.println("ERROR: Function '" + statementArgs + "' in line '" + this.fullLineGet + "' does not exist");
-					System.exit(0);
-				}
+			// replaces params
+			this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc,
+					Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndexSave)[0]), tabNum);
 
-				// checks duplicates in checkFunction
-				checkFunction.add(statementArgs);
-
-				for (int i = 0; i < checkFunction.size(); i++) {
-					for (int j = 0; j < checkFunction.size(); j++) {
-						if (checkFunction.get(i).equals(checkFunction.get(j)) && i != j) {
-							System.out.println(
-									"ERROR: Recurring function '" + checkFunction.get(i) + "' at line '" + this.fullLineGet + "'");
-							System.exit(0);
-						}
-					}
-				}
-
-				// replaces params
-				this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc,
-						Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndexSave)[0]), tabNum);
-				
-				ArgUtils.checkCommands(this.arrayReturn, tabNum);
-				checkFunction.clear();
-			//}
+			ArgUtils.checkCommands(this.arrayReturn, tabNum);
+			// checkFunction.clear();
 
 		} else {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");

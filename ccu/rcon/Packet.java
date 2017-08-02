@@ -29,7 +29,7 @@ public class Packet {
 		}
 	}
 
-	public String toString() {
+	/*public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("ID:\n");
 		sb.append(this.requestID);
@@ -38,7 +38,7 @@ public class Packet {
 		sb.append("\nMessage:\n");
 		sb.append(new String(this.payload));
 		return sb.toString();
-	}
+	}*/
 
 	public String message() {
 		return new String(this.payload);
