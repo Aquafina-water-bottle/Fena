@@ -42,7 +42,6 @@ DEF Snd_Wither minecraft:entity.wither.death
 DEF Snd_Level minecraft:entity.player.levelup
 DEF Snd_Explode minecraft:entity.generic.explode
 DEF Snd_Hat minecraft:block.note.hat
-
 DEF Snd_Primed minecraft:entity.tnt.primed
 //>
 

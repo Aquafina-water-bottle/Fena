@@ -16,14 +16,29 @@ public class MinecraftRcon {
 			try {
 				Transceiver testRcon = new Transceiver(ReadConfig.rconIP, ReadConfig.rconPort.intValue(), ReadConfig.rconPassword);
 				
-				for (String writeCmd : Setblock.initialCommands) {
-					rconArray.add(writeCmd);
-				}
-				for (String writeCmd : Setblock.setblockCommands) {
-					rconArray.add(writeCmd);
-				}
-				for (String writeCmd : Setblock.finalCommands) {
-					rconArray.add(writeCmd);
+				if (ReadConfig.rconDouble) {
+					for (String writeCmd : Setblock.initialCommands) {
+						rconArray.add(writeCmd);
+						rconArray.add(writeCmd);
+					}
+					for (String writeCmd : Setblock.setblockCommands) {
+						rconArray.add(writeCmd);
+						rconArray.add(writeCmd);
+					}
+					for (String writeCmd : Setblock.finalCommands) {
+						rconArray.add(writeCmd);
+						rconArray.add(writeCmd);
+					}
+				} else {
+					for (String writeCmd : Setblock.initialCommands) {
+						rconArray.add(writeCmd);
+					}
+					for (String writeCmd : Setblock.setblockCommands) {
+						rconArray.add(writeCmd);
+					}
+					for (String writeCmd : Setblock.finalCommands) {
+						rconArray.add(writeCmd);
+					}
 				}
 				
 				testRcon.transceive(rconArray);

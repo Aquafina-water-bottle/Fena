@@ -23,9 +23,6 @@ public class Con_Else {
 
 		ArrayList<String> returnArray = new ArrayList<String>();
 
-		ArgUtils.checkCommands(this.arrayGet, tabNum);
-		ArgUtils.checkWhiteSpace(this.arrayGet, tabNum, false);
-
 		// Removes "COND " and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("ELSE", "").replaceAll("^\\s+", "");
 		if (statementEncase.endsWith(":")) {
@@ -37,6 +34,9 @@ public class Con_Else {
 			}
 
 			if (parseArray == true) {
+				ArgUtils.checkWhiteSpace(this.arrayGet, tabNum, false);
+				ArgUtils.checkCommands(this.arrayGet, tabNum);
+				
 				for (String getLine : this.arrayGet) {
 					returnArray.add(getLine.substring(1));
 				}

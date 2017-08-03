@@ -21,26 +21,21 @@ import ccu.rcon.MinecraftRcon;
 
 public class Main {
 	/* TODO
-	 * -Better RCON usage
-	 * -Combiner options using .mcfunction
-	 * -Multithreading when checking for the version
-	 * -Config file for library set to default library folder if unspecified
-	 * 
 	 * General statements
 	 * -FILE
-	 * -SET for setting arrays
 	 */
 
 	// .replaceAll("^\\s+", "") = space to the left
 	// .replaceAll("\\s+$", "") = space to the right
 
 	public static File getJarFile = null;
+	public static boolean ranInEclpise = false;
 
 	public static void main(String[] args) {
 		long startTime = System.nanoTime();
 
 		// checks version
-		String currentVersion = "Build 11";
+		String currentVersion = "Build 12";
 		System.out.println("Current: " + currentVersion);
 
 		try {
@@ -67,14 +62,15 @@ public class Main {
 		System.out.println("");
 
 		// for CCU_NPP.bat
-		if (args.length == 1) {
-			getJarFile = new File(args[0]);
-		}
 		if (args.length == 2) {
 			ReadConfig.regFilePath = new File(args[0]);
 			getJarFile = new File(args[1]);
+			getJarFile = getJarFile.getParentFile();
+		} else {
+			ranInEclpise = true;
+			getJarFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath().replace("%20", " "));
 		}
-
+		
 		// String asdf = "this is a CALC(1 + SIN((1 - 2.0)) * (13 - 3)) asdf)";
 		// MathParser.parseSecondaryStatements(asdf, asdf);
 

@@ -104,11 +104,11 @@ public class Con_Loop {
 					arrayLoopReturn.addAll(ParamUtils.replaceParams(this.arrayGet, paramArrayGet, paramNum, tabNum - 1));
 					
 				}
-				
 				ArgUtils.checkCommands(arrayLoopReturn, tabNum - 1);
 
 			} else {
 				System.out.println("ERROR: Curly brackets in line '" + this.fullLineGet + "' are not balanced");
+				System.out.println(arrayGet);
 				System.exit(0);
 			}
 
@@ -126,7 +126,7 @@ public class Con_Loop {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 			System.exit(0);
 		}
-
+		
 		return arrayLoopReturn;
 	}
 }

@@ -126,7 +126,7 @@ public class Var_Array {
 								// removes current
 								statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 								activatedFunc += " " + statementArgs.substring(0, statementArgs.indexOf(" "));
-								
+
 							} else {
 								System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
 								System.exit(0);
@@ -301,13 +301,13 @@ public class Var_Array {
 			}
 
 			// the end should make 'statementArgs' as the actual use thing (Array name)
-			
+
 			/*
 			// sets activate settings
 			if (hasActivated == null) {
 				hasActivated = false;
 			}
-
+			
 			// checking whether the function name exists
 			
 			if (hasActivated == true) {
@@ -317,7 +317,7 @@ public class Var_Array {
 						break;
 					}
 				}
-
+			
 				if (activateConfirm) {
 					arrayFuncActivateCalc.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
 				} else {
@@ -420,9 +420,6 @@ public class Var_Array {
 						getArrayCalc = new String[tempArray.size()];
 						for (int j = 0; j < tempArray.size(); j++) {
 							getArrayCalc[j] = tempArray.get(j).trim();
-							if (getArrayCalc[j].equals("NULL")) {
-								getArrayCalc[j] = "";
-							}
 							ArgUtils.checkCoords(getArrayCalc[j], arrayType, this.fullLineGet);
 						}
 
@@ -437,12 +434,9 @@ public class Var_Array {
 						// creates string array
 						tempArray = ArgUtils.checkCommands(tempArray, tabNum + 1);
 						getArrayCalc = new String[tempArray.size()];
-						
+
 						for (int j = 0; j < tempArray.size(); j++) {
 							getArrayCalc[j] = tempArray.get(j).trim();
-							if (getArrayCalc[j].equals("NULL")) {
-								getArrayCalc[j] = "";
-							}
 							ArgUtils.checkCoords(getArrayCalc[j], arrayType, this.fullLineGet);
 						}
 
@@ -468,7 +462,7 @@ public class Var_Array {
 				doubleArraySave.add(get2DArrayCalc);
 
 			} else { // easy part here- just convert everything into String[]
-				ArgUtils.checkWhiteSpace(this.arrayGet, tabNum, false);
+				ArgUtils.checkWhiteSpace(this.arrayGet, tabNum, true);
 				arrayGet = ArgUtils.checkCommands(arrayGet, tabNum);
 
 				getArrayCalc = new String[arrayGet.size()];
@@ -520,6 +514,25 @@ public class Var_Array {
 		} else {
 			return null;
 		}
+	}
+
+	// This is used specifically for getting the part past the array name
+	// There cannot be a definition in replacement for 'GLOBAL'
+	public static int getArrayIndex(String getLine) {
+		String statementEncase = getLine.replaceFirst("SET", "").replaceAll("^\\s+", "");
+		String statementEncaseCalc = null;
+
+		if (statementEncase.contains(" ")) {
+			statementEncaseCalc = statementEncase.substring(0, statementEncase.indexOf(" "));
+			if (statementEncaseCalc.equals("GLOBAL")) {
+				// removes keyword
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+			}
+		}
+
+		statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+
+		return getLine.length() - statementEncase.length();
 	}
 
 }

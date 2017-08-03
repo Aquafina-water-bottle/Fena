@@ -10,6 +10,7 @@ import ccu.command.Cmd_Group;
 import ccu.command.Cmd_MFunc;
 import ccu.command.Var_Options;
 import ccu.general.GeneralFile;
+import ccu.general.Main;
 import ccu.general.ReadConfig;
 
 public class Setblock {
@@ -34,6 +35,9 @@ public class Setblock {
 
 	// the length of each command in the combiner setblock array
 	public static ArrayList<Integer> combinerCommandLengths = new ArrayList<Integer>();
+
+	// array for all parsed commands
+	public static ArrayList<String> parsedFileCommands = new ArrayList<String>();
 
 	public static void getCommands() {
 		int[] directionPosX = {5, 4, 3, 1, 0};
@@ -125,10 +129,13 @@ public class Setblock {
 		}
 
 		String cmdFileCalc = ReadConfig.regFilePath.getName().toString().substring(0,
-				ReadConfig.regFilePath.getName().toString().indexOf(".ccu")) + "_cmd.txt";
+				ReadConfig.regFilePath.getName().toString().lastIndexOf(".ccu")) + "_cmd.txt";
 		File writeCmdFile = new File(ReadConfig.regFilePath.getParentFile().toString() + "//" + cmdFileCalc);
 
 		// if parseChanges is true: reads name_cmd.txt file if it exists, then copies over only different commands
+
+		ArrayList<String> setblockDisplayCommands = new ArrayList<String>();
+
 		if (Var_Options.parseChanges && writeCmdFile.isFile()) {
 			GeneralFile configFile = new GeneralFile(writeCmdFile);
 			ArrayList<String> readCmdFile = configFile.getFileArray();
@@ -144,9 +151,13 @@ public class Setblock {
 
 				if (differentCommand) {
 					changedCommands.add(setblockCommands.get(i));
-					setblockCommands.set(i, "CHANGED " + setblockCommands.get(i));
+					setblockDisplayCommands.add("CHANGED " + setblockCommands.get(i));
+				} else {
+					setblockDisplayCommands.add(setblockCommands.get(i));
 				}
 			}
+		} else {
+			setblockDisplayCommands.addAll(setblockCommands);
 		}
 
 		// writes the name_cmd.txt file
@@ -163,7 +174,7 @@ public class Setblock {
 			for (String writeCmd : initialCommands) {
 				writer.println(writeCmd);
 			}
-			for (String writeCmd : setblockCommands) {
+			for (String writeCmd : setblockDisplayCommands) {
 				writer.println(writeCmd);
 			}
 			for (String writeCmd : finalCommands) {
@@ -176,7 +187,7 @@ public class Setblock {
 		if (Var_Options.parseOption == true) {
 			// writes the name_parsed.txt file
 			String parseFileCalc = ReadConfig.regFilePath.getName().toString().substring(0,
-					ReadConfig.regFilePath.getName().toString().indexOf(".ccu")) + "_parsed.txt";
+					ReadConfig.regFilePath.getName().toString().lastIndexOf(".ccu")) + "_parsed.txt";
 			File writeParseFile = new File(ReadConfig.regFilePath.getParentFile().toString() + "//" + parseFileCalc);
 			PrintWriter writer = null;
 
@@ -189,12 +200,12 @@ public class Setblock {
 
 			// initial commands
 			if ((initialCommands == null && initialCommands.isEmpty()) == false) {
-				writer.println("INITIALIZE");
+				parsedFileCommands.add("INITIALIZE");
 				for (int i = 0; i < initialCommands.size(); i++) {
-					writer.println("\t" + initialCommands.get(i));
+					parsedFileCommands.add("\t" + initialCommands.get(i));
 				}
 
-				writer.println("");
+				parsedFileCommands.add("");
 			}
 
 			for (int i = 0; i < GroupStructure.groupCommandsArray.size(); i++) {
@@ -202,7 +213,7 @@ public class Setblock {
 
 					// line breaks between each group
 					if (i != 0 && j == 0) {
-						writer.println("");
+						parsedFileCommands.add("");
 					}
 
 					// sets group name
@@ -214,7 +225,7 @@ public class Setblock {
 							groupType = "PULSE";
 						}
 
-						writer.println("GROUP | " + Cmd_Group.arrayGroupSave.get(i)[0] + " | " + groupType + "\t\t["
+						parsedFileCommands.add("GROUP | " + Cmd_Group.arrayGroupSave.get(i)[0] + " | " + groupType + "\t\t["
 								+ Box.groupNameCoordArray[i].getString() + " | " + Cmd_Group.arraySetblockSave.get(i) + "]");
 					}
 
@@ -222,32 +233,32 @@ public class Setblock {
 					if (GroupStructure.groupConditionalArray.get(i)[j] == true) {
 						if (j < GroupStructure.groupCommandsArray.get(i).length - 1
 								&& GroupStructure.groupConditionalArray.get(i)[j + 1] == false) {
-							writer.println("\t L " + GroupStructure.groupCommandsArray.get(i)[j]);
+							parsedFileCommands.add("\t L " + GroupStructure.groupCommandsArray.get(i)[j]);
 						} else {
 							if (j == GroupStructure.groupCommandsArray.get(i).length - 1) {
-								writer.println("\t L " + GroupStructure.groupCommandsArray.get(i)[j]);
+								parsedFileCommands.add("\t L " + GroupStructure.groupCommandsArray.get(i)[j]);
 							} else {
-								writer.println("\t | " + GroupStructure.groupCommandsArray.get(i)[j]);
+								parsedFileCommands.add("\t | " + GroupStructure.groupCommandsArray.get(i)[j]);
 							}
 						}
 					} else {
-						writer.println("\t" + GroupStructure.groupCommandsArray.get(i)[j]);
+						parsedFileCommands.add("\t" + GroupStructure.groupCommandsArray.get(i)[j]);
 					}
 				}
 			}
 
 			// initial commands
 			if ((finalCommands == null && finalCommands.isEmpty()) == false) {
-				writer.println("\nFINALIZE");
+				parsedFileCommands.add("\nFINALIZE");
 				for (int i = 0; i < finalCommands.size(); i++) {
-					writer.println("\t" + finalCommands.get(i));
+					parsedFileCommands.add("\t" + finalCommands.get(i));
 				}
 
-				writer.println("");
+				parsedFileCommands.add("");
 			}
 
 			if (Cmd_MFunc.arrayMFuncSave.size() > 0 && GroupStructure.groupCommandsArray.size() > 0) {
-				writer.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+				parsedFileCommands.add("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 			}
 
 			for (int i = 0; i < Cmd_MFunc.arrayMFuncSave.size(); i++) {
@@ -255,22 +266,26 @@ public class Setblock {
 
 					// line breaks between each group
 					if (i != 0 && j == 0) {
-						writer.println("");
+						parsedFileCommands.add("");
 					}
 
 					// sets group name
 					if (j == 0) {
 						if (Cmd_MFunc.arrayMFuncNameSave.get(i).isEmpty()) {
-							writer.println("MFUNC | " + Cmd_MFunc.arrayMFuncSave.get(i)[0]);
+							parsedFileCommands.add("MFUNC | " + Cmd_MFunc.arrayMFuncSave.get(i)[0]);
 						} else {
-							writer.println(
+							parsedFileCommands.add(
 									"MFUNC | " + Cmd_MFunc.arrayMFuncNameSave.get(i) + " | " + Cmd_MFunc.arrayMFuncSave.get(i)[0]);
 						}
 					} else {
 						// the actual commands
-						writer.println("\t" + Cmd_MFunc.arrayMFuncSave.get(i)[j]);
+						parsedFileCommands.add("\t" + Cmd_MFunc.arrayMFuncSave.get(i)[j]);
 					}
 				}
+			}
+
+			for (String parsedCmd : parsedFileCommands) {
+				writer.println(parsedCmd);
 			}
 
 			writer.close();
@@ -349,14 +364,14 @@ public class Setblock {
 		// includes the initial commands array
 
 		ArrayList<String> combinerArray = new ArrayList<String>();
-		
-		combinerArray.addAll(initialCommands);
+
 		if (Var_Options.parseChanges) {
-			combinerArray = changedCommands;
+			combinerArray.addAll(changedCommands);
 		} else {
-			combinerArray = setblockCommands;
+			combinerArray.addAll(initialCommands);
+			combinerArray.addAll(setblockCommands);
+			combinerArray.addAll(finalCommands);
 		}
-		combinerArray.addAll(finalCommands);
 
 		for (int i = 0; i < combinerArray.size(); i++) {
 			combinerSetblockCommands.add(combinerArray.get(i).replace("\\", "\\\\").replace("\"", "\\\""));
@@ -428,11 +443,11 @@ public class Setblock {
 				}
 			}
 		}
-		
+
 		// writes the name_combiner.txt file
 		if (Var_Options.combinerOption == true) {
 			String combinerFileCalc = ReadConfig.regFilePath.getName().toString().substring(0,
-					ReadConfig.regFilePath.getName().toString().indexOf(".ccu")) + "_combiner.txt";
+					ReadConfig.regFilePath.getName().toString().lastIndexOf(".ccu")) + "_combiner.txt";
 			File writeCombinerFile = new File(ReadConfig.regFilePath.getParentFile().toString() + "//" + combinerFileCalc);
 
 			PrintWriter writer = null;
@@ -449,6 +464,94 @@ public class Setblock {
 			}
 
 			writer.close();
+		}
+
+		if (ReadConfig.globalFilePath == null || ReadConfig.globalFilePath.toString().equalsIgnoreCase("false") == false) {
+			if (ReadConfig.globalFilePath.toString().isEmpty()) {
+				ReadConfig.globalFilePath = new File(Main.getJarFile + "/global.txt");
+			} else {
+				GeneralFile.checkFileExtension(ReadConfig.globalFilePath.toString(), ".txt", false, true);
+			}
+
+			// for combiner commands
+			PrintWriter writer = null;
+			try {
+				writer = new PrintWriter(ReadConfig.globalFilePath, "UTF-8");
+			} catch (FileNotFoundException | UnsupportedEncodingException e) {
+				GeneralFile.dispError(e);
+				System.exit(0);
+			}
+
+			writer.println(ReadConfig.regFilePath.getName() + "\n");
+			for (String writeCmd : fullCombinerCommands) {
+				writer.println(writeCmd + "\n");
+			}
+
+			writer.close();
+
+			// for parsed commands
+			if (Var_Options.parseOption) {
+				try {
+					writer = new PrintWriter(
+							ReadConfig.globalFilePath.toString().substring(0, ReadConfig.globalFilePath.toString().lastIndexOf(".txt"))
+									+ "_parsed.txt",
+							"UTF-8");
+				} catch (FileNotFoundException | UnsupportedEncodingException e) {
+					GeneralFile.dispError(e);
+					System.exit(0);
+				}
+
+				for (String parsedCmd : parsedFileCommands) {
+					writer.println(parsedCmd);
+				}
+
+				writer.close();
+			}
+
+			if (Var_Options.commandOption) {
+				try {
+					writer = new PrintWriter(
+							ReadConfig.globalFilePath.toString().substring(0, ReadConfig.globalFilePath.toString().lastIndexOf(".txt"))
+									+ "_cmd.txt",
+							"UTF-8");
+				} catch (FileNotFoundException | UnsupportedEncodingException e) {
+					GeneralFile.dispError(e);
+					System.exit(0);
+				}
+
+				for (String writeCmd : initialCommands) {
+					writer.println(writeCmd);
+				}
+				for (String writeCmd : setblockDisplayCommands) {
+					writer.println(writeCmd);
+				}
+				for (String writeCmd : finalCommands) {
+					writer.println(writeCmd);
+				}
+				writer.close();
+			}
+
+			if (ReadConfig.globalFunctionFilePath != null && ReadConfig.globalFunctionFilePath.toString().isEmpty() == false) {
+				GeneralFile.checkFileExtension(ReadConfig.globalFunctionFilePath.toString(), ".mcfunction", false, true);
+
+				try {
+					writer = new PrintWriter(ReadConfig.globalFunctionFilePath.toString(), "UTF-8");
+				} catch (FileNotFoundException | UnsupportedEncodingException e) {
+					GeneralFile.dispError(e);
+					System.exit(0);
+				}
+
+				for (String writeCmd : initialCommands) {
+					writer.println(writeCmd);
+				}
+				for (String writeCmd : setblockCommands) {
+					writer.println(writeCmd);
+				}
+				for (String writeCmd : finalCommands) {
+					writer.println(writeCmd);
+				}
+				writer.close();
+			}
 		}
 	}
 }

@@ -1,7 +1,6 @@
 package ccu.general;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 import ccu.command.MathParser;
 
@@ -18,7 +17,7 @@ public class ParamUtils {
 		Integer paramMaxNum = null;
 
 		if (getParamString.trim().contains("|")) {
-			String[] paramsCalc = getParamString.trim().split(Pattern.quote("|"));
+			String[] paramsCalc = getParamString.trim().split("(?<!`)\\|");
 			int paramIndex = 0;
 
 			while (paramIndex < paramsCalc.length) {
@@ -46,14 +45,14 @@ public class ParamUtils {
 
 		for (int i = 0; i < getParamsArray.size(); i++) {
 			if (getParamsArray.get(i).trim().contains("|")) {
-				String[] paramsCalc = getParamsArray.get(i).trim().split(Pattern.quote("|"));
+				String[] paramsCalc = getParamsArray.get(i).trim().split("(?<!`)\\|");
 				int paramIndex = 0;
 
 				while (paramIndex < paramsCalc.length) {
 					Integer calcInt = null;
 
 					if (paramsCalc[paramIndex].contains(";")) {
-						String[] testParams = paramsCalc[paramIndex].split(";");
+						String[] testParams = paramsCalc[paramIndex].split("(?<!`);");
 						if (testParams.length == 2 && NumberUtils.isInt(testParams[0])) {
 							calcInt = Integer.parseInt(testParams[0]);
 						}
@@ -102,7 +101,7 @@ public class ParamUtils {
 			} else {
 
 				// add all existing parameters, even if there's more than enough
-				getParamsCalc = getParams.substring(1, getParams.length() - 1).split(";(?!`)");
+				getParamsCalc = getParams.substring(1, getParams.length() - 1).split("(?<!`);");
 				for (int i = 0; i < getParamsCalc.length; i++) {
 					useParamsCalc.add(getParamsCalc[i]);
 				}

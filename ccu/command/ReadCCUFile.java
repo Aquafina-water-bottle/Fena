@@ -45,6 +45,7 @@ public class ReadCCUFile {
 			"UNASSIGN",
 			"CALL", 
 			"ARRAY",
+			"SET",
 			"SPLIT",
 			"OPTIONS",
 			"LOOP",
@@ -167,17 +168,17 @@ public class ReadCCUFile {
 				recheckLine = false;
 				getDefinitionArray = null;
 
+				// when the line starts with 'DEF'
+				if (getLineCalc.trim().length() >= 3 && getLineCalc.trim().substring(0, 3).equals("DEF") == true) {
+					giveDefString = getLineCalc.substring(Var_Define.getDefineIndex(getLineCalc));
+					getBegDef = getLineCalc.substring(0, Var_Define.getDefineIndex(getLineCalc));
+				} else {
+					giveDefString = getLineCalc;
+				}
+
 				// iterates through all definitions
 				// starts at the negative end to prioritize the more tabulated definition
 				for (int defIndex = Var_Define.arrayDefineSave.size() - 1; defIndex >= 0; defIndex--) {
-
-					// when the line starts with 'DEF'
-					if (getLineCalc.trim().length() >= 3 && getLineCalc.trim().substring(0, 3).equals("DEF") == true) {
-						giveDefString = getLineCalc.substring(Var_Define.getDefineIndex(getLineCalc));
-						getBegDef = getLineCalc.substring(0, Var_Define.getDefineIndex(getLineCalc));
-					} else {
-						giveDefString = getLineCalc;
-					}
 
 					// if a definition matches up (cannot be with UNASSIGN)
 					if (giveDefString.trim().contains(Var_Define.arrayDefineSave.get(defIndex)[2])
@@ -188,42 +189,60 @@ public class ReadCCUFile {
 
 						getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 1, defIndex, getLineCalc);
 						definitionCalc = getDefinitionArray[1] + "";
+						break;
 					}
 				}
 
-				// iterates through all single arrays
-				// starts at the negative end to prioritize the more tabulated array
-				for (int arrayIndex = Var_Array.singleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
-					giveDefString = getLineCalc;
+				if (recheckLine == false) {
+					getBegDef = "";
+					giveDefString = "";
+					
+					// when the line starts with 'SET'
+					if (getLineCalc.trim().length() >= 3 && getLineCalc.trim().substring(0, 3).equals("SET") == true) {
+						giveDefString = getLineCalc.substring(Var_Array.getArrayIndex(getLineCalc));
+						getBegDef = getLineCalc.substring(0, Var_Array.getArrayIndex(getLineCalc));
+					} else {
+						giveDefString = getLineCalc;
+					}
+					
+					// iterates through all single arrays
+					// starts at the negative end to prioritize the more tabulated array
+					for (int arrayIndex = Var_Array.singleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
 
-					// if an array matches up (cannot be with UNASSIGN or ARRAY)
-					if (giveDefString.trim().contains(Var_Array.singleArrayNameSave.get(arrayIndex)[2] + "[")
-							&& this.tabNum >= Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1])
-							&& giveDefString.trim().startsWith("UNASSIGN") == false
-							&& giveDefString.trim().startsWith("ARRAY") == false) {
-						recheckLine = true;
-						changedLineOnce = true;
+						giveDefString = getLineCalc;
 
-						getDefinitionArray = Var_Define.parseDefinition(giveDefString, "", 2, arrayIndex, getLineCalc);
-						definitionCalc = getDefinitionArray[1] + "";
+						// if an array matches up (cannot be with UNASSIGN or ARRAY)
+						if (giveDefString.trim().contains(Var_Array.singleArrayNameSave.get(arrayIndex)[2] + "[")
+								&& this.tabNum >= Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1])
+								&& giveDefString.trim().startsWith("UNASSIGN") == false
+								&& giveDefString.trim().startsWith("SET") == false
+								&& giveDefString.trim().startsWith("ARRAY") == false) {
+							recheckLine = true;
+							changedLineOnce = true;
+
+							getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 2, arrayIndex, getLineCalc);
+							definitionCalc = getDefinitionArray[1] + "";
+						}
 					}
 				}
 
-				// iterates through all double arrays
-				// starts at the negative end to prioritize the more tabulated array
-				for (int arrayIndex = Var_Array.doubleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
-					giveDefString = getLineCalc;
+				if (recheckLine == false) {
+					// iterates through all double arrays
+					// starts at the negative end to prioritize the more tabulated array
+					for (int arrayIndex = Var_Array.doubleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
+						giveDefString = getLineCalc;
 
-					// if an array matches up (cannot be with UNASSIGN or ARRAY)
-					if (giveDefString.trim().contains(Var_Array.doubleArrayNameSave.get(arrayIndex)[2] + "[")
-							&& this.tabNum >= Integer.parseInt(Var_Array.doubleArrayNameSave.get(arrayIndex)[1])
-							&& giveDefString.trim().startsWith("UNASSIGN") == false
-							&& giveDefString.trim().startsWith("ARRAY") == false) {
-						recheckLine = true;
-						changedLineOnce = true;
+						// if an array matches up (cannot be with UNASSIGN or ARRAY)
+						if (giveDefString.trim().contains(Var_Array.doubleArrayNameSave.get(arrayIndex)[2] + "[")
+								&& this.tabNum >= Integer.parseInt(Var_Array.doubleArrayNameSave.get(arrayIndex)[1])
+								&& giveDefString.trim().startsWith("UNASSIGN") == false
+								&& giveDefString.trim().startsWith("ARRAY") == false) {
+							recheckLine = true;
+							changedLineOnce = true;
 
-						getDefinitionArray = Var_Define.parseDefinition(giveDefString, "", 3, arrayIndex, getLineCalc);
-						definitionCalc = getDefinitionArray[1] + "";
+							getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 3, arrayIndex, getLineCalc);
+							definitionCalc = getDefinitionArray[1] + "";
+						}
 					}
 				}
 
@@ -296,6 +315,13 @@ public class ReadCCUFile {
 					case "CALL":
 						Var_Call objCall = new Var_Call(ccuFileArray.get(i), this.tabNum);
 						getCalcArray = objCall.getArray();
+						resetArray = true;
+						singleLineStatement = true;
+						break;
+
+					case "SET":
+						Var_Set objSet = new Var_Set(ccuFileArray.get(i), this.tabNum);
+						getCalcArray = objSet.getArray();
 						resetArray = true;
 						singleLineStatement = true;
 						break;

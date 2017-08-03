@@ -71,9 +71,17 @@ public class GeneralFile {
 	}
 
 	public static ArrayList<String> parseCCU(ArrayList<String> getArray) {
-		ArrayList<String> returnArray = GeneralFile.removeSkipLineBlock(GeneralFile.combineLine(
-				GeneralFile.removeComment(GeneralFile.removeCommentBlock(escapeLine(getArray, "`"), "//=", "=//"), "//", true), "\\"),
-				"/*", "*/", "-/-");
+		ArrayList<String> returnArray = removeRightWhiteSpace(removeSkipLineBlock(
+				combineLine(removeComment(removeCommentBlock(escapeLine(getArray, "`"), "//=", "=//"), "//", true), "\\"), "/*", "*/",
+				"-/-"));
+		return returnArray;
+	}
+
+	public static ArrayList<String> removeRightWhiteSpace(ArrayList<String> getArray) {
+		ArrayList<String> returnArray = new ArrayList<String>();
+		for (int i = 0; i < getArray.size(); i++) {
+			returnArray.add(getArray.get(i).replaceAll("\\s+$", ""));
+		}
 		return returnArray;
 	}
 
@@ -127,6 +135,9 @@ public class GeneralFile {
 
 		for (String line : arrayGet) {
 			StringBuilder sb = new StringBuilder();
+			
+			// adds this because it doesn't split properly if it ends with '`'
+			line += " ";
 			String[] splitEscape = line.split(Pattern.quote(escapeChar));
 
 			for (int i = 0; i < splitEscape.length; i++) {
@@ -135,14 +146,15 @@ public class GeneralFile {
 					for (String charInArray : splitArray) {
 						sb.append(escapeChar + charInArray);
 					}
+
 					sb.append("`");
 				} else {
 					sb.append(splitEscape[i]);
 				}
 			}
-			returnArray.add(sb + "");
+			returnArray.add(sb.substring(0, sb.length() - 1));
 		}
-
+		
 		return returnArray;
 	}
 

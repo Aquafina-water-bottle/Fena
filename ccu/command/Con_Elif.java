@@ -2,8 +2,6 @@ package ccu.command;
 
 import java.util.ArrayList;
 
-import ccu.general.ArgUtils;
-
 public class Con_Elif {
 	private ArrayList<String> arrayGet = new ArrayList<String>();
 	private int tabNum;
@@ -23,9 +21,6 @@ public class Con_Elif {
 
 		ArrayList<String> returnArray = new ArrayList<String>();
 
-		ArgUtils.checkCommands(this.arrayGet, tabNum);
-		ArgUtils.checkWhiteSpace(this.arrayGet, tabNum, false);
-
 		// Removes "COND " and isolates for the arguments with brackets
 		String statementEncase = this.fullLineGet.replaceFirst("ELIF", "").replaceAll("^\\s+", "");
 		if (statementEncase.startsWith("{") && statementEncase.endsWith("}:")) {
@@ -38,6 +33,8 @@ public class Con_Elif {
 			
 			// goes to if right after because elif is like that
 			if (parseArray == true) {
+				
+				// checkcommands and checking lines are done here
 				Con_If objIf = new Con_If(this.arrayGet, this.tabNum, this.fullLineGet, false);
 				returnArray = objIf.getArray();
 				

@@ -178,7 +178,6 @@ public class Con_If {
 						+ this.fullLineGet + "' and that's all I can tell you");
 				System.exit(0);
 			}
-
 			// To prevent lag, checkCommands() is done ONLY after the first part of the IF command returns true
 			if (calcStatement == true) {
 				ArgUtils.checkCommands(this.arrayGet, tabNum);
@@ -188,7 +187,7 @@ public class Con_If {
 					returnArray.add(i, this.arrayGet.get(i).substring(1));
 				}
 				
-				returnArray.add("CCU_ReturnTrue");
+				returnArray.add(this.fullLineGet.substring(0, tabNum - 1) + "CCU_ReturnTrue");
 				
 				return returnArray;
 			} else {

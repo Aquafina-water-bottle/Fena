@@ -8,7 +8,7 @@ DEF ASDF DANK
 DEF DANK MEMES 5
 DEF GLOBAL aFloat 3333333333.1111111111111111111111
 DEF GLOBAL COORDS $DankCoords$ 3.11 ~ 0.0000
-DEF GLOBAL COORDS $DankCoords$ -301 51 930.0 40 0
+DEF GLOBAL TELE $DankCoords$ -301 51 930.0 40 0
 DEF RandNum 5
 DEF ScOP scoreboard players operation
 DEF $test$ ScOP @p TEST
@@ -89,6 +89,14 @@ ARRAY {GLOBAL Arr_Test}:
 	}
 
 MFUNC {BRANCH RayCaster/theHunted Main MFunc_MainRaycaster}:
+	
+	LOOP {1;2;3;`4;5`}:
+		say |0|
+	
+	LOOP {`1 3 + 1`}:
+		say |0|
+		say `|0|`
+	
 	Func_test|0|
 	Func_test_A
 	Func_test_B
@@ -432,6 +440,23 @@ GROUP {Grp_AyyLmao}:
 
 //<Part D
 GROUP {Grp_TheBestGroup}:
+	ARRAY {Arr_SetTest}:
+		1
+		2
+		3
+		4
+		5
+		NULL
+		
+	say Arr_SetTest[S] // LMAO THIS SHIT ENDS WITH ";" THEREFORE IT COMBINES THE LINES AHAHAHHA
+	SET Arr_SetTest[2] say 5
+	say Arr_SetTest[S]
+	
+///	invalid as it's outside the array bounds
+///	SET Arr_SetTest[5] say 5
+	SET Arr_SetTest[1] Arr_SetTest[3]
+	say Arr_SetTest[S]
+	
 	say a
 	say b
 	say c
@@ -531,9 +556,14 @@ GROUP {Grp_TheGreatestGroup}:
 
 //<Part E
 INITIALIZE:
-	DEF COORDS $TeleCoords$ 1 2 3 0 ~1
+	DEF TELE $TeleCoords$ 1 2 3 0 ~1
 	say $TeleCoords$[ry]
 	say $TeleCoords$[rx]
+	say $TeleCoords$`[x]`
+	say `$TeleCoords$[x]`
+	say @a[asdf=1,`asdf2=2`]
+	say @a[asdf=1,asdf2`=2`]
+	say @a[asdf=1,`asdf2`=2]
 	
 	say test
 	say test2
@@ -629,31 +659,31 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 		DEF $Num$ 5
 
 		DEF COORDS $Coords1$ 49 36 -45
-		DEF COORDS $CoordsTP1$ 49 36 -45 -90 0
+		DEF TELE $CoordsTP1$ 49 36 -45 -90 0
 		DEF $Event1$ Ice Race
 		DEF $EventShort1$ ir
 		DEF $EventC1$ aqua
 
 		DEF COORDS $Coords2$ 75 7 -80
-		DEF COORDS $CoordsTP2$ 75 7 -80 90 0
+		DEF TELE $CoordsTP2$ 75 7 -80 90 0
 		DEF $Event2$ Slow Race
 		DEF $EventShort2$ sr
 		DEF $EventC2$ gray
 
 		DEF COORDS $Coords3$ 73 7 -102
-		DEF COORDS $CoordsTP3$ 73 7 -102 90 0
+		DEF TELE $CoordsTP3$ 73 7 -102 90 0
 		DEF $Event3$ Nether Race
 		DEF $EventShort3$ nr
 		DEF $EventC3$ red
 
 		DEF COORDS $Coords4$ 23 7 -133
-		DEF COORDS $CoordsTP4$ 23 7 -133 -90 0
+		DEF TELE $CoordsTP4$ 23 7 -133 -90 0
 		DEF $Event4$ Evil Race
 		DEF $EventShort4$ evilr
 		DEF $EventC4$ gray
 
 		DEF COORDS $Coords5$ 218 18 -37
-		DEF COORDS $CoordsTP5$ 218 18 -37 -90 0
+		DEF TELE $CoordsTP5$ 218 18 -37 -90 0
 		DEF $Event5$ Diamond Race
 		DEF $EventShort5$ dr
 		DEF $EventC5$ aqua

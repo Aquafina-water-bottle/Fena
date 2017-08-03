@@ -18,20 +18,19 @@ public class Var_Define {
 	}
 
 	// list of definitions that CANNOT be definitions because they are used for parameters for other CCU statements
-	// TODO make TELE work with 3, 4 or 5 numbers
 	// if 3, dy / dx returns ~
 	// if 4, dx returns ~
 	// Add seperation of numbers via ;
 
 	// @formatter:off
 	public static String[] exceptionArray = {
-			"DEF", "ARRAY", "SPLIT", "GLOBAL", "COORDS", 
+			"DEF", "ARRAY", "SET", "SPLIT", "GLOBAL", "COORDS", "TELE", 
 			"GROUP", "PULSE", "CLOCK", "BLOCK",
 			"USE", "BEG", "END", "NOSPACE",
 			"FUNC", "ACTIVATE", "CALL", 
 			"MFUNC", "BRANCH",
 			"IMPORT", "LIBRARY", "GETDIR", "WITHIN", "GETCOORDS", 
-			"CALC", "SIN", "COS", "TAN", "INT", "DOUBLE", "GSELF", "NULL",
+			"CALC", "SIN", "COS", "TAN", "INT", "DOUBLE", "GSELF",
 			"COND", "OPTIONS", "UNASSIGN", "IF", "ELSE", "ELIF", "LOOP", "PRINT", "INITIALIZE", "FINALIZE"
 			};
 	// @formatter:on
@@ -61,9 +60,6 @@ public class Var_Define {
 		String defintionGet = null;
 		int paramMaxNum = 0;
 
-		String[] coordsArrayDisp = null;
-		String[] coordsArrayCalc = null;
-
 		/* defineType
 		 * null = unspecified, will be specified after
 		 * 0 = NULL
@@ -84,9 +80,15 @@ public class Var_Define {
 			// removes GLOBAL
 			statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
 			break;
-
+			
 		case "COORDS":
 			defineType = 4;
+			// removes COORDS
+			statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+			break;
+
+		case "TELE":
+			defineType = 5;
 			// removes COORDS
 			statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
 			break;
@@ -106,10 +108,22 @@ public class Var_Define {
 				// removes GLOBAL
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 				break;
-
+				
 			case "COORDS":
 				if (defineType == null) {
 					defineType = 4;
+				} else {
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				// removes COORDS
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+				break;
+
+			case "TELE":
+				if (defineType == null) {
+					defineType = 5;
 				} else {
 					System.out.println(
 							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
@@ -130,11 +144,6 @@ public class Var_Define {
 				if (defineName.trim().length() == 0) {
 					System.out.println("ERROR: Definition '" + this.fullLineGet + "' is blank");
 					System.exit(0);
-				}
-
-				// turns 'NULL' into nothing
-				if (defintionGet.equals("NULL")) {
-					defintionGet = "";
 				}
 
 				// Checks if the name matches any unacceptable define names
@@ -178,29 +187,7 @@ public class Var_Define {
 			}
 
 			// tests whether coords works
-			if (defineType == 4) {
-				coordsArrayDisp = defintionGet.split(" ");
-				coordsArrayCalc = defintionGet.replace("~", "0").split(" ");
-				if (coordsArrayCalc.length >= 3 && coordsArrayCalc.length <= 6) {
-					for (int i = 0; i < coordsArrayCalc.length; i++) {
-						if (NumberUtils.isNum(coordsArrayCalc[i]) == false) {
-							System.out.println(
-									"ERROR: '" + coordsArrayDisp[i] + "' in line '" + this.fullLineGet + "' must be a number");
-							System.exit(0);
-						}
-					}
-				}
-
-				// makes the type for teleporting
-				if (coordsArrayCalc.length == 4 || coordsArrayCalc.length == 5) {
-					defineType = 5;
-				}
-
-				// adds an additional ~ to fill up the gap
-				if (coordsArrayCalc.length == 4) {
-					defintionGet += " ~";
-				}
-			}
+			ArgUtils.checkCoords(defintionGet, defineType, this.fullLineGet);
 
 			// If global, tabnum = 0
 			if (isGlobal == true) {

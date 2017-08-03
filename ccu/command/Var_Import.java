@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import ccu.block.Coordinates;
 import ccu.general.ArgUtils;
 import ccu.general.GeneralFile;
+import ccu.general.Main;
 import ccu.general.ReadConfig;
 
 public class Var_Import {
@@ -47,7 +48,7 @@ public class Var_Import {
 		this.tabNum = tabNumGet;
 		this.fullLineGet = fullLineGet;
 	}
-	
+
 	public ArrayList<String> getArray() {
 
 		// import lookup type (LIBRARY = 1, WITHIN = 2)
@@ -288,10 +289,18 @@ public class Var_Import {
 								// works with or without input
 
 								File importFile = null;
-								if (statementArgs == null) {
-									importFile = ReadConfig.importLibraryPath;
+								if (ReadConfig.importLibraryPath == null || ReadConfig.importLibraryPath.toString().isEmpty()) {
+									if (statementArgs == null) {
+										importFile = new File(Main.getJarFile + "/Library");
+									} else {
+										importFile = new File(Main.getJarFile + "/Library/" + statementArgs);
+									}
 								} else {
-									importFile = new File(ReadConfig.importLibraryPath.toString() + "/" + statementArgs);
+									if (statementArgs == null) {
+										importFile = ReadConfig.importLibraryPath;
+									} else {
+										importFile = new File(ReadConfig.importLibraryPath.toString() + "/" + statementArgs);
+									}
 								}
 
 								if (importFile.isDirectory()) {
@@ -313,10 +322,18 @@ public class Var_Import {
 								// library, full directory, dat files
 
 								File importFile = null;
-								if (statementArgs == null) {
-									importFile = ReadConfig.importLibraryPath;
+								if (ReadConfig.importLibraryPath == null || ReadConfig.importLibraryPath.toString().isEmpty()) {
+									if (statementArgs == null) {
+										importFile = new File(Main.getJarFile + "/Library");
+									} else {
+										importFile = new File(Main.getJarFile + "/Library/" + statementArgs);
+									}
 								} else {
-									importFile = new File(ReadConfig.importLibraryPath.toString() + "/" + statementArgs);
+									if (statementArgs == null) {
+										importFile = ReadConfig.importLibraryPath;
+									} else {
+										importFile = new File(ReadConfig.importLibraryPath.toString() + "/" + statementArgs);
+									}
 								}
 
 								if (importFile.isDirectory()) {
@@ -339,17 +356,31 @@ public class Var_Import {
 
 						} else { // not directory
 							if (importType == 1) { // normal ccu files
-								// library, not directory, ccu files
-								String importFile = GeneralFile.checkFileExtension(
-										ReadConfig.importLibraryPath.toString() + "/" + statementArgs, ".ccu", false, true);
+
+								String importFile = null;
+								if (ReadConfig.importLibraryPath == null || ReadConfig.importLibraryPath.toString().isEmpty()) {
+									importFile = GeneralFile.checkFileExtension(Main.getJarFile + "/Library/" + statementArgs, ".ccu",
+											false, true);
+								} else {
+									importFile = GeneralFile.checkFileExtension(
+											ReadConfig.importLibraryPath.toString() + "/" + statementArgs, ".ccu", false, true);
+								}
+
 								GeneralFile importFileCalc = new GeneralFile(importFile);
 								arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
 
 							} else { // dat files
 								// library, not directory, dat files
 
-								String importFile = GeneralFile.checkFileExtension(
-										ReadConfig.importLibraryPath.toString() + "/" + statementArgs, "_dat.txt", false, false);
+								String importFile = null;
+								if (ReadConfig.importLibraryPath == null || ReadConfig.importLibraryPath.toString().isEmpty()) {
+									importFile = GeneralFile.checkFileExtension(Main.getJarFile + "/Library/" + statementArgs,
+											"_dat.txt", false, false);
+								} else {
+									importFile = GeneralFile.checkFileExtension(
+											ReadConfig.importLibraryPath.toString() + "/" + statementArgs, "_dat.txt", false, false);
+								}
+
 								GeneralFile importFileCalc = new GeneralFile(importFile);
 
 								File fileNameCalc = new File(importFile);
@@ -460,7 +491,8 @@ public class Var_Import {
 							} else { // imports dat files
 								// within, not directory, dat files
 								File importFile = new File(GeneralFile.checkFileExtension(
-										ReadConfig.regFilePath.getParentFile().toString() + "/" + statementArgs, "_dat.txt", false, false));
+										ReadConfig.regFilePath.getParentFile().toString() + "/" + statementArgs, "_dat.txt", false,
+										false));
 								if (importFile.isFile()) {
 									GeneralFile importFileCalc = new GeneralFile(importFile);
 									datCoordFillArray(importFileCalc.getFileArray(), importFile.getName().replace("_dat.txt", ""));
@@ -477,7 +509,7 @@ public class Var_Import {
 										System.exit(0);
 									}
 								}
-								
+
 							}
 						}
 					}

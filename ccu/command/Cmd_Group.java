@@ -233,7 +233,7 @@ public class Cmd_Group {
 
 			// Creates the string array, and puts it in the arraylist
 			// Notice how the first element in each array is the group name and not a valid command
-
+			
 			this.arrayGet = GeneralFile.combineLine(this.arrayGet, ";");
 
 			String[] arrayGroup = new String[this.arrayGet.size() + 1];

@@ -50,14 +50,14 @@ class TestForError {
 public class ReadConfig {
 	public static Integer mcVersion = null;
 	public static File regFilePath = null;
-	public static File globalCombinerFilePath = null;
+	public static File globalFilePath = null;
+	public static File globalFunctionFilePath = null;
 	public static File importLibraryPath = null;
 	public static Boolean preventServerKick = null;
 	public static Boolean serverPlugins = null;
 	public static String[] groupSuffixPulse = null;
 	public static String[] groupSuffixRepeating = null;
 	public static Boolean rconEnable = null;
-	public static Boolean rconFunction = null;
 	public static Boolean rconDouble = null;
 	public static String rconIP = null;
 	public static Integer rconPort = null;
@@ -73,10 +73,10 @@ public class ReadConfig {
 
 		GeneralFile configFile = null;
 
-		if (Main.getJarFile == null) {
+		if (Main.ranInEclpise == true) {
 			configFile = new GeneralFile("CCU.ini");
 		} else {
-			configFile = new GeneralFile(Main.getJarFile.getParent() + "/" + "CCU.ini");
+			configFile = new GeneralFile(Main.getJarFile + "/" + "CCU.ini");
 		}
 
 		ArrayList<String> temp = GeneralFile.removeComment(configFile.getFileArray(), "#", false);
@@ -104,9 +104,13 @@ public class ReadConfig {
 						regFilePath = new File(tempInput);
 					}
 					break;
+					
+				case "globalFilePath":
+					globalFilePath = new File(tempInput);
+					break;
 
-				case "globalCombinerFilePath":
-					globalCombinerFilePath = new File(tempInput);
+				case "globalFunctionFilePath":
+					globalFunctionFilePath = new File(tempInput);
 					break;
 
 				case "importLibraryPath":
@@ -147,16 +151,6 @@ public class ReadConfig {
 					} else {
 						if (tempInput.equalsIgnoreCase("false")) {
 							rconEnable = false;
-						}
-					}
-					break;
-
-				case "rconFunction":
-					if (tempInput.equalsIgnoreCase("true")) {
-						rconFunction = true;
-					} else {
-						if (tempInput.equalsIgnoreCase("false")) {
-							rconFunction = false;
 						}
 					}
 					break;
@@ -207,7 +201,7 @@ public class ReadConfig {
 		}
 
 		// Checking options
-		if (regFilePath == null || regFilePath.toString().length() == 0) {
+		if (regFilePath == null || regFilePath.toString().length() == 0 && Main.ranInEclpise) {
 			System.out.println("ERROR: 'regFilePath' field is empty");
 			System.exit(0);
 		} else {
@@ -270,14 +264,8 @@ public class ReadConfig {
 				System.exit(0);
 			}
 
-			if (rconFunction == null) {
-				System.out.println("WARNING: 'rconFunction' field is empty - defaults to 'false'");
-				rconFunction = false;
-			}
-
 			if (rconDouble == null) {
-				System.out.println("WARNING: 'rconFunction' field is empty - defaults to 'false'");
-				System.exit(0);
+				System.out.println("WARNING: 'rconDouble' field is empty - defaults to 'false'");
 				rconDouble = false;
 			}
 		}

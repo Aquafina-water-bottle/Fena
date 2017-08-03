@@ -45,7 +45,7 @@ public class MathParser {
 
 		// meaning the list is already given and no math is required
 		if (getArgs.contains(";")) {
-			arrayCalc = getArgs.split(";");
+			arrayCalc = getArgs.split("(?<!`);");
 			return arrayCalc;
 
 		} else {
@@ -1113,15 +1113,25 @@ public class MathParser {
 							arrayIndex = 0;
 							while (arrayIndex < arrayListCalc.size()) {
 								if (arrayIndex == 0 && arrayNumType.get(arrayIndex) == false) {
-									System.out.println("ERROR: The first number in '" + getString + "' in line '" + fullLineGet
-											+ "' must be a number");
-									System.exit(0);
+									if (isStrict) {
+										System.out.println("ERROR: The first number in '" + getString + "' in line '" + fullLineGet
+												+ "' must be a number");
+										System.exit(0);
+									} else {
+										storeValueType returnValue = new storeValueType(getString);
+										return returnValue;
+									}
 								}
 
 								if (arrayIndex - 1 == arrayCalc.length && arrayNumType.get(arrayIndex) == false) {
-									System.out.println("ERROR: The last number in '" + getString + "' in line '" + fullLineGet
-											+ "' must be a number");
-									System.exit(0);
+									if (isStrict) {
+										System.out.println("ERROR: The last number in '" + getString + "' in line '" + fullLineGet
+												+ "' must be a number");
+										System.exit(0);
+									} else {
+										storeValueType returnValue = new storeValueType(getString);
+										return returnValue;
+									}
 								}
 
 								if (arrayOperatorType.get(arrayIndex) == true) {
