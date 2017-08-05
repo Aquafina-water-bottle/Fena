@@ -1,20 +1,22 @@
 **A pre-release can be downloaded under releases**
 
-Status: **Near completion (expected to be released at the end of July)**
+Status: **Near completion (I literally just have to finish up documentation and add `FILE`)**
+
+Command Compiler Unlimited (CCU), a spiritual successor to Command Block Parser (CBP), will make understand large numbers of commands easier while being extremely flexibile to cater to any individual's command needs. However, just like CBP, this adds an extra layer of complexity to working with commands.
 
 A random feature list in no particular order:
-* support for command blocks (groups, conditional, combiners)
+* support for command blocks (groups, conditional, combiners) with either relative or direct coordinates
 * general mcfunction support (nicknames and file encapsulation visualized by number of tab spaces)
 * scoreboard, execute, selector and function shortcuts
-* variables (normal, copy/pasting code blocks and arrays) with general coordinate support
-* files for the parsed commands, setblock commands and combiner commands
+* variables (normal, functions and arrays) with general coordinate manipulation support and parameter support
+* files for parsed commands, setblock commands and combiner commands
 * server support to prevent kicking the player when using combiners
 * adding 'minecraft:' over certain commands if plugins are used
 * support for minecraft versions between 1.10 and 1.12
+* support for including custom plugin commands if necessary under the config file
 * basic math (`%, ^, *, /, -, +` as operators, `SIN, COS, TAN` functions with integer and double support)
-* if statements and for loops
-* simplify putting the same string at the beginning or end of a line with 'USE'
-* rcon support (sort of but not really)
-* various methods of formatting to prevent long commands from taking up horizontal space
+* if/else/elif statements and for loops that works with either strings or numbers
+* general rcon support
+* combining lines in various different ways
 * comments & comment blocks
-* importing files and a library for general purposes (will be expanded a lot more in the future)
+* various ways of importing, with a built in library that will be expanded heavily as time goes by
