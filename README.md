@@ -20,3 +20,5 @@ A random feature list in no particular order:
 * combining lines in various different ways
 * comments & comment blocks
 * various ways of importing, with a built in library that will be expanded heavily as time goes by
+
+P.S. I lied about it compiling. It's more like a text interpreter. I don't know how to name programs or use terms properly. Deal with it.
