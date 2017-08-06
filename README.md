@@ -2,7 +2,7 @@
 
 Status: **Near completion (I literally just have to finish up documentation and add `FILE`)**
 
-Command Compiler Unlimited (CCU), a spiritual successor to Command Block Parser (CBP), will make understand large numbers of commands easier while being extremely flexibile to cater to any individual's command needs. However, just like CBP, this adds an extra layer of complexity to working with commands.
+Command Compiler Unlimited (CCU), a spiritual successor to Command Block Parser (CBP), is a minecraft scripting language that will make understand large numbers of commands easier while being extremely flexibile to cater to any individual's command needs. However, just like CBP, this adds an extra layer of complexity to working with commands.
 
 A random feature list in no particular order:
 * support for command blocks (groups, conditional, combiners) with either relative or direct coordinates
