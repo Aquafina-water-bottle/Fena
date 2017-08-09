@@ -71,7 +71,7 @@ public class GeneralFile {
 	}
 
 	public static ArrayList<String> parseCCU(ArrayList<String> getArray) {
-		ArrayList<String> returnArray = removeRightWhiteSpace(removeSkipLineBlock(
+		ArrayList<String> returnArray =removeRightWhiteSpace(removeSkipLineBlock(
 				combineLine(removeComment(removeCommentBlock(escapeLine(getArray, "`"), "//=", "=//"), "//", true), "\\"), "/*", "*/",
 				"-/-"));
 		return returnArray;
@@ -135,7 +135,7 @@ public class GeneralFile {
 
 		for (String line : arrayGet) {
 			StringBuilder sb = new StringBuilder();
-			
+
 			// adds this because it doesn't split properly if it ends with '`'
 			line += " ";
 			String[] splitEscape = line.split(Pattern.quote(escapeChar));
@@ -152,9 +152,9 @@ public class GeneralFile {
 					sb.append(splitEscape[i]);
 				}
 			}
-			returnArray.add(sb.substring(0, sb.length() - 1));
+			returnArray.add(sb.substring(0, sb.length() - 1).replace("``", ""));
 		}
-		
+
 		return returnArray;
 	}
 

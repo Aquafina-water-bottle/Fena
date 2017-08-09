@@ -721,7 +721,9 @@ public class Box {
 			ArrayList<String> datFileArray = readDatFile.getFileArray();
 			if (datFileArray.size() != 0) {
 				initialFillCommand = "fill " + datFileArray.get(0) + " air 0";
-				Setblock.initialCommands.add(initialFillCommand);
+				if (GroupStructure.groupCommandsArray.isEmpty() == false) {
+					Setblock.initialCommands.add(initialFillCommand);
+				}
 			}
 		}
 
@@ -734,12 +736,15 @@ public class Box {
 			System.exit(0);
 		}
 
-		// Write out initial fill coords
-		writer.println(fillCoords1.getString() + " " + fillCoords2.getString());
+		// Write out initial fill coords if groups exist
+		if (GroupStructure.groupCommandsArray.isEmpty() == false) {
+			writer.println(fillCoords1.getString() + " " + fillCoords2.getString());
+		}
 
 		// Checks if the fill commands are the same
-		if (initialFillCommand == null
-				|| initialFillCommand.equals("fill " + fillCoords1.getString() + " " + fillCoords2.getString() + " air 0") == false) {
+		if ((initialFillCommand == null
+				|| initialFillCommand.equals("fill " + fillCoords1.getString() + " " + fillCoords2.getString() + " air 0") == false)
+				&& GroupStructure.groupCommandsArray.isEmpty() == false) {
 
 			// Adds to the initialCommands (current fill commands)
 			Setblock.initialCommands.add("fill " + fillCoords1.getString() + " " + fillCoords2.getString() + " air 0");

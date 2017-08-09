@@ -49,6 +49,9 @@ public class Setblock {
 
 		// getting the setblock commands
 		for (int i = 0; i < Cmd_Group.arrayGroupSave.size(); i++) {
+			if (Cmd_Group.arraySetblockSave.get(i) == null) {
+				Cmd_Group.arraySetblockSave.set(i, Var_Options.blockOption);
+			}
 			finalCommands.add("setblock " + Box.groupNameCoordArray[i].getString() + " " + Cmd_Group.arraySetblockSave.get(i));
 		}
 
@@ -199,7 +202,7 @@ public class Setblock {
 			}
 
 			// initial commands
-			if ((initialCommands == null && initialCommands.isEmpty()) == false) {
+			if ((initialCommands == null || initialCommands.isEmpty()) == false) {
 				parsedFileCommands.add("INITIALIZE");
 				for (int i = 0; i < initialCommands.size(); i++) {
 					parsedFileCommands.add("\t" + initialCommands.get(i));
@@ -248,7 +251,7 @@ public class Setblock {
 			}
 
 			// initial commands
-			if ((finalCommands == null && finalCommands.isEmpty()) == false) {
+			if ((finalCommands == null || finalCommands.isEmpty()) == false) {
 				parsedFileCommands.add("\nFINALIZE");
 				for (int i = 0; i < finalCommands.size(); i++) {
 					parsedFileCommands.add("\t" + finalCommands.get(i));

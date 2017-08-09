@@ -37,7 +37,7 @@ public class Main {
 		long startTime = System.nanoTime();
 
 		// checks version
-		String currentVersion = "1.0";
+		String currentVersion = "1.0.1";
 		System.out.println("Current version: " + currentVersion);
 
 		try {

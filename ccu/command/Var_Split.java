@@ -216,7 +216,7 @@ public class Var_Split {
 				String[] tempSplitCalc = null;
 
 				for (int j = 0; j < calcSplit.size(); j++) {
-					tempSplitCalc = calcSplit.get(j).split(Pattern.quote(arraySplit.get(i)));
+					tempSplitCalc = calcSplit.get(j).split("(?<!`)" + Pattern.quote(arraySplit.get(i)));
 
 					for (String splitString : tempSplitCalc) {
 						tempSplit.add(splitString);

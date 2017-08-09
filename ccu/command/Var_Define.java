@@ -75,24 +75,26 @@ public class Var_Define {
 		ArgUtils.checkWhiteSpace(this.fullLineGet, this.tabNum);
 
 		String statementEncase = this.fullLineGet.replaceFirst("DEF", "").replaceAll("^\\s+", "");
-		switch (statementEncase.substring(0, statementEncase.indexOf(" "))) {
-		case "GLOBAL":
-			isGlobal = true;
-			// removes GLOBAL
-			statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
-			break;
-			
-		case "COORDS":
-			defineType = 4;
-			// removes COORDS
-			statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
-			break;
+		if (statementEncase.contains(" ")) {
+			switch (statementEncase.substring(0, statementEncase.indexOf(" "))) {
+			case "GLOBAL":
+				isGlobal = true;
+				// removes GLOBAL
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+				break;
 
-		case "TELE":
-			defineType = 5;
-			// removes COORDS
-			statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
-			break;
+			case "COORDS":
+				defineType = 4;
+				// removes COORDS
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+				break;
+
+			case "TELE":
+				defineType = 5;
+				// removes COORDS
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+				break;
+			}
 		}
 
 		// Gets second parameters
@@ -109,7 +111,7 @@ public class Var_Define {
 				// removes GLOBAL
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 				break;
-				
+
 			case "COORDS":
 				if (defineType == null) {
 					defineType = 4;
@@ -135,89 +137,80 @@ public class Var_Define {
 				break;
 			}
 			// the end should make 'statementEncase' as the actual use thing (Name Definition)
+		}
+		// Sets name
+		if (statementEncase.contains(" ")) {
+			defineName = statementEncase.substring(0, statementEncase.indexOf(" "));
+			defintionGet = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 
-			// Sets name
-			if (statementEncase.contains(" ")) {
-				defineName = statementEncase.substring(0, statementEncase.indexOf(" "));
-				defintionGet = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
-
-				// Checks if defineName is literally nothing
-				if (defineName.trim().length() == 0) {
-					System.out.println("ERROR: Definition '" + this.fullLineGet + "' is blank");
-					System.exit(0);
-				}
-
-				// Checks if the name matches any unacceptable define names
-				for (String checkException : exceptionArray) {
-					if (defineName.equals(checkException)) {
-						System.out.println("ERROR: A definition cannot be '" + defineName + "' in line '" + this.fullLineGet + "'");
-						System.exit(0);
-					}
-				}
-
-				// Checks how many parameters exist
-				paramMaxNum = ParamUtils.countParams(defintionGet);
-
-			} else {
-				System.out.println("ERROR: '" + this.fullLineGet + "' does not define anything without spaces");
+			// Checks if defineName is literally nothing
+			if (defineName.trim().length() == 0) {
+				System.out.println("ERROR: Definition '" + this.fullLineGet + "' is blank");
 				System.exit(0);
 			}
 
-			// sets options if they are unspecified
-			if (isGlobal == null) {
-				isGlobal = false;
-			}
-			// detects definition type if not specified
-
-			/*
-			if (defineType == null) {
-				if (NumberUtils.isInt(defintionGet)) {
-					// is int
-					defineType = 2;
-				}
-			
-				if (NumberUtils.isDouble(defintionGet)) {
-					// is double
-					defineType = 3;
-				}
-			}*/
-
-			// Sets to string
-			if (defineType == null) {
-				defineType = 1;
-			}
-
-			// tests whether coords works
-			ArgUtils.checkCoords(defintionGet, defineType, this.fullLineGet);
-
-			// If global, tabnum = 0
-			if (isGlobal == true) {
-				this.tabNum = 0;
-			}
-
-			arrayDefineCalc[0] = defineType.toString();
-			arrayDefineCalc[1] = tabNum + "";
-			arrayDefineCalc[2] = defineName;
-			arrayDefineCalc[3] = defintionGet;
-
-			// System.out.println("LOOKUP " + defintionGet);
-
-			arrayDefineCalc[4] = paramMaxNum + "";
-
-			// Checks whether the defineName and tabnum is the same anywhere --> will remove
-			int defIndex = 0;
-			while (defIndex < arrayDefineSave.size()) {
-				if (arrayDefineSave.get(defIndex)[2].equals(defineName) && arrayDefineSave.get(defIndex)[1].equals(tabNum + "")) {
-					arrayDefineSave.remove(defIndex);
-				} else {
-					defIndex++;
+			// Checks if the name matches any unacceptable define names
+			for (String checkException : exceptionArray) {
+				if (defineName.equals(checkException)) {
+					System.out.println("ERROR: A definition cannot be '" + defineName + "' in line '" + this.fullLineGet + "'");
+					System.exit(0);
 				}
 			}
 
-			arrayDefineSave.add(arrayDefineCalc);
+			// Checks how many parameters exist
+			paramMaxNum = ParamUtils.countParams(defintionGet);
 
-			// System.out.println(arrayDefineCalc[2] + " | " + arrayDefineCalc[1]);
+		} else {
+			if (statementEncase.isEmpty()) {
+				System.out.println("ERROR: '" + this.fullLineGet + "' does not define anything");
+				System.exit(0);
+			} else {
+				defineName = statementEncase + "";
+				defintionGet = "";
+			}
 		}
+
+		// sets options if they are unspecified
+		if (isGlobal == null) {
+			isGlobal = false;
+		}
+		// detects definition type if not specified
+
+		// Sets to string
+		if (defineType == null) {
+			defineType = 1;
+		}
+
+		// tests whether coords works
+		ArgUtils.checkCoords(defintionGet, defineType, this.fullLineGet);
+
+		// If global, tabnum = 0
+		if (isGlobal == true) {
+			this.tabNum = 0;
+		}
+
+		arrayDefineCalc[0] = defineType.toString();
+		arrayDefineCalc[1] = tabNum + "";
+		arrayDefineCalc[2] = defineName;
+		arrayDefineCalc[3] = defintionGet;
+
+		// System.out.println("LOOKUP " + defintionGet);
+
+		arrayDefineCalc[4] = paramMaxNum + "";
+
+		// Checks whether the defineName and tabnum is the same anywhere --> will remove
+		int defIndex = 0;
+		while (defIndex < arrayDefineSave.size()) {
+			if (arrayDefineSave.get(defIndex)[2].equals(defineName) && arrayDefineSave.get(defIndex)[1].equals(tabNum + "")) {
+				arrayDefineSave.remove(defIndex);
+			} else {
+				defIndex++;
+			}
+		}
+
+		arrayDefineSave.add(arrayDefineCalc);
+
+		// System.out.println(arrayDefineCalc[2] + " | " + arrayDefineCalc[1]);
 		return null;
 	}
 
@@ -358,7 +351,8 @@ public class Var_Define {
 
 					// checks whether it's within the index
 					if (Var_Array.singleArraySave.get(getIndex).length - 1 < indexCalc) {
-						System.out.println("ERROR: Index '" + Var_Array.singleArrayNameSave.get(getIndex)[2] + "' in line '" + fullLineGet + "' is invalid");
+						System.out.println("ERROR: Index '" + Var_Array.singleArrayNameSave.get(getIndex)[2] + "' in line '"
+								+ fullLineGet + "' is invalid");
 						System.exit(0);
 					}
 
@@ -415,8 +409,8 @@ public class Var_Define {
 
 			} else {
 				if (NumberUtils.isNum(calcIndexString) && calcIndexString.equals("-1") == false) {
-					System.out.println(
-							"ERROR: Array call '" + Var_Array.doubleArrayNameSave.get(getIndex)[2] + "[" + calcIndexString + "]" + "' in '" + fullLineGet + "' is invalid");
+					System.out.println("ERROR: Array call '" + Var_Array.doubleArrayNameSave.get(getIndex)[2] + "[" + calcIndexString
+							+ "]" + "' in '" + fullLineGet + "' is invalid");
 					System.exit(0);
 				}
 			}
@@ -550,7 +544,7 @@ public class Var_Define {
 
 		return returnString;
 	}
-	
+
 	public static String calcDefine(String getString, int tabNum, String fullLineGet) {
 		// Gets beginning 'DEF' part if it exists, and just gets the whole line if it doesn't
 		String giveDefString = "";
@@ -559,7 +553,7 @@ public class Var_Define {
 		boolean recheckLine = false;
 		String definitionCalc = null;
 		ArrayList<String> usedDefinitionArray = new ArrayList<String>();
-		
+
 		do {
 			definitionCalc = null;
 			getBegDef = "";
@@ -595,7 +589,7 @@ public class Var_Define {
 			if (recheckLine == false) {
 				getBegDef = "";
 				giveDefString = "";
-				
+
 				// when the line starts with 'SET'
 				if (getString.trim().length() >= 3 && getString.trim().substring(0, 3).equals("SET") == true) {
 					giveDefString = getString.substring(Var_Array.getArrayIndex(getString));
@@ -603,7 +597,7 @@ public class Var_Define {
 				} else {
 					giveDefString = getString;
 				}
-				
+
 				// iterates through all single arrays
 				// starts at the negative end to prioritize the more tabulated array
 				for (int arrayIndex = Var_Array.singleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
@@ -613,8 +607,7 @@ public class Var_Define {
 					// if an array matches up (cannot be with UNASSIGN or ARRAY)
 					if (giveDefString.trim().contains(Var_Array.singleArrayNameSave.get(arrayIndex)[2] + "[")
 							&& tabNum >= Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1])
-							&& giveDefString.trim().startsWith("UNASSIGN") == false
-							&& giveDefString.trim().startsWith("SET") == false
+							&& giveDefString.trim().startsWith("UNASSIGN") == false && giveDefString.trim().startsWith("SET") == false
 							&& giveDefString.trim().startsWith("ARRAY") == false) {
 						recheckLine = true;
 
@@ -648,8 +641,8 @@ public class Var_Define {
 				// tests for recurring definition
 				for (String testDefinition : usedDefinitionArray) {
 					if (definitionCalc.contains(testDefinition)) {
-						System.out.println("ERROR: Recurring definition at line '" + fullLineGet
-								+ "' starting with the definition '" + testDefinition + "'");
+						System.out.println("ERROR: Recurring definition at line '" + fullLineGet + "' starting with the definition '"
+								+ testDefinition + "'");
 						System.exit(0);
 					}
 				}
@@ -662,7 +655,7 @@ public class Var_Define {
 			}
 
 		} while (recheckLine);
-		
+
 		return getString;
 	}
 }

@@ -243,11 +243,11 @@ public class ReadConfig {
 		}
 
 		if (groupSuffixPulse == null || groupSuffixPulse[0].equals("")) {
-			System.out.println("WARNING: Array " + groupSuffixPulse + " field is empty");
+			System.out.println("WARNING: Array 'groupSuffixPulse' field is empty");
 		}
 
 		if (groupSuffixRepeating == null || groupSuffixRepeating[0].equals("")) {
-			System.out.println("WARNING: Array " + groupSuffixRepeating + " field is empty");
+			System.out.println("WARNING: Array 'groupSuffixRepeating' field is empty");
 		}
 
 		if (rconEnable == null) {
@@ -276,11 +276,11 @@ public class ReadConfig {
 		}
 		
 		if (minecraftCommandsArray == null || minecraftCommandsArray[0].equals("")) {
-			System.out.println("WARNING: Array " + minecraftCommandsArray + " field is empty");
+			System.out.println("WARNING: Array 'minecraftCommandsArray' field is empty");
 		}
 
 		if (minecraftCommandsExceptionArray == null || minecraftCommandsExceptionArray[0].equals("")) {
-			System.out.println("WARNING: Array " + minecraftCommandsExceptionArray + " field is empty");
+			System.out.println("WARNING: Array 'minecraftCommandsExceptionArray' field is empty");
 		} else {
 			ArrayList<String> tempArray = new ArrayList<String>();
 			for (String regCmd : minecraftCommandsArray) {
@@ -307,22 +307,22 @@ public class ReadConfig {
 			serverOverrideArray = null;
 		} else {
 			if (serverOverrideArray == null || serverOverrideArray[0].equals("")) {
-				System.out.println("WARNING: Array " + serverOverrideArray + " field is empty");
+				System.out.println("WARNING: Array 'serverOverrideArray' field is empty");
 			}
 		}
 
 		if (blockArray == null || blockArray[0].equals("")) {
-			System.out.println("ERROR: Array " + blockArray + " field is empty");
+			System.out.println("ERROR: Array 'blockArray' field is empty");
 			System.exit(0);
 		}
 
 		if (selectorArray == null || selectorArray[0].equals("")) {
-			System.out.println("ERROR: Array " + selectorArray + " field is empty");
+			System.out.println("ERROR: Array 'selectorArray' field is empty");
 			System.exit(0);
 		}
 
 		if (targetSelectorArray == null || targetSelectorArray[0].equals("")) {
-			System.out.println("ERROR: Array " + targetSelectorArray + " field is empty");
+			System.out.println("ERROR: Array 'targetSelectorArray' field is empty");
 			System.exit(0);
 		}
 	}
