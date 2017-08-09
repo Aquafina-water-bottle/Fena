@@ -31,7 +31,8 @@ public class Var_Define {
 			"MFUNC", "BRANCH",
 			"IMPORT", "LIBRARY", "GETDIR", "WITHIN", "GETCOORDS", 
 			"CALC", "SIN", "COS", "TAN", "INT", "DOUBLE", "GSELF",
-			"COND", "OPTIONS", "UNASSIGN", "IF", "ELSE", "ELIF", "LOOP", "PRINT", "INITIALIZE", "FINALIZE"
+			"COND", "OPTIONS", "IF", "ELSE", "ELIF", "LOOP", "INITIALIZE", "FINALIZE", 
+			"PRINT", "EXIT", "UNASSIGN"
 			};
 	// @formatter:on
 
@@ -357,7 +358,7 @@ public class Var_Define {
 
 					// checks whether it's within the index
 					if (Var_Array.singleArraySave.get(getIndex).length - 1 < indexCalc) {
-						System.out.println("ERROR: Index '" + calcIndexString + "' in line '" + fullLineGet + "' is invalid");
+						System.out.println("ERROR: Index '" + Var_Array.singleArrayNameSave.get(getIndex)[2] + "' in line '" + fullLineGet + "' is invalid");
 						System.exit(0);
 					}
 
@@ -415,7 +416,7 @@ public class Var_Define {
 			} else {
 				if (NumberUtils.isNum(calcIndexString) && calcIndexString.equals("-1") == false) {
 					System.out.println(
-							"ERROR: Array call '" + getString + "[" + calcIndexString + "]" + "' in '" + fullLineGet + "' is invalid");
+							"ERROR: Array call '" + Var_Array.doubleArrayNameSave.get(getIndex)[2] + "[" + calcIndexString + "]" + "' in '" + fullLineGet + "' is invalid");
 					System.exit(0);
 				}
 			}
@@ -508,7 +509,7 @@ public class Var_Define {
 			}
 
 			if (parseArray == false) { // fail lol
-				System.out.println("ERROR: Array call '" + getString + "' in line '" + fullLineGet + "' is invalid");
+				System.out.println("ERROR: Array call '" + calcIndexString2 + "' in line '" + fullLineGet + "' is invalid");
 				System.exit(0);
 			}
 		}
@@ -548,5 +549,120 @@ public class Var_Define {
 		// System.out.println(getBegString + " | " + definitionCalc + " | " + getEndString + " | " + midStringSave);
 
 		return returnString;
+	}
+	
+	public static String calcDefine(String getString, int tabNum, String fullLineGet) {
+		// Gets beginning 'DEF' part if it exists, and just gets the whole line if it doesn't
+		String giveDefString = "";
+		String getBegDef = "";
+		String[] getDefinitionArray = null;
+		boolean recheckLine = false;
+		String definitionCalc = null;
+		ArrayList<String> usedDefinitionArray = new ArrayList<String>();
+		
+		do {
+			definitionCalc = null;
+			getBegDef = "";
+			giveDefString = "";
+
+			recheckLine = false;
+			getDefinitionArray = null;
+
+			// when the line starts with 'DEF'
+			if (getString.trim().length() >= 3 && getString.trim().substring(0, 3).equals("DEF") == true) {
+				giveDefString = getString.substring(Var_Define.getDefineIndex(getString));
+				getBegDef = getString.substring(0, Var_Define.getDefineIndex(getString));
+			} else {
+				giveDefString = getString;
+			}
+
+			// iterates through all definitions
+			// starts at the negative end to prioritize the more tabulated definition
+			for (int defIndex = Var_Define.arrayDefineSave.size() - 1; defIndex >= 0; defIndex--) {
+
+				// if a definition matches up (cannot be with UNASSIGN)
+				if (giveDefString.trim().contains(Var_Define.arrayDefineSave.get(defIndex)[2])
+						&& tabNum >= Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[1])
+						&& giveDefString.trim().startsWith("UNASSIGN") == false) {
+					recheckLine = true;
+
+					getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 1, defIndex, getString);
+					definitionCalc = getDefinitionArray[1] + "";
+					break;
+				}
+			}
+
+			if (recheckLine == false) {
+				getBegDef = "";
+				giveDefString = "";
+				
+				// when the line starts with 'SET'
+				if (getString.trim().length() >= 3 && getString.trim().substring(0, 3).equals("SET") == true) {
+					giveDefString = getString.substring(Var_Array.getArrayIndex(getString));
+					getBegDef = getString.substring(0, Var_Array.getArrayIndex(getString));
+				} else {
+					giveDefString = getString;
+				}
+				
+				// iterates through all single arrays
+				// starts at the negative end to prioritize the more tabulated array
+				for (int arrayIndex = Var_Array.singleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
+
+					giveDefString = getString;
+
+					// if an array matches up (cannot be with UNASSIGN or ARRAY)
+					if (giveDefString.trim().contains(Var_Array.singleArrayNameSave.get(arrayIndex)[2] + "[")
+							&& tabNum >= Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1])
+							&& giveDefString.trim().startsWith("UNASSIGN") == false
+							&& giveDefString.trim().startsWith("SET") == false
+							&& giveDefString.trim().startsWith("ARRAY") == false) {
+						recheckLine = true;
+
+						getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 2, arrayIndex, getString);
+						definitionCalc = getDefinitionArray[1] + "";
+					}
+				}
+			}
+
+			if (recheckLine == false) {
+				// iterates through all double arrays
+				// starts at the negative end to prioritize the more tabulated array
+				for (int arrayIndex = Var_Array.doubleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
+					giveDefString = getString;
+
+					// if an array matches up (cannot be with UNASSIGN or ARRAY)
+					if (giveDefString.trim().contains(Var_Array.doubleArrayNameSave.get(arrayIndex)[2] + "[")
+							&& tabNum >= Integer.parseInt(Var_Array.doubleArrayNameSave.get(arrayIndex)[1])
+							&& giveDefString.trim().startsWith("UNASSIGN") == false
+							&& giveDefString.trim().startsWith("ARRAY") == false) {
+						recheckLine = true;
+
+						getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 3, arrayIndex, getString);
+						definitionCalc = getDefinitionArray[1] + "";
+					}
+				}
+			}
+
+			if (recheckLine) {
+
+				// tests for recurring definition
+				for (String testDefinition : usedDefinitionArray) {
+					if (definitionCalc.contains(testDefinition)) {
+						System.out.println("ERROR: Recurring definition at line '" + fullLineGet
+								+ "' starting with the definition '" + testDefinition + "'");
+						System.exit(0);
+					}
+				}
+
+				// properly sets the line
+				getString = getDefinitionArray[0] + getDefinitionArray[1] + getDefinitionArray[2];
+
+				// adds to check for recurring definition
+				usedDefinitionArray.add(getDefinitionArray[3]);
+			}
+
+		} while (recheckLine);
+		
+		return getString;
 	}
 }

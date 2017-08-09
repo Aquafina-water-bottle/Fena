@@ -7,7 +7,6 @@ import ccu.general.StringUtils;
 
 class storeValueType {
 	public Boolean isDouble = null;
-	Long getLong = null;
 	Double getDouble = null;
 	String getString = null;
 
@@ -22,11 +21,7 @@ class storeValueType {
 	// Constructor for ints
 	public storeValueType(double getNum, Boolean isDouble) {
 		this.isDouble = isDouble;
-		if (isDouble) {
-			this.getDouble = getNum;
-		} else {
-			this.getLong = (long) getNum;
-		}
+		this.getDouble = getNum;
 	}
 }
 
@@ -181,8 +176,9 @@ public class MathParser {
 		}
 
 		if (calcArray.size() < 4) { // less than 4 arguments = fail
-			System.out.println("ERROR: 4 LOOP arguments are required for line '" + fullLineGet + "'");
-			System.exit(0);
+			arrayCalc = new String[1];
+			arrayCalc[0] = getArgs;
+			return arrayCalc;
 		}
 
 		ArrayList<String> returnArray = new ArrayList<String>();
@@ -751,6 +747,8 @@ public class MathParser {
 				String endString = "";
 
 				int bracketSave = StringUtils.countChars(getString, "(");
+				Boolean calcDouble = null;
+
 				for (int i = 0; i < bracketSave; i++) {
 					begString = getString.substring(0, getString.lastIndexOf("("));
 					endString = getString.substring(getString.lastIndexOf("("));
@@ -758,16 +756,27 @@ public class MathParser {
 						midString = endString.substring(0, endString.indexOf(")") + 1);
 						endString = endString.substring(endString.indexOf(")") + 1);
 
-						getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet, true);
+						getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet, true, calcDouble);
 
+						if (calcType == 4) {
+							getValue.isDouble = false;
+						}
+						if (calcType == 5) {
+							getValue.isDouble = true;
+						}
+						// System.out.println(calcType + " | " + getValue.isDouble + " | " + getValue.getDouble + " | " + midString.substring(1, midString.length() - 1));
+						
+						
 						if (getValue.isDouble) {
 							midString = getValue.getDouble + "";
 						} else {
-							midString = getValue.getLong + "";
+							midString = "CCU_IsInt_" + getValue.getDouble;
 						}
-
+						
+						// midString = getValue.getDouble + "";
 						getString = begString + midString + endString;
 
+						calcDouble = getValue.isDouble;
 					} else {
 						System.out.println("ERROR: Unbalanced brackets in '" + getString + "' in line '" + fullLineGet + "'");
 						System.exit(0);
@@ -781,7 +790,7 @@ public class MathParser {
 					}
 				} else {
 					if (NumberUtils.isNum(getString) == false) {
-						getValue = calcValue(getString, fullLineGet, isStrict);
+						getValue = calcValue(getString, fullLineGet, isStrict, null);
 						if (getValue.isDouble == null) {
 							if (isStrict) {
 								System.out
@@ -789,16 +798,18 @@ public class MathParser {
 								System.exit(0);
 							}
 						} else {
-							if (getValue.isDouble) {
-								getString = getValue.getDouble + "";
-
-							} else {
-								getString = getValue.getLong + "";
+							if (calcType == 4) {
+								getValue.isDouble = false;
 							}
+							if (calcType == 5) {
+								getValue.isDouble = true;
+							}
+
+							getString = getValue.getDouble + "";
 						}
 					} else {
 						if (calcType != 0) {
-							getValue = calcValue(getString, fullLineGet, isStrict);
+							getValue = calcValue(getString, fullLineGet, isStrict, null);
 							if (getValue.isDouble == null) {
 								if (isStrict == true) {
 									System.out.println(
@@ -806,68 +817,52 @@ public class MathParser {
 									System.exit(0);
 								}
 							} else {
+
+								if (calcType == 4) {
+									getValue.isDouble = false;
+								}
+								if (calcType == 5) {
+									getValue.isDouble = true;
+								}
+								
+								/*
 								if (getValue.isDouble) {
 									getString = getValue.getDouble + "";
-
 								} else {
-									getString = getValue.getLong + "";
-								}
+									getString = "CCU_IsInt_" + getValue.getDouble;
+									System.out.println("Test");
+								}*/
+								getString = getValue.getDouble + "";
 							}
 						}
 					}
 				}
-
+				/*
 				if (getValue.isDouble != null) {
-					if (getValue.isDouble) {
-						switch (calcType) {
-						case 1:
-							getValue.getDouble = Math.sin(Math.toRadians(getValue.getDouble));
-							break;
-
-						case 2:
-							getValue.getDouble = Math.cos(Math.toRadians(getValue.getDouble));
-							break;
-
-						case 3:
-							getValue.getDouble = Math.tan(Math.toRadians(getValue.getDouble));
-							break;
-						}
-
-						// turns into long because INT()
-						if (calcType == 4) {
-							getString = NumberUtils.roundDoubleToInt(getValue.getDouble);
-
-						} else {
-							// normal
-							getString = NumberUtils.roundDouble(getValue.getDouble) + "";
-						}
-
-					} else {
-						switch (calcType) {
-						case 1:
-							getValue.getLong = (long) Math.sin(Math.toRadians(getValue.getLong));
-							break;
-
-						case 2:
-							getValue.getLong = (long) Math.cos(Math.toRadians(getValue.getLong));
-							break;
-
-						case 3:
-							getValue.getLong = (long) Math.tan(Math.toRadians(getValue.getLong));
-							break;
-						}
-
-						// turns into double because DOUBLE()
-						if (calcType == 5) {
-							getString = NumberUtils.roundDouble(getValue.getLong) + "";
-						} else {
-							// normal
-							getString = getValue.getLong + "";
-						}
-
+					switch (calcType) {
+					case 1:
+						getValue.getDouble = Math.sin(Math.toRadians(getValue.getDouble));
+						break;
+				
+					case 2:
+						getValue.getDouble = Math.cos(Math.toRadians(getValue.getDouble));
+						break;
+				
+					case 3:
+						getValue.getDouble = Math.tan(Math.toRadians(getValue.getDouble));
+						break;
 					}
+					
+					if (getValue.isDouble) {
+						getString = NumberUtils.roundDouble(getValue.getDouble);
+					} else {
+						getString = NumberUtils.roundDoubleToInt(getValue.getDouble) + "";
+					}
+					
+					System.out.println(getString);
 				}
-				return getString;
+				
+				return getString;*/
 			}
 
 		} else {
@@ -876,52 +871,24 @@ public class MathParser {
 		}
 
 		if (getValue.isDouble != null) {
+			switch (calcType) {
+			case 1:
+				getValue.getDouble = Math.sin(Math.toRadians(getValue.getDouble));
+				break;
+
+			case 2:
+				getValue.getDouble = Math.cos(Math.toRadians(getValue.getDouble));
+				break;
+
+			case 3:
+				getValue.getDouble = Math.tan(Math.toRadians(getValue.getDouble));
+				break;
+			}
+
 			if (getValue.isDouble) {
-				switch (calcType) {
-				case 1:
-					getValue.getDouble = Math.sin(Math.toRadians(getValue.getDouble));
-					break;
-
-				case 2:
-					getValue.getDouble = Math.cos(Math.toRadians(getValue.getDouble));
-					break;
-
-				case 3:
-					getValue.getDouble = Math.tan(Math.toRadians(getValue.getDouble));
-					break;
-				}
-
-				// turns into long because INT()
-				if (calcType == 4) {
-					getString = NumberUtils.roundDoubleToInt(getValue.getDouble);
-
-				} else {
-					// normal
-					getString = NumberUtils.roundDouble(getValue.getDouble) + "";
-				}
-
+				getString = NumberUtils.roundDouble(getValue.getDouble);
 			} else {
-				switch (calcType) {
-				case 1:
-					getValue.getLong = (long) Math.sin(Math.toRadians(getValue.getLong));
-					break;
-
-				case 2:
-					getValue.getLong = (long) Math.cos(Math.toRadians(getValue.getLong));
-					break;
-
-				case 3:
-					getValue.getLong = (long) Math.tan(Math.toRadians(getValue.getLong));
-					break;
-				}
-
-				// turns into double because DOUBLE()
-				if (calcType == 5) {
-					getString = NumberUtils.roundDouble(getValue.getLong) + "";
-				} else {
-					// normal
-					getString = getValue.getLong + "";
-				}
+				getString = NumberUtils.roundDoubleToInt(getValue.getDouble) + "";
 			}
 		}
 
@@ -956,14 +923,14 @@ public class MathParser {
 						midString = endString.substring(0, endString.indexOf(")") + 1);
 						endString = endString.substring(endString.indexOf(")") + 1);
 
-						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet, true);
+						storeValueType getValue = calcValue(midString.substring(1, midString.length() - 1), fullLineGet, true, null);
 
 						if (getValue.isDouble) {
 							midString = getValue.getDouble + "";
 						} else {
-							midString = getValue.getLong + "";
+							midString = NumberUtils.roundDoubleToInt(getValue.getDouble) + "";
 						}
-
+						
 						getString = begString + midString + endString;
 
 					} else {
@@ -1010,16 +977,16 @@ public class MathParser {
 		return getString;
 	}
 
-	private static storeValueType calcValue(String getString, String fullLineGet, boolean isStrict) {
+	private static storeValueType calcValue(String getString, String fullLineGet, boolean isStrict, Boolean isDoubleCalc) {
 		// -, +, *, /, ^, %
 		// Priority: ^, *, /, %, +, -
 
 		double calcDouble = 0;
-		long calcLong = 0;
+		// long calcLong = 0;
 		String[] arrayCalc = null;
 
 		ArrayList<String> arrayListCalc = new ArrayList<String>();
-		ArrayList<Long> arrayLong = new ArrayList<Long>();
+		// ArrayList<Long> arrayLong = new ArrayList<Long>();
 		ArrayList<Double> arrayDouble = new ArrayList<Double>();
 		ArrayList<Boolean> arrayNumType = new ArrayList<Boolean>();
 		ArrayList<Boolean> arrayOperatorType = new ArrayList<Boolean>();
@@ -1027,66 +994,79 @@ public class MathParser {
 		// final String[] operatorArray = {"^", "*", "/", "%", "+", "-"};
 		final String[][] operatorOrderArray = {{"^"}, {"*", "/", "%"}, {"+", "-"}};
 		boolean isDouble = false;
+		String calcString = getString.replace("CCU_IsInt_", "");
 
-		if (NumberUtils.isDouble(getString)) {
-			storeValueType returnValue = new storeValueType(Double.parseDouble(getString), true);
-			return returnValue;
+		if (NumberUtils.isDouble(calcString)) {
+			if (isDoubleCalc != null) {
+				if (isDoubleCalc) {
+					storeValueType returnValue = new storeValueType(Double.parseDouble(calcString), true);
+					return returnValue;
+				} else {
+					storeValueType returnValue = new storeValueType(Double.parseDouble(calcString), false);
+					return returnValue;
+				}
+			} else {
+				storeValueType returnValue = new storeValueType(Double.parseDouble(calcString), true);
+				return returnValue;
+			}
 
 		} else {
-			if (NumberUtils.isInt(getString)) {
-				storeValueType returnValue = new storeValueType(Double.parseDouble(getString), false);
+			if (NumberUtils.isLong(calcString)) {
+				storeValueType returnValue = new storeValueType(Double.parseDouble(calcString), false);
 				return returnValue;
 
 			} else {
 
-				if (getString.contains(" ") == false) {
+				if (calcString.contains(" ") == false) {
 					if (isStrict == true) {
-						System.out.println("ERROR: Math operations in '" + getString
+						System.out.println("ERROR: Math operations in '" + calcString
 								+ "' must be separated by spaces (apart from brackets) in line '" + fullLineGet + "'");
 						System.exit(0);
 					} else {
-						storeValueType returnValue = new storeValueType(getString);
+						storeValueType returnValue = new storeValueType(calcString);
 						return returnValue;
 					}
 				} else {
 					arrayCalc = getString.split(" ");
 
 					// whether it is a double or int
-					for (String line : arrayCalc) {
-						arrayListCalc.add(line);
+					for (int i = 0; i < arrayCalc.length; i++) {
+						arrayListCalc.add(arrayCalc[i]);
 
-						if (NumberUtils.isDouble(line)) {
+						if (NumberUtils.isDouble(arrayCalc[i])) {
 							isDouble = true;
 						}
+						
+						arrayCalc[i] = arrayCalc[i].replace("CCU_IsInt_", "");
+					}
+					
+					getString = calcString + "";
+
+					// overrides all if it's true
+					/*
+					if (isDoubleCalc != null) {
+						if (isDoubleCalc == true) {
+							isDouble = true;
+						} else {
+							isDouble = false;
+						}
+					}*/
+					
+					if (isDoubleCalc != null && isDoubleCalc == true) {
+						isDouble = true;
 					}
 
 					// double overtakes all int
-					if (isDouble == true) {
-						for (String line : arrayCalc) {
+					for (String line : arrayCalc) {
 
-							// adds to arrayNumType only if it's a number
-							// adds number to arrayDouble, is null if operator
-							if (NumberUtils.isNum(line)) {
-								arrayDouble.add(Double.parseDouble(line));
-								arrayNumType.add(true);
-							} else {
-								arrayDouble.add(null);
-								arrayNumType.add(false);
-							}
-						}
-
-					} else { // int
-						for (String line : arrayCalc) {
-
-							// adds to arrayNumType only if it's a number
-							// adds number to arrayDouble, is null if operator
-							if (NumberUtils.isNum(line)) {
-								arrayLong.add(Long.parseLong(line));
-								arrayNumType.add(true);
-							} else {
-								arrayLong.add(null);
-								arrayNumType.add(false);
-							}
+						// adds to arrayNumType only if it's a number
+						// adds number to arrayDouble, is null if operator
+						if (NumberUtils.isNum(line)) {
+							arrayDouble.add(Double.parseDouble(line));
+							arrayNumType.add(true);
+						} else {
+							arrayDouble.add(null);
+							arrayNumType.add(false);
 						}
 					}
 
@@ -1141,75 +1121,39 @@ public class MathParser {
 										switch (arrayListCalc.get(arrayIndex)) {
 
 										case "^":
-											if (isDouble) {
-												calcDouble = Math.pow(calcDouble = arrayDouble.get(arrayIndex - 1),
-														arrayDouble.get(arrayIndex + 1));
-												arrayDouble.set(arrayIndex, calcDouble);
-											} else {
-												calcLong = (long) Math.pow(arrayLong.get(arrayIndex - 1),
-														arrayLong.get(arrayIndex + 1));
-												arrayLong.set(arrayIndex, calcLong);
-											}
+											calcDouble = Math.pow(calcDouble = arrayDouble.get(arrayIndex - 1),
+													arrayDouble.get(arrayIndex + 1));
+											arrayDouble.set(arrayIndex, calcDouble);
 											break;
 
 										case "*":
-											if (isDouble) {
-												calcDouble = arrayDouble.get(arrayIndex - 1) * arrayDouble.get(arrayIndex + 1);
-												arrayDouble.set(arrayIndex, calcDouble);
-											} else {
-												calcLong = arrayLong.get(arrayIndex - 1) * arrayLong.get(arrayIndex + 1);
-												arrayLong.set(arrayIndex, calcLong);
-											}
+											calcDouble = arrayDouble.get(arrayIndex - 1) * arrayDouble.get(arrayIndex + 1);
+											arrayDouble.set(arrayIndex, calcDouble);
 											break;
 
 										case "/":
-											if (isDouble) {
-												calcDouble = arrayDouble.get(arrayIndex - 1) / arrayDouble.get(arrayIndex + 1);
-												arrayDouble.set(arrayIndex, calcDouble);
-											} else {
-												calcLong = arrayLong.get(arrayIndex - 1) / arrayLong.get(arrayIndex + 1);
-												arrayLong.set(arrayIndex, calcLong);
-											}
+											calcDouble = arrayDouble.get(arrayIndex - 1) / arrayDouble.get(arrayIndex + 1);
+											arrayDouble.set(arrayIndex, calcDouble);
 											break;
 
 										case "%":
-											if (isDouble) {
-												calcDouble = arrayDouble.get(arrayIndex - 1) % arrayDouble.get(arrayIndex + 1);
-												arrayDouble.set(arrayIndex, calcDouble);
-											} else {
-												calcLong = arrayLong.get(arrayIndex - 1) % arrayLong.get(arrayIndex + 1);
-												arrayLong.set(arrayIndex, calcLong);
-											}
+											calcDouble = arrayDouble.get(arrayIndex - 1) % arrayDouble.get(arrayIndex + 1);
+											arrayDouble.set(arrayIndex, calcDouble);
 											break;
 
 										case "+":
-											if (isDouble) {
-												calcDouble = arrayDouble.get(arrayIndex - 1) + arrayDouble.get(arrayIndex + 1);
-												arrayDouble.set(arrayIndex, calcDouble);
-											} else {
-												calcLong = arrayLong.get(arrayIndex - 1) + arrayLong.get(arrayIndex + 1);
-												arrayLong.set(arrayIndex, calcLong);
-											}
+											calcDouble = arrayDouble.get(arrayIndex - 1) + arrayDouble.get(arrayIndex + 1);
+											arrayDouble.set(arrayIndex, calcDouble);
 											break;
 
 										case "-":
-											if (isDouble) {
-												calcDouble = arrayDouble.get(arrayIndex - 1) - arrayDouble.get(arrayIndex + 1);
-												arrayDouble.set(arrayIndex, calcDouble);
-											} else {
-												calcLong = arrayLong.get(arrayIndex - 1) - arrayLong.get(arrayIndex + 1);
-												arrayLong.set(arrayIndex, calcLong);
-											}
+											calcDouble = arrayDouble.get(arrayIndex - 1) - arrayDouble.get(arrayIndex + 1);
+											arrayDouble.set(arrayIndex, calcDouble);
 											break;
 										}
 
-										if (isDouble) {
-											arrayDouble.remove(arrayIndex + 1);
-											arrayDouble.remove(arrayIndex - 1);
-										} else {
-											arrayLong.remove(arrayIndex + 1);
-											arrayLong.remove(arrayIndex - 1);
-										}
+										arrayDouble.remove(arrayIndex + 1);
+										arrayDouble.remove(arrayIndex - 1);
 
 										arrayNumType.set(arrayIndex, true);
 										arrayListCalc.set(arrayIndex, "Num");
@@ -1240,7 +1184,7 @@ public class MathParser {
 			storeValueType returnValue = new storeValueType(arrayDouble.get(0), true);
 			return returnValue;
 		} else {
-			storeValueType returnValue = new storeValueType(arrayLong.get(0), false);
+			storeValueType returnValue = new storeValueType(arrayDouble.get(0), false);
 			return returnValue;
 		}
 	}
@@ -1249,7 +1193,7 @@ public class MathParser {
 		// getCommand is like SIN, COS, TAN, CALC
 		// SIN, COS and TAN can be like CALC except the final value returns the sin/cos/tan version
 
-		final String[] secondaryStatementArray = {"SIN", "COS", "TAN", "CALC", "INT", "DOUBLE"};
+		final String[] secondaryStatementArray = {"SIN", "COS", "TAN", "CALC", "INT", "DEC"};
 
 		// if getStatement is true, then keeps going
 		String calcString = null;
@@ -1288,7 +1232,7 @@ public class MathParser {
 					calcType = 4;
 					break;
 
-				case "DOUBLE":
+				case "DEC":
 					calcType = 5;
 					break;
 				}
@@ -1330,13 +1274,13 @@ public class MathParser {
 
 			// no reason with CALC inside any of these
 			if (testBracketString.contains("CALC(")) {
-				testBracketString = testBracketString.replace("CALC", "");
+				testBracketString = testBracketString.replace("CALC(", "(");
 			}
 
 			// checks if there were any 'SIN', 'COS', 'TAN' - recurring function
 
 			if (testBracketString.contains("SIN") || testBracketString.contains("COS") || testBracketString.contains("TAN")
-					|| testBracketString.contains("INT") || testBracketString.contains("DOUBLE")) {
+					|| testBracketString.contains("INT") || testBracketString.contains("DEC")) {
 				testBracketString = parseSecondaryStatements(testBracketString, fullLineGet);
 			}
 

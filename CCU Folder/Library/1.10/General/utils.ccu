@@ -183,14 +183,14 @@ IF {$StyleDirection$ = -X}:
 	
 	FUNC {GLOBAL CCU.cmdSave}:
 		FINALIZE:
-			fill $CoordsOption$[x + 16, y - 1, z + 16, x + 13, y - 3, z + 13] air 0
-			setblock $CoordsOption$[x + 15, y - 1, z + 15] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"SAVE",posX:CALC(1 - $CMDSizeX$),posY:2,posZ:CALC(1 - $CMDSizeZ$),sizeX:$CMDSizeX$,sizeY:$CMDSizeY$,sizeZ:$CMDSizeZ$}
-			setblock $CoordsOption$[x + 15, y - 3, z + 15] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"LOAD",posX:CALC(1 - $CMDSizeX$),posY:4,posZ:CALC(1 - $CMDSizeZ$)}
-			setblock $CoordsOption$[x + 16, y - 1, z + 15] wooden_button 1
-			setblock $CoordsOption$[x + 16, y - 3, z + 15] wooden_button 1
-			setblock $CoordsOption$[x + 15, y - 1, z + 14] redstone_lamp 0
-			setblock $CoordsOption$[x + 15, y - 3, z + 14] redstone_lamp 0
-			setblock $CoordsOption$[x + 14, y - 1, z + 15] command_block 4 replace {TrackOutput:0b,Command:"setblock ~ ~ ~-1 redstone_block 0"}
+			fill $CoordsOption$[x - 3, y - 1, z - 3, x + 0, y - 3, z + 0] air 0
+			setblock $CoordsOption$[x - 1, y - 1, z - 1] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"SAVE",posX:CALC(1 - $CMDSizeX$),posY:2,posZ:CALC(1 - $CMDSizeZ$),sizeX:$CMDSizeX$,sizeY:$CMDSizeY$,sizeZ:$CMDSizeZ$}
+			setblock $CoordsOption$[x - 1, y - 3, z - 1] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"LOAD",posX:CALC(1 - $CMDSizeX$),posY:4,posZ:CALC(1 - $CMDSizeZ$)}
+			setblock $CoordsOption$[x + 0, y - 1, z - 1] wooden_button 1
+			setblock $CoordsOption$[x + 0, y - 3, z - 1] wooden_button 1
+			setblock $CoordsOption$[x - 1, y - 1, z - 2] redstone_lamp 0
+			setblock $CoordsOption$[x - 1, y - 3, z - 2] redstone_lamp 0
+			setblock $CoordsOption$[x - 2, y - 1, z - 1] command_block 4 replace {TrackOutput:0b,Command:"setblock ~ ~ ~-1 redstone_block 0"}
 	
 ///	Positive Z
 IF {$StyleDirection$ = +Z}:
@@ -233,14 +233,14 @@ IF {$StyleDirection$ = -Z}:
 
 	FUNC {GLOBAL CCU.cmdSave}:
 		FINALIZE:
-			fill $CoordsOption$[x + 16, y - 1, z + 16, x + 13, y - 3, z + 13] air 0
-			setblock $CoordsOption$[x + 15, y - 1, z + 15] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"SAVE",posX:CALC(1 - $CMDSizeX$),posY:2,posZ:CALC(1 - $CMDSizeZ$),sizeX:$CMDSizeX$,sizeY:$CMDSizeY$,sizeZ:$CMDSizeZ$}
-			setblock $CoordsOption$[x + 15, y - 3, z + 15] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"LOAD",posX:CALC(1 - $CMDSizeX$),posY:4,posZ:CALC(1 - $CMDSizeZ$)}
-			setblock $CoordsOption$[x + 15, y - 1, z + 16] wooden_button 3
-			setblock $CoordsOption$[x + 15, y - 3, z + 16] wooden_button 3
-			setblock $CoordsOption$[x + 14, y - 1, z + 15] redstone_lamp 0
-			setblock $CoordsOption$[x + 14, y - 3, z + 15] redstone_lamp 0
-			setblock $CoordsOption$[x + 15, y - 1, z + 14] command_block 2 replace {TrackOutput:0b,Command:"setblock ~-1 ~ ~ redstone_block 0"}
+			fill $CoordsOption$[x + 1, y - 1, z + 1, x - 2, y - 3, z - 2] air 0
+			setblock $CoordsOption$[x - 1, y - 1, z - 1] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"SAVE",posX:CALC(1 - $CMDSizeX$),posY:2,posZ:CALC(1 - $CMDSizeZ$),sizeX:$CMDSizeX$,sizeY:$CMDSizeY$,sizeZ:$CMDSizeZ$}
+			setblock $CoordsOption$[x - 1, y - 3, z - 1] structure_block 0 replace {name:"CMDSave_$CMDName$",mode:"LOAD",posX:CALC(1 - $CMDSizeX$),posY:4,posZ:CALC(1 - $CMDSizeZ$)}
+			setblock $CoordsOption$[x - 1, y - 1, z + 0] wooden_button 3
+			setblock $CoordsOption$[x - 1, y - 3, z + 0] wooden_button 3
+			setblock $CoordsOption$[x - 2, y - 1, z - 1] redstone_lamp 0
+			setblock $CoordsOption$[x - 2, y - 3, z - 1] redstone_lamp 0
+			setblock $CoordsOption$[x - 1, y - 1, z - 2] command_block 2 replace {TrackOutput:0b,Command:"setblock ~-1 ~ ~ redstone_block 0"}
 //>
 
 

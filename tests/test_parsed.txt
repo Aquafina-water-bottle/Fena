@@ -503,10 +503,77 @@ GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
 	scoreboard teams remove RRg
 	scoreboard teams remove RRb
 	fill 384 70 104 399 85 105 air 0
-	say 94 13 190
+	say 94 12 190
 	-128 7 410
 
 GROUP | Grp_TestingDocumentation | PULSE		[384 74 102 | stonebrick 0]
+	powertool scoreboard players set @a SPtp 1
+	say Sadly, 2 != 5
+	say 3 = 3
+	say 5 = 5
+	10 != 3 although 5 = 5
+	say four
+	this function
+	has no parameters
+	say abc
+	say the most outside 4th parameter is four
+	however this function has parameters
+	First is (a_number) and second is () while the Func_Outside2 parameter is abc
+	First is (spaces ) and second is ( between semicolons matter) while the Func_Outside2 parameter is abc
+	say A is the letter while 1 is the number
+	say B is the letter while 1 is the number
+	say A is the letter while 2 is the number
+	say B is the letter while 2 is the number
+	say A is the letter while 3 is the number
+	say B is the letter while 3 is the number
+	say 174
+	say 174
+	say 92
+	say 164
+	say 0
+	say 0
+	say 1
+	say 0
+	say 3.33333333333333
+	say 3.33333333333333
+	say 6.33333333333333
+	say 6.33333333333333
+	say 6
+	say 7
+	say 3.33333333333333
+	say 3.33333333333333
+	say 6
+	say 6
+	say 0.5 = 0.5 = 1/2
+	say 0.86602540378444 = 0.86602540378444 = sqrt(3)/2
+	say 0.57735026918963 = 0.57735026918963 = 1/sqrt(3)
+	execute @e[type=ArmorStand,tag=RRStand,score_RRti=0,score_RRti2=2,score_RRti2_min=2] ~ ~ ~ summon Zombie ~ ~ ~ {Tags:["RREntity","RRZombie"],DeathLootTable:"minecraft:empty"}
+	execute @e[type=ArmorStand,tag=RRStand,score_RRti=0,score_RRti2=2,score_RRti2_min=2] ~ ~ ~ scoreboard players add @a[m=2,score_RRpi=1,score_RRpi_min=1] RRti 1
+	give @a leather_helmet 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}
+	give @a leather_chestplate 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}
+	give @a leather_leggings 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}
+	give @a leather_boots 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}
+	give @a[score_RRgi_min=16] minecraft:pumpkin 16 0
+	scoreboard players remove @a[score_RRgi_min=16] RRgi 16
+	give @a[score_RRgi_min=8] minecraft:pumpkin 8 0
+	scoreboard players remove @a[score_RRgi_min=8] RRgi 8
+	give @a[score_RRgi_min=4] minecraft:pumpkin 4 0
+	scoreboard players remove @a[score_RRgi_min=4] RRgi 4
+	give @a[score_RRgi_min=2] minecraft:pumpkin 2 0
+	scoreboard players remove @a[score_RRgi_min=2] RRgi 2
+	give @a[score_RRgi_min=1] minecraft:pumpkin 1 0
+	scoreboard players remove @a[score_RRgi_min=1] RRgi 1
+	say Index 0 --> 0
+	say Index 1 --> 1
+	say Index 2 --> 1
+	say Index 3 --> 2
+	say Index 4 --> 3
+	say Index 5 --> 5
+	say Index 6 --> 8
+	say Index 7 --> 13
+	say Index 8 --> 21
+	say Index 9 --> 34
+	say Index 10 --> 55
 	say -68.43 14 421.6
 	say -62.43 14 421.6;-64.43 14 421.6;-66.43 14 421.6;-68.43 14 421.6;-68.4 14 415.6;-66.4 14 415.6;-64.4 14 415.6
 	say 7
@@ -526,7 +593,7 @@ GROUP | Grp_TestingDocumentation | PULSE		[384 74 102 | stonebrick 0]
 	say 10 != 5
 	say asdf != asdf2
 	say the real asdf
-	setblock 94 13 190 redstone_block 0
+	setblock 94 12 190 redstone_block 0
 	say This;is;a;ran;om;string
 	say 6 aSdFmarker
 

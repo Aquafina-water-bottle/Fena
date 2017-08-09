@@ -32,7 +32,7 @@ public class NumberUtils {
 			return false;
 		}
 		try {
-			Integer.parseInt(testNum);
+			Long.parseLong(testNum);
 			return true;
 		} catch (NumberFormatException e) {
 			try {
@@ -67,7 +67,7 @@ public class NumberUtils {
 
 		return testNum;
 	}
-
+	
 	// checks if it's an int and only an int
 	public static boolean isInt(String testInt) {
 		if (testInt == null) {
@@ -75,6 +75,20 @@ public class NumberUtils {
 		} else {
 			try {
 				Integer.parseInt(testInt);
+				return true;
+			} catch (NumberFormatException e) {
+				return false;
+			}
+		}
+	}
+
+	// checks if it's a long and only an long
+	public static boolean isLong(String testLong) {
+		if (testLong == null) {
+			return false;
+		} else {
+			try {
+				Long.parseLong(testLong);
 				return true;
 			} catch (NumberFormatException e) {
 				return false;
@@ -93,7 +107,7 @@ public class NumberUtils {
 				try {
 
 					// cannot be a double if it works as an int
-					Integer.parseInt(testDouble);
+					Long.parseLong(testDouble);
 					return false;
 
 				} catch (NumberFormatException e) {

@@ -56,6 +56,8 @@ public class Short_Execute {
 		}
 		
 		for (int j = 0; j < shortcutCalcArray.length; j++) {
+			
+			boolean foundNum = false;
 
 			// if it's a data tag --> 3 (DATATAG)
 			if (shortcutCalcArray[j].startsWith("{")) {
@@ -90,17 +92,37 @@ public class Short_Execute {
 			for (String selectorGet : ReadConfig.selectorArray) {
 				if (shortcutCalcArray[j].startsWith(selectorGet)) {
 					shortcutTypeArray[j] = SELECTOR;
+					foundNum = true;
+					break;
+				}
+			}
+			
+			if (foundNum) {
+				continue;
+			}
+			
+			/*
+			for (String cmdGet : ReadConfig.minecraftCommandsExceptionArray) {
+				if (shortcutCalcArray[j].endsWith(cmdGet)) {
+					// string
+					foundNum = true;
 					break;
 				}
 			}
 
+			if (foundNum) {
+				continue;
+			}*/
+			
 			// if it is a command --> 4
 			for (String cmdGet : ReadConfig.minecraftCommandsArray) {
 				if (shortcutCalcArray[j].endsWith(cmdGet)) {
 					shortcutTypeArray[j] = COMMAND;
+					foundNum = true;
 					break;
 				}
 			}
+			
 			/* Right now, whether it is a block or not doesn't matter
 			for (String blockGet : ReadConfig.blockArray) {
 				if (shortcutCalcArray[j].startsWith(blockGet)) {

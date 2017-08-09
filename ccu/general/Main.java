@@ -21,6 +21,8 @@ import ccu.rcon.MinecraftRcon;
 
 public class Main {
 	/* TODO
+	 * -Special comments using #
+	 * 
 	 * General statements
 	 * -FILE
 	 */
@@ -35,22 +37,36 @@ public class Main {
 		long startTime = System.nanoTime();
 
 		// checks version
-		String currentVersion = "Build 12";
-		System.out.println("Current: " + currentVersion);
+		String currentVersion = "1.0";
+		System.out.println("Current version: " + currentVersion);
 
 		try {
 			URL url;
-			url = new URL("https://raw.githubusercontent.com/Aquafina-water-bottle/Command-Compiler-Unlimited/master/CCUVersion.txt");
+			url = new URL("https://raw.githubusercontent.com/Aquafina-water-bottle/Command-Compiler-Unlimited/master/version.txt");
 
 			URLConnection con = url.openConnection();
 			InputStream is = con.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			String getVersion = br.readLine();
 
-			if (currentVersion.equals(getVersion) == false) {
+			if (StringUtils.countChars(currentVersion, ".") == 1) {
+				currentVersion += ".0";
+			}
+
+			if (StringUtils.countChars(getVersion, ".") == 1) {
+				getVersion += ".0";
+			}
+
+			String[] currentVersionCalc = currentVersion.split("\\.");
+			String[] getVersionCalc = getVersion.split("\\.");
+			
+			if (Integer.parseInt(currentVersionCalc[0]) < Integer.parseInt(getVersionCalc[0])
+					|| Integer.parseInt(currentVersionCalc[1]) < Integer.parseInt(getVersionCalc[1])
+					|| Integer.parseInt(currentVersionCalc[2]) < Integer.parseInt(getVersionCalc[2])) {
 				System.out.println("An update is avaliable for CCU (" + getVersion
 						+ ") at 'https://github.com/Aquafina-water-bottle/Command-Compiler-Unlimited/releases'");
 				TimeUnit.SECONDS.sleep(1);
+				
 			}
 
 		} catch (IOException e) {
@@ -70,7 +86,7 @@ public class Main {
 			ranInEclpise = true;
 			getJarFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath().replace("%20", " "));
 		}
-		
+
 		// String asdf = "this is a CALC(1 + SIN((1 - 2.0)) * (13 - 3)) asdf)";
 		// MathParser.parseSecondaryStatements(asdf, asdf);
 
@@ -123,8 +139,6 @@ public class Main {
 
 		// Writes the _commands, _parsed, and _combiner files
 		Setblock.getCommands();
-
-		// Writes the global Combiner file under globalCombinerFilePath
 
 		// RCON
 		MinecraftRcon.useRcon();

@@ -19,14 +19,12 @@ public class MinecraftRcon {
 				if (ReadConfig.rconDouble) {
 					for (String writeCmd : Setblock.initialCommands) {
 						rconArray.add(writeCmd);
-						rconArray.add(writeCmd);
 					}
 					for (String writeCmd : Setblock.setblockCommands) {
 						rconArray.add(writeCmd);
 						rconArray.add(writeCmd);
 					}
 					for (String writeCmd : Setblock.finalCommands) {
-						rconArray.add(writeCmd);
 						rconArray.add(writeCmd);
 					}
 				} else {

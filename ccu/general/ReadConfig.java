@@ -64,6 +64,7 @@ public class ReadConfig {
 	public static String rconPassword = null;
 
 	public static String[] minecraftCommandsArray = null;
+	public static String[] minecraftCommandsExceptionArray = null;
 	public static String[] serverOverrideArray = null;
 	public static String[] blockArray = null;
 	public static String[] selectorArray = null;
@@ -176,9 +177,13 @@ public class ReadConfig {
 				case "rconPassword":
 					rconPassword = tempInput;
 					break;
-
+					
 				case "minecraftCommandsArray":
 					minecraftCommandsArray = tempInput.split(",");
+					break;
+
+				case "minecraftCommandsExceptionArray":
+					minecraftCommandsExceptionArray = tempInput.split(",");
 					break;
 
 				case "serverOverrideArray":
@@ -269,9 +274,33 @@ public class ReadConfig {
 				rconDouble = false;
 			}
 		}
-
+		
 		if (minecraftCommandsArray == null || minecraftCommandsArray[0].equals("")) {
 			System.out.println("WARNING: Array " + minecraftCommandsArray + " field is empty");
+		}
+
+		if (minecraftCommandsExceptionArray == null || minecraftCommandsExceptionArray[0].equals("")) {
+			System.out.println("WARNING: Array " + minecraftCommandsExceptionArray + " field is empty");
+		} else {
+			ArrayList<String> tempArray = new ArrayList<String>();
+			for (String regCmd : minecraftCommandsArray) {
+				boolean cannotUseCmd = false;
+				for (String cmdExcept : minecraftCommandsExceptionArray) {
+					if (cmdExcept.equals(regCmd)) {
+						cannotUseCmd = true;
+						break;
+					}
+				}
+				
+				if (cannotUseCmd == false) {
+					tempArray.add(regCmd);
+				}
+			}
+			
+			minecraftCommandsArray = new String[tempArray.size()];
+			for (int i = 0; i < minecraftCommandsArray.length; i++) {
+				minecraftCommandsArray[i] = tempArray.get(i);
+			}
 		}
 
 		if (serverPlugins == false) {

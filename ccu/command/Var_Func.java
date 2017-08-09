@@ -55,7 +55,6 @@ public class Var_Func {
 
 		Boolean isGlobal = null;
 		Boolean hasActivated = null;
-		boolean activateConfirm = false;
 		String activatedFunc = null;
 
 		String statementEncase = this.fullLineGet.replaceFirst("FUNC", "").replaceAll("^\\s+", "");
@@ -176,6 +175,7 @@ public class Var_Func {
 			}
 
 			// checking whether the function name exists
+			/*
 			if (hasActivated == true) {
 				for (int i = 0; i < arrayFuncNameSave.size(); i++) {
 					if (activatedFunc.equals(arrayFuncNameSave.get(i)[2])) {
@@ -190,7 +190,7 @@ public class Var_Func {
 					System.out.println("ERROR: Function '" + activatedFunc + "' in line '" + this.fullLineGet + "'does not exist");
 					System.exit(0);
 				}
-			}
+			}*/
 
 			// Checks if the function name is literally nothing
 			if (statementArgs.trim().length() == 0) {
@@ -257,7 +257,8 @@ public class Var_Func {
 			System.exit(0);
 		}
 
-		if (activateConfirm) {
+		if (hasActivated != null && hasActivated) {
+			arrayFuncActivateCalc.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
 			return arrayFuncActivateCalc;
 		} else {
 			return null;

@@ -192,15 +192,13 @@ public class Coordinates {
 			return this;
 		} else {
 			if (GroupStructure.styleOptionXZ.equals("-Z")) {
-				this.z = 16 - tempX;
-				this.x = 16 - tempZ;
+				this.z = -tempX;
+				this.x = -tempZ;
 				return this;
 			} else {
 				if (GroupStructure.styleOptionXZ.equals("-X")) {
-					tempX = 16 - this.z;
-					tempZ = 16 - this.x;
-					this.z = tempX + 0;
-					this.x = tempZ + 0;
+					this.z = -this.z;
+					this.x = -this.x;
 					return this;
 				} else {
 					if (GroupStructure.styleOptionXZ.equals("+X") == false) {

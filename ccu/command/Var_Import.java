@@ -202,6 +202,105 @@ public class Var_Import {
 				}
 			}
 
+			// Gets third parameters
+			if (statementArgs.contains(" ")) {
+				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
+				case "LIBRARY":
+					if (importLookupType == null) {
+						importLookupType = 1;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes LIBRARY
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					break;
+
+				case "WITHIN":
+					if (importLookupType == null) {
+						importLookupType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes WITHIN
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					break;
+
+				case "GETDIR":
+					if (importDirectory == null) {
+						importDirectory = true;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes *
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					break;
+
+				case "GETCOORDS":
+					if (importType == null) {
+						importType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes GROUPCOORDS
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					break;
+				}
+			} else {
+				switch (statementArgs) {
+				case "LIBRARY":
+					if (importLookupType == null) {
+						importLookupType = 1;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					statementArgs = null;
+					break;
+
+				case "WITHIN":
+					if (importLookupType == null) {
+						importLookupType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					statementArgs = null;
+					break;
+
+				case "GETDIR":
+					if (importDirectory == null) {
+						importDirectory = true;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					statementArgs = null;
+					break;
+
+				case "GETCOORDS":
+					if (importType == null) {
+						importType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					statementArgs = null;
+					break;
+				}
+			}
+
 			// Default for importLookupType
 			if (importLookupType == null) {
 				importLookupType = 0;
@@ -402,7 +501,7 @@ public class Var_Import {
 
 								File importFile = new File(ReadConfig.regFilePath.getParentFile() + statementArgs);
 								if (importFile.isDirectory()) {
-									getFileArray = GeneralFile.getFilesInFolder(importFile, ".ccu");
+									getFileArray = GeneralFile.getAllFiles(importFile, ".ccu");
 									for (File filesInArray : getFileArray) {
 										if (filesInArray.equals(ReadConfig.regFilePath) == false) {
 											GeneralFile importFileCalc = new GeneralFile(filesInArray);
@@ -413,7 +512,7 @@ public class Var_Import {
 								} else {
 									importFile = new File(ReadConfig.regFilePath.getParentFile().getParentFile() + statementArgs);
 									if (importFile.isDirectory()) {
-										getFileArray = GeneralFile.getFilesInFolder(importFile, ".ccu");
+										getFileArray = GeneralFile.getAllFiles(importFile, ".ccu");
 										for (File filesInArray : getFileArray) {
 											if (filesInArray.equals(ReadConfig.regFilePath) == false) {
 												GeneralFile importFileCalc = new GeneralFile(filesInArray);
@@ -429,14 +528,14 @@ public class Var_Import {
 								}
 							} else { // imports dat files
 								// within, full directory, dat files
-
+								
 								if (statementArgs.isEmpty() == false) {
 									statementArgs = "/" + statementArgs;
 								}
 
 								File importFile = new File(ReadConfig.regFilePath.getParentFile() + statementArgs);
 								if (importFile.isDirectory()) {
-									getFileArray = GeneralFile.getFilesInFolder(importFile, "_dat.txt");
+									getFileArray = GeneralFile.getAllFiles(importFile, "_dat.txt");
 									for (File filesInArray : getFileArray) {
 										if (filesInArray.equals(ReadConfig.regFilePath) == false) {
 											GeneralFile importFileCalc = new GeneralFile(filesInArray);
@@ -448,7 +547,7 @@ public class Var_Import {
 								} else {
 									importFile = new File(ReadConfig.regFilePath.getParentFile().getParentFile() + statementArgs);
 									if (importFile.isDirectory()) {
-										getFileArray = GeneralFile.getFilesInFolder(importFile, "_dat.txt");
+										getFileArray = GeneralFile.getAllFiles(importFile, "_dat.txt");
 										for (File filesInArray : getFileArray) {
 											if (filesInArray.equals(ReadConfig.regFilePath) == false) {
 												GeneralFile importFileCalc = new GeneralFile(filesInArray);

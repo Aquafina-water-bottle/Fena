@@ -55,6 +55,7 @@ public class ReadCCUFile {
 			"USE",
 			"COND",
 			"PRINT",
+			"EXIT",
 			"INITIALIZE",
 			"FINALIZE"
 			};
@@ -94,22 +95,10 @@ public class ReadCCUFile {
 		int subListCalc2 = -2;
 		boolean resetArray = false;
 		boolean singleLineStatement = false;
-		boolean recheckLine = false;
 		boolean resetIndexCalc = false;
-		String definitionCalc = null;
 		boolean getStatement = false;
 		Boolean checkElse = null;
 
-		// Gets beginning 'DEF' part if it exists, and just gets the whole line if it doesn't
-		String giveDefString = "";
-		String getBegDef = "";
-		String[] getDefinitionArray = null;
-
-		// ccuFileArray.get(i) while calculating through the definitions
-		String getLineCalc = "";
-		boolean changedLineOnce = false;
-
-		ArrayList<String> usedDefinitionArray = new ArrayList<String>();
 		ArrayList<String> getCalcArray = new ArrayList<String>();
 		ArrayList<String> encapsulateArray = new ArrayList<String>();
 		ArrayList<String> subListTopArray = new ArrayList<String>();
@@ -140,11 +129,6 @@ public class ReadCCUFile {
 				break;
 			}
 
-			// does at least once to check if it works
-			usedDefinitionArray.clear();
-			getLineCalc = ccuFileArray.get(i) + "";
-			changedLineOnce = false;
-
 			// If the previous line is "CCU_ReturnFalse"
 			if (i > 0) {
 				String checkElseString = this.ccuFileArray.get(i - 1).trim();
@@ -160,116 +144,7 @@ public class ReadCCUFile {
 				}
 			}
 
-			do {
-				definitionCalc = null;
-				getBegDef = "";
-				giveDefString = "";
-
-				recheckLine = false;
-				getDefinitionArray = null;
-
-				// when the line starts with 'DEF'
-				if (getLineCalc.trim().length() >= 3 && getLineCalc.trim().substring(0, 3).equals("DEF") == true) {
-					giveDefString = getLineCalc.substring(Var_Define.getDefineIndex(getLineCalc));
-					getBegDef = getLineCalc.substring(0, Var_Define.getDefineIndex(getLineCalc));
-				} else {
-					giveDefString = getLineCalc;
-				}
-
-				// iterates through all definitions
-				// starts at the negative end to prioritize the more tabulated definition
-				for (int defIndex = Var_Define.arrayDefineSave.size() - 1; defIndex >= 0; defIndex--) {
-
-					// if a definition matches up (cannot be with UNASSIGN)
-					if (giveDefString.trim().contains(Var_Define.arrayDefineSave.get(defIndex)[2])
-							&& this.tabNum >= Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[1])
-							&& giveDefString.trim().startsWith("UNASSIGN") == false) {
-						recheckLine = true;
-						changedLineOnce = true;
-
-						getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 1, defIndex, getLineCalc);
-						definitionCalc = getDefinitionArray[1] + "";
-						break;
-					}
-				}
-
-				if (recheckLine == false) {
-					getBegDef = "";
-					giveDefString = "";
-					
-					// when the line starts with 'SET'
-					if (getLineCalc.trim().length() >= 3 && getLineCalc.trim().substring(0, 3).equals("SET") == true) {
-						giveDefString = getLineCalc.substring(Var_Array.getArrayIndex(getLineCalc));
-						getBegDef = getLineCalc.substring(0, Var_Array.getArrayIndex(getLineCalc));
-					} else {
-						giveDefString = getLineCalc;
-					}
-					
-					// iterates through all single arrays
-					// starts at the negative end to prioritize the more tabulated array
-					for (int arrayIndex = Var_Array.singleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
-
-						giveDefString = getLineCalc;
-
-						// if an array matches up (cannot be with UNASSIGN or ARRAY)
-						if (giveDefString.trim().contains(Var_Array.singleArrayNameSave.get(arrayIndex)[2] + "[")
-								&& this.tabNum >= Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1])
-								&& giveDefString.trim().startsWith("UNASSIGN") == false
-								&& giveDefString.trim().startsWith("SET") == false
-								&& giveDefString.trim().startsWith("ARRAY") == false) {
-							recheckLine = true;
-							changedLineOnce = true;
-
-							getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 2, arrayIndex, getLineCalc);
-							definitionCalc = getDefinitionArray[1] + "";
-						}
-					}
-				}
-
-				if (recheckLine == false) {
-					// iterates through all double arrays
-					// starts at the negative end to prioritize the more tabulated array
-					for (int arrayIndex = Var_Array.doubleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
-						giveDefString = getLineCalc;
-
-						// if an array matches up (cannot be with UNASSIGN or ARRAY)
-						if (giveDefString.trim().contains(Var_Array.doubleArrayNameSave.get(arrayIndex)[2] + "[")
-								&& this.tabNum >= Integer.parseInt(Var_Array.doubleArrayNameSave.get(arrayIndex)[1])
-								&& giveDefString.trim().startsWith("UNASSIGN") == false
-								&& giveDefString.trim().startsWith("ARRAY") == false) {
-							recheckLine = true;
-							changedLineOnce = true;
-
-							getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 3, arrayIndex, getLineCalc);
-							definitionCalc = getDefinitionArray[1] + "";
-						}
-					}
-				}
-
-				if (recheckLine) {
-
-					// tests for recurring definition
-					for (String testDefinition : usedDefinitionArray) {
-						if (definitionCalc.contains(testDefinition)) {
-							System.out.println("ERROR: Recurring definition at line '" + ccuFileArray.get(i)
-									+ "' starting with the definition '" + testDefinition + "'");
-							System.exit(0);
-						}
-					}
-
-					// properly sets the line
-					getLineCalc = getDefinitionArray[0] + getDefinitionArray[1] + getDefinitionArray[2];
-
-					// adds to check for recurring definition
-					usedDefinitionArray.add(getDefinitionArray[3]);
-				}
-
-			} while (recheckLine);
-
-			// if changedLineOnce is set to true, it finally sets the array
-			if (changedLineOnce) {
-				ccuFileArray.set(i, getLineCalc);
-			}
+			ccuFileArray.set(i, Var_Define.calcDefine(ccuFileArray.get(i), this.tabNum, ccuFileArray.get(i)));
 
 			// iterates through all functions
 			// starts at the negative end to prioritize the more tabulated function
@@ -346,13 +221,19 @@ public class ReadCCUFile {
 						resetArray = true;
 						singleLineStatement = true;
 						break;
-
+						
 					case "PRINT":
 						String printString = ccuFileArray.get(i).replaceFirst("PRINT", "");
-						System.out.println("PRINT:\t\t" + printString.replaceAll("^\\s+", ""));
+						System.out.println(printString.replaceAll("^\\s+", ""));
 						getCalcArray = null;
 						resetArray = true;
 						singleLineStatement = true;
+						break;
+
+					case "EXIT":
+						String exitString = ccuFileArray.get(i).replaceFirst("EXIT", "");
+						System.out.println("EXIT:\t" + exitString.replaceAll("^\\s+", ""));
+						System.exit(0);
 						break;
 					}
 
