@@ -53,6 +53,7 @@ public class Var_Define {
 		 *  -name - defineName
 		 * 	-string - defintionGet
 		 */
+		
 		String[] arrayDefineCalc = new String[5];
 		Integer defineType = null;
 		Boolean isGlobal = null;
@@ -235,10 +236,16 @@ public class Var_Define {
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 			}
 		}
+		
+		if (statementEncase.contains(" ")) {
+			statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+			return getLine.length() - statementEncase.length();
+		} else {
+			return getLine.length();
+		}
+		
 
-		statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
-
-		return getLine.length() - statementEncase.length();
+		
 	}
 
 	public static String[] parseDefinition(String getString, String getBegDef, int parseType, int getIndex, String fullLineGet) {

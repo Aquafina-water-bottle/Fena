@@ -39,7 +39,8 @@ public class Con_Elif {
 				returnArray = objIf.getArray();
 				
 			} else {
-				returnArray = null;
+				returnArray.add(this.fullLineGet.substring(0, tabNum - 1) + "CCU_ReturnFalse");
+				return returnArray;
 			}
 
 		} else {

@@ -5,7 +5,6 @@
 //<Defines
 DEF CCU_ExecuteSpawnStand @e[type=ArmorStand,SpawnStand,SPgam=0]
 DEF CCU_FinalSpawnStand @e[type=ArmorStand,SpawnStand,SPgam=0] SPgam = $SPid$
-DEF CCU_NumberObjAdd Number dummy
 //>
 
 //<Number Adding
@@ -19,6 +18,7 @@ ARRAY {ACTIVATE CCU.iterateNumbers() ARGS}:
 =//
 
 FUNC {GLOBAL CCU.iterateNumbers}:
+	scoreboard objectives add Number dummy
 	LOOP {ARGS[S]}:
 		|0| Number = |0|
 	
