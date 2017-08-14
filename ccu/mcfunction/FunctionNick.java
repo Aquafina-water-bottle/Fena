@@ -7,9 +7,10 @@ import ccu.block.Setblock;
 import ccu.command.Cmd_MFunc;
 import ccu.command.Var_Options;
 import ccu.general.GeneralFile;
+import ccu.general.ReadConfig;
 
 public class FunctionNick {
-	
+
 	private static void replaceFunctionNicks(ArrayList<String[]> arrayGet, int startInt) {
 		for (int i = 0; i < arrayGet.size(); i++) {
 			for (int j = 1; j < arrayGet.get(i).length; j++) {
@@ -20,14 +21,14 @@ public class FunctionNick {
 			}
 		}
 	}
-	
+
 	private static void replaceFunctionNicksSingle(ArrayList<String> arrayGet, int startInt) {
 		for (int i = 0; i < arrayGet.size(); i++) {
-				String calcString = getCommand(arrayGet.get(i));
-				if (calcString != null) {
-					arrayGet.set(i, calcString);
-				}
+			String calcString = getCommand(arrayGet.get(i));
+			if (calcString != null) {
+				arrayGet.set(i, calcString);
 			}
+		}
 	}
 
 	public static void setFunctionNicks() {
@@ -47,7 +48,7 @@ public class FunctionNick {
 				System.exit(0);
 			}
 		}
-		
+
 		replaceFunctionNicks(GroupStructure.groupCommandsArray, 0);
 		replaceFunctionNicks(Cmd_MFunc.arrayMFuncSave, 1);
 		replaceFunctionNicksSingle(Setblock.initialCommands, 0);
@@ -60,19 +61,26 @@ public class FunctionNick {
 		String[] shortcutCalcArray = null;
 		String shortcutResultCalc = null;
 		boolean changedLine = false;
+		boolean foundCommand = false;
 
 		shortcutCalc = getString.trim();
 		shortcutCalcArray = shortcutCalc.split(" ");
 		for (int i = 0; i < shortcutCalcArray.length; i++) {
+			for (int j = 0; j < ReadConfig.minecraftCommandsArray.length; j++) {
+				if (shortcutCalcArray[i].equals(ReadConfig.minecraftCommandsArray[j])) {
+					foundCommand = true;
+					break;
+				}
+			}
 
-			// if it ends with 'function'
-			if (shortcutCalcArray[i].endsWith("function")) {
-				for (int j = 0; j < Cmd_MFunc.arrayMFuncNameSave.size(); j++) {
-					if (i + 1 < shortcutCalcArray.length && shortcutCalcArray[i + 1].equals(Cmd_MFunc.arrayMFuncNameSave.get(j))) {
-						shortcutCalcArray[i + 1] = Cmd_MFunc.fileMFuncCommandSave.get(j);
-						changedLine = true;
-						break;
+			for (int j = 0; j < Cmd_MFunc.arrayMFuncNameSave.size(); j++) {
+				if (shortcutCalcArray[i].equals(Cmd_MFunc.arrayMFuncNameSave.get(j))) {
+					shortcutCalcArray[i] = Cmd_MFunc.fileMFuncCommandSave.get(j);
+					if (i - 1 < 0 || foundCommand == false) {
+						shortcutCalcArray[i] = "function " + shortcutCalcArray[i];
 					}
+					changedLine = true;
+					break;
 				}
 			}
 		}

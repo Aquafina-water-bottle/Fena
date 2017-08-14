@@ -22,6 +22,7 @@ public class Var_Options {
 	public static Boolean combinerOption = null;
 	public static File filePathFuncOption = null;
 	public static Boolean parseChanges = null;
+	public static Boolean deleteFunctionFolder = null;
 
 	// @formatter:off
 	private final String[] optionArray = {
@@ -33,6 +34,7 @@ public class Var_Options {
 			"combinerOption",
 			"filePathFuncOption",
 			"parseChangesOption",
+			"deleteFunctionFolderOption",
 			"A"
 			};
 	// @formatter:on
@@ -125,13 +127,24 @@ public class Var_Options {
 						Var_Options.filePathFuncOption = new File(tempInput);
 						lineUsed = true;
 					}
-
+					
 					if (optionName.equals("parseChangesOption")) {
 						if (tempInput.equalsIgnoreCase("true")) {
 							Var_Options.parseChanges = true;
 						} else {
 							if (tempInput.equalsIgnoreCase("false")) {
 								Var_Options.parseChanges = false;
+							}
+						}
+						lineUsed = true;
+					}
+
+					if (optionName.equals("deleteFunctionFolderOption")) {
+						if (tempInput.equalsIgnoreCase("true")) {
+							Var_Options.deleteFunctionFolder = true;
+						} else {
+							if (tempInput.equalsIgnoreCase("false")) {
+								Var_Options.deleteFunctionFolder = false;
 							}
 						}
 						lineUsed = true;
@@ -193,6 +206,10 @@ public class Var_Options {
 		if (parseChanges == null) {
 			System.out.println("WARNING: 'parseChanges' field is empty - defaults to 'false'");
 			Var_Options.parseChanges = false;
+		}
+		if (deleteFunctionFolder == null) {
+			System.out.println("WARNING: 'deleteFunctionFolder' field is empty - defaults to 'false'");
+			Var_Options.deleteFunctionFolder = false;
 		}
 	}
 

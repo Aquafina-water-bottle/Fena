@@ -100,11 +100,20 @@ public class Short_Selector {
 		boolean changedFullLine = false;
 		boolean isScore = false;
 
+		// @formatter:off
+		String[][] gamemodeReplace = {
+				{"0", "s", "survival"},
+				{"1", "c", "creative"},
+				{"2", "a", "adventure"},
+				{"3", "sp", "spectator"}
+		};
+		// @formatter:on
+
 		shortcutCalc = fullLineGet.trim();
 		shortcutCalcArray = shortcutCalc.split("@");
 
 		// Essentially anything except the first line will be a possible selector
-		
+
 		changedFullLine = false;
 		for (int i = 1; i < shortcutCalcArray.length; i++) {
 			changedLine = false;
@@ -182,26 +191,40 @@ public class Short_Selector {
 								} else {
 									// meaning '=' makes sense
 									isScore = true;
+									selectorBeg = shortcutSelectorArray[j].substring(0, shortcutSelectorArray[j].indexOf("="));
+									selectorEnd = shortcutSelectorArray[j].substring(shortcutSelectorArray[j].indexOf("=") + 1);
+
 									for (String targetSelector : ReadConfig.targetSelectorArray) {
-										selectorBeg = shortcutSelectorArray[j].substring(0, shortcutSelectorArray[j].indexOf("="));
-										selectorEnd = shortcutSelectorArray[j].substring(shortcutSelectorArray[j].indexOf("=") + 1);
 										if (selectorBeg.equals(targetSelector)) {
 											isScore = false;
-											break;
-										}
+											
+											// if it's either of the first two, sets it to the 3rd
+											if (ReadConfig.mcVersion == 4 && selectorBeg.equals("m")) {
+												for (String[] checkGamemodeVal : gamemodeReplace) {
+													if (selectorEnd.equals(checkGamemodeVal[0])
+															|| selectorEnd.equals(checkGamemodeVal[1])) {
+														selectorEnd = checkGamemodeVal[2];
+													}
+												}
+												
+												shortcutSelectorArray[j] = selectorBeg + "=" + selectorEnd;
+												changedLine = true;
+											}
 
-										// if it's already parsed as a score
-										if (selectorBeg.startsWith("score_")) {
-											isScore = false;
 											break;
-										}
-
-										// checks if the next one is an int (if not, it isn't a score)
-										if (NumberUtils.isInt(selectorEnd) == false) {
-											isScore = false;
 										}
 									}
 
+									// if it's already parsed as a score
+									if (selectorBeg.startsWith("score_")) {
+										isScore = false;
+										break;
+									}
+
+									// checks if the next one is an int (if not, it isn't a score)
+									if (NumberUtils.isInt(selectorEnd) == false) {
+										isScore = false;
+									}
 									// first part is not recognized - meaning it's an objective
 									// if it is still a score
 									if (isScore == true) {
@@ -211,7 +234,7 @@ public class Short_Selector {
 											// System.out.println(fullLineGet.substring(0, 30));
 											// System.out.println(shortcutSelectorArray[j]);
 										}
-										
+
 									}
 									changedLine = true;
 								}
@@ -314,7 +337,7 @@ public class Short_Selector {
 
 			// if something changed
 			if (changedLine == true) {
-				
+
 				for (int j = 0; j < shortcutSelectorArray.length; j++) {
 					if (j == 0) {
 						shortcutResultCalc = shortcutSelectorArray[j];
@@ -350,7 +373,7 @@ public class Short_Selector {
 		System.out.println(shortcutFinalResultCalc);
 		System.out.println("");
 		*/
-		
+
 		return shortcutFinalResultCalc;
 	}
 }

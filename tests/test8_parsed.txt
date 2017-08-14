@@ -1,0 +1,11 @@
+INITIALIZE
+	fill ~5 ~5 ~5 ~22 ~7 ~7 air 0
+
+GROUP | Grp_MainStart | PULSE		[~6 ~6 ~6 | air 0]
+	say This;is;a;definition;This;is;a;definition
+	say This;is;a;definition;;This;is;a;definition
+	say This;is;a;definition This;is;a;definition
+
+FINALIZE
+	setblock ~6 ~6 ~6 air 0
+

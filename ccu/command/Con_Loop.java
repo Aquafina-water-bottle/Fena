@@ -41,7 +41,7 @@ public class Con_Loop {
 		String statementEncase = this.fullLineGet.replaceFirst("LOOP", "").replaceAll("^\\s+", "");
 		if (statementEncase.startsWith("{") && statementEncase.endsWith("}:")) {
 
-			statementEncase = statementEncase.substring(0, statementEncase.length() - 1);
+			statementEncase = statementEncase.substring(0, statementEncase.length() - 1).replace("CALC(","(");
 			// Gets rid of the last colon
 			// splits in spaces, gets number of {}
 
@@ -76,7 +76,6 @@ public class Con_Loop {
 						
 						// substring to get rid of curly brackets
 						loopArray = MathParser.getLoopArray(stringCalc.substring(1, stringCalc.length() - 1), fullLineGet); // gets the math stuff here
-						
 						loopArrayStorage.add(loopArray);
 						stringCalc = null;
 					}

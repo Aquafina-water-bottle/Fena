@@ -454,95 +454,97 @@ setblock 399 84 105 chain_command_block 4 replace {Command:"scoreboard teams rem
 setblock 398 84 105 chain_command_block 4 replace {Command:"fill 384 70 104 399 85 105 air 0",TrackOutput:0b,auto:1b}
 setblock 397 84 105 chain_command_block 4 replace {Command:"say 94 12 190",TrackOutput:0b,auto:1b}
 setblock 396 84 105 chain_command_block 4 replace {Command:"-128 7 410",TrackOutput:0b,auto:1b}
-setblock 385 74 102 command_block 5 replace {Command:"powertool scoreboard players set @a SPtp 1",TrackOutput:0b,auto:0b}
-setblock 386 74 102 chain_command_block 5 replace {Command:"say Sadly, 2 != 5",TrackOutput:0b,auto:1b}
-setblock 387 74 102 chain_command_block 5 replace {Command:"say 3 = 3",TrackOutput:0b,auto:1b}
-setblock 388 74 102 chain_command_block 5 replace {Command:"say 5 = 5",TrackOutput:0b,auto:1b}
-setblock 389 74 102 chain_command_block 5 replace {Command:"10 != 3 although 5 = 5",TrackOutput:0b,auto:1b}
-setblock 390 74 102 chain_command_block 5 replace {Command:"say four",TrackOutput:0b,auto:1b}
-setblock 391 74 102 chain_command_block 5 replace {Command:"this function",TrackOutput:0b,auto:1b}
-setblock 392 74 102 chain_command_block 5 replace {Command:"has no parameters",TrackOutput:0b,auto:1b}
-setblock 393 74 102 chain_command_block 5 replace {Command:"say abc",TrackOutput:0b,auto:1b}
-setblock 394 74 102 chain_command_block 5 replace {Command:"say the most outside 4th parameter is four",TrackOutput:0b,auto:1b}
-setblock 395 74 102 chain_command_block 5 replace {Command:"however this function has parameters",TrackOutput:0b,auto:1b}
-setblock 396 74 102 chain_command_block 5 replace {Command:"First is (a_number) and second is () while the Func_Outside2 parameter is abc",TrackOutput:0b,auto:1b}
-setblock 397 74 102 chain_command_block 5 replace {Command:"First is (spaces ) and second is ( between semicolons matter) while the Func_Outside2 parameter is abc",TrackOutput:0b,auto:1b}
-setblock 398 74 102 chain_command_block 5 replace {Command:"say A is the letter while 1 is the number",TrackOutput:0b,auto:1b}
-setblock 399 74 102 chain_command_block 1 replace {Command:"say B is the letter while 1 is the number",TrackOutput:0b,auto:1b}
-setblock 399 75 102 chain_command_block 4 replace {Command:"say A is the letter while 2 is the number",TrackOutput:0b,auto:1b}
-setblock 398 75 102 chain_command_block 4 replace {Command:"say B is the letter while 2 is the number",TrackOutput:0b,auto:1b}
-setblock 397 75 102 chain_command_block 4 replace {Command:"say A is the letter while 3 is the number",TrackOutput:0b,auto:1b}
-setblock 396 75 102 chain_command_block 4 replace {Command:"say B is the letter while 3 is the number",TrackOutput:0b,auto:1b}
-setblock 395 75 102 chain_command_block 4 replace {Command:"say 174",TrackOutput:0b,auto:1b}
-setblock 394 75 102 chain_command_block 4 replace {Command:"say 174",TrackOutput:0b,auto:1b}
-setblock 393 75 102 chain_command_block 4 replace {Command:"say 92",TrackOutput:0b,auto:1b}
-setblock 392 75 102 chain_command_block 4 replace {Command:"say 164",TrackOutput:0b,auto:1b}
-setblock 391 75 102 chain_command_block 4 replace {Command:"say 0",TrackOutput:0b,auto:1b}
-setblock 390 75 102 chain_command_block 4 replace {Command:"say 0",TrackOutput:0b,auto:1b}
-setblock 389 75 102 chain_command_block 4 replace {Command:"say 1",TrackOutput:0b,auto:1b}
+setblock 385 74 102 command_block 5 replace {Command:"say This;is;a;definition;This;is;a;definition",TrackOutput:0b,auto:0b}
+setblock 386 74 102 chain_command_block 5 replace {Command:"say This;is;a;definition; This;is;a;definition",TrackOutput:0b,auto:1b}
+setblock 387 74 102 chain_command_block 5 replace {Command:"say This;is;a;definition This;is;a;definition",TrackOutput:0b,auto:1b}
+setblock 388 74 102 chain_command_block 5 replace {Command:"say Sadly, 2 != 5",TrackOutput:0b,auto:1b}
+setblock 389 74 102 chain_command_block 5 replace {Command:"say 3 = 3",TrackOutput:0b,auto:1b}
+setblock 390 74 102 chain_command_block 5 replace {Command:"say 5 = 5",TrackOutput:0b,auto:1b}
+setblock 391 74 102 chain_command_block 5 replace {Command:"10 != 3 although 5 = 5",TrackOutput:0b,auto:1b}
+setblock 392 74 102 chain_command_block 5 replace {Command:"say four",TrackOutput:0b,auto:1b}
+setblock 393 74 102 chain_command_block 5 replace {Command:"this function",TrackOutput:0b,auto:1b}
+setblock 394 74 102 chain_command_block 5 replace {Command:"has no parameters",TrackOutput:0b,auto:1b}
+setblock 395 74 102 chain_command_block 5 replace {Command:"say abc",TrackOutput:0b,auto:1b}
+setblock 396 74 102 chain_command_block 5 replace {Command:"say the most outside 4th parameter is four",TrackOutput:0b,auto:1b}
+setblock 397 74 102 chain_command_block 5 replace {Command:"however this function has parameters",TrackOutput:0b,auto:1b}
+setblock 398 74 102 chain_command_block 5 replace {Command:"First is (a_number) and second is () while the Func_Outside2 parameter is abc",TrackOutput:0b,auto:1b}
+setblock 399 74 102 chain_command_block 1 replace {Command:"First is (spaces ) and second is ( between semicolons matter) while the Func_Outside2 parameter is abc",TrackOutput:0b,auto:1b}
+setblock 399 75 102 chain_command_block 4 replace {Command:"say A is the letter while 1 is the number",TrackOutput:0b,auto:1b}
+setblock 398 75 102 chain_command_block 4 replace {Command:"say B is the letter while 1 is the number",TrackOutput:0b,auto:1b}
+setblock 397 75 102 chain_command_block 4 replace {Command:"say A is the letter while 2 is the number",TrackOutput:0b,auto:1b}
+setblock 396 75 102 chain_command_block 4 replace {Command:"say B is the letter while 2 is the number",TrackOutput:0b,auto:1b}
+setblock 395 75 102 chain_command_block 4 replace {Command:"say A is the letter while 3 is the number",TrackOutput:0b,auto:1b}
+setblock 394 75 102 chain_command_block 4 replace {Command:"say B is the letter while 3 is the number",TrackOutput:0b,auto:1b}
+setblock 393 75 102 chain_command_block 4 replace {Command:"say 174",TrackOutput:0b,auto:1b}
+setblock 392 75 102 chain_command_block 4 replace {Command:"say 174",TrackOutput:0b,auto:1b}
+setblock 391 75 102 chain_command_block 4 replace {Command:"say 92",TrackOutput:0b,auto:1b}
+setblock 390 75 102 chain_command_block 4 replace {Command:"say 164",TrackOutput:0b,auto:1b}
+setblock 389 75 102 chain_command_block 4 replace {Command:"say 0",TrackOutput:0b,auto:1b}
 setblock 388 75 102 chain_command_block 4 replace {Command:"say 0",TrackOutput:0b,auto:1b}
-setblock 387 75 102 chain_command_block 4 replace {Command:"say 3.33333333333333",TrackOutput:0b,auto:1b}
-setblock 386 75 102 chain_command_block 4 replace {Command:"say 3.33333333333333",TrackOutput:0b,auto:1b}
-setblock 385 75 102 chain_command_block 4 replace {Command:"say 6.33333333333333",TrackOutput:0b,auto:1b}
-setblock 384 75 102 chain_command_block 1 replace {Command:"say 6.33333333333333",TrackOutput:0b,auto:1b}
-setblock 384 76 102 chain_command_block 5 replace {Command:"say 6",TrackOutput:0b,auto:1b}
-setblock 385 76 102 chain_command_block 5 replace {Command:"say 7",TrackOutput:0b,auto:1b}
-setblock 386 76 102 chain_command_block 5 replace {Command:"say 3.33333333333333",TrackOutput:0b,auto:1b}
-setblock 387 76 102 chain_command_block 5 replace {Command:"say 3.33333333333333",TrackOutput:0b,auto:1b}
-setblock 388 76 102 chain_command_block 5 replace {Command:"say 6",TrackOutput:0b,auto:1b}
-setblock 389 76 102 chain_command_block 5 replace {Command:"say 6",TrackOutput:0b,auto:1b}
-setblock 390 76 102 chain_command_block 5 replace {Command:"say 0.5 = 0.5 = 1/2",TrackOutput:0b,auto:1b}
-setblock 391 76 102 chain_command_block 5 replace {Command:"say 0.86602540378444 = 0.86602540378444 = sqrt(3)/2",TrackOutput:0b,auto:1b}
-setblock 392 76 102 chain_command_block 5 replace {Command:"say 0.57735026918963 = 0.57735026918963 = 1/sqrt(3)",TrackOutput:0b,auto:1b}
-setblock 393 76 102 chain_command_block 5 replace {Command:"execute @e[type=ArmorStand,tag=RRStand,score_RRti=0,score_RRti2=2,score_RRti2_min=2] ~ ~ ~ summon Zombie ~ ~ ~ {Tags:[\"RREntity\",\"RRZombie\"],DeathLootTable:\"minecraft:empty\"}",TrackOutput:0b,auto:1b}
-setblock 394 76 102 chain_command_block 5 replace {Command:"execute @e[type=ArmorStand,tag=RRStand,score_RRti=0,score_RRti2=2,score_RRti2_min=2] ~ ~ ~ scoreboard players add @a[m=2,score_RRpi=1,score_RRpi_min=1] RRti 1",TrackOutput:0b,auto:1b}
-setblock 395 76 102 chain_command_block 5 replace {Command:"give @a leather_helmet 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}",TrackOutput:0b,auto:1b}
-setblock 396 76 102 chain_command_block 5 replace {Command:"give @a leather_chestplate 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}",TrackOutput:0b,auto:1b}
-setblock 397 76 102 chain_command_block 5 replace {Command:"give @a leather_leggings 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}",TrackOutput:0b,auto:1b}
-setblock 398 76 102 chain_command_block 5 replace {Command:"give @a leather_boots 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}",TrackOutput:0b,auto:1b}
-setblock 399 76 102 chain_command_block 1 replace {Command:"give @a[score_RRgi_min=16] minecraft:pumpkin 16 0",TrackOutput:0b,auto:1b}
-setblock 399 77 102 chain_command_block 4 replace {Command:"scoreboard players remove @a[score_RRgi_min=16] RRgi 16",TrackOutput:0b,auto:1b}
-setblock 398 77 102 chain_command_block 4 replace {Command:"give @a[score_RRgi_min=8] minecraft:pumpkin 8 0",TrackOutput:0b,auto:1b}
-setblock 397 77 102 chain_command_block 4 replace {Command:"scoreboard players remove @a[score_RRgi_min=8] RRgi 8",TrackOutput:0b,auto:1b}
-setblock 396 77 102 chain_command_block 4 replace {Command:"give @a[score_RRgi_min=4] minecraft:pumpkin 4 0",TrackOutput:0b,auto:1b}
-setblock 395 77 102 chain_command_block 4 replace {Command:"scoreboard players remove @a[score_RRgi_min=4] RRgi 4",TrackOutput:0b,auto:1b}
-setblock 394 77 102 chain_command_block 4 replace {Command:"give @a[score_RRgi_min=2] minecraft:pumpkin 2 0",TrackOutput:0b,auto:1b}
-setblock 393 77 102 chain_command_block 4 replace {Command:"scoreboard players remove @a[score_RRgi_min=2] RRgi 2",TrackOutput:0b,auto:1b}
-setblock 392 77 102 chain_command_block 4 replace {Command:"give @a[score_RRgi_min=1] minecraft:pumpkin 1 0",TrackOutput:0b,auto:1b}
-setblock 391 77 102 chain_command_block 4 replace {Command:"scoreboard players remove @a[score_RRgi_min=1] RRgi 1",TrackOutput:0b,auto:1b}
-setblock 390 77 102 chain_command_block 4 replace {Command:"say Index 0 --> 0",TrackOutput:0b,auto:1b}
-setblock 389 77 102 chain_command_block 4 replace {Command:"say Index 1 --> 1",TrackOutput:0b,auto:1b}
-setblock 388 77 102 chain_command_block 4 replace {Command:"say Index 2 --> 1",TrackOutput:0b,auto:1b}
-setblock 387 77 102 chain_command_block 4 replace {Command:"say Index 3 --> 2",TrackOutput:0b,auto:1b}
-setblock 386 77 102 chain_command_block 4 replace {Command:"say Index 4 --> 3",TrackOutput:0b,auto:1b}
-setblock 385 77 102 chain_command_block 4 replace {Command:"say Index 5 --> 5",TrackOutput:0b,auto:1b}
-setblock 384 77 102 chain_command_block 1 replace {Command:"say Index 6 --> 8",TrackOutput:0b,auto:1b}
-setblock 384 78 102 chain_command_block 5 replace {Command:"say Index 7 --> 13",TrackOutput:0b,auto:1b}
-setblock 385 78 102 chain_command_block 5 replace {Command:"say Index 8 --> 21",TrackOutput:0b,auto:1b}
-setblock 386 78 102 chain_command_block 5 replace {Command:"say Index 9 --> 34",TrackOutput:0b,auto:1b}
-setblock 387 78 102 chain_command_block 5 replace {Command:"say Index 10 --> 55",TrackOutput:0b,auto:1b}
-setblock 388 78 102 chain_command_block 5 replace {Command:"say -68.43 14 421.6",TrackOutput:0b,auto:1b}
-setblock 389 78 102 chain_command_block 5 replace {Command:"say -62.43 14 421.6;-64.43 14 421.6;-66.43 14 421.6;-68.43 14 421.6;-68.4 14 415.6;-66.4 14 415.6;-64.4 14 415.6",TrackOutput:0b,auto:1b}
-setblock 390 78 102 chain_command_block 5 replace {Command:"say 7",TrackOutput:0b,auto:1b}
-setblock 391 78 102 chain_command_block 5 replace {Command:"say element1_3",TrackOutput:0b,auto:1b}
-setblock 392 78 102 chain_command_block 5 replace {Command:"say element1_1;NULL;element1_3",TrackOutput:0b,auto:1b}
-setblock 393 78 102 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 394 78 102 chain_command_block 5 replace {Command:"say 6",TrackOutput:0b,auto:1b}
-setblock 395 78 102 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
-setblock 396 78 102 chain_command_block 5 replace {Command:"say 1 2 3 4 5 6 7 8 9 10 say 1 != 5",TrackOutput:0b,auto:1b}
-setblock 397 78 102 chain_command_block 5 replace {Command:"say 2 != 5",TrackOutput:0b,auto:1b}
-setblock 398 78 102 chain_command_block 5 replace {Command:"say 3 != 5",TrackOutput:0b,auto:1b}
-setblock 399 78 102 chain_command_block 1 replace {Command:"say 4 != 5",TrackOutput:0b,auto:1b}
-setblock 399 79 102 chain_command_block 4 replace {Command:"say 6 != 5",TrackOutput:0b,auto:1b}
-setblock 398 79 102 chain_command_block 4 replace {Command:"say 7 != 5",TrackOutput:0b,auto:1b}
-setblock 397 79 102 chain_command_block 4 replace {Command:"say 8 != 5",TrackOutput:0b,auto:1b}
-setblock 396 79 102 chain_command_block 4 replace {Command:"say 9 != 5",TrackOutput:0b,auto:1b}
-setblock 395 79 102 chain_command_block 4 replace {Command:"say 10 != 5",TrackOutput:0b,auto:1b}
-setblock 394 79 102 chain_command_block 4 replace {Command:"say asdf != asdf2",TrackOutput:0b,auto:1b}
-setblock 393 79 102 chain_command_block 4 replace {Command:"say the real asdf",TrackOutput:0b,auto:1b}
-setblock 392 79 102 chain_command_block 4 replace {Command:"setblock 94 12 190 redstone_block 0",TrackOutput:0b,auto:1b}
-setblock 391 79 102 chain_command_block 4 replace {Command:"say This;is;a;ran;om;string",TrackOutput:0b,auto:1b}
-setblock 390 79 102 chain_command_block 4 replace {Command:"say 6 aSdFmarker",TrackOutput:0b,auto:1b}
+setblock 387 75 102 chain_command_block 4 replace {Command:"say 1",TrackOutput:0b,auto:1b}
+setblock 386 75 102 chain_command_block 4 replace {Command:"say 0",TrackOutput:0b,auto:1b}
+setblock 385 75 102 chain_command_block 4 replace {Command:"say 3.33333333333333",TrackOutput:0b,auto:1b}
+setblock 384 75 102 chain_command_block 1 replace {Command:"say 3.33333333333333",TrackOutput:0b,auto:1b}
+setblock 384 76 102 chain_command_block 5 replace {Command:"say 6.33333333333333",TrackOutput:0b,auto:1b}
+setblock 385 76 102 chain_command_block 5 replace {Command:"say 6.33333333333333",TrackOutput:0b,auto:1b}
+setblock 386 76 102 chain_command_block 5 replace {Command:"say 6",TrackOutput:0b,auto:1b}
+setblock 387 76 102 chain_command_block 5 replace {Command:"say 7",TrackOutput:0b,auto:1b}
+setblock 388 76 102 chain_command_block 5 replace {Command:"say 3.33333333333333",TrackOutput:0b,auto:1b}
+setblock 389 76 102 chain_command_block 5 replace {Command:"say 3.33333333333333",TrackOutput:0b,auto:1b}
+setblock 390 76 102 chain_command_block 5 replace {Command:"say 6",TrackOutput:0b,auto:1b}
+setblock 391 76 102 chain_command_block 5 replace {Command:"say 6",TrackOutput:0b,auto:1b}
+setblock 392 76 102 chain_command_block 5 replace {Command:"say 0.5 = 0.5 = 1/2",TrackOutput:0b,auto:1b}
+setblock 393 76 102 chain_command_block 5 replace {Command:"say 0.86602540378444 = 0.86602540378444 = sqrt(3)/2",TrackOutput:0b,auto:1b}
+setblock 394 76 102 chain_command_block 5 replace {Command:"say 0.57735026918963 = 0.57735026918963 = 1/sqrt(3)",TrackOutput:0b,auto:1b}
+setblock 395 76 102 chain_command_block 5 replace {Command:"execute @e[type=ArmorStand,tag=RRStand,score_RRti=0,score_RRti2=2,score_RRti2_min=2] ~ ~ ~ summon Zombie ~ ~ ~ {Tags:[\"RREntity\",\"RRZombie\"],DeathLootTable:\"minecraft:empty\"}",TrackOutput:0b,auto:1b}
+setblock 396 76 102 chain_command_block 5 replace {Command:"execute @e[type=ArmorStand,tag=RRStand,score_RRti=0,score_RRti2=2,score_RRti2_min=2] ~ ~ ~ scoreboard players add @a[m=2,score_RRpi=1,score_RRpi_min=1] RRti 1",TrackOutput:0b,auto:1b}
+setblock 397 76 102 chain_command_block 5 replace {Command:"give @a leather_helmet 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}",TrackOutput:0b,auto:1b}
+setblock 398 76 102 chain_command_block 5 replace {Command:"give @a leather_chestplate 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}",TrackOutput:0b,auto:1b}
+setblock 399 76 102 chain_command_block 1 replace {Command:"give @a leather_leggings 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}",TrackOutput:0b,auto:1b}
+setblock 399 77 102 chain_command_block 4 replace {Command:"give @a leather_boots 1 0 {HideFlags:127,ench:[{id:0,lvl:1}]}",TrackOutput:0b,auto:1b}
+setblock 398 77 102 chain_command_block 4 replace {Command:"give @a[score_RRgi_min=16] minecraft:pumpkin 16 0",TrackOutput:0b,auto:1b}
+setblock 397 77 102 chain_command_block 4 replace {Command:"scoreboard players remove @a[score_RRgi_min=16] RRgi 16",TrackOutput:0b,auto:1b}
+setblock 396 77 102 chain_command_block 4 replace {Command:"give @a[score_RRgi_min=8] minecraft:pumpkin 8 0",TrackOutput:0b,auto:1b}
+setblock 395 77 102 chain_command_block 4 replace {Command:"scoreboard players remove @a[score_RRgi_min=8] RRgi 8",TrackOutput:0b,auto:1b}
+setblock 394 77 102 chain_command_block 4 replace {Command:"give @a[score_RRgi_min=4] minecraft:pumpkin 4 0",TrackOutput:0b,auto:1b}
+setblock 393 77 102 chain_command_block 4 replace {Command:"scoreboard players remove @a[score_RRgi_min=4] RRgi 4",TrackOutput:0b,auto:1b}
+setblock 392 77 102 chain_command_block 4 replace {Command:"give @a[score_RRgi_min=2] minecraft:pumpkin 2 0",TrackOutput:0b,auto:1b}
+setblock 391 77 102 chain_command_block 4 replace {Command:"scoreboard players remove @a[score_RRgi_min=2] RRgi 2",TrackOutput:0b,auto:1b}
+setblock 390 77 102 chain_command_block 4 replace {Command:"give @a[score_RRgi_min=1] minecraft:pumpkin 1 0",TrackOutput:0b,auto:1b}
+setblock 389 77 102 chain_command_block 4 replace {Command:"scoreboard players remove @a[score_RRgi_min=1] RRgi 1",TrackOutput:0b,auto:1b}
+setblock 388 77 102 chain_command_block 4 replace {Command:"say Index 0 --> 0",TrackOutput:0b,auto:1b}
+setblock 387 77 102 chain_command_block 4 replace {Command:"say Index 1 --> 1",TrackOutput:0b,auto:1b}
+setblock 386 77 102 chain_command_block 4 replace {Command:"say Index 2 --> 1",TrackOutput:0b,auto:1b}
+setblock 385 77 102 chain_command_block 4 replace {Command:"say Index 3 --> 2",TrackOutput:0b,auto:1b}
+setblock 384 77 102 chain_command_block 1 replace {Command:"say Index 4 --> 3",TrackOutput:0b,auto:1b}
+setblock 384 78 102 chain_command_block 5 replace {Command:"say Index 5 --> 5",TrackOutput:0b,auto:1b}
+setblock 385 78 102 chain_command_block 5 replace {Command:"say Index 6 --> 8",TrackOutput:0b,auto:1b}
+setblock 386 78 102 chain_command_block 5 replace {Command:"say Index 7 --> 13",TrackOutput:0b,auto:1b}
+setblock 387 78 102 chain_command_block 5 replace {Command:"say Index 8 --> 21",TrackOutput:0b,auto:1b}
+setblock 388 78 102 chain_command_block 5 replace {Command:"say Index 9 --> 34",TrackOutput:0b,auto:1b}
+setblock 389 78 102 chain_command_block 5 replace {Command:"say Index 10 --> 55",TrackOutput:0b,auto:1b}
+setblock 390 78 102 chain_command_block 5 replace {Command:"say -68.43 14 421.6",TrackOutput:0b,auto:1b}
+setblock 391 78 102 chain_command_block 5 replace {Command:"say -62.43 14 421.6;-64.43 14 421.6;-66.43 14 421.6;-68.43 14 421.6;-68.4 14 415.6;-66.4 14 415.6;-64.4 14 415.6",TrackOutput:0b,auto:1b}
+setblock 392 78 102 chain_command_block 5 replace {Command:"say 7",TrackOutput:0b,auto:1b}
+setblock 393 78 102 chain_command_block 5 replace {Command:"say element1_3",TrackOutput:0b,auto:1b}
+setblock 394 78 102 chain_command_block 5 replace {Command:"say element1_1;NULL;element1_3",TrackOutput:0b,auto:1b}
+setblock 395 78 102 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
+setblock 396 78 102 chain_command_block 5 replace {Command:"say 6",TrackOutput:0b,auto:1b}
+setblock 397 78 102 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
+setblock 398 78 102 chain_command_block 5 replace {Command:"say 1 2 3 4 5 6 7 8 9 10 say 1 != 5",TrackOutput:0b,auto:1b}
+setblock 399 78 102 chain_command_block 1 replace {Command:"say 2 != 5",TrackOutput:0b,auto:1b}
+setblock 399 79 102 chain_command_block 4 replace {Command:"say 3 != 5",TrackOutput:0b,auto:1b}
+setblock 398 79 102 chain_command_block 4 replace {Command:"say 4 != 5",TrackOutput:0b,auto:1b}
+setblock 397 79 102 chain_command_block 4 replace {Command:"say 6 != 5",TrackOutput:0b,auto:1b}
+setblock 396 79 102 chain_command_block 4 replace {Command:"say 7 != 5",TrackOutput:0b,auto:1b}
+setblock 395 79 102 chain_command_block 4 replace {Command:"say 8 != 5",TrackOutput:0b,auto:1b}
+setblock 394 79 102 chain_command_block 4 replace {Command:"say 9 != 5",TrackOutput:0b,auto:1b}
+setblock 393 79 102 chain_command_block 4 replace {Command:"say 10 != 5",TrackOutput:0b,auto:1b}
+setblock 392 79 102 chain_command_block 4 replace {Command:"say asdf != asdf2",TrackOutput:0b,auto:1b}
+setblock 391 79 102 chain_command_block 4 replace {Command:"say the real asdf",TrackOutput:0b,auto:1b}
+setblock 390 79 102 chain_command_block 4 replace {Command:"setblock 94 12 190 redstone_block 0",TrackOutput:0b,auto:1b}
+setblock 389 79 102 chain_command_block 4 replace {Command:"say This;is;a;ran;om;string",TrackOutput:0b,auto:1b}
+setblock 388 79 102 chain_command_block 4 replace {Command:"say 6 aSdFmarker",TrackOutput:0b,auto:1b}
 say test
 say test2
 say 1 = 1

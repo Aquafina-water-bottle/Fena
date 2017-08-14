@@ -916,8 +916,18 @@ GROUP {BLOCK stained_hardened_clay 11 CLOCK Grp_asdf}:
 
 //<Part Fibonacci
 GROUP {Grp_TestingDocumentation}:
-	powertool @a SPtp = 1
 	
+	DEF $TestingEscape$ This is a definition
+	DEF $TestingNull$ ``
+	SPLIT {Arr_TestingEscape This is a definition This is a definition} { }
+	say Arr_TestingEscape[S]
+	SPLIT {Arr_TestingEscape $TestingEscape$ $TestingNull$ $TestingEscape$} { }
+	say Arr_TestingEscape[S]
+	SPLIT {Arr_TestingEscape $TestingEscape$` `$TestingEscape$} { }
+	say Arr_TestingEscape[S]
+	
+	
+///	powertool @a SPtp = 1
 	
 	FUNC {Func_TestingIf_Out2}:
 		IF {|0| = 5}:

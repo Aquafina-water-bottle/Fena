@@ -141,7 +141,7 @@ public class Var_Define {
 		}
 		// Sets name
 		if (statementEncase.contains(" ")) {
-			defineName = statementEncase.substring(0, statementEncase.indexOf(" "));
+			defineName = statementEncase.substring(0, statementEncase.indexOf(" ")).replace("`", "");
 			defintionGet = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 
 			// Checks if defineName is literally nothing
@@ -166,7 +166,7 @@ public class Var_Define {
 				System.out.println("ERROR: '" + this.fullLineGet + "' does not define anything");
 				System.exit(0);
 			} else {
-				defineName = statementEncase + "";
+				defineName = statementEncase.replace("`", "");
 				defintionGet = "";
 			}
 		}
@@ -210,7 +210,6 @@ public class Var_Define {
 		}
 
 		arrayDefineSave.add(arrayDefineCalc);
-
 		// System.out.println(arrayDefineCalc[2] + " | " + arrayDefineCalc[1]);
 		return null;
 	}
@@ -650,6 +649,7 @@ public class Var_Define {
 					if (definitionCalc.contains(testDefinition)) {
 						System.out.println("ERROR: Recurring definition at line '" + fullLineGet + "' starting with the definition '"
 								+ testDefinition + "'");
+						System.out.println(definitionCalc + " | " + testDefinition);
 						System.exit(0);
 					}
 				}

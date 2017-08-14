@@ -1,0 +1,78 @@
+//(Name)
+
+//<General Definitions
+DEF $SA$ x=#,y=#,z=#,dx=#,dy=#,dz=#
+DEF $SPid$ #
+DEF $SPpvp$ 0
+DEF $SPsat$ 0
+
+DEF $CMDName$ NAME
+DEF $CMDSizeX$ 16
+DEF $CMDSizeY$ 16
+DEF $CMDSizeZ$ 16
+
+DEF $TextStart$ {"text":"","extra":[{"text":"[","color":"gray"},{"text":"NAME","color":"COLOR","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"NAME","color":"COLOR"}}},{"text":"]","color":"gray"},{"text":": "},
+
+IMPORT {LIBRARY GETDIR 1.12/General}
+//>
+
+//<Options
+OPTIONS:
+	parseOption true
+	commandOption true
+	combinerOption true
+	filePathFuncOption C:\Users\Austin\Documents\Austin\powder game code\eGO\Server Stuff\1.12.1\world\data\functions\test
+	parseChangesOption false
+	deleteFunctionFolderOption true
+//>
+
+
+//<Groups
+MFUNC {init Grp_MainStart}:
+	IF {$asdf$ = `$asdf$`}:
+		say true
+	ELSE:
+		say false
+		
+	ARRAY {GLOBAL Arr_Test}:
+		say 1
+		say 2
+	
+	ARRAY {GLOBAL ACTIVATE CCU.arrayListAdd(Arr_Test) ARGS}:
+		say 3
+		say 4
+	
+	ARRAY {GLOBAL ACTIVATE CCU.arrayListAdd(Arr_Test;3) ARGS}:
+		say 3.5
+		
+	LOOP {Arr_Test[S]}:
+		|0|
+		
+	CCU.arrayListRemove(Arr_Test;2)
+	-
+	
+	LOOP {Arr_Test[S]}:
+		|0|
+		
+///	CCU.instantCalc
+	DEF $FibonacciLength$ 50
+	LOOP {0 ($FibonacciLength$ - 1) + 1}:
+		IF {|0| = 0}:
+			DEF GLOBAL $Var1$ 0
+			DEF GLOBAL $CalcFib$ 0
+		IF {|0| = 1}:
+			DEF GLOBAL $Var2$ 1
+			DEF GLOBAL $CalcFib$ 1
+		IF {|0| > 1}:
+			DEF GLOBAL $CalcFib$ CALC($Var1$ + $Var2$)
+			CCU.instantGlobalCalc($CalcFib$;`$CalcFib$`)
+			DEF GLOBAL $Var1$ $Var2$
+			DEF GLOBAL $Var2$ $CalcFib$
+		say Calculating: Index |0| --> $CalcFib$
+	
+	CCU.mfuncTemp(if @e[type=armor_stand,SPtp=1])
+		say test
+		
+	CCU.mfuncTemp(if @e[type=armor_stand,SPtp=1])
+		say test2
+//>

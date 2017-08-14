@@ -319,7 +319,17 @@ public class GeneralFile {
 
 		return fileArray;
 	}
-
+	
+	public static void deleteDir(File file) {
+	    File[] contents = file.listFiles();
+	    if (contents != null) {
+	        for (File f : contents) {
+	            deleteDir(f);
+	        }
+	    }
+	    file.delete();
+	}
+	
 	// Checks for directory
 	/*
 	public static void checkDir(File pathName, String varPathName) {

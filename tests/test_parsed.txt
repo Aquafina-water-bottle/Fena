@@ -507,7 +507,9 @@ GROUP | Grp_asdf | CLOCK		[384 70 104 | stained_hardened_clay 11]
 	-128 7 410
 
 GROUP | Grp_TestingDocumentation | PULSE		[384 74 102 | stonebrick 0]
-	powertool scoreboard players set @a SPtp 1
+	say This;is;a;definition;This;is;a;definition
+	say This;is;a;definition; This;is;a;definition
+	say This;is;a;definition This;is;a;definition
 	say Sadly, 2 != 5
 	say 3 = 3
 	say 5 = 5

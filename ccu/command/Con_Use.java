@@ -71,6 +71,7 @@ public class Con_Use {
 					} else {
 						System.out.println(
 								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					// removes BEG
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
@@ -82,6 +83,7 @@ public class Con_Use {
 					} else {
 						System.out.println(
 								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					// removes END
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
@@ -93,6 +95,7 @@ public class Con_Use {
 					} else {
 						System.out.println(
 								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
 					}
 					// removes NOSPACE
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);

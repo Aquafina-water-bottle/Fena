@@ -49,7 +49,7 @@ public class Con_If {
 			String statementArgs = statementEncase.substring(1, statementEncase.length() - 2);
 
 			for (String operator : operatorArray) {
-				if (statementArgs.contains(operator)) {
+				if (statementArgs.contains(" " + operator + " ")) {
 
 					if (foundOperator == null) { // checks multiple different operators
 						foundOperator = true;
@@ -152,14 +152,14 @@ public class Con_If {
 
 			} else { // if string
 				if (getOperator.equals("=")) {
-					if (splitArgsTemp[0].equals(splitArgsTemp[1])) {
+					if (splitArgsTemp[0].replace("`", "").equals(splitArgsTemp[1].replace("`", ""))) {
 						calcStatement = true;
 					} else {
 						calcStatement = false;
 					}
 				} else {
 					if (getOperator.equals("!=")) {
-						if (splitArgsTemp[0].equals(splitArgsTemp[1])) {
+						if (splitArgsTemp[0].replace("`", "").equals(splitArgsTemp[1].replace("`", ""))) {
 							calcStatement = false;
 						} else {
 							calcStatement = true;

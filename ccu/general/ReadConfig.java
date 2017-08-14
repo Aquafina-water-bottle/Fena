@@ -278,6 +278,18 @@ public class ReadConfig {
 		if (minecraftCommandsArray == null || minecraftCommandsArray[0].equals("")) {
 			System.out.println("WARNING: Array 'minecraftCommandsArray' field is empty");
 		}
+		
+		if (ReadConfig.mcVersion >= 2) {
+			String[] minecraftCommandsArrayCalc = new String[minecraftCommandsArray.length + 2];
+			for (int i = 0; i < minecraftCommandsArray.length; i++) {
+				minecraftCommandsArrayCalc[i] = minecraftCommandsArray[i];
+			}
+			
+			// adds if and unless to prevent the execute command from interfering with the function shortcut
+			minecraftCommandsArrayCalc[minecraftCommandsArrayCalc.length - 2] = "if";
+			minecraftCommandsArrayCalc[minecraftCommandsArrayCalc.length - 1] = "unless";
+			minecraftCommandsArray = minecraftCommandsArrayCalc;
+		}
 
 		if (minecraftCommandsExceptionArray == null || minecraftCommandsExceptionArray[0].equals("")) {
 			System.out.println("WARNING: Array 'minecraftCommandsExceptionArray' field is empty");

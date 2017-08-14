@@ -33,7 +33,7 @@ public class ServerOverride {
 				}
 			}
 			
-			if (shortcutDataTag == false) {
+			if (shortcutDataTag == false && ReadConfig.serverOverrideArray != null) {
 				for (String cmdGet : ReadConfig.serverOverrideArray) {
 					if (shortcutCalcArray[j].equals(cmdGet)) {
 						shortcutCalcArray[j] = "minecraft:" + shortcutCalcArray[j];

@@ -12,6 +12,11 @@ import ccu.general.GeneralFile;
 public class WriteFile {
 	public static void writeMCFunction() {
 
+		if (Var_Options.deleteFunctionFolder && Cmd_MFunc.arrayMFuncSave.isEmpty() == false
+				&& Var_Options.filePathFuncOption != null) {
+			GeneralFile.deleteDir(Var_Options.filePathFuncOption);
+		}
+
 		for (String[] functionArray : Cmd_MFunc.arrayMFuncSave) {
 			if (Var_Options.filePathFuncOption == null) {
 				System.out.println("ERROR: 'MFUNC' statement was detected but 'filePathFuncOption' is empty");

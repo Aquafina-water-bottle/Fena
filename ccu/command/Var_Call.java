@@ -103,7 +103,7 @@ public class Var_Call {
 			this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc,
 					Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndexSave)[0]), tabNum);
 
-			ArgUtils.checkCommands(this.arrayReturn, tabNum);
+			// ArgUtils.checkCommands(this.arrayReturn, tabNum);
 			// checkFunction.clear();
 
 		} else {
