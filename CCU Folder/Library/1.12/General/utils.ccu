@@ -14,6 +14,7 @@ SPLIT {Arr_Temp $BlockOption$} { }
 IF {Arr_Temp[0] = redstone_block}:
 	UNASSIGN {DEF $BlockOption$}
 	DEF GLOBAL $BlockOption$ stonebrick 0
+	
 UNASSIGN {ARRAY Arr_Temp}
 
 ///	For area effect clouds lol
@@ -145,6 +146,24 @@ FUNC {CCU.instantCalc}:
 FUNC {CCU.instantGlobalCalc}:
 	LOOP {|0| |0| + 1}:
 		DEF GLOBAL |1;2| |0;1|
+//>
+
+//<Temporary mcFunctions
+//= Makes a function under the temp folder, called temp_#
+Usage:
+CCU.mfuncTemp(if @s)
+	what you want
+	the function to be
+=//
+
+FUNC {GLOBAL CCU.mfuncTemp}:
+	IF {$CCUSave_MFuncTempCounter$ = `$CCUSave_MFuncTempCounter$`}:
+		DEF GLOBAL $CCUSave_MFuncTempCounter$ 0
+	ELSE:
+		DEF GLOBAL $CCUSave_MFuncTempCounter$ CALC($CCUSave_MFuncTempCounter$ + 1)
+		CCU.instantGlobalCalc($CCUSave_MFuncTempCounter$;`$CCUSave_MFuncTempCounter$`)
+	MFunc_Temp$CCUSave_MFuncTempCounter$ |0|
+	MFUNC {temp/temp_$CCUSave_MFuncTempCounter$ MFunc_Temp$CCUSave_MFuncTempCounter$}:
 //>
 
 //<Lists
@@ -328,6 +347,11 @@ IF {$StyleDirection$ = -Z}:
 			setblock $CoordsOption$[x - 2, y - 3, z - 1] redstone_lamp 0
 			setblock $CoordsOption$[x - 1, y - 1, z - 2] command_block 2 replace {TrackOutput:0b,Command:"setblock ~-1 ~ ~ redstone_block 0"}
 //>
+
+
+
+
+
 
 
 
