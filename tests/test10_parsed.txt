@@ -1,70 +1,14 @@
-MFUNC | MFunc_Temp0 | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/test/temp/temp_0.mcfunction
-	say test
-
-MFUNC | MFunc_Temp1 | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/test/temp/temp_1.mcfunction
-	say test2
-
 MFUNC | Grp_MainStart | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/test/init.mcfunction
-	say true
-	say 1
-	say 2
-	say 3
-	say 3.5
-	say 4
-	-
-	say 1
-	say 2
-	say 3.5
-	say 4
-	say Calculating: Index 0 --> 0
-	say Calculating: Index 1 --> 1
-	say Calculating: Index 2 --> 1
-	say Calculating: Index 3 --> 2
-	say Calculating: Index 4 --> 3
-	say Calculating: Index 5 --> 5
-	say Calculating: Index 6 --> 8
-	say Calculating: Index 7 --> 13
-	say Calculating: Index 8 --> 21
-	say Calculating: Index 9 --> 34
-	say Calculating: Index 10 --> 55
-	say Calculating: Index 11 --> 89
-	say Calculating: Index 12 --> 144
-	say Calculating: Index 13 --> 233
-	say Calculating: Index 14 --> 377
-	say Calculating: Index 15 --> 610
-	say Calculating: Index 16 --> 987
-	say Calculating: Index 17 --> 1597
-	say Calculating: Index 18 --> 2584
-	say Calculating: Index 19 --> 4181
-	say Calculating: Index 20 --> 6765
-	say Calculating: Index 21 --> 10946
-	say Calculating: Index 22 --> 17711
-	say Calculating: Index 23 --> 28657
-	say Calculating: Index 24 --> 46368
-	say Calculating: Index 25 --> 75025
-	say Calculating: Index 26 --> 121393
-	say Calculating: Index 27 --> 196418
-	say Calculating: Index 28 --> 317811
-	say Calculating: Index 29 --> 514229
-	say Calculating: Index 30 --> 832040
-	say Calculating: Index 31 --> 1346269
-	say Calculating: Index 32 --> 2178309
-	say Calculating: Index 33 --> 3524578
-	say Calculating: Index 34 --> 5702887
-	say Calculating: Index 35 --> 9227465
-	say Calculating: Index 36 --> 14930352
-	say Calculating: Index 37 --> 24157817
-	say Calculating: Index 38 --> 39088169
-	say Calculating: Index 39 --> 63245986
-	say Calculating: Index 40 --> 102334155
-	say Calculating: Index 41 --> 165580141
-	say Calculating: Index 42 --> 267914296
-	say Calculating: Index 43 --> 433494437
-	say Calculating: Index 44 --> 701408733
-	say Calculating: Index 45 --> 1134903170
-	say Calculating: Index 46 --> 1836311903
-	say Calculating: Index 47 --> -1323752223
-	say Calculating: Index 48 --> 512559680
-	say Calculating: Index 49 --> -811192543
-	function test:temp/temp_0 if @e[type=armor_stand,score_SPtp=1,score_SPtp_min=1]
-	function test:temp/temp_1 if @e[type=armor_stand,score_SPtp=1,score_SPtp_min=1]
+	scoreboard objectives add Rand dummy
+	scoreboard players set RandCalc Rand 1000110001
+	scoreboard players set Seed Rand 1000110001
+	scoreboard players set Mod Rand 11
+
+MFUNC | MFunc_RandCalc | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/test/rand_calc.mcfunction
+	scoreboard players operation RandCalc Rand *= Seed Rand
+	scoreboard players operation RandCalc Rand %= Seed Rand
+	scoreboard players operation @s Rand = Seed Rand
+	scoreboard players operation @s Rand %= RandCalc Rand
+	scoreboard players operation @s Rand %= Mod Rand
+	scoreboard players add @s Rand 5
+	tellraw @s {"score":{"objective":"Rand","name":"@s"}}

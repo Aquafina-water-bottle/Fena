@@ -29,6 +29,7 @@ OPTIONS:
 
 //<Groups
 MFUNC {init Grp_MainStart}:
+	//=
 	IF {$asdf$ = `$asdf$`}:
 		say true
 	ELSE:
@@ -75,4 +76,36 @@ MFUNC {init Grp_MainStart}:
 		
 	CCU.mfuncTemp(if @e[type=armor_stand,SPtp=1])
 		say test2
+	=//
+	
+	//=
+	ARRAY {Arr_TestNum}:
+		0.8
+		0.6
+		0.5
+		0.3
+		0.0
+		-0.1
+		-0.5
+		-0.9
+		-1.1
+		
+///	LOOP {Arr_TestNum[S]}:
+	///	say |0| --> DEC(INT(|0|))
+	
+	LOOP {Arr_TestNum[S]}:
+		DEF $TestRound$ |0;1|
+		DEF $TestRound2$ |0;1|
+		CCU.roundDown($TestRound2$;`$TestRound2$`)
+		say $TestRound$ --> $TestRound2$
+	
+	CCU.scoreRand(2;6;36;2;0)
+	=//
+	
+	ScOA Rand dummy
+	CCU.initializeScoreRand(1;Rand;@s;5;15)
+	
+MFUNC {rand_calc MFunc_RandCalc}:
+	CCU.scoreRand(1;Rand;@s;5;15)
+	tellraw @s {"score":{"objective":"Rand","name":"@s"}}
 //>

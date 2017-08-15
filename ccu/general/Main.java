@@ -37,7 +37,7 @@ public class Main {
 		long startTime = System.nanoTime();
 
 		// checks version
-		String currentVersion = "1.0.3";
+		String currentVersion = "1.0.4";
 		System.out.println("Current version: " + currentVersion);
 
 		try {
@@ -78,7 +78,7 @@ public class Main {
 		System.out.println("");
 
 		// for CCU_NPP.bat
-		if (args.length == 2) {
+		if (args.length >= 1) {
 			ReadConfig.regFilePath = new File(args[0]);
 			getJarFile = new File(args[1]);
 			getJarFile = getJarFile.getParentFile();

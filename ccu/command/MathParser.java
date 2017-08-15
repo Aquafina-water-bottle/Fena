@@ -103,7 +103,8 @@ public class MathParser {
 								}
 							}
 
-							calcArray.add(arrayCalc[i].replace("(", "").replace(")", ""));
+							arrayCalc[i] = parseSecondaryStatements(arrayCalc[i], fullLineGet);
+							calcArray.add(arrayCalc[i]);
 
 						}
 					} else {
@@ -126,6 +127,7 @@ public class MathParser {
 							if (tempCount == 0) {
 
 								argNum++;
+								stringCalc = parseSecondaryStatements(stringCalc, fullLineGet);
 								calcArgs = getLoopOperation(stringCalc, fullLineGet, argNum); // gets the math stuff here 
 								calcArray.add(calcArgs);
 
@@ -163,7 +165,8 @@ public class MathParser {
 								calcArray.add(arrayCalc[i]);
 
 							} else {
-								calcArray.add(arrayCalc[i].replace("(", "").replace(")", ""));
+								arrayCalc[i] = parseSecondaryStatements(arrayCalc[i], fullLineGet);
+								calcArray.add(arrayCalc[i]);
 							}
 
 						}
@@ -231,7 +234,8 @@ public class MathParser {
 					returnArray.add(NumberUtils.roundDouble(calcNum));
 
 					// detects ending if it equals
-					if (Double.parseDouble(returnArray.get(returnArray.size() - 1)) == numCalcArray[1]) {
+					if (numCalcArray[1] == numCalcArray[0]
+							|| Double.parseDouble(returnArray.get(returnArray.size() - 1)) == numCalcArray[1]) {
 						break;
 					}
 
@@ -289,6 +293,10 @@ public class MathParser {
 				}
 
 				while (true) {
+					if (numCalcArray[1] == numCalcArray[0]) {
+						break;
+					}
+					
 					calcNum = calcNum * numCalcArray[3];
 					returnArray.add(NumberUtils.roundDouble(calcNum));
 
@@ -351,6 +359,10 @@ public class MathParser {
 				}
 
 				while (true) {
+					if (numCalcArray[1] == numCalcArray[0]) {
+						break;
+					}
+					
 					calcNum = calcNum / numCalcArray[3];
 					returnArray.add(NumberUtils.roundDouble(calcNum));
 
@@ -390,8 +402,11 @@ public class MathParser {
 				}
 
 				while (true) {
+					if (numCalcArray[1] == numCalcArray[0]) {
+						break;
+					}
+					
 					calcNum = calcNum - numCalcArray[3];
-
 					returnArray.add(NumberUtils.roundDouble(calcNum));
 
 					// detects ending if it equals
@@ -429,8 +444,11 @@ public class MathParser {
 				}
 
 				while (true) {
+					if (numCalcArray[1] == numCalcArray[0]) {
+						break;
+					}
+					
 					calcNum = calcNum + numCalcArray[3];
-
 					returnArray.add(NumberUtils.roundDouble(calcNum));
 
 					// detects ending if it equals
@@ -765,14 +783,13 @@ public class MathParser {
 							getValue.isDouble = true;
 						}
 						// System.out.println(calcType + " | " + getValue.isDouble + " | " + getValue.getDouble + " | " + midString.substring(1, midString.length() - 1));
-						
-						
+
 						if (getValue.isDouble) {
 							midString = getValue.getDouble + "";
 						} else {
 							midString = "CCU_IsInt_" + getValue.getDouble;
 						}
-						
+
 						// midString = getValue.getDouble + "";
 						getString = begString + midString + endString;
 
@@ -824,7 +841,7 @@ public class MathParser {
 								if (calcType == 5) {
 									getValue.isDouble = true;
 								}
-								
+
 								/*
 								if (getValue.isDouble) {
 									getString = getValue.getDouble + "";
@@ -930,7 +947,7 @@ public class MathParser {
 						} else {
 							midString = NumberUtils.roundDoubleToInt(getValue.getDouble) + "";
 						}
-						
+
 						getString = begString + midString + endString;
 
 					} else {
@@ -1036,10 +1053,10 @@ public class MathParser {
 						if (NumberUtils.isDouble(arrayCalc[i])) {
 							isDouble = true;
 						}
-						
+
 						arrayCalc[i] = arrayCalc[i].replace("CCU_IsInt_", "");
 					}
-					
+
 					getString = calcString + "";
 
 					// overrides all if it's true
@@ -1051,7 +1068,7 @@ public class MathParser {
 							isDouble = false;
 						}
 					}*/
-					
+
 					if (isDoubleCalc != null && isDoubleCalc == true) {
 						isDouble = true;
 					}
