@@ -21,3 +21,4 @@ FUNC {ACTIVATE CCU.coordinatesToScoreboard() ARGS}:
 
 	ARRAY {Arr_CCUCloudTags}:
 		GetCoordsCloud
+	

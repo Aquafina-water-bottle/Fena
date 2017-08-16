@@ -432,7 +432,7 @@ MFUNC | MFunc_GetZ | C:/Users/Austin/Documents/Austin/powder game code/eGO/Serve
 	scoreboard players operation @s CDpz = @e[type=area_effect_cloud,tag=GetCoordsCloud] CDpz
 	kill @e[type=area_effect_cloud,tag=GetCoordsCloud]
 
-MFUNC | MFunc_Main | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/teleport.mcfunction
+MFUNC | MFunc_Teleport | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/teleport.mcfunction
 	execute @e[score_CDclx_min=1] ~ ~ ~ function french_man:coordinates/teleport_posX
 	execute @e[score_CDclx=-1] ~ ~ ~ function french_man:coordinates/teleport_negX
 	execute @e[score_CDcly_min=1] ~ ~ ~ function french_man:coordinates/teleport_posY

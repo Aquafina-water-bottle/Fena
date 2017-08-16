@@ -39,6 +39,7 @@ FUNC {ACTIVATE CCU.coordinatesToScoreboard() ARGS}:
 //<Initialize
 FUNC {CCU.coordinatesToScoreboard}:
 	ARGS()
+	UNASSIGN {FUNC ARGS}
 	
 	IF {$CCUObjX$ = `$CCUObjX$`}:
 		EXIT $CCUObjX$ must be defined when using CCU.coordinatesToScoreboard
@@ -177,7 +178,7 @@ FUNC {CCU.coordinatesToScoreboard}:
 				ScOP @s $CCUObj|0|$ = @e[type=area_effect_cloud,$CCUFirstTagCalc$] $CCUObj|0|$
 				kill @e[type=area_effect_cloud,$CCUFirstTagCalc$]
 
-		MFUNC {teleport MFunc_Main}:	
+		MFUNC {teleport MFunc_Teleport}:	
 			LOOP {X;Y;Z}:
 				@e[$CCUObjTP|0|$>=1] MFunc_TPPos|0|
 				@e[$CCUObjTP|0|$<=-1] MFunc_TPNeg|0|
