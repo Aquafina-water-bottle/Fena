@@ -26,9 +26,6 @@ public class WriteFile {
 			String mcfunctionFile = functionArray[0];
 			PrintWriter writer = null;
 
-			// TODO spaces are replaced with %20?
-			// specifically in the commands
-
 			// Creates the folder if it wasn't made already
 
 			File folderCreate = new File(mcfunctionFile);

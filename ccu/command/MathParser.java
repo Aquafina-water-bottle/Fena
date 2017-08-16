@@ -898,16 +898,19 @@ public class MathParser {
 				break;
 
 			case 3:
-				
 				getValue.getDouble = Math.tan(Math.toRadians(getValue.getDouble));
 				break;
-				
+
 			case 6:
 				getValue.getDouble = Math.log(getValue.getDouble);
 				break;
-
+				
 			case 7:
 				getValue.getDouble = Math.log10(getValue.getDouble);
+				break;
+
+			case 8:
+				getValue.getDouble = Math.abs(getValue.getDouble);
 				break;
 			}
 
@@ -1219,7 +1222,7 @@ public class MathParser {
 		// getCommand is like SIN, COS, TAN, CALC
 		// SIN, COS and TAN can be like CALC except the final value returns the sin/cos/tan version
 
-		final String[] secondaryStatementArray = {"SIN", "COS", "TAN", "CALC", "INT", "DEC", "LOG", "LOG10"};
+		final String[] secondaryStatementArray = {"SIN", "COS", "TAN", "CALC", "INT", "DEC", "LOG", "LOG10", "ABS"};
 
 		// if getStatement is true, then keeps going
 		String calcString = null;
@@ -1265,9 +1268,13 @@ public class MathParser {
 				case "LOG":
 					calcType = 6;
 					break;
-
+					
 				case "LOG10":
 					calcType = 7;
+					break;
+
+				case "ABS":
+					calcType = 8;
 					break;
 				}
 
@@ -1314,7 +1321,7 @@ public class MathParser {
 			// checks if there were any 'SIN', 'COS', 'TAN' - recurring function
 			if (testBracketString.contains("SIN") || testBracketString.contains("COS") || testBracketString.contains("TAN")
 					|| testBracketString.contains("INT") || testBracketString.contains("DEC") || testBracketString.contains("LOG")
-					|| testBracketString.contains("LOG10")) {
+					|| testBracketString.contains("LOG10") || testBracketString.contains("ABS")) {
 				testBracketString = parseSecondaryStatements(testBracketString, fullLineGet);
 			}
 
