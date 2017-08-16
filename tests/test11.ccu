@@ -1,0 +1,122 @@
+//(Name)
+
+//<General Definitions
+DEF $CMDName$ Randomized_Location
+DEF $CMDSizeX$ 16
+DEF $CMDSizeY$ 8
+DEF $CMDSizeZ$ 3
+
+DEF $StyleDirection$ +X
+DEF COORDS $CoordsOption$ 233 7 174
+DEF $BlockOption$ stonebrick 0
+
+IMPORT {LIBRARY GETDIR 1.10/General}
+
+DEF COORDS $Corner$ 233 5 181
+DEF $RowNumber$ 8
+DEF $ColumnNumber$ 26
+//>
+
+//<Options
+OPTIONS:
+	blockOption $BlockOption$
+	coordsOption $CoordsOption$
+	styleOption $StyleDirection$ 16
+	parseOption true
+	commandOption true
+	combinerOption true
+///	filePathFuncOption 
+	parseChangesOption false
+//>
+
+
+//<General Scoreboard Start
+FUNC {Func_GeneralScoreboardStart}:
+	ARRAY {GLOBAL ACTIVATE CCU.objectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
+		LocN dummy Location Number ID
+		Loc dummy Location Fill
+		TeleNum dummy Location Teleport Number
+		Random dummy Location Rand
+	
+	summon ArmorStand $Corner$[x, y - 1, z] {Tags:["LocationEntity","LocationSummon"],Invulnerable:1,PersistenceRequired:1,Marker:1,NoGravity:1}
+	@a stats entity @a[c=1] set AffectedBlocks @a[c=1] Loc
+	@e[type=ArmorStand,LocationSummon] Loc = 0
+	@e[type=ArmorStand,LocationSummon] stats entity @e[c=1,type=ArmorStand,LocationSummon] set AffectedBlocks @e[c=1,type=ArmorStand,LocationSummon] Loc
+//>
+
+//<Summon Counter Testfor Clock
+FUNC {Func_SummonCounterTFClock}:
+	testfor @e[type=ArmorStand,LocationSummon]
+	CCU_SetblockTestfor
+	
+	@e[type=ArmorStand,LocationSummon] summon AreaEffectCloud ~ ~ ~ {Tags:["LocationEntity","LocationCounter"],$Duration$}
+	@e[type=AreaEffectCloud,LocationCounter] LocN + 0
+	@e[type=ArmorStand,LocationSummon] fill ~ ~ ~ ~CALC($ColumnNumber$ - 1) ~ ~ stone 4 replace stone 2
+	@e[type=ArmorStand,LocationSummon] fill ~ ~ ~ ~CALC($ColumnNumber$ - 1) ~ ~ stone 2 replace stone 4
+	ScOP @e[type=ArmorStand,LocationSummon] LocN += @e[type=ArmorStand,LocationSummon] Loc
+	ScOP @e[type=AreaEffectCloud,LocationCounter,LocN=0] LocN = @e[type=ArmorStand,LocationSummon] LocN
+	@e[type=ArmorStand,LocationSummon] TeleNum + 1
+	tp @e[type=ArmorStand,LocationSummon] ~ ~ ~1
+	kill @e[type=ArmorStand,LocationSummon,TeleNum=$RowNumber$]
+//>
+
+//<General Scoreboard Clock
+FUNC {Func_GeneralScoreboardClock}:
+	tp @a[Loc] $Corner$
+	@a[Loc] Loc = 0
+	@a[Loc] LocN = 0
+	
+	LOOP {16 1 / 2}:
+	/// fills with stone and replaces it back to update the 
+		@a[Loc] fill ~ ~-1 ~ ~CALC(|0| - 1) ~-1 ~ stone 4 replace stone 2
+		@a[Loc] fill ~ ~-1 ~ ~CALC(|0| - 1) ~-1 ~ stone 2 replace stone 4
+		
+		IF {|0| != 1}:
+			@a[Loc] ScOP @a[c=1] LocN = @a[c=1] Loc
+			@a[Loc] ScOP @a[c=1] Loc -= @a[c=1] Random
+			tp @a[Loc,Loc<=-1] ~|0| ~ ~
+			@a[Loc,Loc<=-1] ScOP @a[c=1] Random -= @a[c=1] LocN
+			
+		ELSE:
+			@a[Loc] ScOP @a[c=1] Loc -= @a[c=1] Random
+			tp @a[Loc,Loc<=-1] ~1 ~ ~
+			
+	@a[Loc] Random = 0
+	@a[Loc] - Loc
+//>
+
+//<General Scoreboard End
+FUNC {Func_GeneralScoreboardEnd}:
+	CCU.objectiveRemove(Obj_GeneralScoreboardStart)
+	kill @e[LocationEntity]
+//>
+
+
+//<Groups
+GROUP {Grp_MainStart}:
+	CCU_Deactivate(GSELF)
+	Func_GeneralScoreboardStart()
+	CCU_Activate(Grp_MainClock)
+	CCU.tfActivate(Grp_SummonCounterTFClock)
+
+GROUP {Grp_SummonCounterTFClock}:
+	Func_SummonCounterTFClock()
+
+GROUP {Grp_MainClock}:
+	Func_GeneralScoreboardClock()
+
+GROUP {Grp_MainEnd}:
+	CCU_Deactivate(GSELF)
+	Func_GeneralScoreboardEnd()
+	CCU_Deactivate(Grp_MainClock)
+	CCU.tfDeactivate(Grp_SummonCounterTFClock)
+
+CCU.cmdSave()
+//>
+
+
+
+
+
+
+

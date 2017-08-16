@@ -1,0 +1,467 @@
+MFUNC | MFunc_TPPosX | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/teleport_posX.mcfunction
+	execute @s[score_CDclx_min=33554432] ~ ~ ~ tp @s ~33554432 ~ ~
+	scoreboard players remove @s[score_CDclx_min=33554432] CDclx 33554432
+	execute @s[score_CDclx_min=16777216] ~ ~ ~ tp @s ~16777216 ~ ~
+	scoreboard players remove @s[score_CDclx_min=16777216] CDclx 16777216
+	execute @s[score_CDclx_min=8388608] ~ ~ ~ tp @s ~8388608 ~ ~
+	scoreboard players remove @s[score_CDclx_min=8388608] CDclx 8388608
+	execute @s[score_CDclx_min=4194304] ~ ~ ~ tp @s ~4194304 ~ ~
+	scoreboard players remove @s[score_CDclx_min=4194304] CDclx 4194304
+	execute @s[score_CDclx_min=2097152] ~ ~ ~ tp @s ~2097152 ~ ~
+	scoreboard players remove @s[score_CDclx_min=2097152] CDclx 2097152
+	execute @s[score_CDclx_min=1048576] ~ ~ ~ tp @s ~1048576 ~ ~
+	scoreboard players remove @s[score_CDclx_min=1048576] CDclx 1048576
+	execute @s[score_CDclx_min=524288] ~ ~ ~ tp @s ~524288 ~ ~
+	scoreboard players remove @s[score_CDclx_min=524288] CDclx 524288
+	execute @s[score_CDclx_min=262144] ~ ~ ~ tp @s ~262144 ~ ~
+	scoreboard players remove @s[score_CDclx_min=262144] CDclx 262144
+	execute @s[score_CDclx_min=131072] ~ ~ ~ tp @s ~131072 ~ ~
+	scoreboard players remove @s[score_CDclx_min=131072] CDclx 131072
+	execute @s[score_CDclx_min=65536] ~ ~ ~ tp @s ~65536 ~ ~
+	scoreboard players remove @s[score_CDclx_min=65536] CDclx 65536
+	execute @s[score_CDclx_min=32768] ~ ~ ~ tp @s ~32768 ~ ~
+	scoreboard players remove @s[score_CDclx_min=32768] CDclx 32768
+	execute @s[score_CDclx_min=16384] ~ ~ ~ tp @s ~16384 ~ ~
+	scoreboard players remove @s[score_CDclx_min=16384] CDclx 16384
+	execute @s[score_CDclx_min=8192] ~ ~ ~ tp @s ~8192 ~ ~
+	scoreboard players remove @s[score_CDclx_min=8192] CDclx 8192
+	execute @s[score_CDclx_min=4096] ~ ~ ~ tp @s ~4096 ~ ~
+	scoreboard players remove @s[score_CDclx_min=4096] CDclx 4096
+	execute @s[score_CDclx_min=2048] ~ ~ ~ tp @s ~2048 ~ ~
+	scoreboard players remove @s[score_CDclx_min=2048] CDclx 2048
+	execute @s[score_CDclx_min=1024] ~ ~ ~ tp @s ~1024 ~ ~
+	scoreboard players remove @s[score_CDclx_min=1024] CDclx 1024
+	execute @s[score_CDclx_min=512] ~ ~ ~ tp @s ~512 ~ ~
+	scoreboard players remove @s[score_CDclx_min=512] CDclx 512
+	execute @s[score_CDclx_min=256] ~ ~ ~ tp @s ~256 ~ ~
+	scoreboard players remove @s[score_CDclx_min=256] CDclx 256
+	execute @s[score_CDclx_min=128] ~ ~ ~ tp @s ~128 ~ ~
+	scoreboard players remove @s[score_CDclx_min=128] CDclx 128
+	execute @s[score_CDclx_min=64] ~ ~ ~ tp @s ~64 ~ ~
+	scoreboard players remove @s[score_CDclx_min=64] CDclx 64
+	execute @s[score_CDclx_min=32] ~ ~ ~ tp @s ~32 ~ ~
+	scoreboard players remove @s[score_CDclx_min=32] CDclx 32
+	execute @s[score_CDclx_min=16] ~ ~ ~ tp @s ~16 ~ ~
+	scoreboard players remove @s[score_CDclx_min=16] CDclx 16
+	execute @s[score_CDclx_min=8] ~ ~ ~ tp @s ~8 ~ ~
+	scoreboard players remove @s[score_CDclx_min=8] CDclx 8
+	execute @s[score_CDclx_min=4] ~ ~ ~ tp @s ~4 ~ ~
+	scoreboard players remove @s[score_CDclx_min=4] CDclx 4
+	execute @s[score_CDclx_min=2] ~ ~ ~ tp @s ~2 ~ ~
+	scoreboard players remove @s[score_CDclx_min=2] CDclx 2
+	execute @s[score_CDclx_min=1] ~ ~ ~ tp @s ~1 ~ ~
+	scoreboard players remove @s[score_CDclx_min=1] CDclx 1
+
+MFUNC | MFunc_TPNegX | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/teleport_negX.mcfunction
+	execute @s[score_CDclx=-33554432] ~ ~ ~ tp @s ~-33554432 ~ ~
+	scoreboard players add @s[score_CDclx=-33554432] CDclx 33554432
+	execute @s[score_CDclx=-16777216] ~ ~ ~ tp @s ~-16777216 ~ ~
+	scoreboard players add @s[score_CDclx=-16777216] CDclx 16777216
+	execute @s[score_CDclx=-8388608] ~ ~ ~ tp @s ~-8388608 ~ ~
+	scoreboard players add @s[score_CDclx=-8388608] CDclx 8388608
+	execute @s[score_CDclx=-4194304] ~ ~ ~ tp @s ~-4194304 ~ ~
+	scoreboard players add @s[score_CDclx=-4194304] CDclx 4194304
+	execute @s[score_CDclx=-2097152] ~ ~ ~ tp @s ~-2097152 ~ ~
+	scoreboard players add @s[score_CDclx=-2097152] CDclx 2097152
+	execute @s[score_CDclx=-1048576] ~ ~ ~ tp @s ~-1048576 ~ ~
+	scoreboard players add @s[score_CDclx=-1048576] CDclx 1048576
+	execute @s[score_CDclx=-524288] ~ ~ ~ tp @s ~-524288 ~ ~
+	scoreboard players add @s[score_CDclx=-524288] CDclx 524288
+	execute @s[score_CDclx=-262144] ~ ~ ~ tp @s ~-262144 ~ ~
+	scoreboard players add @s[score_CDclx=-262144] CDclx 262144
+	execute @s[score_CDclx=-131072] ~ ~ ~ tp @s ~-131072 ~ ~
+	scoreboard players add @s[score_CDclx=-131072] CDclx 131072
+	execute @s[score_CDclx=-65536] ~ ~ ~ tp @s ~-65536 ~ ~
+	scoreboard players add @s[score_CDclx=-65536] CDclx 65536
+	execute @s[score_CDclx=-32768] ~ ~ ~ tp @s ~-32768 ~ ~
+	scoreboard players add @s[score_CDclx=-32768] CDclx 32768
+	execute @s[score_CDclx=-16384] ~ ~ ~ tp @s ~-16384 ~ ~
+	scoreboard players add @s[score_CDclx=-16384] CDclx 16384
+	execute @s[score_CDclx=-8192] ~ ~ ~ tp @s ~-8192 ~ ~
+	scoreboard players add @s[score_CDclx=-8192] CDclx 8192
+	execute @s[score_CDclx=-4096] ~ ~ ~ tp @s ~-4096 ~ ~
+	scoreboard players add @s[score_CDclx=-4096] CDclx 4096
+	execute @s[score_CDclx=-2048] ~ ~ ~ tp @s ~-2048 ~ ~
+	scoreboard players add @s[score_CDclx=-2048] CDclx 2048
+	execute @s[score_CDclx=-1024] ~ ~ ~ tp @s ~-1024 ~ ~
+	scoreboard players add @s[score_CDclx=-1024] CDclx 1024
+	execute @s[score_CDclx=-512] ~ ~ ~ tp @s ~-512 ~ ~
+	scoreboard players add @s[score_CDclx=-512] CDclx 512
+	execute @s[score_CDclx=-256] ~ ~ ~ tp @s ~-256 ~ ~
+	scoreboard players add @s[score_CDclx=-256] CDclx 256
+	execute @s[score_CDclx=-128] ~ ~ ~ tp @s ~-128 ~ ~
+	scoreboard players add @s[score_CDclx=-128] CDclx 128
+	execute @s[score_CDclx=-64] ~ ~ ~ tp @s ~-64 ~ ~
+	scoreboard players add @s[score_CDclx=-64] CDclx 64
+	execute @s[score_CDclx=-32] ~ ~ ~ tp @s ~-32 ~ ~
+	scoreboard players add @s[score_CDclx=-32] CDclx 32
+	execute @s[score_CDclx=-16] ~ ~ ~ tp @s ~-16 ~ ~
+	scoreboard players add @s[score_CDclx=-16] CDclx 16
+	execute @s[score_CDclx=-8] ~ ~ ~ tp @s ~-8 ~ ~
+	scoreboard players add @s[score_CDclx=-8] CDclx 8
+	execute @s[score_CDclx=-4] ~ ~ ~ tp @s ~-4 ~ ~
+	scoreboard players add @s[score_CDclx=-4] CDclx 4
+	execute @s[score_CDclx=-2] ~ ~ ~ tp @s ~-2 ~ ~
+	scoreboard players add @s[score_CDclx=-2] CDclx 2
+	execute @s[score_CDclx=-1] ~ ~ ~ tp @s ~-1 ~ ~
+	scoreboard players add @s[score_CDclx=-1] CDclx 1
+
+MFUNC | MFunc_TPPosY | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/teleport_posY.mcfunction
+	execute @s[score_CDcly_min=4096] ~ ~ ~ tp @s ~ ~4096 ~
+	scoreboard players remove @s[score_CDcly_min=4096] CDcly 4096
+	execute @s[score_CDcly_min=2048] ~ ~ ~ tp @s ~ ~2048 ~
+	scoreboard players remove @s[score_CDcly_min=2048] CDcly 2048
+	execute @s[score_CDcly_min=1024] ~ ~ ~ tp @s ~ ~1024 ~
+	scoreboard players remove @s[score_CDcly_min=1024] CDcly 1024
+	execute @s[score_CDcly_min=512] ~ ~ ~ tp @s ~ ~512 ~
+	scoreboard players remove @s[score_CDcly_min=512] CDcly 512
+	execute @s[score_CDcly_min=256] ~ ~ ~ tp @s ~ ~256 ~
+	scoreboard players remove @s[score_CDcly_min=256] CDcly 256
+	execute @s[score_CDcly_min=128] ~ ~ ~ tp @s ~ ~128 ~
+	scoreboard players remove @s[score_CDcly_min=128] CDcly 128
+	execute @s[score_CDcly_min=64] ~ ~ ~ tp @s ~ ~64 ~
+	scoreboard players remove @s[score_CDcly_min=64] CDcly 64
+	execute @s[score_CDcly_min=32] ~ ~ ~ tp @s ~ ~32 ~
+	scoreboard players remove @s[score_CDcly_min=32] CDcly 32
+	execute @s[score_CDcly_min=16] ~ ~ ~ tp @s ~ ~16 ~
+	scoreboard players remove @s[score_CDcly_min=16] CDcly 16
+	execute @s[score_CDcly_min=8] ~ ~ ~ tp @s ~ ~8 ~
+	scoreboard players remove @s[score_CDcly_min=8] CDcly 8
+	execute @s[score_CDcly_min=4] ~ ~ ~ tp @s ~ ~4 ~
+	scoreboard players remove @s[score_CDcly_min=4] CDcly 4
+	execute @s[score_CDcly_min=2] ~ ~ ~ tp @s ~ ~2 ~
+	scoreboard players remove @s[score_CDcly_min=2] CDcly 2
+	execute @s[score_CDcly_min=1] ~ ~ ~ tp @s ~ ~1 ~
+	scoreboard players remove @s[score_CDcly_min=1] CDcly 1
+
+MFUNC | MFunc_TPNegY | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/teleport_negY.mcfunction
+	execute @s[score_CDcly=-4096] ~ ~ ~ tp @s ~ ~-4096 ~
+	scoreboard players add @s[score_CDcly=-4096] CDcly 4096
+	execute @s[score_CDcly=-2048] ~ ~ ~ tp @s ~ ~-2048 ~
+	scoreboard players add @s[score_CDcly=-2048] CDcly 2048
+	execute @s[score_CDcly=-1024] ~ ~ ~ tp @s ~ ~-1024 ~
+	scoreboard players add @s[score_CDcly=-1024] CDcly 1024
+	execute @s[score_CDcly=-512] ~ ~ ~ tp @s ~ ~-512 ~
+	scoreboard players add @s[score_CDcly=-512] CDcly 512
+	execute @s[score_CDcly=-256] ~ ~ ~ tp @s ~ ~-256 ~
+	scoreboard players add @s[score_CDcly=-256] CDcly 256
+	execute @s[score_CDcly=-128] ~ ~ ~ tp @s ~ ~-128 ~
+	scoreboard players add @s[score_CDcly=-128] CDcly 128
+	execute @s[score_CDcly=-64] ~ ~ ~ tp @s ~ ~-64 ~
+	scoreboard players add @s[score_CDcly=-64] CDcly 64
+	execute @s[score_CDcly=-32] ~ ~ ~ tp @s ~ ~-32 ~
+	scoreboard players add @s[score_CDcly=-32] CDcly 32
+	execute @s[score_CDcly=-16] ~ ~ ~ tp @s ~ ~-16 ~
+	scoreboard players add @s[score_CDcly=-16] CDcly 16
+	execute @s[score_CDcly=-8] ~ ~ ~ tp @s ~ ~-8 ~
+	scoreboard players add @s[score_CDcly=-8] CDcly 8
+	execute @s[score_CDcly=-4] ~ ~ ~ tp @s ~ ~-4 ~
+	scoreboard players add @s[score_CDcly=-4] CDcly 4
+	execute @s[score_CDcly=-2] ~ ~ ~ tp @s ~ ~-2 ~
+	scoreboard players add @s[score_CDcly=-2] CDcly 2
+	execute @s[score_CDcly=-1] ~ ~ ~ tp @s ~ ~-1 ~
+	scoreboard players add @s[score_CDcly=-1] CDcly 1
+
+MFUNC | MFunc_TPPosZ | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/teleport_posZ.mcfunction
+	execute @s[score_CDclz_min=33554432] ~ ~ ~ tp @s ~ ~ ~33554432
+	scoreboard players remove @s[score_CDclz_min=33554432] CDclz 33554432
+	execute @s[score_CDclz_min=16777216] ~ ~ ~ tp @s ~ ~ ~16777216
+	scoreboard players remove @s[score_CDclz_min=16777216] CDclz 16777216
+	execute @s[score_CDclz_min=8388608] ~ ~ ~ tp @s ~ ~ ~8388608
+	scoreboard players remove @s[score_CDclz_min=8388608] CDclz 8388608
+	execute @s[score_CDclz_min=4194304] ~ ~ ~ tp @s ~ ~ ~4194304
+	scoreboard players remove @s[score_CDclz_min=4194304] CDclz 4194304
+	execute @s[score_CDclz_min=2097152] ~ ~ ~ tp @s ~ ~ ~2097152
+	scoreboard players remove @s[score_CDclz_min=2097152] CDclz 2097152
+	execute @s[score_CDclz_min=1048576] ~ ~ ~ tp @s ~ ~ ~1048576
+	scoreboard players remove @s[score_CDclz_min=1048576] CDclz 1048576
+	execute @s[score_CDclz_min=524288] ~ ~ ~ tp @s ~ ~ ~524288
+	scoreboard players remove @s[score_CDclz_min=524288] CDclz 524288
+	execute @s[score_CDclz_min=262144] ~ ~ ~ tp @s ~ ~ ~262144
+	scoreboard players remove @s[score_CDclz_min=262144] CDclz 262144
+	execute @s[score_CDclz_min=131072] ~ ~ ~ tp @s ~ ~ ~131072
+	scoreboard players remove @s[score_CDclz_min=131072] CDclz 131072
+	execute @s[score_CDclz_min=65536] ~ ~ ~ tp @s ~ ~ ~65536
+	scoreboard players remove @s[score_CDclz_min=65536] CDclz 65536
+	execute @s[score_CDclz_min=32768] ~ ~ ~ tp @s ~ ~ ~32768
+	scoreboard players remove @s[score_CDclz_min=32768] CDclz 32768
+	execute @s[score_CDclz_min=16384] ~ ~ ~ tp @s ~ ~ ~16384
+	scoreboard players remove @s[score_CDclz_min=16384] CDclz 16384
+	execute @s[score_CDclz_min=8192] ~ ~ ~ tp @s ~ ~ ~8192
+	scoreboard players remove @s[score_CDclz_min=8192] CDclz 8192
+	execute @s[score_CDclz_min=4096] ~ ~ ~ tp @s ~ ~ ~4096
+	scoreboard players remove @s[score_CDclz_min=4096] CDclz 4096
+	execute @s[score_CDclz_min=2048] ~ ~ ~ tp @s ~ ~ ~2048
+	scoreboard players remove @s[score_CDclz_min=2048] CDclz 2048
+	execute @s[score_CDclz_min=1024] ~ ~ ~ tp @s ~ ~ ~1024
+	scoreboard players remove @s[score_CDclz_min=1024] CDclz 1024
+	execute @s[score_CDclz_min=512] ~ ~ ~ tp @s ~ ~ ~512
+	scoreboard players remove @s[score_CDclz_min=512] CDclz 512
+	execute @s[score_CDclz_min=256] ~ ~ ~ tp @s ~ ~ ~256
+	scoreboard players remove @s[score_CDclz_min=256] CDclz 256
+	execute @s[score_CDclz_min=128] ~ ~ ~ tp @s ~ ~ ~128
+	scoreboard players remove @s[score_CDclz_min=128] CDclz 128
+	execute @s[score_CDclz_min=64] ~ ~ ~ tp @s ~ ~ ~64
+	scoreboard players remove @s[score_CDclz_min=64] CDclz 64
+	execute @s[score_CDclz_min=32] ~ ~ ~ tp @s ~ ~ ~32
+	scoreboard players remove @s[score_CDclz_min=32] CDclz 32
+	execute @s[score_CDclz_min=16] ~ ~ ~ tp @s ~ ~ ~16
+	scoreboard players remove @s[score_CDclz_min=16] CDclz 16
+	execute @s[score_CDclz_min=8] ~ ~ ~ tp @s ~ ~ ~8
+	scoreboard players remove @s[score_CDclz_min=8] CDclz 8
+	execute @s[score_CDclz_min=4] ~ ~ ~ tp @s ~ ~ ~4
+	scoreboard players remove @s[score_CDclz_min=4] CDclz 4
+	execute @s[score_CDclz_min=2] ~ ~ ~ tp @s ~ ~ ~2
+	scoreboard players remove @s[score_CDclz_min=2] CDclz 2
+	execute @s[score_CDclz_min=1] ~ ~ ~ tp @s ~ ~ ~1
+	scoreboard players remove @s[score_CDclz_min=1] CDclz 1
+
+MFUNC | MFunc_TPNegZ | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/teleport_negZ.mcfunction
+	execute @s[score_CDclz=-33554432] ~ ~ ~ tp @s ~ ~ ~-33554432
+	scoreboard players add @s[score_CDclz=-33554432] CDclz 33554432
+	execute @s[score_CDclz=-16777216] ~ ~ ~ tp @s ~ ~ ~-16777216
+	scoreboard players add @s[score_CDclz=-16777216] CDclz 16777216
+	execute @s[score_CDclz=-8388608] ~ ~ ~ tp @s ~ ~ ~-8388608
+	scoreboard players add @s[score_CDclz=-8388608] CDclz 8388608
+	execute @s[score_CDclz=-4194304] ~ ~ ~ tp @s ~ ~ ~-4194304
+	scoreboard players add @s[score_CDclz=-4194304] CDclz 4194304
+	execute @s[score_CDclz=-2097152] ~ ~ ~ tp @s ~ ~ ~-2097152
+	scoreboard players add @s[score_CDclz=-2097152] CDclz 2097152
+	execute @s[score_CDclz=-1048576] ~ ~ ~ tp @s ~ ~ ~-1048576
+	scoreboard players add @s[score_CDclz=-1048576] CDclz 1048576
+	execute @s[score_CDclz=-524288] ~ ~ ~ tp @s ~ ~ ~-524288
+	scoreboard players add @s[score_CDclz=-524288] CDclz 524288
+	execute @s[score_CDclz=-262144] ~ ~ ~ tp @s ~ ~ ~-262144
+	scoreboard players add @s[score_CDclz=-262144] CDclz 262144
+	execute @s[score_CDclz=-131072] ~ ~ ~ tp @s ~ ~ ~-131072
+	scoreboard players add @s[score_CDclz=-131072] CDclz 131072
+	execute @s[score_CDclz=-65536] ~ ~ ~ tp @s ~ ~ ~-65536
+	scoreboard players add @s[score_CDclz=-65536] CDclz 65536
+	execute @s[score_CDclz=-32768] ~ ~ ~ tp @s ~ ~ ~-32768
+	scoreboard players add @s[score_CDclz=-32768] CDclz 32768
+	execute @s[score_CDclz=-16384] ~ ~ ~ tp @s ~ ~ ~-16384
+	scoreboard players add @s[score_CDclz=-16384] CDclz 16384
+	execute @s[score_CDclz=-8192] ~ ~ ~ tp @s ~ ~ ~-8192
+	scoreboard players add @s[score_CDclz=-8192] CDclz 8192
+	execute @s[score_CDclz=-4096] ~ ~ ~ tp @s ~ ~ ~-4096
+	scoreboard players add @s[score_CDclz=-4096] CDclz 4096
+	execute @s[score_CDclz=-2048] ~ ~ ~ tp @s ~ ~ ~-2048
+	scoreboard players add @s[score_CDclz=-2048] CDclz 2048
+	execute @s[score_CDclz=-1024] ~ ~ ~ tp @s ~ ~ ~-1024
+	scoreboard players add @s[score_CDclz=-1024] CDclz 1024
+	execute @s[score_CDclz=-512] ~ ~ ~ tp @s ~ ~ ~-512
+	scoreboard players add @s[score_CDclz=-512] CDclz 512
+	execute @s[score_CDclz=-256] ~ ~ ~ tp @s ~ ~ ~-256
+	scoreboard players add @s[score_CDclz=-256] CDclz 256
+	execute @s[score_CDclz=-128] ~ ~ ~ tp @s ~ ~ ~-128
+	scoreboard players add @s[score_CDclz=-128] CDclz 128
+	execute @s[score_CDclz=-64] ~ ~ ~ tp @s ~ ~ ~-64
+	scoreboard players add @s[score_CDclz=-64] CDclz 64
+	execute @s[score_CDclz=-32] ~ ~ ~ tp @s ~ ~ ~-32
+	scoreboard players add @s[score_CDclz=-32] CDclz 32
+	execute @s[score_CDclz=-16] ~ ~ ~ tp @s ~ ~ ~-16
+	scoreboard players add @s[score_CDclz=-16] CDclz 16
+	execute @s[score_CDclz=-8] ~ ~ ~ tp @s ~ ~ ~-8
+	scoreboard players add @s[score_CDclz=-8] CDclz 8
+	execute @s[score_CDclz=-4] ~ ~ ~ tp @s ~ ~ ~-4
+	scoreboard players add @s[score_CDclz=-4] CDclz 4
+	execute @s[score_CDclz=-2] ~ ~ ~ tp @s ~ ~ ~-2
+	scoreboard players add @s[score_CDclz=-2] CDclz 2
+	execute @s[score_CDclz=-1] ~ ~ ~ tp @s ~ ~ ~-1
+	scoreboard players add @s[score_CDclz=-1] CDclz 1
+
+MFUNC | MFunc_GetY | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/get_posY.mcfunction
+	scoreboard players set @s CDpy 0
+	summon area_effect_cloud ~ ~ ~ {Duration:5,Tags:[GetCoordsCloud]}
+	scoreboard players add @s CDst 0
+	stats entity @e[type=area_effect_cloud,tag=GetCoordsCloud] set SuccessCount @e[c=1,score_CDst_min=0] CDst
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~4096 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 4096
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~2048 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 2048
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~1024 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 1024
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~512 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 512
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~256 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 256
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~128 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 128
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~64 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 64
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~32 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 32
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~16 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 16
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~8 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 8
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~4 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 4
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~2 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 2
+	execute @e[tag=GetCoordsCloud] ~ ~ ~ tp @s ~ ~1 ~
+	scoreboard players add @s[score_CDst_min=1] CDpy 1
+	scoreboard players remove @s CDpy 4096
+	scoreboard players reset @s CDst
+	scoreboard players operation @s CDpy *= -1 Number
+	kill @e[type=area_effect_cloud,tag=GetCoordsCloud]
+
+MFUNC | MFunc_CalcX | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/calc_posX.mcfunction
+	execute @s ~33554432 ~ ~ scoreboard players add @s CDpx 33554432
+	execute @s ~33554432 ~ ~ tp @s ~33554432 ~ ~
+	execute @s ~16777216 ~ ~ scoreboard players add @s CDpx 16777216
+	execute @s ~16777216 ~ ~ tp @s ~16777216 ~ ~
+	execute @s ~8388608 ~ ~ scoreboard players add @s CDpx 8388608
+	execute @s ~8388608 ~ ~ tp @s ~8388608 ~ ~
+	execute @s ~4194304 ~ ~ scoreboard players add @s CDpx 4194304
+	execute @s ~4194304 ~ ~ tp @s ~4194304 ~ ~
+	execute @s ~2097152 ~ ~ scoreboard players add @s CDpx 2097152
+	execute @s ~2097152 ~ ~ tp @s ~2097152 ~ ~
+	execute @s ~1048576 ~ ~ scoreboard players add @s CDpx 1048576
+	execute @s ~1048576 ~ ~ tp @s ~1048576 ~ ~
+	execute @s ~524288 ~ ~ scoreboard players add @s CDpx 524288
+	execute @s ~524288 ~ ~ tp @s ~524288 ~ ~
+	execute @s ~262144 ~ ~ scoreboard players add @s CDpx 262144
+	execute @s ~262144 ~ ~ tp @s ~262144 ~ ~
+	execute @s ~131072 ~ ~ scoreboard players add @s CDpx 131072
+	execute @s ~131072 ~ ~ tp @s ~131072 ~ ~
+	execute @s ~65536 ~ ~ scoreboard players add @s CDpx 65536
+	execute @s ~65536 ~ ~ tp @s ~65536 ~ ~
+	execute @s ~32768 ~ ~ scoreboard players add @s CDpx 32768
+	execute @s ~32768 ~ ~ tp @s ~32768 ~ ~
+	execute @s ~16384 ~ ~ scoreboard players add @s CDpx 16384
+	execute @s ~16384 ~ ~ tp @s ~16384 ~ ~
+	execute @s ~8192 ~ ~ scoreboard players add @s CDpx 8192
+	execute @s ~8192 ~ ~ tp @s ~8192 ~ ~
+	execute @s ~4096 ~ ~ scoreboard players add @s CDpx 4096
+	execute @s ~4096 ~ ~ tp @s ~4096 ~ ~
+	execute @s ~2048 ~ ~ scoreboard players add @s CDpx 2048
+	execute @s ~2048 ~ ~ tp @s ~2048 ~ ~
+	execute @s ~1024 ~ ~ scoreboard players add @s CDpx 1024
+	execute @s ~1024 ~ ~ tp @s ~1024 ~ ~
+	execute @s ~512 ~ ~ scoreboard players add @s CDpx 512
+	execute @s ~512 ~ ~ tp @s ~512 ~ ~
+	execute @s ~256 ~ ~ scoreboard players add @s CDpx 256
+	execute @s ~256 ~ ~ tp @s ~256 ~ ~
+	execute @s ~128 ~ ~ scoreboard players add @s CDpx 128
+	execute @s ~128 ~ ~ tp @s ~128 ~ ~
+	execute @s ~64 ~ ~ scoreboard players add @s CDpx 64
+	execute @s ~64 ~ ~ tp @s ~64 ~ ~
+	execute @s ~32 ~ ~ scoreboard players add @s CDpx 32
+	execute @s ~32 ~ ~ tp @s ~32 ~ ~
+	execute @s ~16 ~ ~ scoreboard players add @s CDpx 16
+	execute @s ~16 ~ ~ tp @s ~16 ~ ~
+	execute @s ~8 ~ ~ scoreboard players add @s CDpx 8
+	execute @s ~8 ~ ~ tp @s ~8 ~ ~
+	execute @s ~4 ~ ~ scoreboard players add @s CDpx 4
+	execute @s ~4 ~ ~ tp @s ~4 ~ ~
+	execute @s ~2 ~ ~ scoreboard players add @s CDpx 2
+	execute @s ~2 ~ ~ tp @s ~2 ~ ~
+	execute @s ~1 ~ ~ scoreboard players add @s CDpx 1
+	execute @s ~1 ~ ~ tp @s ~1 ~ ~
+	scoreboard players remove @s CDpx 29999999
+	scoreboard players operation @s CDpx *= -1 Number
+
+MFUNC | MFunc_GetX | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/get_posX.mcfunction
+	scoreboard players set @s CDpx 0
+	summon area_effect_cloud ~ ~ ~ {Duration:5,Tags:[GetCoordsCloud]}
+	execute @e[type=area_effect_cloud,tag=GetCoordsCloud] ~ ~ ~ function french_man:coordinates/calc_posX
+	scoreboard players operation @s CDpx = @e[type=area_effect_cloud,tag=GetCoordsCloud] CDpx
+	kill @e[type=area_effect_cloud,tag=GetCoordsCloud]
+
+MFUNC | MFunc_CalcZ | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/calc_posZ.mcfunction
+	execute @s ~ ~ ~33554432 scoreboard players add @s CDpz 33554432
+	execute @s ~ ~ ~33554432 tp @s ~ ~ ~33554432
+	execute @s ~ ~ ~16777216 scoreboard players add @s CDpz 16777216
+	execute @s ~ ~ ~16777216 tp @s ~ ~ ~16777216
+	execute @s ~ ~ ~8388608 scoreboard players add @s CDpz 8388608
+	execute @s ~ ~ ~8388608 tp @s ~ ~ ~8388608
+	execute @s ~ ~ ~4194304 scoreboard players add @s CDpz 4194304
+	execute @s ~ ~ ~4194304 tp @s ~ ~ ~4194304
+	execute @s ~ ~ ~2097152 scoreboard players add @s CDpz 2097152
+	execute @s ~ ~ ~2097152 tp @s ~ ~ ~2097152
+	execute @s ~ ~ ~1048576 scoreboard players add @s CDpz 1048576
+	execute @s ~ ~ ~1048576 tp @s ~ ~ ~1048576
+	execute @s ~ ~ ~524288 scoreboard players add @s CDpz 524288
+	execute @s ~ ~ ~524288 tp @s ~ ~ ~524288
+	execute @s ~ ~ ~262144 scoreboard players add @s CDpz 262144
+	execute @s ~ ~ ~262144 tp @s ~ ~ ~262144
+	execute @s ~ ~ ~131072 scoreboard players add @s CDpz 131072
+	execute @s ~ ~ ~131072 tp @s ~ ~ ~131072
+	execute @s ~ ~ ~65536 scoreboard players add @s CDpz 65536
+	execute @s ~ ~ ~65536 tp @s ~ ~ ~65536
+	execute @s ~ ~ ~32768 scoreboard players add @s CDpz 32768
+	execute @s ~ ~ ~32768 tp @s ~ ~ ~32768
+	execute @s ~ ~ ~16384 scoreboard players add @s CDpz 16384
+	execute @s ~ ~ ~16384 tp @s ~ ~ ~16384
+	execute @s ~ ~ ~8192 scoreboard players add @s CDpz 8192
+	execute @s ~ ~ ~8192 tp @s ~ ~ ~8192
+	execute @s ~ ~ ~4096 scoreboard players add @s CDpz 4096
+	execute @s ~ ~ ~4096 tp @s ~ ~ ~4096
+	execute @s ~ ~ ~2048 scoreboard players add @s CDpz 2048
+	execute @s ~ ~ ~2048 tp @s ~ ~ ~2048
+	execute @s ~ ~ ~1024 scoreboard players add @s CDpz 1024
+	execute @s ~ ~ ~1024 tp @s ~ ~ ~1024
+	execute @s ~ ~ ~512 scoreboard players add @s CDpz 512
+	execute @s ~ ~ ~512 tp @s ~ ~ ~512
+	execute @s ~ ~ ~256 scoreboard players add @s CDpz 256
+	execute @s ~ ~ ~256 tp @s ~ ~ ~256
+	execute @s ~ ~ ~128 scoreboard players add @s CDpz 128
+	execute @s ~ ~ ~128 tp @s ~ ~ ~128
+	execute @s ~ ~ ~64 scoreboard players add @s CDpz 64
+	execute @s ~ ~ ~64 tp @s ~ ~ ~64
+	execute @s ~ ~ ~32 scoreboard players add @s CDpz 32
+	execute @s ~ ~ ~32 tp @s ~ ~ ~32
+	execute @s ~ ~ ~16 scoreboard players add @s CDpz 16
+	execute @s ~ ~ ~16 tp @s ~ ~ ~16
+	execute @s ~ ~ ~8 scoreboard players add @s CDpz 8
+	execute @s ~ ~ ~8 tp @s ~ ~ ~8
+	execute @s ~ ~ ~4 scoreboard players add @s CDpz 4
+	execute @s ~ ~ ~4 tp @s ~ ~ ~4
+	execute @s ~ ~ ~2 scoreboard players add @s CDpz 2
+	execute @s ~ ~ ~2 tp @s ~ ~ ~2
+	execute @s ~ ~ ~1 scoreboard players add @s CDpz 1
+	execute @s ~ ~ ~1 tp @s ~ ~ ~1
+	scoreboard players remove @s CDpz 29999999
+	scoreboard players operation @s CDpz *= -1 Number
+
+MFUNC | MFunc_GetZ | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/get_posZ.mcfunction
+	scoreboard players set @s CDpz 0
+	summon area_effect_cloud ~ ~ ~ {Duration:5,Tags:[GetCoordsCloud]}
+	execute @e[type=area_effect_cloud,tag=GetCoordsCloud] ~ ~ ~ function french_man:coordinates/calc_posZ
+	scoreboard players operation @s CDpz = @e[type=area_effect_cloud,tag=GetCoordsCloud] CDpz
+	kill @e[type=area_effect_cloud,tag=GetCoordsCloud]
+
+MFUNC | MFunc_Main | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/teleport.mcfunction
+	execute @e[score_CDclx_min=1] ~ ~ ~ function french_man:coordinates/teleport_posX
+	execute @e[score_CDclx=-1] ~ ~ ~ function french_man:coordinates/teleport_negX
+	execute @e[score_CDcly_min=1] ~ ~ ~ function french_man:coordinates/teleport_posY
+	execute @e[score_CDcly=-1] ~ ~ ~ function french_man:coordinates/teleport_negY
+	execute @e[score_CDclz_min=1] ~ ~ ~ function french_man:coordinates/teleport_posZ
+	execute @e[score_CDclz=-1] ~ ~ ~ function french_man:coordinates/teleport_negZ
+
+MFUNC | MFunc_DispCoords | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/display_coords.mcfunction
+	function french_man:coordinates/get_posX
+	function french_man:coordinates/get_posY
+	function french_man:coordinates/get_posZ
+	title @s actionbar {"text":"","extra":[{"text":"X --> ","color":"gold"},{"score":{"name":"@s","objective":"CDpx"},"color":"green"},{"text":" Y --> ","color":"gold"},{"score":{"name":"@s","objective":"CDpy"},"color":"green"},{"text":" Z --> ","color":"gold"},{"score":{"name":"@s","objective":"CDpz"},"color":"green"}]}
+
+MFUNC | MFunc_Uninstall | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/uninstall.mcfunction
+	scoreboard objectives remove CDpx
+	scoreboard objectives remove CDpy
+	scoreboard objectives remove CDpz
+	scoreboard objectives remove CDclx
+	scoreboard objectives remove CDcly
+	scoreboard objectives remove CDclz
+	scoreboard objectives remove CDst
+
+MFUNC | MFunc_Init | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/french_man/coordinates/init.mcfunction
+	scoreboard objectives add CDpx dummy
+	scoreboard objectives add CDpy dummy
+	scoreboard objectives add CDpz dummy
+	scoreboard objectives add CDclx dummy
+	scoreboard objectives add CDcly dummy
+	scoreboard objectives add CDclz dummy
+	scoreboard objectives add CDst dummy
+	scoreboard objectives add Number dummy
+	scoreboard players set -1 Number -1

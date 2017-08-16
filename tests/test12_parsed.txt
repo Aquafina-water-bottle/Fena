@@ -1,0 +1,4 @@
+MFUNC | MFunc_Init | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12/world/data/functions/custom/init.mcfunction
+	say this is a function
+	scoreboard players add @a[m=2] RRti 1
+	function custom:init if execute @a[m=2,score_RRti=10]

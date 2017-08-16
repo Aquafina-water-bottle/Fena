@@ -7,24 +7,6 @@ DEF CCU_ExecuteSpawnStand @e[type=armor_stand,SpawnStand,SPgam=0]
 DEF CCU_FinalSpawnStand @e[type=armor_stand,SpawnStand,SPgam=0] SPgam = $SPid$
 //>
 
-//<Number Adding
-//=
-USE {ScOA}:
-	CCU_NumberObjAdd
-
-ARRAY {ACTIVATE CCU.iterateNumbers() ARGS}:
-	-1
-	20
-=//
-
-FUNC {GLOBAL CCU.iterateNumbers}:
-	scoreboard objectives add Number dummy
-	LOOP {ARGS[S]}:
-		|0| Number = |0|
-	
-	UNASSIGN {ARRAY ARGS}
-//>
-
 //<Setting Options
 //= from 1 --> 2 --> 4... etc
 ARRAY {GLOBAL ACTIVATE CCU.setOptions(@e[type=armor_stand,RRStand,RRop>=$TempScore$];RRop) ARGS}:

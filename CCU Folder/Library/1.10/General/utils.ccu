@@ -46,6 +46,29 @@ DEF Snd_Hat minecraft:block.note.hat
 DEF Snd_Primed minecraft:entity.tnt.primed
 //>
 
+//<Number Adding
+//=
+USE {ScOA}:
+	CCU_NumberObjAdd
+
+ARRAY {ACTIVATE CCU.iterateNumbers() ARGS}:
+	-1
+	20
+=//
+
+FUNC {GLOBAL CCU.iterateNumbers}:
+	IF {|0| = ``}:
+		DEF GLOBAL $CCUNumberObj$ Number
+	ELSE:
+		DEF GLOBAL $CCUNumberObj$ |0;1|
+	scoreboard objectives add $CCUNumberObj$ dummy
+	LOOP {ARGS[S]}:
+		|0| $CCUNumberObj$ = |0|
+	
+	UNASSIGN {GLOBAL DEF $CCUNumberObj$}
+	UNASSIGN {ARRAY ARGS}
+//>
+
 //<Objective and Team lists
 //=
 ARRAY {GLOBAL ACTIVATE CCU.objectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
@@ -309,6 +332,22 @@ FUNC {GLOBAL CCU.scoreRand}:
 		ScOP |2| |1| %= Mod |1|
 		IF {|3| > 0}:
 			|2| |1| + |3|
+//>
+
+//<Scoreboard Tags
+//= Takes an array of scoreboard tags and places them inside any given data tag
+ARRAY {Arr_CCUCloudTags}:
+	GetCoordsCloud
+	GetCoordsEntity
+	
+CCU.scoreboardTags(Arr_CCUCloudTags)
+=//
+FUNC {GLOBAL CCU.scoreboardTags}:
+	LOOP {0 |0|[-1] + 1}:
+		|0;1|[|0|];
+		IF {|0| != |0;1|[-1]}:
+			,;
+	
 //>
 
 //<Directional based defines
