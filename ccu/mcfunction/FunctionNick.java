@@ -37,7 +37,6 @@ public class FunctionNick {
 					+ Cmd_MFunc.arrayMFuncSave.get(i)[0];
 
 			tempFileCalc = GeneralFile.checkFileExtension(tempFileCalc, ".mcfunction", true, true);
-			System.out.println("File created: " + tempFileCalc);
 			Cmd_MFunc.arrayMFuncSave.get(i)[0] = tempFileCalc;
 
 			if (tempFileCalc.contains("/functions/")) {

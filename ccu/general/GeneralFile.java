@@ -47,8 +47,6 @@ public class GeneralFile {
 			System.exit(0);
 		}
 
-		System.out.println("Successfully found the file: " + this.fileString);
-
 		// tbh idk what this does
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		ArrayList<String> doc = new ArrayList<String>();
