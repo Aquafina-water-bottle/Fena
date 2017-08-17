@@ -73,12 +73,7 @@ public class ReadConfig {
 	public static void getConfigOptions() {
 
 		GeneralFile configFile = null;
-
-		if (Main.ranInEclpise == true) {
-			configFile = new GeneralFile("CCU.ini");
-		} else {
-			configFile = new GeneralFile(Main.getJarFile + "/" + "CCU.ini");
-		}
+		configFile = new GeneralFile(Main.getJarFile + "/" + "CCU.ini");
 
 		ArrayList<String> temp = GeneralFile.removeComment(configFile.getFileArray(), "#", false);
 		for (String line : temp) {
@@ -105,7 +100,7 @@ public class ReadConfig {
 						regFilePath = new File(tempInput);
 					}
 					break;
-					
+
 				case "globalFilePath":
 					globalFilePath = new File(tempInput);
 					break;
@@ -177,7 +172,7 @@ public class ReadConfig {
 				case "rconPassword":
 					rconPassword = tempInput;
 					break;
-					
+
 				case "minecraftCommandsArray":
 					minecraftCommandsArray = tempInput.split(",");
 					break;
@@ -206,7 +201,7 @@ public class ReadConfig {
 		}
 
 		// Checking options
-		if (regFilePath == null || regFilePath.toString().length() == 0 && Main.ranInEclpise) {
+		if (regFilePath == null || regFilePath.toString().length() == 0) {
 			System.out.println("ERROR: 'regFilePath' field is empty");
 			System.exit(0);
 		} else {
@@ -274,17 +269,17 @@ public class ReadConfig {
 				rconDouble = false;
 			}
 		}
-		
+
 		if (minecraftCommandsArray == null || minecraftCommandsArray[0].equals("")) {
 			System.out.println("WARNING: Array 'minecraftCommandsArray' field is empty");
 		}
-		
+
 		if (ReadConfig.mcVersion >= 2) {
 			String[] minecraftCommandsArrayCalc = new String[minecraftCommandsArray.length + 2];
 			for (int i = 0; i < minecraftCommandsArray.length; i++) {
 				minecraftCommandsArrayCalc[i] = minecraftCommandsArray[i];
 			}
-			
+
 			// adds if and unless to prevent the execute command from interfering with the function shortcut
 			minecraftCommandsArrayCalc[minecraftCommandsArrayCalc.length - 2] = "if";
 			minecraftCommandsArrayCalc[minecraftCommandsArrayCalc.length - 1] = "unless";
@@ -303,12 +298,12 @@ public class ReadConfig {
 						break;
 					}
 				}
-				
+
 				if (cannotUseCmd == false) {
 					tempArray.add(regCmd);
 				}
 			}
-			
+
 			minecraftCommandsArray = new String[tempArray.size()];
 			for (int i = 0; i < minecraftCommandsArray.length; i++) {
 				minecraftCommandsArray[i] = tempArray.get(i);

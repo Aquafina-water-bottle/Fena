@@ -31,13 +31,12 @@ public class Main {
 	// .replaceAll("\\s+$", "") = space to the right
 
 	public static File getJarFile = null;
-	public static boolean ranInEclpise = false;
 
 	public static void main(String[] args) {
 		long startTime = System.nanoTime();
 
 		// checks version
-		String currentVersion = "1.0.6";
+		String currentVersion = "1.0.7";
 		System.out.println("Current version: " + currentVersion);
 
 		try {
@@ -59,14 +58,14 @@ public class Main {
 
 			String[] currentVersionCalc = currentVersion.split("\\.");
 			String[] getVersionCalc = getVersion.split("\\.");
-			
+
 			if (Integer.parseInt(currentVersionCalc[0]) < Integer.parseInt(getVersionCalc[0])
 					|| Integer.parseInt(currentVersionCalc[1]) < Integer.parseInt(getVersionCalc[1])
 					|| Integer.parseInt(currentVersionCalc[2]) < Integer.parseInt(getVersionCalc[2])) {
 				System.out.println("An update is avaliable for CCU (" + getVersion
 						+ ") at 'https://github.com/Aquafina-water-bottle/Command-Compiler-Unlimited/releases'");
 				TimeUnit.SECONDS.sleep(1);
-				
+
 			}
 
 		} catch (IOException e) {
@@ -78,14 +77,11 @@ public class Main {
 		System.out.println("");
 
 		// for CCU_NPP.bat
-		if (args.length == 2) {
+		if (args.length >= 1) {
 			ReadConfig.regFilePath = new File(args[0]);
-			getJarFile = new File(args[1]);
-			getJarFile = getJarFile.getParentFile();
-		} else {
-			ranInEclpise = true;
-			getJarFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath().replace("%20", " "));
 		}
+
+		getJarFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath().replace("%20", " "));
 
 		// String asdf = "this is a CALC(1 + SIN((1 - 2.0)) * (13 - 3)) asdf)";
 		// MathParser.parseSecondaryStatements(asdf, asdf);
