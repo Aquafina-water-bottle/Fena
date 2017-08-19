@@ -48,6 +48,7 @@ class TestForError {
 }
 
 public class ReadConfig {
+	public static Boolean toggleEGO = null;
 	public static Integer mcVersion = null;
 	public static File regFilePath = null;
 	public static File globalFilePath = null;
@@ -91,8 +92,14 @@ public class ReadConfig {
 				// matches the given text in the ini file
 				// with the actual variables
 				switch (tempVar) {
-				case "mcVersion":
-					mcVersion = Integer.parseInt(tempInput);
+				case "EGO":
+					if (tempInput.equalsIgnoreCase("true")) {
+						toggleEGO = true;
+					} else {
+						if (tempInput.equalsIgnoreCase("false")) {
+							toggleEGO = false;
+						}
+					}
 					break;
 
 				case "regFilePath":
@@ -173,6 +180,10 @@ public class ReadConfig {
 					rconPassword = tempInput;
 					break;
 
+				case "mcVersion":
+					mcVersion = Integer.parseInt(tempInput);
+					break;
+
 				case "minecraftCommandsArray":
 					minecraftCommandsArray = tempInput.split(",");
 					break;
@@ -200,6 +211,10 @@ public class ReadConfig {
 			}
 		}
 
+		if (toggleEGO == null) {
+			toggleEGO = false;
+		}
+
 		// Checking options
 		if (regFilePath == null || regFilePath.toString().length() == 0) {
 			System.out.println("ERROR: 'regFilePath' field is empty");
@@ -211,22 +226,78 @@ public class ReadConfig {
 			}
 		}
 
-		/*
-		if (globalCombinerFilePath == null || globalCombinerFilePath.toString().length() == 0) {
-			System.out.println("WARNING: 'globalCombinerFilePath' field is empty");
-			System.exit(0);
-		} else {
-			if (globalCombinerFilePath.isFile() == false) {
-				System.out.println("ERROR: " + globalCombinerFilePath.toString() + " is not a file");
-				System.exit(0);
-			}
-		}
-		*/
-		if (mcVersion == null) {
-			System.out.println("WARNING: 'mcVersion' field is empty - defaults to 1.12 (2)");
-			mcVersion = 2;
-		}
+		if (toggleEGO) { // default EGO settings
+			System.out.println("Using default EGO settings (1.10)");
+			preventServerKick = true;
+			serverPlugins = true;
+			rconEnable = false;
+			mcVersion = 1;
+			// @formatter:off
+			String[][] tempStringArray = {
+					{"Pulse", "Start", "End"}, // groupSuffixPulse
+					{"Clock","Repeat"}, // groupSuffixRepeating
+					
+					// minecraftCommandsArray
+					{"pictionary", "bd", "achievement", "blockdata", "clear", "clone", "debug", "defaultgamemode", "difficulty",
+							"effect", "enchant", "entitydata", "execute", "fill", "gamemode", "gamerule", "give", "help", "kill", "me",
+							"msg", "particle", "playsound", "publish", "replaceitem", "say", "scoreboard", "seed", "setblock",
+							"setworldspawn", "spawnpoint", "spreadplayers", "stats", "stopsound", "summon", "teleport", "tell",
+							"tellraw", "testfor", "testforblock", "testforblocks", "time", "title", "toggledownfall", "tp", "trigger",
+							"w", "weather", "worldborder", "xp"},
+					{"execute"}, // minecraftCommandsExceptionArray
+					{"kill","clear","xp","tp","teleport","gamemode"}, // serverOverrideArray
+					
+					// blockArray
+					{"acacia_door", "acacia_fence", "acacia_fence_gate", "acacia_stairs", "activator_rail", "air", "anvil", "barrier",
+							"beacon", "bed", "bedrock", "beetroots", "birch_door", "birch_fence", "birch_fence_gate", "birch_stairs",
+							"bone_block", "bookshelf", "brewing_stand", "brick_block", "brick_stairs", "brown_mushroom",
+							"brown_mushroom_block", "cactus", "cake", "carpet", "carrots", "cauldron", "chain_command_block", "chest",
+							"chorus_flower", "chorus_plant", "clay", "coal_block", "coal_ore", "cobblestone", "cobblestone_wall",
+							"cocoa", "command_block", "crafting_table", "dark_oak_door", "dark_oak_fence", "dark_oak_fence_gate",
+							"dark_oak_stairs", "daylight_detector", "daylight_detector_inverted", "deadbush", "detector_rail",
+							"diamond_block", "diamond_ore", "dirt", "dispenser", "double_plant", "double_stone_slab",
+							"double_stone_slab2", "double_wooden_slab", "dragon_egg", "dropper", "emerald_block", "emerald_ore",
+							"enchanting_table", "end_bricks", "end_gateway", "end_portal", "end_portal_frame", "end_rod", "end_stone",
+							"ender_chest", "farmland", "fence", "fence_gate", "fire", "flower_pot", "flowing_lava", "flowing_water",
+							"frosted_ice", "furnace", "glass", "glass_pane", "glowstone", "gold_block", "gold_ore", "golden_rail",
+							"grass", "grass_path", "gravel", "hardened_clay", "hay_block", "heavy_weighted_pressure_plate", "hopper",
+							"ice", "iron_bars", "iron_block", "iron_door", "iron_ore", "iron_trapdoor", "jukebox", "jungle_door",
+							"jungle_fence", "jungle_fence_gate", "jungle_stairs", "ladder", "lapis_block", "lapis_ore", "lava",
+							"leaves", "leaves2", "lever", "light_weighted_pressure_plate", "lit_furnace", "lit_pumpkin",
+							"lit_redstone_lamp", "lit_redstone_ore", "log", "log2", "magma", "melon_block", "melon_stem",
+							"mob_spawner", "monster_egg", "mossy_cobblestone", "mycelium", "nether_brick", "nether_brick_fence",
+							"nether_brick_stairs", "nether_wart", "nether_wart_block", "netherrack", "noteblock", "oak_stairs",
+							"obsidian", "packed_ice", "piston", "piston_extension", "piston_head", "planks", "portal", "potatoes",
+							"powered_comparator", "powered_repeater", "prismarine", "pumpkin", "pumpkin_stem", "purpur_block",
+							"purpur_double_slab", "purpur_pillar", "purpur_slab", "purpur_stairs", "quartz_block", "quartz_ore",
+							"quartz_stairs", "rail", "red_flower", "red_mushroom", "red_mushroom_block", "red_nether_brick",
+							"red_sandstone", "red_sandstone_stairs", "redstone_block", "redstone_lamp", "redstone_ore",
+							"redstone_torch", "redstone_wire", "reeds", "repeating_command_block", "sand", "sandstone",
+							"sandstone_stairs", "sapling", "sea_lantern", "skull", "slime", "snow", "snow_layer", "soul_sand",
+							"sponge", "spruce_door", "spruce_fence", "spruce_fence_gate", "spruce_stairs", "stained_glass",
+							"stained_glass_pane", "stained_hardened_clay", "standing_banner", "standing_sign", "sticky_piston",
+							"stone", "stone_brick_stairs", "stone_button", "stone_pressure_plate", "stone_slab", "stone_slab2",
+							"stone_stairs", "stonebrick", "structure_block", "structure_void", "tallgrass", "tnt", "torch", "trapdoor",
+							"trapped_chest", "tripwire", "tripwire_hook", "unlit_redstone_torch", "unpowered_comparator",
+							"unpowered_repeater", "vine", "wall_banner", "wall_sign", "water", "waterlily", "web", "wheat",
+							"wooden_button", "wooden_door", "wooden_pressure_plate", "wooden_slab", "wool", "yellow_flower"},
+					{"@a","@e","@r","@p"}, // selectorArray
+					
+					// targetSelectorArray
+					{"x","y","z","r","rm","dx","dy","dz","tag","team","type","c","l","lm","m","name","rx","rxm","ry","rym"}
+			};
+			// @formatter:on
 
+			groupSuffixPulse = tempStringArray[0];
+			groupSuffixRepeating = tempStringArray[1];
+			minecraftCommandsArray = tempStringArray[2];
+			minecraftCommandsExceptionArray = tempStringArray[3];
+			serverOverrideArray = tempStringArray[4];
+			blockArray = tempStringArray[5];
+			selectorArray = tempStringArray[6];
+			targetSelectorArray = tempStringArray[7];
+			
+		}
 		if (preventServerKick == null) {
 			System.out.println("WARNING: 'preventServerKick' field is empty - defaults to 'false'");
 			preventServerKick = false;
@@ -268,6 +339,11 @@ public class ReadConfig {
 				System.out.println("WARNING: 'rconDouble' field is empty - defaults to 'false'");
 				rconDouble = false;
 			}
+		}
+
+		if (mcVersion == null) {
+			System.out.println("WARNING: 'mcVersion' field is empty - defaults to 1.12 (2)");
+			mcVersion = 2;
 		}
 
 		if (minecraftCommandsArray == null || minecraftCommandsArray[0].equals("")) {

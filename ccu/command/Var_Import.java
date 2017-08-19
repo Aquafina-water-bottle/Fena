@@ -39,6 +39,9 @@ public class Var_Import {
 	public static ArrayList<Coordinates> datCoordArray = new ArrayList<Coordinates>();
 	public static ArrayList<Coordinates> datCoordFillArray = new ArrayList<Coordinates>();
 
+	// to make sure no files are imported twice
+	public static ArrayList<File> importSaveArray = new ArrayList<File>();
+
 	private ArrayList<String> arrayReturn = new ArrayList<String>();
 
 	private int tabNum;
@@ -50,6 +53,10 @@ public class Var_Import {
 	}
 
 	public ArrayList<String> getArray() {
+		// if importSaveArray is empty, adds regFilePath
+		if (importSaveArray.isEmpty()) {
+			importSaveArray.add(ReadConfig.regFilePath);
+		}
 
 		// import lookup type (LIBRARY = 1, WITHIN = 2)
 		// If it's not stated as either or, it defaults to direct file
@@ -329,7 +336,16 @@ public class Var_Import {
 								// Get all files within the directory and directories inside
 								getFileArray = GeneralFile.getAllFiles(importFile, ".ccu");
 								for (File filesInArray : getFileArray) {
-									if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+									boolean foundSameFile = false;
+									for (File checkFile : importSaveArray) {
+										if (filesInArray.equals(checkFile)) {
+											foundSameFile = true;
+											break;
+										}
+									}
+
+									if (foundSameFile == false) {
+										importSaveArray.add(filesInArray);
 										GeneralFile importFileCalc = new GeneralFile(filesInArray);
 										arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
 									}
@@ -348,7 +364,16 @@ public class Var_Import {
 								// Get all files within the directory and directories inside
 								getFileArray = GeneralFile.getAllFiles(importFile, "_dat.txt");
 								for (File filesInArray : getFileArray) {
-									if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+									boolean foundSameFile = false;
+									for (File checkFile : importSaveArray) {
+										if (filesInArray.equals(checkFile)) {
+											foundSameFile = true;
+											break;
+										}
+									}
+
+									if (foundSameFile == false) {
+										importSaveArray.add(filesInArray);
 										GeneralFile importFileCalc = new GeneralFile(filesInArray);
 										datCoordFillArray(importFileCalc.getFileArray(),
 												filesInArray.getName().replace("_dat.txt", ""));
@@ -366,17 +391,42 @@ public class Var_Import {
 
 							// direct, not directory, normal files
 							String importFile = GeneralFile.checkFileExtension(statementArgs, ".ccu", false, true);
-							GeneralFile importFileCalc = new GeneralFile(importFile);
-							arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+							File fileNameCalc = new File(importFile);
+
+							boolean foundSameFile = false;
+							for (File checkFile : importSaveArray) {
+								if (fileNameCalc.equals(checkFile)) {
+									foundSameFile = true;
+									break;
+								}
+							}
+
+							if (foundSameFile == false) {
+								importSaveArray.add(fileNameCalc);
+								GeneralFile importFileCalc = new GeneralFile(importFile);
+								arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+							}
 
 						} else { // dat files
 
 							// direct, not directory, dat files
 							String importFile = GeneralFile.checkFileExtension(statementArgs, "_dat.txt", false, false);
-							GeneralFile importFileCalc = new GeneralFile(importFile);
-
 							File fileNameCalc = new File(importFile);
-							datCoordFillArray(importFileCalc.getFileArray(), fileNameCalc.getName().replace("_dat.txt", ""));
+
+							boolean foundSameFile = false;
+							for (File checkFile : importSaveArray) {
+								if (fileNameCalc.equals(checkFile)) {
+									foundSameFile = true;
+									break;
+								}
+							}
+
+							if (foundSameFile == false) {
+								importSaveArray.add(fileNameCalc);
+
+								GeneralFile importFileCalc = new GeneralFile(importFile);
+								datCoordFillArray(importFileCalc.getFileArray(), fileNameCalc.getName().replace("_dat.txt", ""));
+							}
 						}
 					}
 				} else {
@@ -405,7 +455,16 @@ public class Var_Import {
 								if (importFile.isDirectory()) {
 									getFileArray = GeneralFile.getAllFiles(importFile, ".ccu");
 									for (File filesInArray : getFileArray) {
-										if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+										boolean foundSameFile = false;
+										for (File checkFile : importSaveArray) {
+											if (filesInArray.equals(checkFile)) {
+												foundSameFile = true;
+												break;
+											}
+										}
+
+										if (foundSameFile == false) {
+											importSaveArray.add(filesInArray);
 											GeneralFile importFileCalc = new GeneralFile(filesInArray);
 											arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
 										}
@@ -438,7 +497,17 @@ public class Var_Import {
 								if (importFile.isDirectory()) {
 									getFileArray = GeneralFile.getAllFiles(importFile, "_dat.txt");
 									for (File filesInArray : getFileArray) {
-										if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+
+										boolean foundSameFile = false;
+										for (File checkFile : importSaveArray) {
+											if (filesInArray.equals(checkFile)) {
+												foundSameFile = true;
+												break;
+											}
+										}
+
+										if (foundSameFile == false) {
+											importSaveArray.add(filesInArray);
 											GeneralFile importFileCalc = new GeneralFile(filesInArray);
 											datCoordFillArray(importFileCalc.getFileArray(),
 													filesInArray.getName().replace("_dat.txt", ""));
@@ -465,8 +534,21 @@ public class Var_Import {
 											ReadConfig.importLibraryPath.toString() + "/" + statementArgs, ".ccu", false, true);
 								}
 
-								GeneralFile importFileCalc = new GeneralFile(importFile);
-								arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+								File fileNameCalc = new File(importFile);
+
+								boolean foundSameFile = false;
+								for (File checkFile : importSaveArray) {
+									if (fileNameCalc.equals(checkFile)) {
+										foundSameFile = true;
+										break;
+									}
+								}
+
+								if (foundSameFile == false) {
+									importSaveArray.add(fileNameCalc);
+									GeneralFile importFileCalc = new GeneralFile(importFile);
+									arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+								}
 
 							} else { // dat files
 								// library, not directory, dat files
@@ -480,10 +562,21 @@ public class Var_Import {
 											ReadConfig.importLibraryPath.toString() + "/" + statementArgs, "_dat.txt", false, false);
 								}
 
-								GeneralFile importFileCalc = new GeneralFile(importFile);
-
 								File fileNameCalc = new File(importFile);
-								datCoordFillArray(importFileCalc.getFileArray(), fileNameCalc.getName().replace("_dat.txt", ""));
+
+								boolean foundSameFile = false;
+								for (File checkFile : importSaveArray) {
+									if (fileNameCalc.equals(checkFile)) {
+										foundSameFile = true;
+										break;
+									}
+								}
+
+								if (foundSameFile == false) {
+									importSaveArray.add(fileNameCalc);
+									GeneralFile importFileCalc = new GeneralFile(importFile);
+									datCoordFillArray(importFileCalc.getFileArray(), fileNameCalc.getName().replace("_dat.txt", ""));
+								}
 
 							}
 						}
@@ -503,7 +596,17 @@ public class Var_Import {
 								if (importFile.isDirectory()) {
 									getFileArray = GeneralFile.getAllFiles(importFile, ".ccu");
 									for (File filesInArray : getFileArray) {
-										if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+
+										boolean foundSameFile = false;
+										for (File checkFile : importSaveArray) {
+											if (filesInArray.equals(checkFile)) {
+												foundSameFile = true;
+												break;
+											}
+										}
+
+										if (foundSameFile == false) {
+											importSaveArray.add(filesInArray);
 											GeneralFile importFileCalc = new GeneralFile(filesInArray);
 											arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
 										}
@@ -514,7 +617,17 @@ public class Var_Import {
 									if (importFile.isDirectory()) {
 										getFileArray = GeneralFile.getAllFiles(importFile, ".ccu");
 										for (File filesInArray : getFileArray) {
-											if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+
+											boolean foundSameFile = false;
+											for (File checkFile : importSaveArray) {
+												if (filesInArray.equals(checkFile)) {
+													foundSameFile = true;
+													break;
+												}
+											}
+
+											if (foundSameFile == false) {
+												importSaveArray.add(filesInArray);
 												GeneralFile importFileCalc = new GeneralFile(filesInArray);
 												arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
 											}
@@ -528,7 +641,7 @@ public class Var_Import {
 								}
 							} else { // imports dat files
 								// within, full directory, dat files
-								
+
 								if (statementArgs.isEmpty() == false) {
 									statementArgs = "/" + statementArgs;
 								}
@@ -537,7 +650,17 @@ public class Var_Import {
 								if (importFile.isDirectory()) {
 									getFileArray = GeneralFile.getAllFiles(importFile, "_dat.txt");
 									for (File filesInArray : getFileArray) {
-										if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+
+										boolean foundSameFile = false;
+										for (File checkFile : importSaveArray) {
+											if (filesInArray.equals(checkFile)) {
+												foundSameFile = true;
+												break;
+											}
+										}
+
+										if (foundSameFile == false) {
+											importSaveArray.add(filesInArray);
 											GeneralFile importFileCalc = new GeneralFile(filesInArray);
 											datCoordFillArray(importFileCalc.getFileArray(),
 													filesInArray.getName().replace("_dat.txt", ""));
@@ -549,7 +672,17 @@ public class Var_Import {
 									if (importFile.isDirectory()) {
 										getFileArray = GeneralFile.getAllFiles(importFile, "_dat.txt");
 										for (File filesInArray : getFileArray) {
-											if (filesInArray.equals(ReadConfig.regFilePath) == false) {
+
+											boolean foundSameFile = false;
+											for (File checkFile : importSaveArray) {
+												if (filesInArray.equals(checkFile)) {
+													foundSameFile = true;
+													break;
+												}
+											}
+
+											if (foundSameFile == false) {
+												importSaveArray.add(filesInArray);
 												GeneralFile importFileCalc = new GeneralFile(filesInArray);
 												datCoordFillArray(importFileCalc.getFileArray(),
 														filesInArray.getName().replace("_dat.txt", ""));
@@ -571,15 +704,38 @@ public class Var_Import {
 								File importFile = new File(GeneralFile.checkFileExtension(
 										ReadConfig.regFilePath.getParentFile().toString() + "/" + statementArgs, ".ccu", false, true));
 								if (importFile.isFile()) {
-									GeneralFile importFileCalc = new GeneralFile(importFile);
-									arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+									boolean foundSameFile = false;
+									for (File checkFile : importSaveArray) {
+										if (importFile.equals(checkFile)) {
+											foundSameFile = true;
+											break;
+										}
+									}
+
+									if (foundSameFile == false) {
+										importSaveArray.add(importFile);
+										GeneralFile importFileCalc = new GeneralFile(importFile);
+										arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+									}
+
 								} else {
 									importFile = new File(GeneralFile.checkFileExtension(
 											ReadConfig.regFilePath.getParentFile().getParentFile().toString() + "/" + statementArgs,
 											".ccu", false, true));
 									if (importFile.isFile()) {
-										GeneralFile importFileCalc = new GeneralFile(importFile);
-										arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+										boolean foundSameFile = false;
+										for (File checkFile : importSaveArray) {
+											if (importFile.equals(checkFile)) {
+												foundSameFile = true;
+												break;
+											}
+										}
+
+										if (foundSameFile == false) {
+											importSaveArray.add(importFile);
+											GeneralFile importFileCalc = new GeneralFile(importFile);
+											arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+										}
 									} else {
 										System.out.println("ERROR: File '" + statementArgs + "' under line '" + this.fullLineGet
 												+ "' cannot be found");
@@ -593,15 +749,38 @@ public class Var_Import {
 										ReadConfig.regFilePath.getParentFile().toString() + "/" + statementArgs, "_dat.txt", false,
 										false));
 								if (importFile.isFile()) {
-									GeneralFile importFileCalc = new GeneralFile(importFile);
-									datCoordFillArray(importFileCalc.getFileArray(), importFile.getName().replace("_dat.txt", ""));
+									boolean foundSameFile = false;
+									for (File checkFile : importSaveArray) {
+										if (importFile.equals(checkFile)) {
+											foundSameFile = true;
+											break;
+										}
+									}
+
+									if (foundSameFile == false) {
+										importSaveArray.add(importFile);
+										GeneralFile importFileCalc = new GeneralFile(importFile);
+										datCoordFillArray(importFileCalc.getFileArray(), importFile.getName().replace("_dat.txt", ""));
+									}
 								} else {
 									importFile = new File(GeneralFile.checkFileExtension(
 											ReadConfig.regFilePath.getParentFile().getParentFile().toString() + "/" + statementArgs,
 											"_dat.txt", false, false));
 									if (importFile.isFile()) {
-										GeneralFile importFileCalc = new GeneralFile(importFile);
-										datCoordFillArray(importFileCalc.getFileArray(), importFile.getName().replace("_dat.txt", ""));
+										boolean foundSameFile = false;
+										for (File checkFile : importSaveArray) {
+											if (importFile.equals(checkFile)) {
+												foundSameFile = true;
+												break;
+											}
+										}
+
+										if (foundSameFile == false) {
+											importSaveArray.add(importFile);
+											GeneralFile importFileCalc = new GeneralFile(importFile);
+											datCoordFillArray(importFileCalc.getFileArray(),
+													importFile.getName().replace("_dat.txt", ""));
+										}
 									} else {
 										System.out.println("ERROR: File '" + statementArgs + "' under line '" + this.fullLineGet
 												+ "' cannot be found");

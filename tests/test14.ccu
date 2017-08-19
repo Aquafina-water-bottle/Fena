@@ -1,0 +1,27 @@
+//(Name)
+
+//<General Definitions
+IMPORT {LIBRARY GETDIR 1.0.0/1.12/General}
+IMPORT {LIBRARY GETDIR 1.0.0/1.12/General}
+
+IMPORT {C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\CCU - Command Combiner Unlimited\test2\asdf.ccu}
+IMPORT {C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\CCU - Command Combiner Unlimited\test2\asdf.ccu}
+//>
+
+//<Options
+OPTIONS:
+	parseOption true
+	commandOption false
+	combinerOption false
+	filePathFuncOption C:\Users\Austin\Documents\Austin\powder game code\eGO\Server Stuff\1.12.1\world\data\functions\test
+	deleteFunctionFolderOption true
+//>
+
+
+//<Groups
+MFUNC {Grp_MainStart}:
+	SPLIT {MAX 4 Arr_Temp This is a random string} { } {i}
+	say Arr_Temp[S]
+	SPLIT {MAX 4 GLOBAL Array_Name This is a random string} { } {d}
+	say Array_Name[S] /// will return with 'This;is;a;ran;om string'
+//>

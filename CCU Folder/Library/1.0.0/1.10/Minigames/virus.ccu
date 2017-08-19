@@ -1,4 +1,5 @@
 //(Virus)
+CCU.isImport(Minigames/virus)
 
 //== General Virus Import (EGO)
 	In general, Virus is pretty much death tag. If the virus tags you, you die and turn into the virus until the time runs out or everyone is infected.

@@ -1,5 +1,5 @@
-///	Universal import definitions / functions are shown here
-///	General/utils.ccu
+//(General Utils)
+CCU.isImport(General/utils)
 
 //<Regular defines
 //=
@@ -39,6 +39,10 @@ DEF CCU_Deactivate setblock |0| $BlockOption$
 ///	CCU_LogBase(base;number)
 DEF CCU_LogBase LOG(DEC(|0|) / DEC(|1|))
 
+///	Gets the largest exponent where a binary search can successfully go past the number
+FUNC {GLOBAL CCU.getBinaryExponent}:
+	CCU.roundDown(CALC(LOG(DEC(|0|)) / LOG(2.0));`$CCUCalcBinaryExponent$`)
+
 DEF Snd_Pling minecraft:block.note.pling
 DEF Snd_XP minecraft:entity.experience_orb.pickup
 DEF Snd_Item minecraft:entity.item.pickup
@@ -48,8 +52,6 @@ DEF Snd_Level minecraft:entity.player.levelup
 DEF Snd_Explode minecraft:entity.generic.explode
 DEF Snd_Hat minecraft:block.note.hat
 DEF Snd_Primed minecraft:entity.tnt.primed
-
-FUNC {GLOBAL CCU.isImport}:
 //>
 
 //<Number Adding
@@ -62,12 +64,13 @@ ARRAY {ACTIVATE CCU.iterateNumbers() ARGS}:
 	20
 =//
 
-FUNC {GLOBAL CCU.iterateNumbers}:
+FUNC {GLOBAL CCU.setConstants}:
 	IF {|0| = ``}:
 		DEF GLOBAL $CCUNumberObj$ Number
 	ELSE:
 		DEF GLOBAL $CCUNumberObj$ |0;1|
-	scoreboard objectives add $CCUNumberObj$ dummy
+	IF {|1| != false}:
+		scoreboard objectives add $CCUNumberObj$ dummy
 	LOOP {ARGS[S]}:
 		|0| $CCUNumberObj$ = |0|
 	

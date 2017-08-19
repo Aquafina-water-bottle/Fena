@@ -1,5 +1,5 @@
 //(Races)
-///	C:\Users\Austin\Documents\Austin\powder game code\eGO\Events & Commands\CCU - Command Combiner Unlimited\Library\Minigames\Races.ccu
+CCU.isImport(Minigames/races)
 
 //== General Races Import (EGO)
 	Races, in this context are parkour courses that can have 3 different types:

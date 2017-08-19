@@ -1,7 +1,7 @@
+//(Random Number Generator)
+CCU.isImport(Math/random)
 
 //<Randomizers
-CCU.isImport()
-
 //= Various examples of score randomizers
 Type 1: I have no idea what this is, but it looks like an example of a linear congruential generator except it isnt? idk
 	
@@ -42,7 +42,17 @@ FUNC {GLOBAL CCU.random.init}:
 	UNASSIGN {FUNC ARGS}
 	
 	IF {|0| = 1}:
-		RandCalc |1| = 1000110001
+	///	Randomizes the starting RandCalc number
+		summon AreaEffectCloud ~ ~ ~ {Tags:["CCURandTemp"],Duration:5}
+		summon AreaEffectCloud ~ ~ ~ {Tags:["CCURandTemp"],Duration:5}
+		@e[type=AreaEffectCloud,CCURandTemp] |1| + 100 /// to prevent it from going to 0
+		
+		LOOP {1 (2 ^ 28) * 2}:
+			@r[type=AreaEffectCloud,CCURandTemp] |1;1| + |0|
+		
+		ScOP RandCalc |1| = @r[type=AreaEffectCloud,CCURandTemp] |1|
+		kill @e[type=AreaEffectCloud,CCURandTemp]
+		
 		Seed |1| = 1000110001
 		IF {$CCUDynamicMin$ = false}:
 			IF {$CCUDynamicMax$ = false}:
@@ -80,10 +90,10 @@ FUNC {GLOBAL CCU.random.main}:
 				
 		ELIF {$CCUDynamicMax$ = true}:
 			ScOP Mod |1| = Max |1|
-			IF {$CCURandMin$ + 1 > 0}:
-				Mod |1| - CALC($CCURandMin$ + 1)
-			ELIF {$CCURandMin$ + 1 < 0}:
-				Mod |1| + ABS($CCURandMin$ + 1)
+			IF {$CCURandMin$ > 1}:
+				Mod |1| - CALC($CCURandMin$ - 1)
+			ELIF {$CCURandMin$ < 1}:
+				Mod |1| + CALC(($CCURandMin$ * -1) + 1)
 			
 		ELIF {$CCUSetMod$ = true}:
 			Mod |1| = CALC($CCURandMin$ - $CCURandMax$ + 1)

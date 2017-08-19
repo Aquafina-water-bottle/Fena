@@ -1,5 +1,5 @@
 IMPORT {LIBRARY GETDIR 1.12/General}
-IMPORT {LIBRARY 1.12/Coordinates/coordinates.ccu}
+IMPORT {LIBRARY 1.12/Coordinates/getCoords.ccu}
 
 OPTIONS:
 	parseOption true
@@ -8,17 +8,5 @@ OPTIONS:
 	filePathFuncOption C:\Users\Austin\Documents\Austin\powder game code\eGO\Server Stuff\1.12.1\world\data\functions\french_man
 	deleteFunctionFolderOption true
 		
-FUNC {ACTIVATE CCU.coordinatesToScoreboard() ARGS}:
-	DEF $CCUObjX$ CDpx
-	DEF $CCUObjY$ CDpy
-	DEF $CCUObjZ$ CDpz
-	DEF $CCUObjTPX$ CDclx
-	DEF $CCUObjTPY$ CDcly
-	DEF $CCUObjTPZ$ CDclz
-	DEF $CCUObjStats$ CDst
-	DEF $CCUFolderName$ coordinates
-	DEF $CCUNumber$ Number
-
-	ARRAY {Arr_CCUCloudTags}:
-		GetCoordsCloud
+FUNC {ACTIVATE CCU.coordinates.getCoords() ARGS}:
 	

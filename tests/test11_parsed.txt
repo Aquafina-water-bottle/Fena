@@ -1,82 +1,149 @@
 INITIALIZE
-	fill 233 7 174 250 17 176 air 0
+	fill 233 7 174 250 21 176 air 0
 
 GROUP | Grp_MainStart | PULSE		[234 8 175 | stonebrick 0]
 	setblock 234 8 175 stonebrick 0
-	scoreboard objectives add LocN dummy Location Number ID
-	scoreboard objectives add Loc dummy Location Fill
-	scoreboard objectives add TeleNum dummy Location Teleport Number
-	scoreboard objectives add Random dummy Location Rand
-	summon ArmorStand 233 4 181 {Tags:["LocationEntity","LocationSummon"],Invulnerable:1,PersistenceRequired:1,Marker:1,NoGravity:1}
-	execute @a ~ ~ ~ stats entity @a[c=1] set AffectedBlocks @a[c=1] Loc
-	scoreboard players set @e[type=ArmorStand,tag=LocationSummon] Loc 0
-	execute @e[type=ArmorStand,tag=LocationSummon] ~ ~ ~ stats entity @e[c=1,type=ArmorStand,tag=LocationSummon] set AffectedBlocks @e[c=1,type=ArmorStand,tag=LocationSummon] Loc
-	setblock 234 12 175 redstone_block 0
-	blockdata 236 10 175 {auto:1b}
-	setblock 234 10 175 redstone_block 0
+	scoreboard objectives add CCULCnu dummy Location Number
+	scoreboard objectives add CCULCnt dummy Location Number Total
+	scoreboard objectives add CCULCab dummy Location Affected Blocks
+	scoreboard objectives add CCULCtn dummy Location Teleport Number
+	scoreboard objectives add CCULCrd dummy Location Random
+	scoreboard objectives add CCULCcl dummy Location Calc
+	scoreboard objectives add CCULCmx dummy Location Max
+	scoreboard objectives add CCULCcn dummy Location Choose Num
+	scoreboard objectives add Number dummy
+	scoreboard players set -1 Number -1
+	summon ArmorStand 233 4 181 {Tags:["LocationEntity","CCULocStand"],Invulnerable:1,PersistenceRequired:1,Marker:1,NoGravity:1}
+	execute @a ~ ~ ~ stats entity @a[c=1] set AffectedBlocks @a[c=1] CCULCab
+	scoreboard players set @e[type=ArmorStand,tag=CCULocStand] CCULCab 0
+	scoreboard players set @e[type=ArmorStand,tag=CCULocStand] CCULCtn 0
+	execute @e[type=ArmorStand,tag=CCULocStand] ~ ~ ~ stats entity @e[c=1,type=ArmorStand,tag=CCULocStand] set AffectedBlocks @e[c=1,type=ArmorStand,tag=CCULocStand] CCULCab
+	summon AreaEffectCloud ~ ~ ~ {Tags:["CCURandTemp"],Duration:5}
+	summon AreaEffectCloud ~ ~ ~ {Tags:["CCURandTemp"],Duration:5}
+	scoreboard players add @e[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 100
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 1
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 2
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 4
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 8
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 16
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 32
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 64
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 128
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 256
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 512
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 1024
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 2048
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 4096
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 8192
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 16384
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 32768
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 65536
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 131072
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 262144
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 524288
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 1048576
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 2097152
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 4194304
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 8388608
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 16777216
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 33554432
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 67108864
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 134217728
+	scoreboard players add @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd 268435456
+	scoreboard players operation RandCalc CCULCrd = @r[type=AreaEffectCloud,tag=CCURandTemp] CCULCrd
+	minecraft:kill @e[type=AreaEffectCloud,tag=CCURandTemp]
+	scoreboard players set Seed CCULCrd 1000110001
+	scoreboard players set Max CCULCrd 5
+	scoreboard objectives setdisplay sidebar CCULCrd
+	setblock 234 15 175 redstone_block 0
+	blockdata 236 13 175 {auto:1b}
+	setblock 234 13 175 redstone_block 0
 
-GROUP | Grp_SummonCounterTFClock | CLOCK		[234 10 175 | stonebrick 0]
-	testfor @e[type=ArmorStand,tag=LocationSummon]
+GROUP | Grp_SummonCounterTFClock | CLOCK		[234 13 175 | stonebrick 0]
+	testfor @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn_min=0]
 	setblock ~ ~ ~ repeating_command_block 13 replace {TrackOutput:0b,auto:1b}
-	execute @e[type=ArmorStand,tag=LocationSummon] ~ ~ ~ summon AreaEffectCloud ~ ~ ~ {Tags:["LocationEntity","LocationCounter"],Duration:2147483647}
-	scoreboard players add @e[type=AreaEffectCloud,tag=LocationCounter] LocN 0
-	execute @e[type=ArmorStand,tag=LocationSummon] ~ ~ ~ fill ~ ~ ~ ~25 ~ ~ stone 4 replace stone 2
-	execute @e[type=ArmorStand,tag=LocationSummon] ~ ~ ~ fill ~ ~ ~ ~25 ~ ~ stone 2 replace stone 4
-	scoreboard players operation @e[type=ArmorStand,tag=LocationSummon] LocN += @e[type=ArmorStand,tag=LocationSummon] Loc
-	scoreboard players operation @e[type=AreaEffectCloud,tag=LocationCounter,score_LocN=0,score_LocN_min=0] LocN = @e[type=ArmorStand,tag=LocationSummon] LocN
-	scoreboard players add @e[type=ArmorStand,tag=LocationSummon] TeleNum 1
-	minecraft:tp @e[type=ArmorStand,tag=LocationSummon] ~ ~ ~1
-	minecraft:kill @e[type=ArmorStand,tag=LocationSummon,score_TeleNum=8,score_TeleNum_min=8]
+	execute @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn_min=0] ~ ~ ~ summon AreaEffectCloud ~ ~ ~ {Tags:["LocationEntity","CCULocCloud"],Duration:2147483647}
+	scoreboard players add @e[type=AreaEffectCloud,tag=CCULocCloud] CCULCnt 0
+	execute @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn_min=0] ~ ~ ~ fill ~ ~ ~ ~25 ~ ~ stone 1 replace stone 2
+	execute @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn_min=0,score_CCULCab=0,score_CCULCab_min=0] ~ ~ ~ minecraft:kill @e[type=AreaEffectCloud,tag=CCULocCloud,score_CCULCnt=0,score_CCULCnt_min=0]
+	scoreboard players operation @e[type=AreaEffectCloud,tag=CCULocCloud,score_CCULCnt=0,score_CCULCnt_min=0] CCULCnu += @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn_min=0] CCULCab
+	scoreboard players operation @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn_min=0] CCULCnt += @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn_min=0] CCULCab
+	scoreboard players operation @e[type=AreaEffectCloud,tag=CCULocCloud,score_CCULCnt=0,score_CCULCnt_min=0] CCULCnt = @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn_min=0] CCULCnt
+	scoreboard players add @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn_min=0] CCULCtn 1
+	minecraft:tp @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn_min=0] ~ ~ ~1
+	scoreboard players operation Max CCULCrd = @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn=37,score_CCULCtn_min=37] CCULCnt
+	execute @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn=37,score_CCULCtn_min=37] ~ ~ ~ fill 233 4 181 258 4 217 stone 2 replace stone 1
+	scoreboard players set @e[type=ArmorStand,tag=CCULocStand,score_CCULCtn=37,score_CCULCtn_min=37] CCULCtn -1
 
-GROUP | Grp_MainClock | CLOCK		[234 12 175 | stonebrick 0]
+GROUP | Grp_MainClock | CLOCK		[234 15 175 | stonebrick 0]
+	testfor @a[tag=Loc]
+	setblock ~ ~ ~ repeating_command_block 13 replace {TrackOutput:0b,auto:1b}
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation RandCalc CCULCrd *= Seed CCULCrd
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation RandCalc CCULCrd %= Seed CCULCrd
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[tag=Loc] CCULCrd = Seed CCULCrd
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[tag=Loc] CCULCrd %= RandCalc CCULCrd
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation Mod CCULCrd = Max CCULCrd
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[tag=Loc] CCULCrd %= Mod CCULCrd
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players add @a[tag=Loc] CCULCrd 1
 	minecraft:tp @a[tag=Loc] 233 5 181
-	scoreboard players set @a[tag=Loc] Loc 0
-	scoreboard players set @a[tag=Loc] LocN 0
-	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~15 ~-1 ~ stone 4 replace stone 2
-	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~15 ~-1 ~ stone 2 replace stone 4
-	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] LocN = @a[c=1] Loc
-	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] Loc -= @a[c=1] Random
-	minecraft:tp @a[tag=Loc,score_Loc=-1] ~16 ~ ~
-	execute @a[tag=Loc,score_Loc=-1] ~ ~ ~ scoreboard players operation @a[c=1] Random -= @a[c=1] LocN
-	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~7 ~-1 ~ stone 4 replace stone 2
-	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~7 ~-1 ~ stone 2 replace stone 4
-	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] LocN = @a[c=1] Loc
-	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] Loc -= @a[c=1] Random
-	minecraft:tp @a[tag=Loc,score_Loc=-1] ~8 ~ ~
-	execute @a[tag=Loc,score_Loc=-1] ~ ~ ~ scoreboard players operation @a[c=1] Random -= @a[c=1] LocN
-	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~3 ~-1 ~ stone 4 replace stone 2
-	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~3 ~-1 ~ stone 2 replace stone 4
-	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] LocN = @a[c=1] Loc
-	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] Loc -= @a[c=1] Random
-	minecraft:tp @a[tag=Loc,score_Loc=-1] ~4 ~ ~
-	execute @a[tag=Loc,score_Loc=-1] ~ ~ ~ scoreboard players operation @a[c=1] Random -= @a[c=1] LocN
-	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~1 ~-1 ~ stone 4 replace stone 2
-	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~1 ~-1 ~ stone 2 replace stone 4
-	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] LocN = @a[c=1] Loc
-	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] Loc -= @a[c=1] Random
-	minecraft:tp @a[tag=Loc,score_Loc=-1] ~2 ~ ~
-	execute @a[tag=Loc,score_Loc=-1] ~ ~ ~ scoreboard players operation @a[c=1] Random -= @a[c=1] LocN
-	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~0 ~-1 ~ stone 4 replace stone 2
-	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~0 ~-1 ~ stone 2 replace stone 4
-	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] Loc -= @a[c=1] Random
-	minecraft:tp @a[tag=Loc,score_Loc=-1] ~1 ~ ~
-	scoreboard players set @a[tag=Loc] Random 0
+	execute @a[tag=Loc] ~ ~ ~ execute @e[type=AreaEffectCloud,tag=CCULocCloud] ~ ~ ~ scoreboard players operation @e[c=1,r=1,type=AreaEffectCloud,tag=CCULocCloud] CCULCcl = @e[c=1,r=1,type=AreaEffectCloud,tag=CCULocCloud] CCULCnt
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @e[type=AreaEffectCloud,tag=CCULocCloud] CCULCcl -= @a[tag=Loc] CCULCrd
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @e[type=AreaEffectCloud,tag=CCULocCloud] CCULCcl *= -1 Number
+	execute @a[tag=Loc] ~ ~ ~ minecraft:tp @a[tag=Loc] @e[c=1,type=AreaEffectCloud,tag=CCULocCloud,score_CCULCcl=0]
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[tag=Loc] CCULCcn = @e[c=1,r=1,type=AreaEffectCloud,tag=CCULocCloud,score_CCULCcl=0] CCULCcl
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[tag=Loc] CCULCcn += @e[c=1,r=1,type=AreaEffectCloud,tag=CCULocCloud,score_CCULCcl=0] CCULCnu
+	execute @a[tag=Loc] ~ ~ ~ minecraft:tp @a[tag=Loc] ~ ~1 ~
+	scoreboard players set @a[tag=Loc] CCULCab 0
+	scoreboard players set @a[tag=Loc] CCULCcl 0
+	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~15 ~-1 ~ stone 1 replace stone 2
+	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~15 ~-1 ~ stone 2 replace stone 1
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] CCULCcl = @a[c=1] CCULCab
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] CCULCab -= @a[c=1] CCULCcn
+	minecraft:tp @a[tag=Loc,score_CCULCab=-1] ~16 ~ ~
+	execute @a[tag=Loc,score_CCULCab=-1] ~ ~ ~ scoreboard players operation @a[c=1] CCULCcn -= @a[c=1] CCULCcl
+	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~7 ~-1 ~ stone 1 replace stone 2
+	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~7 ~-1 ~ stone 2 replace stone 1
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] CCULCcl = @a[c=1] CCULCab
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] CCULCab -= @a[c=1] CCULCcn
+	minecraft:tp @a[tag=Loc,score_CCULCab=-1] ~8 ~ ~
+	execute @a[tag=Loc,score_CCULCab=-1] ~ ~ ~ scoreboard players operation @a[c=1] CCULCcn -= @a[c=1] CCULCcl
+	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~3 ~-1 ~ stone 1 replace stone 2
+	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~3 ~-1 ~ stone 2 replace stone 1
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] CCULCcl = @a[c=1] CCULCab
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] CCULCab -= @a[c=1] CCULCcn
+	minecraft:tp @a[tag=Loc,score_CCULCab=-1] ~4 ~ ~
+	execute @a[tag=Loc,score_CCULCab=-1] ~ ~ ~ scoreboard players operation @a[c=1] CCULCcn -= @a[c=1] CCULCcl
+	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~1 ~-1 ~ stone 1 replace stone 2
+	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~1 ~-1 ~ stone 2 replace stone 1
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] CCULCcl = @a[c=1] CCULCab
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] CCULCab -= @a[c=1] CCULCcn
+	minecraft:tp @a[tag=Loc,score_CCULCab=-1] ~2 ~ ~
+	execute @a[tag=Loc,score_CCULCab=-1] ~ ~ ~ scoreboard players operation @a[c=1] CCULCcn -= @a[c=1] CCULCcl
+	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~0 ~-1 ~ stone 1 replace stone 2
+	execute @a[tag=Loc] ~ ~ ~ fill ~ ~-1 ~ ~0 ~-1 ~ stone 2 replace stone 1
+	execute @a[tag=Loc] ~ ~ ~ scoreboard players operation @a[c=1] CCULCab -= @a[c=1] CCULCcn
+	minecraft:tp @a[tag=Loc,score_CCULCab=-1] ~1 ~ ~
+	scoreboard players set @a[tag=Loc] CCULCcn 0
 	scoreboard players tag @a[tag=Loc] remove Loc
 
-GROUP | Grp_MainEnd | PULSE		[234 16 175 | stonebrick 0]
-	setblock 234 16 175 stonebrick 0
-	scoreboard objectives remove LocN
-	scoreboard objectives remove Loc
-	scoreboard objectives remove TeleNum
-	scoreboard objectives remove Random
+GROUP | Grp_MainEnd | PULSE		[234 20 175 | stonebrick 0]
+	setblock 234 20 175 stonebrick 0
+	scoreboard objectives remove CCULCnu
+	scoreboard objectives remove CCULCnt
+	scoreboard objectives remove CCULCab
+	scoreboard objectives remove CCULCtn
+	scoreboard objectives remove CCULCrd
+	scoreboard objectives remove CCULCcl
+	scoreboard objectives remove CCULCmx
+	scoreboard objectives remove CCULCcn
 	minecraft:kill @e[tag=LocationEntity]
-	setblock 234 12 175 stonebrick 0
-	blockdata 236 10 175 {auto:0b}
-	setblock 234 10 175 stonebrick 0
+	setblock 234 15 175 stonebrick 0
+	blockdata 236 13 175 {auto:0b}
+	setblock 234 13 175 stonebrick 0
 
 FINALIZE
 	fill 233 6 174 236 4 177 air 0
-	setblock 234 6 175 structure_block 0 replace {name:"CMDSave_Randomized_Location",mode:"SAVE",posX:0,posY:2,posZ:0,sizeX:16,sizeY:8,sizeZ:3}
+	setblock 234 6 175 structure_block 0 replace {name:"CMDSave_Randomized_Location",mode:"SAVE",posX:0,posY:2,posZ:0,sizeX:16,sizeY:16,sizeZ:3}
 	setblock 234 4 175 structure_block 0 replace {name:"CMDSave_Randomized_Location",mode:"LOAD",posX:0,posY:4,posZ:0}
 	setblock 233 6 175 wooden_button 2
 	setblock 233 4 175 wooden_button 2
@@ -84,7 +151,7 @@ FINALIZE
 	setblock 234 4 176 redstone_lamp 0
 	setblock 235 6 175 command_block 5 replace {TrackOutput:0b,Command:"setblock ~ ~ ~1 redstone_block 0"}
 	setblock 234 8 175 stonebrick 0
-	setblock 234 10 175 stonebrick 0
-	setblock 234 12 175 stonebrick 0
-	setblock 234 16 175 stonebrick 0
+	setblock 234 13 175 stonebrick 0
+	setblock 234 15 175 stonebrick 0
+	setblock 234 20 175 stonebrick 0
 

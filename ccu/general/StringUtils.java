@@ -1,5 +1,8 @@
 package ccu.general;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import ccu.command.MathParser;
 import ccu.command.ServerOverride;
 import ccu.command.Short_Execute;
@@ -22,6 +25,17 @@ public class StringUtils {
 		returnString = getString.substring(0, StringUtils.countChars(getString, "\t"));
 
 		return returnString;
+	}
+	
+
+	public static Integer indexOfRegex(String text, String regex) {
+	    Pattern pattern = Pattern.compile(regex);
+	    Matcher matcher = pattern.matcher(text);
+	    // Check all occurrences
+	    while (matcher.find()) {
+	        return matcher.start();
+	    }
+	    return null;
 	}
 
 	public static String generalParse(String getString) {

@@ -36,7 +36,7 @@ public class Main {
 		long startTime = System.nanoTime();
 
 		// checks version
-		String currentVersion = "1.0.7";
+		String currentVersion = "1.1.0";
 		System.out.println("Current version: " + currentVersion);
 
 		try {
@@ -59,9 +59,14 @@ public class Main {
 			String[] currentVersionCalc = currentVersion.split("\\.");
 			String[] getVersionCalc = getVersion.split("\\.");
 
-			if (Integer.parseInt(currentVersionCalc[0]) < Integer.parseInt(getVersionCalc[0])
-					|| Integer.parseInt(currentVersionCalc[1]) < Integer.parseInt(getVersionCalc[1])
-					|| Integer.parseInt(currentVersionCalc[2]) < Integer.parseInt(getVersionCalc[2])) {
+			boolean outdatedVersion = true;
+			if (Integer.parseInt(currentVersionCalc[0]) > Integer.parseInt(getVersionCalc[0])
+					|| Integer.parseInt(currentVersionCalc[1]) > Integer.parseInt(getVersionCalc[1])
+					|| Integer.parseInt(currentVersionCalc[2]) > Integer.parseInt(getVersionCalc[2])) {
+				outdatedVersion = false;
+			}
+
+			if (outdatedVersion) {
 				System.out.println("An update is avaliable for CCU (" + getVersion
 						+ ") at 'https://github.com/Aquafina-water-bottle/Command-Compiler-Unlimited/releases'");
 				TimeUnit.SECONDS.sleep(1);

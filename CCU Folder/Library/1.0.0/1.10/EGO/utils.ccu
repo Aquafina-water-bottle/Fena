@@ -1,6 +1,5 @@
-
-///	eGO related definitions / functions are shown here
-///	General/eGO.ccu
+//(eGO)
+CCU.isImport(EGO/utils)
 
 //<Defines
 DEF CCU_ExecuteSpawnStand @e[type=ArmorStand,SpawnStand,SPgam=0]

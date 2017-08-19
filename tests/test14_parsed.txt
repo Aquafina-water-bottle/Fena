@@ -1,0 +1,3 @@
+MFUNC | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/test/Grp_MainStart.mcfunction
+	say Th;s;;s;a random string
+	say This;is;a;ran;om string

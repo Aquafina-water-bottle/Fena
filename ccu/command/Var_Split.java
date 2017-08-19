@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import ccu.general.ArgUtils;
+import ccu.general.NumberUtils;
 import ccu.general.StringUtils;
 
 public class Var_Split {
@@ -35,6 +36,8 @@ public class Var_Split {
 		String getArrayName = null;
 		String getString = null;
 
+		Integer splitNum = null;
+
 		ArrayList<String> calcSplit = new ArrayList<String>();
 
 		String statementEncase = this.fullLineGet.replaceFirst("SPLIT", "").replaceAll("^\\s+", "");
@@ -44,7 +47,7 @@ public class Var_Split {
 
 			String stringCalc = null;
 			int tempCount = 0;
-			
+
 			if (StringUtils.countChars(statementEncase, "{") == StringUtils.countChars(statementEncase, "}")
 					&& StringUtils.countChars(statementEncase, "{") > 0) {
 
@@ -111,6 +114,25 @@ public class Var_Split {
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					break;
 
+				case "MAX":
+					// removes MAX
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+
+					if (statementArgs.contains(" ") == false) {
+						System.out.println("ERROR: Invalid arguments for 'MAX' in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+
+					String splitNumTest = statementArgs.substring(0, statementArgs.indexOf(" "));
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					if (NumberUtils.isInt(splitNumTest)) {
+						splitNum = Integer.parseInt(splitNumTest);
+					} else {
+						System.out.println("ERROR: 'MAX' in line '" + this.fullLineGet + "' must be proceeded with an integer");
+						System.exit(0);
+					}
+					break;
+
 				}
 			}
 
@@ -153,6 +175,96 @@ public class Var_Split {
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
 					break;
 
+				case "MAX":
+					// removes MAX
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+
+					if (statementArgs.contains(" ") == false) {
+						System.out.println("ERROR: Invalid arguments for 'MAX' in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+
+					if (splitNum == null) {
+						String splitNumTest = statementArgs.substring(0, statementArgs.indexOf(" "));
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						if (NumberUtils.isInt(splitNumTest)) {
+							splitNum = Integer.parseInt(splitNumTest);
+						} else {
+							System.out.println("ERROR: 'MAX' in line '" + this.fullLineGet + "' must be proceeded with an integer");
+							System.exit(0);
+						}
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+				}
+			}
+
+			// Gets third parameters
+			if (statementArgs.contains(" ")) {
+				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
+				case "GLOBAL":
+					if (isGlobal == null) {
+						isGlobal = true;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes GLOBAL
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "COORDS":
+					if (arrayType == null) {
+						arrayType = 4;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes COORDS
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "TELE":
+					if (arrayType == null) {
+						arrayType = 5;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes TELE
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "MAX":
+					// removes MAX
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+
+					if (statementArgs.contains(" ") == false) {
+						System.out.println("ERROR: Invalid arguments for 'MAX' in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+
+					if (splitNum == null) {
+						String splitNumTest = statementArgs.substring(0, statementArgs.indexOf(" "));
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						if (NumberUtils.isInt(splitNumTest)) {
+							splitNum = Integer.parseInt(splitNumTest);
+						} else {
+							System.out.println("ERROR: 'MAX' in line '" + this.fullLineGet + "' must be proceeded with an integer");
+							System.exit(0);
+						}
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
 				}
 			}
 
@@ -200,7 +312,7 @@ public class Var_Split {
 			while (arrayIndex < Var_Array.singleArrayNameSave.size()) {
 				if (Var_Array.singleArrayNameSave.get(arrayIndex)[2].equals(getArrayName)
 						&& Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1]) == tabNumCalc) {
-					
+
 					Var_Array.singleArraySave.remove(arrayIndex);
 					Var_Array.singleArrayNameSave.remove(arrayIndex);
 				} else {
@@ -211,24 +323,84 @@ public class Var_Split {
 			// does the splitting here lol
 			calcSplit.add(getString);
 
-			for (int i = 0; i < arraySplit.size(); i++) {
+			Integer findMinIndex = null;
+			Integer splitLength = null;
+			
+			boolean foundSplit = false;
+			int countSplitNum = 0;
+			ArrayList<Integer> calcIndexArray = new ArrayList<Integer>();
+			ArrayList<String> tempArray = new ArrayList<String>();
+
+			for (int j = 0; j < calcSplit.size(); j++) {
+				if (foundSplit) {
+					j = 0;
+					foundSplit = false;
+				}
+
+				calcIndexArray.clear();
+				for (int i = 0; i < arraySplit.size(); i++) {
+					calcIndexArray.add(StringUtils.indexOfRegex(calcSplit.get(j), "(?<!`)" + Pattern.quote(arraySplit.get(i))));
+				}
+
+				findMinIndex = null;
+				for (int i = 0; i < calcIndexArray.size(); i++) {
+					if (calcIndexArray.get(i) == null) {
+						continue;
+
+					} else {
+						if (findMinIndex == null) {
+							findMinIndex = calcIndexArray.get(i);
+						} else {
+							findMinIndex = Math.min(findMinIndex, calcIndexArray.get(i));
+						}
+					}
+				}
+
+				if (findMinIndex != null) {
+					if (splitNum != null && countSplitNum >= splitNum) {
+						break;
+					}
+					
+					for (int i = 0; i < calcIndexArray.size(); i++) {
+						if (calcIndexArray.get(i) == findMinIndex) {
+							splitLength = arraySplit.get(i).length();
+							break;
+						}
+					}
+					
+					tempArray.clear();
+					for (int i = 0; i < calcSplit.size(); i++) {
+						if (j == i) {
+							tempArray.add(calcSplit.get(j).substring(0, findMinIndex));
+							tempArray.add(calcSplit.get(j).substring(findMinIndex + splitLength));
+						} else {
+							tempArray.add(calcSplit.get(i));
+						}
+					}
+
+					calcSplit.clear();
+					calcSplit.addAll(tempArray);
+					foundSplit = true;
+					countSplitNum++;
+				}
+			}
+
+			/*
 				ArrayList<String> tempSplit = new ArrayList<String>();
 				String[] tempSplitCalc = null;
-
+			
 				for (int j = 0; j < calcSplit.size(); j++) {
 					tempSplitCalc = calcSplit.get(j).split("(?<!`)" + Pattern.quote(arraySplit.get(i)));
-
+			
 					for (String splitString : tempSplitCalc) {
 						tempSplit.add(splitString);
 					}
 				}
-
+			
 				// re-adds after split
 				calcSplit.clear();
-				for (int j = 0; j < tempSplit.size(); j++) {
-					calcSplit.add(tempSplit.get(j));
-				}
-			}
+				calcSplit.addAll(tempSplit);
+			}*/
 
 			// check coords
 			for (int i = 0; i < calcSplit.size(); i++) {
@@ -242,7 +414,7 @@ public class Var_Split {
 			tempArraySave[0] = arrayType + "";
 			tempArraySave[1] = tabNumCalc + "";
 			tempArraySave[2] = getArrayName; // name
-			
+
 			Var_Array.singleArrayNameSave.add(tempArraySave);
 
 			for (int i = 0; i < calcSplit.size(); i++) {

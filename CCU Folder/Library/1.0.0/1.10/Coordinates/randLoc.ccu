@@ -1,11 +1,14 @@
 //(Name)
+CCU.isImport(Coordinates/randLoc)
 
-//<General Definitions
-DEF $CMDName$ Randomized_Location
-DEF $CMDSizeX$ 16
-DEF $CMDSizeY$ 16
-DEF $CMDSizeZ$ 3
+//==
+Ideas from:
+	Shane Stone for providing the basis on how everything is done
+	Shane Stone's Youtube Channel: https://www.youtube.com/user/shanewolf38/featured
+	Video explanation: https://www.youtube.com/watch?v=9jZpheCdkqM
+=//
 
+//=
 DEF $StyleDirection$ +X
 DEF COORDS $CoordsOption$ 233 7 174
 DEF $BlockOption$ stonebrick 0
@@ -13,17 +16,6 @@ DEF $BlockOption$ stonebrick 0
 IMPORT {LIBRARY GETDIR 1.10/General}
 IMPORT {LIBRARY 1.10/Math/random.ccu}
 
-DEF COORDS $Corner$ 233 5 181
-
-DEF $RowNumber$ 37
-DEF $ColumnNumber$ 26
-
-DEF $EntityType$ AreaEffectCloud
-
-DEF COORDS $FillRegion$ 233 4 181 258 4 217
-//>
-
-//<Options
 OPTIONS:
 	blockOption $BlockOption$
 	coordsOption $CoordsOption$
@@ -31,44 +23,77 @@ OPTIONS:
 	parseOption true
 	commandOption true
 	combinerOption true
-///	filePathFuncOption 
 	parseChangesOption false
-//>
+		
+FUNC {ACTIVATE CCU.coordinates.randLoc() ARGS}:
+	DEF COORDS $Corner$ 233 5 181
+	DEF COORDS $FillRegion$ 233 4 181 258 4 217
+	DEF $RowNumber$ 37
+	DEF $ColumnNumber$ 26
 
+	DEF $EntityType$ AreaEffectCloud /// change to ArmorStand for debugging purposes
+	
+	DEF $CCUrandLocObjNum$ CCULCnu
+	DEF $CCUrandLocObjTot$ CCULCnt
+	DEF $CCUrandLocObjAffectedBlocks$ CCULCab
+	DEF $CCUrandLocObjTeleNum$ CCULCtn
+	DEF $CCUrandLocObjRand$ CCULCrd
+	DEF $CCUrandLocObjCalc$ CCULCcl
+	DEF $CCUrandLocObjChooseNum$ CCULCcn
+	DEF $CCUrandLocObjConst$ Number
+	DEF $CCUrandLocSelector$ @a[Loc]
+	
+	ARRAY GLOBAL {Arr_CCUrandLocCloudTags}:
+		CCURandLocCloud
+		
+	ARRAY GLOBAL {Arr_CCUrandLocStandTags}:
+		CCURandLocStand
+=//
 
 //<Initialize
 FUNC {CCU.coordinates.randLocInitialize}:
 	ARGS()
 	UNASSIGN {FUNC ARGS}
 	
-	IF {$CCUObjX$ = `$CCUObjX$`}:
-		EXIT $CCUObjX$ must be defined when using CCU.coordinates.randLocInitialize
+	IF {$CCUObjNum$ = `$CCUObjX$`}:
+		PRINT $CCUObjX$ under CCU.coordinates.randLocInitialize will default to CCUCDpx
+		DEF GLOBAL $CCUObjX$ CCUCDpx
 	
 	IF {$CCUObjY$ = `$CCUObjY$`}:
-		EXIT $CCUObjY$ must be defined when using CCU.coordinates.randLocInitialize
+		PRINT $CCUObjY$ under CCU.coordinates.randLocInitialize will default to CCUCDpy
+		DEF GLOBAL $CCUObjY$ CCUCDpy
 	
 	IF {$CCUObjZ$ = `$CCUObjZ$`}:
-		EXIT $CCUObjZ$ must be defined when using CCU.coordinates.randLocInitialize
+		PRINT $CCUObjZ$ under CCU.coordinates.randLocInitialize will default to CCUCDpz
+		DEF GLOBAL $CCUObjZ$ CCUCDpz
 	
 	IF {$CCUObjTPX$ = `$CCUObjTPX$`}:
-		EXIT $CCUObjTPX$ must be defined when using CCU.coordinates.randLocInitialize
+		PRINT $CCUObjTPX$ under CCU.coordinates.randLocInitialize will default to CCUCDtx
+		DEF GLOBAL $CCUObjTPX$ CCUCDtx
 	
 	IF {$CCUObjTPY$ = `$CCUObjTPY$`}:
-		EXIT $CCUObjTPY$ must be defined when using CCU.coordinates.randLocInitialize
+		PRINT $CCUObjTPY$ under CCU.coordinates.randLocInitialize will default to CCUCDty
+		DEF GLOBAL $CCUObjTPY$ CCUCDty
 	
 	IF {$CCUObjTPZ$ = `$CCUObjTPZ$`}:
-		EXIT $CCUObjTPZ$ must be defined when using CCU.coordinates.randLocInitialize
+		PRINT $CCUObjTPZ$ under CCU.coordinates.randLocInitialize will default to CCUCDtz
+		DEF GLOBAL $CCUObjTPZ$ CCUCDtz
 	
 	IF {$CCUObjStats$ = `$CCUObjStats$`}:
-		EXIT $CCUObjStats$ must be defined when using CCU.coordinates.randLocInitialize
-
+		PRINT $CCUObjStats$ under CCU.coordinates.randLocInitialize will default to CCUCDst
+		DEF GLOBAL $CCUObjStats$ CCUCDst
+	
 	IF {Arr_CCUCloudTags[S] = `Arr_CCUCloudTags[S]`}:
-		EXIT Arr_CCUCloudTags must be defined when using CCU.coordinates.randLocInitialize
+		PRINT Arr_CCUCloudTags under CCU.coordinates.randLocInitialize will default to CCUGetCoordsCloud
+		ARRAY {GLOBAL Arr_CCUCloudTags}:
+			CCUGetCoordsCloud
 	
 	IF {$CCUFolderName$ = `$CCUFolderName$`}:
+		PRINT $CCUFolderName$ under CCU.coordinates.randLocInitialize will default to coordinates
 		DEF GLOBAL $CCUFolderName$ coordinates
 	
 	IF {$CCUNumber$ = `$CCUNumber$`}:
+		PRINT $CCUNumber$ under CCU.coordinates.randLocInitialize will default to Number
 		DEF GLOBAL $CCUNumber$ Number
 //>
 
@@ -173,7 +198,7 @@ FUNC {Func_GeneralScoreboardClock}:
 //<General Scoreboard End
 FUNC {Func_GeneralScoreboardEnd}:
 	CCU.objectiveRemove(Obj_GeneralScoreboardStart)
-	kill @e[LocationEntity]
+	kill @e[type=AreaEffectCloud,]
 //>
 
 

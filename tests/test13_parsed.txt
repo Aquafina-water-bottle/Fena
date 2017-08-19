@@ -1,0 +1,53 @@
+MFUNC | MFunc_Init | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/random/init.mcfunction
+	scoreboard objectives add Random dummy Location Rand
+	scoreboard objectives setdisplay sidebar Random
+	summon area_effect_cloud ~ ~ ~ {Tags:["CCURandTemp"],Duration:5}
+	summon area_effect_cloud ~ ~ ~ {Tags:["CCURandTemp"],Duration:5}
+	scoreboard players add @e[type=area_effect_cloud,tag=CCURandTemp] Random 100
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 1
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 2
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 4
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 8
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 16
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 32
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 64
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 128
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 256
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 512
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 1024
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 2048
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 4096
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 8192
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 16384
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 32768
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 65536
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 131072
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 262144
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 524288
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 1048576
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 2097152
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 4194304
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 8388608
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 16777216
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 33554432
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 67108864
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 134217728
+	scoreboard players add @r[type=area_effect_cloud,tag=CCURandTemp] Random 268435456
+	scoreboard players operation RandCalc Random = @r[type=area_effect_cloud,tag=CCURandTemp] Random
+	kill @e[type=area_effect_cloud,tag=CCURandTemp]
+	scoreboard players set Seed Random 1000110001
+	scoreboard players set Max Random 5
+
+MFUNC | MFunc_Main | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/random/main.mcfunction
+	scoreboard players operation RandCalc Random *= Seed Random
+	scoreboard players operation RandCalc Random %= Seed Random
+	scoreboard players operation @a[c=1] Random = Seed Random
+	scoreboard players operation @a[c=1] Random %= RandCalc Random
+	scoreboard players operation Mod Random = Max Random
+	scoreboard players remove Mod Random 1
+	scoreboard players operation @a[c=1] Random %= Mod Random
+	scoreboard players add @a[c=1] Random 2
+	tellraw @a {"score":{"name":"french_man","objective":"Random"}}
+
+MFUNC | Grp_Uninstall | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/random/uninstall.mcfunction
+	scoreboard objectives remove Random
