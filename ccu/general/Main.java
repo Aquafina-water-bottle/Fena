@@ -36,7 +36,7 @@ public class Main {
 		long startTime = System.nanoTime();
 
 		// checks version
-		String currentVersion = "1.1.0";
+		String currentVersion = "1.1.1";
 		System.out.println("Current version: " + currentVersion);
 
 		try {
@@ -60,9 +60,9 @@ public class Main {
 			String[] getVersionCalc = getVersion.split("\\.");
 
 			boolean outdatedVersion = true;
-			if (Integer.parseInt(currentVersionCalc[0]) > Integer.parseInt(getVersionCalc[0])
-					|| Integer.parseInt(currentVersionCalc[1]) > Integer.parseInt(getVersionCalc[1])
-					|| Integer.parseInt(currentVersionCalc[2]) > Integer.parseInt(getVersionCalc[2])) {
+			if (Integer.parseInt(currentVersionCalc[0]) >= Integer.parseInt(getVersionCalc[0])
+					|| Integer.parseInt(currentVersionCalc[1]) >= Integer.parseInt(getVersionCalc[1])
+					|| Integer.parseInt(currentVersionCalc[2]) >= Integer.parseInt(getVersionCalc[2])) {
 				outdatedVersion = false;
 			}
 
