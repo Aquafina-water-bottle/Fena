@@ -223,6 +223,8 @@ public class ReadConfig {
 			if (regFilePath.isFile() == false) {
 				System.out.println("ERROR: " + regFilePath.toString() + " is not a file");
 				System.exit(0);
+			} else {
+				System.out.println("Compiling file '" + regFilePath.getName() + "'\n");
 			}
 		}
 
@@ -238,7 +240,7 @@ public class ReadConfig {
 					{"Clock","Repeat"}, // groupSuffixRepeating
 					
 					// minecraftCommandsArray
-					{"pictionary", "bd", "achievement", "blockdata", "clear", "clone", "debug", "defaultgamemode", "difficulty",
+					{"pictionary", "bd", "nobreak", "achievement", "blockdata", "clear", "clone", "debug", "defaultgamemode", "difficulty",
 							"effect", "enchant", "entitydata", "execute", "fill", "gamemode", "gamerule", "give", "help", "kill", "me",
 							"msg", "particle", "playsound", "publish", "replaceitem", "say", "scoreboard", "seed", "setblock",
 							"setworldspawn", "spawnpoint", "spreadplayers", "stats", "stopsound", "summon", "teleport", "tell",

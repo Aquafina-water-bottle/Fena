@@ -76,17 +76,6 @@ public class Var_Unassign {
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					break;
 
-				case "OBJLIST":
-					unassignType = 4;
-					// removes OBJLIST
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
-					break;
-
-				case "TEAMLIST":
-					unassignType = 5;
-					// removes TEAMLIST
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
-					break;
 				}
 			}
 
@@ -140,32 +129,11 @@ public class Var_Unassign {
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					break;
 
-				case "OBJLIST":
-					if (unassignType == null) {
-						unassignType = 4;
-					} else {
-						System.out.println(
-								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
-						System.exit(0);
-					}
-					// removes OBJLIST
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
-					break;
-
-				case "TEAMLIST":
-					if (unassignType == null) {
-						unassignType = 5;
-					} else {
-						System.out.println(
-								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
-						System.exit(0);
-					}
-					// removes TEAMLIST
-					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
-					break;
 				}
 			}
-
+			
+			statementArgs = statementArgs.replace("`", "");
+			
 			if (isGlobal == null) {
 				isGlobal = false;
 			}

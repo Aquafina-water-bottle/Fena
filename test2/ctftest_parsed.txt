@@ -1,0 +1,16 @@
+INITIALIZE
+	fill 1 1 1 18 3 3 air 0
+
+GROUP | Grp_MainStart | PULSE		[2 2 2 | stonebrick 0]
+	summon AreaEffectCloud 546;85;138;-45;0   {Rotation:[f,f],Duration:MAX_INT,Tags:["CTFEntity","CTFRedSpawn","CTFSpawnPoint"]}
+	summon AreaEffectCloud 549;85;142;0;0   {Rotation:[f,f],Duration:MAX_INT,Tags:["CTFEntity","CTFRedSpawn","CTFSpawnPoint"]}
+	summon AreaEffectCloud 551;85;140;0;0   {Rotation:[f,f],Duration:MAX_INT,Tags:["CTFEntity","CTFRedSpawn","CTFSpawnPoint"]}
+	summon AreaEffectCloud 548;82;137;-90;0   {Rotation:[f,f],Duration:MAX_INT,Tags:["CTFEntity","CTFRedSpawn","CTFSpawnPoint"]}
+	summon AreaEffectCloud 545;77;136;0;0   {Rotation:[f,f],Duration:MAX_INT,Tags:["CTFEntity","CTFRedSpawn","CTFSpawnPoint"]}
+	summon AreaEffectCloud 544;79;140;-90;0   {Rotation:[f,f],Duration:MAX_INT,Tags:["CTFEntity","CTFRedSpawn","CTFSpawnPoint"]}
+	summon AreaEffectCloud 548;81;141;0;0   {Rotation:[f,f],Duration:MAX_INT,Tags:["CTFEntity","CTFRedSpawn","CTFSpawnPoint"]}
+	summon AreaEffectCloud 546 85 138 {Rotation:[-45f,0f],Duration:MAX_INT,Tags:["CTFEntity","CTFRedSpawn","CTFSpawnPoint"]}
+
+FINALIZE
+	setblock 2 2 2 stonebrick 0
+

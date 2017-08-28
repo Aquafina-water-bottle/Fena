@@ -8,7 +8,7 @@ DEF $SA$ x=548,y=106,z=148,dx=20,dy=5,dz=21
 DEF $ArenaArea$ x=535,y=0,z=129,dx=50,dy=256,dz=64
 
 DEF COORDS $CoordsOption$ 544 48 144
-DEF $StyleDirection$ +X
+DEF $StyleOption$ +X
 DEF $SPid$ 33
 DEF $SPpvp$ 1
 DEF $SPsat$ 0
@@ -53,7 +53,7 @@ DEF MIN_INT CALC(-2 ^ 31)
 OPTIONS:
 	blockOption stonebrick 0
 	coordsOption $CoordsOption$
-	styleOption $StyleDirection$ 16
+	styleOption $StyleOption$ 16
 	
 	parseOption true
 	commandOption true

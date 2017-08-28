@@ -29,19 +29,22 @@ public class Main {
 
 	// .replaceAll("^\\s+", "") = space to the left
 	// .replaceAll("\\s+$", "") = space to the right
+	// just negative lookbehind (?<!`)q
+	// (negative) lookahead OR lookbehind (?<!`)q(?!`)
+	// (negative) lookahead AND lookbehind q(?!(?<=`.)`)
 
 	public static File getJarFile = null;
 
 	public static void main(String[] args) {
+		
 		long startTime = System.nanoTime();
 
 		// checks version
-		String currentVersion = "1.1.1";
+		String currentVersion = "1.2.0";
 		System.out.println("Current version: " + currentVersion);
 
 		try {
-			URL url;
-			url = new URL("https://raw.githubusercontent.com/Aquafina-water-bottle/Command-Compiler-Unlimited/master/version.txt");
+			URL url = new URL("https://raw.githubusercontent.com/Aquafina-water-bottle/Command-Compiler-Unlimited/master/version.txt");
 
 			URLConnection con = url.openConnection();
 			InputStream is = con.getInputStream();
@@ -78,8 +81,6 @@ public class Main {
 		} catch (InterruptedException e) {
 			GeneralFile.dispError(e);
 		}
-
-		System.out.println("");
 
 		// for CCU_NPP.bat
 		if (args.length >= 1) {

@@ -1,0 +1,14 @@
+MFUNC | Grp_MainStart | C:/Users/Austin/Documents/Austin/powder game code/eGO/Server Stuff/1.12.1/world/data/functions/test/main.mcfunction
+	say
+	say T;h;i;s; ;i;s; ;a; ;s;t;r;i;n;g
+	scoreboard players set -1 Constants -1
+	scoreboard players set 20 Constants 20
+	scoreboard objectives add RRti dummy Royal Rumble Timer
+	scoreboard objectives add RRpl dummy Royal Rumble Player List
+	scoreboard objectives remove RRti
+	scoreboard objectives remove RRpl
+	scoreboard teams add RRg Royal Rumble Green
+	scoreboard teams option RRg color green
+	scoreboard teams option RRg friendlyfire false
+	scoreboard teams remove RRg
+	say RRg Royal Rumble Green;OPT color green;OPT friendlyfire false;element 1;element 2

@@ -34,12 +34,12 @@ public class Con_Else {
 			}
 
 			if (parseArray == true) {
-				ArgUtils.checkWhiteSpace(this.arrayGet, tabNum, false);
-				ArgUtils.checkCommands(this.arrayGet, tabNum);
+				ArgUtils.checkWhiteSpace(returnArray, tabNum, false);
 				
 				for (String getLine : this.arrayGet) {
 					returnArray.add(getLine.substring(1));
 				}
+				
 			} else {
 				returnArray = null;
 			}

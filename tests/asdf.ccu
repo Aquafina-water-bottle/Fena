@@ -1,14 +1,14 @@
-DEF $StyleDirection$ +X
-DEF $StyleDirection$ -X
-DEF $StyleDirection$ +Z
-DEF $StyleDirection$ -Z
+DEF $StyleOption$ +X
+DEF $StyleOption$ -X
+DEF $StyleOption$ +Z
+DEF $StyleOption$ -Z
 
 OPTIONS:
 	blockOption stonebrick 0
 	coordsOption $CoordsOption$
 ///	Style
 ///	Avaliable options: +X -X +Z -Z (and) height in y
-	styleOption $StyleDirection$ 16
+	styleOption $StyleOption$ 16
 	
 FUNC {GLOBAL Func_Test}:
 	say |0|

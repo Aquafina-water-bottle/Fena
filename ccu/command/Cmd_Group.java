@@ -42,7 +42,7 @@ public class Cmd_Group {
 
 		// checkCommands
 		ArgUtils.checkCommands(this.arrayGet, tabNum);
-
+		
 		// Check tab spaces
 		ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum, false);
 

@@ -85,7 +85,7 @@ public class ParamUtils {
 
 	// gets all params within round brackets
 	// getParams includes round brackets
-	public static ArrayList<String> getParams(String getParams, int paramNum) {
+	public static ArrayList<String> getParams(String getParams, int paramNum, int paramMaxSplit) {
 
 		ArrayList<String> useParamsCalc = new ArrayList<String>();
 		String[] getParamsCalc = null;
@@ -101,7 +101,12 @@ public class ParamUtils {
 			} else {
 
 				// add all existing parameters, even if there's more than enough
-				getParamsCalc = getParams.substring(1, getParams.length() - 1).split("(?<!`);");
+				if (paramMaxSplit >= 0) {
+					getParamsCalc = getParams.substring(1, getParams.length() - 1).split("(?<!`);", paramMaxSplit + 1);
+				} else {
+					getParamsCalc = getParams.substring(1, getParams.length() - 1).split("(?<!`);");
+				}
+				
 				for (int i = 0; i < getParamsCalc.length; i++) {
 					useParamsCalc.add(getParamsCalc[i]);
 				}
@@ -280,9 +285,15 @@ public class ParamUtils {
 		if ((getString.isEmpty() == false && getString.startsWith("[") && getString.contains("]")
 				&& getString.indexOf("[") < getString.indexOf("]"))) {
 
+			String[] getInsideCalc = StringUtils.getInside(getString, "", "[", "]", true);
+			getParamsString = getInsideCalc[1];
+			getEndString = getInsideCalc[2];
+			
+			/*
 			getParamsString = getString.substring(getString.indexOf("["), getString.indexOf("]") + 1);
 			getEndString = getString.substring(getString.indexOf("]") + 1);
-
+			*/
+			
 			// everything within [ and ]
 			defineParamCalc = getParamsString.substring(1, getParamsString.length() - 1);
 

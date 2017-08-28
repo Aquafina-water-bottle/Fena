@@ -45,6 +45,7 @@ public class Box {
 		return blockArrayGet;
 	}
 
+	/*
 	private static void printArray(int[][] blockArray, int xz, int y) {
 		if (xz != 0) {
 			System.out.println("");
@@ -64,7 +65,7 @@ public class Box {
 			}
 			System.out.println("");
 		}
-	}
+	}*/
 
 	private static int[][] surroundingArrayInt(int[][] blockArrayGet, int getY, int getXZ, int detectInt, int surroundInt) {
 		/** When it detects number 'detectInt', it replaces the surrounding numbers with 'surroundInt'
@@ -365,7 +366,7 @@ public class Box {
 		}
 
 		// System.out.println(fillCoordsCalcY + " | " + fillCoordsCalc);
-		printArray(blockArray, fillCoordsCalc, fillCoordsCalcY);
+		// printArray(blockArray, fillCoordsCalc, fillCoordsCalcY);
 
 		if (foundEmptyLineXZ == true) {
 			fillCoordsCalc--;

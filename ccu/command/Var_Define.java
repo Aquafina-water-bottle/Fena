@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ccu.general.ArgUtils;
 import ccu.general.NumberUtils;
 import ccu.general.ParamUtils;
+import ccu.general.StringUtils;
 
 public class Var_Define {
 	public static ArrayList<String[]> arrayDefineSave = new ArrayList<String[]>();
@@ -24,13 +25,14 @@ public class Var_Define {
 
 	// @formatter:off
 	public static String[] exceptionArray = {
-			"DEF", "ARRAY", "SET", "SPLIT", "GLOBAL", "COORDS", "TELE", 
+			"DEF", "ARRAY", "SET", "SPLIT", "MAX", "GLOBAL", "TEMP", "RETURN", "COORDS", "TELE", 
 			"GROUP", "PULSE", "CLOCK", "BLOCK",
 			"USE", "BEG", "END", "NOSPACE",
-			"FUNC", "ACTIVATE", "CALL", 
+			"FUNC", "ACTIVATE", "PARSESEP", "CALL", 
 			"MFUNC", "BRANCH",
 			"IMPORT", "LIBRARY", "GETDIR", "WITHIN", "GETCOORDS", 
-			"CALC", "SIN", "COS", "TAN", "INT", "DOUBLE", "GSELF",
+			"CALC", "SIN", "COS", "TAN", "ABS", "LOG", "LOG10", "INT", "DOUBLE",
+			"GSELF", "ISIMPORT",
 			"COND", "OPTIONS", "IF", "ELSE", "ELIF", "LOOP", "INITIALIZE", "FINALIZE", 
 			"PRINT", "EXIT", "UNASSIGN"
 			};
@@ -53,13 +55,14 @@ public class Var_Define {
 		 *  -name - defineName
 		 * 	-string - defintionGet
 		 */
-		
-		String[] arrayDefineCalc = new String[5];
+
+		String[] arrayDefineCalc = new String[6];
 		Integer defineType = null;
-		Boolean isGlobal = null;
+		Integer visibilityType = null; // 1 = global, 2 = temp
 
 		String defineName = null;
 		String defintionGet = null;
+		Integer splitNum = null;
 		int paramMaxNum = 0;
 
 		/* defineType
@@ -79,8 +82,20 @@ public class Var_Define {
 		if (statementEncase.contains(" ")) {
 			switch (statementEncase.substring(0, statementEncase.indexOf(" "))) {
 			case "GLOBAL":
-				isGlobal = true;
+				visibilityType = 1;
 				// removes GLOBAL
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+				break;
+				
+			case "TEMP":
+				visibilityType = 2;
+				// removes TEMP
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+				break;
+				
+			case "RETURN":
+				visibilityType = 3;
+				// removes TEMP
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
 				break;
 
@@ -95,15 +110,34 @@ public class Var_Define {
 				// removes COORDS
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
 				break;
+				
+			case "MAX":
+				// removes MAX
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+
+				if (statementEncase.contains(" ") == false) {
+					System.out.println("ERROR: Invalid arguments for 'MAX' in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+
+				String splitNumTest = statementEncase.substring(0, statementEncase.indexOf(" "));
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+				if (NumberUtils.isInt(splitNumTest)) {
+					splitNum = Integer.parseInt(splitNumTest);
+				} else {
+					System.out.println("ERROR: 'MAX' in line '" + this.fullLineGet + "' must be proceeded with an integer");
+					System.exit(0);
+				}
+				break;
 			}
 		}
-
+		
 		// Gets second parameters
 		if (statementEncase.contains(" ")) {
 			switch (statementEncase.substring(0, statementEncase.indexOf(" "))) {
 			case "GLOBAL":
-				if (isGlobal == null) {
-					isGlobal = true;
+				if (visibilityType == null) {
+					visibilityType = 1;
 				} else {
 					System.out.println(
 							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
@@ -112,7 +146,31 @@ public class Var_Define {
 				// removes GLOBAL
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 				break;
-
+				
+			case "TEMP":
+				if (visibilityType == null) {
+					visibilityType = 2;
+				} else {
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				// removes GLOBAL
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+				break;
+				
+			case "RETURN":
+				if (visibilityType == null) {
+					visibilityType = 3;
+				} else {
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				// removes GLOBAL
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+				break;
+				
 			case "COORDS":
 				if (defineType == null) {
 					defineType = 4;
@@ -124,7 +182,7 @@ public class Var_Define {
 				// removes COORDS
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 				break;
-
+				
 			case "TELE":
 				if (defineType == null) {
 					defineType = 5;
@@ -136,9 +194,125 @@ public class Var_Define {
 				// removes COORDS
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 				break;
+				
+			case "MAX":
+				// removes MAX
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+				
+				if (statementEncase.contains(" ") == false) {
+					System.out.println("ERROR: Invalid arguments for 'MAX' in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				
+				if (splitNum == null) {
+					String splitNumTest = statementEncase.substring(0, statementEncase.indexOf(" "));
+					statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+					if (NumberUtils.isInt(splitNumTest)) {
+						splitNum = Integer.parseInt(splitNumTest);
+					} else {
+						System.out.println("ERROR: 'MAX' in line '" + this.fullLineGet + "' must be proceeded with an integer");
+						System.exit(0);
+					}
+				} else {
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				break;
+			}
+		}
+		
+		// Gets third parameters
+		if (statementEncase.contains(" ")) {
+			switch (statementEncase.substring(0, statementEncase.indexOf(" "))) {
+			case "GLOBAL":
+				if (visibilityType == null) {
+					visibilityType = 1;
+				} else {
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				// removes GLOBAL
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+				break;
+				
+			case "TEMP":
+				if (visibilityType == null) {
+					visibilityType = 2;
+				} else {
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				// removes GLOBAL
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+				break;
+				
+			case "RETURN":
+				if (visibilityType == null) {
+					visibilityType = 3;
+				} else {
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				// removes GLOBAL
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+				break;
+				
+			case "COORDS":
+				if (defineType == null) {
+					defineType = 4;
+				} else {
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				// removes COORDS
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+				break;
+				
+			case "TELE":
+				if (defineType == null) {
+					defineType = 5;
+				} else {
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				// removes COORDS
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
+				break;
+
+			case "MAX":
+				// removes MAX
+				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+
+				if (statementEncase.contains(" ") == false) {
+					System.out.println("ERROR: Invalid arguments for 'MAX' in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+
+				if (splitNum == null) {
+					String splitNumTest = statementEncase.substring(0, statementEncase.indexOf(" "));
+					statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1);
+					if (NumberUtils.isInt(splitNumTest)) {
+						splitNum = Integer.parseInt(splitNumTest);
+					} else {
+						System.out.println("ERROR: 'MAX' in line '" + this.fullLineGet + "' must be proceeded with an integer");
+						System.exit(0);
+					}
+				} else {
+					System.out.println(
+							"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+					System.exit(0);
+				}
+				break;
 			}
 			// the end should make 'statementEncase' as the actual use thing (Name Definition)
 		}
+		
 		// Sets name
 		if (statementEncase.contains(" ")) {
 			defineName = statementEncase.substring(0, statementEncase.indexOf(" ")).replace("`", "");
@@ -172,8 +346,8 @@ public class Var_Define {
 		}
 
 		// sets options if they are unspecified
-		if (isGlobal == null) {
-			isGlobal = false;
+		if (visibilityType == null) {
+			visibilityType = 0;
 		}
 		// detects definition type if not specified
 
@@ -184,20 +358,33 @@ public class Var_Define {
 
 		// tests whether coords works
 		ArgUtils.checkCoords(defintionGet, defineType, this.fullLineGet);
-
+		
+		// if splitNum is null
+		if (splitNum == null) {
+			splitNum = -1;
+		}
+		
 		// If global, tabnum = 0
-		if (isGlobal == true) {
+		switch (visibilityType) {
+		case 1:
 			this.tabNum = 0;
+			break;
+			
+		case 2:
+			this.tabNum += 1;
+			break;
+			
+		case 3:
+			this.tabNum -= 1;
+			break;
 		}
 
 		arrayDefineCalc[0] = defineType.toString();
 		arrayDefineCalc[1] = tabNum + "";
 		arrayDefineCalc[2] = defineName;
 		arrayDefineCalc[3] = defintionGet;
-
-		// System.out.println("LOOKUP " + defintionGet);
-
 		arrayDefineCalc[4] = paramMaxNum + "";
+		arrayDefineCalc[5] = splitNum + "";
 
 		// Checks whether the defineName and tabnum is the same anywhere --> will remove
 		int defIndex = 0;
@@ -235,19 +422,18 @@ public class Var_Define {
 				statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 			}
 		}
-		
+
 		if (statementEncase.contains(" ")) {
 			statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 			return getLine.length() - statementEncase.length();
 		} else {
 			return getLine.length();
 		}
-		
 
-		
 	}
 
-	public static String[] parseDefinition(String getString, String getBegDef, int parseType, int getIndex, String fullLineGet) {
+	public static String[] parseDefinition(String getString, String getBegDef, int parseType, int getIndex, int tabNum,
+			String fullLineGet) {
 		/* parseType - 1 == def
 		 * parseType - 2 == array
 		 * parseType - 3 == 2d array
@@ -313,11 +499,19 @@ public class Var_Define {
 						&& getEndString.indexOf("(") < getEndString.indexOf(")")) {
 
 					// split params
+					String[] getInside = StringUtils.getInside(getEndString, "", "(", ")", true);
+					getParamsString = getInside[1];
+					getEndString = getInside[2];
+					
+					/*
 					getParamsString = getEndString.substring(getEndString.indexOf("("), getEndString.indexOf(")") + 1);
 					getEndString = getEndString.substring(getEndString.indexOf(")") + 1);
+					*/
 				}
 
-				useParamsCalc = ParamUtils.getParams(getParamsString, Integer.parseInt(Var_Define.arrayDefineSave.get(getIndex)[4]));
+				// check for definitions within the parameters
+				getParamsString = Var_Define.calcDefine(getParamsString, tabNum, fullLineGet);
+				useParamsCalc = ParamUtils.getParams(getParamsString, Integer.parseInt(Var_Define.arrayDefineSave.get(getIndex)[4]), Integer.parseInt(Var_Define.arrayDefineSave.get(getIndex)[5]));
 
 				// replace all params
 				definitionCalc = ParamUtils.replaceParams(Var_Define.arrayDefineSave.get(getIndex)[3], useParamsCalc,
@@ -339,8 +533,11 @@ public class Var_Define {
 		if (parseType == 2) {
 			String calcIndexString = null;
 
-			calcIndexString = getEndString.substring(getEndString.indexOf("[") + 1, getEndString.indexOf("]"));
-			getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
+			String[] getInsideCalc = StringUtils.getInside(getEndString, "", "[", "]", true);
+			calcIndexString = getInsideCalc[3];
+			getEndString = getInsideCalc[2];
+			
+			calcIndexString = Var_Define.calcDefine(calcIndexString, tabNum, fullLineGet);
 
 			if (NumberUtils.isNum(calcIndexString) == false) {
 				calcIndexString = MathParser.parseSecondaryStatements(calcIndexString, fullLineGet);
@@ -406,12 +603,16 @@ public class Var_Define {
 			String calcIndexString2 = "";
 			boolean parseArray = false;
 
-			calcIndexString = getEndString.substring(getEndString.indexOf("[") + 1, getEndString.indexOf("]"));
-			getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
+			String[] getInsideCalc = StringUtils.getInside(getEndString, "", "[", "]", true);
+			calcIndexString = getInsideCalc[3];
+			calcIndexString = Var_Define.calcDefine(calcIndexString, tabNum, fullLineGet);
+			getEndString = getInsideCalc[2];
 
 			if (getEndString.startsWith("[") && getEndString.contains("]")) { // gets calcIndexString2
-				calcIndexString2 = getEndString.substring(getEndString.indexOf("[") + 1, getEndString.indexOf("]"));
-				getEndString = getEndString.substring(getEndString.indexOf("]") + 1);
+				getInsideCalc = StringUtils.getInside(getEndString, "", "[", "]", true);
+				calcIndexString2 = getInsideCalc[3];
+				calcIndexString2 = Var_Define.calcDefine(calcIndexString2, tabNum, fullLineGet);
+				getEndString = getInsideCalc[2];
 
 			} else {
 				if (NumberUtils.isNum(calcIndexString) && calcIndexString.equals("-1") == false) {
@@ -568,6 +769,13 @@ public class Var_Define {
 			recheckLine = false;
 			getDefinitionArray = null;
 
+			// undergoes PARSE()
+			String[] parseArray = null;
+			parseArray = StringUtils.parseInside(getString);
+			if (parseArray != null) {
+				getString = parseArray[0] + parseArray[1] + parseArray[2];
+			}
+			
 			// when the line starts with 'DEF'
 			if (getString.trim().length() >= 3 && getString.trim().substring(0, 3).equals("DEF") == true) {
 				giveDefString = getString.substring(Var_Define.getDefineIndex(getString));
@@ -586,7 +794,7 @@ public class Var_Define {
 						&& giveDefString.trim().startsWith("UNASSIGN") == false) {
 					recheckLine = true;
 
-					getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 1, defIndex, getString);
+					getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 1, defIndex, tabNum, getString);
 					definitionCalc = getDefinitionArray[1] + "";
 					break;
 				}
@@ -617,7 +825,7 @@ public class Var_Define {
 							&& giveDefString.trim().startsWith("ARRAY") == false) {
 						recheckLine = true;
 
-						getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 2, arrayIndex, getString);
+						getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 2, arrayIndex, tabNum, getString);
 						definitionCalc = getDefinitionArray[1] + "";
 					}
 				}
@@ -636,14 +844,14 @@ public class Var_Define {
 							&& giveDefString.trim().startsWith("ARRAY") == false) {
 						recheckLine = true;
 
-						getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 3, arrayIndex, getString);
+						getDefinitionArray = Var_Define.parseDefinition(giveDefString, getBegDef, 3, arrayIndex, tabNum, getString);
 						definitionCalc = getDefinitionArray[1] + "";
 					}
 				}
 			}
 
 			if (recheckLine) {
-
+				
 				// tests for recurring definition
 				for (String testDefinition : usedDefinitionArray) {
 					if (definitionCalc.contains(testDefinition)) {
@@ -654,15 +862,73 @@ public class Var_Define {
 					}
 				}
 
+				// sees if there is any definition inside definitionCalc - if not, clears usedDefinitionArray
+				boolean foundDefinition = false;
+
+				for (int defIndex = Var_Define.arrayDefineSave.size() - 1; defIndex >= 0; defIndex--) {
+					if (definitionCalc.trim().contains(Var_Define.arrayDefineSave.get(defIndex)[2])) {
+						foundDefinition = true;
+						break;
+					}
+				}
+
+				if (foundDefinition == false) {
+					for (int arrayIndex = Var_Array.singleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
+						// if an array matches up (cannot be with UNASSIGN or ARRAY)
+						if (definitionCalc.trim().contains(Var_Array.singleArrayNameSave.get(arrayIndex)[2] + "[")) {
+							foundDefinition = true;
+							break;
+						}
+					}
+				}
+
+				if (foundDefinition == false) {
+					for (int arrayIndex = Var_Array.doubleArrayNameSave.size() - 1; arrayIndex >= 0; arrayIndex--) {
+						if (definitionCalc.trim().contains(Var_Array.doubleArrayNameSave.get(arrayIndex)[2] + "[")) {
+							foundDefinition = true;
+							break;
+						}
+					}
+				}
+
+				if (foundDefinition == false) {
+					// meaning it's useless to keep the usedDefinitionArra
+					usedDefinitionArray.clear();
+				} else {
+					// adds to check for recurring definition
+					usedDefinitionArray.add(getDefinitionArray[3]);
+				}
+
 				// properly sets the line
 				getString = getDefinitionArray[0] + getDefinitionArray[1] + getDefinitionArray[2];
-
-				// adds to check for recurring definition
-				usedDefinitionArray.add(getDefinitionArray[3]);
 			}
 
 		} while (recheckLine);
+		
 
+		// removes PARSE()
+		getString = StringUtils.removeParse(getString);
+		
 		return getString;
+	}
+	
+	public static void garbageCollect(int tabNum, int resetlastFunc) {
+		boolean resetIndexCalc = false;
+		
+		// reset all definitions that don't work with the decreasing tab numbers
+		for (int defIndex = 0; defIndex < arrayDefineSave.size(); defIndex++) {
+			if ((resetlastFunc <= 1) && defIndex == arrayDefineSave.size() - 1) {
+				break;
+			}
+			
+			if (resetIndexCalc == true) {
+				resetIndexCalc = false;
+				defIndex = 0;
+			}
+			if (tabNum <= Integer.parseInt(arrayDefineSave.get(defIndex)[1])) {
+				resetIndexCalc = true;
+				arrayDefineSave.remove(defIndex);
+			}
+		}
 	}
 }

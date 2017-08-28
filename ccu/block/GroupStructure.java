@@ -37,7 +37,7 @@ public class GroupStructure {
 		// Get the option from the VAR_Options class
 		try {
 			styleOptionY = Integer.valueOf(Var_Options.styleOption.substring(3));
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException | StringIndexOutOfBoundsException e) {
 			System.out.println("ERROR: Incorrect syntax for 'styleOption " + Var_Options.styleOption + "'");
 			System.exit(0);
 		}

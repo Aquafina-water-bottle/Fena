@@ -67,7 +67,7 @@ public class Var_Call {
 				// if it matches
 				if (statementArgs.equals(Var_Func.arrayFuncNameSave.get(funcIndex)[2])) {
 
-					useParamsCalc = ParamUtils.getParams(getParamCalc, Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndex)[0]));
+					useParamsCalc = ParamUtils.getParams(getParamCalc, Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndex)[0]), Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndex)[4]));
 
 					for (int i = 0; i < Var_Func.arrayFuncSave.get(funcIndex).length; i++) {
 						lineCalc = whitespaceCalc + Var_Func.arrayFuncSave.get(funcIndex)[i];
@@ -88,7 +88,7 @@ public class Var_Call {
 			// checks duplicates in checkFunction
 			/*
 			checkFunction.add(statementArgs);
-
+			
 			for (int i = 0; i < checkFunction.size(); i++) {
 				for (int j = 0; j < checkFunction.size(); j++) {
 					if (checkFunction.get(i).equals(checkFunction.get(j)) && i != j) {
@@ -102,6 +102,21 @@ public class Var_Call {
 			// replaces params
 			this.arrayReturn = ParamUtils.replaceParams(this.arrayReturn, useParamsCalc,
 					Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndexSave)[0]), tabNum);
+			
+			// if parseSep is set to true
+			if (Var_Func.arrayFuncNameSave.get(funcIndexSave)[3].equals("true")) {
+				ArrayList<String> arrayCalc = new ArrayList<String>();
+				for (String cmd : arrayReturn) {
+					arrayCalc.add("\t" + cmd);
+				}
+
+				// readds the array after the checkCommands function and removes the extra tab space
+				ArgUtils.checkCommands(arrayCalc, tabNum + 1);
+				arrayReturn.clear();
+				for (String cmd : arrayCalc) {
+					arrayReturn.add(cmd.substring(1));
+				}
+			}
 
 			// ArgUtils.checkCommands(this.arrayReturn, tabNum);
 			// checkFunction.clear();

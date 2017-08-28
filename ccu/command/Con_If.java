@@ -180,13 +180,12 @@ public class Con_If {
 			}
 			// To prevent lag, checkCommands() is done ONLY after the first part of the IF command returns true
 			if (calcStatement == true) {
-				ArgUtils.checkCommands(this.arrayGet, tabNum);
-
-				// gets rid of tab spaces
-				for (int i = 0; i < this.arrayGet.size(); i++) {
-					returnArray.add(i, this.arrayGet.get(i).substring(1));
-				}
+				ArgUtils.checkWhiteSpace(returnArray, tabNum, false);
 				
+				for (String getLine : this.arrayGet) {
+					returnArray.add(getLine.substring(1));
+				}
+
 				returnArray.add(this.fullLineGet.substring(0, tabNum - 1) + "CCU_ReturnTrue");
 				
 				return returnArray;

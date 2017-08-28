@@ -1,0 +1,119 @@
+//(Random Number Generator)
+
+IMPORT {LIBRARY v2.0/checkImport.ccu}
+CCU.checkImport(ISIMPORT;math/random)
+
+IMPORT {LIBRARY GETDIR v2.0/1.10/general}
+
+//<Randomizers
+//= Various examples of score randomizers
+Type 1: I have no idea what this is, but it looks like an example of a linear congruential generator except it isnt? idk
+
+FUNC {TEMP ACTIVATE CCU.math.rand.init(type) ARGS}:
+	DEF $RandDynamicMin$ false
+	DEF $RandDynamicMax$ false
+	DEF $RandMin$ 3
+	DEF $RandMax$ 17
+	DEF $RandObj$ CCUrd
+
+CCU.math.rand.cmdInit(type)
+CCU.math.rand.cmdMain(selector;type)
+=//
+
+FUNC {PARSESEP CCU.math.rand.init}:
+	ARRAY {TEMP ACTIVATE CCU.varsInit(ARGS;false) ARGS}:
+		`$RandDynamicMin$` true
+		`$RandDynamicMax$` true
+		`$RandMin$` 0
+		`$RandMax$` 20
+		`$RandObj$` CCUrd
+		
+	ARRAY {GLOBAL Arr_CCUMathRandVars}:
+		`$RandDynamicMin$`
+		`$RandDynamicMax$`
+		`$RandMin$`
+		`$RandMax$`
+		`$RandObj$`
+	
+	CCU.setClassVars(Arr_CCUMathRandVars;|0|)
+	
+FUNC {CCU.math.rand.cmdInit}:
+	CCU.useClassVars(Arr_CCUMathRandVars;|0|)
+
+///	Randomizes the starting RandCalc number
+	summon AreaEffectCloud ~ ~ ~ {Tags:["CCURandTemp"],Duration:5}
+	summon AreaEffectCloud ~ ~ ~ {Tags:["CCURandTemp"],Duration:5}
+	@e[type=AreaEffectCloud,CCURandTemp] $RandObj$ + 100 /// to prevent it from going to 0
+	
+	LOOP {1 (2 ^ 28) * 2}:
+		@r[type=AreaEffectCloud,CCURandTemp] $RandObj$ + |0|
+	
+	ScOP RandCalc $RandObj$ = @r[type=AreaEffectCloud,CCURandTemp] $RandObj$
+	kill @e[type=AreaEffectCloud,CCURandTemp]
+	
+	Seed $RandObj$ = 1000110001
+	IF {$RandDynamicMin$ = false}:
+		IF {$RandDynamicMax$ = false}:
+			Mod $RandObj$ = CALC($RandMax$ - $RandMin$ + 1)
+			
+		ELSE:
+			Max $RandObj$ = $RandMax$
+			
+	ELIF {$RandDynamicMax$ = false}:
+		Min $RandObj$ = $RandMin$
+		
+	ELSE:
+		Min $RandObj$ = $RandMin$
+		Max $RandObj$ = $RandMax$
+		
+	CCU.removeClassVars(Arr_CCUMathRandVars;|0|)
+	
+	
+FUNC {CCU.math.rand.cmdMain}:
+	CCU.useClassVars(Arr_CCUMathRandVars;|1|)
+	
+	ScOP RandCalc $RandObj$ *= Seed $RandObj$
+	ScOP RandCalc $RandObj$ %= Seed $RandObj$
+	ScOP |0| $RandObj$ = Seed $RandObj$
+	ScOP |0| $RandObj$ %= RandCalc $RandObj$
+	
+	IF {$RandDynamicMin$ = true}:
+		IF {$RandDynamicMax$ = true}:
+			ScOP Mod $RandObj$ = Max $RandObj$
+			ScOP Mod $RandObj$ -= Min $RandObj$
+			Mod $RandObj$ + 1
+			
+		ELSE:
+			Mod $RandObj$ = CALC($RandMax$ + 1)
+			ScOP Mod $RandObj$ -= Min $RandObj$
+			
+	ELIF {$RandDynamicMax$ = true}:
+		ScOP Mod $RandObj$ = Max $RandObj$
+		IF {$RandMin$ > 1}:
+			Mod $RandObj$ - CALC($RandMin$ - 1)
+		ELIF {$RandMin$ < 1}:
+			Mod $RandObj$ + CALC(($RandMin$ * -1) + 1)
+		
+	ELIF {$CCUSetMod$ = true}:
+		Mod $RandObj$ = CALC($RandMin$ - $RandMax$ + 1)
+	
+	ScOP |0| $RandObj$ %= Mod $RandObj$
+	IF {$RandMin$ != 0}:
+		IF {$RandDynamicMin$ = true}:
+			ScOP |0| $RandObj$ += Min $RandObj$
+			
+		ELIF {$RandMin$ > 0}:
+			|0| $RandObj$ + $RandMin$
+		ELSE:
+			|0| $RandObj$ - ABS($RandMin$)
+			
+	CCU.removeClassVars(Arr_CCUMathRandVars;|1|)
+//>
+
+
+
+
+
+
+
+

@@ -347,7 +347,7 @@ public class Var_Import {
 									if (foundSameFile == false) {
 										importSaveArray.add(filesInArray);
 										GeneralFile importFileCalc = new GeneralFile(filesInArray);
-										arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+										arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray(), true));
 									}
 								}
 							} else {
@@ -404,7 +404,7 @@ public class Var_Import {
 							if (foundSameFile == false) {
 								importSaveArray.add(fileNameCalc);
 								GeneralFile importFileCalc = new GeneralFile(importFile);
-								arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+								arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray(), true));
 							}
 
 						} else { // dat files
@@ -466,7 +466,7 @@ public class Var_Import {
 										if (foundSameFile == false) {
 											importSaveArray.add(filesInArray);
 											GeneralFile importFileCalc = new GeneralFile(filesInArray);
-											arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+											arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray(), true));
 										}
 									}
 
@@ -547,7 +547,7 @@ public class Var_Import {
 								if (foundSameFile == false) {
 									importSaveArray.add(fileNameCalc);
 									GeneralFile importFileCalc = new GeneralFile(importFile);
-									arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+									arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray(), true));
 								}
 
 							} else { // dat files
@@ -608,7 +608,7 @@ public class Var_Import {
 										if (foundSameFile == false) {
 											importSaveArray.add(filesInArray);
 											GeneralFile importFileCalc = new GeneralFile(filesInArray);
-											arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+											arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray(), true));
 										}
 									}
 
@@ -629,7 +629,7 @@ public class Var_Import {
 											if (foundSameFile == false) {
 												importSaveArray.add(filesInArray);
 												GeneralFile importFileCalc = new GeneralFile(filesInArray);
-												arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+												arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray(), true));
 											}
 										}
 
@@ -715,7 +715,7 @@ public class Var_Import {
 									if (foundSameFile == false) {
 										importSaveArray.add(importFile);
 										GeneralFile importFileCalc = new GeneralFile(importFile);
-										arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+										arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray(), true));
 									}
 
 								} else {
@@ -734,7 +734,7 @@ public class Var_Import {
 										if (foundSameFile == false) {
 											importSaveArray.add(importFile);
 											GeneralFile importFileCalc = new GeneralFile(importFile);
-											arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray()));
+											arrayReturn.addAll(GeneralFile.parseCCU(importFileCalc.getFileArray(), true));
 										}
 									} else {
 										System.out.println("ERROR: File '" + statementArgs + "' under line '" + this.fullLineGet

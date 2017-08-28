@@ -30,7 +30,7 @@ public class Var_Split {
 	public ArrayList<String> getArray() {
 
 		Integer arrayType = null;
-		Boolean isGlobal = null;
+		Integer visibilityType = null;
 
 		String[] getArrayCalc = null;
 		String getArrayName = null;
@@ -73,13 +73,20 @@ public class Var_Split {
 						// substring to get rid of curly brackets
 						// if it's empty, doesn't add
 
-						if (stringCalc.substring(1, stringCalc.length() - 1).isEmpty() == false) {
+						if (stringCalc.substring(1, stringCalc.length() - 1).isEmpty()) {
+							String tempSave = arraySplit.get(0);
+							arraySplit.clear();
+							arraySplit.add(tempSave);
+							arraySplit.add("");
+							break;
+						} else {
 							arraySplit.add(stringCalc.substring(1, stringCalc.length() - 1));
 						}
 
 						stringCalc = null;
 					}
 				}
+
 			} else {
 				System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 				System.exit(0);
@@ -89,6 +96,16 @@ public class Var_Split {
 			String statementArgs = arraySplit.get(0);
 			arraySplit.remove(0);
 
+			// makes it split on all if no split char is given
+			if (arraySplit.isEmpty()) {
+				arraySplit.add("");
+			}
+
+			// remvoes ` from split chars
+			for (int i = 0; i < arraySplit.size(); i++) {
+				arraySplit.set(i, arraySplit.get(i).replace("`", ""));
+			}
+
 			if (statementArgs.contains("\t")) {
 				System.out.println("ERROR: Arguments in line '" + this.fullLineGet + "' contains unnecessary tab spaces");
 				System.exit(0);
@@ -97,8 +114,20 @@ public class Var_Split {
 			if (statementArgs.contains(" ")) {
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
 				case "GLOBAL":
-					isGlobal = true;
+					visibilityType = 1;
 					// removes GLOBAL
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					break;
+
+				case "TEMP":
+					visibilityType = 2;
+					// removes TEMP
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					break;
+
+				case "RETURN":
+					visibilityType = 3;
+					// removes RETURN
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					break;
 
@@ -140,14 +169,38 @@ public class Var_Split {
 			if (statementArgs.contains(" ")) {
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
 				case "GLOBAL":
-					if (isGlobal == null) {
-						isGlobal = true;
+					if (visibilityType == null) {
+						visibilityType = 1;
 					} else {
 						System.out.println(
 								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 						System.exit(0);
 					}
 					// removes GLOBAL
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "TEMP":
+					if (visibilityType == null) {
+						visibilityType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes TEMP
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "RETURN":
+					if (visibilityType == null) {
+						visibilityType = 3;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes RETURN
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
 					break;
 
@@ -206,14 +259,38 @@ public class Var_Split {
 			if (statementArgs.contains(" ")) {
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
 				case "GLOBAL":
-					if (isGlobal == null) {
-						isGlobal = true;
+					if (visibilityType == null) {
+						visibilityType = 1;
 					} else {
 						System.out.println(
 								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 						System.exit(0);
 					}
 					// removes GLOBAL
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "TEMP":
+					if (visibilityType == null) {
+						visibilityType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes TEMP
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "RETURN":
+					if (visibilityType == null) {
+						visibilityType = 3;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes RETURN
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
 					break;
 
@@ -292,8 +369,8 @@ public class Var_Split {
 			}
 
 			// Gets options
-			if (isGlobal == null) {
-				isGlobal = false;
+			if (visibilityType == null) {
+				visibilityType = 0;
 			}
 
 			if (arrayType == null) {
@@ -301,10 +378,20 @@ public class Var_Split {
 			}
 
 			// Gets elements
-			int tabNumCalc = 0;
+			int tabNumCalc = this.tabNum; // normal
 
-			if (isGlobal == false) {
-				tabNumCalc = this.tabNum + 0;
+			switch (visibilityType) {
+			case 1: // global
+				tabNumCalc = 0;
+				break;
+
+			case 2: // temp
+				tabNumCalc = this.tabNum + 1;
+				break;
+
+			case 3: // return
+				tabNumCalc = this.tabNum - 1;
+				break;
 			}
 
 			// checks for repeats
@@ -325,21 +412,25 @@ public class Var_Split {
 
 			Integer findMinIndex = null;
 			Integer splitLength = null;
-			
-			boolean foundSplit = false;
+
 			int countSplitNum = 0;
 			ArrayList<Integer> calcIndexArray = new ArrayList<Integer>();
-			ArrayList<String> tempArray = new ArrayList<String>();
-
+			
 			for (int j = 0; j < calcSplit.size(); j++) {
-				if (foundSplit) {
-					j = 0;
-					foundSplit = false;
-				}
 
 				calcIndexArray.clear();
 				for (int i = 0; i < arraySplit.size(); i++) {
 					calcIndexArray.add(StringUtils.indexOfRegex(calcSplit.get(j), "(?<!`)" + Pattern.quote(arraySplit.get(i))));
+					if (calcIndexArray.size() >= 1 && calcIndexArray.get(0) != null && calcIndexArray.get(0) == 0
+							&& !calcSplit.get(j).isEmpty()) {
+						calcIndexArray.set(i, 1);
+					}
+					// System.out.println(calcIndexArray.size() + "<" + i + " | " + calcIndexArray.get(i) + " | " + calcSplit.get(j));
+				}
+
+				if (calcSplit.get(j).isEmpty()) {
+					calcSplit.remove(j);
+					break;
 				}
 
 				findMinIndex = null;
@@ -360,15 +451,15 @@ public class Var_Split {
 					if (splitNum != null && countSplitNum >= splitNum) {
 						break;
 					}
-					
+
 					for (int i = 0; i < calcIndexArray.size(); i++) {
 						if (calcIndexArray.get(i) == findMinIndex) {
 							splitLength = arraySplit.get(i).length();
 							break;
 						}
 					}
-					
-					tempArray.clear();
+
+					ArrayList<String> tempArray = new ArrayList<String>();
 					for (int i = 0; i < calcSplit.size(); i++) {
 						if (j == i) {
 							tempArray.add(calcSplit.get(j).substring(0, findMinIndex));
@@ -380,7 +471,6 @@ public class Var_Split {
 
 					calcSplit.clear();
 					calcSplit.addAll(tempArray);
-					foundSplit = true;
 					countSplitNum++;
 				}
 			}
@@ -406,7 +496,7 @@ public class Var_Split {
 			for (int i = 0; i < calcSplit.size(); i++) {
 				ArgUtils.checkCoords(calcSplit.get(i), arrayType, this.fullLineGet);
 			}
-
+			
 			getArrayCalc = new String[calcSplit.size()];
 
 			// adds general stuff

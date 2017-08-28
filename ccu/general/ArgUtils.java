@@ -38,6 +38,7 @@ public class ArgUtils {
 				if ((i > 0) && getArray.get(i - 1).trim().startsWith(statement)) {
 					tabNumCalc++;
 					break;
+					
 				}
 			}
 

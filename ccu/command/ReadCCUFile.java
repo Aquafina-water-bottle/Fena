@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import ccu.general.GeneralFile;
+import ccu.general.StringUtils;
 
 public class ReadCCUFile {
 	private ArrayList<String> ccuFileArray = new ArrayList<String>();
@@ -26,7 +27,7 @@ public class ReadCCUFile {
 	// Constructor
 	public ReadCCUFile(File fileName) {
 		GeneralFile ccuFile = new GeneralFile(fileName);
-		this.ccuFileArray = GeneralFile.parseCCU(ccuFile.getFileArray());
+		this.ccuFileArray = GeneralFile.parseCCU(ccuFile.getFileArray(), false);
 		// .replaceAll("\\s+$", "")
 	}
 
@@ -95,9 +96,14 @@ public class ReadCCUFile {
 		int subListCalc2 = -2;
 		boolean resetArray = false;
 		boolean singleLineStatement = false;
-		boolean resetIndexCalc = false;
 		boolean getStatement = false;
+		int resetLastDef = 2; // 2 = true, 0 or 1 = false
+		int resetLastFunc = 2;
+		int resetLastArray = 2;
+		int resetLast2DArray = 2;
 		Boolean checkElse = null;
+
+		String[] parseArray = null;
 
 		ArrayList<String> getCalcArray = new ArrayList<String>();
 		ArrayList<String> encapsulateArray = new ArrayList<String>();
@@ -111,6 +117,41 @@ public class ReadCCUFile {
 
 		int i = -1;
 		while (i < this.ccuFileArray.size()) {
+			if (resetLastArray == 1) {
+				Var_Array.garbageCollect(this.tabNum + 1, 2);
+				resetLastArray = 2;
+			}
+
+			if (resetLastArray == 0) {
+				resetLastArray = 1;
+			}
+
+			if (resetLast2DArray == 1) {
+				Var_Array.garbageCollect2D(this.tabNum + 1, 2);
+				resetLast2DArray = 2;
+			}
+
+			if (resetLast2DArray == 0) {
+				resetLast2DArray = 1;
+			}
+
+			if (resetLastFunc == 1) {
+				Var_Func.garbageCollect(this.tabNum + 1, 2);
+				resetLastFunc = 2;
+			}
+
+			if (resetLastFunc == 0) {
+				resetLastFunc = 1;
+			}
+
+			if (resetLastDef == 1) {
+				Var_Define.garbageCollect(this.tabNum + 1, 2);
+				resetLastDef = 2;
+			}
+
+			if (resetLastDef == 0) {
+				resetLastDef = 1;
+			}
 
 			checkElse = null;
 
@@ -144,6 +185,14 @@ public class ReadCCUFile {
 				}
 			}
 
+			// parses the PARSE() secondary statement
+			parseArray = null;
+			parseArray = StringUtils.parseInside(ccuFileArray.get(i));
+			if (parseArray != null) {
+				ccuFileArray.set(i, parseArray[0] + parseArray[1] + parseArray[2]);
+			}
+
+			// gets definitions
 			ccuFileArray.set(i, Var_Define.calcDefine(ccuFileArray.get(i), this.tabNum, ccuFileArray.get(i)));
 
 			// iterates through all functions
@@ -183,6 +232,12 @@ public class ReadCCUFile {
 					case "DEF":
 						Var_Define objDefine = new Var_Define(ccuFileArray.get(i), this.tabNum);
 						getCalcArray = objDefine.getArray();
+
+						if (Integer
+								.parseInt(Var_Define.arrayDefineSave.get(Var_Define.arrayDefineSave.size() - 1)[1]) == this.tabNum + 1) {
+							resetLastDef = 0;
+						}
+
 						resetArray = true;
 						singleLineStatement = true;
 						break;
@@ -221,7 +276,7 @@ public class ReadCCUFile {
 						resetArray = true;
 						singleLineStatement = true;
 						break;
-						
+
 					case "PRINT":
 						String printString = ccuFileArray.get(i).replaceFirst("PRINT", "");
 						System.out.println(printString.replaceAll("^\\s+", ""));
@@ -344,7 +399,7 @@ public class ReadCCUFile {
 							break;
 
 						case "COND":
-							Cmd_Cond objCond = new Cmd_Cond(encapsulateArray, this.tabNum, ccuFileArray.get(i));
+							Con_Cond objCond = new Con_Cond(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objCond.getArray();
 							resetArray = true;
 							break;
@@ -352,6 +407,12 @@ public class ReadCCUFile {
 						case "FUNC":
 							Var_Func objFunc = new Var_Func(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objFunc.getArray();
+
+							if (Integer.parseInt(
+									Var_Func.arrayFuncNameSave.get(Var_Func.arrayFuncNameSave.size() - 1)[1]) == this.tabNum) {
+								resetLastFunc = 0;
+							}
+
 							resetArray = true;
 							break;
 
@@ -370,6 +431,20 @@ public class ReadCCUFile {
 						case "ARRAY":
 							Var_Array objArray = new Var_Array(encapsulateArray, this.tabNum, ccuFileArray.get(i));
 							getCalcArray = objArray.getArray();
+
+							if (getCalcArray.get(0).equals("2D")) {
+								if (Integer.parseInt(Var_Array.doubleArrayNameSave
+										.get(Var_Array.doubleArrayNameSave.size() - 1)[1]) == this.tabNum) {
+									resetLast2DArray = 0;
+								}
+							} else {
+								if (Integer.parseInt(Var_Array.singleArrayNameSave
+										.get(Var_Array.singleArrayNameSave.size() - 1)[1]) == this.tabNum) {
+									resetLastArray = 0;
+								}
+							}
+							getCalcArray.remove(0);
+
 							resetArray = true;
 							break;
 
@@ -418,55 +493,10 @@ public class ReadCCUFile {
 
 					// only resets when the the statement isn't a single line
 					if (singleLineStatement == false) {
-
-						// reset all definitions that don't work with the decreasing tab numbers
-						for (int defIndex = 0; defIndex < Var_Define.arrayDefineSave.size(); defIndex++) {
-							if (resetIndexCalc == true) {
-								resetIndexCalc = false;
-								defIndex = 0;
-							}
-							if (this.tabNum == Integer.parseInt(Var_Define.arrayDefineSave.get(defIndex)[1])) {
-								resetIndexCalc = true;
-								Var_Define.arrayDefineSave.remove(defIndex);
-							}
-						}
-
-						// reset all functions that don't work with the decreasing tab numbers
-						for (int funcIndex = 0; funcIndex < Var_Func.arrayFuncNameSave.size(); funcIndex++) {
-							if (resetIndexCalc == true) {
-								resetIndexCalc = false;
-								funcIndex = 0;
-							}
-							if (this.tabNum == Integer.parseInt(Var_Func.arrayFuncNameSave.get(funcIndex)[1])) {
-								resetIndexCalc = true;
-								Var_Func.arrayFuncSave.remove(funcIndex);
-								Var_Func.arrayFuncNameSave.remove(funcIndex);
-							}
-						}
-
-						// reset all arrays that don't work with the decreasing tab numbers
-						for (int arrayIndex = 0; arrayIndex < Var_Array.singleArrayNameSave.size(); arrayIndex++) {
-							if (resetIndexCalc == true) {
-								resetIndexCalc = false;
-								arrayIndex = 0;
-							}
-							if (this.tabNum == Integer.parseInt(Var_Array.singleArrayNameSave.get(arrayIndex)[1])) {
-								resetIndexCalc = true;
-								Var_Array.singleArraySave.remove(arrayIndex);
-								Var_Array.singleArrayNameSave.remove(arrayIndex);
-							}
-						}
-						for (int arrayIndex = 0; arrayIndex < Var_Array.doubleArrayNameSave.size(); arrayIndex++) {
-							if (resetIndexCalc == true) {
-								resetIndexCalc = false;
-								arrayIndex = 0;
-							}
-							if (this.tabNum == Integer.parseInt(Var_Array.doubleArrayNameSave.get(arrayIndex)[1])) {
-								resetIndexCalc = true;
-								Var_Array.doubleArraySave.remove(arrayIndex);
-								Var_Array.doubleArrayNameSave.remove(arrayIndex);
-							}
-						}
+						Var_Define.garbageCollect(this.tabNum, resetLastDef);
+						Var_Func.garbageCollect(this.tabNum, resetLastFunc);
+						Var_Array.garbageCollect(this.tabNum, resetLastArray);
+						Var_Array.garbageCollect2D(this.tabNum, resetLast2DArray);
 
 						indexCalc = 0;
 						this.tabNum--;

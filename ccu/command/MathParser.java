@@ -1197,7 +1197,7 @@ public class MathParser {
 
 									} else {
 										System.out
-												.println("ERROR: Operators don't match up with numbers in line '" + fullLineGet + "'");
+												.println("ERROR: Operators don't match up with numbers in '" + getString + "' in line '" + fullLineGet + "'");
 										System.exit(0);
 									}
 								}

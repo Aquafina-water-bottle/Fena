@@ -2,6 +2,7 @@ package ccu.command;
 
 import java.util.ArrayList;
 
+import ccu.general.NumberUtils;
 import ccu.general.ParamUtils;
 
 public class Var_Func {
@@ -13,11 +14,13 @@ public class Var_Func {
 	 * -CCU. is a special prefix to a FUNC or DEF name meant for imported functions
 	 * -Is followed by lower camelCase if it's a FUNC and upper CamelCase if it's a DEF
 	 * -eg. CCU.Set($RandInt$;3) is a DEF, while CCU.xpNumber is a FUNC
-	 * {GLOBAL ACTIVATE CCU.xpNumber args}:
-	 * {ACTIVATE CCU.xpNumber args}:
-	 * {GLOBAL args}:
-	 * {args}:
+	 * {PARSESEP Func_Something}
+	 * {GLOBAL ACTIVATE CCU.xpNumber ARGS}:
+	 * {ACTIVATE CCU.xpNumber ARGS}:
+	 * {GLOBAL ARGS}:
+	 * {ARGS}:
 	 * -ACTIVATE is essentially just putting 'CCU.xpNumber' at the end of the function
+	 * -PARSESEP is to separate variables from each other by adding a tab space to them
 	 * 	
 	 * How functions should work - No checkCommands() recurring loop
 	 * Instead, just copies as is without any modification
@@ -53,9 +56,11 @@ public class Var_Func {
 	public ArrayList<String> getArray() {
 		// Will not do checkCommands()
 
-		Boolean isGlobal = null;
+		Integer visibilityType = null;
 		Boolean hasActivated = null;
+		Boolean parseSep = null;
 		String activatedFunc = null;
+		Integer splitNum = null;
 
 		String statementEncase = this.fullLineGet.replaceFirst("FUNC", "").replaceAll("^\\s+", "");
 		if (statementEncase.startsWith("{") && statementEncase.endsWith("}:")) {
@@ -71,9 +76,46 @@ public class Var_Func {
 				case "GLOBAL":
 					// removes GLOBAL
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
-					isGlobal = true;
+					visibilityType = 1;
 					break;
+					
+				case "TEMP":
+					// removes TEMP
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					visibilityType = 2;
+					break;
+					
+				case "RETURN":
+					// removes TEMP
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					visibilityType = 3;
+					break;
+					
+				case "PARSESEP":
+					// removes PARSESEP
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					parseSep = true;
+					break;
+					
+				case "MAX":
+					// removes MAX
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 
+					if (statementArgs.contains(" ") == false) {
+						System.out.println("ERROR: Invalid arguments for 'MAX' in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+
+					String splitNumTest = statementArgs.substring(0, statementArgs.indexOf(" "));
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					if (NumberUtils.isInt(splitNumTest)) {
+						splitNum = Integer.parseInt(splitNumTest);
+					} else {
+						System.out.println("ERROR: 'MAX' in line '" + this.fullLineGet + "' must be proceeded with an integer");
+						System.exit(0);
+					}
+					break;
+					
 				case "ACTIVATE":
 					// removes ACTIVATE
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
@@ -106,15 +148,321 @@ public class Var_Func {
 					break;
 				}
 			}
+			
+			if (statementArgs.contains(" ")) {
+				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
+				case "GLOBAL":
+					if (visibilityType == null) {
+						// removes GLOBAL
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						visibilityType = 1;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "TEMP":
+					if (visibilityType == null) {
+						// removes TEMP
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						visibilityType = 2;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "RETURN":
+					if (visibilityType == null) {
+						// removes TEMP
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						visibilityType = 3;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "PARSESEP":
+					if (parseSep == null) {
+						// removes GLOBAL
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						parseSep = true;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+
+				case "MAX":
+					// removes MAX
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+
+					if (statementArgs.contains(" ") == false) {
+						System.out.println("ERROR: Invalid arguments for 'MAX' in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+
+					if (splitNum == null) {
+						String splitNumTest = statementArgs.substring(0, statementArgs.indexOf(" "));
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						if (NumberUtils.isInt(splitNumTest)) {
+							splitNum = Integer.parseInt(splitNumTest);
+						} else {
+							System.out.println("ERROR: 'MAX' in line '" + this.fullLineGet + "' must be proceeded with an integer");
+							System.exit(0);
+						}
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "ACTIVATE":
+					if (hasActivated == null) {
+						// removes ACTIVATE
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						hasActivated = true;
+						
+						if (statementArgs.contains(" ") == false) {
+							System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+							System.exit(0);
+						}
+						
+						activatedFunc = statementArgs.substring(0, statementArgs.indexOf(" "));
+						
+						// testing if it has parameters and does not have an ending bracket
+						while (true) {
+							if (activatedFunc.contains("(") && activatedFunc.endsWith(")") == false) {
+								if (statementArgs.contains(" ")) {
+									
+									// removes current
+									statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+									activatedFunc += " " + statementArgs.substring(0, statementArgs.indexOf(" "));
+								} else {
+									System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+									System.exit(0);
+								}
+							} else {
+								break;
+							}
+						}
+						
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				}
+			}
+			
+			if (statementArgs.contains(" ")) {
+				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
+				case "GLOBAL":
+					if (visibilityType == null) {
+						// removes GLOBAL
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						visibilityType = 1;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "TEMP":
+					if (visibilityType == null) {
+						// removes TEMP
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						visibilityType = 2;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "RETURN":
+					if (visibilityType == null) {
+						// removes TEMP
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						visibilityType = 3;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "PARSESEP":
+					if (parseSep == null) {
+						// removes GLOBAL
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						parseSep = true;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "MAX":
+					// removes MAX
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					
+					if (statementArgs.contains(" ") == false) {
+						System.out.println("ERROR: Invalid arguments for 'MAX' in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					
+					if (splitNum == null) {
+						String splitNumTest = statementArgs.substring(0, statementArgs.indexOf(" "));
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						if (NumberUtils.isInt(splitNumTest)) {
+							splitNum = Integer.parseInt(splitNumTest);
+						} else {
+							System.out.println("ERROR: 'MAX' in line '" + this.fullLineGet + "' must be proceeded with an integer");
+							System.exit(0);
+						}
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "ACTIVATE":
+					if (hasActivated == null) {
+						// removes ACTIVATE
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						hasActivated = true;
+						
+						if (statementArgs.contains(" ") == false) {
+							System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+							System.exit(0);
+						}
+						
+						activatedFunc = statementArgs.substring(0, statementArgs.indexOf(" "));
+						
+						// testing if it has parameters and does not have an ending bracket
+						while (true) {
+							if (activatedFunc.contains("(") && activatedFunc.endsWith(")") == false) {
+								if (statementArgs.contains(" ")) {
+									
+									// removes current
+									statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+									activatedFunc += " " + statementArgs.substring(0, statementArgs.indexOf(" "));
+								} else {
+									System.out.println("ERROR: Invalid arguments for 'ACTIVATE' in line '" + this.fullLineGet + "'");
+									System.exit(0);
+								}
+							} else {
+								break;
+							}
+						}
+						
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				}
+			}
 
 			if (statementArgs.contains(" ")) {
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
 				case "GLOBAL":
-					if (isGlobal == null) {
+					if (visibilityType == null) {
 						// removes GLOBAL
 						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
-						isGlobal = true;
+						visibilityType = 1;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "TEMP":
+					if (visibilityType == null) {
+						// removes TEMP
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						visibilityType = 2;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "RETURN":
+					if (visibilityType == null) {
+						// removes TEMP
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						visibilityType = 3;
+						
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+					
+				case "PARSESEP":
+					if (parseSep == null) {
+						// removes GLOBAL
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						parseSep = true;
 
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					break;
+
+				case "MAX":
+					// removes MAX
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+
+					if (statementArgs.contains(" ") == false) {
+						System.out.println("ERROR: Invalid arguments for 'MAX' in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+
+					if (splitNum == null) {
+						String splitNumTest = statementArgs.substring(0, statementArgs.indexOf(" "));
+						statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+						if (NumberUtils.isInt(splitNumTest)) {
+							splitNum = Integer.parseInt(splitNumTest);
+						} else {
+							System.out.println("ERROR: 'MAX' in line '" + this.fullLineGet + "' must be proceeded with an integer");
+							System.exit(0);
+						}
 					} else {
 						System.out.println(
 								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
@@ -163,10 +511,14 @@ public class Var_Func {
 
 				}
 			}
-
+			// sets split num settings
+			if (splitNum == null) {
+				splitNum = -1;
+			}
+			
 			// sets global settings
-			if (isGlobal == null) {
-				isGlobal = false;
+			if (visibilityType == null) {
+				visibilityType = 0;
 			}
 
 			// sets activate settings
@@ -191,7 +543,7 @@ public class Var_Func {
 					System.exit(0);
 				}
 			}*/
-
+			
 			// Checks if the function name is literally nothing
 			if (statementArgs.trim().length() == 0) {
 				System.out.println("ERROR: Function name at '" + this.fullLineGet + "' is blank");
@@ -212,15 +564,28 @@ public class Var_Func {
 				System.exit(0);
 			}
 
-			// Checks whether the defineName and tabnum is the same anywhere --> will remove
-			int funcIndex = 0;
-			int tabNumCalc = 0;
-
-			// if it's global, tabNumCalc is already set to 1
-			if (isGlobal == false) {
-				tabNumCalc = this.tabNum - 1;
+			if (parseSep == null) {
+				parseSep = false;
 			}
 
+			// Checks whether the defineName and tabnum is the same anywhere --> will remove
+			int funcIndex = 0;
+			int tabNumCalc = this.tabNum - 1;
+			
+			switch (visibilityType) {
+			case 1:
+				tabNumCalc = 0;
+				break;
+				
+			case 2:
+				tabNumCalc = this.tabNum;
+				break;
+				
+			case 3:
+				tabNumCalc = this.tabNum - 2;
+				break;
+			}
+			
 			// checks for repeats
 			while (funcIndex < arrayFuncNameSave.size()) {
 				if (arrayFuncNameSave.get(funcIndex)[2].equals(statementArgs)
@@ -239,16 +604,22 @@ public class Var_Func {
 				arrayFuncCalc[i] = arrayGet.get(i).substring(this.tabNum);
 			}
 
-			String[] addStringArray = new String[3];
+			String[] addStringArray = new String[5];
 
 			// Gets param number
 			addStringArray[0] = ParamUtils.countParams(arrayGet, this.fullLineGet) + "";
 
 			// Adds tab num
 			addStringArray[1] = tabNumCalc + "";
-
+			
 			// Adds the name
 			addStringArray[2] = statementArgs;
+
+			// Adds whether it parses vars or not
+			addStringArray[3] = parseSep + "";
+			
+			// Adds max split num
+			addStringArray[4] = splitNum + "";
 
 			arrayFuncSave.add(arrayFuncCalc);
 			arrayFuncNameSave.add(addStringArray);
@@ -262,6 +633,26 @@ public class Var_Func {
 			return arrayFuncActivateCalc;
 		} else {
 			return null;
+		}
+	}
+	
+	public static void garbageCollect(int tabNum, int resetlastFunc) {
+		boolean resetIndexCalc = false;
+
+		// reset all functions that don't work with the decreasing tab numbers
+		for (int funcIndex = 0; funcIndex < arrayFuncNameSave.size(); funcIndex++) {
+			if ((resetlastFunc <= 1) && funcIndex == arrayFuncNameSave.size() - 1) {
+				break;
+			}
+			if (resetIndexCalc == true) {
+				resetIndexCalc = false;
+				funcIndex = 0;
+			}
+			if (tabNum <= Integer.parseInt(arrayFuncNameSave.get(funcIndex)[1])) {
+				resetIndexCalc = true;
+				arrayFuncSave.remove(funcIndex);
+				arrayFuncNameSave.remove(funcIndex);
+			}
 		}
 	}
 }

@@ -53,9 +53,6 @@ public class Var_Array {
 	public static ArrayList<String[]> singleArraySave = new ArrayList<String[]>();
 	public static ArrayList<String[]> singleArrayNameSave = new ArrayList<String[]>();
 
-	// Get ACTIVATE func
-	private ArrayList<String> arrayFuncActivateCalc = new ArrayList<String>();
-
 	private ArrayList<String> arrayGet = new ArrayList<String>();
 	private int tabNum;
 	private String fullLineGet;
@@ -67,10 +64,11 @@ public class Var_Array {
 	}
 
 	public ArrayList<String> getArray() {
+		ArrayList<String> returnArray = new ArrayList<String>();
 
 		boolean is2DArray = false;
 		Integer arrayType = null;
-		Boolean isGlobal = null;
+		Integer visibilityType = null;
 
 		Boolean hasActivated = null;
 		String activatedFunc = null;
@@ -89,8 +87,20 @@ public class Var_Array {
 			if (statementArgs.contains(" ")) {
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
 				case "GLOBAL":
-					isGlobal = true;
+					visibilityType = 1;
 					// removes GLOBAL
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					break;
+
+				case "TEMP":
+					visibilityType = 2;
+					// removes TEMP
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
+					break;
+
+				case "RETURN":
+					visibilityType = 3;
+					// removes RETURN
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1);
 					break;
 
@@ -144,14 +154,38 @@ public class Var_Array {
 			if (statementArgs.contains(" ")) {
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
 				case "GLOBAL":
-					if (isGlobal == null) {
-						isGlobal = true;
+					if (visibilityType == null) {
+						visibilityType = 1;
 					} else {
 						System.out.println(
 								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 						System.exit(0);
 					}
 					// removes GLOBAL
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "TEMP":
+					if (visibilityType == null) {
+						visibilityType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes TEMP
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "RETURN":
+					if (visibilityType == null) {
+						visibilityType = 3;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes RETURN
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
 					break;
 
@@ -224,14 +258,38 @@ public class Var_Array {
 			if (statementArgs.contains(" ")) {
 				switch (statementArgs.substring(0, statementArgs.indexOf(" "))) {
 				case "GLOBAL":
-					if (isGlobal == null) {
-						isGlobal = true;
+					if (visibilityType == null) {
+						visibilityType = 1;
 					} else {
 						System.out.println(
 								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
 						System.exit(0);
 					}
 					// removes GLOBAL
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "TEMP":
+					if (visibilityType == null) {
+						visibilityType = 2;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes TEMP
+					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
+					break;
+
+				case "RETURN":
+					if (visibilityType == null) {
+						visibilityType = 3;
+					} else {
+						System.out.println(
+								"ERROR: There are two arguments that conflict with each other in line '" + this.fullLineGet + "'");
+						System.exit(0);
+					}
+					// removes RETURN
 					statementArgs = statementArgs.substring(statementArgs.indexOf(" ") + 1, statementArgs.length());
 					break;
 
@@ -349,8 +407,8 @@ public class Var_Array {
 			}
 
 			// Gets options
-			if (isGlobal == null) {
-				isGlobal = false;
+			if (visibilityType == null) {
+				visibilityType = 0;
 			}
 
 			if (arrayType == null) {
@@ -372,10 +430,20 @@ public class Var_Array {
 				is2DArray = true;
 			}
 
-			int tabNumCalc = 0;
+			int tabNumCalc = this.tabNum - 1; // normal
 
-			if (isGlobal == false) {
-				tabNumCalc = this.tabNum - 1;
+			switch (visibilityType) {
+			case 1: // global
+				tabNumCalc = 0;
+				break;
+			
+			case 2: // temp
+				tabNumCalc = this.tabNum;
+				break;
+				
+			case 3: // return
+				tabNumCalc = this.tabNum - 2;
+				break;
 			}
 
 			// checks for repeats
@@ -409,7 +477,7 @@ public class Var_Array {
 				ArrayList<String[]> tempArrayStorage = new ArrayList<String[]>();
 
 				for (int i = 1; i < arrayGet.size(); i++) {
-
+					
 					// split
 					if (StringUtils.countChars(arrayGet.get(i), "\t") == whiteSpaceCalc.length() + 1
 							&& arrayGet.get(i).trim().equals("} {")) {
@@ -421,6 +489,9 @@ public class Var_Array {
 						for (int j = 0; j < tempArray.size(); j++) {
 							getArrayCalc[j] = tempArray.get(j).trim();
 							ArgUtils.checkCoords(getArrayCalc[j], arrayType, this.fullLineGet);
+							if (getArrayCalc[j].equals("NULL")) {
+								getArrayCalc[j] = "";
+							}
 						}
 
 						tempArrayStorage.add(getArrayCalc);
@@ -476,6 +547,9 @@ public class Var_Array {
 
 				for (int i = 0; i < arrayGet.size(); i++) {
 					getArrayCalc[i] = arrayGet.get(i).trim();
+					if (getArrayCalc[i].equals("NULL")) {
+						getArrayCalc[i] = "";
+					}
 				}
 
 				// adds array
@@ -508,12 +582,16 @@ public class Var_Array {
 		}
 		*/
 
-		if (hasActivated != null && hasActivated) {
-			arrayFuncActivateCalc.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
-			return arrayFuncActivateCalc;
+		if (is2DArray) {
+			returnArray.add("2D");
 		} else {
-			return null;
+			returnArray.add("1D");
 		}
+
+		if (hasActivated != null && hasActivated) {
+			returnArray.add(this.fullLineGet.substring(0, this.tabNum - 1) + activatedFunc);
+		}
+		return returnArray;
 	}
 
 	// This is used specifically for getting the part past the array name
@@ -533,6 +611,48 @@ public class Var_Array {
 		statementEncase = statementEncase.substring(statementEncase.indexOf(" ") + 1, statementEncase.length());
 
 		return getLine.length() - statementEncase.length();
+	}
+
+	public static void garbageCollect(int tabNum, int resetlastArray) {
+		boolean resetIndexCalc = false;
+
+		// reset all arrays that don't work with the decreasing tab numbers
+		for (int arrayIndex = 0; arrayIndex < singleArrayNameSave.size(); arrayIndex++) {
+			if ((resetlastArray <= 1) && arrayIndex == singleArrayNameSave.size() - 1) {
+				break;
+			}
+
+			if (resetIndexCalc == true) {
+				resetIndexCalc = false;
+				arrayIndex = 0;
+			}
+			if (tabNum <= Integer.parseInt(singleArrayNameSave.get(arrayIndex)[1])) {
+				resetIndexCalc = true;
+				singleArraySave.remove(arrayIndex);
+				singleArrayNameSave.remove(arrayIndex);
+			}
+		}
+	}
+
+	public static void garbageCollect2D(int tabNum, int resetlast2DArray) {
+		boolean resetIndexCalc = false;
+
+		// reset all 2D arrays that don't work with the decreasing tab numbers
+		for (int arrayIndex = 0; arrayIndex < doubleArrayNameSave.size(); arrayIndex++) {
+			if ((resetlast2DArray <= 1) == false && arrayIndex == doubleArrayNameSave.size() - 1) {
+				break;
+			}
+
+			if (resetIndexCalc == true) {
+				resetIndexCalc = false;
+				arrayIndex = 0;
+			}
+			if (tabNum <= Integer.parseInt(doubleArrayNameSave.get(arrayIndex)[1])) {
+				resetIndexCalc = true;
+				doubleArraySave.remove(arrayIndex);
+				doubleArrayNameSave.remove(arrayIndex);
+			}
+		}
 	}
 
 }

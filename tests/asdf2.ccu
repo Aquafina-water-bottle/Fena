@@ -14,7 +14,7 @@ DEF $CMDSizeZ$ 16
 
 DEF $TextStart$ {"text":"","extra":[{"text":"[","color":"gray"},{"text":"NAME","color":"COLOR","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"NAME","color":"COLOR"}}},{"text":"]","color":"gray"},{"text":": "},
 
-DEF $StyleDirection$ +X
+DEF $StyleOption$ +X
 DEF COORDS $CoordsOption$ x y z
 DEF $BlockOption$ stonebrick 0
 
@@ -25,7 +25,7 @@ IMPORT {LIBRARY GETDIR General}
 OPTIONS:
 	blockOption stonebrick 0
 	coordsOption $CoordsOption$
-	styleOption $StyleDirection$ 16
+	styleOption $StyleOption$ 16
 	parseOption true
 	commandOption true
 	combinerOption true

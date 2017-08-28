@@ -252,16 +252,17 @@ public class Setblock {
 
 			// initial commands
 			if ((finalCommands == null || finalCommands.isEmpty()) == false) {
-				parsedFileCommands.add("\nFINALIZE");
+				parsedFileCommands.add("");
+				parsedFileCommands.add("FINALIZE");
 				for (int i = 0; i < finalCommands.size(); i++) {
 					parsedFileCommands.add("\t" + finalCommands.get(i));
 				}
-
-				parsedFileCommands.add("");
 			}
 
 			if (Cmd_MFunc.arrayMFuncSave.size() > 0 && GroupStructure.groupCommandsArray.size() > 0) {
-				parsedFileCommands.add("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+				parsedFileCommands.add("");
+				parsedFileCommands.add("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+				parsedFileCommands.add("");
 			}
 
 			for (int i = 0; i < Cmd_MFunc.arrayMFuncSave.size(); i++) {
@@ -463,7 +464,8 @@ public class Setblock {
 
 			// goes through initial commands (fill and setblock) and the actual setblock commands
 			for (String writeCmd : fullCombinerCommands) {
-				writer.println(writeCmd + "\n");
+				writer.println(writeCmd);
+				writer.println();
 			}
 
 			writer.close();
@@ -485,9 +487,11 @@ public class Setblock {
 				System.exit(0);
 			}
 
-			writer.println(ReadConfig.regFilePath.getName() + "\n");
+			writer.println(ReadConfig.regFilePath.getName());
+			writer.println();
 			for (String writeCmd : fullCombinerCommands) {
-				writer.println(writeCmd + "\n");
+				writer.println(writeCmd);
+				writer.println();
 			}
 
 			writer.close();

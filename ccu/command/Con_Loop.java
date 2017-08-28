@@ -20,7 +20,7 @@ public class Con_Loop {
 	}
 
 	public ArrayList<String> getArray() {
-		
+
 		/** Iterates though either an array or a given set of numbers
 		 * Valid operators are: +, -, /, *, ^, () (NOTICE: % is not valid)
 		 * Examples:
@@ -41,7 +41,7 @@ public class Con_Loop {
 		String statementEncase = this.fullLineGet.replaceFirst("LOOP", "").replaceAll("^\\s+", "");
 		if (statementEncase.startsWith("{") && statementEncase.endsWith("}:")) {
 
-			statementEncase = statementEncase.substring(0, statementEncase.length() - 1).replace("CALC(","(");
+			statementEncase = statementEncase.substring(0, statementEncase.length() - 1);
 			// Gets rid of the last colon
 			// splits in spaces, gets number of {}
 
@@ -73,7 +73,7 @@ public class Con_Loop {
 						if (stringCalc.equals("{NULL}")) {
 							stringCalc = "{}";
 						}
-						
+
 						// substring to get rid of curly brackets
 						loopArray = MathParser.getLoopArray(stringCalc.substring(1, stringCalc.length() - 1), fullLineGet); // gets the math stuff here
 						loopArrayStorage.add(loopArray);
@@ -83,7 +83,7 @@ public class Con_Loop {
 
 				// checks tab spaces
 				ArgUtils.checkWhiteSpace(this.arrayGet, this.tabNum, false);
-				
+
 				for (int i = 0; i < this.arrayGet.size(); i++) {
 					// removes a tab space infront of the line
 					this.arrayGet.set(i, this.arrayGet.get(i).substring(1));
@@ -101,9 +101,8 @@ public class Con_Loop {
 
 					// replaces params and adds it onto the arrayLoopReturn
 					arrayLoopReturn.addAll(ParamUtils.replaceParams(this.arrayGet, paramArrayGet, paramNum, tabNum - 1));
-					
+
 				}
-				ArgUtils.checkCommands(arrayLoopReturn, tabNum - 1);
 
 			} else {
 				System.out.println("ERROR: Curly brackets in line '" + this.fullLineGet + "' are not balanced");
@@ -125,7 +124,7 @@ public class Con_Loop {
 			System.out.println("ERROR: Incorrect syntax at '" + this.fullLineGet + "'");
 			System.exit(0);
 		}
-		
+
 		return arrayLoopReturn;
 	}
 }

@@ -67,11 +67,25 @@ public class GeneralFile {
 		}
 		return doc;
 	}
+	
+	
+	public static ArrayList<String> parseCCU(ArrayList<String> getArray, boolean isImport) {
 
-	public static ArrayList<String> parseCCU(ArrayList<String> getArray) {
+		
 		ArrayList<String> returnArray =removeRightWhiteSpace(removeSkipLineBlock(
-				combineLine(removeComment(removeCommentBlock(escapeLine(getArray, "`"), "//=", "=//"), "//", true), "\\"), "/*", "*/",
+				combineLine(removeComment(removeCommentBlock(escapeLine(getArray, "`", "/"), "//=", "=//"), "//", true), "\\"), "/*", "*/",
 				"-/-"));
+		
+
+		if (isImport) {
+			for (int i = 0; i < returnArray.size(); i++) {
+				returnArray.set(i, returnArray.get(i).replace("ISIMPORT", "true"));
+			}
+		} else {
+			for (int i = 0; i < returnArray.size(); i++) {
+				returnArray.set(i, returnArray.get(i).replace("ISIMPORT", "false"));
+			}
+		}
 		return returnArray;
 	}
 
@@ -127,7 +141,7 @@ public class GeneralFile {
 		return returnArray;
 	}
 
-	public static ArrayList<String> escapeLine(ArrayList<String> arrayGet, String escapeChar) {
+	public static ArrayList<String> escapeLine(ArrayList<String> arrayGet, String escapeChar, String startChar) {
 
 		ArrayList<String> returnArray = new ArrayList<String>();
 
@@ -135,22 +149,23 @@ public class GeneralFile {
 			StringBuilder sb = new StringBuilder();
 
 			// adds this because it doesn't split properly if it ends with '`'
-			line += " ";
+		//	line += " ";
 			String[] splitEscape = line.split(Pattern.quote(escapeChar));
-
+			
 			for (int i = 0; i < splitEscape.length; i++) {
 				if (i % 2 == 1) {
 					String[] splitArray = splitEscape[i].split("|");
 					for (String charInArray : splitArray) {
-						sb.append(escapeChar + charInArray);
+						if (!charInArray.equals("")) {
+							sb.append(escapeChar + charInArray);
+						}
 					}
 
-					sb.append("`");
 				} else {
 					sb.append(splitEscape[i]);
 				}
 			}
-			returnArray.add(sb.substring(0, sb.length() - 1).replace("``", ""));
+			returnArray.add(sb.substring(0, sb.length()));
 		}
 
 		return returnArray;
