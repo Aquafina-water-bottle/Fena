@@ -1,0 +1,420 @@
+//(General Utils)
+
+IMPORT {LIBRARY v2/checkImport.ccu}
+CCU.checkImport(ISIMPORT;general/utils)
+
+//<Regular defines
+///	For area effect clouds lol
+DEF $Duration$ Duration:2147483647
+
+///	For no loot drops
+DEF $NoLoot$ DeathLootTable:"minecraft:empty"
+
+DEF ScTA scoreboard teams add
+DEF ScTO scoreboard teams option
+DEF ScTR scoreboard teams remove
+DEF ScOA scoreboard objectives add
+DEF ScSS scoreboard objectives setdisplay sidebar
+DEF ScOS scoreboard objectives setdisplay
+DEF ScOR scoreboard objectives remove
+DEF ScOP scoreboard players operation
+
+///	Simply uses the log change base formula
+///	CCU_LogBase(base;number)
+DEF CCU_LogBase LOG(DEC(|0|)) / LOG(DEC(|1|))
+
+///	Gets the largest exponent where a binary search can successfully go past the number
+FUNC {GLOBAL CCU.getBinaryExponent}:
+	DEF $CCUCalcBinaryExponent$ CALC(CCU_LogBase(|0;1|;2.0))
+	CCU.instantCalc(`$CCUCalcBinaryExponent$`)
+///	PRINT $CCUCalcBinaryExponent$
+	
+	CCU.roundDown(`$CCUCalcBinaryExponent$`)
+
+DEF Snd_Pling minecraft:block.note.pling
+DEF Snd_XP minecraft:entity.experience_orb.pickup
+DEF Snd_Item minecraft:entity.item.pickup
+DEF Snd_TP minecraft:entity.endermen.teleport
+DEF Snd_Wither minecraft:entity.wither.death
+DEF Snd_Level minecraft:entity.player.levelup
+DEF Snd_Explode minecraft:entity.generic.explode
+DEF Snd_Hat minecraft:block.note.hat
+DEF Snd_Primed minecraft:entity.tnt.primed
+//>
+
+//<Setting Options
+//= from 1 --> 2 --> 4... etc
+ARRAY {GLOBAL ACTIVATE CCU.setOptions(@e[type=ArmorStand,RRStand,RRop>=$Temp$];RRop) ARGS}:
+	{
+		
+		
+	} {
+		
+		
+	} {
+		
+		
+	} {
+		
+		
+	}
+=//
+
+FUNC {GLOBAL CCU.setOptions}:
+///	deincrementing loop
+	LOOP {ARGS[-1] 0 - 1}:
+		DEF $Temp$ CALC(2 ^ |0;1|)
+		USE {|0;1|}:
+			LOOP {0 ARGS[|0|][-1] + 1}:
+				ARGS[|0;1|][|0|]
+				
+	///	removes score
+		IF {$Temp$ != 1}:
+			|0;1| |1;1| - $Temp$
+		IF {$Temp$ = 1}:
+			|0;1| |1;1| = 0
+//>
+
+//<Setting Constants
+//=
+Initialize true/false
+
+ARRAY {TEMP ACTIVATE CCU.setConstantsArray(Obj_name;true/false) ARGS}:
+	-1
+	20
+	
+CCU.setConstants(Obj_name;true/false;Number1;Number2;Number3)
+=//
+
+FUNC {PARSESEP CCU.setConstantsArray}:
+	IF {|0| = ``}:
+		DEF $Temp$ Number
+	ELSE:
+		DEF $Temp$ |0;1|
+	IF {|1| = true}:
+		scoreboard objectives add $Temp$ dummy
+	LOOP {ARGS[S]}:
+		|0| $Temp$ = |0|
+		
+FUNC {PARSESEP MAX 2 CCU.setConstants}:
+	IF {|0| = ``}:
+		DEF $Temp$ Number
+	ELSE:
+		DEF $Temp$ |0;1|
+	IF {|1| = true}:
+		scoreboard objectives add $Temp$ dummy
+	LOOP {|2|}:
+		|0| $Temp$ = |0|
+//>
+
+//<Objective and Team lists
+//=
+ARRAY {GLOBAL ACTIVATE CCU.objectiveAdd(Obj_GeneralScoreboardStart) Obj_GeneralScoreboardStart}:
+	RRti dummy Royal Rumble Timer
+	RRpl dummy Royal Rumble Player List
+
+
+CCU.objectiveRemove(Obj_GeneralScoreboardStart)
+=//
+
+FUNC {PARSESEP CCU.objectiveAdd}:
+	LOOP {|0|[S]}:
+		scoreboard objectives add |0|
+
+FUNC {PARSESEP CCU.objectiveRemove}:
+	LOOP {|0|[S]}:
+		SPLIT {MAX 1 Arr_Temp |0|} { }
+		scoreboard objectives remove Arr_Temp[0]
+	UNASSIGN {ARRAY Arr_Temp}
+
+//=
+///	OPT in the beginning means it's an option
+ARRAY {GLOBAL ACTIVATE CCU.teamAdd(Team_GeneralScoreboardStart) Team_GeneralScoreboardStart}:
+	RRg Royal Rumble Green
+	OPT color green
+	OPT friendlyfire false
+
+
+CCU.teamRemove(Team_GeneralScoreboardStart)
+=//
+
+FUNC {PARSESEP CCU.teamAdd}:
+	LOOP {|0|[S]}:
+		SPLIT {MAX 1 Arr_Temp |0|} { }
+		IF {Arr_Temp[0] = OPT}:
+			scoreboard teams option $Temp$ Arr_Temp[1]
+		
+		IF {Arr_Temp[0] != OPT}:
+			scoreboard teams add |0|
+			DEF $Temp$ Arr_Temp[0] /// temp storage for the team name
+
+FUNC {PARSESEP CCU.teamRemove}:
+	LOOP {|0|[S]}:
+		SPLIT {Arr_Temp |0|} { }
+		IF {Arr_Temp[0] != OPT}:
+			scoreboard teams remove Arr_Temp[0]
+//>
+
+//<Villager offers
+//=
+ARRAY {ACTIVATE CCU.getVillagerOffers() ARGS}:
+	{
+	///	buying then selling
+	///	item id
+	///	item count
+	///	item damage value
+	///	item tag
+	///	only the item id is necessary
+		pumpkin_pie
+		20
+	} {
+		diamond_helmet
+	} {
+		pumpkin_pie
+		50
+	} {
+		diamond_helmet
+		1
+		0
+		{ench:[{id:0,lvl:1}]}
+	}
+returns with $GetVillagerTag$
+=//
+
+///	FUNC {CCU.getVillagerOffers}:
+	
+	
+//>
+
+//<Lists
+//=
+Array Add: Adds everything in ARGS
+	ARRAY {TEMP ACTIVATE CCU.arrayListAdd(Arr_Name;true/false) ARGS}:
+		element 1
+		element 2
+		
+	or
+	
+	ACTIVATE CCU.arrayListAdd(Arr_Name;true/false;String)
+		
+Array Remove: Removes the index number given if any number is given
+	CCU.arrayListRemove(Arr_Name) or CCU.arrayListRemove(Arr_Name;3)
+=//
+
+//=
+FUNC {PARSESEP CCU.arrayListAdd}:
+	DEF $Temp$ true
+	IF {|0|[S] != |0|`[S]`}:
+		DEF $Temp$ false
+		ARRAY {Arr_Temp}:
+			LOOP {|0|[S]}:
+				|0|
+	
+	IF {|1| = ``}: /// meaning the second parameter doesn't have a number
+		ARRAY {GLOBAL |0|}:
+			IF {$Temp$ = false}:
+				LOOP {Arr_Temp[S]}:
+					|0|
+			LOOP {ARGS[S]}:
+				|0|
+				
+	ELSE:
+		ARRAY {GLOBAL |0|}:
+			IF {$Temp$ = false}:
+				LOOP {0 Arr_Temp[-1] + 1}:
+					IF {|0| = |1;1|}:	
+						LOOP {ARGS[S]}:
+							|0|
+					Arr_Temp[|0|]
+=//
+
+FUNC {PARSESEP CCU.arrayListAdd}:
+	DEF $Temp$ true
+	IF {|0|[S] != |0|`[S]`}:
+		DEF $Temp$ false
+		ARRAY {Arr_Temp}:
+			LOOP {|0|[S]}:
+				|0|
+				
+	IF {|1| = true}:
+		DEF $TempArgs$ GLOBAL
+	ELSE:
+		DEF $TempArgs$ RETURN
+	
+	ARRAY {$TempArgs$ |0|}:
+		IF {$Temp$ = false}:
+			LOOP {Arr_Temp[S]}:
+				|0|
+				
+		IF {|2| = ``}: /// meaning the second parameter doesn't have a string
+			LOOP {ARGS[S]}:
+				|0|
+		ELSE:
+			|2|
+	
+FUNC {PARSESEP CCU.arrayListRemove}:
+	ARRAY {Arr_Temp}:
+		LOOP {|0|[S]}:
+			|0|
+	
+	IF {|1| = ``}: /// meaning no arguments are given apart from the array name
+		ARRAY {|0|}:
+			LOOP {0 (Arr_Temp[-1] - 1) + 1}:
+				Arr_Temp[|0|]
+				
+	ELSE: /// meaning arguments were given
+		ARRAY {|0|}:
+			LOOP {0 (Arr_Temp[-1]) + 1}:
+				IF {|1;1| != |0|}:
+					Arr_Temp[|0|]
+//>
+
+//<Scoreboard Tags
+//= Takes an array of scoreboard tags and places them inside any given data tag
+ARRAY {Arr_CCUCloudTags}:
+	GetCoordsCloud
+	GetCoordsEntity
+	
+CCU.scoreboardTags(Arr_CCUCloudTags)
+=//
+
+FUNC {PARSESEP CCU.scoreboardTags}:
+	LOOP {0 |0|[-1] + 1}:
+		|0;1|[|0|];
+		IF {|0| != |0;1|[-1]}:
+			,;
+	
+//>
+
+//<Get Selector Args
+//=
+Gets the selector type and arguments
+Arr_Name[0] --> Type
+Arr_Name[1] --> Selector arguments
+
+CCU.getSelectorArgs(`$SelectorType$`;`$SelectorArgs$`;String)
+=//
+
+FUNC {PARSESEP CCU.getSelectorArgs}:
+	SPLIT {MAX 2 Arr_Temp |2|} {[} {]}
+	
+	DEF RETURN |0;1| Arr_Temp[0]
+	
+	IF {Arr_Temp[L] > 1}: /// meaning no selector arguments were given
+		DEF RETURN |1;1| Arr_Temp[1],|0|
+	ELSE:
+		DEF RETURN |1;1| |0|
+//>
+
+//<Math: Instant Calc
+//=
+Instant calc prevents the CALC() loop from getting too big.
+It takes a definition and parses the CALC statements before moving foward by putting it in a LOOP statement
+
+CCU.instantCalc(`$DefName$`)
+CCU.instantCalc(`$DefName$`;true)
+CCU.instantCalc(`$DefName$`;true;CALC(4 + 1))
+CCU.instantCalc(`$DefName$`;true;$SecondDef$)
+=//
+
+FUNC {PARSESEP CCU.instantCalc}:
+	IF {|1| = true}:
+		IF {|2| = ``}:
+			LOOP {PARSE(|0|) PARSE(|0|) + 1}:
+				DEF GLOBAL |0;2| |0;1| /// global, calc definition
+		ELSE:
+			LOOP {|1| |1| + 1}:
+				DEF GLOBAL |0;2| |0;1| /// global, 3rd param
+	ELSE:
+		IF {|2| = ``}:
+			LOOP {PARSE(|0|) PARSE(|0|) + 1}:
+				DEF RETURN |0;2| |0;1| /// normal, calc definition
+		ELSE:
+			LOOP {|1| |1| + 1}:
+				DEF RETURN |0;2| |0;1| /// normal, 3rd param
+//>
+
+//<Math: Rounding
+//=
+Generally, normal rounding can just be done by INT(Number)
+
+	INT($DefName$)
+	0.8 --> 1
+	0.5 --> 1
+	0.3 --> 0
+	-0.1 --> 0
+	-0.5 --> 0
+	-0.9 --> -1
+	-1.1 --> -1
+	
+	CCU.roundUp(`$DefName$`;true/false)
+	0.8 --> 1
+	0.5 --> 1
+	0.3 --> 1
+	-0.1 --> 0
+	-0.5 --> 0
+	-0.9 --> 0
+	-1.1 --> -1
+
+	CCU.roundDown(`$DefName$`;true/false)
+	0.8 --> 0
+	0.5 --> 0
+	0.3 --> 0
+	-0.1 --> -1
+	-0.5 --> -1
+	-0.9 --> -1
+	-1.1 --> -2
+
+	$RoundCalc$ is positive when it normally rounds down
+	$RoundCalc$ is negative when it normally rounds up
+	DEC(INT(Number)) rounds it normally
+
+=//
+FUNC {PARSESEP CCU.roundUp}:
+	DEF $RoundCalc$ CALC(PARSE(|0;1|) - DEC(INT(PARSE(|0;1|))))
+	
+	IF {$RoundCalc$ > 0.0000001}:
+		DEF $RoundResult$ INT(PARSE(|0;1|) + (1 - $RoundCalc$))
+		
+	ELIF {$RoundCalc$ < -0.0000001}:
+		DEF $RoundResult$ INT(PARSE(|0;1|) - $RoundCalc$)
+		
+	ELSE:
+		DEF $RoundResult$ INT(PARSE(|0;1|))
+		
+	CCU.instantCalc(`$RoundResult$`)
+	IF {|0| = true}:
+		DEF GLOBAL |0;1| $RoundResult$
+	ELSE:
+		DEF RETURN |0;1| $RoundResult$
+	
+FUNC {PARSESEP CCU.roundDown}:
+	DEF $RoundCalc$ CALC(PARSE(|0;1|) - DEC(INT(PARSE(|0;1|))))
+	
+	IF {$RoundCalc$ > 0.0000001}:
+		DEF $RoundResult$ INT(PARSE(|0;1|) - $RoundCalc$)
+		
+	ELIF {$RoundCalc$ < -0.0000001}:
+		DEF $RoundResult$ INT(PARSE(|0;1|) - (1 + $RoundCalc$))
+		
+	ELSE:
+		DEF $RoundResult$ INT(PARSE(|0;1|))
+		
+	CCU.instantCalc(`$RoundResult$`)
+	IF {|0| = true}:
+		DEF GLOBAL |0;1| $RoundResult$
+	ELSE:
+		DEF RETURN |0;1| $RoundResult$
+	
+//>
+
+
+
+
+
+
+
+
+
+
+
