@@ -1,5 +1,0 @@
-fill 429 65 50 446 82 50 air 0
-setblock 431 66 51 command_block 5 replace {Command:"say 1",TrackOutput:0b,auto:0b}
-setblock 432 66 51 chain_command_block 5 replace {Command:"say 2",TrackOutput:0b,auto:1b}
-setblock 433 66 51 chain_command_block 5 replace {Command:"say 3",TrackOutput:0b,auto:1b}
-setblock 430 66 51 stonebrick 0

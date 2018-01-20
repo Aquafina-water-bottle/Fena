@@ -1,5 +1,0 @@
-233 7 174 250 21 176
-Grp_MainStart;234 8 175;249 11 175
-Grp_SummonCounterTFClock;234 13 175;249 13 175
-Grp_MainClock;234 15 175;249 18 175
-Grp_MainEnd;234 20 175;249 20 175

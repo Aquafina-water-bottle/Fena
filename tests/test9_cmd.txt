@@ -1,2 +1,0 @@
-fill ~5 ~5 ~5 ~22 ~7 ~7 air 0
-setblock ~6 ~6 ~6 air 0
