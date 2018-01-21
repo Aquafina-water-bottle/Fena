@@ -1,7 +1,8 @@
+import logging
+
 from .nodes import *
 from .nodeVisitor import NodeVisitor
 from .symbols import *
-import logging
 
 class SemanticAnalyzer(NodeVisitor):
     def __init__(self):
@@ -10,7 +11,7 @@ class SemanticAnalyzer(NodeVisitor):
     def visit_Block(self, node):
         for declaration in node.declarations:
             self.visit(declaration)
-        self.visit(node.compound_statement)
+        self.visit(node.compound_stmt)
 
     def visit_Program(self, node):
         logging.debug('ENTER scope: global')

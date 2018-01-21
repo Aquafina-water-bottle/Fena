@@ -12,11 +12,10 @@ class Interpreter(NodeVisitor):
     def visit_Block(self, node):
         for declaration in node.declarations:
             self.visit(declaration)
-        self.visit(node.compound_statement)
+        self.visit(node.compound_stmt)
 
     def visit_VarDecl(self, node):
-        # Do nothing
-        pass
+        self.visit(node.var_node)
 
     def visit_Type(self, node):
         # Do nothing
@@ -62,7 +61,10 @@ class Interpreter(NodeVisitor):
         pass
 
     def visit_ProcedureDecl(self, node):
-        pass
+        # it doesn't actually visit this right now since it doesn't need to
+        # it has to visit it during the procedure call, not the declaration
+        # self.visit(node.block_node)
+        self.GLOBAL_MEMORY[node.proc_name] = node.block_node
 
     def interpret(self):
         tree = self.tree

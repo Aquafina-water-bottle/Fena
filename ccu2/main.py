@@ -1,27 +1,17 @@
 """
 Shoutout to Ruslan Spivak for pretty much providing the bedrock code to this interpreter
-    His tutorial for making an interpreter can be found here: https://ruslanspivak.com/ 
-
-How versioning works:
-    s#_#_# refers to the semantic version, which comes with their strict rules
-        -this will be used for internal reference since it provides better info for the programmer compared to the public version
-    v#_#_# refers to the public version, which is mostly me intrementing the major / minor / patch whenever I feel necessary
-        -eg. if this program makes backwards incompatable changes that affects 0.001% of the users,
-         I'll update the major in the semantic version, but I'll update either the minor or patch in the public version
-         
-s2.0.0:
-    Mostly reorganizing a huge chunk of the pascal interpreter
-        -Got a logger working
-        -Things are in modules now
+    His tutorial for making an interpreter can be found here: https://ruslanspivak.com/lsbasi-part1/
 """
+
+sVersion, vVersion = "s3.0.0", "v2.0.1-ALPHA"
 
 import sys
 import logging
 
-from s2_0_0.lexer import Lexer
-from s2_0_0.parser import Parser
-from s2_0_0.semanticAnalyzer import SemanticAnalyzer
-from s2_0_0.interpreter import Interpreter
+from CCU.lexer import Lexer
+from CCU.parser import Parser
+from CCU.semanticAnalyzer import SemanticAnalyzer
+from CCU.interpreter import Interpreter
 
 def main():
     setupLogger()
@@ -35,12 +25,13 @@ def main():
     try:
         semantic_analyzer.visit(tree)
     except Exception as e:
-        logging.debug(e)
+        logging.exception(e)
 
     interpreter = Interpreter(tree)
     result = interpreter.interpret()
-    logging.debug('')
     logging.debug('Run-time GLOBAL_MEMORY contents:')
+    
+    # error is that GLOBAL_MEMORY doesn't have anything
     for k, v in sorted(interpreter.GLOBAL_MEMORY.items()):
         logging.debug('%s = %s' % (k, v))
 
@@ -89,7 +80,6 @@ def setupLogger():
     fileDateFmt = "%Y/%m/%d %H:%M:%S"
     consoleDateFmt = "%H:%M:%S"
     logFormat = "[%(asctime)s] [%(levelname)s]: %(message)s"
-    
     
     # actually sets up the logger
     logging.basicConfig(format=logFormat, datefmt=fileDateFmt, filename=fileName, level=fileLevel, filemode=fileMode)

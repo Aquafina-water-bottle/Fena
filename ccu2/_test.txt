@@ -8,7 +8,7 @@ program Main;
       procedure Beta(c : integer);
          var y : integer;
 
-         procedure Gamma(c : integer);
+         procedure Gamma(c, d : integer);
             var x : integer;
          begin { Gamma }
             x := a + b + c + x + y + z;
@@ -22,8 +22,8 @@ program Main;
 
    end;  { AlphaA }
 
-   procedure AlphaB(a : integer);
-      var c : real;
+   procedure AlphaB();
+      var c, a : real;
    begin { AlphaB }
       c := a + b;
    end;  { AlphaB }
