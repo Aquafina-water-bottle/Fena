@@ -191,7 +191,7 @@ class Interpreter:
                     # adds "scoreboard players test"
                     tokens[0:0] = [scoreboard, players, test]
                     logging.debug("{}".format(str(command)))
-                    command.replaceTokens(index, -1, 2, tokens)
+                    command.replaceTokens(index, -2, 1, tokens)
                     logging.debug(" -> {}".format(str(command)))
                     break
 

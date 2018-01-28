@@ -147,6 +147,20 @@
 	say @a[y_rotation=2..5] @a[y_rotation=5] @a[y_rotation=2..] @a[y_rotation=..5]
 	say @a[y_rot=2..5] @a[y_rot=5] @a[y_rot=2..] @a[y_rot=..5]
 	say @a[limit=5,gamemode=creative]
+	
+!mfunc wiki_test
+	@a RRti - 1 {SomeData:Tag}
+	@a RRti = 10 {SomeData:Tag}
+	@a RRti ? 5
+	@a RRti ? 0 10
+	@a reset RRti
+	@a enable RRti
+	@a + RRTimer {SomeData:Tag}
+	@a - RRTimer {SomeData:Tag}
+	join RRd_y @a
+	leave @a
+	empty RRd_y
+
 
 
 

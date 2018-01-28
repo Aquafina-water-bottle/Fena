@@ -33,3 +33,6 @@ s4.0.0		v0.1.0
 
     Post:
         -Generally working now
+
+s4.0.1		v0.1.1
+    -Fixed a bug with "scoreboard players test", now doesn't have a random execute command

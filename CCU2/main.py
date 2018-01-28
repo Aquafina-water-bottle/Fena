@@ -20,7 +20,7 @@ import Post.parser
 import Post.interpreter
 import Post.configData
 
-sVersion, vVersion = "s4.0.0", "v0.1.0-ALPHA"
+sVersion, vVersion = "s4.0.1", "v0.1.1-ALPHA"
 
 
 def main():

@@ -29,8 +29,8 @@ scoreboard_test.mcfunction
 	scoreboard players add @e[type=ArmorStand,tag=RRStand] RRti 1 {Tags:["RREntity","RRDisplay","RRAestheticsStand"],DisabledSlots:2096896,Marker:1,NoGravity:1,NoBasePlate:1,ShowArms:1,Small:1,Invulnerable:1,PersistenceRequired:1,Invisible:1,Rotation:[0f,0f],Pose:{Body:[0f,0f,0f],Head:[0f,0f,0f],LeftArm:[0f,0f,0f],RightArm:[0f,0f,0f],LeftLeg:[0f,0f,0f],RightLeg:[0f,0f,0f]},ArmorItems:[{},{},{},{id:quartz_stairs,Count:1}]}
 	scoreboard players remove @e[type=ArmorStand,tag=RRStand] RRti 1 {DisabledSlots:2096896}
 	scoreboard players set @e[type=ArmorStand,tag=RRStand] RRti 10 {DisabledSlots:2096896}
-	execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 5
-	execute @e[type=ArmorStand,tag=RRStand] ~ ~ ~ scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 0
+	scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 5
+	scoreboard players test @e[type=ArmorStand,tag=RRStand] RRti 0 10
 	scoreboard players reset @e[type=ArmorStand,tag=RRStand] RRti
 	scoreboard players enable @e[type=ArmorStand,tag=RRStand] RRti
 	scoreboard players tag @e[type=ArmorStand,tag=RRStand] add RRTimer {Marker:1b}
@@ -54,4 +54,17 @@ selector_test.mcfunction
 	say @a[ry=2,rym=5] @a[ry=5,rym=5] @a[ry=2] @a[rym=5]
 	say @a[ry=2,rym=5] @a[ry=5,rym=5] @a[ry=2] @a[rym=5]
 	say @a[c=5,m=creative]
+
+wiki_test.mcfunction
+	scoreboard players remove @a RRti 1 {SomeData:Tag}
+	scoreboard players set @a RRti 10 {SomeData:Tag}
+	scoreboard players test @a RRti 5
+	scoreboard players test @a RRti 0 10
+	scoreboard players reset @a RRti
+	scoreboard players enable @a RRti
+	scoreboard players tag @a add RRTimer {SomeData:Tag}
+	scoreboard players tag @a remove RRTimer {SomeData:Tag}
+	scoreboard teams join RRd_y @a
+	scoreboard teams leave @a
+	scoreboard teams empty RRd_y
 
