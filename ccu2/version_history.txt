@@ -17,3 +17,19 @@ s3.0.0		v0.0.1
 	-Changed the main module from s2_0_0 to CCU so I don't have to rename my module every time I update
 	-Added an error module for safe keeping
 	-Change compound_statement to compound_stmt, and AST to Node because I can
+
+s4.0.0		v0.1.0
+    Mid: (Unfinished)
+        -Changing the format from pascal to CCU:
+            -Changed the _text.txt file to reflect the new format
+            -Removed PROGRAM, and allowed the file itself to be its own program
+            -Removed BEGIN / END blocks and replaced it with tab spaces
+            -Removed VAR (and a specific var declarations block)
+            -Changed the order of typing from "name, name: type" to "type name, type name"
+            -All keywords are now case sensitive, and must be lowercase
+
+        General changes:
+            -Added a list [int, int] as position inside the file to better track errors
+
+    Post:
+        -Generally working now

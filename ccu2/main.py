@@ -3,93 +3,67 @@ Shoutout to Ruslan Spivak for pretty much providing the bedrock code to this int
     His tutorial for making an interpreter can be found here: https://ruslanspivak.com/lsbasi-part1/
 """
 
-sVersion, vVersion = "s3.0.0", "v2.0.1-ALPHA"
-
-import sys
 import logging
+import sys
+import os
 
-from CCU.lexer import Lexer
-from CCU.parser import Parser
-from CCU.semanticAnalyzer import SemanticAnalyzer
-from CCU.interpreter import Interpreter
+import Common.loggingSetup
+import Common.file
+
+# import Mid.lexer
+# import Mid.parser
+# import Mid.semanticAnalyzer
+# import Mid.interpreter
+
+import Post.lexer
+import Post.parser
+import Post.interpreter
+import Post.configData
+
+sVersion, vVersion = "s4.0.0", "v0.1.0-ALPHA"
+
 
 def main():
-    setupLogger()
-    text = getFileContents()
-    
-    lexer = Lexer(text)
-    parser = Parser(lexer)
-    tree = parser.parse()
+    print("sVersion={0}\nvVersion={1}".format(sVersion, vVersion))
+    # required to get relative path of the config, debug_info and parsed_cmds file
+    directory = os.path.dirname(__file__)
 
-    semantic_analyzer = SemanticAnalyzer()
-    try:
-        semantic_analyzer.visit(tree)
-    except Exception as e:
-        logging.exception(e)
+    Common.loggingSetup.setupLogging(directory)
+    text, fileName, outputPath = Common.file.getContent()
+    Common.loggingSetup.formatFileName(fileName)
+    Post.configData.getConfigData(directory)
 
-    interpreter = Interpreter(tree)
-    result = interpreter.interpret()
-    logging.debug('Run-time GLOBAL_MEMORY contents:')
-    
-    # error is that GLOBAL_MEMORY doesn't have anything
-    for k, v in sorted(interpreter.GLOBAL_MEMORY.items()):
-        logging.debug('%s = %s' % (k, v))
+    lexer = Post.lexer.Lexer(text, fileName)
+    parser = Post.parser.Parser(lexer)
+    interpreter = Post.interpreter.Interpreter(parser)
+    mcfunctions = interpreter.interpret()
+    Common.file.writeParsedCmds(directory, mcfunctions)
+    Common.file.writeMcFunctions(outputPath, mcfunctions)
 
-def getFileContents():
-    """
-    Gets the file contents within the main file
+    # lexer = Mid.lexer.Lexer(text, fileName)
 
-    -if there is no file, uses the default "_text.txt" file
-        -if that doesn't exist, default python error lol
-    -if there is no contents within the file:
-        EOFError
-    """
-    
-    if len(sys.argv) >= 2:
-        fileName = sys.argv[1]
-    else:
-        fileName = "_test.txt"
-        logging.warn("'{}' is being used because there were no command line arguments".format(fileName))
-        
-    with open(fileName, "r") as file:
-        text = file.read()
-        logging.info("Opening file '{}'".format(fileName))
+    # while not lexer.reachedEOF:
+    #     logging.debug(repr(lexer.getNextToken()))
 
-    if not text:
-        logging.error("{} does not contain anything".format(fileName))
-        raise EOFError
-        
-    return text
+    # print(tokenList)
 
-def setupLogger():
-    """
-    creates 2 loggers:
-        file logger, set at the debug level
-        console logger, set at the warning level
-    """
-    
-    fileName = "debug_info.log"
-    fileLevel = logging.DEBUG
-    consoleLevel = logging.WARNING
+    # parser = Mid.parser.Parser(lexer)
+    # tree = parser.parse()
+    #
+    # semanticAnalyzer = Mid.semanticAnalyzer.SemanticAnalyzer()
+    # semanticAnalyzer.visit(tree)
+    #
+    # interpreter = Mid.interpreter.Interpreter(tree)
+    # result = interpreter.interpret()
+    # logging.debug("Run-time GLOBAL_MEMORY contents:")
+    #
+    # # error is that GLOBAL_MEMORY doesn't have anything
+    # for k, v in sorted(interpreter.GLOBAL_MEMORY.items()):
+    #     logging.debug("%s = %s" % (k, v))
 
-    # generally set to "a" (default) unless internal debugging of the logger is required
-    # in which case, it is set to "w"
-    fileMode = "w"
-    
-    # year/month/day with a 24 hour time
-    fileDateFmt = "%Y/%m/%d %H:%M:%S"
-    consoleDateFmt = "%H:%M:%S"
-    logFormat = "[%(asctime)s] [%(levelname)s]: %(message)s"
-    
-    # actually sets up the logger
-    logging.basicConfig(format=logFormat, datefmt=fileDateFmt, filename=fileName, level=fileLevel, filemode=fileMode)
-    
-    # sets up the console logger
-    console = logging.StreamHandler()
-    console.setLevel(consoleLevel)
-    consoleFormatter = logging.Formatter(logFormat, datefmt=consoleDateFmt)
-    console.setFormatter(consoleFormatter)
-    logging.getLogger().addHandler(console)
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        logging.exception(e)

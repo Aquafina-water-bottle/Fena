@@ -1,32 +1,18 @@
-program Main;
-   var b, x, y : real;
-   var z : integer;
+float b = 10
+float x = 9.0
+float y = 8
+int z = 7
 
-   procedure AlphaA(a : integer);
-      var b : integer;
+void alphaA(int a): /* alphaA */
+	int b = 6
+	
+	void beta(int c): /* beta */
+		int y = 5
+	
+		void gamma(int c, int d): /* gamma */
+			int x = a + b + c + x + y + z
 
-      procedure Beta(c : integer);
-         var y : integer;
-
-         procedure Gamma(c, d : integer);
-            var x : integer;
-         begin { Gamma }
-            x := a + b + c + x + y + z;
-         end;  { Gamma }
-
-      begin { Beta }
-
-      end;  { Beta }
-
-   begin { AlphaA }
-
-   end;  { AlphaA }
-
-   procedure AlphaB();
-      var c, a : real;
-   begin { AlphaB }
-      c := a + b;
-   end;  { AlphaB }
-
-begin { Main }
-end.  { Main }
+void alphaB():
+	float c = 3
+	float a = 2
+	c = a + b

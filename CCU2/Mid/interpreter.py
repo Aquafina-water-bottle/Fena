@@ -1,6 +1,7 @@
 from .nodeVisitor import NodeVisitor
 from .constants import *
 
+
 class Interpreter(NodeVisitor):
     def __init__(self, tree):
         self.tree = tree

@@ -115,6 +115,7 @@ class ScopedSymbolTable(object):
         """
         ???
         """
+        print(name, type(name))
         logging.debug('Lookup: %s. (Scope name: %s)' % (name, self.scope_name))
 
         # 'symbol' is either an instance of the Symbol class or None

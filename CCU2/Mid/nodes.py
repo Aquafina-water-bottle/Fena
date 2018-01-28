@@ -53,7 +53,7 @@ class UnaryOp(Node):
 
 class Compound(Node):
     """
-    represents a 'BEGIN ... END' block
+    represents a list of statements
     
     contains a list of statement nodes
     """
