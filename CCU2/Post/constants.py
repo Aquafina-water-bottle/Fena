@@ -35,7 +35,7 @@ MFUNC = ("mfunc", "mfunc")
 
 # other
 STATEMENT = ("statement", "!")
-INDENT = ("indent", "\t")
+INDENT = ("indent", "    ")
 DEDENT = ("dedent", "dedent")
 NEWLINE = ("newline", "\n")
 EOF = ("EOF", None)

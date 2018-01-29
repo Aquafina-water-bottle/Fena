@@ -1,32 +1,14 @@
-[2018/01/28 18:55:56] [?/INFO]: Calling pyexpander
-[2018/01/28 18:55:56] [?/DEBUG]: 
-
-
-
-
-
-!mfunc init
-	playsound minecraft:block.note.pling
-
-[2018/01/28 18:55:56] [?/DEBUG]: 
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: config: ['advancement', 'blockdata', 'clear', 'clone', 'debug', 'defaultgamemode', 'difficulty', 'effect', 'enchant', 'entitydata', 'execute', 'fill', 'function', 'gamemode', 'gamerule', 'give', 'help', 'kill', 'locate', 'me', 'msg', 'particle', 'playsound', 'publish', 'recipe', 'reload', 'replaceitem', 'say', 'scoreboard', 'seed', 'setblock', 'setworldspawn', 'spawnpoint', 'spreadplayers', 'stats', 'stopsound', 'summon', 'teleport', 'tell', 'tellraw', 'testfor', 'testforblock', 'testforblocks', 'time', 'title', 'toggledownfall', 'tp', 'trigger', 'w', 'weather', 'worldborder', 'xp']
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: config: ['execute']
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: config: ['kill', 'clear', 'tp', 'teleport', 'gamemode']
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: config: ['@a', '@e', '@r', '@p', '@s']
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: config: ['x', 'y', 'z', 'r', 'rm', 'dx', 'dy', 'dz', 'tag', 'team', 'type', 'c', 'l', 'lm', 'm', 'name', 'rx', 'rxm', 'ry', 'rym']
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 1: type='newline', value='\n')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 1: type='statement', value='!')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 2: type='mfunc', value='mfunc')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 8: type='string', value='init')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 1: type='newline', value='\n')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 1: type='indent', value='\t')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 5: type='command', value='playsound')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 15: type='string', value='minecraft:block.note.pling')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 1: type='dedent', value='dedent')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: End compound at Token(Line 9 column 1: type='dedent', value='dedent')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 1: type='newline', value='\n')
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 1: type='EOF', value=None)
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: End compound at Token(Line 9 column 1: type='EOF', value=None)
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: INITIAL: playsound minecraft:block.note.pling
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: FINAL: playsound minecraft:block.note.pling
-[2018/01/28 18:55:56] [main.ccu/DEBUG]: 
+[2018/01/28 21:36:56] [?/INFO]: Calling pyexpander
+[2018/01/28 21:36:57] [?/ERROR]: Command '['expander3.py', '-i', 'main.ccu']' returned non-zero exit status 1
+Traceback (most recent call last):
+  File "/mnt/c/Users/Austin-zs/Documents/Austin/powder game code/Programming/Python3/PyCharmGeneral/CCU2/main.py", line 69, in <module>
+    main()
+  File "/mnt/c/Users/Austin-zs/Documents/Austin/powder game code/Programming/Python3/PyCharmGeneral/CCU2/main.py", line 34, in main
+    text, fileName, outputPath = Common.file.getContent()
+  File "/mnt/c/Users/Austin-zs/Documents/Austin/powder game code/Programming/Python3/PyCharmGeneral/CCU2/Common/file.py", line 32, in getContent
+    text = subprocess.check_output(["expander3.py", '-i', fileName])
+  File "/usr/lib/python3.5/subprocess.py", line 626, in check_output
+    **kwargs).stdout
+  File "/usr/lib/python3.5/subprocess.py", line 708, in run
+    output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['expander3.py', '-i', 'main.ccu']' returned non-zero exit status 1
