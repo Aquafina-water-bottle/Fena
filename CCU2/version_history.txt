@@ -36,3 +36,6 @@ s4.0.0		v0.1.0
 
 s4.0.1		v0.1.1
     -Fixed a bug with "scoreboard players test", now doesn't have a random execute command
+
+s4.1.0      v0.1.2
+    -Integrated pyexpander with the program

@@ -3,6 +3,7 @@ Shoutout to Ruslan Spivak for pretty much providing the bedrock code to this int
     His tutorial for making an interpreter can be found here: https://ruslanspivak.com/lsbasi-part1/
 """
 
+import subprocess
 import logging
 import sys
 import os
@@ -20,11 +21,12 @@ import Post.parser
 import Post.interpreter
 import Post.configData
 
-sVersion, vVersion = "s4.0.1", "v0.1.1-ALPHA"
+sVersion, vVersion = "s4.1.0", "v0.1.2-ALPHA"
 
 
 def main():
     print("sVersion={0}\nvVersion={1}".format(sVersion, vVersion))
+
     # required to get relative path of the config, debug_info and parsed_cmds file
     directory = os.path.dirname(__file__)
 

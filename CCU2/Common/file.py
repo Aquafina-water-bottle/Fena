@@ -1,3 +1,4 @@
+import subprocess
 import logging
 import sys
 import os
@@ -27,9 +28,15 @@ def getContent():
     if fileName == DEFAULT_FILE:
         logging.warning("'{}' is being used because there were no command line arguments".format(fileName))
 
-    with open(fileName, "r") as file:
-        text = file.read()
-        logging.info("Opening file '{}'".format(fileName))
+    logging.info("Calling pyexpander")
+    text = subprocess.check_output(["expander3.py", '-i', fileName])
+    text = text.decode("utf-8")
+    logging.debug(text)
+    logging.debug("")
+
+    # with open(fileName, "r") as file:
+    #     text = file.read()
+    #     logging.info("Opening file '{}'".format(fileName))
 
     return text, fileName, outputPath
 
