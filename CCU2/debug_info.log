@@ -1,14 +1,343 @@
-[2018/01/28 21:36:56] [?/INFO]: Calling pyexpander
-[2018/01/28 21:36:57] [?/ERROR]: Command '['expander3.py', '-i', 'main.ccu']' returned non-zero exit status 1
-Traceback (most recent call last):
-  File "/mnt/c/Users/Austin-zs/Documents/Austin/powder game code/Programming/Python3/PyCharmGeneral/CCU2/main.py", line 69, in <module>
-    main()
-  File "/mnt/c/Users/Austin-zs/Documents/Austin/powder game code/Programming/Python3/PyCharmGeneral/CCU2/main.py", line 34, in main
-    text, fileName, outputPath = Common.file.getContent()
-  File "/mnt/c/Users/Austin-zs/Documents/Austin/powder game code/Programming/Python3/PyCharmGeneral/CCU2/Common/file.py", line 32, in getContent
-    text = subprocess.check_output(["expander3.py", '-i', fileName])
-  File "/usr/lib/python3.5/subprocess.py", line 626, in check_output
-    **kwargs).stdout
-  File "/usr/lib/python3.5/subprocess.py", line 708, in run
-    output=stdout, stderr=stderr)
-subprocess.CalledProcessError: Command '['expander3.py', '-i', 'main.ccu']' returned non-zero exit status 1
+[2018/01/29 14:16:10] [?/INFO]: Calling pyexpander
+[2018/01/29 14:16:10] [?/DEBUG]: 
+
+
+!mfunc init
+    scoreboard objectives add RRpl dummy
+    scoreboard objectives add RRas dummy
+    scoreboard objectives add RRcs stat.useItem.minecraft.carrot_on_a_stick RR carrot stick
+    scoreboard objectives add RRxd dummy RR a fake name
+    scoreboard objectives add RRidk dummy RR a fake name
+    scoreboard objectives remove RRpl
+    scoreboard objectives remove RRas
+    scoreboard objectives remove RRcs
+    scoreboard objectives remove RRxd
+    scoreboard objectives remove RRidk
+    say split
+    scoreboard teams add RRb Royal Rumble Blue
+    scoreboard teams option RRb seeFriendlyInvisibles true
+    scoreboard teams option RRb friendlyfire false
+    scoreboard teams remove RRb
+    say split
+    scoreboard teams add RRg RR green
+    scoreboard teams option RRg color green
+    scoreboard teams option RRg friendlyfire false
+    scoreboard teams option RRg collisionRule pushOwnTeam
+    scoreboard teams option RRg nametagVisibility hideForOtherTeams
+    scoreboard teams add RRb RR Blue
+    scoreboard teams option RRb color blue
+    scoreboard teams option RRb friendlyfire false
+    scoreboard teams option RRb collisionRule pushOwnTeam
+    scoreboard teams option RRb nametagVisibility hideForOtherTeams
+    scoreboard teams remove RRg
+    scoreboard teams remove RRb
+    playsound minecraft:block.note.pling
+    say /home/austin/.local/bin
+    say /home/austin/.local/bin
+    say anothero
+
+[2018/01/29 14:16:10] [?/DEBUG]: 
+[2018/01/29 14:16:10] [?/DEBUG]: None
+[2018/01/29 14:16:10] [?/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: config: ['advancement', 'blockdata', 'clear', 'clone', 'debug', 'defaultgamemode', 'difficulty', 'effect', 'enchant', 'entitydata', 'execute', 'fill', 'function', 'gamemode', 'gamerule', 'give', 'help', 'kill', 'locate', 'me', 'msg', 'particle', 'playsound', 'publish', 'recipe', 'reload', 'replaceitem', 'say', 'scoreboard', 'seed', 'setblock', 'setworldspawn', 'spawnpoint', 'spreadplayers', 'stats', 'stopsound', 'summon', 'teleport', 'tell', 'tellraw', 'testfor', 'testforblock', 'testforblocks', 'time', 'title', 'toggledownfall', 'tp', 'trigger', 'w', 'weather', 'worldborder', 'xp']
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: config: ['execute']
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: config: ['kill', 'clear', 'tp', 'teleport', 'gamemode']
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: config: ['@a', '@e', '@r', '@p', '@s']
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: config: ['x', 'y', 'z', 'r', 'rm', 'dx', 'dy', 'dz', 'tag', 'team', 'type', 'c', 'l', 'lm', 'm', 'name', 'rx', 'rxm', 'ry', 'rym']
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 4 column 1: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 4 column 1: type='statement', value='!')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 4 column 2: type='mfunc', value='mfunc')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 4 column 8: type='string', value='init')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 5 column 1: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 5 column 1: type='indent', value='    ')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 5 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 5 column 16: type='string', value='objectives')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 5 column 27: type='string', value='add')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 5 column 31: type='string', value='RRpl')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 5 column 36: type='string', value='dummy')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 6 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 6 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 6 column 16: type='string', value='objectives')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 6 column 27: type='string', value='add')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 6 column 31: type='string', value='RRas')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 6 column 36: type='string', value='dummy')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 16: type='string', value='objectives')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 27: type='string', value='add')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 31: type='string', value='RRcs')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 36: type='string', value='stat.useItem.minecraft.carrot_on_a_stick')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 77: type='string', value='RR')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 80: type='string', value='carrot')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 7 column 87: type='string', value='stick')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 16: type='string', value='objectives')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 27: type='string', value='add')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 31: type='string', value='RRxd')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 36: type='string', value='dummy')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 42: type='string', value='RR')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 45: type='string', value='a')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 47: type='string', value='fake')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 8 column 52: type='string', value='name')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 16: type='string', value='objectives')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 27: type='string', value='add')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 31: type='string', value='RRidk')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 37: type='string', value='dummy')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 43: type='string', value='RR')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 46: type='string', value='a')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 48: type='string', value='fake')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 9 column 53: type='string', value='name')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 10 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 10 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 10 column 16: type='string', value='objectives')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 10 column 27: type='string', value='remove')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 10 column 34: type='string', value='RRpl')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 11 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 11 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 11 column 16: type='string', value='objectives')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 11 column 27: type='string', value='remove')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 11 column 34: type='string', value='RRas')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 12 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 12 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 12 column 16: type='string', value='objectives')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 12 column 27: type='string', value='remove')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 12 column 34: type='string', value='RRcs')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 13 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 13 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 13 column 16: type='string', value='objectives')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 13 column 27: type='string', value='remove')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 13 column 34: type='string', value='RRxd')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 14 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 14 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 14 column 16: type='string', value='objectives')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 14 column 27: type='string', value='remove')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 14 column 34: type='string', value='RRidk')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 15 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 15 column 5: type='command', value='say')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 15 column 9: type='string', value='split')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 16 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 16 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 16 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 16 column 22: type='string', value='add')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 16 column 26: type='string', value='RRb')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 16 column 30: type='string', value='Royal')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 16 column 36: type='string', value='Rumble')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 16 column 43: type='string', value='Blue')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 17 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 17 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 17 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 17 column 22: type='string', value='option')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 17 column 29: type='string', value='RRb')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 17 column 33: type='string', value='seeFriendlyInvisibles')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 17 column 55: type='string', value='true')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 18 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 18 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 18 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 18 column 22: type='string', value='option')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 18 column 29: type='string', value='RRb')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 18 column 33: type='string', value='friendlyfire')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 18 column 46: type='string', value='false')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 19 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 19 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 19 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 19 column 22: type='string', value='remove')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 19 column 29: type='string', value='RRb')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 20 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 20 column 5: type='command', value='say')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 20 column 9: type='string', value='split')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 21 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 21 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 21 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 21 column 22: type='string', value='add')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 21 column 26: type='string', value='RRg')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 21 column 30: type='string', value='RR')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 21 column 33: type='string', value='green')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 22 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 22 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 22 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 22 column 22: type='string', value='option')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 22 column 29: type='string', value='RRg')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 22 column 33: type='string', value='color')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 22 column 39: type='string', value='green')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 23 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 23 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 23 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 23 column 22: type='string', value='option')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 23 column 29: type='string', value='RRg')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 23 column 33: type='string', value='friendlyfire')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 23 column 46: type='string', value='false')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 24 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 24 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 24 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 24 column 22: type='string', value='option')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 24 column 29: type='string', value='RRg')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 24 column 33: type='string', value='collisionRule')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 24 column 47: type='string', value='pushOwnTeam')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 25 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 25 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 25 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 25 column 22: type='string', value='option')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 25 column 29: type='string', value='RRg')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 25 column 33: type='string', value='nametagVisibility')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 25 column 51: type='string', value='hideForOtherTeams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 26 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 26 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 26 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 26 column 22: type='string', value='add')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 26 column 26: type='string', value='RRb')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 26 column 30: type='string', value='RR')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 26 column 33: type='string', value='Blue')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 27 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 27 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 27 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 27 column 22: type='string', value='option')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 27 column 29: type='string', value='RRb')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 27 column 33: type='string', value='color')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 27 column 39: type='string', value='blue')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 28 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 28 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 28 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 28 column 22: type='string', value='option')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 28 column 29: type='string', value='RRb')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 28 column 33: type='string', value='friendlyfire')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 28 column 46: type='string', value='false')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 29 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 29 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 29 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 29 column 22: type='string', value='option')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 29 column 29: type='string', value='RRb')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 29 column 33: type='string', value='collisionRule')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 29 column 47: type='string', value='pushOwnTeam')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 30 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 30 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 30 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 30 column 22: type='string', value='option')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 30 column 29: type='string', value='RRb')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 30 column 33: type='string', value='nametagVisibility')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 30 column 51: type='string', value='hideForOtherTeams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 31 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 31 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 31 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 31 column 22: type='string', value='remove')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 31 column 29: type='string', value='RRg')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 32 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 32 column 5: type='command', value='scoreboard')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 32 column 16: type='string', value='teams')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 32 column 22: type='string', value='remove')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 32 column 29: type='string', value='RRb')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 33 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 33 column 5: type='command', value='playsound')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 33 column 15: type='string', value='minecraft:block.note.pling')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 34 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 34 column 5: type='command', value='say')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 34 column 9: type='string', value='/home/austin/.local/bin')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 35 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 35 column 5: type='command', value='say')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 35 column 9: type='string', value='/home/austin/.local/bin')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 36 column 5: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 36 column 5: type='command', value='say')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 36 column 9: type='string', value='anothero')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 37 column 1: type='dedent', value='dedent')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: End compound at Token(Line 37 column 1: type='dedent', value='dedent')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 37 column 1: type='newline', value='\n')
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: Advanced to Token(Line 37 column 1: type='EOF', value=None)
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: End compound at Token(Line 37 column 1: type='EOF', value=None)
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard objectives add RRpl dummy
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard objectives add RRpl dummy
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard objectives add RRas dummy
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard objectives add RRas dummy
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard objectives add RRcs stat.useItem.minecraft.carrot_on_a_stick RR carrot stick
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard objectives add RRcs stat.useItem.minecraft.carrot_on_a_stick RR carrot stick
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard objectives add RRxd dummy RR a fake name
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard objectives add RRxd dummy RR a fake name
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard objectives add RRidk dummy RR a fake name
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard objectives add RRidk dummy RR a fake name
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard objectives remove RRpl
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard objectives remove RRpl
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard objectives remove RRas
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard objectives remove RRas
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard objectives remove RRcs
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard objectives remove RRcs
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard objectives remove RRxd
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard objectives remove RRxd
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard objectives remove RRidk
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard objectives remove RRidk
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: say split
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: say split
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams add RRb Royal Rumble Blue
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams add RRb Royal Rumble Blue
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams option RRb seeFriendlyInvisibles true
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams option RRb seeFriendlyInvisibles true
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams option RRb friendlyfire false
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams option RRb friendlyfire false
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams remove RRb
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams remove RRb
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: say split
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: say split
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams add RRg RR green
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams add RRg RR green
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams option RRg color green
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams option RRg color green
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams option RRg friendlyfire false
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams option RRg friendlyfire false
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams option RRg collisionRule pushOwnTeam
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams option RRg collisionRule pushOwnTeam
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams option RRg nametagVisibility hideForOtherTeams
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams option RRg nametagVisibility hideForOtherTeams
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams add RRb RR Blue
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams add RRb RR Blue
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams option RRb color blue
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams option RRb color blue
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams option RRb friendlyfire false
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams option RRb friendlyfire false
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams option RRb collisionRule pushOwnTeam
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams option RRb collisionRule pushOwnTeam
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams option RRb nametagVisibility hideForOtherTeams
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams option RRb nametagVisibility hideForOtherTeams
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams remove RRg
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams remove RRg
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: scoreboard teams remove RRb
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: scoreboard teams remove RRb
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: playsound minecraft:block.note.pling
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: playsound minecraft:block.note.pling
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: say /home/austin/.local/bin
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: say /home/austin/.local/bin
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: say /home/austin/.local/bin
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: say /home/austin/.local/bin
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: INITIAL: say anothero
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: FINAL: say anothero
+[2018/01/29 14:16:10] [main.ccu/DEBUG]: 

@@ -28,10 +28,23 @@ def getContent():
     if fileName == DEFAULT_FILE:
         logging.warning("'{}' is being used because there were no command line arguments".format(fileName))
 
+    # gets the file path of the main ccu file
+    with open(fileName, "r") as file:
+        dirPath = os.path.dirname(os.path.realpath(file.name))
+
+    # print(dirPath, fileName)
+    # print("BEFORE {}".format(sys.path))
+    # sys.path.append(os.getcwd())
+    # print("AFTER {}".format(sys.path))
+
     logging.info("Calling pyexpander")
-    text = subprocess.check_output(["expander3.py", '-i', fileName])
+    expander3path = "expander3.py"
+    process = subprocess.Popen([expander3path, '-i', fileName], stdout=subprocess.PIPE, cwd=dirPath)
+    text, error = process.communicate()
     text = text.decode("utf-8")
     logging.debug(text)
+    logging.debug("")
+    logging.debug(error)
     logging.debug("")
 
     # with open(fileName, "r") as file:
