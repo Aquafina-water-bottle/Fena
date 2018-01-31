@@ -1,0 +1,18 @@
+float b = 10
+float x = 9.0
+float y = 8
+int z = 7
+
+void alphaA(int a): /* alphaA */
+	int b = 6
+	
+	void beta(int c): /* beta */
+		int y = 5
+	
+		void gamma(int c, int d): /* gamma */
+			int x = a + b + c + x + y + z
+
+void alphaB():
+	float c = 3
+	float a = 2
+	c = a + b

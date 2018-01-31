@@ -1,20 +1,9 @@
-**A pre-release can be downloaded under releases**
+**Suddenly Python**
 
-Status: **Near completion (expected to be released at the end of July)**
+The post-processor is working, except it's not the best code avaliable to mankind. In the future, it should be using a specialized grammar to parse everything. Run main.py to use the post-processor.
 
-A random feature list in no particular order:
-* support for command blocks (groups, conditional, combiners)
-* general mcfunction support (nicknames and file encapsulation visualized by number of tab spaces)
-* scoreboard, execute, selector and function shortcuts
-* variables (normal, copy/pasting code blocks and arrays) with general coordinate support
-* files for the parsed commands, setblock commands and combiner commands
-* server support to prevent kicking the player when using combiners
-* adding 'minecraft:' over certain commands if plugins are used
-* support for minecraft versions between 1.10 and 1.12
-* basic math (`%, ^, *, /, -, +` as operators, `SIN, COS, TAN` functions with integer and double support)
-* if statements and for loops
-* simplify putting the same string at the beginning or end of a line with 'USE'
-* rcon support (sort of but not really)
-* various methods of formatting to prevent long commands from taking up horizontal space
-* comments & comment blocks
-* importing files and a library for general purposes (will be expanded a lot more in the future)
+tl;dr reworking literally everything about CCU. Right now, pretty much its entire name is a misnomer. No, it doesn't even support minecraft stuff yet, making "command" meaningless. No, it is not a compiler; it is an interpreter. No, the language is much more restrictive compared to before, making "unlimited" meaningless.
+
+However, since it actually follows the conventions of actual interpreters (like having an actual tokenizer), development should be much faster.
+
+If you want the old java version, check out https://github.com/Aquafina-water-bottle/Command-Compiler-Unlimited/tree/cb62da740e1d5e040e50e1c329d35d738b22503c

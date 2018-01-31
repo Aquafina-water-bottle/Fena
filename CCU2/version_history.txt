@@ -1,0 +1,44 @@
+How versioning works:
+    s#_#_# refers to the semantic version, which comes with their strict rules
+        -this will be used for internal reference since it provides better info for the programmer compared to the public version
+    v#_#_# refers to the public version, which is mostly me intrementing the major / minor / patch whenever I feel necessary
+        -eg. if this program makes backwards incompatable changes that affects 0.001% of the users,
+         I'll update the major in the semantic version, but I'll update either the minor or patch in the public version
+
+s2.0.0		v0.0.0
+    Mostly reorganizing a huge chunk of the pascal interpreter
+        -Got a logger working
+        -Things are in modules now
+
+s3.0.0		v0.0.1
+	-Added procedure declarations to the interpreter's GLOBAL_SCOPE
+	-Added a bit more documentation to the overall program
+	-Moved version history to its own file
+	-Changed the main module from s2_0_0 to CCU so I don't have to rename my module every time I update
+	-Added an error module for safe keeping
+	-Change compound_statement to compound_stmt, and AST to Node because I can
+
+s4.0.0		v0.1.0
+    Mid: (Unfinished)
+        -Changing the format from pascal to CCU:
+            -Changed the _text.txt file to reflect the new format
+            -Removed PROGRAM, and allowed the file itself to be its own program
+            -Removed BEGIN / END blocks and replaced it with tab spaces
+            -Removed VAR (and a specific var declarations block)
+            -Changed the order of typing from "name, name: type" to "type name, type name"
+            -All keywords are now case sensitive, and must be lowercase
+
+        General changes:
+            -Added a list [int, int] as position inside the file to better track errors
+
+    Post:
+        -Generally working now
+
+s4.0.1		v0.1.1
+    -Fixed a bug with "scoreboard players test", now doesn't have a random execute command
+
+s4.1.0      v0.1.2
+    -Integrated pyexpander with the program
+
+s5.0.0      v0.1.3
+    -Changed tab spaces to 4 spaces
