@@ -1,3 +1,4 @@
+import pyexpander.lib as pyexpander
 import subprocess
 import logging
 import sys
@@ -32,20 +33,27 @@ def getContent():
     with open(fileName, "r") as file:
         dirPath = os.path.dirname(os.path.realpath(file.name))
 
+        # add the directory of the file to the import path
+        # allows any py commands in the file to import py files relative to said file
+        sys.path.append(dirPath)
+
+        # automagically raises an exception if pyexpander fails to parse
+        text = pyexpander.expandToStr(file.read(), filename=fileName, auto_indent=True)[0]
+
     # print(dirPath, fileName)
     # print("BEFORE {}".format(sys.path))
     # sys.path.append(os.getcwd())
     # print("AFTER {}".format(sys.path))
 
-    logging.info("Calling pyexpander")
-    expander3path = "expander3.py"
-    process = subprocess.Popen([expander3path, '-i', fileName], stdout=subprocess.PIPE, cwd=dirPath)
-    text, error = process.communicate()
-    text = text.decode("utf-8")
-    logging.debug(text)
-    logging.debug("")
-    logging.debug(error)
-    logging.debug("")
+    # logging.info("Calling pyexpander")
+    # expander3path = "expander3.py"
+    # process = subprocess.Popen([expander3path, '-i', fileName], stdout=subprocess.PIPE, cwd=dirPath)
+    # text, error = process.communicate()
+    # text = text.decode("utf-8")
+    # logging.debug(text)
+    # logging.debug("")
+    # logging.debug(error)
+    # logging.debug("")
 
     # with open(fileName, "r") as file:
     #     text = file.read()
