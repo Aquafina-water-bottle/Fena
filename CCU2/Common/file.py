@@ -38,7 +38,9 @@ def getContent():
         sys.path.append(dirPath)
 
         # automagically raises an exception if pyexpander fails to parse
-        text = pyexpander.expandToStr(file.read(), filename=fileName, auto_indent=True)[0]
+        source_file_text = file.read()
+        text = pyexpander.expandToStr(source_file_text, filename=fileName)[0]
+        logging.debug("\n" + text)
 
     # print(dirPath, fileName)
     # print("BEFORE {}".format(sys.path))
@@ -68,7 +70,9 @@ def writeParsedCmds(directory, mcfunctions):
     with open(fullPath, "w") as file:
         for mcfunction in mcfunctions:
             file.write(mcfunction.path + "\n")
+            logging.debug(mcfunction.path)
             for command in mcfunction.commands:
+                logging.debug(str(command))
                 file.write("\t" + str(command) + "\n")
             file.write("\n")
 

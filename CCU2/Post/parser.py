@@ -270,7 +270,7 @@ class Parser:
     def command(self):
         # checks whether the command can actually be added to an mcfunction or not
         if self.currentFunction is None:
-            self.error("No assigned mcfunction for command")
+            self.error("No assigned mcfunction for command at {}")
 
         if self.currentCommand is not None:
             self.error("Unknown error: Cannot create a new command as one already exists")

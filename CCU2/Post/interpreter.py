@@ -78,20 +78,29 @@ class Interpreter:
                     command.replaceToken(index, newValue)
                     logging.debug(" -> {}".format(str(command)))
 
+    def usePluginConflicts(self, tokenList, index):
+        token = tokenList[index]
+        if token.value in options[PLUGIN_CONFLICT_COMMANDS]:
+            token.value = "minecraft:" + token.value
+
+
     def scoreboardShortcut(self, command):
         for index in range(len(command.tokenList)):
             token = command.tokenList[index]
 
-            # immediately exits after reaching a command
+            # immediately exits after reaching a command unless it is followed by "=", "+" or "-"
             if token.matches(COMMAND):
-                break
+                if not (index + 2 < len(command.tokenList) and
+                        command.tokenList[index+2].matchesOne(PLUS, MINUS, EQUALS)):
+                    self.usePluginConflicts(command.tokenList, index)
+                    break
 
             if token.matchesOne(PLUS, MINUS, EQUALS):
                 # selector objective [+, -, =] int
                 # scoreboard players [add, remove, set] selector objective int
                 # token[2] is operator
                 tokens = command.getTokensAround(index, -2, 1)
-                if tokens is not None and (tokens[0].matchesOne(SELECTOR, STRING, INT) and
+                if tokens is not None and (tokens[0].matchesOne(COMMAND, SELECTOR, STRING, INT) and
                                            tokens[1].matches(STRING) and tokens[3].matches(INT)):
                     scoreboard = Token(None, COMMAND, "scoreboard")
                     players = Token(None, STRING, "players")

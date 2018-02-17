@@ -266,9 +266,13 @@ class Lexer:
                 self.advance(INDENT[VALUE])
             else:
                 # dedents are detected here due to lack of indents
-                # however, if the current token is literally a newline, does nothing and immediately breaks
+                # however, if the current token is literally a newline or comment, does nothing and immediately breaks
                 # this will go back to the beginning of this method, creating a newline token there
                 if self.currentCharsAre("\n"):
+                    return
+
+                if self.currentCharsAre("#"):
+                    self.skipComment()
                     return
 
                 dedents = index+1
@@ -324,6 +328,13 @@ class Lexer:
             result = self.getLockStr()
             token = Token(self.getTokenPos(), INT, int(result))
 
+        # there has to be whitespace after the token for it to be truly a number
+        # otherwise, it's a string
+        if not self.getCurrentChars().isspace():
+            trueTokenPos = self.getTokenPos()
+            self.unlock()
+            additional = self.getString().value
+            return Token(trueTokenPos, STRING, result + additional)
         self.unlock()
         return token
 
