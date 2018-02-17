@@ -1,270 +1,420 @@
 init.mcfunction
-	function ego:virus_1/stop_events.mcfunction
-	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLtp 1561350378
-	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLpvp 2
-	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLsat 1
-	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLsat 1
-	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLwea 0
 	scoreboard objectives add constants dummy
-	scoreboard players set 1200 constants 1200
-	scoreboard players set 20 constants 20
-	scoreboard players set 60 constants 60
-	scoreboard objectives add VR1 dummy Virus 1
-	scoreboard objectives setdisplay sidebar VR1
-	scoreboard objectives add VR1pl dummy Virus 1 Player List
-	scoreboard objectives add VR1de deathCount Virus 1 Deaths
-	scoreboard objectives add VR1ti dummy Virus 1 Timer
-	scoreboard objectives add VR1chi dummy Virus 1 Count Hiders
-	scoreboard objectives add VR1cvr dummy Virus 1 Count Virus
-	scoreboard objectives add VR1gl dummy Virus 1 Glowing Players
-	scoreboard objectives add VR1calc dummy Virus 1 Calculations
-	scoreboard objectives add VR1st dummy Virus 1 State
-	scoreboard teams add VR1h Virus 1 Hiders
-	scoreboard teams option VR1h friendlyfire false
-	scoreboard teams option VR1h collisionRule never
-	scoreboard teams option VR1h deathMessageVisibility never
-	scoreboard teams option VR1h color green
-	scoreboard teams option VR1h nametagVisibility hideForOtherTeams
-	scoreboard teams add VR1v Virus 1 Virus
-	scoreboard teams option VR1v friendlyfire false
-	scoreboard teams option VR1v collisionRule never
-	scoreboard teams option VR1v deathMessageVisibility never
-	scoreboard teams option VR1v color yellow
-	scoreboard teams add VR1d_y Virus 1 Display Yellow
-	scoreboard teams option VR1d_y color yellow
-	scoreboard teams add VR1d_g Virus 1 Display Green
-	scoreboard teams option VR1d_g color green
-	scoreboard teams join VR1d_y Countdown Minutes Seconds Virus
-	scoreboard teams join VR1d_g Hiders
-	scoreboard players operation VR1GameTime VR1calc = VR1GameTime VR1Save
-	scoreboard players operation VR1GameTime VR1calc *= 20 constants
-	scoreboard players operation VR1Countdown VR1calc = VR1Countdown VR1Save
-	scoreboard players operation VR1Countdown VR1calc *= 20 constants
-	scoreboard players operation VR1Glowing VR1calc = VR1Glowing VR1Save
-	scoreboard players operation VR1Glowing VR1calc *= 20 constants
-	summon armor_stand ~ ~ ~ {Tags:["VR1Stand","VR1Entity"],Invulnerable:1,PersistenceRequired:1,Invisible:1,Marker:1,NoGravity:1}
-	execute @e[type=armor_stand,tag=VR1Stand] ~ ~ ~ function ego:virus_1/reset_round
-	tellraw @a[score_EC_min=0,score_EC=0] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":" has started!","color":"green"}]}
-	scoreboard players set @e[type=armor_stand,tag=FlooStand,score_FLgam_min=0,score_FLgam=0] FLgam 1561350378
-
-main.mcfunction
-	scoreboard players add @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181] FLid 0
-	scoreboard players set @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,score_FLid=-1561350379] FLid 1561350378
-	scoreboard players set @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,score_FLid_min=-1561350377] FLid 1561350378
-	execute @e[type=armor_stand,tag=VR1Stand,score_VR1st_min=1,score_VR1st=1] ~ ~ ~ function ego:virus_1/start_round
-	execute @e[type=armor_stand,tag=VR1Stand,score_VR1st_min=2,score_VR1st=2] ~ ~ ~ function ego:virus_1/countdown
-	execute @e[type=armor_stand,tag=VR1Stand,score_VR1st_min=3,score_VR1st=3] ~ ~ ~ function ego:virus_1/during_round
-	execute @e[type=armor_stand,tag=VR1Stand,score_VR1st_min=4,score_VR1st=4] ~ ~ ~ function ego:virus_1/stop_round
-	execute @e[type=armor_stand,tag=VR1Stand,score_VR1st_min=5,score_VR1st=5] ~ ~ ~ function ego:virus_1/wait_for_reset
-	execute @e[type=armor_stand,tag=VR1Stand,score_VR1st_min=6,score_VR1st=6] ~ ~ ~ function ego:virus_1/reset_round
-	execute @e[type=armor_stand,tag=VR1Stand] ~ ~ ~ function ego:virus_1/set_glowing_effects
-	execute @e[type=armor_stand,tag=VR1Stand] ~ ~ ~ function ego:virus_1/calc_player_numbers
-	scoreboard players add @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2] VR1pl 0
-	execute @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,score_VR1pl_min=0,score_VR1pl=0] ~ ~ ~ function ego:virus_1/reset_player
-
-term.mcfunction
-	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLtp 0
-	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLpvp 0
-	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLsat 1
-	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLgmd 1
-	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLwea 0
-	scoreboard players set @e[type=armor_stand,tag=FlooStand,score_FLgam_min=1561350378,score_FLgam=1561350378] FLgam 0
-	tellraw @a[score_EC_min=0,score_EC=0] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":" has stopped!","color":"red"}]}
-	execute @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,score_VR1pl_min=0] ~ ~ ~ function ego:virus_1/reset_player
-	scoreboard objectives remove VR1
-	scoreboard objectives remove VR1pl
-	scoreboard objectives remove VR1de
-	scoreboard objectives remove VR1ti
-	scoreboard objectives remove VR1chi
-	scoreboard objectives remove VR1cvr
-	scoreboard objectives remove VR1gl
-	scoreboard objectives remove VR1calc
-	scoreboard objectives remove VR1st
-	scoreboard teams remove VR1h
-	scoreboard teams remove VR1v
-	scoreboard teams remove VR1d_y
-	scoreboard teams remove VR1d_g
-	kill @e[type=armor_stand,tag=VR1Entity]
-
-start_round.mcfunction
-	title @a actionbar {"text":"The doors are now open","color":"green"}
-	execute @a ~ ~ ~ playsound minecraft:entity.player.levelup voice @s
-	fill -73 49 -229 -66 49 -222 stonebrick 0 replace redstone_block 0
-	scoreboard players operation @s VR1ti = VR1Countdown VR1calc
-	scoreboard players set @s VR1st 2
-
-countdown.mcfunction
-	function ego:virus_1/timer
-	execute @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,score_VR1pl_min=1] ~ ~ ~ function ego:virus_1/player_effects
-	execute @s[score_VR1ti=0] ~ ~ ~ function ego:virus_1/end_countdown
-
-end_countdown.mcfunction
-	scoreboard players reset Countdown VR1
-	title @a actionbar {"text":"The virus has been released!","color":"yellow"}
-	execute @a ~ ~ ~ playsound minecraft:entity.wither.death voice @s
-	fill -73 52 -222 -66 52 -229 stonebrick 0 replace redstone_block 0
-	fill -73 49 -229 -66 49 -222 redstone_block 0 replace stonebrick 0
-	minecraft:tp @a[x=-85,y=45,z=-241,dx=31,dy=5,dz=31,team=VR1v] -69.0 53 -225.0
-	scoreboard players operation @s VR1ti = VR1GameTime VR1calc
-	scoreboard players set @s VR1st 3
-
-during_round.mcfunction
-	kill @e[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,type=item]
-	function ego:virus_1/timer
-	execute @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,score_VR1pl_min=0] ~ ~ ~ function ego:virus_1/player_effects
-	function ego:virus_1/calc_glowing
-	scoreboard players set @e[type=armor_stand,tag=VR1Stand,score_VR1chi_min=0,score_VR1chi=0] VR1st 4
-	scoreboard players set @a[m=2,score_VR1de_min=1,score_VR1pl_min=1,score_VR1pl=1] VR1pl 0
-	scoreboard players set @a[score_VR1de_min=1] VR1de 0
-
-player_effects.mcfunction
-	effect @s[team=VR1v] minecraft:strength 3 90 true
-	effect @s minecraft:resistance 3 3 true
-	effect @s minecraft:instant_health 100 100 true
-
-invuln_effect.mcfunction
-	effect @s minecraft:resistance 3 10 true
-	effect @s minecraft:instant_health 100 100 true
-
-set_glowing_effects.mcfunction
-	execute @s[score_VR1gl_min=2] ~ ~ ~ effect @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,team=VR1h] minecraft:glowing 3 0 true
-	scoreboard players remove @s[score_VR1gl_min=2] VR1gl 2
-	execute @s[score_VR1gl_min=1] ~ ~ ~ effect @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,team=VR1v] minecraft:glowing 3 0 true
-	scoreboard players remove @s[score_VR1gl_min=2] VR1gl 1
-
-stop_round.mcfunction
-	scoreboard players set @s VR1gl 3
-	execute @s[score_VR1chi_min=0,score_VR1chi=0] ~ ~ ~ title @a title {"text":"The virus won!","color":"yellow"}
-	execute @s[score_VR1chi_min=0,score_VR1chi=0] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"The virus won!","color":"yellow"}]}
-	execute @s[score_VR1chi_min=1] ~ ~ ~ title @a title {"text":"Time!","color":"green"}
-	execute @s[score_VR1chi_min=1] ~ ~ ~ title @a subtitle {"text":"The hiders won!","color":"green"}
-	execute @s[score_VR1chi_min=1] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"The time is up! Hiders win!","color":"yellow"}]}
-	execute @s[score_VR1chi_min=1] ~ ~ ~ scoreboard players reset Seconds VR1
-	execute @s[score_VR1chi_min=1] ~ ~ ~ scoreboard players reset Minutes VR1
-	fill -73 52 -222 -66 52 -229 redstone_block 0 replace stonebrick 0
-	fill -73 49 -229 -66 49 -222 redstone_block 0 replace stonebrick 0
-	scoreboard players set @s VR1st 5
-
-wait_for_reset.mcfunction
-	execute @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,score_VR1pl_min=0] ~ ~ ~ function ego:virus_1/invuln_effect
-
-reset_round.mcfunction
-	execute @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,score_VR1pl_min=0] ~ ~ ~ function ego:virus_1/reset_player
-	scoreboard players set @s VR1gl 1
-	fill -73 52 -222 -66 52 -229 redstone_block 0 replace stonebrick 0
-	fill -73 49 -229 -66 49 -222 redstone_block 0 replace stonebrick 0
-	scoreboard players reset Countdown VR1
-	scoreboard players reset Minutes VR1
-	scoreboard players reset Seconds VR1
-	scoreboard players set @s VR1st 0
-
-partial_reset_player.mcfunction
-	clear @s
-	effect @s clear
-	execute @s[score_EC_min=0,score_EC=0] ~ ~ ~ function ego:virus_1/get_book
-	scoreboard players set @s VR1pl 1
-	function ego:virus_1/to_hider if @e[type=armor_stand,tag=VR1Stand,score_VR1st_min=0,score_VR1st=2]
-	function ego:virus_1/to_virus if @e[type=armor_stand,tag=VR1Stand,score_VR1st_min=3,score_VR1st=3]
-
-full_reset_player.mcfunction
-	function
-	scoreboard players set @s FLtp 1561350378
-
-timer.mcfunction
-	scoreboard players remove @s[score_VR1ti_min=1] VR1ti 1
-	function ego:virus_1/disp_time_text
-	function ego:virus_1/disp_time_score
-
-disp_time_text.mcfunction
-	execute @s[score_VR1ti_min=6000,score_VR1ti=6000] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5 minutes remain!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=4800,score_VR1ti=4800] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4 minutes remain!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=3600,score_VR1ti=3600] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3 minutes remain!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=2400,score_VR1ti=2400] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2 minutes remain!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=1200,score_VR1ti=1200] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1 minute remains!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=600,score_VR1ti=600] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"30 seconds remain!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=300,score_VR1ti=300] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"15 seconds remain!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=100,score_VR1ti=100] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=80,score_VR1ti=80] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=60,score_VR1ti=60] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=40,score_VR1ti=40] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2!","color":"yellow"}]}
-	execute @s[score_VR1ti_min=20,score_VR1ti=20] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1!","color":"yellow"}]}
-	scoreboard players set @s[score_VR1ti=0] VR1st 4
-
-disp_time_score.mcfunction
-	scoreboard players operation Seconds VR1ti = @s VR1ti
-	scoreboard players operation Seconds VR1ti /= 20 constants
-	scoreboard players operation Seconds VR1ti %= 60 constants
-	scoreboard players add Seconds VR1ti 1
-	scoreboard players operation Seconds VR1 = Seconds VR1ti
-	scoreboard players operation Minutes VR1ti = @s VR1ti
-	scoreboard players operation Minutes VR1ti /= 1200 constants
-	scoreboard players operation Minutes VR1 = Minutes VR1ti
-
-to_hider.mcfunction
-	clear @s
-	effect @s clear
-	execute @s[score_EC_min=0,score_EC=0] ~ ~ ~ function ego:virus_1/get_book
-	scoreboard teams join VR1h @s
-
-to_virus.mcfunction
-	clear @s
-	effect @s clear
-	execute @s[score_EC_min=0,score_EC=0] ~ ~ ~ function ego:virus_1/get_book
-	replaceitem entity @s slot.armor.head golden_helmet 1 0 {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
-	title @s title {"text":"You are now","color":"yellow"}
-	title @s subtitle {"text":"the virus!","color":"yellow"}
-	scoreboard teams join VR1v @s
-
-calc_glowing.mcfunction
-	scoreboard players operation @s VR1calc = VR1Glowing VR1calc
-	scoreboard players operation @s VR1calc -= @s VR1ti
-	execute @s[score_VR1calc_min=0,score_VR1calc=0] ~ ~ ~ tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Glowing has been removed from all virus!","color":"yellow"}]}
-	execute @s[score_VR1calc_min=0,score_VR1calc=0] ~ ~ ~ execute @a ~ ~ ~ playsound minecraft:entity.experience_orb.pickup voice @a[c=1]
-	scoreboard players set @s[score_VR1calc_min=0,score_VR1calc=0] VR1gl 0
-
-calc_player_numbers.mcfunction
-	scoreboard players set @s VR1chi 0
-	execute @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,team=VR1h] ~ ~ ~ scoreboard players add @e[type=armor_stand,tag=VR1Stand] VR1chi 1
-	scoreboard players operation Hiders VR1 = @s VR1chi
-	scoreboard players set @s VR1cvr 0
-	execute @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,team=VR1v] ~ ~ ~ scoreboard players add @e[type=armor_stand,tag=VR1Stand] VR1cvr 1
-	scoreboard players operation Virus VR1 = @s VR1cvr
-
-input_start_round.mcfunction
-	scoreboard players set @e[type=armor_stand,tag=VR1Stand] VR1st 1
-
-input_stop_round.mcfunction
-	scoreboard players set @e[type=armor_stand,tag=VR1Stand] VR1st 4
-
-input_reset_round.mcfunction
-	scoreboard players set @e[type=armor_stand,tag=VR1Stand] VR1st 6
-
-input_select_rand_virus.mcfunction
-	execute @r[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,team=VR1h] ~ ~ ~ function ego:virus_1/to_virus
-
-input_remove_one_virus.mcfunction
-	execute @r[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,m=2,team=VR1v] ~ ~ ~ function ego:virus_1/to_hider
-
-input_select_team.mcfunction
-	tellraw @a[score_EC_min=0,score_EC=0] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Choose team: ","color":"gray"},{"text":"Hider","color":"green","italic":true,"hoverEvent":{"action":"show_text","value":{"text":"Force someone to join the hiders","color":"green"}},"clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ function ego:virus_1/to_hider"}},{"text":", ","color":"gray","italic":true},{"text":"Virus","color":"yellow","italic":true,"hoverEvent":{"action":"show_text","value":{"text":"Force someone to join the virus","color":"yellow"}},"clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ function ego:virus_1/to_virus"}}]}
-
-input_reset_consts.mcfunction
+	scoreboard players set -1 constants -1
+	scoreboard objectives add FLid dummy FlooNetwork ID
+	scoreboard objectives add FLtp dummy FlooNetwork TP
+	scoreboard objectives add FLbk dummy FlooNetwork Book
+	scoreboard objectives add FLna dummy FlooNetwork Name
+	scoreboard objectives add FLti dummy FlooNetwork SpawnPoint Timer
+	scoreboard objectives add FLlg stat.leaveGame FlooNetwork Leave Game
+	scoreboard objectives add FLgam dummy FlooNetwork Game Toggle
+	scoreboard objectives add FLpvp dummy FlooNetwork PVP toggle
+	scoreboard objectives add FLsat dummy FlooNetwork Saturation toggle
+	scoreboard objectives add FLwea dummy FlooNetwork Weather toggle
+	scoreboard objectives add FLgmd dummy FlooNetwork Gamemode toggle
+	scoreboard objectives add FLraa dummy FlooNetwork Ranking Actions
+	scoreboard objectives add FLrac dummy FlooNetwork Ranking Actions Calc
+	scoreboard objectives add FLdim dummy FlooNetwork Dimension Number
+	scoreboard objectives add FLvot trigger FlooNetwork Vote Trigger
+	scoreboard objectives add MCTeams dummy MC Specialty Teams
+	scoreboard objectives add Health health
+	scoreboard objectives setdisplay list Health
+	scoreboard objectives add VR1Save dummy Virus Save
 	scoreboard players set VR1Countdown VR1Save 60
 	scoreboard players set VR1GameTime VR1Save 600
 	scoreboard players set VR1Glowing VR1Save 300
+	scoreboard objectives add APPS dummy
+	scoreboard objectives add AT dummy
+	scoreboard objectives add EC dummy
+	scoreboard objectives add LE dummy
+	scoreboard objectives add CMD dummy
+	scoreboard players set ir FLna 227577150
+	scoreboard players set sr FLna 1639073828
+	scoreboard players set nr FLna 1411077721
+	scoreboard players set evilr FLna 1441799265
+	scoreboard players set dr FLna 284291924
+	scoreboard players set er FLna 704022040
+	scoreboard players set qr FLna 1336477430
+	scoreboard players set 18r FLna 244076999
+	scoreboard players set epicr FLna 929476859
+	scoreboard players set saltr FLna 1290793335
+	scoreboard players set deathr FLna 1625759596
+	scoreboard players set dirtr FLna 697385017
+	scoreboard players set mr FLna 2083967759
+	scoreboard players set fbr FLna 1689433145
+	scoreboard players set ecr FLna 1390739026
+	scoreboard players set virus1 FLna 1561350378
+	scoreboard players set vr1 FLna 1561350378
+	scoreboard players set virus2 FLna 1561350379
+	scoreboard players set vr2 FLna 1561350379
+	scoreboard players set pvp1 FLna 1773738438
+	scoreboard players set oldctf FLna 1773738438
+	scoreboard players set ctf FLna 1463087182
+	scoreboard players set tp FLna 1541518973
+	scoreboard players set tpl3 FLna 1541518973
+	scoreboard players set st FLna 1100166785
+	scoreboard players set ad FLna 637350197
+	scoreboard players set dp FLna 1625757028
+	scoreboard players set rb FLna 1299512154
+	scoreboard players set mm FLna 1807172851
+	scoreboard players set pc FLna 1511200574
+	scoreboard players set rr FLna 1698782159
+	scoreboard players set spawn FLna 236718384
+	scoreboard players set cmd FLna 674271822
+	scoreboard players set floo FLna 674271822
+	scoreboard players set diagonally FLna 674271822
+	scoreboard players set ts FLna 1971168489
+	scoreboard players set tstoken FLna 1971168489
+	scoreboard players set mghub FLna 327765745
+	scoreboard players set pvphub FLna 743229343
+	scoreboard players set mmhub FLna 81055981
+	scoreboard players set racehub FLna 238315678
+	kill @e[type=armor_stand,tag=FlooStand]
+	summon armor_stand 397 17 61 {Tags:["FlooStand"],Invulnerable:1,PersistenceRequired:1,Invisible:1,Marker:1,NoGravity:1}
+	scoreboard players set Acefire97 APPS 0
+	scoreboard players set Acefire97 MCTeams 1
+	scoreboard players set ashtongreen00 APPS 0
+	scoreboard players set ashtongreen00 MCTeams 1
+	scoreboard players set ENFORCER_GAMING APPS 0
+	scoreboard players set ENFORCER_GAMING MCTeams 1
+	scoreboard players set Kilgore90 APPS 0
+	scoreboard players set Kilgore90 MCTeams 1
+	scoreboard players set french_man EC 0
+	scoreboard players set french_man MCTeams 4
+	scoreboard players set jamboree_lee EC 0
+	scoreboard players set jamboree_lee MCTeams 4
+	scoreboard players set CynRyn EC 0
+	scoreboard players set CynRyn MCTeams 4
+	scoreboard players set CMDZane AT 0
+	scoreboard players set CMDZane MCTeams 2
+	scoreboard players set CMDZane EC 0
+	scoreboard players set CMDZane MCTeams 4
+	scoreboard players set Icohedron EC 0
+	scoreboard players set Icohedron MCTeams 4
+	scoreboard players set TheDarkOne239 EC 0
+	scoreboard players set TheDarkOne239 MCTeams 4
+	scoreboard players set BUTTERLOVER7683 AT 0
+	scoreboard players set BUTTERLOVER7683 MCTeams 2
+	scoreboard players set BUTTERLOVER7683 LE 0
+	scoreboard players set BUTTERLOVER7683 MCTeams 8
+	scoreboard players set FoxyTheBoomQueen AT 0
+	scoreboard players set FoxyTheBoomQueen MCTeams 2
+	scoreboard players set FoxyTheBoomQueen LE 0
+	scoreboard players set FoxyTheBoomQueen MCTeams 8
+	scoreboard players set Daa_ EC 0
+	scoreboard players set Daa_ MCTeams 4
+	scoreboard players set Daa_ LE 0
+	scoreboard players set Daa_ MCTeams 8
+	scoreboard players set idk_lobsters LE 0
+	scoreboard players set idk_lobsters MCTeams 8
+	scoreboard players set JadeofallTrades LE 0
+	scoreboard players set JadeofallTrades MCTeams 8
+	scoreboard players set Witch_Doctor LE 0
+	scoreboard players set Witch_Doctor MCTeams 8
+	scoreboard players set Witch_Doctor CMD 0
+	scoreboard players set Witch_Doctor MCTeams 16
+	scoreboard players set FirezFury LE 0
+	scoreboard players set FirezFury MCTeams 8
+	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLtp 0
+	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLpvp 0
+	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLsat 1
+	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLwea 0
+	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLgmd 1
+	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLgam 0
+	scoreboard players set @e[type=armor_stand,tag=FlooStand] FLraa 28
+	tellraw @a[score_EC_min=0,score_EC=0] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Floo Network","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":" has been installed!","color":"gray"}]}
 
-input_add_one_min.mcfunction
-	scoreboard players add @e[type=armor_stand,tag=VR1Stand] VR1ti 1200
+main.mcfunction
+	execute @e[type=armor_stand,tag=FlooStand] ~ ~ ~ function ego:floo_network/run_event unless @s[score_FLgam_min=0,score_FLgam=0]
+	execute @a[score_FLid_min=1] ~ ~ ~ function ego:floo_network/spawnpoint
+	execute @a[score_FLtp_min=1] ~ ~ ~ function ego:floo_network/teleport
+	execute @a[x=397,y=17,z=61,r=5] ~ ~ ~ function ego:floo_network/in_spawn_tree
+	execute @a[x=350,y=14,z=13,dx=90,dy=30,dz=90] ~ ~ ~ function ego:floo_network/in_spawn
+	execute @a ~ ~ ~ function ego:floo_network/calc_dimension
+	execute @e[type=armor_stand,tag=FlooStand] ~ ~ ~ function ego:floo_network/calc_rank
+	execute @a[score_FLrac_min=1,score_FLrac=1] ~ ~ ~ function ego:floo_network/use_rank
+	execute @e[type=armor_stand,tag=FlooStand] ~ ~ ~ function ego:floo_network/use_options
+	scoreboard players enable * FLvot
+	execute @a[score_FLvot_min=1] ~ ~ ~ function ego:floo_network/vote
+	execute @a[score_FLvot=-1] ~ ~ ~ function ego:floo_network/vote
 
-input_add_30s.mcfunction
-	scoreboard players add @e[type=armor_stand,tag=VR1Stand] VR1ti 600
+term.mcfunction
+	function ego:floo_network/stop_events
+	scoreboard objectives remove FLid
+	scoreboard objectives remove FLtp
+	scoreboard objectives remove FLbk
+	scoreboard objectives remove FLna
+	scoreboard objectives remove FLti
+	scoreboard objectives remove FLlg
+	scoreboard objectives remove FLgam
+	scoreboard objectives remove FLpvp
+	scoreboard objectives remove FLsat
+	scoreboard objectives remove FLwea
+	scoreboard objectives remove FLgmd
+	scoreboard objectives remove FLraa
+	scoreboard objectives remove FLrac
+	scoreboard objectives remove FLdim
+	scoreboard objectives remove FLvot
+	scoreboard objectives setdisplay list
+	tellraw @a[score_EC_min=0,score_EC=0] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Floo Network","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":" has been uninstalled!","color":"gray"}]}
+	kill @e[type=armor_stand,tag=FlooStand]
 
-input_remove_30s.mcfunction
-	scoreboard players remove @e[type=armor_stand,tag=VR1Stand] VR1ti 600
+run_event.mcfunction
+	function ego:ice_race/main if @s[score_FLgam_min=227577150,score_FLgam=227577150]
+	function ego:slow_race/main if @s[score_FLgam_min=1639073828,score_FLgam=1639073828]
+	function ego:nether_race/main if @s[score_FLgam_min=1411077721,score_FLgam=1411077721]
+	function ego:evil_race/main if @s[score_FLgam_min=1441799265,score_FLgam=1441799265]
+	function ego:diamond_race/main if @s[score_FLgam_min=284291924,score_FLgam=284291924]
+	function ego:emerald_race/main if @s[score_FLgam_min=704022040,score_FLgam=704022040]
+	function ego:quartz_race/main if @s[score_FLgam_min=1336477430,score_FLgam=1336477430]
+	function ego:1_8_race/main if @s[score_FLgam_min=244076999,score_FLgam=244076999]
+	function ego:epic_race/main if @s[score_FLgam_min=929476859,score_FLgam=929476859]
+	function ego:salt_race/main if @s[score_FLgam_min=1290793335,score_FLgam=1290793335]
+	function ego:death_run/main if @s[score_FLgam_min=1625759596,score_FLgam=1625759596]
+	function ego:dirt_race/main if @s[score_FLgam_min=697385017,score_FLgam=697385017]
+	function ego:mycelium_race/main if @s[score_FLgam_min=2083967759,score_FLgam=2083967759]
+	function ego:frostburn_run/main if @s[score_FLgam_min=1689433145,score_FLgam=1689433145]
+	function ego:ever_changing_race/main if @s[score_FLgam_min=1390739026,score_FLgam=1390739026]
+	function ego:virus_1/main if @s[score_FLgam_min=1561350378,score_FLgam=1561350378]
+	function ego:virus_2/main if @s[score_FLgam_min=1561350379,score_FLgam=1561350379]
+	function ego:pvp/main if @s[score_FLgam_min=1773738438,score_FLgam=1773738438]
+	function ego:capture_the_flag/main if @s[score_FLgam_min=1463087182,score_FLgam=1463087182]
+	function ego:the_pit_3/main if @s[score_FLgam_min=1541518973,score_FLgam=1541518973]
+	function ego:sand_tomb/main if @s[score_FLgam_min=1100166785,score_FLgam=1100166785]
+	function ego:anvil_drop/main if @s[score_FLgam_min=637350197,score_FLgam=637350197]
+	function ego:death_pit/main if @s[score_FLgam_min=1625757028,score_FLgam=1625757028]
+	function ego:rabbit_ball/main if @s[score_FLgam_min=1299512154,score_FLgam=1299512154]
+	function ego:mastermind/main if @s[score_FLgam_min=1807172851,score_FLgam=1807172851]
+	function ego:pictionary/main if @s[score_FLgam_min=1511200574,score_FLgam=1511200574]
+	function ego:royal_rumble/main if @s[score_FLgam_min=1698782159,score_FLgam=1698782159]
 
-input_remove_one_min.mcfunction
-	scoreboard players remove @e[type=armor_stand,tag=VR1Stand] VR1ti 1200
+spawnpoint.mcfunction
+	spawnpoint @s[score_FLid_min=227577150,score_FLid=227577150] 49 36 -45
+	tellraw @s[score_FLid_min=227577150,score_FLid=227577150] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"49 36 -45","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Ice race","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Ice race","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 227577150"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1639073828,score_FLid=1639073828] 75 7 -80
+	tellraw @s[score_FLid_min=1639073828,score_FLid=1639073828] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"75 7 -80","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Slow Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Slow Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1639073828"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1411077721,score_FLid=1411077721] 73 7 -102
+	tellraw @s[score_FLid_min=1411077721,score_FLid=1411077721] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"73 7 -102","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Nether Race","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Nether Race","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1411077721"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1441799265,score_FLid=1441799265] 23 7 -133
+	tellraw @s[score_FLid_min=1441799265,score_FLid=1441799265] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"23 7 -133","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Evil Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Evil Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1441799265"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=284291924,score_FLid=284291924] 218 18 -37
+	tellraw @s[score_FLid_min=284291924,score_FLid=284291924] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"218 18 -37","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Diamond Race","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Diamond Race","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 284291924"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=704022040,score_FLid=704022040] 276 17 -96
+	tellraw @s[score_FLid_min=704022040,score_FLid=704022040] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"276 17 -96","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Emerald Race","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Emerald Race","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 704022040"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1336477430,score_FLid=1336477430] 229 8 -157
+	tellraw @s[score_FLid_min=1336477430,score_FLid=1336477430] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"229 8 -157","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Quartz Race","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Quartz Race","color":"white"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1336477430"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=244076999,score_FLid=244076999] 242 26 -222
+	tellraw @s[score_FLid_min=244076999,score_FLid=244076999] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"242 26 -222","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"1.8 Race","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"1.8 Race","color":"gold"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 244076999"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=929476859,score_FLid=929476859] 424 12 -122
+	tellraw @s[score_FLid_min=929476859,score_FLid=929476859] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"424 12 -122","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Epic Race","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Epic Race","color":"gold"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 929476859"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1290793335,score_FLid=1290793335] 467 8 -33
+	tellraw @s[score_FLid_min=1290793335,score_FLid=1290793335] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"467 8 -33","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Salt Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Salt Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1290793335"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1625759596,score_FLid=1625759596] 31 20 -240
+	tellraw @s[score_FLid_min=1625759596,score_FLid=1625759596] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"31 20 -240","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Death Run","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Death Run","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1625759596"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=697385017,score_FLid=697385017] 23 15 -189
+	tellraw @s[score_FLid_min=697385017,score_FLid=697385017] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"23 15 -189","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Dirt Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Dirt Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 697385017"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=2083967759,score_FLid=2083967759] 445 68 -669
+	tellraw @s[score_FLid_min=2083967759,score_FLid=2083967759] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"445 68 -669","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Mycelium Race","color":"dark_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mycelium Race","color":"dark_purple"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 2083967759"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1689433145,score_FLid=1689433145] 517 11 -827
+	tellraw @s[score_FLid_min=1689433145,score_FLid=1689433145] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"517 11 -827","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Frostburn Run","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Frostburn Run","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1689433145"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1390739026,score_FLid=1390739026] 460 3 -331
+	tellraw @s[score_FLid_min=1390739026,score_FLid=1390739026] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"460 3 -331","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"EverChanging Race","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"EverChanging Race","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1390739026"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1561350378,score_FLid=1561350378] -85 45 -241
+	tellraw @s[score_FLid_min=1561350378,score_FLid=1561350378] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"-85 45 -241","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1561350379,score_FLid=1561350379] -77 56 -85
+	tellraw @s[score_FLid_min=1561350379,score_FLid=1561350379] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"-77 56 -85","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Virus 2","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 2","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350379"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1773738438,score_FLid=1773738438] -268 49 -39
+	tellraw @s[score_FLid_min=1773738438,score_FLid=1773738438] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"-268 49 -39","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"PVP: Old CTF","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"PVP: Old CTF","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1773738438"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1463087182,score_FLid=1463087182] 558 107 159
+	tellraw @s[score_FLid_min=1463087182,score_FLid=1463087182] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"558 107 159","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Capture","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1463087182"}},{"text":" the ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"white"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1463087182"}},{"text":"flag","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"blue"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1463087182"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1541518973,score_FLid=1541518973] -105 25 200
+	tellraw @s[score_FLid_min=1541518973,score_FLid=1541518973] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"-105 25 200","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"The Pit 3","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Pit 3","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1541518973"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1100166785,score_FLid=1100166785] -250 25 18
+	tellraw @s[score_FLid_min=1100166785,score_FLid=1100166785] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"-250 25 18","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Sand Tomb","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Sand Tomb","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1100166785"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=637350197,score_FLid=637350197] -16 5 87
+	tellraw @s[score_FLid_min=637350197,score_FLid=637350197] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"-16 5 87","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Anvil Drop","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Anvil Drop","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 637350197"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1625757028,score_FLid=1625757028] -187 24 96
+	tellraw @s[score_FLid_min=1625757028,score_FLid=1625757028] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"-187 24 96","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Death Pit","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Death Pit","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1625757028"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1299512154,score_FLid=1299512154] 214 27 334
+	tellraw @s[score_FLid_min=1299512154,score_FLid=1299512154] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"214 27 334","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Rabbit","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit Ball","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1299512154"}},{"text":" ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit Ball","color":"white"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1299512154"}},{"text":"Ball","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit Ball","color":"blue"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1299512154"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1807172851,score_FLid=1807172851] 77 5 41
+	tellraw @s[score_FLid_min=1807172851,score_FLid=1807172851] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"77 5 41","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Mastermind","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mastermind","color":"gold"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1807172851"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1511200574,score_FLid=1511200574] 161 4 180
+	tellraw @s[score_FLid_min=1511200574,score_FLid=1511200574] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"161 4 180","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"P","color":"light_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"light_purple"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"i","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"c","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"gold"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"t","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"i","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"o","color":"dark_green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"dark_green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"n","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"blue"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"a","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"r","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"y","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"white"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1698782159,score_FLid=1698782159] -103 19 482
+	tellraw @s[score_FLid_min=1698782159,score_FLid=1698782159] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"-103 19 482","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Royal","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"blue"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1698782159"}},{"text":" ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"white"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1698782159"}},{"text":"Rumble","color":"dark_green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"dark_green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1698782159"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=236718384,score_FLid=236718384] 397 17 61
+	tellraw @s[score_FLid_min=236718384,score_FLid=236718384] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"397 17 61","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Spawn","color":"dark_red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Spawn","color":"dark_red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 236718384"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=674271822,score_FLid=674271822] 348 4 114
+	tellraw @s[score_FLid_min=674271822,score_FLid=674271822] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"348 4 114","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Floo Network","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=1971168489,score_FLid=1971168489] 549 20 42
+	tellraw @s[score_FLid_min=1971168489,score_FLid=1971168489] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"549 20 42","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Teamspeak Token","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Teamspeak Token","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1971168489"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=327765745,score_FLid=327765745] 329 24 171
+	tellraw @s[score_FLid_min=327765745,score_FLid=327765745] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"329 24 171","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"The Minigame Hub","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Minigame Hub","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 327765745"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=743229343,score_FLid=743229343] 385 15 159
+	tellraw @s[score_FLid_min=743229343,score_FLid=743229343] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"385 15 159","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"The PVP hub","color":"light_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The PVP hub","color":"light_purple"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 743229343"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=81055981,score_FLid=81055981] 329 24 154
+	tellraw @s[score_FLid_min=81055981,score_FLid=81055981] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"329 24 154","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"The Mastermind Hub","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Mastermind Hub","color":"gold"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 81055981"}},{"text":"!","color":"gray"}]}
+	spawnpoint @s[score_FLid_min=238315678,score_FLid=238315678] 329 24 137
+	tellraw @s[score_FLid_min=238315678,score_FLid=238315678] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Your spawnpoint has been set to ","color":"gray"},{"text":"329 24 137","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"The Race Hub","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Race Hub","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 238315678"}},{"text":"!","color":"gray"}]}
+	playsound minecraft:entity.experience_orb.pickup voice @s
+	scoreboard players operation @s FLid *= -1 constants
 
-get_book.mcfunction
-	replaceitem entity @s slot.weapon.offhand written_book 1 0 {title:"Virus 1 Book",author:"eGO",pages:["[\"\",{\"text\":\"Virus 1 Settings\\n\",\"bold\":true},{\"text\":\"\\n\"},{\"text\":\"VR1: \",\"color\":\"dark_gray\"},{\"text\":\"Start\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/init\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Starts the virus map so it can be ran\",\"color\":\"green\"}}},{\"text\":\" / \",\"color\":\"gray\"},{\"text\":\"Stop\\n\",\"color\":\"red\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/term\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Ends the virus map\",\"color\":\"red\"}}},{\"text\":\"Round: \",\"color\":\"dark_gray\"},{\"text\":\"Start\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_start_round\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Starts an individual round\",\"color\":\"dark_green\"}}},{\"text\":\" / \",\"color\":\"gray\"},{\"text\":\"Stop\",\"color\":\"gold\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_stop_round\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Stops an individual round\",\"color\":\"gold\"}}},{\"text\":\" / \",\"color\":\"gray\"},{\"text\":\"Reset\\n\\n\",\"color\":\"red\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_reset_round\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Resets an individual round\",\"color\":\"red\"}}},{\"text\":\"Select Virus: \",\"color\":\"dark_gray\"},{\"text\":\"[+]\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_select_rand_virus\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Chooses a virus\",\"color\":\"dark_green\"}}},{\"text\":\" \",\"color\":\"gray\"},{\"text\":\"[-]\\n\",\"color\":\"red\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_remove_one_virus\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes a virus\",\"color\":\"red\"}}},{\"text\":\"Edit Teams: \",\"color\":\"dark_gray\"},{\"text\":\"[+]\\n\",\"color\":\"gold\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_select_team\"}},{\"text\":\"Reset Settings: \",\"color\":\"dark_gray\"},{\"text\":\"[+]\\n\",\"color\":\"gold\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_reset_consts\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Resets the time settings to their default values\",\"color\":\"gold\"}}},{\"text\":\"Time: \",\"color\":\"dark_gray\"},{\"text\":\"[+]\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_add_one_min\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Adds 1 minute\",\"color\":\"dark_green\"}}},{\"text\":\" \",\"color\":\"gray\"},{\"text\":\"[+]\",\"color\":\"gold\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_add_30s\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Adds 30 seconds\",\"color\":\"gold\"}}},{\"text\":\" \",\"color\":\"gray\"},{\"text\":\"[-]\",\"color\":\"gold\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_remove_30s\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes 30 seconds\",\"color\":\"gold\"}}},{\"text\":\" \",\"color\":\"gray\"},{\"text\":\"[-]\",\"color\":\"red\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function ego:virus_1/input_remove_one_min\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes 1 minute\",\"color\":\"red\"}}}]"]}
+teleport.mcfunction
+	minecraft:tp @s[score_FLtp_min=227577150,score_FLtp=227577150] 49 36 -45 -90 0
+	tellraw @s[score_FLtp_min=227577150,score_FLtp=227577150] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"49 36 -45","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Ice race","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Ice race","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 227577150"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1639073828,score_FLtp=1639073828] 75 7 -80 90 0
+	tellraw @s[score_FLtp_min=1639073828,score_FLtp=1639073828] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"75 7 -80","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Slow Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Slow Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1639073828"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1411077721,score_FLtp=1411077721] 73 7 -102 90 0
+	tellraw @s[score_FLtp_min=1411077721,score_FLtp=1411077721] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"73 7 -102","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Nether Race","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Nether Race","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1411077721"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1441799265,score_FLtp=1441799265] 23 7 -133 -90 0
+	tellraw @s[score_FLtp_min=1441799265,score_FLtp=1441799265] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"23 7 -133","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Evil Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Evil Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1441799265"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=284291924,score_FLtp=284291924] 218 18 -37 -90 0
+	tellraw @s[score_FLtp_min=284291924,score_FLtp=284291924] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"218 18 -37","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Diamond Race","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Diamond Race","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 284291924"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=704022040,score_FLtp=704022040] 276 17 -96 90 0
+	tellraw @s[score_FLtp_min=704022040,score_FLtp=704022040] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"276 17 -96","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Emerald Race","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Emerald Race","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 704022040"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1336477430,score_FLtp=1336477430] 229 8 -157 -90 0
+	tellraw @s[score_FLtp_min=1336477430,score_FLtp=1336477430] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"229 8 -157","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Quartz Race","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Quartz Race","color":"white"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1336477430"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=244076999,score_FLtp=244076999] 242 26 -222 -90 0
+	tellraw @s[score_FLtp_min=244076999,score_FLtp=244076999] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"242 26 -222","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"1.8 Race","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"1.8 Race","color":"gold"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 244076999"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=929476859,score_FLtp=929476859] 424 12 -122 -90 0
+	tellraw @s[score_FLtp_min=929476859,score_FLtp=929476859] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"424 12 -122","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Epic Race","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Epic Race","color":"gold"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 929476859"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1290793335,score_FLtp=1290793335] 467 8 -33 -90 0
+	tellraw @s[score_FLtp_min=1290793335,score_FLtp=1290793335] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"467 8 -33","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Salt Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Salt Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1290793335"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1625759596,score_FLtp=1625759596] 31 20 -240 -45 0
+	tellraw @s[score_FLtp_min=1625759596,score_FLtp=1625759596] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"31 20 -240","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Death Run","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Death Run","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1625759596"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=697385017,score_FLtp=697385017] 23 15 -189.0 -90 0
+	tellraw @s[score_FLtp_min=697385017,score_FLtp=697385017] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"23 15 -189","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Dirt Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Dirt Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 697385017"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=2083967759,score_FLtp=2083967759] 445 68 -669.0 -90 0
+	tellraw @s[score_FLtp_min=2083967759,score_FLtp=2083967759] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"445 68 -669","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Mycelium Race","color":"dark_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mycelium Race","color":"dark_purple"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 2083967759"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1689433145,score_FLtp=1689433145] 517 11 -827 90 0
+	tellraw @s[score_FLtp_min=1689433145,score_FLtp=1689433145] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"517 11 -827","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Frostburn Run","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Frostburn Run","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1689433145"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1390739026,score_FLtp=1390739026] 460 3 -331 -90 0
+	tellraw @s[score_FLtp_min=1390739026,score_FLtp=1390739026] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"460 3 -331","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"EverChanging Race","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"EverChanging Race","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1390739026"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1561350378,score_FLtp=1561350378] -85 45 -241 -45 0
+	tellraw @s[score_FLtp_min=1561350378,score_FLtp=1561350378] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"-85 45 -241","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350378"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1561350379,score_FLtp=1561350379] -77 56 -85 -45 0
+	tellraw @s[score_FLtp_min=1561350379,score_FLtp=1561350379] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"-77 56 -85","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Virus 2","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 2","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1561350379"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1773738438,score_FLtp=1773738438] -268 49 -39 -90 0
+	tellraw @s[score_FLtp_min=1773738438,score_FLtp=1773738438] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"-268 49 -39","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"PVP: Old CTF","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"PVP: Old CTF","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1773738438"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1463087182,score_FLtp=1463087182] 558 107 159.0 90 0
+	tellraw @s[score_FLtp_min=1463087182,score_FLtp=1463087182] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"558 107 159","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Capture","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1463087182"}},{"text":" the ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"white"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1463087182"}},{"text":"flag","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"blue"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1463087182"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1541518973,score_FLtp=1541518973] -105 25 200 -135 0
+	tellraw @s[score_FLtp_min=1541518973,score_FLtp=1541518973] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"-105 25 200","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"The Pit 3","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Pit 3","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1541518973"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1100166785,score_FLtp=1100166785] -250 25 18 -90 0
+	tellraw @s[score_FLtp_min=1100166785,score_FLtp=1100166785] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"-250 25 18","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Sand Tomb","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Sand Tomb","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1100166785"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=637350197,score_FLtp=637350197] -16 5 87 90 0
+	tellraw @s[score_FLtp_min=637350197,score_FLtp=637350197] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"-16 5 87","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Anvil Drop","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Anvil Drop","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 637350197"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1625757028,score_FLtp=1625757028] -187 24 96 -90 0
+	tellraw @s[score_FLtp_min=1625757028,score_FLtp=1625757028] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"-187 24 96","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Death Pit","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Death Pit","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1625757028"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1299512154,score_FLtp=1299512154] 214 27 334 -90 0
+	tellraw @s[score_FLtp_min=1299512154,score_FLtp=1299512154] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"214 27 334","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Rabbit","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit Ball","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1299512154"}},{"text":" ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit Ball","color":"white"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1299512154"}},{"text":"Ball","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit Ball","color":"blue"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1299512154"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1807172851,score_FLtp=1807172851] 77 5 41 0 -15
+	tellraw @s[score_FLtp_min=1807172851,score_FLtp=1807172851] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"77 5 41","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Mastermind","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mastermind","color":"gold"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1807172851"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1511200574,score_FLtp=1511200574] 161 4 180 90 0
+	tellraw @s[score_FLtp_min=1511200574,score_FLtp=1511200574] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"161 4 180","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"P","color":"light_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"light_purple"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"i","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"c","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"gold"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"t","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"i","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"o","color":"dark_green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"dark_green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"n","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"blue"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"a","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"r","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"y","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictionary","color":"white"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1511200574"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1698782159,score_FLtp=1698782159] -103 19 482 -180 0
+	tellraw @s[score_FLtp_min=1698782159,score_FLtp=1698782159] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"-103 19 482","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Royal","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"blue"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1698782159"}},{"text":" ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"white"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1698782159"}},{"text":"Rumble","color":"dark_green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"dark_green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1698782159"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=236718384,score_FLtp=236718384] 397 17 61 90 0
+	tellraw @s[score_FLtp_min=236718384,score_FLtp=236718384] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"397 17 61","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Spawn","color":"dark_red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Spawn","color":"dark_red"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 236718384"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=674271822,score_FLtp=674271822] 348 4 114 -90 0
+	tellraw @s[score_FLtp_min=674271822,score_FLtp=674271822] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"348 4 114","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Floo Network","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=1971168489,score_FLtp=1971168489] 549 20 42
+	tellraw @s[score_FLtp_min=1971168489,score_FLtp=1971168489] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"549 20 42","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"Teamspeak Token","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Teamspeak Token","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1971168489"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=327765745,score_FLtp=327765745] 329 24.065 171 90 0
+	tellraw @s[score_FLtp_min=327765745,score_FLtp=327765745] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"329 24 171","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"The Minigame Hub","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Minigame Hub","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 327765745"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=743229343,score_FLtp=743229343] 385 15 159 180 0
+	tellraw @s[score_FLtp_min=743229343,score_FLtp=743229343] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"385 15 159","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"The PVP hub","color":"light_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The PVP hub","color":"light_purple"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 743229343"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=81055981,score_FLtp=81055981] 329 24.065 154 90 0
+	tellraw @s[score_FLtp_min=81055981,score_FLtp=81055981] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"329 24 154","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"The Mastermind Hub","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Mastermind Hub","color":"gold"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 81055981"}},{"text":"!","color":"gray"}]}
+	minecraft:tp @s[score_FLtp_min=238315678,score_FLtp=238315678] 329 24.076 137 90 0
+	tellraw @s[score_FLtp_min=238315678,score_FLtp=238315678] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have been teleported to ","color":"gray"},{"text":"329 24 137","color":"yellow","bold":"true"},{"text":" at ","color":"gray"},{"text":"The Race Hub","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Race Hub","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 238315678"}},{"text":"!","color":"gray"}]}
+	execute @s ~ ~ ~ playsound minecraft:entity.experience_orb.pickup voice @s
+	scoreboard players set @s FLtp 0
+
+in_spawn_tree.mcfunction
+	effect @s minecraft:saturation 2 0 true
+	gamemode 2 @s[m=0]
+	execute @e[type=armor_stand,tag=FlooStand,score_FLpvp_min=0,score_FLpvp=0] ~ ~ ~ scoreboard teams join NoPVP @a[x=397,y=17,z=61,r=5,m=2]
+	scoreboard players add @s[m=!3] FLti 1
+	scoreboard players operation @s[score_FLti_min=10] FLtp = @e[type=armor_stand,tag=FlooStand,score_FLtp_min=1] FLtp
+	scoreboard players set @s[score_FLti_min=10] FLti 0
+
+in_spawn.mcfunction
+	execute @s[m=!3] ~ ~ ~ detect ~ 3 ~ stained_hardened_clay 5 scoreboard players operation @s FLtp = mghub FLna
+	execute @s[m=!3] ~ ~ ~ detect ~ 3 ~ stained_hardened_clay 2 scoreboard players operation @s FLtp = pvphub FLna
+	execute @s[m=!3] ~ ~ ~ detect ~ 3 ~ stained_hardened_clay 1 scoreboard players operation @s FLtp = mmhub FLna
+	execute @s[m=!3] ~ ~ ~ detect ~ 3 ~ stained_hardened_clay 9 scoreboard players operation @s FLtp = racehub FLna
+
+calc_dimension.mcfunction
+	scoreboard players set @s FLdim 0
+	scoreboard players set @s FLdim 1 {Dimension:0}
+
+calc_rank.mcfunction
+	scoreboard players set @s FLrac 1
+	scoreboard players operation @s[score_FLraa_min=1] FLrac = @s[score_FLraa_min=1] FLraa
+	execute @s[score_FLrac_min=16] ~ ~ ~ scoreboard players set @a[score_MCTeams_min=16,score_MCTeams=16,score_FLdim_min=1,score_FLdim=1] FLrac 0
+	scoreboard players remove @s[score_FLrac_min=16] FLrac 16
+	execute @s[score_FLrac_min=8] ~ ~ ~ scoreboard players set @a[score_MCTeams_min=8,score_MCTeams=8,score_FLdim_min=1,score_FLdim=1] FLrac 0
+	scoreboard players remove @s[score_FLrac_min=8] FLrac 8
+	execute @s[score_FLrac_min=4] ~ ~ ~ scoreboard players set @a[score_MCTeams_min=4,score_MCTeams=4,score_FLdim_min=1,score_FLdim=1] FLrac 0
+	scoreboard players remove @s[score_FLrac_min=4] FLrac 4
+	execute @s[score_FLrac_min=2] ~ ~ ~ scoreboard players set @a[score_MCTeams_min=2,score_MCTeams=2,score_FLdim_min=1,score_FLdim=1] FLrac 0
+	scoreboard players remove @s[score_FLrac_min=2] FLrac 2
+	execute @s[score_FLrac_min=1] ~ ~ ~ scoreboard players set @a[score_MCTeams_min=1,score_MCTeams=1,score_FLdim_min=1,score_FLdim=1] FLrac 0
+	scoreboard players remove @s[score_FLrac_min=1] FLrac 1
+
+use_rank.mcfunction
+	gamemode 2 @s[m=1,score_FLdim_min=1,score_FLdim=1]
+	gamemode 2 @s[m=0,score_FLdim_min=1,score_FLdim=1]
+	scoreboard players operation @s[score_FLlg_min=1,score_FLdim_min=1,score_FLdim=1] FLtp = spawn FLna
+	scoreboard players set @s FLrac 0
+	scoreboard players set @s[score_FLlg_min=1] FLlg 0
+
+use_options.mcfunction
+	execute @s[score_FLpvp_min=0,score_FLpvp=0] ~ ~ ~ scoreboard teams join NoPVP @a[team=!NoPVP,score_FLdim_min=1,score_FLdim=1]
+	execute @s[score_FLpvp_min=1,score_FLpvp=1] ~ ~ ~ effect @a[score_FLdim_min=1,score_FLdim=1] minecraft:weakness 3 100 true
+	execute @s[score_FLsat_min=1,score_FLsat=1] ~ ~ ~ effect @a[score_FLdim_min=1,score_FLdim=1] minecraft:saturation 2 0 true
+	execute @s[score_FLwea_min=0,score_FLwea=0] ~ ~ ~ minecraft:weather clear 1000000
+	execute @s[score_FLwea_min=1,score_FLwea=1] ~ ~ ~ minecraft:weather rain 1000000
+	execute @s[score_FLwea_min=2,score_FLwea=2] ~ ~ ~ minecraft:weather thunder 1000000
+	execute @s[score_FLgmd_min=1,score_FLgmd=1] ~ ~ ~ gamemode 2 @a[m=0,score_FLdim_min=1,score_FLdim=1]
+
+vote.mcfunction
+	tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 674271822"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Vote here: ","color":"gray"},{"text":"Link 1","color":"green","bold":"true","underlined":"true","clickEvent":{"action":"open_url","value":"`http://minecraft-server-list.com/server/200887/vote/`"},"hoverEvent":{"action":"show_text","value":{"text":"Vote link #1","color":"green"}}},{"text":" "},{"text":"Link 2","color":"dark_green","bold":"true","underlined":"true","clickEvent":{"action":"open_url","value":"`http://minecraftservers.org/vote/109809`"},"hoverEvent":{"action":"show_text","value":{"text":"Vote link #2","color":"dark_green"}}},{"text":" "},{"text":"Link 3","color":"green","bold":"true","underlined":"true","clickEvent":{"action":"open_url","value":"`https://minecraftservers.biz/servers/2511/`"},"hoverEvent":{"action":"show_text","value":{"text":"Vote link #3","color":"green"}}},{"text":" "},{"text":"Link 4","color":"dark_green","bold":"true","underlined":"true","clickEvent":{"action":"open_url","value":"`http://minecraft-mp.com/server/86376/vote/`"},"hoverEvent":{"action":"show_text","value":{"text":"Vote link #4","color":"dark_green"}}},{"text":" "},{"text":"Link 5","color":"green","bold":"true","underlined":"true","clickEvent":{"action":"open_url","value":"`http://www.planetminecraft.com/server/edge-gamerscom/vote/`"},"hoverEvent":{"action":"show_text","value":{"text":"Vote link #5","color":"green"}}}]}
+	playsound minecraft:entity.experience_orb.pickup voice @s
+	scoreboard players set @s FLvot 0
+
+stop_events.mcfunction
+	execute @e[type=armor_stand,tag=FlooStand] ~ ~ ~ function ego:floo_network/_stop_events unless @s[score_FLgam_min=0,score_FLgam=0]
+
+_stop_events.mcfunction
+	function ego:ice_race/term if @s[score_FLgam_min=227577150,score_FLgam=227577150]
+	function ego:slow_race/term if @s[score_FLgam_min=1639073828,score_FLgam=1639073828]
+	function ego:nether_race/term if @s[score_FLgam_min=1411077721,score_FLgam=1411077721]
+	function ego:evil_race/term if @s[score_FLgam_min=1441799265,score_FLgam=1441799265]
+	function ego:diamond_race/term if @s[score_FLgam_min=284291924,score_FLgam=284291924]
+	function ego:emerald_race/term if @s[score_FLgam_min=704022040,score_FLgam=704022040]
+	function ego:quartz_race/term if @s[score_FLgam_min=1336477430,score_FLgam=1336477430]
+	function ego:1_8_race/term if @s[score_FLgam_min=244076999,score_FLgam=244076999]
+	function ego:epic_race/term if @s[score_FLgam_min=929476859,score_FLgam=929476859]
+	function ego:salt_race/term if @s[score_FLgam_min=1290793335,score_FLgam=1290793335]
+	function ego:death_run/term if @s[score_FLgam_min=1625759596,score_FLgam=1625759596]
+	function ego:dirt_race/term if @s[score_FLgam_min=697385017,score_FLgam=697385017]
+	function ego:mycelium_race/term if @s[score_FLgam_min=2083967759,score_FLgam=2083967759]
+	function ego:frostburn_run/term if @s[score_FLgam_min=1689433145,score_FLgam=1689433145]
+	function ego:ever_changing_race/term if @s[score_FLgam_min=1390739026,score_FLgam=1390739026]
+	function ego:virus_1/term if @s[score_FLgam_min=1561350378,score_FLgam=1561350378]
+	function ego:virus_2/term if @s[score_FLgam_min=1561350379,score_FLgam=1561350379]
+	function ego:pvp/term if @s[score_FLgam_min=1773738438,score_FLgam=1773738438]
+	function ego:capture_the_flag/term if @s[score_FLgam_min=1463087182,score_FLgam=1463087182]
+	function ego:the_pit_3/term if @s[score_FLgam_min=1541518973,score_FLgam=1541518973]
+	function ego:sand_tomb/term if @s[score_FLgam_min=1100166785,score_FLgam=1100166785]
+	function ego:anvil_drop/term if @s[score_FLgam_min=637350197,score_FLgam=637350197]
+	function ego:death_pit/term if @s[score_FLgam_min=1625757028,score_FLgam=1625757028]
+	function ego:rabbit_ball/term if @s[score_FLgam_min=1299512154,score_FLgam=1299512154]
+	function ego:mastermind/term if @s[score_FLgam_min=1807172851,score_FLgam=1807172851]
+	function ego:pictionary/term if @s[score_FLgam_min=1511200574,score_FLgam=1511200574]
+	function ego:royal_rumble/term if @s[score_FLgam_min=1698782159,score_FLgam=1698782159]
+	scoreboard players set @s[score_FLgam_min=1] FLgam 0
 
