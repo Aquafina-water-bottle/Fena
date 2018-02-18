@@ -1,6 +1,13 @@
+
 class Token:
     def __init__(self, pos, type, value=None):
         """
+        Args:
+            pos (tuple (int, int)): position inside the file formatted as (line, column)
+            type (str): type
+            type (str, str): both type and value
+            value: a custom value
+
         Accepts one of the following:
             str type,        (int, int) pos
             (str, str) type, (int, int) pos
@@ -18,6 +25,10 @@ class Token:
             self.value = value
             self.type = type
 
+    @staticmethod
+    def tokenListStr(tokenList):
+        return " ".join((token.value for token in tokenList))
+
     def getPos(self):
         if self.pos is None:
             return "None"
@@ -29,6 +40,33 @@ class Token:
         else:
             line, column, length = self.pos
             return "Line {0} column {1}-{2}".format(line, column, column+length)
+
+    def matchesOne(self, *types):
+        """
+        returns whether the token matches any one of the types
+
+        :param types: any number of types
+        :return:
+        """
+        for type in types:
+            if isinstance(type, tuple):
+                if self.type == type[0] and self.value == type[1]:
+                    return True
+            elif self.type == type:
+                return True
+        return False
+
+    def matches(self, type, value=None):
+        """
+        returns whether the token matches the given type and/or value
+
+        :param type:
+        :param value:
+        :return:
+        """
+        if isinstance(type, tuple):
+            return self.type == type[0] and self.value == type[1]
+        return (self.type == type) and (value is None or self.value == value)
 
     def __repr__(self):
         """String representation of the class instance.

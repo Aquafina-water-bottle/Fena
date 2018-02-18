@@ -26,14 +26,14 @@ import logging
 
 from queue import Queue
 
-from Post.constants import *
+from Post.constants import (NEWLINE, VALUE, DEDENT, STATEMENT, COMMENT, PATH, MFUNC, INDENT, STRING, FLOAT,
+    INT, COORD, DATATAG, SELECTOR, SIMPLE_TOKENS, LEADING_COMMAND, LEADING_COMMANDS, COMMAND, COMMANDS, SELECTOR_TYPES, EOF)
 from Post.configData import options
 from Post.lexicalToken import Token
 
 
 class Lexer:
     def __init__(self, text, fileName):
-        # client string input, e.g. "4 + 2 * 3 - 6 / 2"
         self.text = text
         self.fileName = fileName
 
@@ -72,7 +72,8 @@ class Lexer:
         """
         Note that this should only be used for creating tokens
 
-        :return: position of the token
+        Returns:
+            tuple (int, int): position of the token
         """
 
         if self.locked:
@@ -88,19 +89,19 @@ class Lexer:
             logging.error(self.getPosRepr() + message)
         raise TypeError
 
-    def advance(self, number=1):
+    def advance(self, increment=1):
         """
         Advance the "pos" pointer and set the "current_char" variable.
 
-        number can either be a string or an integer, where
+        increment can either be a string or an integer, where
         the number incremented will be the string length
         """
 
-        if isinstance(number, str):
-            number = len(number)
+        if isinstance(increment, str):
+            increment = len(increment)
 
         # while loop to increment the self.posInFile variable
-        while number > 0:
+        while increment > 0:
 
             # if the current character is \n, goes to a new line
             # note that the position increments after this, meaning
@@ -121,19 +122,25 @@ class Lexer:
                 self.reachedEOF = True
                 break
 
-            number -= 1
+            increment -= 1
 
     def getCurrentChars(self, length=1):
         """
-        :param length: number of characters from the current position
-        :return: current characters from the current position given the length
+        Args:
+            length (int, optional) number of characters from the current position
+
+        Returns:
+            int: current characters from the current position given the length
         """
         return self.text[self.pos: self.pos + length]
 
     def currentCharsAre(self, chars):
         """
-        :param chars: characters provided to compare to the current string
-        :return: returns whether the characters provided equal to the current string
+        Args:
+            chars (str): characters provided to compare to the current string
+        
+        Returns
+            bool: whether the characters provided equal to the current string
         """
         length = len(chars)
         return chars == self.getCurrentChars(length)
@@ -173,12 +180,12 @@ class Lexer:
         """
         always adds a newline after for better processing
 
-        :param dedents: number of dedent tokens gotten
-        :return: none
+        Args:
+            dedents (int): number of dedent tokens gotten
         """
 
         self.indentLength -= dedents
-        for dedent in range(dedents):
+        for _ in range(dedents):
             dedentToken = Token(self.getTokenPos(), DEDENT)
             self.storedTokens.put(dedentToken)
 
@@ -202,7 +209,6 @@ class Lexer:
         gets the comment token
 
         only called when handling indents as that's when newlines are processed
-        :return:
         """
         self.lock()
         while not self.reachedEOF and not self.currentCharsAre(NEWLINE[VALUE]):
@@ -252,7 +258,6 @@ class Lexer:
         handle existing indents, dedents and new lines
 
         note that this is called when the current character is "\n"
-        :return: None, since all tokens created here will be added to the queue
         """
 
         # newline tokens cannot be put in the beginning because there must be
@@ -421,7 +426,8 @@ class Lexer:
         """
         Gets the entire selector
 
-        :return: selector token
+        Returns:
+            Token: selector token
         """
         self.lock()
 
@@ -444,7 +450,8 @@ class Lexer:
         """
         Simply gets the current string until next whitespace
 
-        :return: String token
+        Returns:
+            Token: String token
         """
         self.lock()
         while not self.reachedEOF and not self.getCurrentChars().isspace() and not self.currentCharsAre("\\\n"):
@@ -472,9 +479,9 @@ class Lexer:
         return Token(tokenPos, STRING, result)
 
     def getNextToken(self):
-        """Lexical analyzer (also known as scanner or tokenizer)
+        """
         This method is responsible for breaking a sentence
-        apart into tokens. One token at a time.
+        apart into tokens, one token at a time.
         """
         while not self.reachedEOF:
 

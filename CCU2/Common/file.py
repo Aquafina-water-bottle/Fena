@@ -69,28 +69,25 @@ def writeParsedCmds(directory, mcfunctions):
     fullPath = os.path.join(directory, FILE_NAME)
     with open(fullPath, "w") as file:
         for mcfunction in mcfunctions:
-            file.write(mcfunction.path + "\n")
-            logging.debug(mcfunction.path)
-            for command in mcfunction.commands:
-                logging.debug(str(command))
-                file.write("\t" + str(command) + "\n")
-            file.write("\n")
+            function_name = mcfunction.path
+            commands = "\n".join("    " + cmd_str for cmd_str in mcfunction.cmd_strs)
+            full_function = function_name + "\n" + commands + "\n"
+
+            file.write(full_function + "\n")
+            logging.debug(full_function)
 
 
 def writeMcFunctions(outputPath, mcfunctions):
-    if outputPath is None:
-        for mcfunction in mcfunctions:
-            relative_path = os.path.join("output", mcfunction.path)
-            os.makedirs(os.path.dirname(relative_path), exist_ok=True)
-            with open(relative_path, "w") as file:
-                for command in mcfunction.commands:
-                    file.write(str(command) + "\n")
-    else:
-        for mcfunction in mcfunctions:
-            absolute_path = os.path.join(outputPath, mcfunction.path)
-            os.makedirs(os.path.dirname(absolute_path), exist_ok=True)
-            with open(absolute_path, "w") as file:
-                for command in mcfunction.commands:
-                    file.write(str(command) + "\n")
+    for mcfunction in mcfunctions:
+
+        if outputPath is None:
+            path = os.path.join("output", mcfunction.path)
+        else:
+            path = os.path.join(outputPath, mcfunction.path)
+    
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w") as file:
+            commands = "\n".join(mcfunction.cmd_strs)
+            file.write(commands + "\n")
 
 

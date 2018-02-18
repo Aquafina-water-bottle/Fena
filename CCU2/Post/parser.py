@@ -1,8 +1,9 @@
 import os
 import logging
 
-from Post.constants import *
+from Post.constants import NEWLINE, STATEMENT, DEDENT, EOF, MFUNC, STRING, INDENT
 from Post.lexicalToken import Token
+from Post.mcfunction import McFunction
 
 """
 program ::= suite
@@ -14,7 +15,7 @@ mfunc_stmt ::= "mfunc" && STR && NEWLINE & INDENT && suite && DEDENT
 
 command ::= [leading_cmd]* && ending_cmd 
 leading_cmd ::= [execute_cmd, (LEADING_START && (STR)*)]
-execute_cmd ::= "execute"? && selector && coords? && (["detect", "ifblock"] && coords? && block && [INT, STR]? &&)?
+execute_cmd ::= ("execute"? && selector && coords?) && (["detect", "ifblock"] && coords? && block && [INT, STR]?)?
 
 ending_cmd ::= [players_cmd, teams_cmd, tag_cmd, regular_cmd]
 players_cmd ::= [players_math_cmd, players_test_cmd, players_obj_cmd]
@@ -32,99 +33,77 @@ tag_cmd ::= selector && ["+", "-"] && STR && (DATATAG)?
 regular_cmd ::= REGULAR_START && [selector, STR]*
 """
 
+# class Command:
+#     """
+#     contains list of tokens for one command
+#     """
+#     def __init__(self):
+#         self.tokenList = []
 
-class McFunction:
-    """
-    Contains all commands within a single defined mcfunction
-    """
+#     def addToken(self, token):
+#         self.tokenList.append(token)
 
-    def __init__(self, path):
-        self.path = path
-        self.commands = []
+#     def __str__(self):
+#         return Token.toCommand(self.tokenList)
 
-        # might be implemented in the future, idk
-        self.nick = None
+#     def __repr__(self):
+#         return Token.toCommandRepr(self.tokenList)
 
-    def addCommand(self, command):
-        """
-        adds the given command to the commands list
+#     def getTokensAround(self, pos, min, max):
+#         """
+#         Gets the tokens around the given position.
 
-        :param command: string representing the command
-        """
-        self.commands.append(command)
+#         eg. index=5, min=-2, max=3:
+#             token_index=3, 4, 5, 6, 7, 8
 
+#         :param pos: position inside the command
+#         :param min: how many tokens before the position
+#         :param max: how many tokens after the position
+#         :return: token list or None
+#         """
 
-class Command:
-    """
-    contains list of tokens for one command
-    """
-    def __init__(self):
-        self.tokenList = []
+#         listLength = len(self.tokenList)
+#         if pos+min >= 0 and pos+max < listLength:
+#             return self.tokenList[pos+min: pos+max+1]
 
-    def addToken(self, token):
-        self.tokenList.append(token)
+#         return None
 
-    def __str__(self):
-        return Token.toCommand(self.tokenList)
+#     def getTokenAt(self, pos):
+#         """
+#         Gets the token at the given position
 
-    def __repr__(self):
-        return Token.toCommandRepr(self.tokenList)
+#         :param pos: position inside the command
+#         :return: token or None
+#         """
+#         listLength = len(self.tokenList)
+#         if 0 <= pos < listLength:
+#             return self.tokenList[pos]
 
-    def getTokensAround(self, pos, min, max):
-        """
-        Gets the tokens around the given position.
+#         return None
 
-        eg. index=5, min=-2, max=3:
-            token_index=3, 4, 5, 6, 7, 8
+#     def replaceTokens(self, pos, min, max, newTokenList):
+#         """
+#         Removes all tokens given the position and inserts the new token list in its place
 
-        :param pos: position inside the command
-        :param min: how many tokens before the position
-        :param max: how many tokens after the position
-        :return: token list or None
-        """
+#         :param pos: position inside the command
+#         :param min: how many tokens before the position
+#         :param max: how many tokens after the position
+#         :param newTokenList: all the tokens to be placed after deletion
+#         :return:
+#         """
 
-        listLength = len(self.tokenList)
-        if pos+min >= 0 and pos+max < listLength:
-            return self.tokenList[pos+min: pos+max+1]
+#         del self.tokenList[pos + min: pos + max + 1]
+#         self.tokenList[pos+min: pos+min] = newTokenList
 
-        return None
+#     def replaceToken(self, pos, newTokenList):
+#         if not isinstance(newTokenList, list):
+#             newTokenList = [newTokenList]
+#         self.tokenList[pos: pos+1] = newTokenList
 
-    def getTokenAt(self, pos):
-        """
-        Gets the token at the given position
-
-        :param pos: position inside the command
-        :return: token or None
-        """
-        listLength = len(self.tokenList)
-        if 0 <= pos < listLength:
-            return self.tokenList[pos]
-
-        return None
-
-    def replaceTokens(self, pos, min, max, newTokenList):
-        """
-        Removes all tokens given the position and inserts the new token list in its place
-
-        :param pos: position inside the command
-        :param min: how many tokens before the position
-        :param max: how many tokens after the position
-        :param newTokenList: all the tokens to be placed after deletion
-        :return:
-        """
-
-        del self.tokenList[pos + min: pos + max + 1]
-        self.tokenList[pos+min: pos+min] = newTokenList
-
-    def replaceToken(self, pos, newTokenList):
-        if not isinstance(newTokenList, list):
-            newTokenList = [newTokenList]
-        self.tokenList[pos: pos+1] = newTokenList
-
-    def insertToken(self, pos, newTokenList):
-        if not isinstance(newTokenList, list):
-            newTokenList = [newTokenList]
-        self.tokenList[pos: pos] = newTokenList
+#     def insertToken(self, pos, newTokenList):
+#         if not isinstance(newTokenList, list):
+#             newTokenList = [newTokenList]
+#         self.tokenList[pos: pos] = newTokenList
 
 
 class Parser:
@@ -134,7 +113,7 @@ class Parser:
         # requires an mcfunction to be set for commands to be used
         # and an mcfunction cannot be set if one has already been set
         self.currentFunction = None
-        self.currentCommand = None
+        self.currentCommand = []
         self.currentToken = None
 
         # the full path to the mcfunction file output
@@ -148,6 +127,7 @@ class Parser:
 
     def parse(self):
         self.suite()
+        logging.debug("")
         # self._debug()
 
     def error(self, message=None):
@@ -272,17 +252,16 @@ class Parser:
         if self.currentFunction is None:
             self.error("No assigned mcfunction for command at {}")
 
-        if self.currentCommand is not None:
+        if self.currentCommand:
             self.error("Unknown error: Cannot create a new command as one already exists")
 
-        self.currentCommand = Command()
         while (not self.lexer.reachedEOF and
                not self.currentToken.matches(NEWLINE) and not self.currentToken.matches(DEDENT)):
-            self.currentCommand.addToken(self.currentToken)
+            self.currentCommand.append(self.currentToken)
             self.advance()
 
-        self.currentFunction.addCommand(self.currentCommand)
-        self.currentCommand = None
+        self.currentFunction.addCommand(self.currentCommand[:])
+        self.currentCommand.clear()
 
     def _debug(self):
         logging.debug("McFunctions assigned: {}".format(len(self.mcfunctions)))

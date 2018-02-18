@@ -1,8 +1,7 @@
 import os
 
 import logging
-from Post.constants import *
-
+from Post.constants import CONFIG_OPTIONS
 """
 -splits lines
 -stores data as dict with key as config option, value as list of values specified within option
@@ -15,7 +14,9 @@ options = {}
 
 
 def getConfigData(dirPath):
-    """ reads each line, splits with = and "," """
+    """
+    reads each line, splits with = and ","
+    """
     CONFIG_NAME = "config.ini"
 
     filePath = os.path.join(dirPath, CONFIG_NAME)
@@ -31,4 +32,3 @@ def getConfigData(dirPath):
 
         options[option] = data.split(",")
         logging.debug("config: " + str(options[option]))
-
