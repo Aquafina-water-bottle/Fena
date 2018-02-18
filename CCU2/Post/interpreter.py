@@ -217,6 +217,7 @@ class Interpreter:
                 return self.function()
 
             elif tokenVal in options[PLUGIN_CONFLICT_COMMANDS]:
+                self.advance()
                 return "minecraft:" + tokenVal
 
         # default value if no shortcut has been found
@@ -278,8 +279,7 @@ class Interpreter:
             self.advance(4)
 
             return "scoreboard players {0} {1} {2} {3}".format(operator, name, objective, score)
-        else:
-            return self.default()
+        return self.default()
 
     def scoreboardTag(self):
         """
@@ -297,8 +297,7 @@ class Interpreter:
             self.advance(3)
 
             return "scoreboard players tag {0} {1} {2}".format(name, operator, tag)
-        else:
-            return self.default()
+        return self.default()
 
     def scoreboardSimple(self):
         """
@@ -316,13 +315,15 @@ class Interpreter:
             self.advance(3)
 
             return "scoreboard players {0} {1} {2}".format(operator, name, objective)
-        else:
-            return self.default()
+        return self.default()
 
     def executeBegin(self):
         """
         Does the beginning part of the execute shortcut, which
         converts selectors into "execute selector coords"
+
+        Note that this doesn't advance since the only time this is
+        called is under Interpreter.default, which advances itself
 
         execute_cmd ::= ("execute"? && selector && coords?) && (["detect", "ifblock"] && coords? && block && [INT, STR]?)?
         """
@@ -348,39 +349,10 @@ class Interpreter:
 
     def executeBlock(self):
         """
+        Does the ending part of the execute command, which
+        is only if "detect" or "ifblock" is detected
+
         execute_cmd ::= ("execute"? && selector && coords?) && (["detect", "ifblock"] && coords? && block && [INT, STR]?)?
-
-        # detect block
-        if token.matchesOne(DETECT, IFBLOCK):
-            # see if there are coords by checking whether the token after "DETECT" or "IFBLOCK"
-            # is an int or coord
-            # ifblock [coord?]
-            tokenCheck = command.getTokenAt(index+1)
-
-            if not tokenCheck.matchesOne(COORD, INT):
-                coordinates = []
-                for _ in range(3):
-                    coord = Token(None, COORD, "~")
-                    coordinates.append(coord)
-
-                logging.debug("EXEC 3: {}".format(str(command)))
-                command.insertToken(index+1, coordinates)
-                logging.debug(" -> {}".format(str(command)))
-
-            # check if after the coordinates, whether the tokens are STR, and (INT or STR)
-            # index is at "DETECT", "IFBLOCK"
-            # ifblock coord1 coord2 coord3 [block number?]
-            tokensCheck = command.getTokensAround(index, 4, 5)
-            if (tokensCheck is not None and
-                    tokensCheck[0].matches(STRING) and not tokensCheck[1].matchesOne(INT, STRING)):
-                starToken = Token(None, STRING, "*")
-                logging.debug("EXEC 4: {}".format(str(command)))
-                command.insertToken(index+5, starToken)
-                logging.debug(" -> {}".format(str(command)))
-
-            # replaces IFBLOCK and DETECT with their string tokens
-            detectToken = Token(None, STRING, DETECT[VALUE])
-            command.replaceToken(index, detectToken)
         """
         tokenStrs = ["detect"]
 
@@ -418,8 +390,3 @@ class Interpreter:
             tokenStrs.append("*")
 
         return " ".join(tokenStrs)
-        
-
-
-        
-

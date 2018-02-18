@@ -20,15 +20,19 @@ TYPE, VALUE = 0, 1
 OPEN_BRACKET = ("open bracket", "[")
 CLOSE_BRACKET = ("close bracket", "]")
 EQUALS = ("equals", "=")
+NOT = ("not", "!")
 RANGE = ("range", "..")
 COMMA = ("comma", ",")
-SIMPLE_TOKENS = (OPEN_BRACKET, CLOSE_BRACKET, EQUALS, RANGE, COMMA)
+SIMPLE_TOKENS = (OPEN_BRACKET, CLOSE_BRACKET, EQUALS, NOT, RANGE, COMMA)
 
 END = ("end", "end")
 
 selectorVarShort = {
     "limit": "c",
     "gamemode": "m",
+}
+
+selectorRangeShort = {
     "dist": "distance",
     "lvl": "level",
     "x_rot": "x_rotation",
@@ -156,7 +160,7 @@ class Lexer:
         if self.getCurrentChars().isalpha() or self.getCurrentChars() == "_":
             return self.getString()
 
-        raise SyntaxError("Invalid character at {}".format(self.getPosRepr()))
+        raise SyntaxError("Invalid character at {0}: {1}".format(self.getPosRepr(), self.getCurrentChars()))
 
 
 
@@ -228,26 +232,48 @@ class Interpreter:
 
     def singleArg(self):
         """
-        singleArg ::= STRING & ("=" & [range, STRING])?
+        singleArg ::= [simpleArg, rangeArg]
         """
-        selectorVar = self.eat(STRING, SELECTOR_VAR)
+        if self.currentToken.matches(SELECTOR_VAR) or self.currentToken.value in selectorVarShort:
+            self.simpleArg()
+        elif self.currentToken.matches(STRING):
+            self.rangeArg()
+        else:
+            self.error("Invalid token, expected a selector var or string")
+
+    def simpleArg(self):
+        """
+        simpleArg ::= defaultVar & "=" & ("!")? & [STRING, INT]
+        """
+
+        selectorVarStr = self.eat(SELECTOR_VAR, STRING).value
+        valueStr = ""
+
+        # gets the shortcut version if it exists
+        selectorVarStr = selectorVarShort.get(selectorVarStr, selectorVarStr)
+        self.eat(EQUALS)
+
+        # checks for "!"
+        if self.currentToken.matches(NOT):
+            self.eat(NOT)
+            valueStr += NOT[VALUE]
+
+        # it can be either a string or integer, but not a range
+        valueStr += str(self.eat(STRING, INTEGER).value)
+        self.selectorStr += "{0}={1}".format(selectorVarStr, valueStr)
+
+    def rangeArg(self):
+        """
+        rangeArg ::= STRING & ("=" & range)?
+        """
+        selectorVar = self.eat(STRING)
 
         if self.currentToken.matches(EQUALS):
             self.eat(EQUALS)
-            if self.currentToken.matches(STRING):
-
-                # gets the shortcut version if it exists
-                selectorVarStr = selectorVarShort.get(selectorVar.value, selectorVar.value)
-
-                if selectorVarStr not in options[SELECTOR_VARIABLES]:
-                    self.error("A string selector argument value cannot exist without a default selector variable")
-                else:
-                    stringValue = self.eat(STRING).value
-                    self.selectorStr += "{0}={1}".format(selectorVarStr, stringValue)
-            else:
-                self.range(selectorVar)
+            self.range(selectorVar)
 
         else:
+            # tag
             self.selectorStr += "tag={}".format(selectorVar.value)
 
     def range(self, selectorVar):
@@ -262,12 +288,11 @@ class Interpreter:
         maxToken = None
 
         # whether the ".." actually exists or not
-        sameVal = False
 
         if self.currentToken.matches(INTEGER):
             minToken = self.eat(INTEGER)
         if not self.currentToken.matches(RANGE):
-            sameVal = True
+            maxToken = minToken
         else:
             self.eat(RANGE)
             if self.currentToken.matches(INTEGER):
@@ -277,9 +302,9 @@ class Interpreter:
         if (minToken, maxToken).count(None) == 2:
             self.error("Range has no integers")
 
-        self.useRange(selectorVar, minToken, maxToken, sameVal)
+        self.useRange(selectorVar, minToken, maxToken)
 
-    def useRange(self, selectorVar, minToken, maxToken, sameVal):
+    def useRange(self, selectorVar, minToken, maxToken):
         """
         Converts the range to a string
 
@@ -293,26 +318,18 @@ class Interpreter:
         argList = []
 
         # gets the shortcut version if it exists
-        selectorVarStr = selectorVarShort.get(selectorVar.value, selectorVar.value)
+        selectorVarStr = selectorRangeShort.get(selectorVar.value, selectorVar.value)
 
-        # if the selector var is part of the default selector
-        # variables, it will use the min value
-        if selectorVarStr in options[SELECTOR_VARIABLES]:
-            if not sameVal:
-                self.error("Default selector variables cannot have ranges")
-            self.selectorStr += "{0}={1}".format(selectorVarStr, str(minToken.value))
+        # checks whether the beginning and ending variables should be different
+        # due to conversion back to 1.12
+        begVar, endVar = selectorRangeLookup.get(selectorVarStr, ("score_{}_min".format(selectorVarStr), "score_{}".format(selectorVarStr)))
+        if minToken is not None:
+            argList.append(begVar + "=" + str(minToken.value))
 
-        else:
-            # checks whether the beginning and ending variables should be different
-            # due to conversion back to 1.12
-            begVar, endVar = selectorRangeLookup.get(selectorVarStr, ("score_{}_min".format(selectorVarStr), "score_{}".format(selectorVarStr)))
-            if minToken is not None:
-                argList.append(begVar + "=" + str(minToken.value))
+        if maxToken is not None:
+            argList.append(endVar + "=" + str(maxToken.value))
 
-            if maxToken is not None:
-                argList.append(endVar + "=" + str(maxToken.value))
-
-            self.selectorStr += ",".join(argList)
+        self.selectorStr += ",".join(argList)
 
 def getSelector(selectorToken):
     selector = selectorToken.value
