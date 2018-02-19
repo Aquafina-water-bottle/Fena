@@ -262,9 +262,7 @@ class Interpreter:
             return "function {}".format(self.default())
         else:
             eventName = os.path.basename(os.path.dirname(self.path))
-            asdf = "function ego:{event}/{name}".format(event=eventName, name=self.default())
-            print(asdf)
-            return asdf
+            return "function ego:{event}/{name}".format(event=eventName, name=self.default())
 
     def name(self, token):
         """
