@@ -128,7 +128,7 @@ class Lexer:
         result = ""
         tokenPos = self.getTokenPos()
 
-        while not self.reachedEnd and (self.getCurrentChars().isalpha() or self.getCurrentChars() == "_"):
+        while not self.reachedEnd and (self.getCurrentChars().isalpha() or self.getCurrentChars().isdigit() or self.getCurrentChars() == "_"):
             result += self.getCurrentChars()
             self.advance()
 
