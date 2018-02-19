@@ -160,7 +160,7 @@ class Lexer:
         if self.getCurrentChars().isalpha() or self.getCurrentChars() == "_":
             return self.getString()
 
-        raise SyntaxError("Invalid character at {0}: {1}".format(self.getPosRepr(), self.getCurrentChars()))
+        raise SyntaxError(self.getPosRepr() + "Invalid character {0}".format(repr(self.getCurrentChars())))
 
 
 
