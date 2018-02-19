@@ -21,7 +21,7 @@ import Post.parser
 import Post.interpreter
 import Post.configData
 
-sVersion, vVersion = "s5.0.0", "v0.1.3-ALPHA"
+sVersion, vVersion = "s5.1.0", "v0.2.0-ALPHA"
 
 
 def main():
@@ -36,7 +36,7 @@ def main():
     Post.configData.getConfigData(directory)
 
     lexer = Post.lexer.Lexer(text, fileName)
-    parser = Post.parser.Parser(lexer)
+    parser = Post.parser.Parser(lexer, outputPath)
     interpreter = Post.interpreter.Interpreter(parser)
     mcfunctions = interpreter.interpret()
     Common.file.writeParsedCmds(directory, mcfunctions)

@@ -1,4 +1,5 @@
 import logging
+import os
 
 from Post.constants import (SELECTOR, PLUS, MINUS, EQUALS, TEST, ENABLE, RESET, COMMAND,
     PLUGIN_CONFLICT_COMMANDS, INT, STRING, LEADING_COMMAND, COORD, IFBLOCK, DETECT)
@@ -31,6 +32,7 @@ class Interpreter:
         self.tokenStrs = []
         self.reachedEnd = False
         self.reachedCmd = False
+        self.path = None
 
         self.operatorTo = {
             "+": "add",
@@ -60,7 +62,7 @@ class Interpreter:
         for mcfunction in self.parser.mcfunctions:
             for command in mcfunction.commands:
 
-                cmdStr = self.interpretCmd(command)
+                cmdStr = self.interpretCmd(command, mcfunction.path)
                 mcfunction.cmd_strs.append(cmdStr)
 
                 logging.debug("INITIAL: {}".format(Token.toCommand(command)))
@@ -159,7 +161,7 @@ class Interpreter:
             return self.cmd[self.pos - num]
         return None
 
-    def interpretCmd(self, cmd):
+    def interpretCmd(self, cmd, path):
         """
         Converts the token list to a usable command string
         """
@@ -170,6 +172,7 @@ class Interpreter:
         self.tokenStrs.clear()
         self.reachedEnd = False
         self.reachedCmd = False
+        self.path = path
 
         logging.debug("First interpreter token set to {}".format(repr(self.token)))
 
@@ -248,8 +251,20 @@ class Interpreter:
         return getSelector(token)
 
     def function(self):
-        # TODO finish later lol
-        return self.default()
+        # just advances itself since it is at "function" already
+        self.advance()
+
+        if not self.token.matches(STRING):
+            self.error("Expected a string token when getting an argument for a /function command")
+
+        # if a colon is not present, that means it is a shortcut
+        if ":" in self.token.value:
+            return "function {}".format(self.default())
+        else:
+            eventName = os.path.basename(os.path.dirname(self.path))
+            asdf = "function ego:{event}/{name}".format(event=eventName, name=self.default())
+            print(asdf)
+            return asdf
 
     def name(self, token):
         """

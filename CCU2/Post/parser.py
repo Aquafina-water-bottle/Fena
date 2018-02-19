@@ -107,7 +107,7 @@ regular_cmd ::= REGULAR_START && [selector, STR]*
 
 
 class Parser:
-    def __init__(self, lexer):
+    def __init__(self, lexer, filePath):
         self.lexer = lexer
 
         # requires an mcfunction to be set for commands to be used
@@ -115,6 +115,8 @@ class Parser:
         self.currentFunction = None
         self.currentCommand = []
         self.currentToken = None
+
+        self.filePath = filePath
 
         # the full path to the mcfunction file output
         # defaults to /mcfunctions/
@@ -231,9 +233,9 @@ class Parser:
         # otherwise, error
         if self.currentFunction is None:
             name = self.currentToken.value + ".mcfunction"
-            # fullPath = os.path.join(self.filePath, name)
-            # self.currentFunction = McFunction(fullPath)
-            self.currentFunction = McFunction(name)
+            fullPath = os.path.join(self.filePath, name)
+            self.currentFunction = McFunction(fullPath)
+            # self.currentFunction = McFunction(name)
         else:
             self.error("Cannot define a mcfunction inside an mcfunction")
 

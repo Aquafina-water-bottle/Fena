@@ -18,13 +18,14 @@ def getContent():
     """
 
     fileName = DEFAULT_FILE
-    outputPath = None
+    outputPath = os.path.abspath("output")
     for index in range(len(sys.argv)):
         argument = sys.argv[index]
         if index == 1:
             fileName = argument
         if index == 2:
-            outputPath = argument
+            outputPath = os.path.abspath(argument)
+            # outputPath = argument
 
     if fileName == DEFAULT_FILE:
         logging.warning("'{}' is being used because there were no command line arguments".format(fileName))
@@ -60,7 +61,7 @@ def getContent():
     # with open(fileName, "r") as file:
     #     text = file.read()
     #     logging.info("Opening file '{}'".format(fileName))
-
+    
     return text, fileName, outputPath
 
 
@@ -79,11 +80,7 @@ def writeParsedCmds(directory, mcfunctions):
 
 def writeMcFunctions(outputPath, mcfunctions):
     for mcfunction in mcfunctions:
-
-        if outputPath is None:
-            path = os.path.join("output", mcfunction.path)
-        else:
-            path = os.path.join(outputPath, mcfunction.path)
+        path = os.path.join(outputPath, mcfunction.path)
     
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w") as file:
