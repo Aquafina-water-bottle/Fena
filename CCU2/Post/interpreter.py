@@ -254,7 +254,7 @@ class Interpreter:
         # just advances itself since it is at "function" already
         self.advance()
 
-        if not self.token.matches(STRING):
+        if not self.token.matchesOne(STRING, COMMAND):
             self.error("Expected a string token when getting an argument for a /function command")
 
         # if a colon is not present, that means it is a shortcut
