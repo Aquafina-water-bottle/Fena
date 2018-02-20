@@ -62,7 +62,13 @@ class Lexer:
         '-5', '4', '0', ... as integers
     """
 
-    def __init__(self, selector, posDisp):
+    def __init__(self):
+        self.selector = None
+        self.pos = 0
+        self.posDisp = None
+        self.reachedEnd = False
+
+    def setSelector(self, selector, posDisp):
         self.selector = selector
         self.pos = 0
         self.posDisp = list(posDisp)
@@ -177,6 +183,11 @@ class Interpreter:
         self.selectorStr = ""
         self.lexer = lexer
         self.currentToken = None
+
+    def setSelector(self, selector, posDisp):
+        self.lexer.setSelector(selector, posDisp)
+        self.selectorStr = ""
+        self.currentToken = None
         self.advance()
 
     def advance(self):
@@ -202,10 +213,12 @@ class Interpreter:
             logging.error("Error during selector shortcut creation at {0}: {1}".format(token, message))
         raise SyntaxError
 
-    def selector(self):
+    def interpret(self, selector, posDisp):
         """
         selector ::= SELECTOR_TYPE & ("[" & selectorArgs & "]")?
         """
+        self.setSelector(selector, posDisp)
+        
         # expects a selector type always at first
         self.eat(SELECTOR_TYPE, addToStr=True)
 
@@ -232,12 +245,16 @@ class Interpreter:
 
     def singleArg(self):
         """
-        singleArg ::= [simpleArg, rangeArg]
+        singleArg ::= [simpleArg, rangeArg, tagArg]
         """
         if self.currentToken.matches(SELECTOR_VAR) or self.currentToken.value in selectorVarShort:
             self.simpleArg()
         elif self.currentToken.matches(STRING):
             self.rangeArg()
+        elif self.currentToken.matches(NOT):
+            self.eat(NOT)
+            selectorStr = self.eat(STRING).value
+            self.tagArg(selectorStr, negate=True)
         else:
             self.error("Invalid token, expected a selector var or string")
 
@@ -273,8 +290,13 @@ class Interpreter:
             self.range(selectorVar)
 
         else:
-            # tag
-            self.selectorStr += "tag={}".format(selectorVar.value)
+            self.tagArg(selectorVar.value)
+
+    def tagArg(self, tag, negate=False):
+        if negate:
+            self.selectorStr += "tag=!{}".format(tag)
+        else:
+            self.selectorStr += "tag={}".format(tag)
 
     def range(self, selectorVar):
         """
@@ -331,9 +353,10 @@ class Interpreter:
 
         self.selectorStr += ",".join(argList)
 
+
+LEXER = Lexer()
+INTERPRETER = Interpreter(LEXER)
 def getSelector(selectorToken):
     selector = selectorToken.value
     pos = selectorToken.pos
-    lexer = Lexer(selector, pos)
-    interpreter = Interpreter(lexer)
-    return interpreter.selector()
+    return INTERPRETER.interpret(selector, pos)
