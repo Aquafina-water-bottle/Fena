@@ -40,7 +40,7 @@ selectorRangeShort = {
 }
 
 selectorRangeLookup = {
-    "distance": ("r", "rm"),
+    "distance": ("rm", "r"),
     "level": ("l", "lm"),
     "x_rotation": ("rx", "rxm"),
     "y_rotation": ("ry", "rym"),
