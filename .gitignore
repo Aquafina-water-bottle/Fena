@@ -4,5 +4,6 @@ _post_test.txt
 
 __pycache__/
 output/
+functions/
 venv/
 .idea/

@@ -6,6 +6,7 @@ from Post.constants import (SELECTOR, PLUS, MINUS, EQUALS, TEST, ENABLE, RESET, 
 from Post.lexicalToken import Token
 from Post.configData import options
 from Post.selector import getSelector
+from Post.mcfunction import McFunction
 
 
 class Interpreter:
@@ -30,9 +31,9 @@ class Interpreter:
         self.cmd = None
         self.token = None
         self.tokenStrs = []
+        self.outputPath = None
         self.reachedEnd = False
         self.reachedCmd = False
-        self.path = None
 
         self.operatorTo = {
             "+": "add",
@@ -56,13 +57,13 @@ class Interpreter:
         }
 
 
-    def interpret(self):
+    def interpret(self, outputPath):
         self.parser.parse()
+        self.outputPath = outputPath
 
         for mcfunction in self.parser.mcfunctions:
             for command in mcfunction.commands:
-
-                cmdStr = self.interpretCmd(command, mcfunction.path)
+                cmdStr = self.interpretCmd(command)
                 mcfunction.cmd_strs.append(cmdStr)
 
                 logging.debug("INITIAL: {}".format(Token.toCommand(command)))
@@ -161,7 +162,7 @@ class Interpreter:
             return self.cmd[self.pos - num]
         return None
 
-    def interpretCmd(self, cmd, path):
+    def interpretCmd(self, cmd):
         """
         Converts the token list to a usable command string
         """
@@ -172,7 +173,6 @@ class Interpreter:
         self.tokenStrs.clear()
         self.reachedEnd = False
         self.reachedCmd = False
-        self.path = path
 
         logging.debug("First interpreter token set to {}".format(repr(self.token)))
 
@@ -258,11 +258,14 @@ class Interpreter:
             self.error("Expected a string token when getting an argument for a /function command")
 
         # if a colon is not present, that means it is a shortcut
-        if ":" in self.token.value:
+        if self.token.value.endswith(":"):
+            self.error("Did not expect a colon at the end of a mcfunction")
+        elif ":" in self.token.value:
             return "function {}".format(self.default())
         else:
-            eventName = os.path.basename(os.path.dirname(self.path))
-            return "function ego:{event}/{name}".format(event=eventName, name=self.default())
+            name = self.default() + ".mcfunction"
+            fullPath = os.path.join(self.outputPath, name)
+            return "function {}".format(McFunction.getFuncPath(fullPath))
 
     def name(self, token):
         """

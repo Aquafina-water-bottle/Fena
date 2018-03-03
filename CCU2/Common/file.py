@@ -1,10 +1,32 @@
 import pyexpander.lib as pyexpander
 import subprocess
+import argparse
 import logging
 import sys
 import os
 
-DEFAULT_FILE = "_post_test.txt"
+
+def getArgs():
+    # Usage: main.py fileName [outputPath] [-d, --debug] [-c, --clean]
+    parser = argparse.ArgumentParser()
+
+    # requires input file
+    parser.add_argument("fileName", help="main ccu file")
+
+    # optional output directory
+    defaultOutputPath = "functions/ccu"
+    parser.add_argument("outputPath", nargs="?", default=defaultOutputPath, help="the directory in which all mcfunctions will be created, with the default being 'functions/ccu'")
+
+    # cleans mcfunctions
+    parser.add_argument("-c", "--clean", help="removes all mcfunction files inside the output directory", action="store_true")
+
+    # debug
+    parser.add_argument("-d", "--debug", help="puts say commands at the front of each mcfunction", action="store_true")
+
+    args = parser.parse_args()
+    args.outputPath = os.path.abspath(args.outputPath)
+
+    return args
 
 
 def getContent():
@@ -17,18 +39,8 @@ def getContent():
         EOFError
     """
 
-    fileName = DEFAULT_FILE
-    outputPath = os.path.abspath("output")
-    for index in range(len(sys.argv)):
-        argument = sys.argv[index]
-        if index == 1:
-            fileName = argument
-        if index == 2:
-            outputPath = os.path.abspath(argument)
-            # outputPath = argument
-
-    if fileName == DEFAULT_FILE:
-        logging.warning("'{}' is being used because there were no command line arguments".format(fileName))
+    args = getArgs()
+    fileName = args.fileName
 
     # gets the file path of the main ccu file
     with open(fileName, "r") as file:
@@ -62,29 +74,66 @@ def getContent():
     #     text = file.read()
     #     logging.info("Opening file '{}'".format(fileName))
     
-    return text, fileName, outputPath
+    return text, args
 
 
-def writeParsedCmds(directory, mcfunctions):
+def addDebugInfo(text, mcfunction, display):
+    if display:
+        return "    say running {}\n".format(mcfunction.funcPath) + text
+    return "say running {}\n".format(mcfunction.funcPath) + text
+    
+
+def cleanOutput(outputPath):
+    """
+    cleans out all mcfunctions from the output directory
+    """
+
+    # gets all files inside the output path
+    for file in os.listdir(outputPath):
+        filePath = os.path.join(outputPath, file)
+        try:
+            if os.path.isfile(filePath) and filePath.endswith(".mcfunction"):
+                # print("found", filePath)
+                os.remove(filePath)
+        except Exception as e:
+            logging.error(e)
+
+def writeParsedCmds(mcfunctions, directory, args):
     FILE_NAME = "parsed_cmds.txt"
+    debug = args.debug
+
     fullPath = os.path.join(directory, FILE_NAME)
     with open(fullPath, "w") as file:
         for mcfunction in mcfunctions:
             function_name = mcfunction.path
             commands = "\n".join("    " + cmd_str for cmd_str in mcfunction.cmd_strs)
+
+            if debug:
+                commands = addDebugInfo(commands, mcfunction, True)
+
             full_function = function_name + "\n" + commands + "\n"
 
             file.write(full_function + "\n")
             logging.debug(full_function)
 
 
-def writeMcFunctions(outputPath, mcfunctions):
+def writeMcFunctions(mcfunctions, args):
+    outputPath = args.outputPath
+    clean = args.clean
+    debug = args.debug
+
+    if clean:
+        cleanOutput(outputPath)
+        
     for mcfunction in mcfunctions:
         path = os.path.join(outputPath, mcfunction.path)
     
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w") as file:
             commands = "\n".join(mcfunction.cmd_strs)
+            if debug:
+                commands = addDebugInfo(commands, mcfunction, False)
+
             file.write(commands + "\n")
 
 

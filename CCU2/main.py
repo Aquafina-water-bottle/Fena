@@ -25,22 +25,25 @@ sVersion, vVersion = "s5.1.1", "v0.2.1-ALPHA"
 
 
 def main():
-    print("sVersion={0}\nvVersion={1}".format(sVersion, vVersion))
+    print("sVersion={}".format(sVersion), "vVersion={}".format(vVersion), sep="\n")
 
     # required to get relative path of the config, debug_info and parsed_cmds file
     directory = os.path.dirname(__file__)
-
+    
     Common.loggingSetup.setupLogging(directory)
-    text, fileName, outputPath = Common.file.getContent()
+    text, args = Common.file.getContent()
+    fileName = args.fileName
+    outputPath = args.outputPath
+
     Common.loggingSetup.formatFileName(fileName)
     Post.configData.getConfigData(directory)
 
     lexer = Post.lexer.Lexer(text, fileName)
     parser = Post.parser.Parser(lexer, outputPath)
     interpreter = Post.interpreter.Interpreter(parser)
-    mcfunctions = interpreter.interpret()
-    Common.file.writeParsedCmds(directory, mcfunctions)
-    Common.file.writeMcFunctions(outputPath, mcfunctions)
+    mcfunctions = interpreter.interpret(outputPath)
+    Common.file.writeParsedCmds(mcfunctions, directory, args)
+    Common.file.writeMcFunctions(mcfunctions, args)
 
     # lexer = Mid.lexer.Lexer(text, fileName)
 
