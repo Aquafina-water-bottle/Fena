@@ -88,7 +88,7 @@ def _get_config_data(file_data=None):
 
     # ensures that this is the first instance of the ConfigData object
     config_data = ConfigData(**options)
-    logging.debug("Config Data: {}".format(config_data))
+    logging.debug("Got the config data: {}".format(config_data))
 
 # this should only be ran inside this folder, hence private
 _get_config_data()

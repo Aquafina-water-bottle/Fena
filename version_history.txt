@@ -56,15 +56,29 @@ s6.0.0      v0.3.0
 
 s7.0.0      v0.4.0
     config_data.py:
-        -Changed all logging errors to syntax error
-        -Renamed config options to match up with the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
-        -config.ini now supports comments, trailing whitespace and empty lines
+        - Changed all logging errors to syntax error
+        - Renamed config options to match up with the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
+        - config.ini now supports comments, trailing whitespace and empty lines
+
+    constants.py:
+        - Removed completely and replaced with token_types.py
+
+    token_types.py: (created)
+        - Changed string constants to multiple Enum values to better organize the constants
+        - Added a TokenRepr class to change the tuple representing both the type and value to the representation and the value
+            - Similarly to the TokenPosition class, this is for clarity compared to the tuple of 2 strs
+
+    lexical_token.py:
+        - Removed a bunch of staticmethods that aren't being used anymore by the token
+        - Created a TokenPosition class to prevent confusion between the
+            line number and the column number of the previous representation,
+            which was a tuple of two ints
 
     TODO:
-        -Change from camel case to snake case
-        -Clean up error logging
-        -Rename certain variables based on selectors to match the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
+        - Change from camel case to snake case
+        - Clean up error logging
+        - Rename certain variables based on selectors to match the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
 
-        -Fix a glitch involving whitespace on empty lines
-        -Fix a glitch involving no empty line at the end of the file
-            -Redo how newlines are converted to tab space tokens
+        - Fix a glitch involving whitespace on empty lines
+        - Fix a glitch involving no empty line at the end of the file
+            - Redo how newlines are converted to tab space tokens

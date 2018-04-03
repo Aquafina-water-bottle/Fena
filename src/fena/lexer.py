@@ -28,8 +28,8 @@ from queue import Queue
 
 from constants import (NEWLINE, VALUE, DEDENT, STATEMENT, COMMENT, PATH, MFUNC, INDENT, STRING, FLOAT,
     INT, COORD, DATATAG, SELECTOR, SIMPLE_TOKENS, LEADING_COMMAND, LEADING_COMMANDS, COMMAND, COMMANDS, SELECTOR_TYPES, EOF)
-from configData import options
-from lexicalToken import Token
+from config_data import ConfigData
+from lexical_token import Token
 
 
 class Lexer:

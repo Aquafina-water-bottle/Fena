@@ -14,8 +14,6 @@ class McFunction:
         # holds a list of command strings
         self.cmd_strs = []
 
-        # might be implemented in the future, idk
-        self.nick = None
 
     def addCommand(self, command):
         """

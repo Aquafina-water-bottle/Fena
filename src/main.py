@@ -3,49 +3,63 @@ Shoutout to Ruslan Spivak for pretty much providing the bedrock code to this int
     His tutorial for making an interpreter can be found here: https://ruslanspivak.com/lsbasi-part1/
 """
 
-import subprocess
+import argparse
 import logging
 import sys
 import os
 
-import fena.loggingSetup
+import fena.logging_setup
 import fena.file
-
-# import Mid.lexer
-# import Mid.parser
-# import Mid.semanticAnalyzer
-# import Mid.interpreter
-
 import fena.lexer
 import fena.parser
 import fena.interpreter
-import fena.configData
 
 semantic_version = "s6.0.0"
 public_version = "v0.3.0-ALPHA"
+
+def get_args():
+    # Usage: main.py fileName [output_path] [-d, --debug] [-c, --clean]
+    parser = argparse.ArgumentParser()
+
+    # requires input file
+    parser.add_argument("file_name", help="main ccu file")
+
+    # optional output directory
+    defaultOutputPath = "functions/ccu"
+    parser.add_argument("output_path", nargs="?", default=defaultOutputPath, help="the directory in which all mcfunctions will be created, with the default being 'functions/ccu'")
+
+    # cleans mcfunctions
+    parser.add_argument("-c", "--clean", help="removes all mcfunction files inside the output directory", action="store_true")
+
+    # debug
+    parser.add_argument("-d", "--debug", help="puts say commands at the front of each mcfunction", action="store_true")
+
+    args = parser.parse_args()
+    args.output_path = os.path.abspath(args.output_path)
+
+    return args
 
 
 def main():
     print("Fena:", "semantic_version={}".format(semantic_version), "public_version={}".format(public_version), sep="\n")
 
+    args = get_args()
+
     # required to get relative path of the config, debug_info and parsed_cmds file
-    directory = os.path.dirname(__file__)
-    
-    fena.loggingSetup.setupLogging(directory)
-    text, args = fena.file.getContent()
-    fileName = args.fileName
-    outputPath = args.outputPath
+    text = fena.file.get_content(args)
+    file_name = args.file_name
+    output_path = args.output_path
 
-    fena.loggingSetup.formatFileName(fileName)
-    fena.configData.getConfigData(directory)
+    # sets the file name for logging
+    fena.logging_setup.format_file_name(file_name)
 
-    lexer = fena.lexer.Lexer(text, fileName)
-    parser = fena.parser.Parser(lexer, outputPath)
+    lexer = fena.lexer.Lexer(text, file_name)
+    parser = fena.parser.Parser(lexer, output_path)
     interpreter = fena.interpreter.Interpreter(parser)
-    mcfunctions = interpreter.interpret(outputPath)
+    mcfunctions = interpreter.interpret(output_path)
 
-    fena.file.writeParsedCmds(mcfunctions, directory, args)
-    fena.file.writeMcFunctions(mcfunctions, args)
+    fena.file.write_parsed_cmds(mcfunctions, args)
+    fena.file.write_mc_functions(mcfunctions, args)
 
 
 if __name__ == '__main__':
