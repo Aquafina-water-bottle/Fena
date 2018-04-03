@@ -1,4 +1,3 @@
-
 class Token:
     def __init__(self, pos, type, value=None):
         """
@@ -68,6 +67,9 @@ class Token:
             return self.type == type[0] and self.value == type[1]
         return (self.type == type) and (value is None or self.value == value)
 
+    def __str__(self):
+        return repr(self.value)
+
     def __repr__(self):
         """String representation of the class instance.
         Examples:
@@ -76,3 +78,17 @@ class Token:
             Token((1, 52): MUL, '*')
         """
         return 'Token({0}: type={1}, value={2})'.format(self.getPos(), repr(self.type), repr(self.value))
+
+    def forCommand(self):
+        return str(self.value)
+
+    @staticmethod
+    def toCommand(tokenList):
+        return " ".join([str(token.value) for token in tokenList])
+
+    @staticmethod
+    def toCommandRepr(tokenList):
+        return " ".join([str(token) for token in tokenList])
+
+
+

@@ -81,7 +81,7 @@ def addDebugInfo(text, mcfunction, display):
     if display:
         return "    say running {}\n".format(mcfunction.funcPath) + text
     return "say running {}\n".format(mcfunction.funcPath) + text
-    
+
 
 def cleanOutput(outputPath):
     """
@@ -97,6 +97,17 @@ def cleanOutput(outputPath):
                 os.remove(filePath)
         except Exception as e:
             logging.error(e)
+
+
+def writeMacro(mcfunctions, args):
+    if args.macro is not None:
+        with open(args.macro, "w") as file:
+            for mcfunction in mcfunctions:
+                file.write("$edit_{}".format(mcfunction.name) + "\n")
+                file.write("$endmacro" + "\n")
+                file.write("$edit_type_{}".format(mcfunction.name) + "\n")
+                file.write("$endmacro" + "\n")
+
 
 def writeParsedCmds(mcfunctions, directory, args):
     FILE_NAME = "parsed_cmds.txt"

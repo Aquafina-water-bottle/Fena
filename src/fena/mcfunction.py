@@ -7,6 +7,7 @@ class McFunction:
 
     def __init__(self, path):
         self.path = path
+        self.name = os.path.basename(self.path).replace(".mcfunction", "")
         self.funcPath = self._getFuncPath()
         self.commands = []
 

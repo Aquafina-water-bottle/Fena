@@ -26,10 +26,10 @@ import logging
 
 from queue import Queue
 
-from Post.constants import (NEWLINE, VALUE, DEDENT, STATEMENT, COMMENT, PATH, MFUNC, INDENT, STRING, FLOAT,
+from constants import (NEWLINE, VALUE, DEDENT, STATEMENT, COMMENT, PATH, MFUNC, INDENT, STRING, FLOAT,
     INT, COORD, DATATAG, SELECTOR, SIMPLE_TOKENS, LEADING_COMMAND, LEADING_COMMANDS, COMMAND, COMMANDS, SELECTOR_TYPES, EOF)
-from Post.configData import options
-from Post.lexicalToken import Token
+from configData import options
+from lexicalToken import Token
 
 
 class Lexer:

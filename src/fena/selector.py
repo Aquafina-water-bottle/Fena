@@ -7,9 +7,9 @@ error reporting and changing easier
 
 import logging
 
-from Common.lexicalToken import Token
-from Post.configData import options
-from Post.constants import SELECTOR_TYPES, SELECTOR_VARIABLES
+from lexicalToken import Token
+from configData import options
+from constants import SELECTOR_TYPES, SELECTOR_VARIABLES
 
 SELECTOR_TYPE = "selector type"
 SELECTOR_VAR = "selector variable"

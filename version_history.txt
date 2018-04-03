@@ -50,3 +50,6 @@ s5.1.1      v0.2.1
         one to one port from the old java code, which is just absolutely disgusting
 
     -Added the function shortcut where you can just type "function name" -> "function ego:EVENT_NAME/name"
+
+s6.0.0      v0.3.0
+    -Removed the Common, Post and Mid folders

@@ -1,9 +1,9 @@
 import os
 import logging
 
-from Post.constants import NEWLINE, STATEMENT, DEDENT, EOF, MFUNC, STRING, INDENT
-from Post.lexicalToken import Token
-from Post.mcfunction import McFunction
+from constants import NEWLINE, STATEMENT, DEDENT, EOF, MFUNC, STRING, INDENT
+from lexicalToken import Token
+from mcfunction import McFunction
 
 """
 program ::= suite

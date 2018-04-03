@@ -8,20 +8,20 @@ import logging
 import sys
 import os
 
-import Common.loggingSetup
-import Common.file
+import loggingSetup
+from file import writeParsedCmds, writeMcFunctions
 
 # import Mid.lexer
 # import Mid.parser
 # import Mid.semanticAnalyzer
 # import Mid.interpreter
 
-import Post.lexer
-import Post.parser
-import Post.interpreter
-import Post.configData
+from lexer import Lexer
+from parser import Parser
+from interpreter import Interpreter
+from configData import getConfigData
 
-sVersion, vVersion = "s5.1.1", "v0.2.1-ALPHA"
+sVersion, vVersion = "s6.0.0", "v0.3.0-ALPHA"
 
 
 def main():
@@ -30,20 +30,21 @@ def main():
     # required to get relative path of the config, debug_info and parsed_cmds file
     directory = os.path.dirname(__file__)
     
-    Common.loggingSetup.setupLogging(directory)
-    text, args = Common.file.getContent()
+    loggingSetup.setupLogging(directory)
+    text, args = file.getContent()
     fileName = args.fileName
     outputPath = args.outputPath
 
-    Common.loggingSetup.formatFileName(fileName)
-    Post.configData.getConfigData(directory)
+    loggingSetup.formatFileName(fileName)
+    configData.getConfigData(directory)
 
-    lexer = Post.lexer.Lexer(text, fileName)
-    parser = Post.parser.Parser(lexer, outputPath)
-    interpreter = Post.interpreter.Interpreter(parser)
-    mcfunctions = interpreter.interpret(outputPath)
-    Common.file.writeParsedCmds(mcfunctions, directory, args)
-    Common.file.writeMcFunctions(mcfunctions, args)
+    lexer = Lexer(text, fileName)
+    parser = Parser(lexer, outputPath)
+    interpreter = Interpreter(parser)
+    mcfunctions = Interpreter.interpret(outputPath)
+    writeParsedCmds(mcfunctions, directory, args)
+    writeMcFunctions(mcfunctions, args)
+    # Common.file.writeMacro(mcfunctions, args)
 
     # lexer = Mid.lexer.Lexer(text, fileName)
 

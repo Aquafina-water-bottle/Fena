@@ -1,12 +1,12 @@
 import logging
 import os
 
-from Post.constants import (SELECTOR, PLUS, MINUS, EQUALS, TEST, ENABLE, RESET, COMMAND,
+from constants import (SELECTOR, PLUS, MINUS, EQUALS, TEST, ENABLE, RESET, COMMAND,
     PLUGIN_CONFLICT_COMMANDS, INT, STRING, LEADING_COMMAND, COORD, IFBLOCK, DETECT)
-from Post.lexicalToken import Token
-from Post.configData import options
-from Post.selector import getSelector
-from Post.mcfunction import McFunction
+from lexicalToken import Token
+from configData import options
+from selector import getSelector
+from mcfunction import McFunction
 
 
 class Interpreter:

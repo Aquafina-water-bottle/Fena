@@ -1,7 +1,7 @@
 import os
 
 import logging
-from Post.constants import CONFIG_OPTIONS
+from constants import CONFIG_OPTIONS
 """
 -splits lines
 -stores data as dict with key as config option, value as list of values specified within option
