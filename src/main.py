@@ -8,64 +8,44 @@ import logging
 import sys
 import os
 
-import loggingSetup
-from file import writeParsedCmds, writeMcFunctions
+import fena.loggingSetup
+import fena.file
 
 # import Mid.lexer
 # import Mid.parser
 # import Mid.semanticAnalyzer
 # import Mid.interpreter
 
-from lexer import Lexer
-from parser import Parser
-from interpreter import Interpreter
-from configData import getConfigData
+import fena.lexer
+import fena.parser
+import fena.interpreter
+import fena.configData
 
-sVersion, vVersion = "s6.0.0", "v0.3.0-ALPHA"
+semantic_version = "s6.0.0"
+public_version = "v0.3.0-ALPHA"
 
 
 def main():
-    print("sVersion={}".format(sVersion), "vVersion={}".format(vVersion), sep="\n")
+    print("Fena:", "semantic_version={}".format(semantic_version), "public_version={}".format(public_version), sep="\n")
 
     # required to get relative path of the config, debug_info and parsed_cmds file
     directory = os.path.dirname(__file__)
     
-    loggingSetup.setupLogging(directory)
-    text, args = file.getContent()
+    fena.loggingSetup.setupLogging(directory)
+    text, args = fena.file.getContent()
     fileName = args.fileName
     outputPath = args.outputPath
 
-    loggingSetup.formatFileName(fileName)
-    configData.getConfigData(directory)
+    fena.loggingSetup.formatFileName(fileName)
+    fena.configData.getConfigData(directory)
 
-    lexer = Lexer(text, fileName)
-    parser = Parser(lexer, outputPath)
-    interpreter = Interpreter(parser)
-    mcfunctions = Interpreter.interpret(outputPath)
-    writeParsedCmds(mcfunctions, directory, args)
-    writeMcFunctions(mcfunctions, args)
-    # Common.file.writeMacro(mcfunctions, args)
+    lexer = fena.lexer.Lexer(text, fileName)
+    parser = fena.parser.Parser(lexer, outputPath)
+    interpreter = fena.interpreter.Interpreter(parser)
+    mcfunctions = interpreter.interpret(outputPath)
 
-    # lexer = Mid.lexer.Lexer(text, fileName)
-
-    # while not lexer.reachedEOF:
-    #     logging.debug(repr(lexer.getNextToken()))
-
-    # print(tokenList)
-
-    # parser = Mid.parser.Parser(lexer)
-    # tree = parser.parse()
-    #
-    # semanticAnalyzer = Mid.semanticAnalyzer.SemanticAnalyzer()
-    # semanticAnalyzer.visit(tree)
-    #
-    # interpreter = Mid.interpreter.Interpreter(tree)
-    # result = interpreter.interpret()
-    # logging.debug("Run-time GLOBAL_MEMORY contents:")
-    #
-    # # error is that GLOBAL_MEMORY doesn't have anything
-    # for k, v in sorted(interpreter.GLOBAL_MEMORY.items()):
-    #     logging.debug("%s = %s" % (k, v))
+    fena.file.writeParsedCmds(mcfunctions, directory, args)
+    fena.file.writeMcFunctions(mcfunctions, args)
 
 
 if __name__ == '__main__':

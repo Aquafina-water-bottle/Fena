@@ -8,7 +8,7 @@ error reporting and changing easier
 import logging
 
 from lexicalToken import Token
-from configData import options
+from config_data import options
 from constants import SELECTOR_TYPES, SELECTOR_VARIABLES
 
 SELECTOR_TYPE = "selector type"

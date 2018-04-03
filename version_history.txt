@@ -53,3 +53,18 @@ s5.1.1      v0.2.1
 
 s6.0.0      v0.3.0
     -Removed the Common, Post and Mid folders
+
+s7.0.0      v0.4.0
+    config_data.py:
+        -Changed all logging errors to syntax error
+        -Renamed config options to match up with the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
+        -config.ini now supports comments, trailing whitespace and empty lines
+
+    TODO:
+        -Change from camel case to snake case
+        -Clean up error logging
+        -Rename certain variables based on selectors to match the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
+
+        -Fix a glitch involving whitespace on empty lines
+        -Fix a glitch involving no empty line at the end of the file
+            -Redo how newlines are converted to tab space tokens
