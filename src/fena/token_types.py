@@ -1,16 +1,5 @@
 from enum import Enum
 
-class TokenRepr:
-    def __init__(self, token_repr, value):
-        self.repr = token_repr
-        self.value = value
-
-    def __str__(self):
-        return "[{} as {}]".format(self.repr, repr(self.value))
-
-    def __repr__(self):
-        return "TokenRepr[repr={}, value={}]".format(repr(self.repr), repr(self.value))
-
 class TokenType(Enum):
     """
     Contains only a token type since the value is arbitrary
@@ -30,34 +19,45 @@ class SimpleToken(Enum):
     Contains the type and value
     """
 
-    STATEMENT = TokenRepr("statement", "!")
-    PLUS = TokenRepr("plus", "+")
-    MINUS = TokenRepr("minus", "-")
-    EQUALS = TokenRepr("equals", "=")
-    TEST = TokenRepr("test", "?")
-    RESET = TokenRepr("reset", "reset")
-    ENABLE = TokenRepr("enable", "enable")
-    JOIN = TokenRepr("join", "join")
-    EMPTY = TokenRepr("empty", "empty")
-    LEAVE = TokenRepr("leave", "leave")
-    DETECT = TokenRepr("detect", "detect")
-    IFBLOCK = TokenRepr("ifblock", "ifblock")
+    STATEMENT = "!"
+    PLUS = "+"
+    MINUS = "-"
+    EQUALS = "="
+    TEST = "?"
+    RESET = "reset"
+    ENABLE = "enable"
+    JOIN = "join"
+    EMPTY = "empty"
+    LEAVE = "leave"
+    DETECT = "detect"
+    IFBLOCK = "ifblock"
+
+SIMPLE_TOKEN_VALUES = (token.value for token in SimpleToken)
+
 
 class WhitespaceToken(Enum):
-    INDENT = TokenRepr("indent", "    ")
-    DEDENT = TokenRepr("dedent", "dedent")
-    NEWLINE = TokenRepr("newline", "\n")
-    EOF = TokenRepr("EOF", None)
+    COMMENT = "#"
+    INDENT = "    "
+    DEDENT = "dedent"
+    NEWLINE = "\n"
+    EOF = None
+
+WHITESPACE_TOKEN_VALUES = (token.value for token in WhitespaceToken)
+
 
 class StatementToken(Enum):
     """
     Contains all possible keyword tokens proceeded after a "!" 
     """
-    MFUNC = TokenRepr("mfunc", "mfunc")
-    FOLDER = TokenRepr("folder", "folder")
-    INITIALS = TokenRepr("initials", "initials")
+    MFUNC = "mfunc"
+    FOLDER = "folder"
+    INITIALS = "initials"
+
+STATEMENT_TOKEN_VALUES = (token.value for token in StatementToken)
+
 
 ALL_TYPES = tuple(TokenType) + tuple(SimpleToken) + tuple(WhitespaceToken) + tuple(StatementToken)
+ALL_TOKENS = tuple(SimpleToken) + tuple(WhitespaceToken) + tuple(StatementToken)
 
 def test():
     print(SimpleToken.PLUS)

@@ -70,9 +70,13 @@ s7.0.0      v0.4.0
 
     lexical_token.py:
         - Removed a bunch of staticmethods that aren't being used anymore by the token
+
+    token_position.py: (created)
         - Created a TokenPosition class to prevent confusion between the
             line number and the column number of the previous representation,
             which was a tuple of two ints
+        - Created a TokenPositionRecorder class as a mutable version of the TokenPosition class
+            used in during the tokenizing process
 
     TODO:
         - Change from camel case to snake case

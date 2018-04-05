@@ -1,130 +1,131 @@
-"""
-Returns a list of tokens
-    operators:
-        "+" -> add OR tag @x add
-        "-" -> remove OR tag @x remove
-        "?" -> test
-        "=" -> set
-        "reset" -> reset
-        "enable" -> enable
-
-        "join" team name
-        "empty" team
-        "leave" name
-
-    selector
-    int
-    coordinates
-    datatag
-    string
-    command
-    execute
-    block
-"""
-
 import logging
 
-from queue import Queue
-
-from constants import (NEWLINE, VALUE, DEDENT, STATEMENT, COMMENT, PATH, MFUNC, INDENT, STRING, FLOAT,
-    INT, COORD, DATATAG, SELECTOR, SIMPLE_TOKENS, LEADING_COMMAND, LEADING_COMMANDS, COMMAND, COMMANDS, SELECTOR_TYPES, EOF)
+from token_types import TokenType, SimpleToken, WhitespaceToken, StatementToken, ALL_TYPES
 from config_data import ConfigData
 from lexical_token import Token
+from token_position import TokenPosition, TokenPositionRecorder
 
 
 class Lexer:
-    def __init__(self, text, fileName):
-        self.text = text
-        self.fileName = fileName
+    config_data = ConfigData()
 
-        # self.pos is an index into self.text
-        self.pos = 0
+    def __init__(self, text):
+        self.text = text
 
         # whether the end of the file has been reached or not
-        self.reachedEOF = False
+        self.reached_eof = False
 
         # row, column
-        self.posInFile = [1, 1]
-
-        # temporary value for setting the locked position
-        self.locked = False
-        self.lockedPos = None
-        self.lockedPosInFile = None
+        self.position = TokenPositionRecorder()
 
         # list of indent strings
         # 1 indent is either 4 spaces or 1 tab space
-        self.indentLength = 0
+        self.indents = 0
 
-        self.storedTokens = Queue()
-
-        if len(self.text) == 0:
-            logging.error("File does not contain anything")
-            raise EOFError
+        # bool returns true if it is a zero length string or complete whitespace
+        if not self.text.strip():
+            raise EOFError("File does not contain anything")
 
         # this is here because the first statement has to be handled
-        self.handleAfterNewline()
-
-    def getPosRepr(self):
-        line, column = self.posInFile
-        return "Line {0} column {1}: ".format(line, column)
-
-    def getTokenPos(self):
-        """
-        Note that this should only be used for creating tokens
-
-        Returns:
-            tuple (int, int): position of the token
-        """
-
-        if self.locked:
-            posInFile = (self.posInFile[0], self.lockedPosInFile[1])
-            return tuple(posInFile)
-        else:
-            return tuple(self.posInFile)
+        # self.handle_after_newline()
 
     def error(self, message=None):
         if message is None:
-            logging.error(self.getPosRepr() + "Invalid character '{}'".format(self.getCurrentChars()))
-        else:
-            logging.error(self.getPosRepr() + message)
-        raise TypeError
+            raise TypeError("{}: Invalid character '{}'".format(self.position, self.get_char()))
+        raise TypeError(str(self.position) + message)
+
+    def advance_chars(self, chars):
+        """
+        Advances given the number of characters
+
+        Args:
+            chars (str)
+        """
+        assert isinstance(chars, str)
+        self.advance(len(chars))
 
     def advance(self, increment=1):
         """
         Advance the "pos" pointer and set the "current_char" variable.
 
-        increment can either be a string or an integer, where
-        the number incremented will be the string length
+        Args:
+            increment (int): Number of chars that will be incremented
         """
+        assert isinstance(increment, int)
 
-        if isinstance(increment, str):
-            increment = len(increment)
-
-        # while loop to increment the self.posInFile variable
-        while increment > 0:
+        # while loop to increment the self.position variable
+        while increment > 0 and not self.reached_eof:
 
             # if the current character is \n, goes to a new line
             # note that the position increments after this, meaning
             # that "\n" is actually the previous character
-            if self.currentCharsAre("\n"):
-                self.posInFile[0] += 1
-                self.posInFile[1] = 1
+            if self.current_chars_are(WhitespaceToken.NEWLINE.value):
+                self.position.increment_row()
             else:
-                self.posInFile[1] += 1
+                self.position.increment_column()
 
-            # if the current character is \t, adds 3 to the length
-            if self.currentCharsAre("\t"):
-                self.posInFile[1] += 3
-
-            self.pos += 1
-
-            if self.pos > len(self.text) - 1:
-                self.reachedEOF = True
-                break
+            if self.position.char_pos > len(self.text) - 1:
+                self.reached_eof = True
 
             increment -= 1
 
-    def getCurrentChars(self, length=1):
+    def create_new_token(self, token_type, value=None):
+        token_pos = self.position.create_instance()
+        return Token(token_pos, token_type, value)
+
+    def get_next_token(self):
+        """
+        This method is responsible for breaking a sentence
+        apart into tokens, one token at a time.
+        """
+        while not self.reached_eof:
+            # line break when "\" is found at the end of a line lol
+            # note that pyexpander does this already, so this is temporarily removed
+            # if self.current_chars_are("\\\n"):
+            #     self.advance(2)
+            #     self.skip_whitespace()
+            #     continue
+
+            # skips all whitespace until \n
+            if self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
+                self.skip_whitespace()
+                continue
+
+            # handles indents and dedents after newline
+            if self.current_chars_are(WhitespaceToken.NEWLINE.value):
+                # can return a single indent token, single dedent token or nothing at all
+                # this will be ran multiple times if there are multiple dedents in one line
+                whitespace_token = self.handle_newline()
+                if whitespace_token is not None:
+                    return whitespace_token
+                continue
+
+            # # gets a number if the first character is a digit or negative digit
+            # # it gets the first 2 current chars, and gets the second current char to see if it's a digit
+            # if self.get_char().isdigit() or (self.current_chars_are("-") and self.get_chars(2)[1].isdigit()):
+            #     return self.get_number()
+
+            # # gets coordinate
+            # if self.current_chars_are("~"):
+            #     return self.get_coord()
+
+            # # gets selector
+            # if self.get_chars(2) in options[SELECTOR_TYPES]:
+            #     return self.get_selector()
+
+            # # gets datatag
+            # if self.current_chars_are("{"):
+            #     return self.get_data_tag()
+
+            return self.get_string()
+
+        # at the end of file by this point, and it must end with dedent tokens if a newline did not end
+        if self.indents > 0:
+            return self.get_dedent()
+
+        return self.create_new_token(WhitespaceToken.EOF)
+
+    def get_char(self):
         """
         Args:
             length (int, optional) number of characters from the current position
@@ -132,9 +133,29 @@ class Lexer:
         Returns:
             int: current characters from the current position given the length
         """
-        return self.text[self.pos: self.pos + length]
+        char_pos = self.position.char_pos
+        return self.text[char_pos]
 
-    def currentCharsAre(self, chars):
+    def get_chars(self, length):
+        """
+        Args:
+            length (int, optional) number of characters from the current position
+
+        Returns:
+            str: current characters from the current position given the length
+        """
+        char_pos = self.position.char_pos
+        return self.text[char_pos: char_pos + length]
+
+    def get_locked_chars(self):
+        """
+        Returns:
+            str: current characters from the locked position to the current position
+        """
+        begin, end = self.position.get_locked_char_pos()
+        return self.text[begin:end]
+
+    def current_chars_are(self, chars):
         """
         Args:
             chars (str): characters provided to compare to the current string
@@ -143,393 +164,363 @@ class Lexer:
             bool: whether the characters provided equal to the current string
         """
         length = len(chars)
-        return chars == self.getCurrentChars(length)
+        return chars == self.get_chars(length)
 
-    def lock(self):
+    def skip_whitespace(self):
         """
-        Locks the starting position to process a multi-character string
-
-        Note that this doesn't actually lock the pos attribute.
+        Skips all whitespace that isn't a newline
         """
-
-        # if not originally locked, does normal thing
-        if not self.locked:
-            self.locked = True
-            self.lockedPos = self.pos
-            self.lockedPosInFile = self.posInFile[:]  # slicing to clone the list
-        else:  # otherwise, warning
-            logging.warning("Unexpected lock before unlock at " + self.getPosRepr())
-
-    def getLockStr(self):
-        return self.text[self.lockedPos: self.pos]
-
-    def unlock(self):
-        self.locked = False
-        self.lockedPos = None
-        self.lockedPosInFile = None
-
-    def skipWhitespace(self):
-        while not self.reachedEOF and self.getCurrentChars().isspace() and not self.currentCharsAre("\n"):
+        while not self.reached_eof and self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
             self.advance()
 
-    def skipComment(self):
-        while not self.reachedEOF and not self.currentCharsAre(NEWLINE[VALUE]):
+    def skip_comment(self):
+        while not self.reached_eof and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
             self.advance()
 
-    def getDedents(self, dedents):
+    def get_dedent(self):
         """
-        always adds a newline after for better processing
-
-        Args:
-            dedents (int): number of dedent tokens gotten
+        Gets a singular dedent token and subtracts one from the indent length
         """
 
-        self.indentLength -= dedents
-        for _ in range(dedents):
-            dedentToken = Token(self.getTokenPos(), DEDENT)
-            self.storedTokens.put(dedentToken)
+        self.indents -= 1
+        return self.create_new_token(WhitespaceToken.DEDENT)
 
-    def handleAfterNewline(self):
-        if self.currentCharsAre("#"):
-            self.skipComment()
-            # self.getComment()
+    # def handle_after_newline(self):
+    #     if self.current_chars_are("#"):
+    #         self.skip_comment()
+    #         return
+
+    #     if self.current_chars_are(STATEMENT[VALUE]):
+    #         statementToken = Token(self.getTokenPos(), STATEMENT)
+    #         self.storedTokens.put(statementToken)
+
+    #         # advances after '!"
+    #         self.advance()
+    #         self.get_post_stmts()
+    #         return
+
+    # def get_statements(self):
+    #     """
+    #     Gets any statements with the first character being "!"
+
+    #     Returns:
+    #         StatementToken
+    #     """
+
+    #     stmt_str = self.get_string()
+    #     if stmt_str in StatementToken:
+    #         token_type = StatementToken(stmt_str)
+    #         return self.create_new_token(token_type)
+
+    #     if self.current_chars_are():
+    #         # creates new PATH token
+    #         self.storedTokens.put(Token(self.getTokenPos(), PATH))
+    #         self.advance(PATH[VALUE])
+
+    #     elif self.current_chars_are(MFUNC[VALUE]):
+    #         # creates new MFUNC token
+    #         self.storedTokens.put(Token(self.getTokenPos(), MFUNC))
+    #         self.advance(MFUNC[VALUE])
+
+    #     else:
+    #         self.error()
+
+    def handle_newline(self):
+        """
+        Once a newline is hit, it creates the given number of indent or dedent tokens
+        It only advances if all possible tokens have been created or the line is
+        either an empty line or a comment
+        """
+        self.position.lock()
+
+        # skips the newline
+        self.advance()
+
+        # gets any whitespace
+        self.skip_whitespace()
+
+        # if the current char is a comment after whitespace, it is still an empty line
+        current_char = self.get_char()
+        if current_char == WhitespaceToken.NEWLINE.value:
+            self.position.unlock()
             return
 
-        if self.currentCharsAre(STATEMENT[VALUE]):
-            statementToken = Token(self.getTokenPos(), STATEMENT)
-            self.storedTokens.put(statementToken)
-
-            # advances after '!"
-            self.advance()
-            self.getPostStmts()
+        if current_char == WhitespaceToken.COMMENT.value:
+            self.skip_comment()
+            self.position.unlock()
             return
 
-    def getComment(self):
-        """
-        gets the comment token
+        # otherwise, the whitespace is valid for interpretation for indents and dedents
+        # gets the string value while removing the newline
+        whitespace = self.get_locked_chars()[1:]
+        self.position.unlock(undo_progress=True)
 
-        only called when handling indents as that's when newlines are processed
-        """
-        self.lock()
-        while not self.reachedEOF and not self.currentCharsAre(NEWLINE[VALUE]):
+        # checks whether the indenting whitespace is actually valid
+        # boolean value of any integer is False if 0, True for anything else
+        if len(whitespace) % len(WhitespaceToken.INDENT.value):
+            # advances to skip the newline and report the error at the proper line
             self.advance()
+            self.error("Invalid whitespace: {}".format(repr(whitespace)))
 
-        result = self.getLockStr()
-        tokenPos = self.getTokenPos()
-        self.unlock()
+        # gets the number of indents at the current area
+        current_indents = whitespace.count(WhitespaceToken.INDENT.value)
 
-        self.storedTokens.put(Token(tokenPos, COMMENT, result))
+        if current_indents > self.indents:
+            if current_indents-1 == self.indents:
+                # skips the newline and indents
+                self.advance()
+                self.skip_whitespace()
+                self.indents += 1
+                return self.create_new_token(WhitespaceToken.INDENT)
 
-    def getPostStmts(self):
-        """
-        assumes first character is after "!"
+            else:
+                self.advance()
+                self.error("Too many indents")
 
-        adds relevant tokens to the stored tokens list
-        """
+        if current_indents < self.indents:
+            # doesn't actually advance here
+            self.indents -= 1
+            return self.create_new_token(WhitespaceToken.DEDENT)
 
-        if self.currentCharsAre(PATH[VALUE]):
-            # creates new PATH token
-            self.storedTokens.put(Token(self.getTokenPos(), PATH))
-            self.advance(PATH[VALUE])
+        # guaranteed to be current_indents == self.indents
+        # meaning that no dedent and indent tokens will be made, so all will be skipped
+        self.advance()
+        self.skip_whitespace()
 
-        elif self.currentCharsAre(MFUNC[VALUE]):
-            # creates new MFUNC token
-            self.storedTokens.put(Token(self.getTokenPos(), MFUNC))
-            self.advance(MFUNC[VALUE])
-
-        else:
-            self.error()
-
-        self.skipWhitespace()
-
-        # gets full path string and stores as string token
-        self.lock()
-        while not self.reachedEOF and not self.currentCharsAre(NEWLINE[VALUE]):
-            self.advance()
-
-        result = self.getLockStr()
-        self.storedTokens.put(Token(self.getTokenPos(), STRING, result))
-
-        self.unlock()
-        return
-
-    def handleIndents(self):
+    def handle_indents(self):
         """
         handle existing indents, dedents and new lines
 
         note that this is called when the current character is "\n"
         """
+        pass
 
-        # newline tokens cannot be put in the beginning because there must be
-        # a string detected for a newline to register
+        # # newline tokens cannot be put in the beginning because there must be
+        # # a string detected for a newline to register
+        # # self.storedTokens.put(newlineToken)
+        # self.advance()
+
+        # # note that index is indents-1 to 0
+        # for index in reversed(range(self.indents)):
+        #     if self.current_chars_are(INDENT[VALUE]):
+        #         self.advance(INDENT[VALUE])
+        #     else:
+        #         # dedents are detected here due to lack of indents
+        #         # however, if the current token is literally a newline or comment, does nothing and immediately breaks
+        #         # this will go back to the beginning of this method, creating a newline token there
+        #         if self.current_chars_are("\n"):
+        #             return
+
+        #         if self.current_chars_are("#"):
+        #             self.skip_comment()
+        #             return
+
+        #         dedents = index+1
+        #         self.get_dedents(dedents)
+
+        #         # adds the newline token here because newline tokens should come after dedent tokens
+        #         newlineToken = Token(self.getTokenPos(), NEWLINE)
+        #         self.storedTokens.put(newlineToken)
+        #         self.handle_after_newline()
+        #         return
+
+        # # if the immediate next character is just a newline, ends
+        # # this is for when there are no indents avaliable to go to the above
+        # if self.current_chars_are("\n"):
+        #     return
+
+        # # handle new indents
+        # newlineToken = Token(self.getTokenPos(), NEWLINE)
         # self.storedTokens.put(newlineToken)
-        self.advance()
+        # if self.current_chars_are(INDENT[VALUE]):
+        #     self.indents += 1
 
-        # note that index is indentLength-1 to 0
-        for index in reversed(range(self.indentLength)):
-            if self.currentCharsAre(INDENT[VALUE]):
-                self.advance(INDENT[VALUE])
-            else:
-                # dedents are detected here due to lack of indents
-                # however, if the current token is literally a newline or comment, does nothing and immediately breaks
-                # this will go back to the beginning of this method, creating a newline token there
-                if self.currentCharsAre("\n"):
-                    return
+        #     indentToken = Token(self.getTokenPos(), INDENT)
+        #     self.storedTokens.put(indentToken)
+        #     self.advance(INDENT[VALUE])
 
-                if self.currentCharsAre("#"):
-                    self.skipComment()
-                    return
+        # # if there is additional whitespace after an indent, error
+        # if self.current_chars_are(INDENT[VALUE]):
+        #     self.error("Invalid indent")
 
-                dedents = index+1
-                self.getDedents(dedents)
+        # # handles newline after indent because indent character will take up its place if not
+        # self.handle_after_newline()
 
-                # adds the newline token here because newline tokens should come after dedent tokens
-                newlineToken = Token(self.getTokenPos(), NEWLINE)
-                self.storedTokens.put(newlineToken)
-                self.handleAfterNewline()
-                return
+    # def get_number(self):
+    #     """Return a (multidigit) integer or float consumed from the input."""
+    #     self.lock()
 
-        # if the immediate next character is just a newline, ends
-        # this is for when there are no indents avaliable to go to the above
-        if self.currentCharsAre("\n"):
-            return
+    #     if not self.reached_eof and (self.current_chars_are("-") or self.get_char().isdigit):
+    #         self.advance()
 
-        # handle new indents
-        newlineToken = Token(self.getTokenPos(), NEWLINE)
-        self.storedTokens.put(newlineToken)
-        if self.currentCharsAre(INDENT[VALUE]):
-            self.indentLength += 1
+    #     while not self.reached_eof and self.get_char().isdigit():
+    #         self.advance()
 
-            indentToken = Token(self.getTokenPos(), INDENT)
-            self.storedTokens.put(indentToken)
-            self.advance(INDENT[VALUE])
+    #     if self.current_chars_are("."):  # indicates it's a float value
+    #         self.advance()
 
-        # if there is additional whitespace after an indent, error
-        if self.currentCharsAre(INDENT[VALUE]):
-            self.error("Invalid indent")
+    #         while not self.reached_eof and self.get_char().isdigit():
+    #             self.advance()
 
-        # handles newline after indent because indent character will take up its place if not
-        self.handleAfterNewline()
+    #         result = self.get_locked_chars()
+    #         token = Token(self.getTokenPos(), FLOAT, float(result))
+    #     else:
+    #         result = self.get_locked_chars()
+    #         token = Token(self.getTokenPos(), INT, int(result))
 
-    def getNumber(self):
-        """Return a (multidigit) integer or float consumed from the input."""
-        self.lock()
+    #     # there has to be whitespace after the token for it to be truly a number
+    #     # otherwise, it's a string
+    #     if not self.get_char().isspace():
+    #         trueTokenPos = self.getTokenPos()
+    #         self.unlock()
+    #         additional = self.get_string().value
+    #         return Token(trueTokenPos, STRING, result + additional)
+    #     self.unlock()
+    #     return token
 
-        if not self.reachedEOF and (self.currentCharsAre("-") or self.getCurrentChars().isdigit):
-            self.advance()
+    # def get_coord(self):
+    #     """
+    #     gets the coordinate token, as either "~" or "~[number]",
+    #     where number can be an int or float
 
-        while not self.reachedEOF and self.getCurrentChars().isdigit():
-            self.advance()
+    #     :return:
+    #     """
 
-        if self.currentCharsAre("."):  # indicates it's a float value
-            self.advance()
+    #     self.lock()
+    #     self.advance()
 
-            while not self.reachedEOF and self.getCurrentChars().isdigit():
-                self.advance()
+    #     if (not self.reached_eof) and (self.current_chars_are("-") or self.get_char().isdigit()):
+    #         self.advance()
 
-            result = self.getLockStr()
-            token = Token(self.getTokenPos(), FLOAT, float(result))
-        else:
-            result = self.getLockStr()
-            token = Token(self.getTokenPos(), INT, int(result))
+    #     while not self.reached_eof and self.get_char().isdigit():
+    #         self.advance()
 
-        # there has to be whitespace after the token for it to be truly a number
-        # otherwise, it's a string
-        if not self.getCurrentChars().isspace():
-            trueTokenPos = self.getTokenPos()
-            self.unlock()
-            additional = self.getString().value
-            return Token(trueTokenPos, STRING, result + additional)
-        self.unlock()
-        return token
+    #     if self.current_chars_are("."):  # indicates it's a float value
+    #         self.advance()
 
-    def getCoord(self):
-        """
-        gets the coordinate token, as either "~" or "~[number]",
-        where number can be an int or float
+    #         while not self.reached_eof and self.get_char().isdigit():
+    #             self.advance()
 
-        :return:
-        """
+    #         result = self.get_locked_chars()
+    #     else:
+    #         result = self.get_locked_chars()
 
-        self.lock()
-        self.advance()
+    #     token = Token(self.getTokenPos(), COORD, result)
+    #     self.unlock()
+    #     return token
 
-        if (not self.reachedEOF) and (self.currentCharsAre("-") or self.getCurrentChars().isdigit()):
-            self.advance()
+    # def get_data_tag(self):
+    #     """
+    #     self.brackets represents how many closing brackets are required to escape this method
 
-        while not self.reachedEOF and self.getCurrentChars().isdigit():
-            self.advance()
+    #     initially starts at one because it requires one closing bracket to close
+    #     note it doesn't account for any strings with curly brackets, so gl with that
 
-        if self.currentCharsAre("."):  # indicates it's a float value
-            self.advance()
+    #     :return:
+    #     """
+    #     brackets = 0
 
-            while not self.reachedEOF and self.getCurrentChars().isdigit():
-                self.advance()
+    #     self.lock()
+    #     tokenPos = self.getTokenPos()
 
-            result = self.getLockStr()
-        else:
-            result = self.getLockStr()
+    #     # result here to skip unnecessary whitespace and comments
+    #     result = ""
 
-        token = Token(self.getTokenPos(), COORD, result)
-        self.unlock()
-        return token
+    #     while not self.reached_eof:
+    #         # handles whitespace right after newline and comments within datatags
+    #         if self.current_chars_are(NEWLINE[VALUE]):
+    #             # adds to result, unlocks, advances (skip whitespace and comment), relocks
+    #             result += self.get_locked_chars()
+    #             self.unlock()
+    #             self.advance()
 
-    def getDataTag(self):
-        """
-        self.brackets represents how many closing brackets are required to escape this method
+    #             if self.get_char().isspace():
+    #                 self.skip_whitespace()
 
-        initially starts at one because it requires one closing bracket to close
-        note it doesn't account for any strings with curly brackets, so gl with that
+    #             self.handle_after_newline()
+    #             self.lock()
+    #             continue
 
-        :return:
-        """
-        brackets = 0
+    #         if self.current_chars_are("{"):
+    #             brackets += 1
+    #         if self.current_chars_are("}"):
+    #             brackets -= 1
+    #         if brackets == 0:
+    #             self.advance()
+    #             break
 
-        self.lock()
-        tokenPos = self.getTokenPos()
+    #         self.advance()
 
-        # result here to skip unnecessary whitespace and comments
-        result = ""
+    #     result += self.get_locked_chars()
 
-        while not self.reachedEOF:
-            # handles whitespace right after newline and comments within datatags
-            if self.currentCharsAre(NEWLINE[VALUE]):
-                # adds to result, unlocks, advances (skip whitespace and comment), relocks
-                result += self.getLockStr()
-                self.unlock()
-                self.advance()
+    #     token = Token(tokenPos, DATATAG, result)
+    #     self.unlock()
+    #     return token
 
-                if self.getCurrentChars().isspace():
-                    self.skipWhitespace()
+    # def get_selector(self):
+    #     """
+    #     Gets the entire selector
 
-                self.handleAfterNewline()
-                self.lock()
-                continue
+    #     Returns:
+    #         Token: selector token
+    #     """
+    #     self.lock()
 
-            if self.currentCharsAre("{"):
-                brackets += 1
-            if self.currentCharsAre("}"):
-                brackets -= 1
-            if brackets == 0:
-                self.advance()
-                break
+    #     # because all beginning selectors are 2 characters, @x
+    #     self.advance()
+    #     self.advance()
 
-            self.advance()
+    #     if self.current_chars_are("["):
+    #         while not self.reached_eof and not self.current_chars_are("]"):
+    #             self.advance()
+    #         self.advance()  # to advance after "["
 
-        result += self.getLockStr()
+    #     result = self.get_locked_chars()
+    #     token = Token(self.getTokenPos(), SELECTOR, result)
+    #     self.unlock()
 
-        token = Token(tokenPos, DATATAG, result)
-        self.unlock()
-        return token
+    #     return token
 
-    def getSelector(self):
-        """
-        Gets the entire selector
-
-        Returns:
-            Token: selector token
-        """
-        self.lock()
-
-        # because all beginning selectors are 2 characters, @x
-        self.advance()
-        self.advance()
-
-        if self.currentCharsAre("["):
-            while not self.reachedEOF and not self.currentCharsAre("]"):
-                self.advance()
-            self.advance()  # to advance after "["
-
-        result = self.getLockStr()
-        token = Token(self.getTokenPos(), SELECTOR, result)
-        self.unlock()
-
-        return token
-
-    def getString(self):
+    def get_string(self):
         """
         Simply gets the current string until next whitespace
 
         Returns:
-            Token: String token
+            str: concatenation of the current chars until the next whitespace
         """
-        self.lock()
-        while not self.reachedEOF and not self.getCurrentChars().isspace() and not self.currentCharsAre("\\\n"):
+        self.position.lock()
+        while not self.reached_eof and not self.get_char().isspace():
             self.advance()
 
-        result = self.getLockStr()
-        tokenPos = self.getTokenPos()
-        self.unlock()
+        result = self.get_locked_chars()
+        self.position.unlock()
 
-        # gets any predefined simple token
-        for simpleToken in SIMPLE_TOKENS:
-            if result == simpleToken[VALUE]:
-                return Token(tokenPos, simpleToken)
+        return self.create_new_token(TokenType.STRING, result)
 
-        # gets leading commands
-        for command in options[LEADING_COMMANDS]:
-            if result == command:
-                return Token(tokenPos, LEADING_COMMAND, command)
+        # # gets any predefined simple token
+        # for simple_token in SimpleToken:
+        #     if result == simple_token.value:
+        #         return Token(tokenPos, simple_token)
 
-        # gets any command
-        for command in options[COMMANDS]:
-            if result == command:
-                return Token(tokenPos, COMMAND, command)
+        # # gets leading commands
+        # for command in options[LEADING_COMMANDS]:
+        #     if result == command:
+        #         return Token(tokenPos, LEADING_COMMAND, command)
 
-        return Token(tokenPos, STRING, result)
+        # # gets any command
+        # for command in options[COMMANDS]:
+        #     if result == command:
+        #         return Token(tokenPos, COMMAND, command)
 
-    def getNextToken(self):
-        """
-        This method is responsible for breaking a sentence
-        apart into tokens, one token at a time.
-        """
-        while not self.reachedEOF:
+        # return Token(tokenPos, STRING, result)
 
-            # returns any stored tokens
-            if not self.storedTokens.empty():
-                return self.storedTokens.get()
+    def test(self):
+        while not self.reached_eof:
+            token = self.get_next_token()
+            print(repr(token))
 
-            # line break when "\" is found at the end of a line lol
-            if self.currentCharsAre("\\\n"):
-                self.advance(2)
-                self.skipWhitespace()
-                continue
-
-            # skips all whitespace until \n
-            if self.getCurrentChars().isspace() and not self.currentCharsAre("\n"):
-                self.skipWhitespace()
-                continue
-
-            # handles indents and dedents
-            if self.currentCharsAre(NEWLINE[VALUE]):
-                # gets either an indent token or dedent token
-                # note that the dedent token carries a value of how many dedents happened
-                self.handleIndents()
-                continue
-
-            # gets a number if the first character is a digit or -DIGIT
-            # it gets the first 2 current chars, and gets the second current char to see if it's a digit
-            if self.getCurrentChars().isdigit() or (self.currentCharsAre("-") and self.getCurrentChars(2)[1].isdigit()):
-                return self.getNumber()
-
-            # gets coordinate
-            if self.currentCharsAre("~"):
-                return self.getCoord()
-
-            # gets selector
-            if self.getCurrentChars(2) in options[SELECTOR_TYPES]:
-                return self.getSelector()
-
-            # gets datatag
-            if self.currentCharsAre("{"):
-                return self.getDataTag()
-
-            return self.getString()
-
-        if self.indentLength > 0:
-            self.getDedents(self.indentLength)
-
-        if not self.storedTokens.empty():
-            return self.storedTokens.get()
-
-        return Token(self.getTokenPos(), EOF)
+if __name__ == "__main__":
+    with open("test_lexer.txt") as file:
+        text = file.read()
+    lexer = Lexer(text)
+    lexer.test()

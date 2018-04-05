@@ -14,8 +14,16 @@ class ConfigData:
         https://stackoverflow.com/questions/2466191/set-attributes-from-dictionary-in-python
     """
     def __init__(self, **options):
-        for key in options:
-            setattr(self, key, options[key])
+        # for key in options:
+        #     setattr(self, key, options[key])
+
+        # changing the above to having all customly defined for pylint
+        if options:
+            self.commands = options["commands"]
+            self.leading_commands = options["leading_commands"]
+            self.plugin_conflict_commands = options["plugin_conflict_commands"]
+            self.target_selector_variables = options["target_selector_variables"]
+            self.target_selector_arguments = options["target_selector_arguments"]
 
     def __str__(self):
         return "ConfigData[vars={}]".format(vars(self))
@@ -107,6 +115,7 @@ def test():
     # should be the original from the config file
     config_data = ConfigData()
     print(config_data)
+    print(config_data.target_selector_variables)
 
     # completely different options
     _get_config_data(file_data)

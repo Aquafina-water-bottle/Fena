@@ -53,7 +53,7 @@ def main():
     # sets the file name for logging
     fena.logging_setup.format_file_name(file_name)
 
-    lexer = fena.lexer.Lexer(text, file_name)
+    lexer = fena.lexer.Lexer(text)
     parser = fena.parser.Parser(lexer, output_path)
     interpreter = fena.interpreter.Interpreter(parser)
     mcfunctions = interpreter.interpret(output_path)

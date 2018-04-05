@@ -4,7 +4,7 @@ class Token:
     def __init__(self, pos, token_type, value=None):
         """
         Args:
-            pos (TokenPosition): position inside the file formatted as (line, column)
+            pos (TokenPosition): position inside the file formatted as (row, column)
             type (TokenType, SimpleToken, WhitespaceToken, StatementToken) type of the token
             value: an optional custom value
         """
@@ -14,8 +14,7 @@ class Token:
 
         if self.value is None:
             assert not isinstance(self.type, TokenType), "A value is required for TokenType (type={}, pos={})".format(self.type, self.pos)
-            token_value = self.type.value.value
-            self.value = token_value
+            self.value = self.type.value
 
     def matches(self, token_type, value=None):
         """
@@ -46,6 +45,15 @@ class Token:
                 return True
         return False
 
+    def cast(self, token_type):
+        """
+        Changes the type of this token
+
+        Args:
+            token_type (any token type): What token type this token should change into
+        """
+        pass
+
     def __str__(self):
         return "Token[{} at {}]".format(repr(self.value), self.pos)
 
@@ -53,27 +61,11 @@ class Token:
         return 'Token[{0}: type={1}, value={2}]'.format(repr(self.pos), repr(self.type), repr(self.value))
 
 
-class TokenPosition:
-    def __init__(self, line, column, length=None):
-        """
-        """
-        self.line = line
-        self.column = column
-        self.length = length
-
-    def __str__(self):
-        if self.length is None:
-            return "[row={}, col={}]".format(self.line, self.column)
-        return "[row={}, col={} to {}]".format(self.line, self.column, self.column + self.length)
-
-    def __repr__(self):
-        if self.length is None:
-            return "TokenPosition[row={}, column={}]".format(self.line, self.column)
-        return "TokenPosition[row={}, column={} to {}]".format(self.line, self.column, self.column + self.length)
-
 
 def test():
-    token_pos = TokenPosition(line=5, column=2)
+    from token_position import TokenPosition
+    token_pos = TokenPosition(row=5, column=2)
+
     token = Token(token_pos, SimpleToken.PLUS)
     print(token)
     print(repr(token))
@@ -81,8 +73,15 @@ def test():
     print(token.type in ALL_TYPES)
     print(token.type in SimpleToken)
 
+    # error since it requires a value
+    # integer = Token(token_pos, TokenType.INT)
     integer = Token(token_pos, TokenType.INT, 26)
     print(repr(integer))
 
+def test_docs():
+    import doctest
+    doctest.testmod()
+
 if __name__ == "__main__":
+    test_docs()
     test()
