@@ -1,16 +1,15 @@
 import os
 import logging
 
-from constants import NEWLINE, STATEMENT, DEDENT, EOF, MFUNC, STRING, INDENT
-from lexicalToken import Token
+from token_types import TokenType, SimpleToken, WhitespaceToken, StatementToken, ALL_TOKENS
 from mcfunction import McFunction
 
 """
 program ::= suite
 suite ::= [statement, command]*
 
-statement ::= "!" && [path_stmt, mfunc_stmt]
-path_stmt ::= "path" && STR
+statement ::= "!" && [folder_stmt, mfunc_stmt]
+path_stmt ::= "folder" && STR && NEWLINE & INDENT && suite && DEDENT
 mfunc_stmt ::= "mfunc" && STR && NEWLINE & INDENT && suite && DEDENT
 
 command ::= [leading_cmd]* && ending_cmd 
@@ -33,94 +32,22 @@ tag_cmd ::= selector && ["+", "-"] && STR && (DATATAG)?
 regular_cmd ::= REGULAR_START && [selector, STR]*
 """
 
-# class Command:
-#     """
-#     contains list of tokens for one command
-#     """
-#     def __init__(self):
-#         self.tokenList = []
-
-#     def addToken(self, token):
-#         self.tokenList.append(token)
-
-#     def __str__(self):
-#         return Token.toCommand(self.tokenList)
-
-#     def __repr__(self):
-#         return Token.toCommandRepr(self.tokenList)
-
-#     def getTokensAround(self, pos, min, max):
-#         """
-#         Gets the tokens around the given position.
-
-#         eg. index=5, min=-2, max=3:
-#             token_index=3, 4, 5, 6, 7, 8
-
-#         :param pos: position inside the command
-#         :param min: how many tokens before the position
-#         :param max: how many tokens after the position
-#         :return: token list or None
-#         """
-
-#         listLength = len(self.tokenList)
-#         if pos+min >= 0 and pos+max < listLength:
-#             return self.tokenList[pos+min: pos+max+1]
-
-#         return None
-
-#     def getTokenAt(self, pos):
-#         """
-#         Gets the token at the given position
-
-#         :param pos: position inside the command
-#         :return: token or None
-#         """
-#         listLength = len(self.tokenList)
-#         if 0 <= pos < listLength:
-#             return self.tokenList[pos]
-
-#         return None
-
-#     def replaceTokens(self, pos, min, max, newTokenList):
-#         """
-#         Removes all tokens given the position and inserts the new token list in its place
-
-#         :param pos: position inside the command
-#         :param min: how many tokens before the position
-#         :param max: how many tokens after the position
-#         :param newTokenList: all the tokens to be placed after deletion
-#         :return:
-#         """
-
-#         del self.tokenList[pos + min: pos + max + 1]
-#         self.tokenList[pos+min: pos+min] = newTokenList
-
-#     def replaceToken(self, pos, newTokenList):
-#         if not isinstance(newTokenList, list):
-#             newTokenList = [newTokenList]
-#         self.tokenList[pos: pos+1] = newTokenList
-
-#     def insertToken(self, pos, newTokenList):
-#         if not isinstance(newTokenList, list):
-#             newTokenList = [newTokenList]
-#         self.tokenList[pos: pos] = newTokenList
-
 
 class Parser:
-    def __init__(self, lexer, filePath):
+    def __init__(self, lexer, file_path):
         self.lexer = lexer
 
         # requires an mcfunction to be set for commands to be used
         # and an mcfunction cannot be set if one has already been set
-        self.currentFunction = None
-        self.currentCommand = []
-        self.currentToken = None
+        self.current_function = None
+        self.current_command = []
+        self.current_token = None
 
-        self.filePath = filePath
+        self.file_path = file_path
 
         # the full path to the mcfunction file output
         # defaults to /mcfunctions/
-        # self.filePath = "mcfunctions"
+        # self.file_path = "mcfunctions"
 
         # list of all mcfunctions avaliable
         self.mcfunctions = []
@@ -134,96 +61,81 @@ class Parser:
 
     def error(self, message=None):
         if message is None:
-            logging.error(repr(self.currentToken) + ": Invalid syntax")
-        else:
-            logging.error(repr(self.currentToken) + ": {}".format(message))
-        raise SyntaxError
+            message = "Invalid syntax"
+        raise SyntaxError("{} : {}".format(repr(self.current_token), message))
 
-    def eat(self, type, value=None):
+    def eat(self, token_type, value=None, error_message=None):
         """
-        Allows the following options:
-            -no parameters: eats any token
-            -type: eats given type
-            -type, value: eats given type and value
+        Advances given the token type and values match up with the current token
 
-        :param type:
-        :param value:
-        :return:
+        Args:
+            token_type (any token type)
+            value (any, defaults to None)
         """
 
-        if value is None and self.currentToken.type == type:
-            self.advance()
-
-        elif (value is None and isinstance(type, tuple) and
-                type[0] == self.currentToken.type and type[1] == self.currentToken.value):
-            self.advance()
-
-        elif (type is not None and value is not None and
-                self.currentToken.type == type and self.currentToken.value == value):
+        if (value is None or self.current_token.value == value) and self.current_token.type.matches(token_type):
             self.advance()
 
         else:
-            self.error()
+            self.error(error_message)
 
     def advance(self):
         """
-        simply gets the next token from the lexer
-
-        :return:
+        Gets the next token from the lexer without checking any type
         """
-        self.currentToken = self.lexer.getNextToken()
-        logging.debug("Advanced to {}".format(repr(self.currentToken)))
+        self.current_token = self.lexer.get_next_token()
+        logging.debug("Advanced to {}".format(repr(self.current_token)))
 
     def suite(self):
-        """ suite ::= [statement, command]* """
-
-        # does this in the beginning since no newline
+        """
+        suite ::= [statement, command]*
+        """
 
         # ignores pure newlines
-        if self.currentToken.matches(NEWLINE):
+        if self.current_token.matches(NEWLINE):
             pass
-        elif self.currentToken.matches(STATEMENT):
+        elif self.current_token.matches(STATEMENT):
             # advances "!"
             self.advance()
             self.statement()
         else:
             self.command()
 
-        while self.currentToken.matches(NEWLINE):
+        while self.current_token.matches(NEWLINE):
             self.eat(NEWLINE)
 
             # breaks if it's a dedent
-            if self.currentToken.matches(DEDENT) or self.currentToken.matches(EOF):
+            if self.current_token.matches(DEDENT) or self.current_token.matches(EOF):
                 break
 
             # ignores pure newlines
-            if self.currentToken.matches(NEWLINE):
+            if self.current_token.matches(NEWLINE):
                 continue
 
-            if self.currentToken.matches(STATEMENT):
+            if self.current_token.matches(STATEMENT):
                 # advances "!"
                 self.advance()
                 self.statement()
             else:
                 self.command()
 
-        logging.debug("End compound at {}".format(repr(self.currentToken)))
+        logging.debug("End compound at {}".format(repr(self.current_token)))
 
     def statement(self):
         """
         Handles any post-processor statements
         """
         # all here should end in a newline
-        if self.currentToken.matches(MFUNC):
+        if self.current_token.matches(MFUNC):
             self.mfunc_stmt()
-        # elif self.currentToken.matches(PATH):
+        # elif self.current_token.matches(PATH):
         #     self.path_stmt()
         else:
             self.error("Invalid statement")
 
     # def path_stmt(self):
     #     self.eat(PATH)
-    #     self.filePath = self.currentToken.value
+    #     self.file_path = self.current_token.value
     #     self.eat(STRING)
 
     def mfunc_stmt(self):
@@ -231,11 +143,11 @@ class Parser:
 
         # if there is no mcfunction, then success
         # otherwise, error
-        if self.currentFunction is None:
-            name = self.currentToken.value + ".mcfunction"
-            fullPath = os.path.join(self.filePath, name)
-            self.currentFunction = McFunction(fullPath)
-            # self.currentFunction = McFunction(name)
+        if self.current_function is None:
+            name = self.current_token.value + ".mcfunction"
+            fullPath = os.path.join(self.file_path, name)
+            self.current_function = McFunction(fullPath)
+            # self.current_function = McFunction(name)
         else:
             self.error("Cannot define a mcfunction inside an mcfunction")
 
@@ -246,24 +158,24 @@ class Parser:
         self.eat(DEDENT)
 
         # resets the current function
-        self.mcfunctions.append(self.currentFunction)
-        self.currentFunction = None
+        self.mcfunctions.append(self.current_function)
+        self.current_function = None
 
     def command(self):
         # checks whether the command can actually be added to an mcfunction or not
-        if self.currentFunction is None:
+        if self.current_function is None:
             self.error("No assigned mcfunction for command at {}")
 
-        if self.currentCommand:
+        if self.current_command:
             self.error("Unknown error: Cannot create a new command as one already exists")
 
         while (not self.lexer.reachedEOF and
-               not self.currentToken.matches(NEWLINE) and not self.currentToken.matches(DEDENT)):
-            self.currentCommand.append(self.currentToken)
+               not self.current_token.matches(NEWLINE) and not self.current_token.matches(DEDENT)):
+            self.current_command.append(self.current_token)
             self.advance()
 
-        self.currentFunction.addCommand(self.currentCommand[:])
-        self.currentCommand.clear()
+        self.current_function.addCommand(self.current_command[:])
+        self.current_command.clear()
 
     def _debug(self):
         logging.debug("McFunctions assigned: {}".format(len(self.mcfunctions)))

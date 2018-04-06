@@ -22,6 +22,8 @@ class Lexer:
         # 1 indent is either 4 spaces or 1 tab space
         self.indents = 0
 
+        self.returned_newline = False
+
         # bool returns true if it is a zero length string or complete whitespace
         if not self.text.strip():
             raise EOFError("File does not contain anything")
@@ -32,7 +34,7 @@ class Lexer:
     def error(self, message=None):
         if message is None:
             raise TypeError("{}: Invalid character '{}'".format(self.position, self.get_char()))
-        raise TypeError(str(self.position) + message)
+        raise TypeError("{}: {}".format(self.position, message))
 
     def advance_chars(self, chars):
         """
@@ -177,6 +179,14 @@ class Lexer:
         while not self.reached_eof and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
             self.advance()
 
+    def get_indent(self):
+        """
+        Gets a singular indent token and adds one from the indent length
+        """
+
+        self.indents += 1
+        return self.create_new_token(WhitespaceToken.INDENT)
+
     def get_dedent(self):
         """
         Gets a singular dedent token and subtracts one from the indent length
@@ -225,16 +235,24 @@ class Lexer:
     #     else:
     #         self.error()
 
-    def handle_newline(self):
+    def handle_newline(self, beginning_line=False):
         """
         Once a newline is hit, it creates the given number of indent or dedent tokens
         It only advances if all possible tokens have been created or the line is
         either an empty line or a comment
+
+        Args:
+            beginning_line (bool): Whether the current line is the first line of the file or not
         """
+        if not self.returned_newline and not beginning_line:
+            self.returned_newline = True
+            return self.create_new_token(WhitespaceToken.NEWLINE)
+
         self.position.lock()
 
         # skips the newline
-        self.advance()
+        if not beginning_line:
+            self.advance()
 
         # gets any whitespace
         self.skip_whitespace()
@@ -243,11 +261,13 @@ class Lexer:
         current_char = self.get_char()
         if current_char == WhitespaceToken.NEWLINE.value:
             self.position.unlock()
+            self.returned_newline = False
             return
 
         if current_char == WhitespaceToken.COMMENT.value:
             self.skip_comment()
             self.position.unlock()
+            self.returned_newline = False
             return
 
         # otherwise, the whitespace is valid for interpretation for indents and dedents
@@ -270,21 +290,25 @@ class Lexer:
                 # skips the newline and indents
                 self.advance()
                 self.skip_whitespace()
-                self.indents += 1
-                return self.create_new_token(WhitespaceToken.INDENT)
+                return self.get_indent()
 
             else:
                 self.advance()
                 self.error("Too many indents")
 
         if current_indents < self.indents:
-            # doesn't actually advance here
-            self.indents -= 1
-            return self.create_new_token(WhitespaceToken.DEDENT)
+            # doesn't actually advance here in case of multiple dedents
+            self.position.lock()
+            self.advance()
+            dedent_token = self.get_dedent()
+            self.position.unlock(undo_progress=True)
+
+            return dedent_token
 
         # guaranteed to be current_indents == self.indents
         # meaning that no dedent and indent tokens will be made, so all will be skipped
         self.advance()
+        self.returned_newline = False
         self.skip_whitespace()
 
     def handle_indents(self):
@@ -515,6 +539,8 @@ class Lexer:
         # return Token(tokenPos, STRING, result)
 
     def test(self):
+        # token = self.get_next_token()
+        # print(repr(token))
         while not self.reached_eof:
             token = self.get_next_token()
             print(repr(token))
@@ -523,4 +549,5 @@ if __name__ == "__main__":
     with open("test_lexer.txt") as file:
         text = file.read()
     lexer = Lexer(text)
+    lexer.handle_newline(beginning_line=True)
     lexer.test()

@@ -10,7 +10,6 @@ class TokenPositionRecorder:
         started (bool): Whether the recorder has started or not
 
         locked (bool):
-        locked_char_pos (int)
         locked_token_pos (TokenPosition): Records the position of the initial character of the lock
     """
 
@@ -21,7 +20,6 @@ class TokenPositionRecorder:
         # self.started = False
 
         self.locked = False
-        self.locked_char_pos = self.char_pos
         self.locked_token_pos = None
 
     def create_instance(self, length=1):
@@ -49,7 +47,7 @@ class TokenPositionRecorder:
 .           >>> r.create_instance()
             TokenPosition[row=None, column=None]
         """
-        return TokenPosition(self.row, self.column, length)
+        return TokenPosition(self.row, self.column, self.char_pos, length)
 
     def increment_column(self, columns=1):
         """
@@ -112,44 +110,37 @@ class TokenPositionRecorder:
         """
         Locks the starting position to process a multi-character string
         by setting the beginning integer slice as char_pos, and letting char_pos advance
-
-        Returns:
-            TokenPosition: The current position
         """
 
         # if not originally locked, does normal thing
         if not self.locked:
             self.locked = True
-            self.locked_char_pos = self.char_pos
+            self.locked_token_pos = TokenPosition(self.row, self.column, self.char_pos)
         # otherwise, warning
         else:
             logging.warning("{}: Unexpected lock before unlock".format(self))
-
-        return self.create_instance()
 
     def get_locked_char_pos(self):
         """
         Returns:
             tuple (int, int): The character positions to get the proper slice of the string
         """
-        return self.locked_char_pos, self.char_pos
+        return self.locked_token_pos.char_pos, self.char_pos
 
     def unlock(self, undo_progress=False):
         """
         Args:
             undo_progress (bool): Whether the character position resets itself back to its original position or not
-
-        Returns:
-            TokenPosition: The current position
         """
         self.locked = False
 
         if undo_progress:
-            self.char_pos = self.locked_char_pos
-        self.locked_pos = None
-        self.locked_token_pos = None
+            original_pos = self.locked_token_pos
+            self.char_pos = original_pos.char_pos
+            self.row = original_pos.row
+            self.column = original_pos.column
 
-        return self.create_instance()
+        self.locked_token_pos = None
 
     def __str__(self):
         return "[row={}, col={}]".format(self.row, self.column)
@@ -175,7 +166,7 @@ class TokenPosition:
              4: |   |   |   |   |
     """
 
-    def __init__(self, row, column, length=1):
+    def __init__(self, row, column, char_pos, length=1):
         assert row is None or (isinstance(row, int) and row > 0)
         assert column is None or (isinstance(column, int) and column > 0)
         assert isinstance(length, int) and length > 0
@@ -183,6 +174,7 @@ class TokenPosition:
         self._row = row
         self._column = column
         self._length = length
+        self._char_pos = char_pos
 
     @property
     def row(self):
@@ -199,6 +191,10 @@ class TokenPosition:
     @property
     def end_column(self):
         return self.column + self.length
+
+    @property
+    def char_pos(self):
+        return self._char_pos
 
     def __str__(self):
         if self.length == 1:

@@ -33,31 +33,6 @@
     
 
 !mfunc scoreboard_test
-    @e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
-    @e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
-    @e[type=ArmorStand,RRStand] RRti + 1 {
-        Tags:["RREntity","RRDisplay","RRAestheticsStand"],
-        
-        # it's free real estate
-        DisabledSlots:2096896,
-        Marker:1,
-        NoGravity:1,
-        NoBasePlate:1,
-        ShowArms:1,
-        Small:1,
-        Invulnerable:1,
-        PersistenceRequired:1,
-        Invisible:1,
-        Rotation:[0f,0f],
-        Pose:{Body:[0f,0f,0f],
-        Head:[0f,0f,0f],
-        LeftArm:[0f,0f,0f],
-        RightArm:[0f,0f,0f],
-        LeftLeg:[0f,0f,0f],
-        RightLeg:[0f,0f,0f]},
-        ArmorItems:[{},{},{},
-        {id:quartz_stairs,Count:1}]}
-
     @s @e[type=ArmorStand,RRStand] RRti - 1 {DisabledSlots:2096896}
     @s @e[type=ArmorStand,RRStand] RRti = 10 {DisabledSlots:2096896}
     @s @e[type=ArmorStand,RRStand] RRti ? 5
@@ -93,6 +68,31 @@
     join RRd_y player
     leave player
     empty RRd_y
+    @e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
+    @e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
+    @e[type=ArmorStand,RRStand] RRti + 1 {
+        Tags:["RREntity","RRDisplay","RRAestheticsStand"],
+        
+        # it's free real estate
+        DisabledSlots:2096896,
+        Marker:1,
+        NoGravity:1,
+        NoBasePlate:1,
+        ShowArms:1,
+        Small:1,
+        Invulnerable:1,
+        PersistenceRequired:1,
+        Invisible:1,
+        Rotation:[0f,0f],
+        Pose:{Body:[0f,0f,0f],
+        Head:[0f,0f,0f],
+        LeftArm:[0f,0f,0f],
+        RightArm:[0f,0f,0f],
+        LeftLeg:[0f,0f,0f],
+        RightLeg:[0f,0f,0f]},
+        ArmorItems:[{},{},{},
+        {id:quartz_stairs,Count:1}]}
+
     
 !mfunc selector_test
     # say @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,RRar>=3<=5] @a[RRpl>=3<5] @a[RRpl>=3] 3
@@ -134,9 +134,6 @@
 !mfunc function_test
     function wiki_test
     function selector_test
-
-
-
 
 # (using my own syntax for a grammar lol)
 # program ::= suite
