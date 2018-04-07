@@ -1,3 +1,6 @@
+if __name__ == "__main__":
+    import logging_setup
+
 import logging
 
 from token_types import TokenType, SimpleToken, WhitespaceToken, StatementToken, ALL_TYPES
@@ -23,6 +26,7 @@ class Lexer:
         self.indents = 0
 
         self.returned_newline = False
+        self.handle_newline(beginning_line=True)
 
         # bool returns true if it is a zero length string or complete whitespace
         if not self.text.strip():
@@ -71,9 +75,29 @@ class Lexer:
 
             increment -= 1
 
-    def create_new_token(self, token_type, value=None):
-        token_pos = self.position.create_instance()
-        return Token(token_pos, token_type, value)
+    def create_new_token(self, token_type, value=None, position=None, advance=False):
+        """
+        Creates a new token and automatically fills out the position
+
+        If the current state of the position is locked, it gets the locked chars instead
+
+        Args:
+            value (any, defaults to None): What value the token should have
+            position (TokenPosition, defaults to None): the position of the current token
+            advance (bool, defaults to False): Whether when creating the token, it should advance or not
+        """
+        if position is None:
+            position = self.position.create_instance()
+
+        if self.position.locked:
+            value = self.get_locked_chars()
+
+        token = Token(position, token_type, value)
+
+        if advance:
+            self.advance_chars(token.value)
+
+        return token
 
     def get_next_token(self):
         """
@@ -115,9 +139,13 @@ class Lexer:
             # if self.get_chars(2) in options[SELECTOR_TYPES]:
             #     return self.get_selector()
 
-            # # gets datatag
-            # if self.current_chars_are("{"):
-            #     return self.get_data_tag()
+            # gets a singular colon token
+            if self.current_chars_are(SimpleToken.COLON.value):
+                return self.create_new_token(SimpleToken.COLON, advance=True)
+
+            # gets datatag
+            if self.current_chars_are("{"):
+                return self.get_data_tag()
 
             return self.get_string()
 
@@ -159,6 +187,8 @@ class Lexer:
 
     def current_chars_are(self, chars):
         """
+        Looks ahead to compare characters
+
         Args:
             chars (str): characters provided to compare to the current string
         
@@ -194,46 +224,6 @@ class Lexer:
 
         self.indents -= 1
         return self.create_new_token(WhitespaceToken.DEDENT)
-
-    # def handle_after_newline(self):
-    #     if self.current_chars_are("#"):
-    #         self.skip_comment()
-    #         return
-
-    #     if self.current_chars_are(STATEMENT[VALUE]):
-    #         statementToken = Token(self.getTokenPos(), STATEMENT)
-    #         self.storedTokens.put(statementToken)
-
-    #         # advances after '!"
-    #         self.advance()
-    #         self.get_post_stmts()
-    #         return
-
-    # def get_statements(self):
-    #     """
-    #     Gets any statements with the first character being "!"
-
-    #     Returns:
-    #         StatementToken
-    #     """
-
-    #     stmt_str = self.get_string()
-    #     if stmt_str in StatementToken:
-    #         token_type = StatementToken(stmt_str)
-    #         return self.create_new_token(token_type)
-
-    #     if self.current_chars_are():
-    #         # creates new PATH token
-    #         self.storedTokens.put(Token(self.getTokenPos(), PATH))
-    #         self.advance(PATH[VALUE])
-
-    #     elif self.current_chars_are(MFUNC[VALUE]):
-    #         # creates new MFUNC token
-    #         self.storedTokens.put(Token(self.getTokenPos(), MFUNC))
-    #         self.advance(MFUNC[VALUE])
-
-    #     else:
-    #         self.error()
 
     def handle_newline(self, beginning_line=False):
         """
@@ -287,9 +277,8 @@ class Lexer:
 
         if current_indents > self.indents:
             if current_indents-1 == self.indents:
-                # skips the newline and indents
-                self.advance()
-                self.skip_whitespace()
+                # doesnt skip the newline and indent to run this function once more to get to
+                # the case where number of indents on the line are equal to the current indentation
                 return self.get_indent()
 
             else:
@@ -302,136 +291,58 @@ class Lexer:
             self.advance()
             dedent_token = self.get_dedent()
             self.position.unlock(undo_progress=True)
-
             return dedent_token
 
         # guaranteed to be current_indents == self.indents
-        # meaning that no dedent and indent tokens will be made, so all will be skipped
+        # no dedent and indent tokens will be made unless already made, so all whitespace will be skipped
         self.advance()
         self.returned_newline = False
         self.skip_whitespace()
 
-    def handle_indents(self):
-        """
-        handle existing indents, dedents and new lines
+        # however, there are certain things that can only happen after a valid newline,
+        # most notably the statement token
+        if self.current_chars_are(SimpleToken.STATEMENT.value):
+            return self.create_new_token(SimpleToken.STATEMENT, advance=True)
 
-        note that this is called when the current character is "\n"
-        """
-        pass
+    def get_data_tag(self):
+        # skips the first curly bracket
+        result = "{"
+        curly_brackets = 1
+        self.advance()
 
-        # # newline tokens cannot be put in the beginning because there must be
-        # # a string detected for a newline to register
-        # # self.storedTokens.put(newlineToken)
-        # self.advance()
+        original_pos = self.position.create_instance()
+        self.position.lock()
 
-        # # note that index is indents-1 to 0
-        # for index in reversed(range(self.indents)):
-        #     if self.current_chars_are(INDENT[VALUE]):
-        #         self.advance(INDENT[VALUE])
-        #     else:
-        #         # dedents are detected here due to lack of indents
-        #         # however, if the current token is literally a newline or comment, does nothing and immediately breaks
-        #         # this will go back to the beginning of this method, creating a newline token there
-        #         if self.current_chars_are("\n"):
-        #             return
+        while not self.reached_eof and curly_brackets > 0:
+            # handles comments
+            if self.current_chars_are(WhitespaceToken.NEWLINE.value):
+                # unlocks so newlines and whitespace are not included in the result
+                result += self.get_locked_chars()
+                self.position.unlock()
 
-        #         if self.current_chars_are("#"):
-        #             self.skip_comment()
-        #             return
+                # skips newline
+                self.advance()
+                self.skip_whitespace()
 
-        #         dedents = index+1
-        #         self.get_dedents(dedents)
+                if self.get_char() == WhitespaceToken.COMMENT.value:
+                    self.skip_comment()
 
-        #         # adds the newline token here because newline tokens should come after dedent tokens
-        #         newlineToken = Token(self.getTokenPos(), NEWLINE)
-        #         self.storedTokens.put(newlineToken)
-        #         self.handle_after_newline()
-        #         return
+                self.position.lock()
+                continue
 
-        # # if the immediate next character is just a newline, ends
-        # # this is for when there are no indents avaliable to go to the above
-        # if self.current_chars_are("\n"):
-        #     return
+            if self.current_chars_are("{"):
+                curly_brackets += 1
+            if self.current_chars_are("}"):
+                curly_brackets -= 1
+            self.advance()
 
-        # # handle new indents
-        # newlineToken = Token(self.getTokenPos(), NEWLINE)
-        # self.storedTokens.put(newlineToken)
-        # if self.current_chars_are(INDENT[VALUE]):
-        #     self.indents += 1
 
-        #     indentToken = Token(self.getTokenPos(), INDENT)
-        #     self.storedTokens.put(indentToken)
-        #     self.advance(INDENT[VALUE])
+        result += self.get_locked_chars()
+        self.position.unlock()
 
-        # # if there is additional whitespace after an indent, error
-        # if self.current_chars_are(INDENT[VALUE]):
-        #     self.error("Invalid indent")
-
-        # # handles newline after indent because indent character will take up its place if not
-        # self.handle_after_newline()
-
-    # def get_number(self):
-    #     """Return a (multidigit) integer or float consumed from the input."""
-    #     self.lock()
-
-    #     if not self.reached_eof and (self.current_chars_are("-") or self.get_char().isdigit):
-    #         self.advance()
-
-    #     while not self.reached_eof and self.get_char().isdigit():
-    #         self.advance()
-
-    #     if self.current_chars_are("."):  # indicates it's a float value
-    #         self.advance()
-
-    #         while not self.reached_eof and self.get_char().isdigit():
-    #             self.advance()
-
-    #         result = self.get_locked_chars()
-    #         token = Token(self.getTokenPos(), FLOAT, float(result))
-    #     else:
-    #         result = self.get_locked_chars()
-    #         token = Token(self.getTokenPos(), INT, int(result))
-
-    #     # there has to be whitespace after the token for it to be truly a number
-    #     # otherwise, it's a string
-    #     if not self.get_char().isspace():
-    #         trueTokenPos = self.getTokenPos()
-    #         self.unlock()
-    #         additional = self.get_string().value
-    #         return Token(trueTokenPos, STRING, result + additional)
-    #     self.unlock()
-    #     return token
-
-    # def get_coord(self):
-    #     """
-    #     gets the coordinate token, as either "~" or "~[number]",
-    #     where number can be an int or float
-
-    #     :return:
-    #     """
-
-    #     self.lock()
-    #     self.advance()
-
-    #     if (not self.reached_eof) and (self.current_chars_are("-") or self.get_char().isdigit()):
-    #         self.advance()
-
-    #     while not self.reached_eof and self.get_char().isdigit():
-    #         self.advance()
-
-    #     if self.current_chars_are("."):  # indicates it's a float value
-    #         self.advance()
-
-    #         while not self.reached_eof and self.get_char().isdigit():
-    #             self.advance()
-
-    #         result = self.get_locked_chars()
-    #     else:
-    #         result = self.get_locked_chars()
-
-    #     token = Token(self.getTokenPos(), COORD, result)
-    #     self.unlock()
-    #     return token
+        # gets a new token position from the original position and the current position
+        token_pos = TokenPosition.from_positions(original_pos, self.position.create_instance())
+        return self.create_new_token(TokenType.DATATAG, value=result, position=token_pos)
 
     # def get_data_tag(self):
     #     """
@@ -516,10 +427,13 @@ class Lexer:
         while not self.reached_eof and not self.get_char().isspace():
             self.advance()
 
-        result = self.get_locked_chars()
+        # result = self.get_locked_chars()
+        # self.position.unlock()
+
+        new_token = self.create_new_token(TokenType.STRING)
         self.position.unlock()
 
-        return self.create_new_token(TokenType.STRING, result)
+        return new_token
 
         # # gets any predefined simple token
         # for simple_token in SimpleToken:
@@ -543,11 +457,10 @@ class Lexer:
         # print(repr(token))
         while not self.reached_eof:
             token = self.get_next_token()
-            print(repr(token))
+            logging.debug(repr(token))
 
 if __name__ == "__main__":
     with open("test_lexer.txt") as file:
         text = file.read()
     lexer = Lexer(text)
-    lexer.handle_newline(beginning_line=True)
     lexer.test()

@@ -1,21 +1,27 @@
 import os
+import logging
 
 class McFunction:
     """
     Contains all commands within a single defined mcfunction
+
+    Args:
+        path (str)
+        prefix (str or None)
     """
 
-    def __init__(self, path):
+    def __init__(self, path, prefix):
         self.path = path
         self.name = os.path.basename(self.path).replace(".mcfunction", "")
-        self.funcPath = self._getFuncPath()
+        self.func_path = self._get_func_path()
+        self.prefix = prefix
         self.commands = []
 
         # holds a list of command strings
         self.cmd_strs = []
 
 
-    def addCommand(self, command):
+    def add_command(self, command):
         """
         Adds the given command to the commands list
 
@@ -24,44 +30,52 @@ class McFunction:
         self.commands.append(command)
 
     @staticmethod
-    def getFuncPath(path):
+    def get_func_path(path):
         # gets the function paths all the way until "functions"
-        functionPaths = []
+        function_paths = []
 
         # the path that will be changed, with the mcfunction file removed
         pathCalc = os.path.dirname(path)
-        fileEnding = ".mcfunction"
+        file_ending = ".mcfunction"
 
         # the mcfunction file
-        funcName = os.path.basename(path)
-        if funcName.endswith(fileEnding):
-            funcName = funcName[:-len(fileEnding)]
+        func_name = os.path.basename(path)
+        if func_name.endswith(file_ending):
+            func_name = func_name[:-len(file_ending)]
 
-        baseName = os.path.basename(pathCalc)
-        pathDisp = ""
+        base_name = os.path.basename(pathCalc)
+        path_disp = ""
 
         # gets all directories in reverse order
-        while baseName != "functions" and baseName != "":
-            functionPaths.append(baseName)
+        while base_name != "functions" and base_name != "":
+            function_paths.append(base_name)
             pathCalc = os.path.dirname(pathCalc)
-            baseName = os.path.basename(pathCalc)
+            base_name = os.path.basename(pathCalc)
 
         # the base name should end at functions for there to be a functions folder
-        if baseName != "functions":
+        if base_name != "functions":
             raise SyntaxError("Path {} must contain a functions/ folder".format(path))
 
         # checks whether the length is 0 for some reason
-        assert len(functionPaths) != 0, "Path {} must contain a folder".format(path)
+        assert len(function_paths) != 0, "Path {} must contain a folder".format(path)
 
-        # pathDisp should end with a separator, aka : or /
-        pathDisp = functionPaths.pop() + ":"
+        # path_disp should end with a separator, aka : or /
+        path_disp = function_paths.pop() + ":"
 
-        # while the functionPaths list is not empty
-        while functionPaths:
-            pathDisp += functionPaths.pop() + "/"
+        # while the function_paths list is not empty
+        while function_paths:
+            path_disp += function_paths.pop() + "/"
 
-        pathDisp += funcName
-        return pathDisp
+        path_disp += func_name
+        return path_disp
 
-    def _getFuncPath(self):
-        return McFunction.getFuncPath(self.path)
+    def _get_func_path(self):
+        return McFunction.get_func_path(self.path)
+
+    def debug_commands(self):
+        for command in self.commands:
+            cmd_str = " ".join(cmd.value for cmd in command)
+            logging.debug(cmd_str)
+
+    def __repr__(self):
+        return "McFunction[path={}, name={}, func_path={}, commands={}]".format(self.path, self.name, self.func_path, self.commands)

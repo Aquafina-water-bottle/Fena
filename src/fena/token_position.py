@@ -17,17 +17,13 @@ class TokenPositionRecorder:
         self.char_pos = 0
         self.row = 1
         self.column = 1
-        # self.started = False
 
         self.locked = False
         self.locked_token_pos = None
 
-    def create_instance(self, length=1):
+    def create_instance(self):
         """
         Creates an immutable instance of itself to be used for token creation
-
-        Args:
-            length (int): The length of the token (defaults to length of 1)
 
         Returns:
             TokenPosition: Position of the current token
@@ -35,19 +31,16 @@ class TokenPositionRecorder:
         Examples:
             >>> r = TokenPositionRecorder()
             >>> r.create_instance()
-            TokenPosition[row=None, column=None]
-
-            >>> r.create_instance()
-            TokenPosition[row=1, column=1]
+            TokenPosition[row=1, column=1, char_pos=0]
 
             >>> r.increment_column(22)
-            >>> r.create_instance(6)
-            TokenPosition[row=1, column=(23 to 29)]
-
-.           >>> r.create_instance()
-            TokenPosition[row=None, column=None]
+            >>> r.create_instance()
+            TokenPosition[row=1, column=23, char_pos=22]
         """
-        return TokenPosition(self.row, self.column, self.char_pos, length)
+        token_pos = TokenPosition(self.row, self.column, self.char_pos)
+        if self.locked:
+            return TokenPosition.from_positions(self.locked_token_pos, token_pos)
+        return token_pos
 
     def increment_column(self, columns=1):
         """
@@ -166,46 +159,87 @@ class TokenPosition:
              4: |   |   |   |   |
     """
 
-    def __init__(self, row, column, char_pos, length=1):
-        assert row is None or (isinstance(row, int) and row > 0)
-        assert column is None or (isinstance(column, int) and column > 0)
-        assert isinstance(length, int) and length > 0
+    def __init__(self, row, column, char_pos, row_end=None, column_end=None, char_pos_end=None):
+        assert isinstance(row, int) and row > 0
+        assert isinstance(column, int) and column > 0
+        assert isinstance(char_pos, int) and char_pos >= 0
+        
+        if row_end is None:
+            row_end = row
+        if column_end is None:
+            column_end = column
+        if char_pos_end is None:
+            char_pos_end = char_pos
 
-        self._row = row
-        self._column = column
-        self._length = length
+        assert isinstance(row_end, int) and row_end > 0
+        assert isinstance(column_end, int) and column_end > 0
+        assert isinstance(char_pos_end, int) and char_pos_end >= 0
+
+        self._row_begin = row
+        self._row_end = row_end
+        self._column_begin = column
+        self._column_end = column_end
         self._char_pos = char_pos
+        self._char_pos_end = char_pos_end
+
+    @ classmethod
+    def from_positions(cls, token_pos, token_pos_end=None):
+        if token_pos_end is None:
+            return cls(token_pos.row, token_pos.column, token_pos.char_pos)
+        return cls(token_pos.row, token_pos.column, token_pos.char_pos, token_pos_end.row, token_pos_end.column, token_pos_end.char_pos)
 
     @property
     def row(self):
-        return self._row
+        return self._row_begin
 
     @property
     def column(self):
-        return self._column
+        return self._column_begin
 
     @property
-    def length(self):
-        return self._length
+    def column_end(self):
+        return self._column_end
 
     @property
-    def end_column(self):
-        return self.column + self.length
+    def row_end(self):
+        return self._row_end
 
     @property
     def char_pos(self):
         return self._char_pos
 
+    @property
+    def char_pos_end(self):
+        return self._char_pos_end
+
     def __str__(self):
-        if self.length == 1:
-            return "[row={}, col={}]".format(self.row, self.column)
-        return "[row={}, col=({} to {})]".format(self.row, self.column, self.end_column)
+        if self.row == self.row_end:
+            if self.column == self.column_end:
+                # both rows and columns lead to the same position
+                return "[row={}, col={}]".format(self.row, self.column)
+
+            # otherwise, columns are different but rows are the same
+            return "[row={}, col=({} to {})]".format(self.row, self.column, self.column_end)
+
+            # otherwise, rows are different and are leading to completely different places
+        return "[(row={}, col={}) to (row={}, col={})]".format(self.row, self.column, self.row_end, self.column_end)
 
     def __repr__(self):
-        if self.length == 1:
-            return "TokenPosition[row={}, column={}]".format(self.row, self.column)
-        return "TokenPosition[row={}, column=({} to {})]".format(self.row, self.column, self.end_column)
+        if self.char_pos == self.char_pos_end:
+            char_pos_repr = "char_pos={}".format(self.char_pos)
+        else:
+            char_pos_repr = "char_pos=({} to {})".format(self.char_pos, self.char_pos_end)
 
+        if self.row == self.row_end:
+            if self.column == self.column_end:
+                # both rows and columns lead to the same position
+                return "TokenPosition[row={}, column={}, {}]".format(self.row, self.column, char_pos_repr)
+
+            # otherwise, columns are different but rows are the same
+            return "TokenPosition[row={}, column=({} to {}), {}]".format(self.row, self.column, self.column_end, char_pos_repr)
+
+            # otherwise, rows are different and are leading to completely different places
+        return "TokenPosition[(row={}, column={}) to (row={}, col={}), {}]".format(self.row, self.column, self.row_end, self.column_end, char_pos_repr)
 
 def test():
     pass

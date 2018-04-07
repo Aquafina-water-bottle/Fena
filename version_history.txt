@@ -78,6 +78,10 @@ s7.0.0      v0.4.0
         - Created a TokenPositionRecorder class as a mutable version of the TokenPosition class
             used in during the tokenizing process
 
+    parser.py:
+        - Added a !folder statement and a !prefix statement
+        - Changed a few methods to better match up to the grammar definition
+
     TODO:
         - Change from camel case to snake case
         - Clean up error logging

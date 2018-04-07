@@ -20,6 +20,7 @@ class SimpleToken(Enum):
     """
 
     STATEMENT = "!"
+    COLON = ":"
     PLUS = "+"
     MINUS = "-"
     EQUALS = "="
@@ -32,7 +33,7 @@ class SimpleToken(Enum):
     DETECT = "detect"
     IFBLOCK = "ifblock"
 
-SIMPLE_TOKEN_VALUES = (token.value for token in SimpleToken)
+SIMPLE_TOKEN_VALUES = tuple(token.value for token in SimpleToken)
 
 
 class WhitespaceToken(Enum):
@@ -42,7 +43,7 @@ class WhitespaceToken(Enum):
     NEWLINE = "\n"
     EOF = None
 
-WHITESPACE_TOKEN_VALUES = (token.value for token in WhitespaceToken)
+WHITESPACE_TOKEN_VALUES = tuple(token.value for token in WhitespaceToken)
 
 
 class StatementToken(Enum):
@@ -51,9 +52,9 @@ class StatementToken(Enum):
     """
     MFUNC = "mfunc"
     FOLDER = "folder"
-    INITIALS = "initials"
+    PREFIX = "prefix"
 
-STATEMENT_TOKEN_VALUES = (token.value for token in StatementToken)
+STATEMENT_TOKEN_VALUES = tuple(token.value for token in StatementToken)
 
 
 ALL_TYPES = tuple(TokenType) + tuple(SimpleToken) + tuple(WhitespaceToken) + tuple(StatementToken)

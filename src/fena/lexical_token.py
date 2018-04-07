@@ -1,4 +1,4 @@
-from token_types import SimpleToken, StatementToken, WhitespaceToken, ALL_TYPES, TokenType
+from token_types import TokenType, SimpleToken, StatementToken, WhitespaceToken, ALL_TYPES, SIMPLE_TOKEN_VALUES, STATEMENT_TOKEN_VALUES
 
 class Token:
     def __init__(self, pos, token_type, value=None):
@@ -14,6 +14,7 @@ class Token:
 
         if self.value is None:
             assert not isinstance(self.type, TokenType), "A value is required for TokenType (type={}, pos={})".format(self.type, self.pos)
+            assert isinstance(self.type, (SimpleToken, WhitespaceToken, StatementToken))
             self.value = self.type.value
 
     def matches(self, token_type, value=None):
@@ -52,7 +53,12 @@ class Token:
         Args:
             token_type (any token type): What token type this token should change into
         """
-        pass
+        if token_type == SimpleToken and self.value in SIMPLE_TOKEN_VALUES:
+            self.type = token_type(self.value)
+        elif token_type == StatementToken and self.value in STATEMENT_TOKEN_VALUES:
+            self.type = token_type(self.value)
+        else:
+            raise TypeError("{} : Invalid type casting to {}".format(repr(self), repr(token_type)))
 
     def __str__(self):
         return "Token[{} at {}]".format(repr(self.value), self.pos)
@@ -64,7 +70,7 @@ class Token:
 
 def test():
     from token_position import TokenPosition
-    token_pos = TokenPosition(row=5, column=2)
+    token_pos = TokenPosition(row=5, column=2, char_pos=167)
 
     token = Token(token_pos, SimpleToken.PLUS)
     print(token)

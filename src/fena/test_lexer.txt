@@ -2,6 +2,8 @@
 # if the python script was ran under "\ego\event_name\src"
 # script.py main.ccu ../
 
+!prefix RR
+
 !mfunc execute_test
     @p ~2 ~1 ~-1 execute @a 3 5.2 -2 @s @r ifblock 2 ~-1 ~ stonebrick 0 @e ifblock stonebrick * say @a
     execute @p ~ -4.2 3 execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ ifblock ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ ifblock ~ ~ ~ stonebrick * say @a
@@ -118,22 +120,24 @@
     say @a[y_rot=2..5] @a[y_rot=5] @a[y_rot=2..] @a[y_rot=..5]
     say @a[limit=5,gamemode=creative]
     
-!mfunc wiki_test
-    @a RRti - 1 {SomeData:Tag}
-    @a RRti = 10 {SomeData:Tag}
-    @a RRti ? 5
-    @a RRti ? 0 10
-    @a reset RRti
-    @a enable RRti
-    @a + RRTimer {SomeData:Tag}
-    @a - RRTimer {SomeData:Tag}
-    join RRd_y @a
-    leave @a
-    empty RRd_y
+!folder ayylmao
+    !mfunc wiki_test
+        @a RRti - 1 {SomeData:Tag}
+        @a RRti = 10 {SomeData:Tag}
+        @a RRti ? 5
+        @a RRti ? 0 10
+        @a reset RRti
+        @a enable RRti
+        @a + RRTimer {SomeData:Tag}
+        @a - RRTimer {SomeData:Tag}
+        join RRd_y @a
+        leave @a
+        empty RRd_y
 
-!mfunc function_test
-    function wiki_test
-    function selector_test
+    !folder kek
+        !mfunc function_test
+            function wiki_test
+            function selector_test
 
 # (using my own syntax for a grammar lol)
 # program ::= suite
