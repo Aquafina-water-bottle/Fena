@@ -6,6 +6,8 @@ import logging
 
 from token_types import TokenType, SimpleToken, WhitespaceToken, StatementToken, ALL_TOKENS, STATEMENT_TOKEN_VALUES
 from mcfunction import McFunction
+from commands import Command, SimpleCommand, ExecuteCommand, ScoreboardCommand, FunctionCommand
+from config_data import ConfigData
 
 """
 Organizes all lines into their respective mcfunctions
@@ -16,9 +18,10 @@ statement ::= "!" && [folder_stmt, mfunc_stmt, prefix_stmt]
 folder_stmt ::= "folder" && STR && (NEWLINE)* & INDENT && suite && DEDENT
 mfunc_stmt ::= "mfunc" && STR && (NEWLINE)* & INDENT && suite && DEDENT
 prefix_stmt ::= "prefix" && STR
-suite ::= [statement, command, NEWLINE]*
+suite ::= [statement, command, NEWLINE]+
+command ::= (STR)+ && (":" & (NEWLINE)* & INDENT && command_block && DEDENT)?
+command_suite ::= [command, NEWLINE]+
 
-command ::= [leading_cmd]* && ending_cmd 
 leading_cmd ::= [execute_cmd, (LEADING_START && (STR)*)]
 execute_cmd ::= ("execute"? && selector && coords?) && (["detect", "ifblock"] && coords? && block && [INT, STR]?)?
 
@@ -43,14 +46,16 @@ class Parser:
     def __init__(self, lexer, file_path):
         self.lexer = lexer
 
+        self.config_data = ConfigData()
+
         # requires an mcfunction to be set for commands to be used
         # and an mcfunction cannot be set if one has already been set
-        self.current_command = []
         self.current_token = None
 
         self.current_function = None
         self.current_prefix = None
         self.current_folders = []
+        self.current_command_slices = []
 
         self.file_path = file_path
 
@@ -118,21 +123,19 @@ class Parser:
         logging.debug("Begin compound at {}".format(repr(self.current_token)))
 
         # note that this is essentially a do-while since it never starts out as a newline
-        beginning = True
-        while self.current_token.matches(WhitespaceToken.NEWLINE) or beginning:
-            if beginning:
-                beginning = False
-            else:
-                self.eat(WhitespaceToken.NEWLINE)
-
-            # ignores pure newlines
-            if self.current_token.matches(WhitespaceToken.NEWLINE):
+        met_newline = True
+        while met_newline:
+            if self.current_token.matches(SimpleToken.STATEMENT):
+                # does a continue since the statement might be a compound and not end in a newline
+                self.statement()
                 continue
 
-            if self.current_token.matches(SimpleToken.STATEMENT):
-                self.statement()
-            else:
+            elif self.current_token.matches_any_of(TokenType.STRING, TokenType.SELECTOR):
                 self.command()
+
+            met_newline = self.current_token.matches(WhitespaceToken.NEWLINE)
+            if met_newline:
+                self.eat(WhitespaceToken.NEWLINE)
 
         logging.debug("End compound at {}".format(repr(self.current_token)))
 
@@ -157,11 +160,6 @@ class Parser:
         else:
             self.error("Invalid statement")
 
-    # def path_stmt(self):
-    #     self.eat(PATH)
-    #     self.file_path = self.current_token.value
-    #     self.eat(STRING)
-
     def mfunc_stmt(self):
         """
         mfunc_stmt ::= "mfunc" && STR && (NEWLINE)* & INDENT && suite && DEDENT
@@ -172,10 +170,15 @@ class Parser:
         if self.current_function is not None:
             self.error("Cannot define a mcfunction inside an mcfunction")
 
+        if not self.current_token.matches(TokenType.STRING):
+            self.error("Expected a string after a mfunc statement")
+
         name = self.current_token.value + ".mcfunction"
-        full_path = os.path.join(self.file_path, name)
+        full_path = os.path.join(self.file_path, *self.current_folders, name)
         self.current_function = McFunction(full_path, self.current_prefix)
-        self.eat(TokenType.STRING)
+
+        # guaranteed string token here
+        self.advance()
 
         # skips any and all newlines right after a mfunc statement
         while self.current_token.matches(WhitespaceToken.NEWLINE):
@@ -234,15 +237,47 @@ class Parser:
         if self.current_function is None:
             self.error("No assigned mcfunction for command")
 
-        if self.current_command:
-            self.error("Unknown error: Cannot create a new command as one already exists")
+        # gets all execute shortcuts or scoreboard shortcut
+        # while self.current_token.matches(TokenType.SELECTOR) or self.current_token.matches(TokenType.STRING, value="execute"):
 
+        #     # checks whether it is actually part of a scoreboard shortcut
+        #     if self.current_token.matches(TokenType.STRING):
+        #         execute = self.current_token
+        #         self.advance()
+
+        #         # if the next token is not a selector, it is expected to be part of a scoreboard shortcut
+        #         # otherwise, the execute part is just simply removed since the execute command doesn't require that part
+        #         if not self.current_token.matches(TokenType.SELECTOR):
+        #             scoreboard_shortcut = self.cmd_scoreboard(execute)
+        #             command.add_scoreboard(scoreboard_shortcut)
+
+        #     selector = self.current_token
+        #     self.advance()
+
+        #     # checks whether it is actually a scoreboard shortcut
+        #     if self.current_token.matches
+
+        command_tokens = []
         while not (self.lexer.reached_eof or self.current_token.matches_any_of(WhitespaceToken.NEWLINE, WhitespaceToken.DEDENT)):
-            self.current_command.append(self.current_token)
+            command_tokens.append(self.current_token)
             self.advance()
+        
+        # checks whether a command suite can be used by seeing if the last token is a colon
+        if command_tokens[-1].matches(SimpleToken.COLON):
+            # self.current_command_slices.append(command_tokens[:-1])
 
-        self.current_function.add_command(self.current_command.copy())
-        self.current_command.clear()
+            # # skips any and all newlines
+            # while self.current_token.matches(WhitespaceToken.NEWLINE):
+            #     self.eat(WhitespaceToken.NEWLINE)
+
+            # self.eat(WhitespaceToken.INDENT)
+            # self.suite(commands_only=True)
+            # self.eat(WhitespaceToken.DEDENT)
+            pass
+
+        else:
+            command = Command(command_tokens)
+            self.current_function.add_command(command)
 
     def _debug(self):
         logging.debug("McFunctions assigned: {}".format(len(self.mcfunctions)))
@@ -263,12 +298,11 @@ if __name__ == "__main__":
 
     parser = Parser(lexer, r"C:\Users\Austin-zs\AppData\Roaming\.minecraft\saves\Snapshot 17w18b\data\functions\ego\event_name")
 
-    mcfunctions = []
     try:
         parser.parse()
-        mcfunctions = parser.mcfunctions
     except Exception as e:
         logging.exception(e)
 
+    mcfunctions = parser.mcfunctions
     for mcfunction in mcfunctions:
         mcfunction.debug_commands()

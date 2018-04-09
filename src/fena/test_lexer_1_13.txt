@@ -1,0 +1,112 @@
+# WE HAVE GOD DAMN NAMESPACES NOW
+!using namespace LMAO
+
+# selector -> as selector
+# vec3 -> positioned vec3
+# pos(selector) -> positioned as selector
+# at(selector) -> at selector
+# at(feet) -> anchored feet
+# at(eyes) -> anchored eyes
+# at(axes) -> align axes (axes = combination of xyz)
+# at(vec3 vec2) -> positioned vec3 facing vec2
+# facing(vec3) -> facing vec3
+# facing(selector) -> facing(selector feet) -> facing selector feet
+# facing(selector eyes) -> facing selector eyes
+# ast(selector) -> as selector at @s
+# rot(selector) -> rotated as selector
+# rot(vec2) -> rotated vec2
+
+# if(dimension) -> in dimension
+# if(selector) -> if entity selector
+# ifnot(selector) -> unless entity selector
+# if(block_type) -> if block ~ ~ ~ block_type
+# ifnot(block_type) -> unless block ~ ~ ~ block_type
+# if(block_type vec3) -> if block vec3 block_type
+# ifnot(block_type vec3) -> if block vec3 block_type
+# if(block_type vec3 vec3) -> if block vec3 vec3 block_type
+# ifnot(block_type vec3 vec3) -> unless block vec3 vec3 block_type
+# if(selector objective operator selector2 objective2) -> if score selector objective operator selector2 objective
+# ifnot(selector objective operator selector2 objective2) -> unless score selector objective operator selector2 objective
+# if(selector objective == selector2 objective2) -> if score selector objective = selector2 objective
+# ifnot(selector objective == selector2 objective2) -> if score selector objective = selector2 objective
+# unless(...) -> ifnot(...)
+
+# note that auto_type = smallest stored value for integers, double when integer
+# eg. 6 -> byte, 8234 -> short, 628137057 -> int, 2345766241356 -> long, 36.73461 and 5.0 -> double
+# result(coords data_path scale) -> store result block coords data_path auto_type scale
+# success(coords data_path scale) -> store success block coords data_path auto_type scale
+# result(selector data_path scale) -> store result entity selector data_path auto_type scale
+# success(selector data_path scale) -> store success entity selector data_path auto_type scale
+
+# result(coords data_path type scale) -> store result block coords data_path type scale
+# success(coords data_path type scale) -> store success block coords data_path type scale
+# result(selector data_path type scale) -> store result entity selector data_path type scale
+# success(selector data_path type scale) -> store success entity selector data_path type scale
+
+# result(bossbar_id max) -> store result bossbar bossbar_id max
+# result(bossbar_id value) -> store result bossbar bossbar_id value
+# success(bossbar_id max) -> store success bossbar bossbar_id max
+# success(bossbar_id value) -> store success bossbar bossbar_id value
+# result(selector objective) -> store result score selector objective
+# success(selector objective) -> store success score selector objective
+
+!mfunc execute_test
+    @p ~2 ~1 ~-1 at(@a) 3 5.2 -2 @s @r if(2 ~-1 ~ stone_brick) @e if(stone_brick): say @a
+    
+    # @s @r -> execute as @s as @r ...
+    # pos(@p) -> execute positioned as @p ...
+    # rot(@a) -> execute rotated as @a ...
+    # 3 5.2 -2 -> execute positioned 3 5.2 -2 ...
+    pos(@p) rot(@a) 3 5.2 -2 @s @r:
+
+        # if(@a) -> execute if entity @a ...
+        # if(stone_brick) -> execute if block ~ ~ ~ stone_brick ...
+        # if(nether) -> execute in nether ...
+        if(@a) @e if(stone_brick) if(nether): say @a
+        if(@a) @e if(stone_brick, nether): say @a
+
+        # if(@r _ti == @s _st) -> execute if score @r _ti = @s _st ...
+        # if(stone_brick ~ ~-1 ~) -> execute if block ~ ~-1 ~ stone_brick
+        # if(@r _ti == @s _st, ~ ~-1 ~ stone_brick) -> execute if score @r _ti = @s _st if block ~ ~ ~ stone_brick ...
+        # at(feet) -> execute anchored feet ...
+        if(@r _ti == @s _st, stone_brick) at(feet): say @a
+        
+        # ifnot(stone_brick 2 3 4 3 4 5) -> execute unless block 2 3 4 3 4 5 stone_brick ...
+        # at(@a) -> execute at @a ...
+        ifnot(stone_brick 2 3 4 3 4 5) at(@a; feet): say @a
+
+    # at(xy) -> execute align xy ...
+    # facing(2 3 4) -> execute facing 2 3 4 ...
+    # facing(@r) -> facing(@r feet) -> execute facing @r feet...
+    # facing(@r eyes) -> execute facing @r eyes...
+    at(xy) ~3 ~2 ~5 facing(2 3 4, @r feet, @r): say @a
+
+    # rot(7, ~3) -> execute rotated 7 ~3 ...
+    # ast(@s[_tag]) -> execute as @s[_tag] at @s ...
+    # result(@s _af) -> execute store result score @s _af ...
+    rot(7 ~3) ast(@s[_tag]) result(@s _af): say @a
+
+    # note that some execute commands don't require a leading command to still be a functional command
+    if(@s)
+
+    # and scoreboard shortcuts can start with selectors too
+    @s _tp + 1
+
+    # success(~ ~ ~ Items[0].Count 2) -> execute store success block ~ ~ ~ Items[0].Count byte 2 run ...
+    success(~ ~ ~ Items[0].Count 2): say @a
+
+    # automatically assigns the type
+    # if there are no decimals, it assigns it to the lowest numeric type
+    # if there are, it autmomatically assigns double precision
+    # result(@s Attributes[0].Base 5) -> execute store result entity @s Attributes[0].Base byte 5 ...
+    # result(@s Attributes[1].Base 2.5) -> execute store result entity @s Attributes[1].Base double 2.5 ...
+    # result(@s Attributes[2].Base int 2.5) -> execute store result entity @s Attributes[1].Base int 2.5 ...
+    result(@s Attributes[0].Base 5, @s Attributes[1].Base 2.5, @s Attributes[2].Base int 2.5): say @a
+
+    # note that data merge requires the entire nbt tag, while execute store result entity just requires a position and integer
+    # execute store result score @s a run data get entity @e[type=pig,limit=1] Attributes[0].Base 2
+    # execute store result entity @e[type=pig,limit=1] Attributes[0].Base double 2 say @s
+
+    # to store bossbar, note that we have to store either max or value too
+    # result(minecraft:green max) -> execute store result bossbar minecraft:green max ...
+    # success(idk value) -> execute store success bossbar minecraft:idk value ...

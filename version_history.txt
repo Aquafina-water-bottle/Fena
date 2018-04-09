@@ -78,6 +78,14 @@ s7.0.0      v0.4.0
         - Created a TokenPositionRecorder class as a mutable version of the TokenPosition class
             used in during the tokenizing process
 
+    lexer.py:
+        - Essentially converted most possible tokens into TokenType.STRING instead
+            of automatically assuming what type they are
+        - Fixed a glitch involving whitespace on empty lines
+        - Fixed a glitch involving no empty line at the end of the file
+            - Redo how newlines are converted to tab space tokens
+
+
     parser.py:
         - Added a !folder statement and a !prefix statement
         - Changed a few methods to better match up to the grammar definition
@@ -87,6 +95,6 @@ s7.0.0      v0.4.0
         - Clean up error logging
         - Rename certain variables based on selectors to match the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
 
-        - Fix a glitch involving whitespace on empty lines
-        - Fix a glitch involving no empty line at the end of the file
-            - Redo how newlines are converted to tab space tokens
+        1.13:
+            - Change format of execute commands to use : and all sub execute commands
+            - mcfunction format in datapacks

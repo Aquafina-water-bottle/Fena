@@ -1,4 +1,4 @@
-from token_types import TokenType, SimpleToken, StatementToken, WhitespaceToken, ALL_TYPES, SIMPLE_TOKEN_VALUES, STATEMENT_TOKEN_VALUES
+from token_types import TokenType, SimpleToken, StatementToken, WhitespaceToken, SelectorSimpleToken, SelectorTokenType, ALL_TYPES, SIMPLE_TOKEN_VALUES, STATEMENT_TOKEN_VALUES
 
 class Token:
     def __init__(self, pos, token_type, value=None):
@@ -13,8 +13,8 @@ class Token:
         self.value = value
 
         if self.value is None:
-            assert not isinstance(self.type, TokenType), "A value is required for TokenType (type={}, pos={})".format(self.type, self.pos)
-            assert isinstance(self.type, (SimpleToken, WhitespaceToken, StatementToken))
+            assert not isinstance(self.type, (TokenType, SelectorTokenType)), "A value is required for a token type (type={}, pos={})".format(self.type, self.pos)
+            assert isinstance(self.type, (SimpleToken, WhitespaceToken, StatementToken, SelectorSimpleToken)), "honestly idk {}".format(repr(self.type))
             self.value = self.type.value
 
     def matches(self, token_type, value=None):
@@ -48,7 +48,8 @@ class Token:
 
     def cast(self, token_type):
         """
-        Changes the type of this token
+        Changes the type of this token without adequate checks, so
+        checking is based off of where this method was ran
 
         Args:
             token_type (any token type): What token type this token should change into

@@ -1,0 +1,35 @@
+selector -> as selector
+coords -> positioned coords
+pos(selector) -> positioned as selector
+at(selector) -> at selector
+at(feet) -> anchored feet
+at(eyes) -> anchored eyes
+at(axes) -> align axes (axes = combination of xyz)
+ast(selector) -> execute as selector at @s ...
+rot(selector) -> rotated as selector
+rot(vec2) -> rotated vec2
+if(dimension) -> in dimension
+
+if(selector) -> if entity selector
+ifnot(selector) -> unless entity selector
+if(block_type) -> if block ~ ~ ~ block_type
+ifnot(block_type) -> unless block ~ ~ ~ block_type
+if(block_type vec3) -> if block vec3 block_type
+ifnot(block_type vec3) -> if block vec3 block_type
+if(block_type vec3 vec3) -> if block vec3 vec3 block_type
+ifnot(block_type vec3 vec3) -> unless block vec3 vec3 block_type
+if(selector objective operator selector2 objective2) -> if score selector objective operator selector2 objective
+ifnot(selector objective operator selector2 objective2) -> unless score selector objective operator selector2 objective
+if(selector objective == selector2 objective2) -> if score selector objective = selector2 objective
+
+# note that auto_type = smallest stored value for integers, double when integer
+result(coords data_path scale) -> store result block coords data_path auto_type scale
+success(coords data_path scale) -> store success block coords data_path auto_type scale
+result(selector data_path scale) -> store result entity selector data_path auto_type scale
+success(selector data_path scale) -> store success entity selector data_path auto_type scale
+result(selector objective) -> store result score selector objective
+success(selector objective) -> store success score selector objective
+result(bossbar_id max) -> store result bossbar bossbar_id max
+result(bossbar_id value) -> store result bossbar bossbar_id value
+success(bossbar_id max) -> store success bossbar bossbar_id max
+success(bossbar_id value) -> store success bossbar bossbar_id value

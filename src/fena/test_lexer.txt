@@ -5,47 +5,47 @@
 !prefix RR
 
 !mfunc execute_test
-    @p ~2 ~1 ~-1 execute @a 3 5.2 -2 @s @r ifblock 2 ~-1 ~ stonebrick 0 @e ifblock stonebrick * say @a
-    execute @p ~ -4.2 3 execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ ifblock ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ ifblock ~ ~ ~ stonebrick * say @a
+    @p ~2 ~1 ~-1 execute @a 3 5.2 -2 @s @r ifblock 2 ~-1 ~ stonebrick 0 @e ifblock stonebrick *: say @a
+    execute @p ~ -4.2 3 execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ ifblock ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ ifblock ~ ~ ~ stonebrick *: say @a
 
-    execute @a ~ ~ ~ say test
-    @a ~ ~ ~ say test
-    @a say test
-    # @s @s @s kill @a[RRti>=1,testTag,kek>=1<=3]
-    @s @s @s kill @a[RRti=1..,testTag,kek=1..3]
+    execute @a ~ ~ ~: say test
+    @a ~ ~ ~: say test
+    @a: say test
+    # @s @s @s: kill @a[RRti>=1,testTag,kek>=1<=3]
+    @s @s @s: kill @a[RRti=(1..),testTag,kek=1..3]
 
-    execute @a ~ ~ ~ ifblock ~ ~ ~ stonebrick 0 say test
-    @a ~ ~ ~ ifblock ~ ~ ~ stonebrick 0 say test
-    @a ~ ~ ~ ifblock stonebrick 0 say test
-    @a ifblock ~ ~ ~ stonebrick 0 say test
-    @a ifblock stonebrick 0 say test
+    execute @a ~ ~ ~ ifblock ~ ~ ~ stonebrick 0: say test
+    @a ~ ~ ~ ifblock ~ ~ ~ stonebrick 0: say test
+    @a ~ ~ ~ ifblock stonebrick 0: say test
+    @a ifblock ~ ~ ~ stonebrick 0: say test
+    @a ifblock stonebrick 0: say test
 
-    execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * say test
-    @a ~ ~ ~ ifblock ~ ~ ~ stonebrick * @a ~ ~ ~ ifblock ~ ~ ~ stonebrick * say test
-    @a ~ ~ ~ ifblock stonebrick * @a ~ ~ ~ ifblock stonebrick * say test
-    @a ifblock ~ ~ ~ stonebrick * @a ifblock ~ ~ ~ stonebrick * say test
-    @a ifblock stonebrick * @a ifblock stonebrick say test
-    @a ifblock stonebrick @a ifblock stonebrick clear
+    execute @a ~ ~ ~ detect ~ ~ ~ stonebrick * execute @a ~ ~ ~ detect ~ ~ ~ stonebrick *: say test
+    @a ~ ~ ~ ifblock ~ ~ ~ stonebrick * @a ~ ~ ~ ifblock ~ ~ ~ stonebrick *: say test
+    @a ~ ~ ~ ifblock stonebrick * @a ~ ~ ~ ifblock stonebrick *: say test
+    @a ifblock ~ ~ ~ stonebrick * @a ifblock ~ ~ ~ stonebrick *: say test
+    @a ifblock stonebrick * @a ifblock stonebrick: say test
+    @a ifblock stonebrick @a ifblock stonebrick: clear
 
-    execute @a ifblock stonebrick 0 say test
-    execute @a say test
+    execute @a ifblock stonebrick 0: say test
+    execute @a: say test
     
-    execute @s ~ ~ ~ detect ~ ~-1 ~ stonebrick * execute @s ~ ~ ~ detect ~ ~ ~ stonebrick_stairs facing=west execute @s ~ ~ ~ detect ~ ~1 ~ stonebrick * kill
-    @s ifblock ~ ~-1 ~ stonebrick * @s detect stonebrick_stairs facing=west @s ifblock ~ ~1 ~ stonebrick * kill
+    execute @s ~ ~ ~ detect ~ ~-1 ~ stonebrick * execute @s ~ ~ ~ detect ~ ~ ~ stonebrick_stairs facing=west execute @s ~ ~ ~ detect ~ ~1 ~ stonebrick *: kill
+    @s ifblock ~ ~-1 ~ stonebrick * @s detect stonebrick_stairs facing=west @s ifblock ~ ~1 ~ stonebrick *: kill
     
 
 !mfunc scoreboard_test
-    @s @e[type=ArmorStand,RRStand] RRti - 1 {DisabledSlots:2096896}
-    @s @e[type=ArmorStand,RRStand] RRti = 10 {DisabledSlots:2096896}
-    @s @e[type=ArmorStand,RRStand] RRti ? 5
-    @s @e[type=ArmorStand,RRStand] RRti ? 0 10
-    @s @e[type=ArmorStand,RRStand] reset RRti
-    @s @e[type=ArmorStand,RRStand] enable RRti
-    @s @e[type=ArmorStand,RRStand] + RRTimer {Marker:1b}
-    @s @e[type=ArmorStand,RRStand] - RRTimer {Marker:1b}
-    @s join RRd_y @e[type=ArmorStand,RRStand]
-    @s leave @e[type=ArmorStand,RRStand]
-    @s empty RRd_y
+    @s: @e[type=ArmorStand,RRStand] RRti - 1 {DisabledSlots:2096896}
+    @s: @e[type=ArmorStand,RRStand] RRti = 10 {DisabledSlots:2096896}
+    @s: @e[type=ArmorStand,RRStand] RRti ? 5
+    @s: @e[type=ArmorStand,RRStand] RRti ? 0 10
+    @s: @e[type=ArmorStand,RRStand] reset RRti
+    @s: @e[type=ArmorStand,RRStand] enable RRti
+    @s: @e[type=ArmorStand,RRStand] + RRTimer {Marker:1b}
+    @s: @e[type=ArmorStand,RRStand] - RRTimer {Marker:1b}
+    @s: join RRd_y @e[type=ArmorStand,RRStand]
+    @s: leave @e[type=ArmorStand,RRStand]
+    @s: empty RRd_y
     
     @e[type=ArmorStand,RRStand] RRti - 1 {DisabledSlots:2096896}
     @e[type=ArmorStand,RRStand] RRti = 10 {DisabledSlots:2096896}
@@ -70,9 +70,9 @@
     join RRd_y player
     leave player
     empty RRd_y
-    @e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
-    @e[type=ArmorStand,RRStand] ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
-    @e[type=ArmorStand,RRStand] RRti + 1 {
+    @e[type=ArmorStand,RRStand]: ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = @e[c=1,r=1,type=ArmorStand,RRStand] RRti2
+    @e[type=ArmorStand,RRStand]: ScOP @e[c=1,r=1,type=ArmorStand,RRStand] RRti = 3 Number
+    @e[type=ArmorStand,RRStand]: RRti + 1 {
         Tags:["RREntity","RRDisplay","RRAestheticsStand"],
         
         # it's free real estate
@@ -108,17 +108,28 @@
     
     # say @a[RRpl<5>=3] @a[RRpl<5>3] @a[RRpl<3]
     say @a[RRpl=3..4] @a[RRpl=4] @a[RRpl=4..]
+    say @a[RRpl=(3..4)] @a[RRpl=(4)] @a[RRpl=(4..)]
     say @a[]
-    
+                    # lol comment
     say @a[distance=2..5] @a[distance=5] @a[distance=2..] @a[distance=..5]
     say @a[dist=2..5] @a[dist=5] @a[dist=2..] @a[dist=..5]
+    say @a[dist=(2..5)] @a[dist=(5)] @a[dist=(2..)] @a[dist=(..5)]
+
     say @a[level=2..5] @a[level=5] @a[level=2..] @a[level=..5]
     say @a[lvl=2..5] @a[lvl=5] @a[lvl=2..] @a[lvl=..5]
+    say @a[lvl=(2..5)] @a[lvl=(5)] @a[lvl=(2..)] @a[lvl=(..5)]
+
     say @a[x_rotation=2..5] @a[x_rotation=5] @a[x_rotation=2..] @a[x_rotation=..5]
     say @a[x_rot=2..5] @a[x_rot=5] @a[x_rot=2..] @a[x_rot=..5]
+    say @a[x_rot=(2..5)] @a[x_rot=(5)] @a[x_rot=(2..)] @a[x_rot=(..5)]
+
     say @a[y_rotation=2..5] @a[y_rotation=5] @a[y_rotation=2..] @a[y_rotation=..5]
     say @a[y_rot=2..5] @a[y_rot=5] @a[y_rot=2..] @a[y_rot=..5]
+    say @a[y_rot=(2..5)] @a[y_rot=(5)] @a[y_rot=(2..)] @a[y_rot=(..5)]
+
     say @a[limit=5,gamemode=creative]
+    say @a[limit=(5),gamemode=(creative)]
+    say @a[limit=(((5))),gamemode=(((creative)))]
     
 !folder ayylmao
     !mfunc wiki_test
@@ -134,10 +145,48 @@
         leave @a
         empty RRd_y
 
+        # testing invalid selectors
+        # @k say test
+
     !folder kek
         !mfunc function_test
             function wiki_test
             function selector_test
+!mfunc not_in_folders
+    # testing prefixes
+    @e[type=ArmorStand,_Stand]: ScOP @e[c=1,r=1,type=ArmorStand,_Stand] _ti = @e[c=1,r=1,type=ArmorStand,_Stand] _ti2
+    say @a[_pl=3..5] @a[_pl=4..5] @a[_pl=..3]
+
+    @a _ti - 1 {SomeData:Tag}
+    scoreboard players remove @a _ti 1 {SomeData:Tag}
+
+    @a _ti = 10 {SomeData:Tag}
+    scoreboard players set @a _ti 10 {SomeData:Tag}
+    
+    @a _ti ? 5
+    scoreboard players test @a _ti 5
+    
+    @a _ti ? 0 10
+    scoreboard players test @a _ti 0 10
+
+    @a reset _ti
+    scoreboard players reset _ti @a 
+
+    @a enable _ti
+    scoreboard players enable _ti @a 
+    
+    @a + _Timer {SomeData:Tag}
+    scoreboard players tag @a add _Timer
+
+    @a - _Timer {SomeData:Tag}
+    scoreboard players tag @a remove _Timer
+    
+    join _d_y @a
+    scoreboard teams join _d_y @a
+
+    empty _d_y
+    scoreboard teams empty _d_y
+    
 
 # (using my own syntax for a grammar lol)
 # program ::= suite

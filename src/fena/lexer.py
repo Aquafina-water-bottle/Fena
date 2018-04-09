@@ -3,10 +3,11 @@ if __name__ == "__main__":
 
 import logging
 
-from token_types import TokenType, SimpleToken, WhitespaceToken, StatementToken, ALL_TYPES
+from token_types import TokenType, SimpleToken, WhitespaceToken, StatementToken, SelectorTokenType, SelectorSimpleToken, ALL_TYPES, SELECTOR_SIMPLE_TOKENS_VALUES
 from config_data import ConfigData
 from lexical_token import Token
 from token_position import TokenPosition, TokenPositionRecorder
+from selector import Selector
 
 
 class Lexer:
@@ -99,11 +100,34 @@ class Lexer:
 
         return token
 
-    def get_next_token(self):
+    def get_next_token(self, for_selector=False):
         """
         This method is responsible for breaking a sentence
         apart into tokens, one token at a time.
         """
+
+        if for_selector:
+            if self.get_chars(2) in self.config_data.target_selector_variables:
+                return self.create_new_token(SelectorTokenType.TARGET_SELECTOR_VARIABLE, self.get_chars(2), advance=True)
+
+            if self.get_char() in SELECTOR_SIMPLE_TOKENS_VALUES:
+                return self.create_new_token(SelectorSimpleToken(self.get_char()), advance=True)
+            if self.get_chars(2) in SELECTOR_SIMPLE_TOKENS_VALUES:
+                return self.create_new_token(SelectorSimpleToken(self.get_chars(2)), advance=True)
+
+            if self.get_char().isalpha() or self.get_char().isdigit() or self.get_char() in "-_":
+                return self.get_string(for_selector=True)
+
+            if self.current_chars_are(SimpleToken.COLON.value):
+                # does not advance since it should stop here
+                return self.create_new_token(SimpleToken.COLON)
+
+            if self.get_char().isspace():
+                return self.create_new_token(SelectorSimpleToken.END, advance=True)
+
+            self.error("Invalid character for a selector: {}".format(repr(self.get_char())))
+
+        # does not require "else" since if it is a selector, it should end in the block above
         while not self.reached_eof:
             # line break when "\" is found at the end of a line lol
             # note that pyexpander does this already, so this is temporarily removed
@@ -135,9 +159,9 @@ class Lexer:
             # if self.current_chars_are("~"):
             #     return self.get_coord()
 
-            # # gets selector
-            # if self.get_chars(2) in options[SELECTOR_TYPES]:
-            #     return self.get_selector()
+            # gets selector
+            if self.current_chars_are("@"):
+                return self.get_selector()
 
             # gets a singular colon token
             if self.current_chars_are(SimpleToken.COLON.value):
@@ -286,12 +310,7 @@ class Lexer:
                 self.error("Too many indents")
 
         if current_indents < self.indents:
-            # doesn't actually advance here in case of multiple dedents
-            self.position.lock()
-            self.advance()
-            dedent_token = self.get_dedent()
-            self.position.unlock(undo_progress=True)
-            return dedent_token
+            return self.get_dedent()
 
         # guaranteed to be current_indents == self.indents
         # no dedent and indent tokens will be made unless already made, so all whitespace will be skipped
@@ -336,7 +355,6 @@ class Lexer:
                 curly_brackets -= 1
             self.advance()
 
-
         result += self.get_locked_chars()
         self.position.unlock()
 
@@ -344,53 +362,82 @@ class Lexer:
         token_pos = TokenPosition.from_positions(original_pos, self.position.create_instance())
         return self.create_new_token(TokenType.DATATAG, value=result, position=token_pos)
 
-    # def get_data_tag(self):
+    def get_selector(self):
+        current_token = None
+        selector_tokens = []
+        while current_token is None or not current_token.matches_any_of(SelectorSimpleToken.END, SimpleToken.COLON):
+            if current_token is not None:
+                selector_tokens.append(current_token)
+            current_token = self.get_next_token(for_selector=True)
+
+        return self.create_new_token(TokenType.SELECTOR, value=Selector(selector_tokens))
+            
+    # def selector_eat(self, chars):
     #     """
-    #     self.brackets represents how many closing brackets are required to escape this method
-
-    #     initially starts at one because it requires one closing bracket to close
-    #     note it doesn't account for any strings with curly brackets, so gl with that
-
-    #     :return:
+    #     Advances the character if the characters match, used only for selectors
     #     """
-    #     brackets = 0
+    #     if not self.current_chars_are(chars):
+    #         self.error("Expected {} but got {}".format(chars, self.get_chars(len(chars))))
 
-    #     self.lock()
-    #     tokenPos = self.getTokenPos()
+    # def get_selector(self):
+    #     """
+    #     selector ::= DEFAULT_VAR & ("[" & selector_args & "]")?
 
-    #     # result here to skip unnecessary whitespace and comments
-    #     result = ""
+    #     selector_args ::= (selector_single_arg)? | (selector_single_arg & ("," & selector_single_arg)*)?
+    #     selector_single_arg ::= [selector_simple_arg, selector_range_arg, selector_tag_arg]
+    #     selector_simple_arg ::= DEFAULT_ARG & "=" & ("!")? & [STRING, INT]
 
-    #     while not self.reached_eof:
-    #         # handles whitespace right after newline and comments within datatags
-    #         if self.current_chars_are(NEWLINE[VALUE]):
-    #             # adds to result, unlocks, advances (skip whitespace and comment), relocks
-    #             result += self.get_locked_chars()
-    #             self.unlock()
-    #             self.advance()
+    #     selector_tag_arg ::= ("!")? & STRING
+    #     selector_range_arg ::= STRING & ("=" & selector_range)?
+    #     selector_range ::= [INTEGER, (INTEGER & ".."), (".." & INTEGER), (INTEGER & ".." & INTEGER)]
 
-    #             if self.get_char().isspace():
-    #                 self.skip_whitespace()
+    #     Gets a full selector and splits the selector up into its component parts
 
-    #             self.handle_after_newline()
-    #             self.lock()
-    #             continue
+    #     Returns:
+    #         Token: with TokenType.SELECTOR and a Selector value
+    #     """
 
-    #         if self.current_chars_are("{"):
-    #             brackets += 1
-    #         if self.current_chars_are("}"):
-    #             brackets -= 1
-    #         if brackets == 0:
-    #             self.advance()
-    #             break
+    #     # checks whether the first characters are inside the target selector variables
+    #     selector_var = self.get_chars(2)
+    #     if selector_var not in self.config_data.target_selector_variables:
+    #         self.error("'{}' is not {}".format(selector_var, self.config_data.target_selector_variables))
 
-    #         self.advance()
+    #     # gets the starting position and advances past the selector variable
+    #     starting_pos = self.position.create_instance()
+    #     selector_var = self.create_new_token(SelectorTokenType.TARGET_SELECTOR_VARIABLE, selector_var)
+    #     selector = Selector(selector_var)
+    #     self.advance(2)
 
-    #     result += self.get_locked_chars()
+    #     # checks whether the selector actually has arguments
+    #     # by seeing if the next character is a space or just "[]"
+    #     if not (self.get_char().isspace() or self.get_chars(2) == "[]"):
+    #         # this allows target selector arguments to be added
+    #         self.selector_eat("[")
+    #         self.selector_args(selector)
+    #         self.selector_eat("]")
 
-    #     token = Token(tokenPos, DATATAG, result)
-    #     self.unlock()
-    #     return token
+    #     ending_pos = self.position.create_instance()
+    #     selector_pos = TokenPosition.from_positions(starting_pos, ending_pos)
+    #     return self.create_new_token(TokenType.SELECTOR, value=selector, position=selector_pos)
+
+    # def selector_args(self, selector):
+    #     """
+    #     selector_args ::= (selector_single_arg)? | (selector_single_arg & ("," & selector_single_arg)*)?
+    #     """
+    #     while not self.current_chars_are("]"):
+    #         self.selector_single_arg(selector)
+    #         if not self.current_chars_are("]"):
+    #             self.selector_eat(",")
+
+    # def selector_single_arg(self, selector):
+    #     """
+    #     selector_single_arg ::= [selector_simple_arg, selector_range_arg, selector_tag_arg]
+    #     """
+    #     # negated tag
+    #     if self.current_chars_are("!"):
+    #         tag_token = self.get_string(for_selector=True)
+    #         selector.add_tag(tag_token)
+
 
     # def get_selector(self):
     #     """
@@ -416,7 +463,7 @@ class Lexer:
 
     #     return token
 
-    def get_string(self):
+    def get_string(self, for_selector=False):
         """
         Simply gets the current string until next whitespace
 
@@ -424,16 +471,22 @@ class Lexer:
             str: concatenation of the current chars until the next whitespace
         """
         self.position.lock()
-        while not self.reached_eof and not self.get_char().isspace():
+
+        current_char = self.get_char()
+        # if the token creation is for the selector, it only advances when it is in the alphabet, a number or "_"
+        # otherwise, it just stops when it is a whitespace character
+        while not self.reached_eof and (
+            (for_selector and (current_char.isalpha() or current_char.isdigit() or current_char in "-_")) or (not for_selector and not current_char.isspace() and not current_char == ":")):
             self.advance()
+            current_char = self.get_char()
 
         # result = self.get_locked_chars()
         # self.position.unlock()
 
-        new_token = self.create_new_token(TokenType.STRING)
+        token = self.create_new_token(TokenType.STRING)
         self.position.unlock()
 
-        return new_token
+        return token
 
         # # gets any predefined simple token
         # for simple_token in SimpleToken:
