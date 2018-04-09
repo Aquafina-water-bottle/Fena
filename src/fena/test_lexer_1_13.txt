@@ -1,8 +1,8 @@
 # WE HAVE GOD DAMN NAMESPACES NOW
 !using namespace LMAO
 
-# selector -> as selector
-# vec3 -> positioned vec3
+# selector -> as(selector) -> as selector
+# vec3 -> pos(vec3) -> positioned vec3
 # pos(selector) -> positioned as selector
 # at(selector) -> at selector
 # at(feet) -> anchored feet
@@ -15,8 +15,8 @@
 # ast(selector) -> as selector at @s
 # rot(selector) -> rotated as selector
 # rot(vec2) -> rotated vec2
+# in(dimension) -> in dimension
 
-# if(dimension) -> in dimension
 # if(selector) -> if entity selector
 # ifnot(selector) -> unless entity selector
 # if(block_type) -> if block ~ ~ ~ block_type
@@ -61,9 +61,9 @@
 
         # if(@a) -> execute if entity @a ...
         # if(stone_brick) -> execute if block ~ ~ ~ stone_brick ...
-        # if(nether) -> execute in nether ...
-        if(@a) @e if(stone_brick) if(nether): say @a
-        if(@a) @e if(stone_brick, nether): say @a
+        # in(nether) -> execute in nether ...
+        if(@a) if(stone_brick) @e in(nether): say @a
+        if(@a, stone_brick) @e in(nether): say @a
 
         # if(@r _ti == @s _st) -> execute if score @r _ti = @s _st ...
         # if(stone_brick ~ ~-1 ~) -> execute if block ~ ~-1 ~ stone_brick
