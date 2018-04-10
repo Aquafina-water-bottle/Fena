@@ -22,13 +22,13 @@
 # if(block_type) -> if block ~ ~ ~ block_type
 # ifnot(block_type) -> unless block ~ ~ ~ block_type
 # if(block_type vec3) -> if block vec3 block_type
-# ifnot(block_type vec3) -> if block vec3 block_type
+# ifnot(block_type vec3) -> unless block vec3 block_type
 # if(block_type vec3 vec3) -> if block vec3 vec3 block_type
 # ifnot(block_type vec3 vec3) -> unless block vec3 vec3 block_type
 # if(selector objective operator selector2 objective2) -> if score selector objective operator selector2 objective
 # ifnot(selector objective operator selector2 objective2) -> unless score selector objective operator selector2 objective
 # if(selector objective == selector2 objective2) -> if score selector objective = selector2 objective
-# ifnot(selector objective == selector2 objective2) -> if score selector objective = selector2 objective
+# ifnot(selector objective == selector2 objective2) -> unless score selector objective = selector2 objective
 # unless(...) -> ifnot(...)
 
 # note that auto_type = smallest stored value for integers, double when integer
