@@ -366,103 +366,11 @@ class Lexer:
         current_token = None
         selector_tokens = []
         while current_token is None or not current_token.matches_any_of(SelectorSimpleToken.END, SimpleToken.COLON):
-            if current_token is not None:
-                selector_tokens.append(current_token)
             current_token = self.get_next_token(for_selector=True)
+            selector_tokens.append(current_token)
 
         return self.create_new_token(TokenType.SELECTOR, value=Selector(selector_tokens))
             
-    # def selector_eat(self, chars):
-    #     """
-    #     Advances the character if the characters match, used only for selectors
-    #     """
-    #     if not self.current_chars_are(chars):
-    #         self.error("Expected {} but got {}".format(chars, self.get_chars(len(chars))))
-
-    # def get_selector(self):
-    #     """
-    #     selector ::= DEFAULT_VAR & ("[" & selector_args & "]")?
-
-    #     selector_args ::= (selector_single_arg)? | (selector_single_arg & ("," & selector_single_arg)*)?
-    #     selector_single_arg ::= [selector_simple_arg, selector_range_arg, selector_tag_arg]
-    #     selector_simple_arg ::= DEFAULT_ARG & "=" & ("!")? & [STRING, INT]
-
-    #     selector_tag_arg ::= ("!")? & STRING
-    #     selector_range_arg ::= STRING & ("=" & selector_range)?
-    #     selector_range ::= [INTEGER, (INTEGER & ".."), (".." & INTEGER), (INTEGER & ".." & INTEGER)]
-
-    #     Gets a full selector and splits the selector up into its component parts
-
-    #     Returns:
-    #         Token: with TokenType.SELECTOR and a Selector value
-    #     """
-
-    #     # checks whether the first characters are inside the target selector variables
-    #     selector_var = self.get_chars(2)
-    #     if selector_var not in self.config_data.target_selector_variables:
-    #         self.error("'{}' is not {}".format(selector_var, self.config_data.target_selector_variables))
-
-    #     # gets the starting position and advances past the selector variable
-    #     starting_pos = self.position.create_instance()
-    #     selector_var = self.create_new_token(SelectorTokenType.TARGET_SELECTOR_VARIABLE, selector_var)
-    #     selector = Selector(selector_var)
-    #     self.advance(2)
-
-    #     # checks whether the selector actually has arguments
-    #     # by seeing if the next character is a space or just "[]"
-    #     if not (self.get_char().isspace() or self.get_chars(2) == "[]"):
-    #         # this allows target selector arguments to be added
-    #         self.selector_eat("[")
-    #         self.selector_args(selector)
-    #         self.selector_eat("]")
-
-    #     ending_pos = self.position.create_instance()
-    #     selector_pos = TokenPosition.from_positions(starting_pos, ending_pos)
-    #     return self.create_new_token(TokenType.SELECTOR, value=selector, position=selector_pos)
-
-    # def selector_args(self, selector):
-    #     """
-    #     selector_args ::= (selector_single_arg)? | (selector_single_arg & ("," & selector_single_arg)*)?
-    #     """
-    #     while not self.current_chars_are("]"):
-    #         self.selector_single_arg(selector)
-    #         if not self.current_chars_are("]"):
-    #             self.selector_eat(",")
-
-    # def selector_single_arg(self, selector):
-    #     """
-    #     selector_single_arg ::= [selector_simple_arg, selector_range_arg, selector_tag_arg]
-    #     """
-    #     # negated tag
-    #     if self.current_chars_are("!"):
-    #         tag_token = self.get_string(for_selector=True)
-    #         selector.add_tag(tag_token)
-
-
-    # def get_selector(self):
-    #     """
-    #     Gets the entire selector
-
-    #     Returns:
-    #         Token: selector token
-    #     """
-    #     self.lock()
-
-    #     # because all beginning selectors are 2 characters, @x
-    #     self.advance()
-    #     self.advance()
-
-    #     if self.current_chars_are("["):
-    #         while not self.reached_eof and not self.current_chars_are("]"):
-    #             self.advance()
-    #         self.advance()  # to advance after "["
-
-    #     result = self.get_locked_chars()
-    #     token = Token(self.getTokenPos(), SELECTOR, result)
-    #     self.unlock()
-
-    #     return token
-
     def get_string(self, for_selector=False):
         """
         Simply gets the current string until next whitespace
