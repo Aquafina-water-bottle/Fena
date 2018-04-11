@@ -5,8 +5,9 @@
 !prefix RR
 
 !mfunc execute_test
-    @p ~2 ~1 ~-1 execute @a 3 5.2 -2 @s @r ifblock 2 ~-1 ~ stonebrick 0 @e ifblock stonebrick *: say @a
-    execute @p ~ -4.2 3 execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ ifblock ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ ifblock ~ ~ ~ stonebrick *: say @a
+    # @p ~2 ~1 ~-1 execute @a 3 5.2 -2 @s @r ifblock 2 ~-1 ~ stonebrick 0 @e ifblock stonebrick *: say @a
+    @p ~2 ~1 ~-1 @a 3 5.2 -2 @s @r if(2 ~-1 ~ stonebrick[0]) @e if(stonebrick): say @a
+    execute @p ~ -4.2 3 execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ ifblock ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick *: say @a
 
     execute @a ~ ~ ~: say test
     @a ~ ~ ~: say test
