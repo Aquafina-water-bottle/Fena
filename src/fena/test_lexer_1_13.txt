@@ -87,7 +87,7 @@
     rot(7 ~3) ast(@s[_tag]) result(@s _af): say @a
 
     # note that some execute commands don't require a leading command to still be a functional command
-    if(@s)
+    @a result(@s _pl) if(@e[type=pig])
 
     # and scoreboard shortcuts can start with selectors too
     @s _tp + 1

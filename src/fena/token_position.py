@@ -142,9 +142,11 @@ class TokenPositionRecorder:
         return "TokenPositionRecorder[char_pos={}, row={}, column={}]".format(self.char_pos, self.row, self.column)
 
 
-class TokenPosition:
+class TokenPosition(tuple):
     """
     Immutable Token Position used in each token to hold their position and length of token
+
+    Answer gotten from https://stackoverflow.com/a/4828108
 
     Args:
         row (int): What row the token is at in the file, defaults to None for a token that doesn't exist
@@ -159,7 +161,9 @@ class TokenPosition:
              4: |   |   |   |   |
     """
 
-    def __init__(self, row, column, char_pos, row_end=None, column_end=None, char_pos_end=None):
+    __slots__ = []
+
+    def __new__(cls, row, column, char_pos, row_end=None, column_end=None, char_pos_end=None):
         assert isinstance(row, int) and row > 0
         assert isinstance(column, int) and column > 0
         assert isinstance(char_pos, int) and char_pos >= 0
@@ -174,43 +178,49 @@ class TokenPosition:
         assert isinstance(row_end, int) and row_end > 0
         assert isinstance(column_end, int) and column_end > 0
         assert isinstance(char_pos_end, int) and char_pos_end >= 0
+        return super().__new__(cls, (row, row_end, column, column_end, char_pos, char_pos_end))
 
-        self._row_begin = row
-        self._row_end = row_end
-        self._column_begin = column
-        self._column_end = column_end
-        self._char_pos = char_pos
-        self._char_pos_end = char_pos_end
+        # self._row_begin = row
+        # self._row_end = row_end
+        # self._column_begin = column
+        # self._column_end = column_end
+        # self._char_pos = char_pos
+        # self._char_pos_end = char_pos_end
 
     @ classmethod
     def from_positions(cls, token_pos, token_pos_end=None):
+        # sets it to a smaller name so it doesn't take up as much room
+        tp, tpe = token_pos, token_pos_end
         if token_pos_end is None:
-            return cls(token_pos.row, token_pos.column, token_pos.char_pos)
-        return cls(token_pos.row, token_pos.column, token_pos.char_pos, token_pos_end.row, token_pos_end.column, token_pos_end.char_pos)
+            return cls(tp.row, tp.column, tp.char_pos)
+        return cls(tp.row, tp.column, tp.char_pos, tpe.row, tpe.column, tpe.char_pos)
 
     @property
     def row(self):
-        return self._row_begin
-
-    @property
-    def column(self):
-        return self._column_begin
-
-    @property
-    def column_end(self):
-        return self._column_end
+        return super().__getitem__(0)
 
     @property
     def row_end(self):
-        return self._row_end
+        return super().__getitem__(1)
+
+    @property
+    def column(self):
+        return super().__getitem__(2)
+
+    @property
+    def column_end(self):
+        return super().__getitem__(3)
 
     @property
     def char_pos(self):
-        return self._char_pos
+        return super().__getitem__(4)
 
     @property
     def char_pos_end(self):
-        return self._char_pos_end
+        return super().__getitem__(5)
+
+    def __getitem__(self, item):
+        raise TypeError("{} object does not support indexing".format(repr(__class__.__name__)))
 
     def __str__(self):
         if self.row == self.row_end:

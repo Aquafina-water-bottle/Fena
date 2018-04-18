@@ -25,6 +25,9 @@ class SimpleToken(Enum):
     MINUS = "-"
     EQUALS = "="
     TEST = "?"
+    COMMA = ","
+    OPEN_PARENTHESES = "("
+    CLOSE_PARENTHESES = ")"
     RESET = "reset"
     ENABLE = "enable"
     JOIN = "join"
@@ -33,7 +36,7 @@ class SimpleToken(Enum):
     DETECT = "detect"
     IFBLOCK = "ifblock"
 
-SIMPLE_TOKEN_VALUES = tuple(token.value for token in SimpleToken)
+SIMPLE_TOKEN_VALUES = frozenset(token.value for token in SimpleToken)
 
 
 class WhitespaceToken(Enum):
@@ -43,7 +46,7 @@ class WhitespaceToken(Enum):
     NEWLINE = "\n"
     EOF = None
 
-WHITESPACE_TOKEN_VALUES = tuple(token.value for token in WhitespaceToken)
+WHITESPACE_TOKEN_VALUES = frozenset(token.value for token in WhitespaceToken)
 
 
 class StatementToken(Enum):
@@ -53,8 +56,9 @@ class StatementToken(Enum):
     MFUNC = "mfunc"
     FOLDER = "folder"
     PREFIX = "prefix"
+    CONSTOBJ = "constobj"
 
-STATEMENT_TOKEN_VALUES = tuple(token.value for token in StatementToken)
+STATEMENT_TOKEN_VALUES = frozenset(token.value for token in StatementToken)
 
 
 class SelectorTokenType(Enum):
@@ -74,11 +78,11 @@ class SelectorSimpleToken(Enum):
     CLOSE_PARENTHESES = ")"
     END = "end"
 
-SELECTOR_SIMPLE_TOKENS_VALUES = tuple(token.value for token in SelectorSimpleToken if token.value != "end")
+SELECTOR_SIMPLE_TOKENS_VALUES = frozenset(token.value for token in SelectorSimpleToken if token.value != "end")
 
 
-ALL_TYPES = tuple(TokenType) + tuple(SelectorTokenType) + tuple(SimpleToken) + tuple(WhitespaceToken) + tuple(StatementToken) + tuple(SelectorSimpleToken)
-ALL_TOKENS = tuple(SimpleToken) + tuple(WhitespaceToken) + tuple(StatementToken) + tuple(SelectorSimpleToken)
+ALL_TYPES = frozenset(TokenType) | frozenset(SelectorTokenType) | frozenset(SimpleToken) | frozenset(WhitespaceToken) | frozenset(StatementToken) | frozenset(SelectorSimpleToken)
+ALL_TOKENS = frozenset(SimpleToken) | frozenset(WhitespaceToken) | frozenset(StatementToken) | frozenset(SelectorSimpleToken)
 
 
 def test():

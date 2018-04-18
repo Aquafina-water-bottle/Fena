@@ -60,16 +60,16 @@ s7.0.0      v0.4.0
         - Renamed config options to match up with the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
         - config.ini now supports comments, trailing whitespace and empty lines
 
-    constants.py:
-        - Removed completely and replaced with token_types.py
+    constants.py: (removed)
+        - Replaced with token_types.py and config_data.py
 
     token_types.py: (created)
         - Changed string constants to multiple Enum values to better organize the constants
-        - Added a TokenRepr class to change the tuple representing both the type and value to the representation and the value
-            - Similarly to the TokenPosition class, this is for clarity compared to the tuple of 2 strs
+        - Created a bunch of frozenset constants to be used for inclusive tests
 
     lexical_token.py:
         - Removed a bunch of staticmethods that aren't being used anymore by the token
+        - Added a cast method that assumes the type can be properly changed when used
 
     token_position.py: (created)
         - Created a TokenPosition class to prevent confusion between the
@@ -78,17 +78,38 @@ s7.0.0      v0.4.0
         - Created a TokenPositionRecorder class as a mutable version of the TokenPosition class
             used in during the tokenizing process
 
+    lexical_token_immutable_bak.py: (created)
+        - Backup version of prototype immutable token
+        - Was later scrapped because casting would change the physical token and that has to be mutable
+
     lexer.py:
         - Essentially converted most possible tokens into TokenType.STRING instead
             of automatically assuming what type they are
         - Fixed a glitch involving whitespace on empty lines
         - Fixed a glitch involving no empty line at the end of the file
             - Redo how newlines are converted to tab space tokens
+        - Separated the lexing part of the selector and made it into its own common_lexer.py
+        - Added some new delimiter tokens as ":", ",", "(" and ")" for execute and chained commands
 
+    scoped_symbol_table.py: (created)
+        - Created an object to handle basic information gotten from statements
+            - General handling is separated from the original parser
+        - Holds the current mcfunction, prefix, file path, constobj name and command slices by chained commands
 
     parser.py:
-        - Added a !folder statement and a !prefix statement
+        - Added a !folder statement block to define what file all the defined mcfunctions will be in
+        - Added a one liner !prefix statement to determine what prefix will be used throughout the file
+        - Added a one liner !constobj statement to determine what objective name will be used for operations with constant numbers
+            - eg. "@s _ti * 5" requires an objective for scoreboard players operation, which wiil be defined with !constobj
+        - Added a command chain option by having a command end with ":" and starting as a new block
+            - Equivalent to CBP or CCUv1 "USE"
         - Changed a few methods to better match up to the grammar definition
+
+    common_lexer.py: (created)
+        - Added a prototype lexer to be used by tokenizing datatags and selectors
+
+    common_parser.py: (created)
+        - Added a prototype parser to be used for parsing datatags and selectors
 
     TODO:
         - Change from camel case to snake case
@@ -96,5 +117,7 @@ s7.0.0      v0.4.0
         - Rename certain variables based on selectors to match the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
 
         1.13:
-            - Change format of execute commands to use : and all sub execute commands
+            - Change format of execute commands to use ":" and all sub execute commands
             - mcfunction format in datapacks
+
+        - Debug file only when "-l" or "--debug-log" is used as a command line argument

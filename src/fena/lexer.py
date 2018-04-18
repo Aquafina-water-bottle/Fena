@@ -9,7 +9,6 @@ from lexical_token import Token
 from token_position import TokenPosition, TokenPositionRecorder
 from selector import Selector
 
-
 class Lexer:
     config_data = ConfigData()
 
@@ -85,7 +84,7 @@ class Lexer:
         Args:
             value (any, defaults to None): What value the token should have
             position (TokenPosition, defaults to None): the position of the current token
-            advance (bool, defaults to False): Whether when creating the token, it should advance or not
+            advance (bool, defaults to False): Whether when creating the token, it should advance afterwards or not
         """
         if position is None:
             position = self.position.create_instance()
@@ -100,32 +99,33 @@ class Lexer:
 
         return token
 
-    def get_next_token(self, for_selector=False):
+    # def get_next_token(self, for_selector=False):
+    def get_next_token(self):
         """
         This method is responsible for breaking a sentence
         apart into tokens, one token at a time.
         """
 
-        if for_selector:
-            if self.get_chars(2) in self.config_data.target_selector_variables:
-                return self.create_new_token(SelectorTokenType.TARGET_SELECTOR_VARIABLE, self.get_chars(2), advance=True)
+        # if for_selector:
+        #     if self.get_chars(2) in self.config_data.target_selector_variables:
+        #         return self.create_new_token(SelectorTokenType.TARGET_SELECTOR_VARIABLE, self.get_chars(2), advance=True)
 
-            if self.get_char() in SELECTOR_SIMPLE_TOKENS_VALUES:
-                return self.create_new_token(SelectorSimpleToken(self.get_char()), advance=True)
-            if self.get_chars(2) in SELECTOR_SIMPLE_TOKENS_VALUES:
-                return self.create_new_token(SelectorSimpleToken(self.get_chars(2)), advance=True)
+        #     if self.get_char() in SELECTOR_SIMPLE_TOKENS_VALUES:
+        #         return self.create_new_token(SelectorSimpleToken(self.get_char()), advance=True)
+        #     if self.get_chars(2) in SELECTOR_SIMPLE_TOKENS_VALUES:
+        #         return self.create_new_token(SelectorSimpleToken(self.get_chars(2)), advance=True)
 
-            if self.get_char().isalpha() or self.get_char().isdigit() or self.get_char() in "-_":
-                return self.get_string(for_selector=True)
+        #     if self.get_char().isalpha() or self.get_char().isdigit() or self.get_char() in "-_":
+        #         return self.get_string(for_selector=True)
 
-            if self.current_chars_are(SimpleToken.COLON.value):
-                # does not advance since it should stop here
-                return self.create_new_token(SimpleToken.COLON)
+        #     if self.current_chars_are(SimpleToken.COLON.value):
+        #         # does not advance since it should stop here
+        #         return self.create_new_token(SimpleToken.COLON)
 
-            if self.get_char().isspace():
-                return self.create_new_token(SelectorSimpleToken.END, advance=True)
+        #     if self.get_char().isspace():
+        #         return self.create_new_token(SelectorSimpleToken.END, advance=True)
 
-            self.error("Invalid character for a selector: {}".format(repr(self.get_char())))
+        #     self.error("Invalid character for a selector: {}".format(repr(self.get_char())))
 
         # does not require "else" since if it is a selector, it should end in the block above
         while not self.reached_eof:
@@ -159,13 +159,21 @@ class Lexer:
             # if self.current_chars_are("~"):
             #     return self.get_coord()
 
+            if self.current_chars_are(SimpleToken.OPEN_PARENTHESES.value):
+                return self.create_new_token(SimpleToken.OPEN_PARENTHESES, advance=True)
+
+            if self.current_chars_are(SimpleToken.CLOSE_PARENTHESES.value):
+                return self.create_new_token(SimpleToken.CLOSE_PARENTHESES, advance=True)
+
+            if self.current_chars_are(SimpleToken.COMMA.value):
+                return self.create_new_token(SimpleToken.COMMA, advance=True)
+
+            if self.current_chars_are(SimpleToken.COLON.value):
+                return self.create_new_token(SimpleToken.COLON, advance=True)
+
             # gets selector
             if self.current_chars_are("@"):
                 return self.get_selector()
-
-            # gets a singular colon token
-            if self.current_chars_are(SimpleToken.COLON.value):
-                return self.create_new_token(SimpleToken.COLON, advance=True)
 
             # gets datatag
             if self.current_chars_are("{"):
@@ -363,15 +371,31 @@ class Lexer:
         return self.create_new_token(TokenType.DATATAG, value=result, position=token_pos)
 
     def get_selector(self):
-        current_token = None
-        selector_tokens = []
-        while current_token is None or not current_token.matches_any_of(SelectorSimpleToken.END, SimpleToken.COLON):
-            current_token = self.get_next_token(for_selector=True)
-            selector_tokens.append(current_token)
+        # current_token = None
+        # selector_tokens = []
+        # while current_token is None or not current_token.matches_any_of(SelectorSimpleToken.END, SimpleToken.COLON):
+        #     current_token = self.get_next_token(for_selector=True)
+        #     selector_tokens.append(current_token)
 
-        return self.create_new_token(TokenType.SELECTOR, value=Selector(selector_tokens))
+        self.position.lock()
+        if self.get_chars(2) not in self.config_data.target_selector_variables:
+            self.error("Expected a selector in {}, got {}".format(self.config_data.target_selector_variables, self.get_chars(2)))
+        self.advance(2)
+
+        # checks whether more of a selector is expected
+        if self.current_chars_are("["):
+            while not self.current_chars_are("]"):
+                self.advance()
+
+            # skips the "]"
+            self.advance()
+
+        token = self.create_new_token(TokenType.SELECTOR)
+        self.position.unlock()
+
+        return token
             
-    def get_string(self, for_selector=False):
+    def get_string(self):
         """
         Simply gets the current string until next whitespace
 
@@ -381,15 +405,17 @@ class Lexer:
         self.position.lock()
 
         current_char = self.get_char()
-        # if the token creation is for the selector, it only advances when it is in the alphabet, a number or "_"
-        # otherwise, it just stops when it is a whitespace character
-        while not self.reached_eof and (
-            (for_selector and (current_char.isalpha() or current_char.isdigit() or current_char in "-_")) or (not for_selector and not current_char.isspace() and not current_char == ":")):
+        # otherwise, it just stops when it is a whitespace character or it isn't a special delimiter character
+        while not self.reached_eof and not current_char.isspace() and not current_char in ":(),":
             self.advance()
             current_char = self.get_char()
 
         # result = self.get_locked_chars()
         # self.position.unlock()
+
+        # checks if the result is a 0 length string: error
+        if not self.get_locked_chars():
+            self.error("Got a 0 length string")
 
         token = self.create_new_token(TokenType.STRING)
         self.position.unlock()
@@ -417,11 +443,17 @@ class Lexer:
         # token = self.get_next_token()
         # print(repr(token))
         while not self.reached_eof:
+            # self.get_next_token()
             token = self.get_next_token()
             logging.debug(repr(token))
 
 if __name__ == "__main__":
+    import timeit
+
     with open("test_lexer.txt") as file:
         text = file.read()
+
+    # number = 20
+    # print(timeit.timeit("lexer = Lexer(text); lexer.test()", number=number, globals=globals()))
     lexer = Lexer(text)
     lexer.test()
