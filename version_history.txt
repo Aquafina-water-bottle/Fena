@@ -115,9 +115,8 @@ s7.0.0      v0.4.0
         - Change from camel case to snake case
         - Clean up error logging
         - Rename certain variables based on selectors to match the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
+        - Debug file only when "-l" or "--debug-log" is used as a command line argument
 
         1.13:
             - Change format of execute commands to use ":" and all sub execute commands
             - mcfunction format in datapacks
-
-        - Debug file only when "-l" or "--debug-log" is used as a command line argument
