@@ -72,11 +72,12 @@ s7.0.0      v0.4.0
         - Added a cast method that assumes the type can be properly changed when used
 
     token_position.py: (created)
-        - Created a TokenPosition class to prevent confusion between the
-            line number and the column number of the previous representation,
-            which was a tuple of two ints
-        - Created a TokenPositionRecorder class as a mutable version of the TokenPosition class
-            used in during the tokenizing process
+        - Created a TokenPosition class
+            - Prevents confusion between the line number and the column number of the previous representation (a tuple of two ints)
+            - Stores more attributes to allow representation of a range of chars
+        - Created a TokenPositionRecorder class:
+            - Mutable version of the TokenPosition class used in during the tokenizing process
+            - Does the main locking and unlocking of the char position
 
     lexical_token_immutable_bak.py: (created)
         - Backup version of prototype immutable token
@@ -107,6 +108,7 @@ s7.0.0      v0.4.0
 
     common_lexer.py: (created)
         - Added a prototype lexer to be used by tokenizing datatags and selectors
+        - Made it inherit ABC
 
     common_parser.py: (created)
         - Added a prototype parser to be used for parsing datatags and selectors

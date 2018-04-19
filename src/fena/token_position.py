@@ -3,8 +3,13 @@ import logging
 class TokenPositionRecorder:
     """
     Mutable version of the TokenPosition that has no length, used during token creation
+
     Args:
+        initial_pos (TokenPosition or None): The starting position of the position recorder
+
+    Attributes:
         char_pos (int): The position within the entire file string
+        initial_char_pos (int): The initial position of a character position used for displaying
         row (int): What row the char_pos is at
         column (int): What column the char_pos is at
         started (bool): Whether the recorder has started or not
@@ -13,10 +18,18 @@ class TokenPositionRecorder:
         locked_token_pos (TokenPosition): Records the position of the initial character of the lock
     """
 
-    def __init__(self):
+    def __init__(self, initial_pos=None):
         self.char_pos = 0
-        self.row = 1
-        self.column = 1
+
+        if initial_pos is None:
+            self.initial_char_pos = 0
+            self.row = 1
+            self.column = 1
+        
+        else:
+            self.initial_char_pos = initial_pos.char_pos
+            self.row = initial_pos.row
+            self.column = initial_pos.column
 
         self.locked = False
         self.locked_token_pos = None
@@ -52,15 +65,15 @@ class TokenPositionRecorder:
         Examples:
             >>> r = TokenPositionRecorder()
             >>> r
-            TokenPositionRecorder[char_pos=0, row=1, column=1]
+            TokenPositionRecorder[row=1, column=1, char_pos=0]
 
             >>> r.increment_column()
             >>> r
-            TokenPositionRecorder[char_pos=1, row=1, column=2]
+            TokenPositionRecorder[row=1, column=2, char_pos=1]
 
             >>> r.increment_column(5)
             >>> r
-            TokenPositionRecorder[char_pos=6, row=1, column=7]
+            TokenPositionRecorder[row=1, column=7, char_pos=6]
         """
         assert isinstance(columns, int)
         self.column += columns
@@ -76,24 +89,24 @@ class TokenPositionRecorder:
         Examples:
             >>> r = TokenPositionRecorder()
             >>> r
-            TokenPositionRecorder[char_pos=0, row=1, column=1]
+            TokenPositionRecorder[row=1, column=1, char_pos=0]
 
             >>> r.increment_column()
             >>> r
-            TokenPositionRecorder[char_pos=1, row=1, column=2]
+            TokenPositionRecorder[row=1, column=2, char_pos=1]
 
             Upon incrementing the row, the column resets
             >>> r.increment_row()
             >>> r
-            TokenPositionRecorder[char_pos=2, row=2, column=1]
+            TokenPositionRecorder[row=2, column=1, char_pos=2]
 
             >>> r.increment_column(4)
             >>> r
-            TokenPositionRecorder[char_pos=6, row=2, column=5]
+            TokenPositionRecorder[row=2, column=5, char_pos=6]
 
             >>> r.increment_row()
             >>> r
-            TokenPositionRecorder[char_pos=7, row=3, column=1]
+            TokenPositionRecorder[row=3, column=1, char_pos=7]
         """
         self.column = 1
         self.row += 1
@@ -125,6 +138,8 @@ class TokenPositionRecorder:
         Args:
             undo_progress (bool): Whether the character position resets itself back to its original position or not
         """
+        if not self.locked:
+            logging.warning("{}: Unexpected unlock before lock".format(self))
         self.locked = False
 
         if undo_progress:
@@ -139,14 +154,19 @@ class TokenPositionRecorder:
         return "[row={}, col={}]".format(self.row, self.column)
 
     def __repr__(self):
-        return "TokenPositionRecorder[char_pos={}, row={}, column={}]".format(self.char_pos, self.row, self.column)
+        if self.initial_char_pos == 0:
+            char_pos = str(self.char_pos)
+        else:
+            char_pos = "({} from initial={} + current={})".format(self.char_pos + self.initial_char_pos, self.initial_char_pos, self.char_pos)
+
+        return "TokenPositionRecorder[row={}, column={}, char_pos={}]".format(self.row, self.column, char_pos)
 
 
 class TokenPosition(tuple):
     """
     Immutable Token Position used in each token to hold their position and length of token
 
-    Answer gotten from https://stackoverflow.com/a/4828108
+    Immutable object gotten from https://stackoverflow.com/a/4828108
 
     Args:
         row (int): What row the token is at in the file, defaults to None for a token that doesn't exist

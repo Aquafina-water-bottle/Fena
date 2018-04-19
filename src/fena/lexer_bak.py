@@ -32,6 +32,9 @@ class Lexer:
         if not self.text.strip():
             raise EOFError("File does not contain anything")
 
+        # this is here because the first statement has to be handled
+        # self.handle_after_newline()
+
     def error(self, message=None):
         if message is None:
             raise TypeError("{}: Invalid character '{}'".format(self.position, self.get_char()))
@@ -103,8 +106,36 @@ class Lexer:
         apart into tokens, one token at a time.
         """
 
+        # if for_selector:
+        #     if self.get_chars(2) in self.config_data.target_selector_variables:
+        #         return self.create_new_token(SelectorTokenType.TARGET_SELECTOR_VARIABLE, self.get_chars(2), advance=True)
+
+        #     if self.get_char() in SELECTOR_SIMPLE_TOKENS_VALUES:
+        #         return self.create_new_token(SelectorSimpleToken(self.get_char()), advance=True)
+        #     if self.get_chars(2) in SELECTOR_SIMPLE_TOKENS_VALUES:
+        #         return self.create_new_token(SelectorSimpleToken(self.get_chars(2)), advance=True)
+
+        #     if self.get_char().isalpha() or self.get_char().isdigit() or self.get_char() in "-_":
+        #         return self.get_string(for_selector=True)
+
+        #     if self.current_chars_are(SimpleToken.COLON.value):
+        #         # does not advance since it should stop here
+        #         return self.create_new_token(SimpleToken.COLON)
+
+        #     if self.get_char().isspace():
+        #         return self.create_new_token(SelectorSimpleToken.END, advance=True)
+
+        #     self.error("Invalid character for a selector: {}".format(repr(self.get_char())))
+
         # does not require "else" since if it is a selector, it should end in the block above
         while not self.reached_eof:
+            # line break when "\" is found at the end of a line lol
+            # note that pyexpander does this already, so this is temporarily removed
+            # if self.current_chars_are("\\\n"):
+            #     self.advance(2)
+            #     self.skip_whitespace()
+            #     continue
+
             # skips all whitespace until \n
             if self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
                 self.skip_whitespace()
@@ -118,6 +149,15 @@ class Lexer:
                 if whitespace_token is not None:
                     return whitespace_token
                 continue
+
+            # # gets a number if the first character is a digit or negative digit
+            # # it gets the first 2 current chars, and gets the second current char to see if it's a digit
+            # if self.get_char().isdigit() or (self.current_chars_are("-") and self.get_chars(2)[1].isdigit()):
+            #     return self.get_number()
+
+            # # gets coordinate
+            # if self.current_chars_are("~"):
+            #     return self.get_coord()
 
             if self.current_chars_are(SimpleToken.OPEN_PARENTHESES.value):
                 return self.create_new_token(SimpleToken.OPEN_PARENTHESES, advance=True)

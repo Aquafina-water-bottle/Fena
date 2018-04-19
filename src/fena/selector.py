@@ -12,50 +12,6 @@ range ::= [INTEGER, (INTEGER & ".."), (".." & INTEGER), (INTEGER & ".." & INTEGE
 
 import logging
 
-# class SelectorParser:
-#     """
-#     Singleton class to parse a selector to reduce initialization costs
-# 
-#     Args:
-#         selector (Selector)
-# 
-#     Attributes:
-#         selector (Selector)
-#         pos (int): Position of the token
-#         current_token (Token)
-#     """
-#     def __init__(self, selector):
-#         self.selector = selector
-#         self.pos = 0
-#         self.current_token = self.advance()
-# 
-#     def parse(self):
-#         pass
-# 
-#     def advance(self):
-#         self.current_token = self.selector.tokens[self.pos]
-#         self.pos += 1
-# 
-#     def eat(self, token_type, error_message=None):
-#         if error_message is None:
-#             error_message = "Selector Syntax Error"
-#         if not self.current_token.type.matches(token_type):
-#             raise SyntaxError("{} : {}".format(repr(self.current_token), error_message))
-#         self.advance()
-# 
-#     def __str__(self):
-#         return "SelectorParser[selector={}, current_token={}]".format(self.selector, self.current_token)
-# 
-#     __repr__ = __str__
-# 
-#     def __new__(cls, selector):
-#         """
-#         Ensures they are the same class
-#         """
-#         if not hasattr(cls, '_config_data'):
-#             cls._selector_parser = super().__new__(cls)
-#         return cls._selector_parser
-
 class Selector:
     arg_shortcut = {
         "limit": "c",
@@ -98,9 +54,9 @@ class Selector:
         """
         Builds so the string representation is made properly
         """
-        pass
-
-    def _eat(self, token_type=None):
+        # lexer = SelectorLexer()
+        # parser = SelectorParser()
+        # parser.parse()
         pass
 
     def _add_default(self, default, value):

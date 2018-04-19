@@ -75,7 +75,7 @@ def _get_config_data(file_data=None):
         option, data = line.split("=")
 
         if option in config_options:
-            # duplicate if there is a new option already inside the retireved options
+            # finds duplicate by checking if there is a new option already inside the retireved options
             if option in retrieved_options:
                 raise SyntaxError("Repeated option {} found in the config file".format(option))
             retrieved_options.add(option)

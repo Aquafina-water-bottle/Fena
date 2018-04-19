@@ -12,9 +12,12 @@ class Token:
         self.type = token_type
         self.value = value
 
+        invalid_types = (TokenType, SelectorTokenType)
+        required_types = (SimpleToken, WhitespaceToken, StatementToken, SelectorSimpleToken)
+
         if self.value is None:
-            assert not isinstance(self.type, (TokenType, SelectorTokenType)), "A value is required for a token type (type={}, pos={})".format(self.type, self.pos)
-            assert isinstance(self.type, (SimpleToken, WhitespaceToken, StatementToken, SelectorSimpleToken)), "honestly idk {}".format(repr(self.type))
+            assert not isinstance(self.type, invalid_types), "A value is required for a token type (type={}, pos={})".format(self.type, self.pos)
+            assert isinstance(self.type, required_types), "The type {} must be a required type of {}".format(required_types, repr(token_type))
             self.value = self.type.value
 
     def matches(self, token_type, value=None):
