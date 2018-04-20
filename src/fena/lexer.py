@@ -28,6 +28,61 @@ class Lexer(CommonLexer):
         if not self.text.strip():
             raise EOFError("File does not contain anything")
 
+    def __iter__(self):
+        """
+        This method is responsible for breaking a sentence
+        apart into tokens, one token at a time.
+        """
+        # yield from self.statement_lexer
+        # if not self.statement_lexer.reached_eof:
+        #     yield next(self.statement_lexer)
+
+        # does not require "else" since if it is a selector, it should end in the block above
+        while not self.reached_eof:
+            # skips all whitespace until \n
+            if self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
+                self.skip_whitespace()
+                continue
+
+            yield from self.statement_lexer
+
+            # handles indents and dedents after newline
+            if self.current_chars_are(WhitespaceToken.NEWLINE.value):
+                # can return a single indent token, single dedent token or nothing at all
+                # this will be ran multiple times if there are multiple dedents in one line
+                whitespace_token = self.handle_newline()
+                if whitespace_token is not None:
+                    yield whitespace_token
+                continue
+
+            yield self.get_command()
+
+            # if self.current_chars_are(SimpleToken.OPEN_PARENTHESES.value):
+            #     return self.create_new_token(SimpleToken.OPEN_PARENTHESES, advance=True)
+
+            # if self.current_chars_are(SimpleToken.CLOSE_PARENTHESES.value):
+            #     return self.create_new_token(SimpleToken.CLOSE_PARENTHESES, advance=True)
+
+            # if self.current_chars_are(SimpleToken.COMMA.value):
+            #     return self.create_new_token(SimpleToken.COMMA, advance=True)
+
+            # if self.current_chars_are(SimpleToken.COLON.value):
+            #     return self.create_new_token(SimpleToken.COLON, advance=True)
+
+            # gets selector
+            # if self.current_chars_are("@"):
+            #     return self.get_selector()
+
+            # gets datatag
+            # if self.current_chars_are("{"):
+            #     return self.get_data_tag()
+
+            # return self.get_string()
+
+        # at the end of file by this point, and it must end with dedent tokens if a newline did not end
+        if self.indents > 0:
+            yield self.get_dedent()
+
     def error(self, message=None):
         return super().error(__class__.__name__, message)
 
@@ -55,60 +110,6 @@ class Lexer(CommonLexer):
                 self.reached_eof = True
 
             increment -= 1
-
-    def get_next_token(self):
-        """
-        This method is responsible for breaking a sentence
-        apart into tokens, one token at a time.
-        """
-        if not self.statement_lexer.reached_eof:
-            return self.statement_lexer.get_next_token()
-
-        # does not require "else" since if it is a selector, it should end in the block above
-        while not self.reached_eof:
-            # skips all whitespace until \n
-            if self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
-                self.skip_whitespace()
-                continue
-
-            # handles indents and dedents after newline
-            if self.current_chars_are(WhitespaceToken.NEWLINE.value):
-                # can return a single indent token, single dedent token or nothing at all
-                # this will be ran multiple times if there are multiple dedents in one line
-                whitespace_token = self.handle_newline()
-                if whitespace_token is not None:
-                    return whitespace_token
-                continue
-
-            return self.get_command()
-
-            # if self.current_chars_are(SimpleToken.OPEN_PARENTHESES.value):
-            #     return self.create_new_token(SimpleToken.OPEN_PARENTHESES, advance=True)
-
-            # if self.current_chars_are(SimpleToken.CLOSE_PARENTHESES.value):
-            #     return self.create_new_token(SimpleToken.CLOSE_PARENTHESES, advance=True)
-
-            # if self.current_chars_are(SimpleToken.COMMA.value):
-            #     return self.create_new_token(SimpleToken.COMMA, advance=True)
-
-            # if self.current_chars_are(SimpleToken.COLON.value):
-            #     return self.create_new_token(SimpleToken.COLON, advance=True)
-
-            # gets selector
-            # if self.current_chars_are("@"):
-            #     return self.get_selector()
-
-            # gets datatag
-            # if self.current_chars_are("{"):
-            #     return self.get_data_tag()
-
-            # return self.get_string()
-
-        # at the end of file by this point, and it must end with dedent tokens if a newline did not end
-        if self.indents > 0:
-            return self.get_dedent()
-
-        return self.create_new_token(WhitespaceToken.EOF)
 
     def skip_whitespace(self):
         """
@@ -361,8 +362,12 @@ if __name__ == "__main__":
     # number = 20
     # print(timeit.timeit("lexer = Lexer(text); lexer.test()", number=number, globals=globals()))
     lexer = Lexer(text)
-    while not lexer.reached_eof:
-        # self.get_next_token()
-        token = lexer.get_next_token()
+
+    for token in lexer:
         logging.debug(repr(token))
+
+    # token = True
+    # while token:
+    #     token = next(lexer, None)
+    #     logging.debug(repr(token))
 

@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 
 class CommonLexer(ABC):
     """
+    Iterator object to get all tokens in a file
+
     Args:
         text (str)
         initial_pos (TokenPosition or None)
@@ -15,6 +17,10 @@ class CommonLexer(ABC):
         self.reached_eof = False
 
     @abstractmethod
+    def __iter__(self):
+        pass
+
+    @abstractmethod
     def error(self, class_name, message=None):
         """
         Args:
@@ -23,12 +29,8 @@ class CommonLexer(ABC):
                 Defaults to None, which will display a generic message containing the current character
         """
         if message is None:
-            message = "Invalid character {char}".format(char=self.get_char())
+            message = "Invalid character {char}".format(char=repr(self.get_char()))
         raise TypeError("{name}{pos}: {message}".format(name=class_name, pos=self.recorder, message=message))
-
-    @abstractmethod
-    def get_next_token(self):
-        pass
 
     @abstractmethod
     def advance(self, increment):

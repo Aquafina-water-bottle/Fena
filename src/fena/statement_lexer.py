@@ -19,10 +19,7 @@ class StatementLexer(CommonLexer):
         self.token_num = 0
         self.reached_eof = False
 
-    def error(self, message=None):
-        return super().error(__class__.__name__, message)
-
-    def get_next_token(self):
+    def __iter__(self):
         """
         Gets the token "!", StatementToken, string tokens
 
@@ -51,9 +48,12 @@ class StatementLexer(CommonLexer):
                 token = self.get_string()
 
             self.token_num += 1
-            return token
+            yield token
 
-        return self.create_new_token(WhitespaceToken.EOF)
+        # return self.create_new_token(WhitespaceToken.EOF)
+
+    def error(self, message=None):
+        return super().error(__class__.__name__, message)
 
     def skip_whitespace(self):
         while not self.reached_eof and (self.get_char().isspace() and self.get_char() != "\n"):
@@ -96,13 +96,15 @@ if __name__ == "__main__":
 
     def test(text):
         statement_lexer.reset(text, position)
-        while not statement_lexer.reached_eof:
-            print(repr(statement_lexer))
-            print(repr(statement_lexer.get_next_token()))
+        for token in statement_lexer:
+            print(repr(token))
+        # while not statement_lexer.reached_eof:
+        #     print(repr(statement_lexer))
+        #     print(repr(statement_lexer.get_next_token()))
 
     test("!mfunc ayylmao")
     test("!folder ayylmao")
     test("!prefix ayylmao")
-    test("!constobj \nayylmao")
+    test("!constobj ayylmao")
     # test("!lolol ayylmao")
 
