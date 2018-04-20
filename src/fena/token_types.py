@@ -1,25 +1,25 @@
-from enum import Enum
+from enum import Enum, auto
 
 class TokenType(Enum):
     """
     Contains only a token type since the value is arbitrary
     """
-    SELECTOR = "selector"
-    INT = "int"
-    FLOAT = "float"
-    COORD = "coord"
-    COORDS = "coords"
-    DATATAG = "datatag"
-    STRING = "string"
-    COMMAND = "command"
-    LEADING_COMMAND = "leading command"
+    SELECTOR = auto()
+    INT = auto()
+    FLOAT = auto()
+    COORD = auto()
+    COORDS = auto()
+    DATATAG = auto()
+    STRING = auto()
+    COMMAND = auto()
+    STATEMENT = auto()
 
 class SimpleToken(Enum):
     """
     Contains the type and value
     """
 
-    STATEMENT = "!"
+    STATEMENT_SPECIFIER = "!"
     COLON = ":"
     PLUS = "+"
     MINUS = "-"

@@ -9,7 +9,6 @@ class TokenPositionRecorder:
 
     Attributes:
         char_pos (int): The position within the entire file string
-        initial_char_pos (int): The initial position of a character position used for displaying
         row (int): What row the char_pos is at
         column (int): What column the char_pos is at
         started (bool): Whether the recorder has started or not
@@ -22,19 +21,14 @@ class TokenPositionRecorder:
         self.char_pos = 0
 
         if initial_pos is None:
-            self.initial_char_pos = 0
-            self.row = 1
-            self.column = 1
+            initial_pos = TokenPosition(row=1, column=1, char_pos=0)
         
-        else:
-            self.initial_char_pos = initial_pos.char_pos
-            self.row = initial_pos.row
-            self.column = initial_pos.column
-
+        self.position = initial_pos
         self.locked = False
         self.locked_token_pos = None
 
-    def create_instance(self):
+    @property
+    def position(self):
         """
         Creates an immutable instance of itself to be used for token creation
 
@@ -54,6 +48,20 @@ class TokenPositionRecorder:
         if self.locked:
             return TokenPosition.from_positions(self.locked_token_pos, token_pos)
         return token_pos
+
+    @position.setter
+    def position(self, position):
+        """
+        Creates an immutable instance of itself to be used for token creation
+
+        Args:
+            position (TokenPosition): Position that the recorder will be changed to
+        """
+        assert isinstance(position, TokenPosition)
+
+        self.char_pos = position.char_pos
+        self.row = position.row
+        self.column = position.column
 
     def increment_column(self, columns=1):
         """
@@ -126,7 +134,8 @@ class TokenPositionRecorder:
         else:
             logging.warning("{}: Unexpected lock before unlock".format(self))
 
-    def get_locked_char_pos(self):
+    @property
+    def locked_char_pos(self):
         """
         Returns:
             tuple (int, int): The character positions to get the proper slice of the string
@@ -154,12 +163,13 @@ class TokenPositionRecorder:
         return "[row={}, col={}]".format(self.row, self.column)
 
     def __repr__(self):
-        if self.initial_char_pos == 0:
-            char_pos = str(self.char_pos)
-        else:
-            char_pos = "({} from initial={} + current={})".format(self.char_pos + self.initial_char_pos, self.initial_char_pos, self.char_pos)
+        # if self.initial_char_pos == 0:
+        #     char_pos = str(self.char_pos)
+        # else:
+        #     char_pos = "({} from initial={} + current={})".format(self.char_pos + self.initial_char_pos, self.initial_char_pos, self.char_pos)
 
-        return "TokenPositionRecorder[row={}, column={}, char_pos={}]".format(self.row, self.column, char_pos)
+        # return "TokenPositionRecorder[row={}, column={}, char_pos={}]".format(self.row, self.column, char_pos)
+        return "TokenPositionRecorder[row={}, column={}, char_pos={}]".format(self.row, self.column, self.char_pos)
 
 
 class TokenPosition(tuple):

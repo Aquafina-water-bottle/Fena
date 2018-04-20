@@ -65,7 +65,7 @@ s7.0.0      v0.4.0
 
     token_types.py: (created)
         - Changed string constants to multiple Enum values to better organize the constants
-        - Created a bunch of frozenset constants to be used for inclusive tests
+        - Created a bunch of frozenset constants to be used for containment tests
 
     lexical_token.py:
         - Removed a bunch of staticmethods that aren't being used anymore by the token
@@ -84,8 +84,8 @@ s7.0.0      v0.4.0
         - Was later scrapped because casting would change the physical token and that has to be mutable
 
     lexer.py:
-        - Essentially converted most possible tokens into TokenType.STRING instead
-            of automatically assuming what type they are
+        - Essentially converted most possible tokens into TokenType.COMMAND instead of automatically assuming what type they are
+            - The exception is the statements, which are separated into their own tokens
         - Fixed a glitch involving whitespace on empty lines
         - Fixed a glitch involving no empty line at the end of the file
             - Redo how newlines are converted to tab space tokens
@@ -113,11 +113,15 @@ s7.0.0      v0.4.0
     common_parser.py: (created)
         - Added a prototype parser to be used for parsing datatags and selectors
 
+    statement_lexer.py: (created)
+        - Added a lexer specifically for converting a statement line into their respective tokens
+
     TODO:
         - Change from camel case to snake case
         - Clean up error logging
         - Rename certain variables based on selectors to match the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
         - Debug file only when "-l" or "--debug-log" is used as a command line argument
+        - WHY HAVEN'T I THOUGHT OF THIS YET: Turn all lexers into iterators
 
         1.13:
             - Change format of execute commands to use ":" and all sub execute commands

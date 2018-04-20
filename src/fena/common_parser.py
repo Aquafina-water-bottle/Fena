@@ -32,7 +32,7 @@ class CommonParser(ABC):
 
     @abstractmethod
     def __repr__(self):
-        pass
+        return "CommonParser[lexer={}, current_token={}]".format(repr(self.lexer), repr(self.current_token))
 
 
 def test():

@@ -25,11 +25,6 @@ class ConfigData:
             self.target_selector_variables = options["target_selector_variables"]
             self.target_selector_arguments = options["target_selector_arguments"]
 
-    def __str__(self):
-        return "ConfigData[vars={}]".format(vars(self))
-
-    __repr__ = __str__
-
     def __new__(cls, **options):
         """
         Ensures they are the same class
@@ -37,6 +32,11 @@ class ConfigData:
         if not hasattr(cls, '_config_data'):
             cls._config_data = super().__new__(cls)
         return cls._config_data
+
+    def __str__(self):
+        return "ConfigData[vars={}]".format(vars(self))
+
+    __repr__ = __str__
 
 def _get_config_data(file_data=None):
     """

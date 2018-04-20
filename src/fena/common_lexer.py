@@ -11,7 +11,7 @@ class CommonLexer(ABC):
 
     def __init__(self, text, initial_pos=None):
         self.text = text
-        self.position = TokenPositionRecorder()
+        self.recorder = TokenPositionRecorder(initial_pos=initial_pos)
         self.reached_eof = False
 
     @abstractmethod
@@ -24,14 +24,14 @@ class CommonLexer(ABC):
         """
         if message is None:
             message = "Invalid character {char}".format(char=self.get_char())
-        raise TypeError("{name}{pos}: {message}".format(name=class_name, pos=self.position, message=message))
+        raise TypeError("{name}{pos}: {message}".format(name=class_name, pos=self.recorder, message=message))
 
     @abstractmethod
     def get_next_token(self):
         pass
 
     @abstractmethod
-    def advance(self, increment=1):
+    def advance(self, increment):
         """
         Advances the position
 
@@ -58,7 +58,7 @@ class CommonLexer(ABC):
         Returns:
             int: current characters from the current position given the length
         """
-        char_pos = self.position.char_pos
+        char_pos = self.recorder.char_pos
         return self.text[char_pos]
 
     def get_chars(self, length):
@@ -69,7 +69,7 @@ class CommonLexer(ABC):
         Returns:
             str: current characters from the current position given the length
         """
-        char_pos = self.position.char_pos
+        char_pos = self.recorder.char_pos
         return self.text[char_pos: char_pos + length]
 
     def get_locked_chars(self):
@@ -77,7 +77,7 @@ class CommonLexer(ABC):
         Returns:
             str: current characters from the locked position to the current position
         """
-        begin, end = self.position.get_locked_char_pos()
+        begin, end = self.recorder.locked_char_pos
         return self.text[begin:end]
 
     def current_chars_are(self, chars):
@@ -106,15 +106,15 @@ class CommonLexer(ABC):
             unlock (bool, defaults to False): Whethre to unlock after creating the token or not
         """
         if position is None:
-            position = self.position.create_instance()
+            position = self.recorder.position
 
-        if self.position.locked:
+        if self.recorder.locked:
             value = self.get_locked_chars()
 
         token = Token(position, token_type, value)
 
         if unlock:
-            self.position.unlock()
+            self.recorder.unlock()
 
         if advance:
             self.advance_chars(token.value)
@@ -123,4 +123,6 @@ class CommonLexer(ABC):
 
     @abstractmethod
     def __repr__(self):
-        pass
+        if self.reached_eof:
+            return "CommonLexer[pos={}, reached_eof={}]".format(repr(self.recorder), self.reached_eof)
+        return "CommonLexer[pos={}, reached_eof={}, current_char={}]".format(repr(self.recorder), self.reached_eof, repr(self.get_char()))
