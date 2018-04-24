@@ -1,6 +1,12 @@
-from token_types import TokenType, SimpleToken, StatementToken, WhitespaceToken, SelectorSimpleToken, SelectorTokenType, ALL_TYPES, SIMPLE_TOKEN_VALUES, STATEMENT_TOKEN_VALUES
+from token_types import SimpleToken, StatementToken, TokenType, ALL_TYPES, ALL_TOKENS, SIMPLE_TOKEN_VALUES, STATEMENT_TOKEN_VALUES
 
 class Token:
+    # invalid types are all types that have preset values
+    invalid_types = ALL_TYPES ^ ALL_TOKENS
+
+    # required types are tokens that require values
+    required_types = ALL_TOKENS
+
     def __init__(self, pos, token_type, value=None):
         """
         Args:
@@ -12,12 +18,9 @@ class Token:
         self.type = token_type
         self.value = value
 
-        invalid_types = (TokenType, SelectorTokenType)
-        required_types = (SimpleToken, WhitespaceToken, StatementToken, SelectorSimpleToken)
-
         if self.value is None:
-            assert not isinstance(self.type, invalid_types), "A value is required for a token type (type={}, pos={})".format(self.type, self.pos)
-            assert isinstance(self.type, required_types), "The type {} must be a required type of {}".format(required_types, repr(token_type))
+            assert not self.type in Token.invalid_types, "A value is required for a token type (type={}, pos={})".format(self.type, self.pos)
+            assert self.type in Token.required_types, "The type {} must be a required type of {}".format(Token.required_types, repr(token_type))
             self.value = self.type.value
 
     def matches(self, token_type, value=None):

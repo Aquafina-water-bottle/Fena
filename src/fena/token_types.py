@@ -9,16 +9,16 @@ class TokenType(Enum):
     FLOAT = auto()
     COORD = auto()
     COORDS = auto()
-    DATATAG = auto()
+    JSON = auto()
     STRING = auto()
-    COMMAND = auto()
-    STATEMENT = auto()
+    LITERAL_STRING = auto()
 
 class SimpleToken(Enum):
     """
     Contains the type and value
     """
 
+    QUOTE = '"'
     COLON = ":"
     COMMA = ","
     OPEN_PARENTHESES = "("
@@ -60,7 +60,7 @@ class ScoreboardShortToken(Enum):
     EMPTY = "empty"
     LEAVE = "leave"
 
-SCOREBOARD_SHORTCUT_TOKENS_VALUES = frozenset(token.value for token in ScoreboardShortToken)
+SCOREBOARD_SHORTCUT_TOKEN_VALUES = frozenset(token.value for token in ScoreboardShortToken)
 
 class ExecuteShortToken(Enum):
     AS = "as"
@@ -76,7 +76,7 @@ class ExecuteShortToken(Enum):
     RESULT = "result"
     SUCCESS = "success"
 
-EXECUTE_SHORTCUT_TOKENS_VALUES = frozenset(token.value for token in ExecuteShortToken)
+EXECUTE_SHORTCUT_TOKEN_VALUES = frozenset(token.value for token in ExecuteShortToken)
 
 class ExecuteShortArgsToken(Enum):
     # other
@@ -105,10 +105,8 @@ class ExecuteShortArgsToken(Enum):
 
 
 class SelectorTokenType(Enum):
-    TARGET_SELECTOR_VARIABLE = "selector variable"
-    TARGET_SELECTOR_ARGUMENT = "selector argument"
-    STRING = "string"
-    INT = "int"
+    TARGET_SELECTOR_VARIABLE = auto()
+    TARGET_SELECTOR_ARGUMENT = auto()
 
 class SelectorSimpleToken(Enum):
     BEGIN = "@"
@@ -120,26 +118,42 @@ class SelectorSimpleToken(Enum):
     COMMA = ","
     OPEN_PARENTHESES = "("
     CLOSE_PARENTHESES = ")"
-    END = "end"
 
-SELECTOR_SIMPLE_TOKENS_VALUES = frozenset(token.value for token in SelectorSimpleToken if token.value != "end")
+SELECTOR_SIMPLE_TOKEN_VALUES = frozenset(token.value for token in SelectorSimpleToken if token.value != "end")
 
 
 class NBTSimpleToken(Enum):
+    EMPTY = r"{}"
     BEGIN = "{"
     END = "}"
-    BEGIN_LIST = "["
-    END_LIST = "]"
+    BEGIN_ARRAY = "["
+    END_ARRAY = "]"
+    COLON = ":"
     COMMA = ","
     INT_ARRAY_BEGIN = "I;"
     BYTE_ARRAY_BEGIN = "B;"
     LONG_ARRAY_BEGIN = "L;"
     QUOTE = '"'
 
+    BYTE_END = "b"
+    SHORT_END = "s"
+    LONG_END = "l"
+    FLOAT_END = "f"
+    DOUBLE_END = "d"
 
+NBT_SIMPLE_TOKEN_VALUES = frozenset(token.value for token in SelectorSimpleToken if token.value != "end")
+NBT_NUMBER_END_VALUES = frozenset(token.value for token in 
+    (NBTSimpleToken.BYTE_END, NBTSimpleToken.SHORT_END, NBTSimpleToken.LONG_END, NBTSimpleToken.FLOAT_END, NBTSimpleToken.DOUBLE_END))
 
-ALL_TYPES = (frozenset(TokenType) | frozenset(SelectorTokenType) | frozenset(SimpleToken) | frozenset(WhitespaceToken) | frozenset(StatementToken) | frozenset(SelectorSimpleToken))
-ALL_TOKENS = frozenset(SimpleToken) | frozenset(WhitespaceToken) | frozenset(StatementToken) | frozenset(SelectorSimpleToken)
+def frozenset_union(*types):
+    return_set = frozenset()
+    for enum_type in types:
+        return_set |= frozenset(enum_type)
+    return return_set
+
+ALL_TOKENS = frozenset_union(SimpleToken, WhitespaceToken, StatementToken, SelectorSimpleToken, 
+    ScoreboardShortToken, ExecuteShortToken, ExecuteShortArgsToken, NBTSimpleToken)
+ALL_TYPES = frozenset_union(ALL_TOKENS, TokenType, SelectorTokenType)
 
 
 def test():

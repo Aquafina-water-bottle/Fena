@@ -163,7 +163,7 @@
         LeftLeg:[0f,0f,0f],
         RightLeg:[0f,0f,0f]},
         ArmorItems:[{},{},{},
-        {id:quartz_stairs,Count:1}]}
+            {id:quartz_stairs,Count:1}]}
 
     
 !mfunc selector_test
