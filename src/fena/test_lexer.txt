@@ -44,7 +44,7 @@
         say @s
         @r _ti + 1
         @a[_pl=1]:
-            pl = 0
+            _pl = 0
             playsound:
                 sound_1 voice @a
                 sound_2 voice @a
@@ -53,13 +53,13 @@
         effect_1 20 0 true
         effect_2 20 0 true
     
-    @e[type=armor_stand,_ti=(0..20)] say @s
-    @e[type=armor_stand,_ti=(0..20)] @r _ti + 1
-    @e[type=armor_stand,_ti=(0..20)] @a[_pl=1] _pl = 0
-    @e[type=armor_stand,_ti=(0..20)] @a[_pl=1] playsound sound_1 voice @a
-    @e[type=armor_stand,_ti=(0..20)] @a[_pl=1] playsound sound_2 voice @a
-    @e[type=armor_stand,_ti=0] : effect @a[_pl=0] effect_1 20 0 true
-    @e[type=armor_stand,_ti=0] : effect @a[_pl=0] effect_2 20 0 true
+    # @e[type=armor_stand,_ti=(0..20)] say @s
+    # @e[type=armor_stand,_ti=(0..20)] @r _ti + 1
+    # @e[type=armor_stand,_ti=(0..20)] @a[_pl=1] _pl = 0
+    # @e[type=armor_stand,_ti=(0..20)] @a[_pl=1] playsound sound_1 voice @a
+    # @e[type=armor_stand,_ti=(0..20)] @a[_pl=1] playsound sound_2 voice @a
+    # @e[type=armor_stand,_ti=0] : effect @a[_pl=0] effect_1 20 0 true
+    # @e[type=armor_stand,_ti=0] : effect @a[_pl=0] effect_2 20 0 true
 
 !mfunc scoreboard_test
     @s: @e[type=armor_stand,_stand] _ti - 1 {DisabledSlots:2096896}
@@ -257,31 +257,3 @@
 
     empty _d_y
     scoreboard teams empty _d_y
-    
-
-# (using my own syntax for a grammar lol)
-# program ::= suite
-# suite ::= [statement, command]*
-
-# statement ::= "!" && [path_stmt, mfunc_stmt]
-# path_stmt ::= "path" && STR
-# mfunc_stmt ::= "mfunc" && STR && NEWLINE & INDENT && suite && DEDENT
-
-# command ::= [leading_cmd]* && ending_cmd 
-# leading_cmd ::= [execute_cmd, (LEADING_START && (STR)*)]
-# execute_cmd ::= "execute"? && selector && coords? && (["detect", "ifblock"] && coords? && block && [INT, STR]?)?
-
-# ending_cmd ::= [players_cmd, teams_cmd, tag_cmd, regular_cmd]
-# players_cmd ::= [players_math_cmd, players_test_cmd, players_obj_cmd]
-# players_math_cmd ::= selector && STR && ["+", "-", "="] && INT && (DATATAG)?
-# players_test_cmd ::= selector && STR && ["?"] && INT && (INT)?
-# players_obj_cmd ::= selector && ["reset", "enable"] && STR
-
-# teams_cmd ::= [team_join_cmd, team_leave_cmd, team_empty_cmd]
-# team_join_cmd ::= "join" && STR && selector
-# team_leave_cmd ::= "leave" && selector
-# team_empty_cmd ::= "empty" && STR
-
-# tag_cmd ::= selector && ["+", "-"] && STR && (DATATAG)?
-
-# regular_cmd ::= REGULAR_START && [selector, STR]*    

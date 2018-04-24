@@ -5,10 +5,10 @@ import os
 import logging
 
 from token_types import TokenType, SimpleToken, WhitespaceToken, StatementToken, ALL_TOKENS, STATEMENT_TOKEN_VALUES
-from mcfunction import McFunction
-from commands import Command, SimpleCommand, ExecuteCommand, ScoreboardCommand, FunctionCommand
-from config_data import ConfigData
+from mcfunction import McFunctionBuilder
+from command_builder import CommandBuilder
 from scoped_symbol_table import ScopedSymbolTable
+from common_parser import CommonParser
 
 """
 Organizes all lines into their respective mcfunctions
@@ -43,58 +43,36 @@ tag_cmd ::= selector && ["+", "-"] && STR && (DATATAG)?
 regular_cmd ::= REGULAR_START && [selector, STR]*
 """
 
-class Parser:
+class Parser(CommonParser):
     def __init__(self, lexer, file_path):
-        self.lexer = lexer
-
-        self.config_data = ConfigData()
+        super().__init__(__class__.__name__, lexer)
 
         # requires an mcfunction to be set for commands to be used
         # and an mcfunction cannot be set if one has already been set
-        self.current_token = None
         self.symbol_table = ScopedSymbolTable()
         self.file_path = file_path
 
-        # the full path to the mcfunction file output
-        # defaults to /mcfunctions/
-        # self.file_path = "mcfunctions"
-
         # list of all mcfunctions avaliable
         self.mcfunctions = []
-
-        self.advance()
 
     def parse(self):
         logging.debug("Original symbol table: {}".format(repr(self.symbol_table)))
         self.program()
         logging.debug("Final symbol table: {}".format(repr(self.symbol_table)))
         logging.debug("")
+        logging.debug("Begin building")
 
-    def error(self, message=None):
-        if message is None:
-            message = "Invalid syntax"
-        raise SyntaxError("{} : {}".format(repr(self.current_token), message))
+        # builds all mcfunctions
+        CommandBuilder.initialize(self.symbol_table, self.mcfunctions)
+        # built_mcfunctions = []
+        # for mcfunction in self.mcfunctions:
+        #     built_mcfunctions.append(mcfunction.build())
 
-    def eat(self, token_type, value=None, error_message=None):
-        """
-        Advances given the token type and values match up with the current token
-
-        Args:
-            token_type (any token type)
-            value (any, defaults to None)
-        """
-
-        if (value is None or self.current_token.value == value) and self.current_token.matches(token_type):
-            self.advance()
-
-        else:
-            self.error(error_message)
+        # self.mcfunctions = built_mcfunctions
+        logging.debug("End building")
 
     def advance(self):
-        """
-        Gets the next token from the lexer without checking any type
-        """
-        self.current_token = self.lexer.get_next_token()
+        super().advance()
         logging.debug("Advanced to {}".format(repr(self.current_token)))
 
     def program(self):
@@ -103,7 +81,7 @@ class Parser:
         """
         logging.debug("Begin program at {}".format(repr(self.current_token)))
 
-        while self.current_token.matches_any_of(WhitespaceToken.NEWLINE, SimpleToken.STATEMENT):
+        while self.current_token is not None and self.current_token.matches_any_of(WhitespaceToken.NEWLINE, SimpleToken.STATEMENT_SPECIFIER):
             # skips all newlines
             if self.current_token.matches(WhitespaceToken.NEWLINE):
                 self.eat(WhitespaceToken.NEWLINE)
@@ -124,12 +102,12 @@ class Parser:
         # note that this is essentially a do-while since it never starts out as a newline
         met_newline = True
         while met_newline:
-            if not commands_only and self.current_token.matches(SimpleToken.STATEMENT):
+            if not commands_only and self.current_token.matches(SimpleToken.STATEMENT_SPECIFIER):
                 # does a continue since the statement might be a compound and not end in a newline
                 self.statement()
                 continue
 
-            elif self.current_token.matches_any_of(TokenType.STRING, TokenType.SELECTOR):
+            elif self.current_token.matches_any_of(TokenType.COMMAND):
                 self.command()
                 continue
 
@@ -153,7 +131,7 @@ class Parser:
         statement ::= "!" && [folder_stmt, mfunc_stmt]
         """
         # all here should start with "!"
-        self.eat(SimpleToken.STATEMENT)
+        self.eat(SimpleToken.STATEMENT_SPECIFIER)
 
         if self.current_token.value in STATEMENT_TOKEN_VALUES:
             self.current_token.cast(StatementToken)
@@ -189,7 +167,7 @@ class Parser:
 
         # new scoped symbol table for the mcfunction stmt
         self.symbol_table = ScopedSymbolTable(enclosing_scope=self.symbol_table)
-        self.symbol_table.function = McFunction(full_path, self.symbol_table.prefix)
+        self.symbol_table.function = McFunctionBuilder(full_path)
 
         # guaranteed string token here
         self.advance()
@@ -271,26 +249,22 @@ class Parser:
         self.symbol_table = self.symbol_table.enclosing_scope
 
     def command(self):
+        """
+        command ::= (STR)+ && (":" & (NEWLINE)* & INDENT && command_suite && DEDENT)?
+        """
         # checks whether the command can actually be added to an mcfunction or not
         if self.symbol_table.function is None:
             self.error("No assigned mcfunction for command")
 
-        command_tokens = []
-        contains_execute = False
-        while not (self.lexer.reached_eof or self.current_token.matches_any_of(WhitespaceToken.NEWLINE, WhitespaceToken.DEDENT)):
-            command_tokens.append(self.current_token)
-            self.advance()
-            if self.current_token.matches(SimpleToken.COLON):
-                contains_execute = True
-        
+        # command = self.current_token.value
+        # print(command)
+        command = self.eat(TokenType.COMMAND)
+
         # checks whether a command suite can be used by seeing if the last token of a command is a colon
         # the reason why it has a colon is because a colon is valid in the middle of a command when used as an execute shortcut
-        if command_tokens[-1].matches(SimpleToken.COLON):
+        if command.value[-1] == ":":
             self.symbol_table = ScopedSymbolTable(enclosing_scope=self.symbol_table)
-            self.symbol_table.add_command_slice(command_tokens[:-1])
-
-            command_slice = " ".join(x.value for x in (self.symbol_table.command_slices))
-            print(command_slice, contains_execute)
+            self.symbol_table.add_command_slice(command)
 
             # skips any and all newlines
             while self.current_token.matches(WhitespaceToken.NEWLINE):
@@ -303,17 +277,12 @@ class Parser:
             self.symbol_table = self.symbol_table.enclosing_scope
 
         else:
-            command_tokens = self.symbol_table.command_slices + command_tokens
-            command = Command(command_tokens)
+            command.value = self.symbol_table.command_slices + command.value
             self.symbol_table.function.add_command(command)
-
-    def _debug(self):
-        logging.debug("McFunctions assigned: {}".format(len(self.mcfunctions)))
-        for mcfunction in self.mcfunctions:
-            logging.debug("")
-            logging.debug(mcfunction.path)
-            for command in mcfunction.commands:
-                logging.debug(command)
+    
+    def __repr__(self):
+        return "Parser[common={}, symbol_table={}, file_path={}, mcfunctions={}]".format(
+            super().__repr__(), self.symbol_table, self.file_path, self.mcfunctions)
 
 if __name__ == "__main__":
     from lexer import Lexer
@@ -333,4 +302,7 @@ if __name__ == "__main__":
 
     mcfunctions = parser.mcfunctions
     for mcfunction in mcfunctions:
-        mcfunction.debug_commands()
+        logging.debug("")
+        logging.debug(str(mcfunction))
+        for command in mcfunction.commands:
+            logging.debug(repr(command))

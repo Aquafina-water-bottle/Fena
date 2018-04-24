@@ -59,7 +59,7 @@ class TokenPositionRecorder:
         """
         assert isinstance(position, TokenPosition)
 
-        self.char_pos = position.char_pos
+        # self.char_pos = position.char_pos
         self.row = position.row
         self.column = position.column
 

@@ -1,6 +1,9 @@
 import os
 import itertools
 
+from token_types import TokenType
+from lexical_token import Token
+
 class ScopedSymbolTable:
     """
     Attributes:
@@ -11,8 +14,8 @@ class ScopedSymbolTable:
         function (McFunction or None)
         constobj (str or None)
         prefix (str or None)
-        folders (list)
-        command_slices (list)
+        folders (tuple of strs)
+        command_slices (tuple of strs)
     """
 
     def __init__(self, enclosing_scope=None):
@@ -24,8 +27,8 @@ class ScopedSymbolTable:
             self._function = None
             self._constobj = None
             self._prefix = None
-            self._folders = []
-            self._command_slices = []
+            self._folders = ()
+            self._command_slices = ()
 
         else:
             assert isinstance(self.enclosing_scope, ScopedSymbolTable)
@@ -34,16 +37,37 @@ class ScopedSymbolTable:
             self._function = enclosing_scope._function
             self._constobj = enclosing_scope._constobj
             self._prefix = enclosing_scope._prefix
-            self._folders = enclosing_scope._folders.copy()
-            self._command_slices = enclosing_scope._command_slices.copy()
+            self._folders = enclosing_scope._folders
+            self._command_slices = enclosing_scope._command_slices
+
+        self._update_command_slices()
 
     def add_folder(self, folder):
         assert isinstance(folder, str)
-        self._folders.append(folder)
+        self._folders += (folder,)
 
     def add_command_slice(self, command_slice):
-        assert isinstance(command_slice, list)
-        self._command_slices.append(command_slice)
+        """
+        Updates the command slice by adding the proper string to the tuple
+
+        Args:
+            command_slice (Token): Token with type COMMAND
+        """
+        valid_type = Token
+        assert isinstance(command_slice, valid_type), "Expected {} but got {}".format(valid_type, type(command_slice))
+        valid_token_type = TokenType.COMMAND
+        assert command_slice.matches(valid_token_type), "Expected {} but got {}".format(valid_token_type, command_slice.type)
+        assert command_slice.value[-1] == ":", "Expected ':' but got {}".format(command_slice.value[-1])
+
+        self._command_slices += (command_slice.value[:-1],)
+        self._update_command_slices()
+
+    def _update_command_slices(self):
+        if self._command_slices:
+            # adds a leading whitespace so commands can be properly added to it
+            self._command_slices_str = " ".join(self._command_slices) + " "
+        else:
+            self._command_slices_str = ""
 
     @property
     def function(self):
@@ -87,8 +111,8 @@ class ScopedSymbolTable:
         """
         Returns:
             str: The string representation of the folder concatenation
+                returns a 0 length string if folders is an empty list
         """
-        # returns a 0 width string if folders is an empty list
         if not self._folders:
             return None
         return os.path.join(*self._folders)
@@ -96,12 +120,13 @@ class ScopedSymbolTable:
     @property
     def command_slices(self):
         """
-        Concatenation of lists inside list: https://stackoverflow.com/a/716482
+        Concatenation of all strings in a tuple into one string
 
         Returns:
-            list of Tokens: The concatenation of all command slices
+            str: The concatenation of all command slices
+                This also adds an extra space at the end so commands can be properly added to it
         """
-        return list(itertools.chain.from_iterable(self._command_slices))
+        return self._command_slices_str
 
     def __str__(self):
         return "[function={}, constobj={}, prefix={}, folders={}, command_slices={}]".format(

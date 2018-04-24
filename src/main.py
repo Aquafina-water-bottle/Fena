@@ -12,7 +12,8 @@ import fena.logging_setup
 import fena.file
 import fena.lexer
 import fena.parser
-import fena.interpreter
+import fena.writer
+# import fena.interpreter
 
 semantic_version = "s6.0.0"
 public_version = "v0.3.0-ALPHA"
@@ -55,11 +56,16 @@ def main():
 
     lexer = fena.lexer.Lexer(text)
     parser = fena.parser.Parser(lexer, output_path)
-    interpreter = fena.interpreter.Interpreter(parser)
-    mcfunctions = interpreter.interpret(output_path)
+    parser.parse()
 
-    fena.file.write_parsed_cmds(mcfunctions, args)
-    fena.file.write_mc_functions(mcfunctions, args)
+    writer = fena.writer.Writer(parser.mcfunctions, args)
+    writer.write()
+
+    # interpreter = fena.interpreter.Interpreter(parser)
+    # mcfunctions = interpreter.interpret(output_path)
+
+    # fena.file.write_parsed_cmds(mcfunctions, args)
+    # fena.file.write_mc_functions(mcfunctions, args)
 
 
 if __name__ == '__main__':

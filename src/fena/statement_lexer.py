@@ -8,7 +8,7 @@ class StatementLexer(CommonLexer):
         token_num (int): What token position the lexer is currently at
     """
     def __init__(self):
-        super().__init__(text=None)
+        super().__init__(__class__.__name__, text=None)
         self.token_num = 0
         self.reached_eof = True
 
@@ -50,15 +50,6 @@ class StatementLexer(CommonLexer):
             self.token_num += 1
             yield token
 
-        # return self.create_new_token(WhitespaceToken.EOF)
-
-    def error(self, message=None):
-        return super().error(__class__.__name__, message)
-
-    def skip_whitespace(self):
-        while not self.reached_eof and (self.get_char().isspace() and self.get_char() != "\n"):
-            self.advance()
-
     def get_string(self):
         """
         Simply gets the current string until next whitespace
@@ -77,15 +68,6 @@ class StatementLexer(CommonLexer):
             self.error("Got a 0 length string")
 
         return self.create_new_token(TokenType.STRING, unlock=True)
-
-    def advance(self, increment=1):
-        assert isinstance(increment, int)
-        while increment > 0 and not self.reached_eof:
-            self.recorder.increment_row()
-            increment -= 1
-
-            if self.recorder.char_pos > len(self.text) - 1:
-                self.reached_eof = True
 
     def __repr__(self):
         return "StatementLexer[common={}, token_num={}]".format(super().__repr__(), self.token_num)

@@ -7,36 +7,59 @@ class CommonParser(ABC):
         parser_type (str)
 
     Attributes:
-        lexer (CommonLexer)
+        iterator (CommonLexer)
         parser_type (str)
         current_token (Token)
     """
         
-    def __init__(self, lexer):
-        self.lexer = lexer
-        self.current_token = self.advance()
-
-    def advance(self):
-        self.current_token = self.lexer.get_next_token()
-
-    def eat(self, token_type, error_message=None):
-        if error_message is None:
-            error_message = "{} Syntax Error".format(repr(__class__.__name__))
-        if not self.current_token.type.matches(token_type):
-            raise SyntaxError("{} : {}".format(repr(self.current_token), error_message))
+    def __init__(self, class_name, lexer):
+        self.class_name = class_name
+        self.iterator = iter(lexer)
+        self.current_token = None
         self.advance()
 
     @abstractmethod
     def parse(self):
         pass
 
+    def error(self, message=None):
+        if message is None:
+            message = "Invalid syntax"
+        raise SyntaxError("{} {}: {}".format(self.class_name, self.current_token, message))
+
+    def advance(self):
+        """
+        Gets the next token from the lexer without checking any type
+        """
+        self.current_token = next(self.iterator, None)
+
+    def eat(self, token_type, value=None, error_message=None):
+        """
+        Advances given the token type and values match up with the current token
+
+        Args:
+            token_type (any token type)
+            value (any, defaults to None)
+        """
+
+        if (value is None or self.current_token.value == value) and self.current_token.matches(token_type):
+            token = self.current_token
+            self.advance()
+
+        else:
+            if error_message is None:
+                error_message = "Expected {}".format(token_type)
+            self.error(error_message)
+
+        return token
+
     @abstractmethod
     def __repr__(self):
-        return "CommonParser[lexer={}, current_token={}]".format(repr(self.lexer), repr(self.current_token))
+        return "CommonParser[iterator={}, current_token={}]".format(repr(self.iterator), repr(self.current_token))
 
 
 def test():
-    # from common_lexer import CommonLexer
+    # from common_iterator import CommonLexer
 
     # class Test(CommonParser):
     #     pass

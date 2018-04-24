@@ -19,25 +19,12 @@ class SimpleToken(Enum):
     Contains the type and value
     """
 
-    STATEMENT_SPECIFIER = "!"
     COLON = ":"
-    PLUS = "+"
-    MINUS = "-"
-    EQUALS = "="
-    TEST = "?"
     COMMA = ","
     OPEN_PARENTHESES = "("
     CLOSE_PARENTHESES = ")"
-    RESET = "reset"
-    ENABLE = "enable"
-    JOIN = "join"
-    EMPTY = "empty"
-    LEAVE = "leave"
-    DETECT = "detect"
-    IFBLOCK = "ifblock"
 
 SIMPLE_TOKEN_VALUES = frozenset(token.value for token in SimpleToken)
-
 
 class WhitespaceToken(Enum):
     COMMENT = "#"
@@ -51,14 +38,70 @@ WHITESPACE_TOKEN_VALUES = frozenset(token.value for token in WhitespaceToken)
 
 class StatementToken(Enum):
     """
-    Contains all possible keyword tokens proceeded after a "!" 
+    Contains all possible keyword tokens proceeded after a "!" and the "!" token
     """
+    STATEMENT_SPECIFIER = "!"
     MFUNC = "mfunc"
     FOLDER = "folder"
     PREFIX = "prefix"
     CONSTOBJ = "constobj"
 
 STATEMENT_TOKEN_VALUES = frozenset(token.value for token in StatementToken)
+
+
+class ScoreboardShortToken(Enum):
+    PLUS = "+"
+    MINUS = "-"
+    EQUALS = "="
+    TEST = "?"
+    RESET = "reset"
+    ENABLE = "enable"
+    JOIN = "join"
+    EMPTY = "empty"
+    LEAVE = "leave"
+
+SCOREBOARD_SHORTCUT_TOKENS_VALUES = frozenset(token.value for token in ScoreboardShortToken)
+
+class ExecuteShortToken(Enum):
+    AS = "as"
+    POS = "pos"
+    AT = "at"
+    FACING = "facing"
+    AST = "as at"
+
+    IF = "if"
+    IFNOT = "ifnot"
+    UNLESS = "unless"
+
+    RESULT = "result"
+    SUCCESS = "success"
+
+EXECUTE_SHORTCUT_TOKENS_VALUES = frozenset(token.value for token in ExecuteShortToken)
+
+class ExecuteShortArgsToken(Enum):
+    # other
+    FEET = "feet"
+    EYES = "eyes"
+    AXES = "axes"
+
+    # dimensions
+    OVERWORLD = "overworld"
+    NETHER = "nether"
+    THE_END = "the_end"
+
+    # comparison operators
+    EQUALS = "=="
+    GREATER_THAN = ">"
+    GREATER_THAN_EQUAL = ">="
+    LESS_THAN = "<"
+    LESS_THAN_EQUAL = "<="
+
+    # primative types used for scaling
+    SHORT = "short"
+
+    # bossbar keywords
+    MAX = "max"
+    VALUE = "value"
 
 
 class SelectorTokenType(Enum):
@@ -68,6 +111,7 @@ class SelectorTokenType(Enum):
     INT = "int"
 
 class SelectorSimpleToken(Enum):
+    BEGIN = "@"
     OPEN_BRACKET = "["
     CLOSE_BRACKET = "]"
     EQUALS = "="
@@ -81,7 +125,20 @@ class SelectorSimpleToken(Enum):
 SELECTOR_SIMPLE_TOKENS_VALUES = frozenset(token.value for token in SelectorSimpleToken if token.value != "end")
 
 
-ALL_TYPES = frozenset(TokenType) | frozenset(SelectorTokenType) | frozenset(SimpleToken) | frozenset(WhitespaceToken) | frozenset(StatementToken) | frozenset(SelectorSimpleToken)
+class NBTSimpleToken(Enum):
+    BEGIN = "{"
+    END = "}"
+    BEGIN_LIST = "["
+    END_LIST = "]"
+    COMMA = ","
+    INT_ARRAY_BEGIN = "I;"
+    BYTE_ARRAY_BEGIN = "B;"
+    LONG_ARRAY_BEGIN = "L;"
+    QUOTE = '"'
+
+
+
+ALL_TYPES = (frozenset(TokenType) | frozenset(SelectorTokenType) | frozenset(SimpleToken) | frozenset(WhitespaceToken) | frozenset(StatementToken) | frozenset(SelectorSimpleToken))
 ALL_TOKENS = frozenset(SimpleToken) | frozenset(WhitespaceToken) | frozenset(StatementToken) | frozenset(SelectorSimpleToken)
 
 

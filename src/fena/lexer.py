@@ -3,7 +3,7 @@ if __name__ == "__main__":
 
 import logging
 
-from token_types import TokenType, SimpleToken, WhitespaceToken, StatementToken, SelectorTokenType, SelectorSimpleToken, ALL_TYPES, SELECTOR_SIMPLE_TOKENS_VALUES
+from token_types import TokenType, WhitespaceToken, StatementToken, NBTSimpleToken
 from config_data import ConfigData
 from lexical_token import Token
 from token_position import TokenPosition, TokenPositionRecorder
@@ -11,10 +11,8 @@ from common_lexer import CommonLexer
 from statement_lexer import StatementLexer
 
 class Lexer(CommonLexer):
-    config_data = ConfigData()
-
     def __init__(self, text):
-        super().__init__(text)
+        super().__init__(__class__.__name__, text)
 
         # list of indent strings
         # 1 indent is either 4 spaces or 1 tab space
@@ -33,10 +31,6 @@ class Lexer(CommonLexer):
         This method is responsible for breaking a sentence
         apart into tokens, one token at a time.
         """
-        # yield from self.statement_lexer
-        # if not self.statement_lexer.reached_eof:
-        #     yield next(self.statement_lexer)
-
         # does not require "else" since if it is a selector, it should end in the block above
         while not self.reached_eof:
             # skips all whitespace until \n
@@ -44,6 +38,7 @@ class Lexer(CommonLexer):
                 self.skip_whitespace()
                 continue
 
+            # gets all statement tokens if avaliable
             yield from self.statement_lexer
 
             # handles indents and dedents after newline
@@ -82,41 +77,6 @@ class Lexer(CommonLexer):
         # at the end of file by this point, and it must end with dedent tokens if a newline did not end
         if self.indents > 0:
             yield self.get_dedent()
-
-    def error(self, message=None):
-        return super().error(__class__.__name__, message)
-
-    def advance(self, increment=1):
-        """
-        Advance the "pos" pointer and set the "current_char" variable.
-
-        Args:
-            increment (int): Number of chars that will be incremented
-        """
-        assert isinstance(increment, int)
-
-        # while loop to increment the self.recorder variable
-        while increment > 0 and not self.reached_eof:
-
-            # if the current character is \n, goes to a new line
-            # note that the position increments after this, meaning
-            # that "\n" is actually the previous character
-            if self.current_chars_are(WhitespaceToken.NEWLINE.value):
-                self.recorder.increment_row()
-            else:
-                self.recorder.increment_column()
-
-            if self.recorder.char_pos > len(self.text) - 1:
-                self.reached_eof = True
-
-            increment -= 1
-
-    def skip_whitespace(self):
-        """
-        Skips all whitespace that isn't a newline
-        """
-        while not self.reached_eof and self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
-            self.advance()
 
     def skip_comment(self):
         while not self.reached_eof and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
@@ -209,7 +169,7 @@ class Lexer(CommonLexer):
 
         # however, there are certain things that can only happen after a valid newline,
         # most notably the statement token
-        if self.current_chars_are(SimpleToken.STATEMENT_SPECIFIER.value):
+        if self.current_chars_are(StatementToken.STATEMENT_SPECIFIER.value):
             # return self.create_new_token(SimpleToken.STATEMENT_SPECIFIER, advance=True)
             statement_token = self.get_statement()
             self.statement_lexer.reset(statement_token.value, statement_token.pos)
@@ -240,7 +200,7 @@ class Lexer(CommonLexer):
 
         # otherwise, it just stops when it is a whitespace character or it isn't a special delimiter character
         # TODO: Allow selectors to have datatags
-        while not self.reached_eof and not self.get_char() in ("{", "\n"):
+        while not self.reached_eof and not self.get_char() in (NBTSimpleToken.BEGIN.value, WhitespaceToken.NEWLINE.value):
             self.advance()
 
         result = self.get_locked_chars()
@@ -251,7 +211,7 @@ class Lexer(CommonLexer):
             self.error("Got a 0 length string for a command")
 
         # gets the datatag if possible
-        if self.get_char() == "{":
+        if self.get_char() == NBTSimpleToken.BEGIN.value:
             result += self.get_data_tag()
 
         token_pos = TokenPosition.from_positions(original_pos, self.recorder.position)
@@ -287,9 +247,9 @@ class Lexer(CommonLexer):
                 self.recorder.lock()
                 continue
 
-            if self.current_chars_are("{"):
+            if self.current_chars_are(NBTSimpleToken.BEGIN.value):
                 curly_brackets += 1
-            if self.current_chars_are("}"):
+            if self.current_chars_are(NBTSimpleToken.END.value):
                 curly_brackets -= 1
             self.advance()
 

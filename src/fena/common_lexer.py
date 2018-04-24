@@ -1,6 +1,8 @@
+from abc import ABC, abstractmethod
+
 from lexical_token import Token
 from token_position import TokenPosition, TokenPositionRecorder
-from abc import ABC, abstractmethod
+from token_types import WhitespaceToken
 
 class CommonLexer(ABC):
     """
@@ -11,17 +13,49 @@ class CommonLexer(ABC):
         initial_pos (TokenPosition or None)
     """
 
-    def __init__(self, text, initial_pos=None):
+    def __init__(self, class_name, text, initial_pos=None):
+        self.class_name = class_name
         self.text = text
         self.recorder = TokenPositionRecorder(initial_pos=initial_pos)
+        self.reached_eof = False
+
+    @classmethod
+    def from_lexer(self, class_name, lexer):
+        self.class_name = class_name
+        self.text = lexer.text
+        self.recorder = lexer.recorder
         self.reached_eof = False
 
     @abstractmethod
     def __iter__(self):
         pass
 
-    @abstractmethod
-    def error(self, class_name, message=None):
+    def advance(self, increment=1):
+        """
+        Advances the position
+
+        Args:
+            increment (int): Number of chars that will be incremented
+        """
+        assert isinstance(increment, int)
+
+        # while loop to increment the self.recorder variable
+        while increment > 0 and not self.reached_eof:
+
+            # if the current character is \n, goes to a new line
+            # note that the position increments after this, meaning
+            # that "\n" is actually the previous character
+            if self.current_chars_are(WhitespaceToken.NEWLINE.value):
+                self.recorder.increment_row()
+            else:
+                self.recorder.increment_column()
+
+            if self.recorder.char_pos > len(self.text) - 1:
+                self.reached_eof = True
+
+            increment -= 1
+
+    def error(self, message=None):
         """
         Args:
             class_name (str): Name of the class that will implement this
@@ -30,17 +64,19 @@ class CommonLexer(ABC):
         """
         if message is None:
             message = "Invalid character {char}".format(char=repr(self.get_char()))
-        raise TypeError("{name}{pos}: {message}".format(name=class_name, pos=self.recorder, message=message))
+        raise TypeError("{name}{pos}: {message}".format(name=self.class_name, pos=self.recorder, message=message))
 
-    @abstractmethod
-    def advance(self, increment):
+    def skip_whitespace(self, skip_newline=False):
         """
-        Advances the position
+        Skips all whitespace that isn't a newline
+        """
+        if skip_newline:
+            while not self.reached_eof and self.get_char().isspace():
+                self.advance()
+        else:
+            while not self.reached_eof and self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
+                self.advance()
 
-        Args:
-            increment (int): Number of chars that will be incremented
-        """
-        pass
 
     def advance_chars(self, chars):
         """
@@ -60,6 +96,8 @@ class CommonLexer(ABC):
         Returns:
             int: current characters from the current position given the length
         """
+        if self.reached_eof:
+            return None
         char_pos = self.recorder.char_pos
         return self.text[char_pos]
 
