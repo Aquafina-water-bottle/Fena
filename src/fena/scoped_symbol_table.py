@@ -1,8 +1,10 @@
 import os
 import itertools
+import copy
 
 from token_types import TokenType
 from lexical_token import Token
+from command_builder import CommandBuilder
 
 class ScopedSymbolTable:
     """
@@ -15,7 +17,6 @@ class ScopedSymbolTable:
         constobj (str or None)
         prefix (str or None)
         folders (tuple of strs)
-        command_slices (tuple of strs)
     """
 
     def __init__(self, enclosing_scope=None):
@@ -24,50 +25,27 @@ class ScopedSymbolTable:
         if enclosing_scope is None:
             self.scope_level = 0
             self.is_global = True
+
             self._function = None
+            self._command_builder = None
             self._constobj = None
             self._prefix = None
             self._folders = ()
-            self._command_slices = ()
 
         else:
             assert isinstance(self.enclosing_scope, ScopedSymbolTable)
-            self.is_global = False
             self.scope_level = enclosing_scope.scope_level + 1
+            self.is_global = False
+
             self._function = enclosing_scope._function
+            self._command_builder = enclosing_scope._command_builder
             self._constobj = enclosing_scope._constobj
             self._prefix = enclosing_scope._prefix
             self._folders = enclosing_scope._folders
-            self._command_slices = enclosing_scope._command_slices
-
-        self._update_command_slices()
 
     def add_folder(self, folder):
         assert isinstance(folder, str)
         self._folders += (folder,)
-
-    def add_command_slice(self, command_slice):
-        """
-        Updates the command slice by adding the proper string to the tuple
-
-        Args:
-            command_slice (Token): Token with type COMMAND
-        """
-        valid_type = Token
-        assert isinstance(command_slice, valid_type), "Expected {} but got {}".format(valid_type, type(command_slice))
-        valid_token_type = TokenType.COMMAND
-        assert command_slice.matches(valid_token_type), "Expected {} but got {}".format(valid_token_type, command_slice.type)
-        assert command_slice.value[-1] == ":", "Expected ':' but got {}".format(command_slice.value[-1])
-
-        self._command_slices += (command_slice.value[:-1],)
-        self._update_command_slices()
-
-    def _update_command_slices(self):
-        if self._command_slices:
-            # adds a leading whitespace so commands can be properly added to it
-            self._command_slices_str = " ".join(self._command_slices) + " "
-        else:
-            self._command_slices_str = ""
 
     @property
     def function(self):
@@ -80,6 +58,17 @@ class ScopedSymbolTable:
         """
         assert self.function is None, "The function can only be set if one has not already been set"
         self._function = function
+
+    @property
+    def command_builder(self):
+        if self._command_builder is None:
+            self._command_builder = CommandBuilder()
+        return self._command_builder
+
+    # @command_builder.setter
+    # def command_builder(self, command_builder):
+    #     assert isinstance(command_builder, CommandBuilder)
+    #     self._command_builder = command_builder
 
     @property
     def constobj(self):
@@ -117,23 +106,10 @@ class ScopedSymbolTable:
             return None
         return os.path.join(*self._folders)
 
-    @property
-    def command_slices(self):
-        """
-        Concatenation of all strings in a tuple into one string
-
-        Returns:
-            str: The concatenation of all command slices
-                This also adds an extra space at the end so commands can be properly added to it
-        """
-        return self._command_slices_str
-
     def __str__(self):
-        return "[function={}, constobj={}, prefix={}, folders={}, command_slices={}]".format(
-            self.function, repr(self.constobj), repr(self.prefix), repr(self.folders), self.command_slices
-        )
+        return "[function={}, constobj={}, prefix={}, folders={}, command_builder={}]".format(
+            self.function, repr(self.constobj), repr(self.prefix), repr(self.folders), repr(self.command_builder))
 
     def __repr__(self):
         return "ScopedSymbolTable[scope_level={}, is_global={}, enclosing_scope={}, current_scope={}]".format(
-            self.scope_level, self.is_global, self.enclosing_scope, self
-        )
+            self.scope_level, self.is_global, self.enclosing_scope, str(self))

@@ -54,7 +54,7 @@ def _get_config_data(file_data=None):
     CONFIG_NAME = "../config.ini"
 
     # all possible option keys
-    config_options = ["commands", "leading_commands", "plugin_conflict_commands", "target_selector_variables", "target_selector_arguments"]
+    valid_config_options = frozenset({"commands", "leading_commands", "plugin_conflict_commands", "target_selector_variables", "target_selector_arguments"})
 
     # all keys that have been retrieved
     # this is stored as a set since order doesn't really matter
@@ -74,20 +74,20 @@ def _get_config_data(file_data=None):
     for line in lines:
         option, data = line.split("=")
 
-        if option in config_options:
+        if option in valid_config_options:
             # finds duplicate by checking if there is a new option already inside the retireved options
             if option in retrieved_options:
                 raise SyntaxError("Repeated option {} found in the config file".format(option))
             retrieved_options.add(option)
 
         else:
-            raise SyntaxError("Option {} was not found inside existing config options {}".format(repr(option), config_options))
+            raise SyntaxError("Option {} was not found inside existing config options {}".format(repr(option), valid_config_options))
 
         # gets the list as a split through "," on the RHS
         options[option] = data.split(",")
 
     # checks for a missing option using set difference
-    options_difference = set(config_options) - retrieved_options
+    options_difference = valid_config_options - retrieved_options
 
     # runs only if there are items in the set difference
     # meaning all in the difference are missing

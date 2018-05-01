@@ -1,0 +1,50 @@
+{
+    "limit": {
+        "replaces": "c"
+    },
+
+    "gamemode": {
+        "replaces": "m",
+        "group": "only_negation",
+        "values": {
+            "0": "survival",
+            "1": "creative",
+            "2": "adventure",
+            "3": "spectator"
+        }
+    },
+
+    "sort": {
+        "replaces": "s",
+        "values": {
+            "a": "arbitrary",
+            "r": "random",
+            "c": "closest",
+            "f": "furthest"
+        }
+    },
+
+    "distance": {
+        "replaces": "dist",
+        "1.12_range": ["rm", "r"]
+    },
+
+    "level": {
+        "replaces": "lvl",
+        "1.12_range": ["l", "lm"]
+    },
+    
+    "x_rotation": {
+        "replaces": "x_rot",
+        "1.12_range": ["rx", "rxm"]
+    },
+    
+    "y_rotation": {
+        "replaces": "y_rot",
+        "1.12_range": ["ry", "rym"]
+    },
+
+    "type": {
+        "group": "only_negation"
+    }
+}

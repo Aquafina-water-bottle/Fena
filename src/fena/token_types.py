@@ -4,20 +4,22 @@ class TokenType(Enum):
     """
     Contains only a token type since the value is arbitrary
     """
-    SELECTOR = auto()
     INT = auto()
     FLOAT = auto()
-    COORD = auto()
-    COORDS = auto()
-    JSON = auto()
     STRING = auto()
     LITERAL_STRING = auto()
+    COORD = auto()
+    COORDS = auto()
+    NBT = auto()
+    JSON = auto()
+    BLOCK = auto()
+    DETECT = auto()
+    SELECTOR = auto()
 
 class SimpleToken(Enum):
     """
     Contains the type and value
     """
-
     QUOTE = '"'
     COLON = ":"
     COMMA = ","
@@ -97,7 +99,12 @@ class ExecuteShortArgsToken(Enum):
     LESS_THAN_EQUAL = "<="
 
     # primative types used for scaling
+    BYTE = "byte"
     SHORT = "short"
+    INT = "int"
+    LONG = "long"
+    FLOAT = "float"
+    DOUBLE = "double"
 
     # bossbar keywords
     MAX = "max"

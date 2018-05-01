@@ -41,43 +41,12 @@ class Lexer:
             if self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
                 self.skip_whitespace()
 
-            # gets all statement tokens if avaliable
-            # yield from self.statement_lexer
-
             # handles indents and dedents after newline
             elif self.current_chars_are(WhitespaceToken.NEWLINE.value):
-                # can return a single indent token, single dedent token or nothing at all
-                # this will be ran multiple times if there are multiple dedents in one line
                 yield from self.handle_newline()
-                # whitespace_token = self.handle_newline()
-                # if whitespace_token is not None:
-                #     yield whitespace_token
-                # continue
 
             else:
                 yield from self.get_command()
-
-            # if self.current_chars_are(SimpleToken.OPEN_PARENTHESES.value):
-            #     return self.create_new_token(SimpleToken.OPEN_PARENTHESES, advance=True)
-
-            # if self.current_chars_are(SimpleToken.CLOSE_PARENTHESES.value):
-            #     return self.create_new_token(SimpleToken.CLOSE_PARENTHESES, advance=True)
-
-            # if self.current_chars_are(SimpleToken.COMMA.value):
-            #     return self.create_new_token(SimpleToken.COMMA, advance=True)
-
-            # if self.current_chars_are(SimpleToken.COLON.value):
-            #     return self.create_new_token(SimpleToken.COLON, advance=True)
-
-            # gets selector
-            # if self.current_chars_are("@"):
-            #     return self.get_selector()
-
-            # gets datatag
-            # if self.current_chars_are("{"):
-            #     return self.get_data_tag()
-
-            # return self.get_string()
 
         # at the end of file by this point, and it must end with dedent tokens if a newline did not end
         if self.indents > 0:
@@ -366,28 +335,6 @@ class Lexer:
 
             self.skip_whitespace()
 
-        # original_pos = self.recorder.position
-        # self.recorder.lock()
-
-        # # otherwise, it just stops when it is a whitespace character or it isn't a special delimiter character
-        # # TODO: Allow selectors to have datatags
-        # while not self.reached_eof and not self.get_char() in (NBTSimpleToken.BEGIN.value, WhitespaceToken.NEWLINE.value):
-        #     self.advance()
-
-        # result = self.get_locked_chars()
-        # self.recorder.unlock()
-
-        # # checks if the result is a 0 length string
-        # if not result:
-        #     self.error("Got a 0 length string for a command")
-
-        # # gets the datatag if possible
-        # if self.get_char() == NBTSimpleToken.BEGIN.value:
-        #     result += self.get_data_tag()
-
-        # token_pos = TokenPosition.from_positions(original_pos, self.recorder.position)
-        # return self.create_new_token(TokenType.COMMAND, value=result, position=token_pos)
-
     def get_selector(self):
         """
         Gets all selector tokens (handles selector variables and brackets)
@@ -401,7 +348,7 @@ class Lexer:
 
         yield self.create_new_token(SelectorTokenType.TARGET_SELECTOR_VARIABLE, value=self.get_chars(2), advance=True)
 
-        # starts getting the tokens inside the square brackets []
+        # starts getting the tokens inside square brackets including the square brackets
         if self.current_chars_are(SelectorSimpleToken.OPEN_BRACKET.value):
             yield self.create_new_token(SelectorSimpleToken.OPEN_BRACKET, advance=True)
             yield from self.get_selector_arguments()
@@ -409,7 +356,7 @@ class Lexer:
 
     def get_selector_arguments(self):
         """
-        Gets all selector arguments
+        Gets all selector arguments inside the square brackets []
         """
         while not self.current_chars_are(SelectorSimpleToken.CLOSE_BRACKET.value):
             if self.get_char().isspace():
@@ -434,28 +381,32 @@ class Lexer:
                 self.error()
 
     def get_literal_string(self):
-        original_pos = self.recorder.position
+        """
+        Returns:
+            Token: Literal string with quotes enclosing it
+        """
 
         # advances the first "
+        self.recorder.lock()
         self.advance()
 
-        result = '"'
         while not self.current_chars_are('"'):
+            # Skips past any \" since it doesn't count as a string end
             if self.current_chars_are(r'\"'):
-                result += '"'
                 self.advance(2)
+
+            # There shouldn't ever be a newline in a string
             elif self.current_chars_are(WhitespaceToken.NEWLINE.value):
                 self.error()
+
+            # Advances normally
             else:
-                result += self.get_char()
                 self.advance()
 
         # advances the last "
         self.advance()
-        result += '"'
 
-        position = TokenPosition.from_positions(original_pos, self.recorder.position)
-        return self.create_new_token(TokenType.LITERAL_STRING, value=result, position=position)
+        return self.create_new_token(TokenType.LITERAL_STRING, unlock=True)
 
     def get_number(self, int_type=TokenType.INT, float_type=TokenType.FLOAT):
         """
@@ -475,7 +426,7 @@ class Lexer:
 
         while self.get_char().isdigit():
             self.advance()
-        if self.get_char() == "." and self.get_chars(2) != "..":
+        if self.get_char() == "." and self.get_chars(2) != "..":  # float
             while self.get_char().isdigit():
                 self.advance()
 
@@ -554,96 +505,9 @@ class Lexer:
 
         # gets the ending bracket token
         yield self.create_new_token(end_type, advance=True)
-    
-        # # skips the first curly bracket
-        # result = "{"
-        # curly_brackets = 1
-        # self.advance()
-
-        # self.recorder.lock()
-
-        # while not self.reached_eof and curly_brackets > 0:
-        #     # handles comments
-        #     if self.current_chars_are(WhitespaceToken.NEWLINE.value):
-        #         # unlocks so newlines and whitespace are not included in the result
-        #         result += self.get_locked_chars()
-        #         self.recorder.unlock()
-
-        #         # skips newline
-        #         self.advance()
-        #         self.skip_whitespace()
-
-        #         if self.get_char() == WhitespaceToken.COMMENT.value:
-        #             self.skip_comment()
-
-        #         self.recorder.lock()
-        #         continue
-
-        #     if self.current_chars_are(NBTSimpleToken.BEGIN.value):
-        #         curly_brackets += 1
-        #     if self.current_chars_are(NBTSimpleToken.END.value):
-        #         curly_brackets -= 1
-        #     self.advance()
-
-        # result += self.get_locked_chars()
-        # self.recorder.unlock()
-
-        # return result
-
-    # def get_selector(self):
-    #     # current_token = None
-    #     # selector_tokens = []
-    #     # while current_token is None or not current_token.matches_any_of(SelectorSimpleToken.END, SimpleToken.COLON):
-    #     #     current_token = self.get_next_token(for_selector=True)
-    #     #     selector_tokens.append(current_token)
-
-    #     self.recorder.lock()
-    #     if self.get_chars(2) not in self.config_data.target_selector_variables:
-    #         self.error("Expected a selector in {}, got {}".format(self.config_data.target_selector_variables, self.get_chars(2)))
-    #     self.advance(2)
-
-    #     # checks whether more of a selector is expected
-    #     if self.current_chars_are("["):
-    #         while not self.current_chars_are("]"):
-    #             self.advance()
-
-    #         # skips the "]"
-    #         self.advance()
-
-    #     token = self.create_new_token(TokenType.SELECTOR)
-    #     self.recorder.unlock()
-
-    #     return token
-    
-    # def get_string(self):
-    #     """
-    #     Simply gets the current string until next whitespace
-
-    #     Returns:
-    #         str: concatenation of the current chars until the next whitespace
-    #     """
-    #     self.recorder.lock()
-
-    #     current_char = self.get_char()
-    #     # otherwise, it just stops when it is a whitespace character or it isn't a special delimiter character
-    #     while not self.reached_eof and not current_char.isspace() and not current_char in ":(),":
-    #         self.advance()
-    #         current_char = self.get_char()
-
-    #     # result = self.get_locked_chars()
-    #     # self.recorder.unlock()
-
-    #     # checks if the result is a 0 length string: error
-    #     if not self.get_locked_chars():
-    #         self.error("Got a 0 length string")
-
-    #     token = self.create_new_token(TokenType.STRING)
-    #     self.recorder.unlock()
-
-    #     return token
 
     def __repr__(self):
-        return "Lexer[common={}, indents={}, handle_newline={}]".format(super().__repr__(), self.indents, self.handle_newline)
+        return "Lexer[text={}, recorder={}, indents={}, reached_eof={}]".format(repr(self.text), repr(self.recorder), self.indents, self.reached_eof)
 
 if __name__ == "__main__":
     # import timeit
@@ -658,8 +522,8 @@ if __name__ == "__main__":
     for token in lexer:
         logging.debug(repr(token))
 
-    # token = True
-    # while token:
-    #     token = next(lexer, None)
-    #     logging.debug(repr(token))
+    # gets only selector tokens
+    lexer = Lexer("@e[x=5,y=4,z=2, type=armor_stand,_Entity, _pl=(5..6), {CustomNameVisible:1b}]")
+    for token in lexer.get_selector():
+        logging.debug(repr(token))
 

@@ -18,28 +18,29 @@
 # in(dimension) -> in dimension
 
 # if(selector) -> if entity selector
-# ifnot(selector) -> unless entity selector
 # if(block_type) -> if block ~ ~ ~ block_type
-# ifnot(block_type) -> unless block ~ ~ ~ block_type
 # if(block_type vec3) -> if block vec3 block_type
-# ifnot(block_type vec3) -> unless block vec3 block_type
-# if(block_type vec3 vec3) -> if block vec3 vec3 block_type
-# ifnot(block_type vec3 vec3) -> unless block vec3 vec3 block_type
+# if(block_type vec3 vec3) -> if blocks vec3 vec3 block_type
 # if(selector objective operator selector2 objective2) -> if score selector objective operator selector2 objective
-# ifnot(selector objective operator selector2 objective2) -> unless score selector objective operator selector2 objective
-# if(selector objective == selector2 objective2) -> if score selector objective = selector2 objective
-# ifnot(selector objective == selector2 objective2) -> unless score selector objective = selector2 objective
-# unless(...) -> ifnot(...)
+# if(selector objective == int) -> if score selector objective matches int
+# if(selector objective < int) -> if score selector objective matches ..(int-1)
+# if(selector objective <= int) -> if score selector objective matches ..(int)
+# if(selector objective > int) -> if score selector objective matches (int+1)..
+# if(selector objective >= int) -> if score selector objective matches (int)..
+# if(objective operator int) -> if score @s objective matches (int)..
+# if(selector objective in int..int) -> if score selector objective matches int..int
+# if(objective in int..int) -> if score @s objective matches int..int
+# unless(...) -> ifnot(...) -> (Literally any if statement but replace "if" with "unless")
 
 # note that auto_type = smallest stored value for integers, double when integer
 # eg. 6 -> byte, 8234 -> short, 628137057 -> int, 2345766241356 -> long, 36.73461 and 5.0 -> double
-# result(coords data_path scale) -> store result block coords data_path auto_type scale
-# success(coords data_path scale) -> store success block coords data_path auto_type scale
+# result(vec3 data_path scale) -> store result block vec3 data_path auto_type scale
+# success(vec3 data_path scale) -> store success block vec3 data_path auto_type scale
 # result(selector data_path scale) -> store result entity selector data_path auto_type scale
 # success(selector data_path scale) -> store success entity selector data_path auto_type scale
 
-# result(coords data_path type scale) -> store result block coords data_path type scale
-# success(coords data_path type scale) -> store success block coords data_path type scale
+# result(vec3 data_path type scale) -> store result block vec3 data_path type scale
+# success(vec3 data_path type scale) -> store success block vec3 data_path type scale
 # result(selector data_path type scale) -> store result entity selector data_path type scale
 # success(selector data_path type scale) -> store success entity selector data_path type scale
 
@@ -110,3 +111,8 @@
     # to store bossbar, note that we have to store either max or value too
     # result(minecraft:green max) -> execute store result bossbar minecraft:green max ...
     # success(idk value) -> execute store success bossbar minecraft:idk value ...
+
+
+!mfunc selector_test
+    # @a[advancements={minecraft:story/mine_diamond={diamond=true},minecraft:story/iron_tools=true}]
+    # naturally @a[advancements={story/mine_diamond={diamond=true},story/iron_tools=true}]

@@ -5,6 +5,24 @@
 !prefix RR
 !constobj constants
 
+!mfunc json_test
+    tellraw @a {"text":"","extra":[
+        {"text":"[","color":"gray"},
+        {"text":"MM","color":"gold","bold":"true",
+            "hoverEvent":{"action":"show_text","value":{"text":"Mastermind","color":"gold"}},
+            "clickEvent":{"action":"run_command","value":"/scoreboard players set @p FLtp 1217546713"}},
+        {"text":"]","color":"gray"},
+        {"text":": "},
+        {"text":"The correct combo is ","color":"green"},
+        {"selector":"@e[type=armor_stand,score_MMrn_min=3,score_MMrn=3,tag=MMCorrect1]"},
+        {"text":", ","color":"green"},
+        {"selector":"@e[type=armor_stand,score_MMrn_min=3,score_MMrn=3,tag=MMCorrect2]"},
+        {"text":", ","color":"green"},
+        {"selector":"@e[type=armor_stand,score_MMrn_min=3,score_MMrn=3,tag=MMCorrect3]"},
+        {"text":" and ","color":"green"},
+        {"selector":"@e[type=armor_stand,score_MMrn_min=3,score_MMrn=3,tag=MMCorrect4]"},
+        {"text":"!","color":"green"}]}
+
 !mfunc execute_test
     # @p ~2 ~1 ~-1 execute @a 3 5.2 -2 @s @r ifblock 2 ~-1 ~ stonebrick 0 @e ifblock stonebrick *: say @a
     @p ~2 ~1 ~-1 @a 3 5.2 -2 @s @r if(stonebrick[0] 2 ~-1 ~) @e if(stonebrick): say @a
@@ -100,30 +118,64 @@
 
     # @e[type=armor_stand,_stand]: ScOP @e[c=1,r=1,type=armor_stand,_stand] _ti = @e[c=1,r=1,type=armor_stand,_stand] _ti2
     # @e[type=armor_stand,_stand]: ScOP @e[c=1,r=1,type=armor_stand,_stand] _ti = 3 Number
+
+    # players_op_objective (selector2=None, objective2=None)
+    # execute @e[type=armor_stand,tag=rr.stand] ~ ~ ~ scoreboard players operation @s rr.ti = Players rr.ti2
     @e[type=armor_stand,_stand]: @s _ti = Players _ti2
+
+    # execute @e[type=armor_stand,tag=rr.stand] ~ ~ ~ scoreboard players operation @s rr.ti = @r rr.ti2
     @e[type=armor_stand,_stand]: @s _ti = @r _ti2
+
+    # execute @e[type=armor_stand,tag=rr.stand] ~ ~ ~ scoreboard players operation @s rr.ti = @r rr.ti
+    @e[type=armor_stand,_stand]: @s _ti = @r
+
+    # execute @e[type=armor_stand,tag=rr.stand] ~ ~ ~ scoreboard players operation @s rr.ti = @s rr.ti2
     @e[type=armor_stand,_stand]: @s _ti = _ti2
+
+    # scoreboard players operation @e[type=armor_stand,tag=rr.stand] rr.ti = Players rr.ti2
     @e[type=armor_stand,_stand] _ti = Players _ti2
+
+    # scoreboard players operation @e[type=armor_stand,tag=rr.stand] rr.ti = @r rr.ti2
     @e[type=armor_stand,_stand] _ti = @r _ti2
+
+    # scoreboard players operation @e[type=armor_stand,tag=rr.stand] rr.ti = @r rr.ti
+    @e[type=armor_stand,_stand] _ti = @r
+    
+    # scoreboard players operation @e[type=armor_stand,tag=rr.stand] rr.ti = @s rr.ti
+    # note that this might be contradictory to what you want
+    # try not to use this format without an execute at the beginning
+    @e[type=armor_stand,_stand] _ti = _ti2
+
+    # shortcut for scoreboard players set ya potato
     @e[type=armor_stand,_stand] _ti = 3
 
     @e[type=armor_stand,_stand]: @s _ti * Players _ti2
     @e[type=armor_stand,_stand]: @s _ti * @r _ti2
     @e[type=armor_stand,_stand]: @s _ti * _ti2
+    @e[type=armor_stand,_stand]: @s _ti * @r
     @e[type=armor_stand,_stand] _ti * Players _ti2
     @e[type=armor_stand,_stand] _ti * @r _ti2
+    @e[type=armor_stand,_stand] _ti * _ti2
+    @e[type=armor_stand,_stand] _ti * @r
+
+    # players_op_const (value as int)
+    # will use the constant objective specifed under !constobj <value>
     @e[type=armor_stand,_stand] _ti * 3
 
     @e[type=armor_stand,_stand]: @s _ti / Players _ti2
     @e[type=armor_stand,_stand]: @s _ti / @r _ti2
     @e[type=armor_stand,_stand]: @s _ti / _ti2
+    @e[type=armor_stand,_stand]: @s _ti / @r
     @e[type=armor_stand,_stand] _ti / Players _ti2
     @e[type=armor_stand,_stand] _ti / @r _ti2
+    @e[type=armor_stand,_stand] _ti / _ti2
+    @e[type=armor_stand,_stand] _ti / @r
     @e[type=armor_stand,_stand] _ti / 3
 
     @e[type=armor_stand,_stand]: @s _ti % Players _ti2
     @e[type=armor_stand,_stand]: @s _ti % @r _ti2
     @e[type=armor_stand,_stand]: @s _ti % _ti2
+    @e[type=armor_stand,_stand]: @s _ti % @r
     @e[type=armor_stand,_stand] _ti % Players _ti2
     @e[type=armor_stand,_stand] _ti % @r _ti2
     @e[type=armor_stand,_stand] _ti % 3
@@ -131,21 +183,29 @@
     @e[type=armor_stand,_stand]: @s _ti + Players _ti2
     @e[type=armor_stand,_stand]: @s _ti + @r _ti2
     @e[type=armor_stand,_stand]: @s _ti + _ti2
+    @e[type=armor_stand,_stand]: @s _ti + @r
     @e[type=armor_stand,_stand] _ti + Players _ti2
     @e[type=armor_stand,_stand] _ti + @r _ti2
+
+    # shortcut for scoreboard players add
     @e[type=armor_stand,_stand] _ti + 3
 
     @e[type=armor_stand,_stand]: @s _ti - Players _ti2
     @e[type=armor_stand,_stand]: @s _ti - @r _ti2
     @e[type=armor_stand,_stand]: @s _ti - _ti2
+    @e[type=armor_stand,_stand]: @s _ti - @r
     @e[type=armor_stand,_stand] _ti - Players _ti2
     @e[type=armor_stand,_stand] _ti - @r _ti2
+
+    # shortcut for scoreboard players remove
     @e[type=armor_stand,_stand] _ti - 3
 
+    # datatag shortcut: should be able to cut through multiple lines
     @e[type=armor_stand,_stand] _ti + 1 {
-        Tags:["RREntity","RRDisplay","RRAestheticsStand"],
+        Tags:["_Entity","_Display","RRAestheticsStand"],
         
-        # it's free real estate
+        # it's free real estate 
+        # comments can be put inside nbt tag declarations but not json (for now)
         DisabledSlots:2096896,
         Marker:1,
         NoGravity:1,

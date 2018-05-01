@@ -1,4 +1,7 @@
+import logging
+
 from token_types import SimpleToken, StatementToken, TokenType, ALL_TYPES, ALL_TOKENS, SIMPLE_TOKEN_VALUES, STATEMENT_TOKEN_VALUES
+from coord_utils import is_coord
 
 class Token:
     # invalid types are all types that have preset values
@@ -52,27 +55,52 @@ class Token:
                 return True
         return False
 
-    def cast(self, token_type):
+    def cast(self, token_type, error_message=None):
         """
         Changes the type of this token without adequate checks, so
         checking is based off of where this method was ran
 
         Args:
             token_type (any token type): What token type this token should change into
+            error_message (str or None): What will be displayed in the error message
         """
-        if token_type == SimpleToken and self.value in SIMPLE_TOKEN_VALUES:
-            self.type = token_type(self.value)
-        elif token_type == StatementToken and self.value in STATEMENT_TOKEN_VALUES:
-            self.type = token_type(self.value)
+        if token_type.isinstance(TokenType):
+            if token_type == TokenType.COORD and is_coord(self.value):
+                self._cast(token_type, is_value=True)
+            else:
+                self._cast_error(token_type, message=error_message)
+            return
+
+        # guaranteed not to be TokenType
+        try:
+            self._cast(token_type)
+        except ValueError:
+            # repr of self shows the token type
+            self._cast_error(token_type, message=error_message)
+
+    def _cast(self, token_type, is_value=False):
+        """
+        Args:
+            token_type (any token type): What token type this token should change into
+            is_value (bool): Whether the token type can be directly set or it must be gotten from the enum class
+        """
+        if is_value:
+            new_type = token_type
         else:
-            raise TypeError("{} : Invalid type casting to {}".format(repr(self), repr(token_type)))
+            new_type = token_type(self.value)
+        logging.debug("Converted token {} to type {}".format(repr(self), new_type))
+        self.type = new_type
+
+    def _cast_error(self, token_type, message=None):
+        if message is None:
+            message = "Invalid type casting"
+        raise TypeError("{} cast to {}: {}".format(self, repr(token_type), message))
 
     def __str__(self):
         return "Token[{} at {}]".format(repr(self.value), self.pos)
 
     def __repr__(self):
         return 'Token[{0}: type={1}, value={2}]'.format(repr(self.pos), repr(self.type), repr(self.value))
-
 
 
 def test():
