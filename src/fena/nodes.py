@@ -2,15 +2,22 @@ from abc import ABC
 
 class NodeVisitor:
     """
-    Taken straight from TODO
+    Taken pretty much straight from https://ruslanspivak.com/
     """
-    def visit(self, node):
-        method_name = 'visit_' + type(node).__name__
-        visitor = getattr(self, method_name, self.generic_visit)
-        return visitor(node)
 
-    def generic_visit(self, node):
-        raise Exception('No visit_{} method'.format(type(node).__name__))
+    def visit(self, node):
+        """
+        Visits the specific node type
+
+        Args:
+            node (class type that inherits from Node)
+
+        Returns:
+            pass
+        """
+        method_name = 'visit_' + type(node).__name__
+        visitor = getattr(self, method_name)
+        return visitor(node)
 
 class Node(ABC):
     pass

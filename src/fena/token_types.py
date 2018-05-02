@@ -130,7 +130,6 @@ SELECTOR_SIMPLE_TOKEN_VALUES = frozenset(token.value for token in SelectorSimple
 
 
 class NBTSimpleToken(Enum):
-    EMPTY = r"{}"
     BEGIN = "{"
     END = "}"
     BEGIN_ARRAY = "["

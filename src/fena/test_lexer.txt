@@ -57,27 +57,27 @@
     @s if(stonebrick ~ ~-1 ~) @s if(stonebrick_stairs[facing=west]) @s if(stonebrick ~ ~1 ~): kill
     @s if(stonebrick ~ ~-1 ~, stonebrick_stairs[facing=west], stonebrick ~ ~1 ~): kill
 
-    # testing out chained commands
-    @e[type=armor_stand,_ti=(0..20)]:
-        say @s
-        @r _ti + 1
-        @a[_pl=1]:
-            _pl = 0
-            playsound:
-                sound_1 voice @a
-                sound_2 voice @a
+    # testing out chained commands: DISCONTINUED
+    # @e[type=armor_stand,_ti=(0..20)]:
+    #     say @s
+    #     @r _ti + 1
+    #     @a[_pl=1]:
+    #         _pl = 0
+    #         playsound:
+    #             sound_1 voice @a
+    #             sound_2 voice @a
 
-    @e[type=armor_stand,_ti=0]: effect @a[_pl=0]:
-        effect_1 20 0 true
-        effect_2 20 0 true
+    # @e[type=armor_stand,_ti=0]: effect @a[_pl=0]:
+    #     effect_1 20 0 true
+    #     effect_2 20 0 true
     
-    # @e[type=armor_stand,_ti=(0..20)] say @s
-    # @e[type=armor_stand,_ti=(0..20)] @r _ti + 1
-    # @e[type=armor_stand,_ti=(0..20)] @a[_pl=1] _pl = 0
-    # @e[type=armor_stand,_ti=(0..20)] @a[_pl=1] playsound sound_1 voice @a
-    # @e[type=armor_stand,_ti=(0..20)] @a[_pl=1] playsound sound_2 voice @a
-    # @e[type=armor_stand,_ti=0] : effect @a[_pl=0] effect_1 20 0 true
-    # @e[type=armor_stand,_ti=0] : effect @a[_pl=0] effect_2 20 0 true
+    @e[type=armor_stand,_ti=(0..20)]: say @s
+    @e[type=armor_stand,_ti=(0..20)]: @r _ti + 1
+    @e[type=armor_stand,_ti=(0..20)]: @a[_pl=1] _pl = 0
+    @e[type=armor_stand,_ti=(0..20)] @a[_pl=1]: playsound sound_1 voice @a
+    @e[type=armor_stand,_ti=(0..20)] @a[_pl=1]: playsound sound_2 voice @a
+    @e[type=armor_stand,_ti=0]: effect @a[_pl=0] effect_1 20 0 true
+    @e[type=armor_stand,_ti=0]: effect @a[_pl=0] effect_2 20 0 true
 
 !mfunc scoreboard_test
     @s: @e[type=armor_stand,_stand] _ti - 1 {DisabledSlots:2096896}
@@ -126,37 +126,19 @@
     # execute @e[type=armor_stand,tag=rr.stand] ~ ~ ~ scoreboard players operation @s rr.ti = @r rr.ti2
     @e[type=armor_stand,_stand]: @s _ti = @r _ti2
 
-    # execute @e[type=armor_stand,tag=rr.stand] ~ ~ ~ scoreboard players operation @s rr.ti = @r rr.ti
-    @e[type=armor_stand,_stand]: @s _ti = @r
-
-    # execute @e[type=armor_stand,tag=rr.stand] ~ ~ ~ scoreboard players operation @s rr.ti = @s rr.ti2
-    @e[type=armor_stand,_stand]: @s _ti = _ti2
-
     # scoreboard players operation @e[type=armor_stand,tag=rr.stand] rr.ti = Players rr.ti2
     @e[type=armor_stand,_stand] _ti = Players _ti2
 
     # scoreboard players operation @e[type=armor_stand,tag=rr.stand] rr.ti = @r rr.ti2
     @e[type=armor_stand,_stand] _ti = @r _ti2
 
-    # scoreboard players operation @e[type=armor_stand,tag=rr.stand] rr.ti = @r rr.ti
-    @e[type=armor_stand,_stand] _ti = @r
-    
-    # scoreboard players operation @e[type=armor_stand,tag=rr.stand] rr.ti = @s rr.ti
-    # note that this might be contradictory to what you want
-    # try not to use this format without an execute at the beginning
-    @e[type=armor_stand,_stand] _ti = _ti2
-
     # shortcut for scoreboard players set ya potato
     @e[type=armor_stand,_stand] _ti = 3
 
     @e[type=armor_stand,_stand]: @s _ti * Players _ti2
     @e[type=armor_stand,_stand]: @s _ti * @r _ti2
-    @e[type=armor_stand,_stand]: @s _ti * _ti2
-    @e[type=armor_stand,_stand]: @s _ti * @r
     @e[type=armor_stand,_stand] _ti * Players _ti2
     @e[type=armor_stand,_stand] _ti * @r _ti2
-    @e[type=armor_stand,_stand] _ti * _ti2
-    @e[type=armor_stand,_stand] _ti * @r
 
     # players_op_const (value as int)
     # will use the constant objective specifed under !constobj <value>
@@ -164,26 +146,18 @@
 
     @e[type=armor_stand,_stand]: @s _ti / Players _ti2
     @e[type=armor_stand,_stand]: @s _ti / @r _ti2
-    @e[type=armor_stand,_stand]: @s _ti / _ti2
-    @e[type=armor_stand,_stand]: @s _ti / @r
     @e[type=armor_stand,_stand] _ti / Players _ti2
     @e[type=armor_stand,_stand] _ti / @r _ti2
-    @e[type=armor_stand,_stand] _ti / _ti2
-    @e[type=armor_stand,_stand] _ti / @r
     @e[type=armor_stand,_stand] _ti / 3
 
     @e[type=armor_stand,_stand]: @s _ti % Players _ti2
     @e[type=armor_stand,_stand]: @s _ti % @r _ti2
-    @e[type=armor_stand,_stand]: @s _ti % _ti2
-    @e[type=armor_stand,_stand]: @s _ti % @r
     @e[type=armor_stand,_stand] _ti % Players _ti2
     @e[type=armor_stand,_stand] _ti % @r _ti2
     @e[type=armor_stand,_stand] _ti % 3
 
     @e[type=armor_stand,_stand]: @s _ti + Players _ti2
     @e[type=armor_stand,_stand]: @s _ti + @r _ti2
-    @e[type=armor_stand,_stand]: @s _ti + _ti2
-    @e[type=armor_stand,_stand]: @s _ti + @r
     @e[type=armor_stand,_stand] _ti + Players _ti2
     @e[type=armor_stand,_stand] _ti + @r _ti2
 
@@ -192,8 +166,6 @@
 
     @e[type=armor_stand,_stand]: @s _ti - Players _ti2
     @e[type=armor_stand,_stand]: @s _ti - @r _ti2
-    @e[type=armor_stand,_stand]: @s _ti - _ti2
-    @e[type=armor_stand,_stand]: @s _ti - @r
     @e[type=armor_stand,_stand] _ti - Players _ti2
     @e[type=armor_stand,_stand] _ti - @r _ti2
 

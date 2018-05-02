@@ -1,5 +1,6 @@
 import os
 import logging
+import json
 
 """
 Gets all config data from the config folder
@@ -24,6 +25,8 @@ class ConfigData:
             self.plugin_conflict_commands = options["plugin_conflict_commands"]
             self.target_selector_variables = options["target_selector_variables"]
             self.target_selector_arguments = options["target_selector_arguments"]
+            self.version = options["version"]
+            self.selector_json = options["selector_json"]
 
     def __new__(cls, **options):
         """
@@ -54,7 +57,9 @@ def _get_config_data(file_data=None):
     CONFIG_NAME = "../config.ini"
 
     # all possible option keys
-    valid_config_options = frozenset({"commands", "leading_commands", "plugin_conflict_commands", "target_selector_variables", "target_selector_arguments"})
+    valid_config_options = frozenset(
+        {"commands", "leading_commands", "plugin_conflict_commands", "target_selector_variables", "target_selector_arguments", "version"})
+    valid_versions = frozenset({"1.12", "1.13"})
 
     # all keys that have been retrieved
     # this is stored as a set since order doesn't really matter
@@ -83,8 +88,13 @@ def _get_config_data(file_data=None):
         else:
             raise SyntaxError("Option {} was not found inside existing config options {}".format(repr(option), valid_config_options))
 
-        # gets the list as a split through "," on the RHS
-        options[option] = data.split(",")
+        # gets the list as a split through "," on the RHS unless it is the version
+        if option == "version":
+            if data not in valid_versions:
+                raise SyntaxError("{}: Invalid version in config (must be in {})".format(data, valid_versions))
+            options[option] = data
+        else:
+            options[option] = data.split(",")
 
     # checks for a missing option using set difference
     options_difference = valid_config_options - retrieved_options
@@ -94,11 +104,35 @@ def _get_config_data(file_data=None):
     if options_difference:
         raise SyntaxError("Option(s) {} were not found".format(options_difference))
 
+    json_data = _get_selector_config_data()
+    options["selector_json"] = json_data
+
     # ensures that this is the first instance of the ConfigData object
     config_data = ConfigData(**options)
     logging.debug("Got the config data: {}".format(config_data))
 
-# this should only be ran inside this folder, hence private
+
+def _get_selector_config_data(file_data=None):
+    """
+    Gets the full json file with the standard library json decoder
+
+    Args:
+        file_data (str): The file contents for testing purposes
+            It is default to none so the config file can be read.
+    """
+    # the config file should be placed one directory below
+    CONFIG_NAME = "../selector_config.json"
+
+    if file_data is None:
+        # gets absolute path of this config_data.py file
+        dir_path = os.path.dirname(__file__)
+        file_path = os.path.join(dir_path, CONFIG_NAME)
+
+        with open(file_path, "r") as file:
+            return json.load(file)
+
+
+# this should only be ran inside this folder, hence why it is private
 _get_config_data()
 
 def test():
@@ -110,12 +144,13 @@ def test():
 
         target_selector_variables=@a,@e
         target_selector_arguments=x,y,z,r,rm
+
+        version=1.13
     """
 
     # should be the original from the config file
     config_data = ConfigData()
     print(config_data)
-    print(config_data.target_selector_variables)
 
     # completely different options
     _get_config_data(file_data)

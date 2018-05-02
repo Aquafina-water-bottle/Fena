@@ -21,9 +21,26 @@ folder_stmt ::= "folder" && STR && (NEWLINE)* & INDENT && suite && DEDENT
 mfunc_stmt ::= "mfunc" && STR && (NEWLINE)* & INDENT && suite && DEDENT
 prefix_stmt ::= "prefix" && STR
 constobj_stmt ::= "constobj" && STR
+
 suite ::= [statement, command, NEWLINE]+
-command ::= (STR)+ && (":" & (NEWLINE)* & INDENT && command_suite && DEDENT)?
-command_suite ::= [command, NEWLINE]+
+command ::= (execute_cmd && ":")? && [scoreboard_cmd, function_cmd, simple_cmd]
+
+execute_cmd ::= selector && (vec3)? && exec_if && (execute_cmd)?
+exec_if ::= "if" && "(" && (exec_if_args)+ && ")"
+exec_if_args ::= block && (vec3)? && ("," && exec_if_args)?
+
+scoreboard_cmd ::= [scoreboard_players_math, scoreboard_players_special, scoreboard_players_op, scoreboard_teams, scoreboard_tags]
+scoreboard_players_math ::= [SELECTOR, STR] && STR && ["+", "-", "="] && INT && (NBT)?
+scoreboard_players_special ::= [SELECTOR, STR] && ["enable", "reset", "get"] && STR
+scoreboard_players_op ::= [SELECTOR, STR] && STR && ["=", "+", "-", "*", "/", "%"] && ((STR) | (SELECTOR) | 
+scoreboard_teams ::= ("join" && STR && [SELECTOR, STR]+) | ("leave" && [SELECTOR, STR]+) | ("empty" && STR)
+scoreboard_tags ::= [SELECTOR, STR] && ("+", "-") && STR
+
+function_cmd ::= "function" && STR
+simple_cmd ::= COMMAND_KEYWORD && (STR)*
+
+vec3 ::= coord && coord && coord
+coord ::= ("^", "~")? & ("-")? & [INT, FLOAT]
 """
 
 class Parser:
@@ -229,7 +246,7 @@ class Parser:
         # resets the current folder
         self.symbol_table = self.symbol_table.enclosing_scope
 
-    def suite(self, commands_only=False):
+    def suite(self):
         """
         suite ::= [statement, command]*
         """
@@ -243,26 +260,16 @@ class Parser:
             if self.current_token.matches(WhitespaceToken.NEWLINE):
                 self.eat(WhitespaceToken.NEWLINE)
 
-            elif not commands_only and self.current_token.matches(StatementToken.STATEMENT_SPECIFIER):
+            elif self.current_token.matches(StatementToken.STATEMENT_SPECIFIER):
                 self.statement()
 
             elif self.current_token.matches_any_of(TokenType.STRING, SelectorTokenType.TARGET_SELECTOR_VARIABLE):
                 self.command()
 
             else:
-                if commands_only:
-                    message = "Expected a newline or command"
-                else:
-                    message = "Expected a newline, command or statement specifier"
-                self.error(message)
+                self.error("Expected a newline, command or statement specifier")
 
         logging.debug("End compound at {}".format(repr(self.current_token)))
-
-    def command_suite(self):
-        """
-        command_suite ::= [command, NEWLINE]+
-        """
-        self.suite(commands_only=True)
 
     def get_command_builder(self):
         """
@@ -319,23 +326,23 @@ class Parser:
 
         # checks whether a command suite can be used by seeing if the last token of a command is a colon
         # the reason why it has a colon is because a colon is valid in the middle of a command when used as an execute shortcut
-        if self.current_token.matches(SimpleToken.COLON):
-            self.symbol_table = ScopedSymbolTable(enclosing_scope=self.symbol_table)
-            self.symbol_table.command_builder = command_builder
+        # if self.current_token.matches(SimpleToken.COLON):
+        #     self.symbol_table = ScopedSymbolTable(enclosing_scope=self.symbol_table)
+        #     self.symbol_table.command_builder = command_builder
 
-            # skips any and all newlines
-            while self.current_token.matches(WhitespaceToken.NEWLINE):
-                self.eat(WhitespaceToken.NEWLINE)
+        #     # skips any and all newlines
+        #     while self.current_token.matches(WhitespaceToken.NEWLINE):
+        #         self.eat(WhitespaceToken.NEWLINE)
 
-            self.eat(WhitespaceToken.INDENT)
-            self.command_suite()
-            self.eat(WhitespaceToken.DEDENT)
+        #     self.eat(WhitespaceToken.INDENT)
+        #     self.command_suite()
+        #     self.eat(WhitespaceToken.DEDENT)
 
-            self.symbol_table = self.symbol_table.enclosing_scope
+        #     self.symbol_table = self.symbol_table.enclosing_scope
 
-        else:
-            command.value = self.symbol_table.command_slices + command.value
-            self.symbol_table.function.add_command(command)
+        # else:
+        #     command.value = self.symbol_table.command_slices + command.value
+        #     self.symbol_table.function.add_command(command)
 
     def selector(self):
         """

@@ -1,12 +1,17 @@
-{
-    "limit": {
-        "replaces": "c"
+{   
+    "replacements": {
+        "c": "limit",
+        "m": "gamemode",
+        "s": "sort",
+        "dist": "distance",
+        "lvl": "level",
+        "x_rot": "x_rotation",
+        "y_rot": "y_rotation"
     },
 
     "gamemode": {
-        "replaces": "m",
         "group": "only_negation",
-        "values": {
+        "args": {
             "0": "survival",
             "1": "creative",
             "2": "adventure",
@@ -15,8 +20,7 @@
     },
 
     "sort": {
-        "replaces": "s",
-        "values": {
+        "args": {
             "a": "arbitrary",
             "r": "random",
             "c": "closest",
@@ -25,22 +29,18 @@
     },
 
     "distance": {
-        "replaces": "dist",
         "1.12_range": ["rm", "r"]
     },
-
+    
     "level": {
-        "replaces": "lvl",
         "1.12_range": ["l", "lm"]
     },
     
     "x_rotation": {
-        "replaces": "x_rot",
         "1.12_range": ["rx", "rxm"]
     },
     
     "y_rotation": {
-        "replaces": "y_rot",
         "1.12_range": ["ry", "rym"]
     },
 

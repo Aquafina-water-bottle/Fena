@@ -60,9 +60,7 @@ s7.0.0      v0.4.0
         - Renamed config options to match up with the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
         - config.ini now supports comments, trailing whitespace and empty lines
         - Changed list of valid options into frozenset because it is only used for containment tests
-
-    constants.py: (removed)
-        - Replaced with token_types.py and config_data.py
+        - Added a version config option to specify "1.12" or "1.13"
 
     token_types.py: (created)
         - Changed string constants to multiple Enum values to better organize the constants
@@ -143,6 +141,9 @@ s7.0.0      v0.4.0
     commands.py: (created)
         - Might be deleted
 
+    constants.py: (DELETED)
+        - Replaced with token_types.py and config_data.py
+
     lexical_token_immutable_bak.py: (created -> DELETED)
         - Backup version of prototype immutable token
         - Was later scrapped because casting would change the physical token and that has to be mutable
@@ -167,6 +168,10 @@ s7.0.0      v0.4.0
         - Debug file only when "-l" or "--debug-log" is used as a command line argument
         - Get the config data working with the selector_config.json
         - Revamp parser into making a parse tree and interpreter class
+            - Problem is trying to determine how to make chaining commands
+                - Previous states of commands have to be stored
+                - Proper syntax must be checked for all commands
+        - Have proper english for defining token types (what are enum classes and values inside enum classes)
 
         1.13:
             - Change format of execute commands to use ":" and all sub execute commands
