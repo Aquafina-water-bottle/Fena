@@ -64,7 +64,7 @@ class Token:
             token_type (any token type): What token type this token should change into
             error_message (str or None): What will be displayed in the error message
         """
-        if token_type.isinstance(TokenType):
+        if isinstance(token_type, TokenType):
             if token_type == TokenType.COORD and is_coord(self.value):
                 self._cast(token_type, is_value=True)
             else:

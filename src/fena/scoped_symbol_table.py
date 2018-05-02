@@ -28,8 +28,6 @@ class ScopedSymbolTable:
 
             self._function = None
             self._command_builder = None
-            self._constobj = None
-            self._prefix = None
             self._folders = ()
 
         else:
@@ -39,8 +37,6 @@ class ScopedSymbolTable:
 
             self._function = enclosing_scope._function
             self._command_builder = enclosing_scope._command_builder
-            self._constobj = enclosing_scope._constobj
-            self._prefix = enclosing_scope._prefix
             self._folders = enclosing_scope._folders
 
     def add_folder(self, folder):
@@ -71,31 +67,6 @@ class ScopedSymbolTable:
     #     self._command_builder = command_builder
 
     @property
-    def constobj(self):
-        return self._constobj
-
-    @constobj.setter
-    def constobj(self, constobj):
-        """
-        The constobj can only be set once in the global scope
-        """
-        assert self.is_global, "The constobj can only be set in the global context"
-        assert self.constobj is None, "The constobj can only be set if the constobj has not been previously set"
-        self._constobj = constobj
-
-    @property
-    def prefix(self):
-        return self._prefix
-
-    @prefix.setter
-    def prefix(self, prefix):
-        """
-        A prefix can only be set if it is in the global scope
-        """
-        assert self.is_global, "The prefix can only be set in the global context"
-        self._prefix = prefix
-
-    @property
     def folders(self):
         """
         Returns:
@@ -107,8 +78,8 @@ class ScopedSymbolTable:
         return os.path.join(*self._folders)
 
     def __str__(self):
-        return "[function={}, constobj={}, prefix={}, folders={}, command_builder={}]".format(
-            self.function, repr(self.constobj), repr(self.prefix), repr(self.folders), repr(self.command_builder))
+        return "[function={}, folders={}, command_builder={}]".format(
+            self.function, repr(self.folders), repr(self.command_builder))
 
     def __repr__(self):
         return "ScopedSymbolTable[scope_level={}, is_global={}, enclosing_scope={}, current_scope={}]".format(

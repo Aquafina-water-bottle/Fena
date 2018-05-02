@@ -141,6 +141,9 @@ s7.0.0      v0.4.0
     commands.py: (created)
         - Might be deleted
 
+    terminology.txt: (created)
+        - Created a general list of terms that will remain constant throughout the code documentation and naming conventions
+
     constants.py: (DELETED)
         - Replaced with token_types.py and config_data.py
 

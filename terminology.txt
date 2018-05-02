@@ -1,0 +1,34 @@
+mcfunction path: the path to the mcfunction specified by the minecraft "function" command 
+    eg. ego:block_hunt/a_small_village/give_disguise
+
+mcfunction full path: the path to the actual mcfunction file specified by the given os 
+    eg. C:/Users/Austin/AppData/Roaming/.minecraft/temp/data/functions/ego/block_hunt/a_small_village/give_disguise.mcfunction
+
+
+tokens: The general group of simple tokens and typed tokens
+
+simple tokens: All tokens with a predefined value
+    eg. SimpleToken.COLON, StatementSimpleToken.STATEMENT_SPECIFIER
+
+typed tokens: All tokens that carry a specific type and value
+    eg. TypedToken.INT, SelectorTypedToken.TARGET_SELECTOR_VARIABLE
+
+token types: The actual enum claass that holds all tokens
+    eg. TypedToken, SimpleToken, StatementSimpleToken
+
+token values: All values held by each individual simple and typed token
+    eg. ":" for SimpleToken.COLON
+
+
+(target) selector variables: The minecraft selector beginning with "@" and a character
+    eg. @r, @a, @p
+
+(target) selector arguments: All arguments provided inside the square brackets of a selector variable
+    eg. limit, dx, dy, dz, tag
+
+(target) selector argument values: All values provided on the RHS of the selector argument
+    eg. 5, 2..3, (12..), survival
+
+
+LHS: Left hand side
+RHS: Right hand side

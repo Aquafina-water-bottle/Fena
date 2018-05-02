@@ -6,23 +6,25 @@ import logging
 
 from token_types import TokenType, SimpleToken, WhitespaceToken, StatementToken, SelectorTokenType, SelectorSimpleToken, ExecuteShortToken
 from token_types import ALL_TOKENS, STATEMENT_TOKEN_VALUES, EXECUTE_SHORTCUT_TOKEN_VALUES
-from mcfunction import McFunctionBuilder
+from mcfunction import McFunction
 from command_builder import CommandBuilder
 from scoped_symbol_table import ScopedSymbolTable
-from corountine import coroutine
+from in_file_config import InFileConfig
+from nodes import ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, CommandNode, NodeVisitor
 
 """
 Organizes all lines into their respective mcfunctions
 
-program ::= (NEWLINE)* & (statement)* & (NEWLINE)*
+program ::= statement_suite
+statement_suite ::= [statement, NEWLINE]+
 
 statement ::= "!" && [folder_stmt, mfunc_stmt, prefix_stmt, constobj_stmt]
-folder_stmt ::= "folder" && STR && (NEWLINE)* & INDENT && suite && DEDENT
-mfunc_stmt ::= "mfunc" && STR && (NEWLINE)* & INDENT && suite && DEDENT
+folder_stmt ::= "folder" && STR && (NEWLINE)* & INDENT && statement_suite && DEDENT
+mfunc_stmt ::= "mfunc" && STR && (NEWLINE)* & INDENT && command_suite && DEDENT
 prefix_stmt ::= "prefix" && STR
 constobj_stmt ::= "constobj" && STR
 
-suite ::= [statement, command, NEWLINE]+
+command_suite ::= [command, NEWLINE]+
 command ::= (execute_cmd && ":")? && [scoreboard_cmd, function_cmd, simple_cmd]
 
 execute_cmd ::= selector && (vec3)? && exec_if && (execute_cmd)?
@@ -60,14 +62,21 @@ class Parser:
         self.advance()
 
         self.symbol_table = ScopedSymbolTable()
+        self.in_file_config = InFileConfig()
         self.file_path = file_path
-        self.mcfunctions = []
+        # self.mcfunctions = []
 
     def parse(self):
+        """
+        Returns:
+            ProgramNode: The parse tree parent
+        """
         logging.debug("Original symbol table: {}".format(repr(self.symbol_table)))
-        self.program()
+        parse_tree = self.program()
         logging.debug("Final symbol table: {}".format(repr(self.symbol_table)))
         logging.debug("")
+
+        return parse_tree
 
     def error(self, message=None):
         if message is None:
@@ -81,16 +90,18 @@ class Parser:
         self.current_token = next(self.iterator, None)
         logging.debug("Advanced to {}".format(repr(self.current_token)))
 
-    def eat(self, token_type, value=None, error_message=None):
+    def eat(self, token_type, error_message=None):
         """
         Advances given the token type and values match up with the current token
 
         Args:
             token_type (any token type)
-            value (any, defaults to None)
+
+        Returns:
+            Token: The token that was just 'eaten'
         """
 
-        if (value is None or self.current_token.value == value) and self.current_token.matches(token_type):
+        if self.current_token.matches(token_type):
             token = self.current_token
             self.advance()
             return token
@@ -99,66 +110,104 @@ class Parser:
             error_message = "Expected {}".format(token_type)
         self.error(error_message)
 
-    def build_functions(self):
-        """
-        Builds all mcfunctions
-
-        Returns:
-            list: All built mcfunctions
-        """
-        logging.debug("Begin building")
-        CommandBuilder.initialize(self.symbol_table, self.mcfunctions)
-        built_mcfunctions = []
-
-        for mcfunction in self.mcfunctions:
-            built_mcfunctions.append(mcfunction.build())
-        logging.debug("End building")
-
-        return built_mcfunctions
-
     def program(self):
         """
         program ::= (statement)*
+
+        Returns:
+            ProgramNode: The parse tree parent
         """
         logging.debug("Begin program at {}".format(repr(self.current_token)))
+        statement_nodes = self.statement_suite()
+        logging.debug("End program at {}".format(repr(self.current_token)))
 
-        while self.current_token is not None and self.current_token.matches_any_of(WhitespaceToken.NEWLINE, SimpleToken.STATEMENT_SPECIFIER):
-            # skips all newlines
+        program = ProgramNode(statement_nodes)
+        return program
+
+    def statement_suite(self):
+        """
+        statement_suite ::= [NEWLINE, statement]*
+        """
+        logging.debug("Begin statement compound at {}".format(repr(self.current_token)))
+        logging.debug("with scoped symbol table = {}".format(repr(self.symbol_table)))
+
+        statement_nodes = []
+
+        # note that this is essentially a do-while since it never starts out as a newline
+        while self.current_token.matches_any_of(WhitespaceToken.NEWLINE, StatementToken.STATEMENT_SPECIFIER):
+            # base case is if a newline is not met
             if self.current_token.matches(WhitespaceToken.NEWLINE):
                 self.eat(WhitespaceToken.NEWLINE)
 
-            # otherwise, gets statement
-            elif self.current_token.matches(SimpleToken.STATEMENT_SPECIFIER):
-                self.statement()
+            elif self.current_token.matches(StatementToken.STATEMENT_SPECIFIER):
+                statement_node = self.statement()
+                statement_nodes.append(statement_node)
 
-            elif self.current_token is not None:
-                self.error("Unexpected default case")
+            else:
+                self.error("Expected a newline or statement specifier")
 
-        logging.debug("End program at {}".format(repr(self.current_token)))
+        logging.debug("End statement compound at {}".format(repr(self.current_token)))
+
+        return statement_nodes
+
+    def command_suite(self):
+        """
+        command_suite ::= [NEWLINE, command]*
+        """
+        logging.debug("Begin command compound at {}".format(repr(self.current_token)))
+        logging.debug("with scoped symbol table = {}".format(repr(self.symbol_table)))
+
+        command_nodes = []
+
+        # note that this is essentially a do-while since it never starts out as a newline
+        while self.current_token.matches_any_of(WhitespaceToken.NEWLINE, TokenType.STRING, SelectorTokenType.TARGET_SELECTOR_VARIABLE):
+            # base case is if a newline is not met
+            if self.current_token.matches(WhitespaceToken.NEWLINE):
+                self.eat(WhitespaceToken.NEWLINE)
+
+            elif self.current_token.matches_any_of(TokenType.STRING, SelectorTokenType.TARGET_SELECTOR_VARIABLE):
+                command_node = self.command()
+                command_nodes.append(command_node)
+
+            else:
+                self.error("Expected a newline, command or statement specifier")
+
+        logging.debug("End command compound at {}".format(repr(self.current_token)))
+
+        return command_nodes
 
     def statement(self):
         """
         Handles any post-processor statements
 
         statement ::= "!" && [folder_stmt, mfunc_stmt, prefix_stmt, constobj_stmt]
+
+        Returns:
+            McFunctionNode: if the statement was the beginning of a mcfunction declaration
+            FolderNode: if the statement was a folder declaration
+            PrefixNode: if the statement was a prefix statement
+            ConstObjNode: if the statement was a constobj statement
         """
         # all here should start with "!"
-        self.eat(SimpleToken.STATEMENT_SPECIFIER)
+        self.eat(StatementToken.STATEMENT_SPECIFIER)
 
         if self.current_token.matches(StatementToken.MFUNC):
-            self.mfunc_stmt()
-        elif self.current_token.matches(StatementToken.FOLDER):
-            self.folder_stmt()
-        elif self.current_token.matches(StatementToken.PREFIX):
-            self.prefix_stmt()
-        elif self.current_token.matches(StatementToken.CONSTOBJ):
-            self.constobj_stmt()
-        else:
-            self.error("Invalid statement")
+            return self.mfunc_stmt()
+        if self.current_token.matches(StatementToken.FOLDER):
+            return self.folder_stmt()
+        if self.current_token.matches(StatementToken.PREFIX):
+            return self.prefix_stmt()
+        if self.current_token.matches(StatementToken.CONSTOBJ):
+            return self.constobj_stmt()
+
+        self.error("Invalid statement")
 
     def mfunc_stmt(self):
         """
         mfunc_stmt ::= "mfunc" && STR && (NEWLINE)* & INDENT && suite && DEDENT
+
+        Returns:
+            McFunctionNode: The mcfunction node to define the mcfunction in the parse tree
         """
         self.eat(StatementToken.MFUNC)
 
@@ -173,51 +222,16 @@ class Parser:
         else:
             full_path = os.path.join(self.file_path, self.symbol_table.folders, name)
 
-        # new scoped symbol table for the mcfunction stmt
-        self.symbol_table = ScopedSymbolTable(enclosing_scope=self.symbol_table)
-        self.symbol_table.function = McFunctionBuilder(full_path)
-
         # skips any and all newlines right after a mfunc statement
         while self.current_token.matches(WhitespaceToken.NEWLINE):
             self.eat(WhitespaceToken.NEWLINE)
 
         self.eat(WhitespaceToken.INDENT)
-        self.suite()
+        command_nodes = self.command_suite()
         self.eat(WhitespaceToken.DEDENT)
 
-        # resets the current function
-        self.mcfunctions.append(self.symbol_table.function)
-        self.symbol_table = self.symbol_table.enclosing_scope
-
-    def prefix_stmt(self):
-        """
-        prefix_stmt ::= "prefix" && STR
-        """
-        self.eat(StatementToken.PREFIX)
-
-        # requires the prefix to be defined in the global scope
-        if not self.symbol_table.is_global:
-            self.error("Cannot define a prefix when the scope is not global")
-
-        prefix_token = self.eat(TokenType.STRING, error_message="Expected a string after a prefix statement")
-
-        self.symbol_table.prefix = prefix_token.value
-
-    def constobj_stmt(self):
-        """
-        constobj_stmt ::= "constobj" && STR
-        """
-        self.eat(StatementToken.CONSTOBJ)
-
-        constobj_token = self.eat(TokenType.STRING, error_message="Expected a string after a prefix statement")
-
-        if not self.symbol_table.is_global:
-            self.error("The constobj cannot be set outside the global context")
-
-        if self.symbol_table.constobj is not None:
-            self.error("The constobj cannot be set twice")
-
-        self.symbol_table.constobj = constobj_token.value
+        mcfunction_node = McFunctionNode(full_path, command_nodes)
+        return mcfunction_node
 
     def folder_stmt(self):
         """
@@ -240,70 +254,44 @@ class Parser:
             self.eat(WhitespaceToken.NEWLINE)
 
         self.eat(WhitespaceToken.INDENT)
-        self.suite()
+        statement_nodes = self.statement_suite()
         self.eat(WhitespaceToken.DEDENT)
 
         # resets the current folder
         self.symbol_table = self.symbol_table.enclosing_scope
 
-    def suite(self):
+        folder_node = FolderNode(folder_token.value, statement_nodes)
+        return folder_node
+
+    def prefix_stmt(self):
         """
-        suite ::= [statement, command]*
+        prefix_stmt ::= "prefix" && STR
         """
-        logging.debug("Begin compound at {}".format(repr(self.current_token)))
-        logging.debug("with scoped symbol table = {}".format(repr(self.symbol_table)))
+        self.eat(StatementToken.PREFIX)
+        prefix_token = self.eat(TokenType.STRING, error_message="Expected a string after a prefix statement")
 
-        # note that this is essentially a do-while since it never starts out as a newline
-        while self.current_token.matches_any_of(
-                WhitespaceToken.NEWLINE, StatementToken.STATEMENT_SPECIFIER, TokenType.STRING, SelectorTokenType.TARGET_SELECTOR_VARIABLE):
-            # base case is if a newline is not met
-            if self.current_token.matches(WhitespaceToken.NEWLINE):
-                self.eat(WhitespaceToken.NEWLINE)
+        # requires the prefix to be defined in the global scope
+        if not self.symbol_table.is_global:
+            self.error("Cannot define a prefix when the scope is not global")
 
-            elif self.current_token.matches(StatementToken.STATEMENT_SPECIFIER):
-                self.statement()
+        self.in_file_config.prefix = prefix_token
+        prefix_node = PrefixNode(prefix_token.value)
+        return prefix_node
 
-            elif self.current_token.matches_any_of(TokenType.STRING, SelectorTokenType.TARGET_SELECTOR_VARIABLE):
-                self.command()
-
-            else:
-                self.error("Expected a newline, command or statement specifier")
-
-        logging.debug("End compound at {}".format(repr(self.current_token)))
-
-    def get_command_builder(self):
+    def constobj_stmt(self):
         """
-        Creates a new scope for a command builder to work out things
-
-        Coroutine:
-            Gets all tokens until a colon or newline is reached
-
-        Returns:
-            CommandBuilder: The full command in a command builder
-            bool: Whether the last token before the line was a colon or not
-                This signifies a command chain
+        constobj_stmt ::= "constobj" && STR
         """
-        self.symbol_table = ScopedSymbolTable(enclosing_scope=self.symbol_table)
-        command_builder = self.symbol_table.command_builder
-        
-        while not self.current_token.matches(WhitespaceToken.NEWLINE):
-            if self.current_token.matches(SelectorTokenType.TARGET_SELECTOR_VARIABLE):
-                selector = self.get_selector()
-                command_builder.execute.add(selector, execute_type="as")
+        self.eat(StatementToken.CONSTOBJ)
+        constobj_token = self.eat(TokenType.STRING, error_message="Expected a string after a constobj statement")
 
-            elif self.current_token.value in EXECUTE_SHORTCUT_TOKEN_VALUES:
-                command_builder.execute.state = self.current_token.value
-                self.eat("dank memes lololololllo")
-                self.current_token.cast(ExecuteShortToken)
-            # elif token
-            else:
-                self.current_token.cast(TokenType.COORD)
+        # requires the constobj to be defined in the global scope
+        if not self.symbol_table.is_global:
+            self.error("The constobj cannot be set outside the global context")
 
-            if self.current_token.matches(WhitespaceToken.NEWLINE):
-                break
-
-        self.symbol_table = self.symbol_table.enclosing_scope
-        return command_builder
+        self.in_file_config.constobj = constobj_token
+        constobj_node = ConstObjNode(constobj_token.value)
+        return constobj_node
 
     def command(self):
         """
@@ -312,37 +300,50 @@ class Parser:
         Returns:
             str: The full built command
         """
-        # checks whether the command can actually be added to an mcfunction or not
-        if self.symbol_table.function is None:
-            self.error("No assigned mcfunction for command")
+        command_segment_nodes = []
 
-        # command = self.eat(TokenType.COMMAND)
-        # command_builder = CommandBuilder()
-        # while not self.current_token.matches(WhitespaceToken.NEWLINE):
-        #     if self.current_token.matches(SelectorTokenType.TARGET_SELECTOR_VARIABLE):
-        #         selector = self.selector(build=True)
+        # gets either the execute command or a scoreboard shortcut command
+        if self.current_token.matches(SelectorTokenType.TARGET_SELECTOR_VARIABLE):
+            selector_begin_node = self.selector_begin_cmd()
+            command_segment_nodes.append(selector_begin_node)
 
-        command_builder = self.get_command_builder()
+        # guaranteed to be a scoreboard shortcut command
+        if self.current_token.matches(SelectorTokenType.TARGET_SELECTOR_VARIABLE):
+            scoreboard_cmd_node = self.scoreboard_cmd()
+            command_segment_nodes.append(scoreboard_cmd_node)
+        elif self.current_token.matches(TokenType.STRING):
+            simple_cmd_node = self.simple_cmd()
+            command_segment_nodes.append(simple_cmd_node)
+        elif self.current_token.matches(WhitespaceToken.NEWLINE):
+            pass
+        else:
+            self.error("Expected a newline, selector or start of a simple command")
 
-        # checks whether a command suite can be used by seeing if the last token of a command is a colon
-        # the reason why it has a colon is because a colon is valid in the middle of a command when used as an execute shortcut
-        # if self.current_token.matches(SimpleToken.COLON):
-        #     self.symbol_table = ScopedSymbolTable(enclosing_scope=self.symbol_table)
-        #     self.symbol_table.command_builder = command_builder
+        command_node = CommandNode(command_segment_nodes)
+        return command_node
 
-        #     # skips any and all newlines
-        #     while self.current_token.matches(WhitespaceToken.NEWLINE):
-        #         self.eat(WhitespaceToken.NEWLINE)
+    def selector_begin_cmd(self):
+        """
+        Intermediary function to determine whether a selector at the beginning
+        of a command is part of a scoreboard shortcut or execute shortcut
 
-        #     self.eat(WhitespaceToken.INDENT)
-        #     self.command_suite()
-        #     self.eat(WhitespaceToken.DEDENT)
+        It is a scoreboard shortcut if the second or third token is a scoreboard operator 
+        It is an execute shortcut if the second token is a selector, coordinate or an ex
 
-        #     self.symbol_table = self.symbol_table.enclosing_scope
+        Returns:
+            ExecuteCmdNode: if the selector is part of an execute shortcut
+            ScoreboardCmdNode: if the selector is part of a scoreboard shortcut
+        """
+        pass
 
-        # else:
-        #     command.value = self.symbol_table.command_slices + command.value
-        #     self.symbol_table.function.add_command(command)
+    def execute_cmd(self, begin_selector=None):
+        pass
+
+    def scoreboard_cmd(self, selector=None, objective=None):
+        pass
+
+    def simple_cmd(self):
+        pass
 
     def selector(self):
         """
@@ -351,16 +352,10 @@ class Parser:
             Token: with TokenType.SELECTOR if the build option is true
         """
         pass
-
-    def get_selector(self, build=False):
-        pass
-
-    def _get_selector(self):
-        pass
     
     def __repr__(self):
-        return "Parser[iterator={}, current_token={}, symbol_table={}, file_path={}, mcfunctions={}]".format(
-            repr(self.iterator), repr(self.current_token), self.symbol_table, self.file_path, self.mcfunctions)
+        return "Parser[iterator={}, current_token={}, symbol_table={}, file_path={}]".format(
+            repr(self.iterator), repr(self.current_token), self.symbol_table, self.file_path)
 
 if __name__ == "__main__":
     from lexer import Lexer
@@ -378,9 +373,9 @@ if __name__ == "__main__":
     except Exception as e:
         logging.exception(e)
 
-    mcfunctions = parser.mcfunctions
-    for mcfunction in mcfunctions:
-        logging.debug("")
-        logging.debug(str(mcfunction))
-        for command in mcfunction.commands:
-            logging.debug(repr(command))
+    # mcfunctions = parser.mcfunctions
+    # for mcfunction in mcfunctions:
+    #     logging.debug("")
+    #     logging.debug(str(mcfunction))
+    #     for command in mcfunction.commands:
+    #         logging.debug(repr(command))
