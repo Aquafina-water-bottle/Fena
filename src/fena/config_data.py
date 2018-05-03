@@ -1,6 +1,6 @@
 import os
-import logging
 import json
+import logging
 
 """
 Gets all config data from the config folder
@@ -20,14 +20,18 @@ class ConfigData:
 
         # changing the above to having all customly defined for pylint
         if options:
-            self.commands = options["commands"]
+            self.version = options["version"]
             self.leading_commands = options["leading_commands"]
             self.plugin_conflict_commands = options["plugin_conflict_commands"]
-            self.version = options["version"]
+
             self.selector_variables = options["selector_variables"]
             self.selector_arguments = options["selector_arguments"]
             self.selector_replacements = options["selector_replacements"]
             self.selector_argument_details = options["selector_argument_details"]
+
+            self.commands = options["commands"]
+            self.blocks = options["blocks"]
+            self.entities = options["entities"]
 
     def __new__(cls, **options):
         """
@@ -42,8 +46,38 @@ class ConfigData:
 
     __repr__ = __str__
 
+def _get_file_str(file_name):
+    """
+    Gets the data in the file string with the file path relative to this python file (config_data.py)
+
+    Returns:
+        str: The full file as a str
+    """
+    dir_path = os.path.dirname(__file__)
+    file_path = os.path.join(dir_path, "../config/" + file_name)
+
+    with open(file_path, "r") as file:
+        file_data = file.read()
+
+    return file_data
+
+
+def _get_file_name(version, option_name, extension="txt"):
+    """
+    Gets the data inside the file given the version, option and extension
+
+    Args:
+        version (str)
+        option_name (str)
+        extension (str)
+    """
+    return "{option}_{version}.{extension}".format(option=option_name, version=version, extension=extension)
+
+
 def _get_config_data(file_data=None):
     """
+    Gets all data from config.ini
+
     For each line:
      - splits with = to get the left hand side (LHS) and right hand side (RHS)
      - splits on "," at the RHS to get all the config options
@@ -52,76 +86,33 @@ def _get_config_data(file_data=None):
     Args:
         file_data (str): The file contents for testing purposes
             It is default to none so the config file can be read.
+
+    Returns:
+        dict: All options found in config.ini
     """
 
     # the config file should be placed one directory below
-    CONFIG_NAME = "../config.ini"
-
-    # all possible option keys
-    valid_config_options = frozenset({"commands", "leading_commands", "plugin_conflict_commands", "version"})
-    valid_versions = frozenset({"1.12", "1.13"})
-
-    # all keys that have been retrieved
-    # this is stored as a set since order doesn't really matter
-    retrieved_options = set()
+    config_name = "config.ini"
     options = {}
 
     if file_data is None:
-        # gets absolute path of this config_data.py file
-        dir_path = os.path.dirname(__file__)
-        file_path = os.path.join(dir_path, CONFIG_NAME)
-
-        with open(file_path, "r") as file:
-            file_data = file.read()
+        file_data = _get_file_str(config_name)
 
     # gets rid of empty lines, trailing whitespace and comments
     lines = [line.strip() for line in file_data.splitlines() if line.strip() if line.strip()[0] != "#"]
+
+    # gets the list as a split through "," on the RHS unless it is the version
     for line in lines:
         option, data = line.split("=")
-
-        if option in valid_config_options:
-            # finds duplicate by checking if there is a new option already inside the retireved options
-            if option in retrieved_options:
-                raise SyntaxError("Repeated option {} found in the config file".format(option))
-            retrieved_options.add(option)
-
-        else:
-            raise SyntaxError("Option {} was not found inside existing config options {}".format(repr(option), valid_config_options))
-
-        # gets the list as a split through "," on the RHS unless it is the version
         if option == "version":
-            if data not in valid_versions:
-                raise SyntaxError("{}: Invalid version in config (must be in {})".format(data, valid_versions))
             options[option] = data
         else:
             options[option] = data.split(",")
 
-    # checks for a missing option using set difference
-    options_difference = valid_config_options - retrieved_options
-
-    # runs only if there are items in the set difference
-    # meaning all in the difference are missing
-    if options_difference:
-        raise SyntaxError("Option(s) {} were not found".format(options_difference))
-
-    # gets all selector config options from the config data
-    valid_selector_config_options = frozenset({"selector_variables", "selector_arguments", "selector_replacements", "selector_argument_details"})
-    json_data = _get_selector_config_data(options["version"])
-
-    # checks whether the options defined in the config file are more or less than expected
-    if frozenset(json_data.keys()) != valid_selector_config_options:
-        # TODO specify which
-        raise SyntaxError("Missing keys or too many keys in the json data")
-
-    for selector_option in valid_selector_config_options:
-        options[selector_option] = json_data[selector_option]
-
-    # ensures that this is the first instance of the ConfigData object
-    config_data = ConfigData(**options)
-    logging.debug("Got the config data: {}".format(config_data))
+    return options
 
 
-def _get_selector_config_data(version, file_data=None):
+def _get_selector_config_data(version):
     """
     Gets the full json file with the standard library json decoder
 
@@ -130,19 +121,83 @@ def _get_selector_config_data(version, file_data=None):
             It is default to none so the config file can be read.
     """
     # the config file should be placed one directory below
-    CONFIG_NAME = "../selector_config_{}.json".format(version)
+    file_name = _get_file_name(version, "selector", extension="json")
+    file_str = _get_file_str(file_name)
+    return json.loads(file_str)
 
-    if file_data is None:
-        # gets absolute path of this config_data.py file
-        dir_path = os.path.dirname(__file__)
-        file_path = os.path.join(dir_path, CONFIG_NAME)
 
-        with open(file_path, "r") as file:
-            return json.load(file)
+def _get_other_config_data(version):
+    """
+    Gets data from:
+        blocks
+        commands
+        entities
+
+    Returns:
+        dict: Maps "blocks", "commands" and "entities" to their respective lists
+    """
+    other_options = {}
+    option_names = ("blocks", "commands", "entities")
+
+    for option in option_names:
+        file_name = _get_file_name(version, option)
+        file_data = _get_file_str(file_name)
+        data = [line for line in file_data.splitlines() if line]
+        other_options[option] = data
+
+    return other_options
+
+
+def _validate_options(options, valid_options):
+    """
+    General function to validate that all valid options are found inside the options with no extra options
+
+    Args:
+        options (dict): All options found in the config file
+        valid_options (frozenset): All expected options
+    """
+    # checks for a missing option using set difference
+    missing_options = valid_options - frozenset(options.keys())
+    extra_options = frozenset(options.keys()) - valid_options
+
+    if missing_options:
+        raise SyntaxError("{}: Option(s) were not found".format(set(missing_options)))
+
+    if extra_options:
+        raise SyntaxError("{}: Extra option(s) were detected".format(set(extra_options)))
+
+
+def _get_all_data():
+    """
+    Main function to get all data from all config files
+    """
+    # gets all config data from config.ini and validates
+    general_options = _get_config_data()
+    valid_general_options = frozenset({"version", "leading_commands", "plugin_conflict_commands"})
+    _validate_options(general_options, valid_general_options)
+
+    # makes sure the version is correct
+    valid_versions = frozenset({"1.12", "1.13"})
+    version = general_options["version"]
+    if version not in valid_versions:
+        raise SyntaxError("{}: Invalid version in config (must be in {})".format(version, valid_versions))
+
+    # gets all selector config options from the config data
+    selector_options = _get_selector_config_data(version)
+    valid_selector_options = frozenset({"selector_variables", "selector_arguments", "selector_replacements", "selector_argument_details"})
+    _validate_options(selector_options, valid_selector_options)
+
+    # gets all blocks, commands and entities
+    other_options = _get_other_config_data(version)
+
+    # ensures that this is the first instance of the ConfigData object
+    all_options = {**general_options, **selector_options, **other_options}
+    config_data = ConfigData(**all_options)
+    logging.debug("Got the config data: {}".format(config_data))
 
 
 # this should only be ran inside this folder, hence why it is private
-_get_config_data()
+_get_all_data()
 
 def test():
     file_data = """
@@ -167,4 +222,7 @@ def test():
     print(id(config_data), id(config_data_2))
 
 if __name__ == "__main__":
-    test()
+    config_data = ConfigData()
+    print(json.dumps(vars(config_data), indent=4))
+    # print(config_data)
+    # test()

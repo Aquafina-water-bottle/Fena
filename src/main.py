@@ -1,6 +1,9 @@
 """
-Shoutout to Ruslan Spivak for pretty much providing the bedrock code to this interpreter
-    His tutorial for making an interpreter can be found here: https://ruslanspivak.com/lsbasi-part1/
+A butt load of code shameless taken from Ruslan Spivak's tutorial for making an interpreter:
+    https://ruslanspivak.com/lsbasi-part1/
+
+blocks.txt and entities.txt shamelessly taken from:
+    https://github.com/PepijnMC/Minecraft
 """
 
 import argparse

@@ -1,0 +1,104 @@
+{   
+    "selector_variables": ["@a", "@e", "@r", "@p", "@s"],
+
+    "selector_arguments": [
+        "x", "y", "z", "dx", "dy", "dz", "r", "rm", "rx", "rxm", "ry", "rym",
+        "c", "l", "lm", "team", "name", "tag", "type", "m",
+        "distance", "level", "x_rotation", "y_rotation"
+    ],
+
+    "selector_replacements": {
+        "dist": "distance",
+        "distance": ["rm", "r"],
+
+        "xrot": "x_rotation",
+        "x_rotation": ["rx", "rxm"],
+        
+        "yrot": "y_rotation",
+        "y_rotation": ["ry", "rym"],
+
+        "lvl": "level",
+        "level": ["l", "lm"]
+    },
+
+    "selector_argument_details": {
+        "x": {
+            "parse_type": "INT"
+        },
+        "y": {
+            "parse_type": "INT"
+        },
+        "z": {
+            "parse_type": "INT"
+        },
+        "dx": {
+            "parse_type": "INT"
+        },
+        "dy": {
+            "parse_type": "INT"
+        },
+        "dz": {
+            "parse_type": "INT"
+        },
+        "r": {
+            "parse_type": "SHORTCUT_ERROR"
+        },
+        "rm": {
+            "parse_type": "SHORTCUT_ERROR"
+        },
+        "rx": {
+            "parse_type": "SHORTCUT_ERROR"
+        },
+        "rxm": {
+            "parse_type": "SHORTCUT_ERROR"
+        },
+        "ry": {
+            "parse_type": "SHORTCUT_ERROR"
+        },
+        "rym": {
+            "parse_type": "SHORTCUT_ERROR"
+        },
+
+        "c": {
+            "parse_type": "INT"
+        },
+        "l": {
+            "parse_type": "SHORTCUT_ERROR"
+        },
+        "lm": {
+            "parse_type": "SHORTCUT_ERROR"
+        },
+
+        "team": {
+            "parse_type": "STR"
+        },
+        "name": {
+            "parse_type": "STR"
+        },
+
+        "tag": {
+            "parse_type": "SHORTCUT_ERROR"
+        },
+
+        "distance": {
+            "parse_type": "INT_RANGE"
+        },
+        "x_rotation": {
+            "parse_type": "INT_RANGE"
+        },
+        "y_rotation": {
+            "parse_type": "INT_RANGE"
+        },
+        "level": {
+            "parse_type": "INT_RANGE"
+        },
+
+        "m": {
+            "args": ["0", "1", "2", "3"]
+        },
+
+        "type": {
+            "parse_type": "ENTITIES"
+        }
+    }
+}

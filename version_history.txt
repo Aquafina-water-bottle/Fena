@@ -55,9 +55,10 @@ s6.0.0      v0.3.0
     -Removed the Common, Post and Mid folders
 
 s7.0.0      v0.4.0
-    config.ini:
+    config/config.ini:
         - Added a version config option to specify "1.12" or "1.13"
         - Removed target_selector_arguments and target_selector_variables and replaced it with selector_arguments and selector_variables in the json file
+        - moved to /src/config instead of just being under /src
 
     config_data.py:
         - Changed all logging errors to syntax error
@@ -147,15 +148,17 @@ s7.0.0      v0.4.0
     terminology.txt: (created)
         - Created a general list of terms that will remain constant throughout the code documentation and naming conventions
 
-    selector_json_1.12.json: (created)
+    config/selector_1.12.json, config/selector_1.13.json: (created)
         - Holds all config data specifically for selector based things for 1.12
             - json is used instead of a regular ini because more formatting is required (lists and dicts)
 
-    selector_json_1.13.json: (created)
-        - Same thing as selector_json_1.12.json except for 1.13
+    config/blocks_1.12.txt, config/blocks_1.13.txt,
+    config/commands_1.12.txt, config/commands_1.13.txt,
+    config/entities_1.12.txt, config/entites_1.13.txt: (created):
+        - Holds all data as said by the file name (formatted with each line being a valid item)
 
-    token_types.py: (created -> DELETED)
-        - Renamed to token_classes.py after setting the terminology.txt as the standard across all files
+    token_types.py: (created -> renamed to token_classes.py)
+        - Renamed after setting the terminology.txt as the standard across all files
 
     constants.py: (DELETED)
         - Replaced with token_types.py and config_data.py

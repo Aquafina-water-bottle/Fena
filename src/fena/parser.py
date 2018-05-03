@@ -29,7 +29,7 @@ command ::= (execute_cmd && ":")? && [scoreboard_cmd, function_cmd, simple_cmd]
 
 execute_cmd ::= selector && (vec3)? && exec_if && (execute_cmd)?
 exec_if ::= "if" && "(" && (exec_if_args)+ && ")"
-exec_if_args ::= block && (vec3)? && ("," && exec_if_args)?
+exec_if_args ::= block && (vec3)? | (block && (vec3)? && ("," && exec_if_args)*)
 
 scoreboard_cmd ::= [scoreboard_players_math, scoreboard_players_special, scoreboard_players_op, scoreboard_teams, scoreboard_tags]
 scoreboard_players_math ::= [SELECTOR, STR] && STR && ["+", "-", "="] && INT && (NBT)?
@@ -40,6 +40,16 @@ scoreboard_tags ::= [SELECTOR, STR] && ("+", "-") && STR
 
 function_cmd ::= "function" && STR
 simple_cmd ::= COMMAND_KEYWORD && (STR)*
+
+selector ::= SELECTOR_VAR & ("[" & selector_args & "]")?
+
+selector_args ::= (single_arg)? | (single_arg & ("," & single_arg)*)?
+single_arg ::= [simple_arg, range_arg, tag_arg]
+
+simple_arg ::= DEFAULT_ARG & "=" & ("!")? & [STRING, INT]
+tag_arg ::= STRING
+range_arg ::= STRING & ("=" & range)?
+range ::= [INTEGER, (INTEGER & ".."), (".." & INTEGER), (INTEGER & ".." & INTEGER)]
 
 vec3 ::= coord && coord && coord
 coord ::= ("^", "~")? & ("-")? & [INT, FLOAT]
@@ -342,13 +352,14 @@ class Parser:
             ExecuteCmdNode: if the selector is part of an execute shortcut
             ScoreboardCmdNode: if the selector is part of a scoreboard shortcut
         """
-        selector = self.selector()
+        selector_node = self.selector()
+        # assumes scoreboard objectives will not be the same as the execute shortcut simple tokens
         if (self.current_token.value in TokenValues.get(ExecuteSimpleToken) or is_coord_token(self.current_token) or 
                 self.current_token.matches_any_of(SelectorTypedToken.SELECTOR_VARIABLE, SimpleToken.COLON)):
-            return self.execute_cmd(begin_selector=selector)
+            return self.execute_cmd(begin_selector=selector_node)
 
         else:
-            return self.scoreboard_cmd(begin_target=selector)
+            return self.scoreboard_cmd(begin_target=selector_node)
 
     def execute_cmd(self, begin_selector=None, objective=None):
         pass
