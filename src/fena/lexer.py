@@ -4,9 +4,8 @@ if __name__ == "__main__":
 import logging
 import json
 
-from token_types import WhitespaceToken, StatementToken, NBTSimpleToken, SimpleToken, SelectorSimpleToken, NBTSimpleToken
-from token_types import TokenType, SelectorTokenType
-from token_types import STATEMENT_TOKEN_VALUES, SIMPLE_TOKEN_VALUES, NBT_NUMBER_END_VALUES
+from token_classes import WhitespaceSimpleToken, StatementSimpleToken, NBTSimpleToken, SimpleToken, SelectorSimpleToken, NBTSimpleToken, NBTNumberEndSimpleToken
+from token_classes import TypedToken, SelectorTypedToken, TokenValues
 
 from config_data import ConfigData
 from lexical_token import Token
@@ -38,11 +37,11 @@ class Lexer:
         # does not require "else" since if it is a selector, it should end in the block above
         while not self.reached_eof:
             # skips all whitespace until \n
-            if self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
+            if self.get_char().isspace() and not self.current_chars_are(WhitespaceSimpleToken.NEWLINE.value):
                 self.skip_whitespace()
 
             # handles indents and dedents after newline
-            elif self.current_chars_are(WhitespaceToken.NEWLINE.value):
+            elif self.current_chars_are(WhitespaceSimpleToken.NEWLINE.value):
                 yield from self.handle_newline()
 
             else:
@@ -67,7 +66,7 @@ class Lexer:
             # if the current character is \n, goes to a new line
             # note that the position increments after this, meaning
             # that "\n" is actually the previous character
-            if self.current_chars_are(WhitespaceToken.NEWLINE.value):
+            if self.current_chars_are(WhitespaceSimpleToken.NEWLINE.value):
                 self.recorder.increment_row()
             else:
                 self.recorder.increment_column()
@@ -96,7 +95,7 @@ class Lexer:
             while not self.reached_eof and self.get_char().isspace():
                 self.advance()
         else:
-            while not self.reached_eof and self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
+            while not self.reached_eof and self.get_char().isspace() and not self.current_chars_are(WhitespaceSimpleToken.NEWLINE.value):
                 self.advance()
 
     def advance_chars(self, chars):
@@ -183,7 +182,7 @@ class Lexer:
         return token
 
     def skip_comment(self):
-        while not self.reached_eof and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
+        while not self.reached_eof and not self.current_chars_are(WhitespaceSimpleToken.NEWLINE.value):
             self.advance()
 
     def get_indent(self):
@@ -194,7 +193,7 @@ class Lexer:
             Token: Indent token
         """
         self.indents += 1
-        return self.create_new_token(WhitespaceToken.INDENT)
+        return self.create_new_token(WhitespaceSimpleToken.INDENT)
 
     def get_dedent(self):
         """
@@ -204,7 +203,7 @@ class Lexer:
             Token: Dedent token
         """
         self.indents -= 1
-        return self.create_new_token(WhitespaceToken.DEDENT)
+        return self.create_new_token(WhitespaceSimpleToken.DEDENT)
 
     def handle_newline(self):
         """
@@ -214,7 +213,7 @@ class Lexer:
             Token: Newline token and all tokens gotten from handling a beginning of a line
         """
         # gets one newline token whenever called unless it is at the beginning of the line
-        yield self.create_new_token(WhitespaceToken.NEWLINE)
+        yield self.create_new_token(WhitespaceSimpleToken.NEWLINE)
         self.advance()
 
         yield from self.handle_line_begin()
@@ -236,19 +235,19 @@ class Lexer:
         self.recorder.unlock()
 
         # if the current char is a comment after whitespace, it is still an empty line
-        if self.get_char() in (WhitespaceToken.NEWLINE.value, WhitespaceToken.COMMENT.value):
-            if self.current_chars_are(WhitespaceToken.COMMENT.value):
+        if self.get_char() in (WhitespaceSimpleToken.NEWLINE.value, WhitespaceSimpleToken.COMMENT.value):
+            if self.current_chars_are(WhitespaceSimpleToken.COMMENT.value):
                 self.skip_comment()
             return
 
         # otherwise, the whitespace is valid for interpretation for indents and dedents
         # checks whether the indenting whitespace is actually valid (4 spaces)
         # boolean value of any integer is False if 0, True for anything else
-        if len(whitespace) % len(WhitespaceToken.INDENT.value):
+        if len(whitespace) % len(WhitespaceSimpleToken.INDENT.value):
             self.error("Invalid whitespace: {} (requires indentation of 4 spaces)".format(repr(whitespace)))
 
         # gets the number of indents at the current area
-        current_indents = whitespace.count(WhitespaceToken.INDENT.value)
+        current_indents = whitespace.count(WhitespaceSimpleToken.INDENT.value)
 
         if current_indents > self.indents:
             if current_indents-1 == self.indents:
@@ -263,7 +262,7 @@ class Lexer:
 
         # all possible dedent and indent tokens have been gotten by this point
         # however, there are certain things that can only happen after a valid newline (statements)
-        if self.current_chars_are(StatementToken.STATEMENT_SPECIFIER.value):
+        if self.current_chars_are(StatementSimpleToken.STATEMENT_SPECIFIER.value):
             yield from self.get_statement()
 
     def get_statement(self):
@@ -274,14 +273,14 @@ class Lexer:
         Yields:
             Token: All statement tokens (statement specifier, statement keyword, strings after keywords)
         """
-        yield self.create_new_token(StatementToken.STATEMENT_SPECIFIER, advance=True)
+        yield self.create_new_token(StatementSimpleToken.STATEMENT_SPECIFIER, advance=True)
         self.skip_whitespace()
 
         keyword_token = self.get_until_space()
-        if keyword_token.value not in STATEMENT_TOKEN_VALUES:
+        if keyword_token.value not in TokenValues.get(StatementSimpleToken):
             self.error("Statement keyword {} does not exist".format(repr(keyword_token.value)))
 
-        keyword_token.cast(StatementToken)
+        keyword_token.cast(StatementSimpleToken)
         yield keyword_token
         self.skip_whitespace()
 
@@ -311,7 +310,7 @@ class Lexer:
 
         # checks if the result is a 0 length string: error
         assert self.get_locked_chars()
-        return self.create_new_token(TokenType.STRING, unlock=True)
+        return self.create_new_token(TypedToken.STRING, unlock=True)
 
     def get_command(self):
         """
@@ -320,8 +319,8 @@ class Lexer:
         Yields:
             Token: Delimiter, NBT, Selector, String tokens
         """
-        while not self.reached_eof and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
-            if self.get_char() in SIMPLE_TOKEN_VALUES:
+        while not self.reached_eof and not self.current_chars_are(WhitespaceSimpleToken.NEWLINE.value):
+            if self.get_char() in TokenValues.get(SimpleToken):
                 yield self.create_new_token(SimpleToken(self.get_char()), advance=True)
 
             elif self.current_chars_are(SelectorSimpleToken.BEGIN.value):
@@ -343,10 +342,10 @@ class Lexer:
             Token: Selector tokens (Selector variables and all selector arguments)
         """
         # checks for valid selector var as @a, @e, @r, @s, @p (or whatever is specified in the config)
-        if self.get_chars(2) not in Lexer.config_data.target_selector_variables:
+        if self.get_chars(2) not in Lexer.config_data.selector_variables:
             self.error("Invalid selector variable: {}".format(repr(self.get_chars(2))))
 
-        yield self.create_new_token(SelectorTokenType.TARGET_SELECTOR_VARIABLE, value=self.get_chars(2), advance=True)
+        yield self.create_new_token(SelectorTypedToken.SELECTOR_VARIABLE, value=self.get_chars(2), advance=True)
 
         # starts getting the tokens inside square brackets including the square brackets
         if self.current_chars_are(SelectorSimpleToken.OPEN_BRACKET.value):
@@ -390,13 +389,13 @@ class Lexer:
         self.recorder.lock()
         self.advance()
 
-        while not self.current_chars_are('"'):
+        while not self.current_chars_are(SimpleToken.QUOTE.value):
             # Skips past any \" since it doesn't count as a string end
             if self.current_chars_are(r'\"'):
                 self.advance(2)
 
             # There shouldn't ever be a newline in a string
-            elif self.current_chars_are(WhitespaceToken.NEWLINE.value):
+            elif self.current_chars_are(WhitespaceSimpleToken.NEWLINE.value):
                 self.error()
 
             # Advances normally
@@ -406,9 +405,9 @@ class Lexer:
         # advances the last "
         self.advance()
 
-        return self.create_new_token(TokenType.LITERAL_STRING, unlock=True)
+        return self.create_new_token(TypedToken.LITERAL_STRING, unlock=True)
 
-    def get_number(self, int_type=TokenType.INT, float_type=TokenType.FLOAT):
+    def get_number(self, int_type=TypedToken.INT, float_type=TypedToken.FLOAT):
         """
         Gets a number token as either an integer or float token
         Format: ("-")? & (INT)+ & ("." & (INT)+)?
@@ -450,7 +449,7 @@ class Lexer:
         decoder = json.JSONDecoder()
         json_object, position = decoder.raw_decode(self.text[self.recorder.char_pos:])
         self.advance(position)
-        return self.create_new_token(TokenType.JSON, value=json_object)
+        return self.create_new_token(TypedToken.JSON, value=json_object)
 
     def get_nbt(self, nbt_array=False):
         """
@@ -467,14 +466,14 @@ class Lexer:
         yield self.create_new_token(begin_type, advance=True)
 
         while not self.current_chars_are(end_type.value):
-            if self.get_char().isspace() and self.get_char() != WhitespaceToken.NEWLINE.value:
+            if self.get_char().isspace() and self.get_char() != WhitespaceSimpleToken.NEWLINE.value:
                 self.skip_whitespace()
 
             # skips comments inside nbt tags
-            if self.current_chars_are(WhitespaceToken.NEWLINE.value):
+            if self.current_chars_are(WhitespaceSimpleToken.NEWLINE.value):
                 self.advance()
                 self.skip_whitespace()
-                if self.current_chars_are(WhitespaceToken.COMMENT.value):
+                if self.current_chars_are(WhitespaceSimpleToken.COMMENT.value):
                     self.skip_comment()
 
             elif self.get_char() in (NBTSimpleToken.COLON.value, NBTSimpleToken.COMMA.value):
@@ -488,14 +487,14 @@ class Lexer:
                 # recursive call to get nbt in []
                 yield from self.get_nbt(nbt_array=True)
 
-            elif self.get_char() == '"':
+            elif self.get_char() == SimpleToken.QUOTE.value:
                 yield self.get_literal_string()
             elif self.get_char().isdigit() or self.get_char() == "-":
                 yield self.get_number()
                 # sees if the number has a type by seeing if there is a letter after a number
                 if self.get_char().isalpha():
-                    if self.get_char() in NBT_NUMBER_END_VALUES:
-                        yield self.create_new_token(NBTSimpleToken(self.get_char()), advance=True)
+                    if self.get_char() in TokenValues.get(NBTNumberEndSimpleToken):
+                        yield self.create_new_token(NBTNumberEndSimpleToken(self.get_char()), advance=True)
                     else:
                         self.error("Unknown alphabetical value ending")
             elif self.get_char().isalpha():

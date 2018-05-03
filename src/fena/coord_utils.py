@@ -1,6 +1,6 @@
 import re
 
-from token_types import TokenType
+from token_classes import TypedToken
 
 _alpha = re.compile("[A-Za-z_]")
 
@@ -96,6 +96,7 @@ def are_coords(*tokens):
     Checks whether a group of tokens:
         - Have a length of 2 or 3 tokens
         - Have the same type (local, or world (absolute and relative) coordinates)
+        - All have the type of TypedToken.COORD
     """
     # records the supposed global coord type as either "relative" or "local", as to skip absolute
 
@@ -104,7 +105,7 @@ def are_coords(*tokens):
         return False
 
     for token in tokens:
-        if not is_coord_token(token) or not token.matches(TokenType.COORD):
+        if not is_coord_token(token) or not token.matches(TypedToken.COORD):
             return False
 
         coord_type = get_token_coord_type(token)
@@ -149,11 +150,10 @@ if __name__ == "__main__":
     print()
     from token_position import TokenPosition
     from lexical_token import Token
-    from token_types import TokenType
     position = TokenPosition(row=1, column=5, char_pos=3)
-    coord1 = Token(position, TokenType.COORD, value="25.6")
-    coord2 = Token(position, TokenType.COORD, value="^25.6")
-    coord3 = Token(position, TokenType.COORD, value="~25.6")
+    coord1 = Token(position, TypedToken.COORD, value="25.6")
+    coord2 = Token(position, TypedToken.COORD, value="^25.6")
+    coord3 = Token(position, TypedToken.COORD, value="~25.6")
 
     print(are_coords(coord1, coord1, coord1)) # true
     print(are_coords(coord2, coord2, coord2)) # true

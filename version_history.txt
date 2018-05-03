@@ -55,20 +55,28 @@ s6.0.0      v0.3.0
     -Removed the Common, Post and Mid folders
 
 s7.0.0      v0.4.0
+    config.ini:
+        - Added a version config option to specify "1.12" or "1.13"
+        - Removed target_selector_arguments and target_selector_variables and replaced it with selector_arguments and selector_variables in the json file
+
     config_data.py:
         - Changed all logging errors to syntax error
         - Renamed config options to match up with the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
         - config.ini now supports comments, trailing whitespace and empty lines
         - Changed list of valid options into frozenset because it is only used for containment tests
-        - Added a version config option to specify "1.12" or "1.13"
 
-    token_types.py: (created)
-        - Changed string constants to multiple Enum values to better organize the constants
+    token_classes.py: (created)
+        - Changed string constants to multiple Enum values (token classes) to better organize the constants
         - Created a bunch of frozenset constants to be used for containment tests
+            - Contains specifically specific token classes and token types
+        - Created a class "TokenValues" which gets all token values given a token class
+            - Uses dynamic programming to cache values (maps the token class to the values)
+        - Renamed a bunch of token classes to better match up with what token types they represent (Simple or Typed)
 
     lexical_token.py:
         - Removed a bunch of staticmethods that aren't being used anymore by the token
         - Added a cast method that assumes the type can be properly changed when used
+            - Works with both token classes and token types
 
     token_position.py: (created)
         - Created a TokenPosition class
@@ -102,9 +110,8 @@ s7.0.0      v0.4.0
         - Added a one liner !prefix statement to determine what prefix will be used throughout the file
         - Added a one liner !constobj statement to determine what objective name will be used for operations with constant numbers
             - eg. "@s _ti * 5" requires an objective for scoreboard players operation, which wiil be defined with !constobj
-        - Added a command chain option by having a command end with ":" and starting as a new block
+        - Added a command chain option by having a command end with ":" and starting as a new block -> REMOVED
             - Equivalent to CBP or CCUv1 "USE"
-        - Changed a few methods to better match up to the grammar definition
 
     builder.py: (created)
         - Made a simple class that all builders must inherit from
@@ -130,10 +137,6 @@ s7.0.0      v0.4.0
             - Only an ABC class with no abstract methods
         - Node visitor class taken straight from the tutorial
 
-    selector_config.json: (created)
-        - Holds all config data specifically for selector based things
-            - json is used instead of a regular ini because more formatting is required (lists and dicts)
-
     command_builder.py: (created)
         - Added a bunch of builder classes (command, execute, scoreboard, function, simplecommand)
             - The general command builder class will have all class vars moved to in_file_config.py
@@ -143,6 +146,16 @@ s7.0.0      v0.4.0
 
     terminology.txt: (created)
         - Created a general list of terms that will remain constant throughout the code documentation and naming conventions
+
+    selector_json_1.12.json: (created)
+        - Holds all config data specifically for selector based things for 1.12
+            - json is used instead of a regular ini because more formatting is required (lists and dicts)
+
+    selector_json_1.13.json: (created)
+        - Same thing as selector_json_1.12.json except for 1.13
+
+    token_types.py: (created -> DELETED)
+        - Renamed to token_classes.py after setting the terminology.txt as the standard across all files
 
     constants.py: (DELETED)
         - Replaced with token_types.py and config_data.py
@@ -166,6 +179,10 @@ s7.0.0      v0.4.0
 
     command_parser.py: (created -> DELETED)
         - parser specifically for commands
+
+    selector_config.json: (created -> DELETED)
+        - Holds all config data specifically for selector based things
+            - json is used instead of a regular ini because more formatting is required (lists and dicts)
 
     TODO:
         - Debug file only when "-l" or "--debug-log" is used as a command line argument

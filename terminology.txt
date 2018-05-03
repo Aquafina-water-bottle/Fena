@@ -1,11 +1,15 @@
-mcfunction path: the path to the mcfunction specified by the minecraft "function" command 
+mcfunction (minecraft) path: the path to the mcfunction specified by the minecraft "function" command 
     eg. ego:block_hunt/a_small_village/give_disguise
 
 mcfunction full path: the path to the actual mcfunction file specified by the given os 
     eg. C:/Users/Austin/AppData/Roaming/.minecraft/temp/data/functions/ego/block_hunt/a_small_village/give_disguise.mcfunction
 
 
-tokens: The general group of simple tokens and typed tokens
+token: The full token containing the token type, value and position (lexical_token.Token object)
+    eg. Token[TokenPosition[row=1, column=3, char_pos=2]: type=<SelectorSimpleToken.OPEN_BRACKET: '['>, value='[']
+
+token type: The general group of simple tokens and typed tokens, one of which is carried by a token object
+    eg. SimpleToken.COLON, TypedToken.INT
 
 simple tokens: All tokens with a predefined value
     eg. SimpleToken.COLON, StatementSimpleToken.STATEMENT_SPECIFIER
@@ -13,12 +17,18 @@ simple tokens: All tokens with a predefined value
 typed tokens: All tokens that carry a specific type and value
     eg. TypedToken.INT, SelectorTypedToken.TARGET_SELECTOR_VARIABLE
 
-token types: The actual enum claass that holds all tokens
+token class: The actual enum class that holds all tokens
     eg. TypedToken, SimpleToken, StatementSimpleToken
 
 token values: All values held by each individual simple and typed token
     eg. ":" for SimpleToken.COLON
 
+
+targets: Both target selectors and full (fake or real) names
+    eg. @a[gSA=1,RRpl=3], french_man
+
+(target) selectors: All formats with a selector variable and optional selector arguments to select a target
+    eg. @a[type=armor_stand,RREntity,RRst=1]
 
 (target) selector variables: The minecraft selector beginning with "@" and a character
     eg. @r, @a, @p
@@ -28,6 +38,19 @@ token values: All values held by each individual simple and typed token
 
 (target) selector argument values: All values provided on the RHS of the selector argument
     eg. 5, 2..3, (12..), survival
+
+
+local coordinates: All coordinates specified with ^
+    eg. ^25, ^75.3, ^-23.4
+
+relative coordinates: All coordinates specified with ~
+    eg. ~25, ~75.3, ~-23.4
+
+absolute coordinates: All coordinates specified just as a numeric value
+    eg. 25, 75.3, -23.4
+    
+world coordinates: Both absolute and relative coordinates
+    eg. 785, ~-27.1, 33.4
 
 
 LHS: Left hand side

@@ -23,10 +23,11 @@ class ConfigData:
             self.commands = options["commands"]
             self.leading_commands = options["leading_commands"]
             self.plugin_conflict_commands = options["plugin_conflict_commands"]
-            self.target_selector_variables = options["target_selector_variables"]
-            self.target_selector_arguments = options["target_selector_arguments"]
             self.version = options["version"]
-            self.selector_json = options["selector_json"]
+            self.selector_variables = options["selector_variables"]
+            self.selector_arguments = options["selector_arguments"]
+            self.selector_replacements = options["selector_replacements"]
+            self.selector_argument_details = options["selector_argument_details"]
 
     def __new__(cls, **options):
         """
@@ -57,8 +58,7 @@ def _get_config_data(file_data=None):
     CONFIG_NAME = "../config.ini"
 
     # all possible option keys
-    valid_config_options = frozenset(
-        {"commands", "leading_commands", "plugin_conflict_commands", "target_selector_variables", "target_selector_arguments", "version"})
+    valid_config_options = frozenset({"commands", "leading_commands", "plugin_conflict_commands", "version"})
     valid_versions = frozenset({"1.12", "1.13"})
 
     # all keys that have been retrieved
@@ -104,15 +104,24 @@ def _get_config_data(file_data=None):
     if options_difference:
         raise SyntaxError("Option(s) {} were not found".format(options_difference))
 
-    json_data = _get_selector_config_data()
-    options["selector_json"] = json_data
+    # gets all selector config options from the config data
+    valid_selector_config_options = frozenset({"selector_variables", "selector_arguments", "selector_replacements", "selector_argument_details"})
+    json_data = _get_selector_config_data(options["version"])
+
+    # checks whether the options defined in the config file are more or less than expected
+    if frozenset(json_data.keys()) != valid_selector_config_options:
+        # TODO specify which
+        raise SyntaxError("Missing keys or too many keys in the json data")
+
+    for selector_option in valid_selector_config_options:
+        options[selector_option] = json_data[selector_option]
 
     # ensures that this is the first instance of the ConfigData object
     config_data = ConfigData(**options)
     logging.debug("Got the config data: {}".format(config_data))
 
 
-def _get_selector_config_data(file_data=None):
+def _get_selector_config_data(version, file_data=None):
     """
     Gets the full json file with the standard library json decoder
 
@@ -121,7 +130,7 @@ def _get_selector_config_data(file_data=None):
             It is default to none so the config file can be read.
     """
     # the config file should be placed one directory below
-    CONFIG_NAME = "../selector_config.json"
+    CONFIG_NAME = "../selector_config_{}.json".format(version)
 
     if file_data is None:
         # gets absolute path of this config_data.py file
@@ -141,9 +150,6 @@ def test():
         commands=totally_a_command,yep
         leading_commands=execute
         plugin_conflict_commands=nope,avi
-
-        target_selector_variables=@a,@e
-        target_selector_arguments=x,y,z,r,rm
 
         version=1.13
     """

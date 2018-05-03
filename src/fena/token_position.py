@@ -37,11 +37,11 @@ class TokenPositionRecorder:
 
         Examples:
             >>> r = TokenPositionRecorder()
-            >>> r.create_instance()
+            >>> r.position
             TokenPosition[row=1, column=1, char_pos=0]
 
             >>> r.increment_column(22)
-            >>> r.create_instance()
+            >>> r.position
             TokenPosition[row=1, column=23, char_pos=22]
         """
         token_pos = TokenPosition(self.row, self.column, self.char_pos)

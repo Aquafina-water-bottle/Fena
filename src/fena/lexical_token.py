@@ -1,20 +1,14 @@
 import logging
 
-from token_types import SimpleToken, StatementToken, TokenType, ALL_TYPES, ALL_TOKENS, SIMPLE_TOKEN_VALUES, STATEMENT_TOKEN_VALUES
+from token_classes import ALL_SIMPLE_TOKEN_TYPES, ALL_TYPED_TOKEN_TYPES, ALL_TOKEN_TYPES, TypedToken
 from coord_utils import is_coord
 
 class Token:
-    # invalid types are all types that have preset values
-    invalid_types = ALL_TYPES ^ ALL_TOKENS
-
-    # required types are tokens that require values
-    required_types = ALL_TOKENS
-
     def __init__(self, pos, token_type, value=None):
         """
         Args:
             pos (TokenPosition): position inside the file formatted as (row, column)
-            type (TokenType, SimpleToken, WhitespaceToken, StatementToken) type of the token
+            type (TypedToken, SimpleToken, WhitespaceToken, StatementToken) type of the token
             value: an optional custom value
         """
         self.pos = pos
@@ -22,8 +16,8 @@ class Token:
         self.value = value
 
         if self.value is None:
-            assert not self.type in Token.invalid_types, "A value is required for a token type (type={}, pos={})".format(self.type, self.pos)
-            assert self.type in Token.required_types, "The type {} must be a required type of {}".format(Token.required_types, repr(token_type))
+            assert not self.type in ALL_TYPED_TOKEN_TYPES, "A value is required for a token type (type={}, pos={})".format(self.type, self.pos)
+            assert self.type in ALL_SIMPLE_TOKEN_TYPES, "The type {} must be a simple token type {}".format(ALL_SIMPLE_TOKEN_TYPES, repr(token_type))
             self.value = self.type.value
 
     def matches(self, token_type, value=None):
@@ -37,7 +31,7 @@ class Token:
         Returns:
             bool: Whether the type matches the given type
         """
-        assert token_type in ALL_TYPES
+        assert token_type in ALL_TOKEN_TYPES
         return (self.type == token_type) and (value is None or self.value == value)
 
     def matches_any_of(self, *types):
@@ -64,30 +58,33 @@ class Token:
             token_type (any token type): What token type this token should change into
             error_message (str or None): What will be displayed in the error message
         """
-        if isinstance(token_type, TokenType):
-            if token_type == TokenType.COORD and is_coord(self.value):
-                self._cast(token_type, is_value=True)
+        if isinstance(token_type, TypedToken):
+            if token_type == TypedToken.COORD and is_coord(self.value):
+                self._cast_token_type(token_type)
             else:
                 self._cast_error(token_type, message=error_message)
             return
 
-        # guaranteed not to be TokenType
+        # guaranteed not to be TypedToken
         try:
-            self._cast(token_type)
+            self._cast_token_class(token_type)
         except ValueError:
             # repr of self shows the token type
             self._cast_error(token_type, message=error_message)
 
-    def _cast(self, token_type, is_value=False):
+    def _cast_token_type(self, token_type):
         """
         Args:
             token_type (any token type): What token type this token should change into
-            is_value (bool): Whether the token type can be directly set or it must be gotten from the enum class
         """
-        if is_value:
-            new_type = token_type
-        else:
-            new_type = token_type(self.value)
+        new_type = token_type
+        logging.debug("Converted token {} to type {}".format(repr(self), new_type))
+        self.type = new_type
+
+    def _cast_token_class(self, token_class):
+        """
+        """
+        new_type = token_class(self.value)
         logging.debug("Converted token {} to type {}".format(repr(self), new_type))
         self.type = new_type
 
@@ -105,18 +102,20 @@ class Token:
 
 def test():
     from token_position import TokenPosition
+    from token_classes import SimpleToken
+
     token_pos = TokenPosition(row=5, column=2, char_pos=167)
 
     token = Token(token_pos, SimpleToken.PLUS)
     print(token)
     print(repr(token))
 
-    print(token.type in ALL_TYPES)
+    print(token.type in ALL_TOKEN_TYPES)
     print(token.type in SimpleToken)
 
     # error since it requires a value
-    # integer = Token(token_pos, TokenType.INT)
-    integer = Token(token_pos, TokenType.INT, 26)
+    # integer = Token(token_pos, TypedToken.INT)
+    integer = Token(token_pos, TypedToken.INT, 26)
     print(repr(integer))
 
 def test_docs():

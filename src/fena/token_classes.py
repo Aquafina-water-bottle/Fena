@@ -1,6 +1,32 @@
 from enum import Enum, auto
 
-class TokenType(Enum):
+class TokenValues:
+    cache = {}
+    
+    @staticmethod
+    def get(token_class):
+        assert token_class not in ALL_TYPED_TOKEN_CLASSES
+        if token_class not in TokenValues.cache:
+            values = frozenset(token.value for token in token_class)
+            TokenValues.cache[token_class] = values
+
+        return TokenValues.cache[token_class]
+
+def get_token_types(token_classes):
+    """
+    Args:
+        token_classes (Enum)
+
+    Returns:
+        frozenset: The set containing all tokens
+    """
+    token_type_set = set()
+    for token_type in token_classes:
+        token_type_set |= set(token_type)
+    return frozenset(token_type_set)
+
+
+class TypedToken(Enum):
     """
     Contains only a token type since the value is arbitrary
     """
@@ -13,7 +39,6 @@ class TokenType(Enum):
     NBT = auto()
     JSON = auto()
     BLOCK = auto()
-    DETECT = auto()
     SELECTOR = auto()
 
 class SimpleToken(Enum):
@@ -21,24 +46,20 @@ class SimpleToken(Enum):
     Contains the type and value
     """
     QUOTE = '"'
+    ESCAPED_QUOTE = r'\"'
     COLON = ":"
     COMMA = ","
     OPEN_PARENTHESES = "("
     CLOSE_PARENTHESES = ")"
 
-SIMPLE_TOKEN_VALUES = frozenset(token.value for token in SimpleToken)
-
-class WhitespaceToken(Enum):
+class WhitespaceSimpleToken(Enum):
     COMMENT = "#"
     INDENT = "    "
     DEDENT = "dedent"
     NEWLINE = "\n"
-    EOF = None
-
-WHITESPACE_TOKEN_VALUES = frozenset(token.value for token in WhitespaceToken)
 
 
-class StatementToken(Enum):
+class StatementSimpleToken(Enum):
     """
     Contains all possible keyword tokens proceeded after a "!" and the "!" token
     """
@@ -48,23 +69,20 @@ class StatementToken(Enum):
     PREFIX = "prefix"
     CONSTOBJ = "constobj"
 
-STATEMENT_TOKEN_VALUES = frozenset(token.value for token in StatementToken)
 
-
-class ScoreboardShortToken(Enum):
+class ScoreboardSimpleToken(Enum):
     PLUS = "+"
     MINUS = "-"
     EQUALS = "="
-    TEST = "?"
     RESET = "reset"
     ENABLE = "enable"
+    GET = "<-"
     JOIN = "join"
     EMPTY = "empty"
     LEAVE = "leave"
 
-SCOREBOARD_SHORTCUT_TOKEN_VALUES = frozenset(token.value for token in ScoreboardShortToken)
 
-class ExecuteShortToken(Enum):
+class ExecuteSimpleToken(Enum):
     AS = "as"
     POS = "pos"
     AT = "at"
@@ -78,9 +96,8 @@ class ExecuteShortToken(Enum):
     RESULT = "result"
     SUCCESS = "success"
 
-EXECUTE_SHORTCUT_TOKEN_VALUES = frozenset(token.value for token in ExecuteShortToken)
 
-class ExecuteShortArgsToken(Enum):
+class ExecuteArgsSimpleToken(Enum):
     # other
     FEET = "feet"
     EYES = "eyes"
@@ -89,7 +106,7 @@ class ExecuteShortArgsToken(Enum):
     # dimensions
     OVERWORLD = "overworld"
     NETHER = "nether"
-    THE_END = "the_end"
+    THE_END = "end"
 
     # comparison operators
     EQUALS = "=="
@@ -111,9 +128,9 @@ class ExecuteShortArgsToken(Enum):
     VALUE = "value"
 
 
-class SelectorTokenType(Enum):
-    TARGET_SELECTOR_VARIABLE = auto()
-    TARGET_SELECTOR_ARGUMENT = auto()
+class SelectorTypedToken(Enum):
+    SELECTOR_VARIABLE = auto()
+    SELECTOR_ARGUMENT = auto()
 
 class SelectorSimpleToken(Enum):
     BEGIN = "@"
@@ -125,8 +142,6 @@ class SelectorSimpleToken(Enum):
     COMMA = ","
     OPEN_PARENTHESES = "("
     CLOSE_PARENTHESES = ")"
-
-SELECTOR_SIMPLE_TOKEN_VALUES = frozenset(token.value for token in SelectorSimpleToken if token.value != "end")
 
 
 class NBTSimpleToken(Enum):
@@ -141,33 +156,46 @@ class NBTSimpleToken(Enum):
     LONG_ARRAY_BEGIN = "L;"
     QUOTE = '"'
 
+
+class NBTNumberEndSimpleToken(Enum):
     BYTE_END = "b"
     SHORT_END = "s"
     LONG_END = "l"
     FLOAT_END = "f"
     DOUBLE_END = "d"
 
-NBT_SIMPLE_TOKEN_VALUES = frozenset(token.value for token in SelectorSimpleToken if token.value != "end")
-NBT_NUMBER_END_VALUES = frozenset(token.value for token in 
-    (NBTSimpleToken.BYTE_END, NBTSimpleToken.SHORT_END, NBTSimpleToken.LONG_END, NBTSimpleToken.FLOAT_END, NBTSimpleToken.DOUBLE_END))
 
-def frozenset_union(*types):
-    return_set = frozenset()
-    for enum_type in types:
-        return_set |= frozenset(enum_type)
-    return return_set
 
-ALL_TOKENS = frozenset_union(SimpleToken, WhitespaceToken, StatementToken, SelectorSimpleToken, 
-    ScoreboardShortToken, ExecuteShortToken, ExecuteShortArgsToken, NBTSimpleToken)
-ALL_TYPES = frozenset_union(ALL_TOKENS, TokenType, SelectorTokenType)
+ALL_SIMPLE_TOKEN_CLASSES = frozenset({SimpleToken, WhitespaceSimpleToken, StatementSimpleToken, SelectorSimpleToken, 
+    ScoreboardSimpleToken, ExecuteSimpleToken, ExecuteArgsSimpleToken, NBTSimpleToken, NBTNumberEndSimpleToken})
+
+ALL_TYPED_TOKEN_CLASSES = frozenset({TypedToken, SelectorTypedToken})
+
+ALL_TOKEN_CLASSES = ALL_SIMPLE_TOKEN_CLASSES | ALL_TYPED_TOKEN_CLASSES
+
+
+ALL_SIMPLE_TOKEN_TYPES = get_token_types(ALL_SIMPLE_TOKEN_CLASSES)
+
+ALL_TYPED_TOKEN_TYPES = get_token_types(ALL_TYPED_TOKEN_CLASSES)
+
+ALL_TOKEN_TYPES = ALL_SIMPLE_TOKEN_TYPES | ALL_TYPED_TOKEN_TYPES
 
 
 def test():
-    print(SimpleToken.PLUS)
-    print(repr(SimpleToken.PLUS))
-    print(SimpleToken.PLUS in SimpleToken)
-    print(SimpleToken.PLUS in TokenType)
-    print(SimpleToken.PLUS in ALL_TYPES)
+    print(SimpleToken.COLON)
+    print(repr(SimpleToken.COLON))
+    print(SimpleToken.COLON in SimpleToken)
+    print(SimpleToken.COLON in TypedToken)
+    print(SimpleToken.COLON in ALL_SIMPLE_TOKEN_TYPES)
+
+    print(TokenValues.get(SimpleToken))
+    # print(TokenValues.cache)
+    print(TokenValues.get(SimpleToken))
+
+    print(ALL_TOKEN_CLASSES)
+    print(ALL_TYPED_TOKEN_CLASSES)
+    print(ALL_TYPED_TOKEN_TYPES)
+    print(TokenValues.get(StatementSimpleToken))
 
 if __name__ == "__main__":
     test()
