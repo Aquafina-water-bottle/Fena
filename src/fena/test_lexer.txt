@@ -72,7 +72,7 @@
     #     effect_2 20 0 true
     
     @e[type=armor_stand,_ti=(0..20)]: say @s
-    @e[type=armor_stand,_ti=(0..20)]: @r _ti + 1
+    @e[type=armor_stand,_ti=(0..20)]: @r _ti += 1
     @e[type=armor_stand,_ti=(0..20)]: @a[_pl=1] _pl = 0
     @e[type=armor_stand,_ti=(0..20)] @a[_pl=1]: playsound sound_1 voice @a
     @e[type=armor_stand,_ti=(0..20)] @a[_pl=1]: playsound sound_2 voice @a
@@ -80,41 +80,35 @@
     @e[type=armor_stand,_ti=0]: effect @a[_pl=0] effect_2 20 0 true
 
 !mfunc scoreboard_test
-    @s: @e[type=armor_stand,_stand] _ti - 1 {DisabledSlots:2096896}
+    @s: @e[type=armor_stand,_stand] _ti -= 1 {DisabledSlots:2096896}
     @s: @e[type=armor_stand,_stand] _ti = 10 {DisabledSlots:2096896}
-    @s: @e[type=armor_stand,_stand] _ti ? 5
-    @s: @e[type=armor_stand,_stand] _ti ? 0 10
     @s: @e[type=armor_stand,_stand] reset _ti
     @s: @e[type=armor_stand,_stand] enable _ti
-    @s: @e[type=armor_stand,_stand] + _timer {Marker:1b}
-    @s: @e[type=armor_stand,_stand] - _timer {Marker:1b}
-    @s: join _d_y @e[type=armor_stand,_stand]
-    @s: leave @e[type=armor_stand,_stand]
-    @s: empty _d_y
-    
-    @e[type=armor_stand,_stand] _ti - 1 {DisabledSlots:2096896}
+    @s: @e[type=armor_stand,_stand] += _timer {Marker:1b}
+    @s: @e[type=armor_stand,_stand] -= _timer {Marker:1b}
+    @s: team _d_y += @e[type=armor_stand,_stand]
+    @s: team leave @e[type=armor_stand,_stand]
+    @s: team empty _d_y
+
+    @e[type=armor_stand,_stand] _ti -= 1 {DisabledSlots:2096896}
     @e[type=armor_stand,_stand] _ti = 10 {DisabledSlots:2096896}
-    @e[type=armor_stand,_stand] _ti ? 5
-    @e[type=armor_stand,_stand] _ti ? 0 10
     @e[type=armor_stand,_stand] reset _ti
     @e[type=armor_stand,_stand] enable _ti
-    @e[type=armor_stand,_stand] + _timer {Marker:1b}
-    @e[type=armor_stand,_stand] - _timer {Marker:1b}
-    join _d_y @e[type=armor_stand,_stand]
-    leave @e[type=armor_stand,_stand]
-    empty _d_y
+    @e[type=armor_stand,_stand] += _timer {Marker:1b}
+    @e[type=armor_stand,_stand] -= _timer {Marker:1b}
+    team _d_y += @e[type=armor_stand,_stand]
+    team leave @e[type=armor_stand,_stand]
+    team empty _d_y
     
-    player _ti - 1 {DisabledSlots:2096896}
+    player _ti -= 1 {DisabledSlots:2096896}
     player _ti = 10 {DisabledSlots:2096896}
-    player _ti ? 5
-    player _ti ? 0 10
     player reset _ti
     player enable _ti
-    player + _timer {Marker:1b}
-    player - _timer {Marker:1b}
-    join _d_y player
-    leave player
-    empty _d_y
+    player += _timer {Marker:1b}
+    player -= _timer {Marker:1b}
+    team _d_y += player 
+    team leave player
+    team empty _d_y
 
     # @e[type=armor_stand,_stand]: ScOP @e[c=1,r=1,type=armor_stand,_stand] _ti = @e[c=1,r=1,type=armor_stand,_stand] _ti2
     # @e[type=armor_stand,_stand]: ScOP @e[c=1,r=1,type=armor_stand,_stand] _ti = 3 Number
@@ -241,11 +235,13 @@
         @a _ti ? 0 10
         @a reset _ti
         @a enable _ti
+        @a <- _ti
         @a + _timer {SomeData:Tag}
         @a - _timer {SomeData:Tag}
-        join _d_y @a
-        leave @a
-        empty _d_y
+        team add _d_y display yellow
+        team @a + _d_y
+        team leave @a
+        team empty _d_y
 
         # testing invalid selectors
         # @k say test

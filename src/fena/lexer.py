@@ -51,6 +51,9 @@ class Lexer:
         if self.indents > 0:
             yield self.get_dedent()
 
+        # gets one last EOF token
+        yield self.create_new_token(TypedToken.EOF)
+
     def advance(self, increment=1):
         """
         Advances the position

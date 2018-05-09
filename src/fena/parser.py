@@ -4,19 +4,23 @@ if __name__ == "__main__":
 import os
 import logging
 
+from lexical_token import Token
 from token_classes import SimpleToken, WhitespaceSimpleToken, StatementSimpleToken, SelectorSimpleToken, ExecuteSimpleToken
 from token_classes import TypedToken, SelectorTypedToken, TokenValues
-# from scoped_symbol_table import ScopedSymbolTable
-# from in_file_config import InFileConfig
-from nodes import ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, CommandNode, NodeVisitor
+from token_classes import ALL_TYPED_TOKEN_TYPES
+from nodes import ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode
+from nodes import ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode
+from exec_nodes import ExecuteCmdNode_1_12, ExecuteCmdNode_1_13, ExecuteSubCmdNode_1_12, ExecuteSubIfArgBlock
+from node_visitors import NodeBuilder, NodeVisitor
 from coord_utils import is_coord_token
 from config_data import ConfigData
+from number_utils import is_signed_int
 
 """
 Organizes all lines into their respective mcfunctions
 
 program ::= statement_suite
-statement_suite ::= [statement, NEWLINE]+
+statement_suite ::= [NEWLINE, (statement, NEWLINE)]*
 
 statement ::= "!" && [folder_stmt, mfunc_stmt, prefix_stmt, constobj_stmt]
 folder_stmt ::= "folder" && STR && (NEWLINE)* & INDENT && statement_suite && DEDENT
@@ -24,35 +28,113 @@ mfunc_stmt ::= "mfunc" && STR && (NEWLINE)* & INDENT && command_suite && DEDENT
 prefix_stmt ::= "prefix" && STR
 constobj_stmt ::= "constobj" && STR
 
-command_suite ::= [command, NEWLINE]+
-command ::= (execute_cmd && ":")? && [scoreboard_cmd, function_cmd, simple_cmd]
+command_suite ::= [NEWLINE, (command, NEWLINE)]*
+command ::= (execute_cmd)? && [sb_cmd, simple_cmd]
+simple_cmd ::= [team_cmd, tag_cmd, data_cmd, bossbar_cmd, effect_cmd, function_cmd, (COMMAND_KEYWORD && (STR)*)]
 
-execute_cmd ::= selector && (vec3)? && exec_if && (execute_cmd)?
-exec_if ::= "if" && "(" && (exec_if_args)+ && ")"
-exec_if_args ::= block && (vec3)? | (block && (vec3)? && ("," && exec_if_args)*)
+execute_cmd_1_12 ::= selector && (vec3)? && (exec_sub_if)? && (execute_cmd_1_12)? && ":"
+execute_cmd_1_13 ::= [selector, vec3, exec_sub_cmds]+ && ":"
 
-scoreboard_cmd ::= [scoreboard_players_math, scoreboard_players_special, scoreboard_players_op, scoreboard_teams, scoreboard_tags]
-scoreboard_players_math ::= [SELECTOR, STR] && STR && ["+", "-", "="] && INT && (NBT)?
-scoreboard_players_special ::= [SELECTOR, STR] && ["enable", "reset", "get"] && STR
-scoreboard_players_op ::= [SELECTOR, STR] && STR && ["=", "+", "-", "*", "/", "%"] && ((STR) | (SELECTOR) | 
-scoreboard_teams ::= ("join" && STR && [SELECTOR, STR]+) | ("leave" && [SELECTOR, STR]+) | ("empty" && STR)
-scoreboard_tags ::= [SELECTOR, STR] && ("+", "-") && STR
+exec_sub_cmd_keywords ::= ("as", "pos", "at", "facing", "rot", "anchor", "in", "ast", "if", "ifnot", "unless", "result" ,"success")
+exec_sub_cmds ::= [rio.rule("exec_sub_" + rule) for (str rule) in exec_sub_cmd_keywords]
+for (str rule) in exec_sub_cmd_keywords:
+    rule_arg ::= rio.rule("exec_sub_" + rule + "_arg)
+    rio.rule("exec_sub_" + "rule") ::= rule && "(" && rule_arg && ("," && rule_arg)* && ")"
+
+exec_sub_as_arg ::= selector
+exec_sub_pos_arg ::= vec3
+
+exec_sub_at_arg ::= [exec_sub_at_arg_anchor, exec_sub_at_arg_selctor, exec_sub_at_arg_axes, exec_sub_at_arg_pos]
+exec_sub_at_arg_anchor ::= ["feet", "eyes"]
+exec_sub_at_arg_selctor ::= selector
+exec_sub_at_arg_axes ::= rio.rand.combo("xyz")
+exec_sub_at_arg_pos ::= vec3 && vec2
+
+exec_sub_facing_arg ::= [vec3, selector && ("eyes", "feet")?]
+exec_sub_rot_arg ::= [vec3, selector]
+exec_sub_anchor_arg ::= ["feet", "eyes"]
+exec_sub_in_arg ::= ["overworld", "nether", "end"]
+exec_sub_ast_arg ::= selector
+
+exec_sub_if_arg ::= [exec_sub_if_arg_selector, exec_sub_if_arg_block, exec_sub_if_arg_blocks, exec_sub_if_arg_compare, exec_sub_if_arg_range]
+exec_sub_if_arg_selector ::= selector
+exec_sub_if_arg_block ::= block && (vec3)?
+exec_sub_if_arg_blocks ::= vec3 && vec3 && "==" && vec3 && ["all", "masked"]?
+exec_sub_if_arg_compare ::= (target)? && STR && ["==", "<", "<=", ">", ">="] && (target && STR) | (INT)
+exec_sub_if_arg_range ::= (target)? && STR && in && range
+exec_sub_ifnot_arg ::= exec_sub_if_arg
+exec_sub_unless_arg ::= exec_sub_if_arg
+
+exec_sub_result_arg ::= [exec_sub_result_arg_data, exec_sub_result_arg_score, exec_sub_result_arg_bossbar]
+exec_sub_result_arg_data ::= [vec3, selector] && STR && (data_type)? && signed_int
+exec_sub_result_arg_score ::= selector && STR
+exec_sub_result_arg_bossbar ::= STR && ["max", "value"]
+exec_sub_success_arg ::= exec_sub_result_arg 
+
+sb_cmd ::= [sb_players_math, sb_players_special]
+sb_players_math ::= target && STR && ["=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="] && (signed_int | target && (STR)?)
+sb_players_special ::= target && ["enable", "reset", "<-"] && STR
+
+team_cmd ::= "team" && [team_add, team_join, team_leave, team_empty, team_option, team_remove]
+team_add ::= "add" && STR && (STR)*
+team_join ::= STR && "+=" && target
+team_leave ::= "leave" && target
+team_empty ::= "empty" && STR
+team_option ::= STR && team_option_arg && "=" && team_option_arg_value
+# team_option_arg, team_option_arg_value are defined in the team_options_version.json
+team_remove ::= "remove" && STR
+
+tag_cmd ::= "tag" && [tag_add, tag_remove]
+tag_add ::= selector && "+=" && STR
+tag_remove ::= selector && "-=" && STR
+
+data_cmd ::= "data" && [data_get, data_merge, data_remove]
+data_get ::= [selector, vec3] && "<-" && (STR && (signed_int)?)?
+data_merge ::= [selector, vec3] && "+=" && nbt_tag
+data_remove ::= [selector, vec3] && "-=" && STR
+
+bossbar_cmd ::= "bossbar" && [bossbar_add, bossbar_remove, bossbar_get, bossbar_set_]
+bossbar_add ::= STR && json
+bossbar_remove ::= STR
+bossbar_get ::= STR && "<-" && ["max", "value", "players", "visible"]
+bossbar_set_max ::= STR && "max" && "=" && pos_int
+bossbar_set_value ::= STR && "value" && "=" && nonneg_int
+bossbar_set_players ::= STR && "players" && "=" && selector
+bossbar_set_visible ::= STR && "=" && ["visible", "invisible"]
+bossbar_set_color ::= STR && "color" && "=" && ["white", "pink", "red", "yellow", "green", "blue", "purple"]
+bossbar_set_style ::= STR && "color" && "=" && ["0", "6", "10", "12", "20"]
+
+effect_cmd ::= "effect" && [effect_give, effect_clear]
+effect_clear ::= selector && "-" && ["all", effect_id]
+effect_give ::= selector && "+" && effect_id && (pos_int && ((nonneg_int)? && ["true", "false"]? )? )?
+# effect_id are defined under effects_version.txt
 
 function_cmd ::= "function" && STR
-simple_cmd ::= COMMAND_KEYWORD && (STR)*
 
-selector ::= SELECTOR_VAR & ("[" & selector_args & "]")?
-
+selector ::= selector_var & ("[" & selector_args & "]")?
+# selector_var is defined under selector_version.json as "selector_variables"
 selector_args ::= (single_arg)? | (single_arg & ("," & single_arg)*)?
 single_arg ::= [simple_arg, range_arg, tag_arg]
 
-simple_arg ::= DEFAULT_ARG & "=" & ("!")? & [STRING, INT]
-tag_arg ::= STRING
-range_arg ::= STRING & ("=" & range)?
-range ::= [INTEGER, (INTEGER & ".."), (".." & INTEGER), (INTEGER & ".." & INTEGER)]
+simple_arg ::= default_arg & "=" & ("!")? & [STR, signed_int]
+# default_arg is defined under selector_version.json as "selector_arguments"
+tag_arg ::= STR
+range_arg ::= STR & ("=" & range)?
+range ::= [nonneg_int, (nonneg_int & ".."), (".." & nonneg_int), (nonneg_int & ".." & nonneg_int)]
 
+nonneg_int ::= INT  # Z nonneg
+signed_int ::= ("-")? && INT  # Z
+pos_int ::= INT, ::/= 0  # Z+
+
+float ::= (INT)? && "." && INT  # R, R <= 0
+signed_float ::= ("-")? && float  # R
+
+target ::= [selector, STR]
+vec2 ::= coord && coord
 vec3 ::= coord && coord && coord
-coord ::= ("^", "~")? & ("-")? & [INT, FLOAT]
+data_type ::= ["byte", "short", "int", "long", "float", "double"]
+coord ::= ("^", "~")? & [signed_int, signed_float]
+block ::= block_type & ("[" & (block_states)? & "]")? & (nbt_tag)?
 """
 
 class Parser:
@@ -99,27 +181,42 @@ class Parser:
         """
         Gets the next token from the lexer without checking any type
         """
-        self.current_token = next(self.iterator, None)
+        previous_token = self.current_token
+        self.current_token = next(self.iterator)
         logging.debug("Advanced to {}".format(repr(self.current_token)))
+        return previous_token
 
-    def eat(self, token_type, error_message=None):
+    def eat(self, *token_types, values=None, error_message=None):
         """
         Advances given the token type and values match up with the current token
 
         Args:
-            token_type (any token type)
+            token_types (any token type)
+            values (any or None): Any specified value that should exist within the body of a typed token
+            error_message (str or None): What the error message should say in case there is a syntax error
 
         Returns:
             Token: The token that was just 'eaten'
-        """
 
-        if self.current_token.matches(token_type):
-            token = self.current_token
-            self.advance()
-            return token
+        Raises:
+            SyntaxError: if the current token doesn't match any of the given token types or values
+        """
+        # makes sure that there exists at least one token type
+        assert token_types, "Requires at least one token type"
+
+        if (self.current_token.matches_any_of(*token_types) and
+                (values is None or (self.current_token.value in values and self.current_token.type in ALL_TYPED_TOKEN_TYPES))):
+            return self.advance()
 
         if error_message is None:
-            error_message = "Expected {}".format(token_type)
+            if len(token_types) == 1:
+                error_message = "Expected {}".format(token_types[0])
+            else:
+                error_message = "Expected one of {}".format(token_types)
+
+        if values is not None:
+            error_message += " with any value from {}".format(values)
+
         self.error(error_message)
 
     def program(self):
@@ -138,7 +235,10 @@ class Parser:
 
     def statement_suite(self):
         """
-        statement_suite ::= [NEWLINE, statement]*
+        statement_suite ::= [NEWLINE, (statement, NEWLINE)]*
+
+        Returns:
+            list of McFunctionNode, FolderNode, PrefixNode, ConstObjNode objects
         """
         logging.debug("Begin statement compound at {}".format(repr(self.current_token)))
         # logging.debug("with scoped symbol table = {}".format(repr(self.symbol_table)))
@@ -164,7 +264,10 @@ class Parser:
 
     def command_suite(self):
         """
-        command_suite ::= [NEWLINE, command]*
+        command_suite ::= [NEWLINE, (command, NEWLINE)]*
+
+        Returns:
+            list of FenaCmdNode objects
         """
         logging.debug("Begin command compound at {}".format(repr(self.current_token)))
         # logging.debug("with scoped symbol table = {}".format(repr(self.symbol_table)))
@@ -242,12 +345,14 @@ class Parser:
         command_nodes = self.command_suite()
         self.eat(WhitespaceSimpleToken.DEDENT)
 
-        mcfunction_node = McFunctionNode(name, command_nodes)
-        return mcfunction_node
+        return McFunctionNode(name, command_nodes)
 
     def folder_stmt(self):
         """
         folder_stmt ::= "folder" && STR && (NEWLINE)* & INDENT && suite && DEDENT
+
+        Returns:
+            FolderNode
         """
         self.eat(StatementSimpleToken.FOLDER)
 
@@ -272,12 +377,14 @@ class Parser:
         # resets the current folder
         # self.symbol_table = self.symbol_table.enclosing_scope
 
-        folder_node = FolderNode(folder_token.value, statement_nodes)
-        return folder_node
+        return FolderNode(folder_token.value, statement_nodes)
 
     def prefix_stmt(self):
         """
         prefix_stmt ::= "prefix" && STR
+
+        Returns:
+            PrefixNode
         """
         self.eat(StatementSimpleToken.PREFIX)
         prefix_token = self.eat(TypedToken.STRING, error_message="Expected a string after a prefix statement")
@@ -287,12 +394,14 @@ class Parser:
         #     self.error("Cannot define a prefix when the scope is not global")
 
         # self.in_file_config.prefix = prefix_token
-        prefix_node = PrefixNode(prefix_token.value)
-        return prefix_node
+        return PrefixNode(prefix_token.value)
 
     def constobj_stmt(self):
         """
         constobj_stmt ::= "constobj" && STR
+
+        Returns:
+            ConstObjNode
         """
         self.eat(StatementSimpleToken.CONSTOBJ)
         constobj_token = self.eat(TypedToken.STRING, error_message="Expected a string after a constobj statement")
@@ -302,15 +411,14 @@ class Parser:
         #     self.error("The constobj cannot be set outside the global context")
 
         # self.in_file_config.constobj = constobj_token
-        constobj_node = ConstObjNode(constobj_token.value)
-        return constobj_node
+        return ConstObjNode(constobj_token.value)
 
     def command(self):
         """
-        command ::= (execute_cmd && ":")? && [scoreboard_cmd, function_cmd, simple_cmd]
+        command ::= (execute_cmd && ":")? && [sb_cmd, function_cmd, simple_cmd]
 
         Returns:
-            str: The full built command
+            FenaCmdNode
         """
         command_segment_nodes = []
 
@@ -318,18 +426,22 @@ class Parser:
         if self.current_token.matches(SelectorTypedToken.SELECTOR_VARIABLE):
             selector_begin_node = self.selector_begin_cmd()
             command_segment_nodes.append(selector_begin_node)
+        elif (Parser.config_data.version == "1.13" and 
+                self.current_token.value in TokenValues.get(ExecuteSimpleToken) or is_coord_token(self.current_token)):
+            execute_node = self.execute_cmd()
+            command_segment_nodes.append(execute_node)
 
         if not self.current_token.matches(WhitespaceSimpleToken.NEWLINE):
             # guaranteed to be a scoreboard shortcut command with a selector
             if self.current_token.matches(SelectorTypedToken.SELECTOR_VARIABLE):
-                scoreboard_cmd_node = self.scoreboard_cmd()
-                command_segment_nodes.append(scoreboard_cmd_node)
+                sb_cmd_node = self.sb_cmd()
+                command_segment_nodes.append(sb_cmd_node)
 
             # string can be a target no matter the context
             elif self.current_token.matches(TypedToken.STRING):
-                if self.current_token.value not in Parser.config_data.commands:
+                if self.current_token.value not in Parser.config_data.command_names:
                     # if the string is not a command specified in the config data, guaranteed scoreboard shortcut
-                    command_node = self.scoreboard_cmd()
+                    command_node = self.sb_cmd()
                 else:
                     command_node = self.simple_cmd()
                 command_segment_nodes.append(command_node)
@@ -337,8 +449,7 @@ class Parser:
             else:
                 self.error("Expected a newline, selector or start of a simple command")
 
-        command_node = CommandNode(command_segment_nodes)
-        return command_node
+        return FenaCmdNode(command_segment_nodes)
 
     def selector_begin_cmd(self):
         """
@@ -350,22 +461,231 @@ class Parser:
 
         Returns:
             ExecuteCmdNode: if the selector is part of an execute shortcut
-            ScoreboardCmdNode: if the selector is part of a scoreboard shortcut
+            ScoreboardCmdMathNode: if the selector is part of a scoreboard math shortcut
+            ScoreboardCmdSpecialNode: if the selector is part of a scoreboard special shortcut
         """
         selector_node = self.selector()
         # assumes scoreboard objectives will not be the same as the execute shortcut simple tokens
         if (self.current_token.value in TokenValues.get(ExecuteSimpleToken) or is_coord_token(self.current_token) or 
                 self.current_token.matches_any_of(SelectorTypedToken.SELECTOR_VARIABLE, SimpleToken.COLON)):
             return self.execute_cmd(begin_selector=selector_node)
+        return self.sb_cmd(begin_target=selector_node)
+
+    def execute_cmd(self, begin_selector=None):
+        """
+        Does a specific function depending on the version provided
+        execute_cmd ::= {"1.12": execute_cmd_1_12, "1.13": execute_cmd_1_13}
+
+        Returns:
+            ExecuteCmdNode_1_12
+            ExecuteCmdNode_1_13
+        """
+
+        if Parser.config_data.version == "1.12":
+            return self.execute_cmd_1_12(begin_selector)
+        elif Parser.config_data.version == "1.13":
+            return self.execute_cmd_1_13(begin_selector)
+        else:
+            self.error("Unknown version")
+
+    def execute_cmd_1_12(self, begin_selector=None):
+        """
+        execute_cmd_1_12 ::= selector && (vec3)? && (exec_sub_if)? && (execute_cmd)? && ":"
+
+        Returns:
+            ExecuteCmdNode_1_12: Node containing a list of ExecuteCmdSubNode_1_12 objects
+        """
+        execute_nodes = []
+
+        while True:
+            # begin_selector is always set back to none at the beginning
+            if begin_selector is None:
+                selector_node = self.selector() 
+            else:
+                selector_node = begin_selector
+
+            if is_coord_token(self.current_token):
+                coords_node = self.vec3()
+            else:
+                coords_node = None
+
+            if self.current_token.value == "if":
+                exec_sub_if_nodes = self.exec_sub_if_arg()
+            else:
+                exec_sub_if_nodes = None
+
+            # this execute node format is specific to 1.12
+            execute_node = ExecuteSubCmdNode_1_12(selector=selector_node, coords=coords_node, sub_if=exec_sub_if_nodes)
+            execute_nodes.append(execute_node)
+
+            begin_selector = None
+            if self.current_token.matches(SimpleToken.COLON):
+                self.advance()
+                break
+
+            return ExecuteCmdNode_1_12(execute_nodes)
+
+    def execute_cmd_1_13(self, begin_selector=None):
+        """
+        execute_cmd_1_13 ::= [selector, vec3, exec_sub_cmds]+ && ":"
+
+        Returns:
+            ExecuteCmdNode_1_13: 1.13 execute command node containing a list of SelectorNode, Vec3Node, and any ExecuteSub{type}Node
+        """
+        execute_nodes = []
+
+        if begin_selector is not None:
+            execute_nodes.append(begin_selector)
+
+        while True:
+            if self.current_token.value in TokenValues.get(ExecuteSimpleToken):
+                exec_sub_node = self.exec_sub_cmds()
+                execute_nodes.append(exec_sub_node)
+
+            elif self.current_token.matches(SelectorSimpleToken.BEGIN):
+                selector_node = self.selector()
+                execute_nodes.append(selector_node)
+
+            elif is_coord_token(self.current_token):
+                coords_node = self.vec3()
+                execute_nodes.append(coords_node)
+        
+            elif self.current_token.matches(SimpleToken.COLON):
+                self.advance()
+                break
+
+            else:
+                self.error("Unknown argument for an execute shortcut")
+
+        execute_node = ExecuteCmdNode_1_13(execute_nodes)
+        return execute_node
+
+    def exec_sub_cmds(self):
+        """
+        exec_sub_cmd_keywords ::= ("as", "pos", "at", "facing", "rot", "anchor", "in", "ast", "if", "ifnot", "unless", "result" ,"success")
+        exec_sub_cmds ::= [rio.rule("exec_sub_" + rule) for (str rule) in exec_sub_cmd_keywords]
+
+        Chooses a method between each token value in token_classes.ExecuteSimpleToken
+        This assumes that the current token value matches one token value inside the ExecuteSimpleToken
+
+        Returns:
+            list of ExecSubArg Nodes
+        """
+        assert Parser.config_data.version == "1.13"
+
+        # skips past the first part of the execute sub command
+        self.advance()
+        self.eat(SimpleToken.OPEN_PARENTHESES)
+
+        # gets the attribute of "exec_sub_(sub_command)"
+        method_name = "exec_sub_{}_arg".format(self.current_token.value)
+        exec_sub_arg_method = getattr(self, method_name) 
+
+        # contains the list of nodes gotten from the arg method
+        exec_sub_arg_nodes = []
+
+        while True:
+            exec_sub_arg_node = exec_sub_arg_method()
+            exec_sub_arg_nodes.append(exec_sub_arg_node)
+
+            if self.current_token.matches(SimpleToken.COLON):
+                self.advance()
+            elif self.current_token.matches(SimpleToken.CLOSE_PARENTHESES):
+                break
+
+        self.eat(SimpleToken.CLOSE_PARENTHESES)
+
+        # gets the proper node for the execute sub command
+        return exec_sub_arg_nodes
+
+    def exec_sub_if_arg(self):
+        """
+        exec_sub_if_arg ::= [exec_sub_if_arg_selector, exec_sub_if_arg_block, exec_sub_if_arg_blocks, exec_sub_if_arg_compare, exec_sub_if_arg_range]
+
+        exec_sub_if_arg_selector ::= selector
+        exec_sub_if_arg_block ::= block && (vec3)?
+        exec_sub_if_arg_blocks ::= vec3 && vec3 && "==" && vec3 && ["all", "masked"]?
+        exec_sub_if_arg_compare ::= (target)? && STR && ["==", "<", "<=", ">", ">="] && (target && STR) | (INT)
+        exec_sub_if_arg_range ::= (target)? && STR && in && range
+
+        1.12
+        Returns:
+            ExecuteSubIfArgBlock
+        """
+        if Parser.config_data.version == "1.12":
+            if self.current_token.value not in Parser.config_data.blocks:
+                self.error("Expected a block inside the if argument")
+
+            self.current_token.cast(TypedToken.BLOCK)
+            block_token = self.advance()
+
+            if is_coord_token(self.current_token):
+                coord_node = self.vec3()
+            else:
+                coord_node = None
+
+            return ExecuteSubIfArgBlock(block_token, coord_node, version="1.12")
 
         else:
-            return self.scoreboard_cmd(begin_target=selector_node)
+            raise NotImplementedError
+            
 
-    def execute_cmd(self, begin_selector=None, objective=None):
-        pass
+    def sb_cmd(self, begin_target=None):
+        """
+        sb_cmd ::= [sb_players_math, sb_players_special]
 
-    def scoreboard_cmd(self, begin_target=None):
-        pass
+        Returns:
+            ScoreboardCmdMathNode: if the selector is part of a scoreboard math shortcut
+            ScoreboardCmdSpecialNode: if the selector is part of a scoreboard special shortcut
+        """
+        if begin_target is None:
+            begin_target = self.target()
+
+        if self.current_token.value in ("enable", "reset", "<-"):
+            self.sb_players_math(begin_target=begin_target)
+        else:
+            self.sb_players_special(target=begin_target)
+
+    def sb_players_math(self, begin_target):
+        """
+        sb_players_math ::= target && STR && ["=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="] && (signed_int | target && (STR)?)
+
+        Returns:
+            ScoreboardCmdMathNode: pass
+            ScoreboardCmdMathValueNode: pass
+        """
+        valid_operators = frozenset({"=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="})
+
+        begin_objective = self.eat(TypedToken.STRING)
+        operator = self.eat(TypedToken.STRING, values=valid_operators)
+
+        if self.current_token.matches(SelectorSimpleToken.BEGIN):
+            end_target = self.selector
+        else:
+            # target might be a signed int if it is a string
+            end_target = self.eat(TypedToken.STRING)
+
+        # gets the optional ending objective
+        # this means that the target is not a constant number
+        if self.current_token.matches(TypedToken.STRING):
+            end_objective = self.eat(TypedToken.STRING)
+            return ScoreboardCmdMathNode(begin_target, begin_objective, operator, end_target, end_objective)
+
+        # checks whether the target is just a signed int, meaning the target is just a constant number
+        if isinstance(end_target, Token) and is_signed_int(end_target.value):
+            return ScoreboardCmdMathValueNode(begin_target, begin_objective, operator, end_target)
+        return ScoreboardCmdMathNode(begin_target, begin_objective, operator, end_target)
+
+
+    def sb_players_special(self, target):
+        """
+        sb_players_special ::= target && ["enable", "reset", "<-"] && STR
+        """
+        sub_cmd = self.eat(TypedToken.STRING)
+        objective = self.eat(TypedToken.STRING)
+
+        return ScoreboardCmdSpecialNode(target, sub_cmd, objective)
+
 
     def simple_cmd(self):
         """
@@ -377,6 +697,14 @@ class Parser:
     def selector(self):
         """
         """
+        pass
+
+    def vec3(self):
+        """
+        """
+        pass
+
+    def target(self):
         pass
     
     def __repr__(self):

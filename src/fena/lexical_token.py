@@ -2,8 +2,13 @@ import logging
 
 from token_classes import ALL_SIMPLE_TOKEN_TYPES, ALL_TYPED_TOKEN_TYPES, ALL_TOKEN_TYPES, TypedToken
 from coord_utils import is_coord
+from config_data import ConfigData
+from in_file_config import InFileConfig
 
 class Token:
+    config_data = ConfigData()
+    in_file_config = InFileConfig()
+
     def __init__(self, pos, token_type, value=None):
         """
         Args:
@@ -59,7 +64,8 @@ class Token:
             error_message (str or None): What will be displayed in the error message
         """
         if isinstance(token_type, TypedToken):
-            if token_type == TypedToken.COORD and is_coord(self.value):
+            if (token_type == TypedToken.COORD and is_coord(self.value) or 
+                    token_type == TypedToken.BLOCK and self.value in Token.config_data.blocks):
                 self._cast_token_type(token_type)
             else:
                 self._cast_error(token_type, message=error_message)
@@ -93,11 +99,41 @@ class Token:
             message = "Invalid type casting"
         raise TypeError("{} cast to {}: {}".format(self, repr(token_type), message))
 
+    def build(self, prefix=False, replacements=None):
+        """
+        Returns its value with a prefix if avaliable
+
+        Args:
+            prefix (bool): Whether the value might have a prefix placeholder or not
+            replacements (dict): Any possible replacements to the token valuestring
+
+        Returns:
+            str: The new string that is guaranteed to have a prefix
+        """
+        assert isinstance(prefix, bool)
+
+        string = str(self.value)
+        
+        if prefix:
+            if string.startswith("_"):
+                # prefix=rr, string=__ti -> rr._ti
+                # prefix=rr, string=_ti -> rr.ti
+                return self.in_file_config.prefix + "." + string[1:]
+
+            if "." not in string and self.config_data.ego:
+                logging.warning("No prefix given to {!r}".format(self))
+
+        if replacements is not None:
+            assert isinstance(replacements, dict)
+            return replacements.get(string, string)
+
+        return string
+
     def __str__(self):
-        return "Token[{} at {}]".format(repr(self.value), self.pos)
+        return "Token[{!r} at {}]".format(self.value, self.pos)
 
     def __repr__(self):
-        return 'Token[{0}: type={1}, value={2}]'.format(repr(self.pos), repr(self.type), repr(self.value))
+        return 'Token[{!r}: type={!r}, value={!r}]'.format(self.pos, self.type, self.value)
 
 
 def test():

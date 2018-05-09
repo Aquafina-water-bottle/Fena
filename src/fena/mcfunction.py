@@ -1,7 +1,7 @@
 # import logging
 # import os
 
-from command_builder import CommandBuilder
+# from command_builder import CommandBuilder
 # from lexical_token import Token
 # from token_types import TokenType
 
@@ -57,9 +57,9 @@ class McFunction:
         commands (list or tuple): The full list of CommandBuilders
             It becomes a tuple of strs when the mcfunction is built
     """
-    def __init__(self, full_path):
+    def __init__(self, mfunc_name, full_path):
         self.full_path = full_path
-        self.built = False
+        self.mfunc_name = mfunc_name
         self.commands = []
 
     def add_command(self, command):
@@ -69,19 +69,24 @@ class McFunction:
         Args:
             command (CommandBuilder)
         """
-        assert isinstance(command, CommandBuilder)
-        assert not self.built
+        assert isinstance(command, str)
         self.commands.append(command)
 
-    def build_commands(self):
-        assert not self.built
-        self.built = True
-        built_commands = []
-        
-        for command in self.commands:
-            built_command = command.build()
-            assert isinstance(built_command, str)
-            built_commands.append(built_command)
+    def finalize(self):
+        """
+        Converts all mutable attributes into immutable attributes
+        """
+        self.commands = tuple(self.commands)
 
-        assert isinstance(self.commands, list)
-        self.commands = tuple(built_commands)
+    # def build_commands(self):
+    #     assert not self.built
+    #     self.built = True
+    #     built_commands = []
+    #     
+    #     for command in self.commands:
+    #         built_command = command.build()
+    #         assert isinstance(built_command, str)
+    #         built_commands.append(built_command)
+
+    #     assert isinstance(self.commands, list)
+    #     self.commands = tuple(built_commands)

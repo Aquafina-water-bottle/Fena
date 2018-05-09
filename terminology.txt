@@ -1,3 +1,6 @@
+mcfunction name: The base name of the full path of the mcfunction without the extension
+    eg. give_disguise
+
 mcfunction (minecraft) path: the path to the mcfunction specified by the minecraft "function" command 
     eg. ego:block_hunt/a_small_village/give_disguise
 
@@ -51,6 +54,34 @@ absolute coordinates: All coordinates specified just as a numeric value
     
 world coordinates: Both absolute and relative coordinates
     eg. 785, ~-27.1, 33.4
+
+
+commands: Any full command in either Fena or minecraft depending on the context
+
+fena commands: Any full command in Fena
+    eg. @a[gSA=1,m=!3] if(coal_block ~ 19 ~) @s gTEMP = 1
+
+minecraft commands: Any full command in minecraft
+    eg. (1.12): execute @a[score_gSA_min=1,score_gSA=1,m=!3] ~ ~ ~ detect ~ 19 ~ coal_block * scoreboard players set @s gTEMP 1
+    eg. (1.13): execute as @a[scores={gSA=1},gamemode=!spectator] if block ~ 19 ~ coal_block run scoreboard players set @s gTEMP 1
+
+command name: The first part of any command
+    eg. scoreboard, execute, kill, effect
+
+sub commands: Any keyword found past the first command name
+    eg. players, add, run, if
+
+command parameters: Any custom input for any part past the first command name that is not a keyword (sub command)
+    eg. 7, @a, _custom_tag
+
+execute sub commands: Any execute command shortcut formatted as: execute sub command keyword, "(", execute sub command arguments, ")"
+    eg. if(stone_bricks ~ ~ ~), ast(@e[type=armor_stand,_stand])
+
+execute sub command arguments:
+    eg. stone_bricks ~ ~ ~, @e[type=armor_stand,_stand]
+
+execute sub command keyword: Any keyword shortcut inside a leading execute command
+    eg. if, ast
 
 
 LHS: Left hand side

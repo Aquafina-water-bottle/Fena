@@ -9,36 +9,29 @@
 
     "selector_replacements": {
         "dist": "distance",
-        "distance": ["rm", "r"],
-
         "xrot": "x_rotation",
-        "x_rotation": ["rx", "rxm"],
-        
         "yrot": "y_rotation",
-        "y_rotation": ["ry", "rym"],
-
-        "lvl": "level",
-        "level": ["l", "lm"]
+        "lvl": "level"
     },
 
     "selector_argument_details": {
         "x": {
-            "parse_type": "INT"
+            "parse_type": "SIGNED_INT"
         },
         "y": {
-            "parse_type": "INT"
+            "parse_type": "SIGNED_INT"
         },
         "z": {
-            "parse_type": "INT"
+            "parse_type": "SIGNED_INT"
         },
         "dx": {
-            "parse_type": "INT"
+            "parse_type": "SIGNED_INT"
         },
         "dy": {
-            "parse_type": "INT"
+            "parse_type": "SIGNED_INT"
         },
         "dz": {
-            "parse_type": "INT"
+            "parse_type": "SIGNED_INT"
         },
         "r": {
             "parse_type": "SHORTCUT_ERROR"
@@ -60,7 +53,7 @@
         },
 
         "c": {
-            "parse_type": "INT"
+            "parse_type": "SIGNED_INT"
         },
         "l": {
             "parse_type": "SHORTCUT_ERROR"
@@ -81,20 +74,25 @@
         },
 
         "distance": {
-            "parse_type": "INT_RANGE"
+            "parse_type": "INT_RANGE",
+            "range_replace": ["rm", "r"]
         },
         "x_rotation": {
-            "parse_type": "INT_RANGE"
+            "parse_type": "INT_RANGE",
+            "range_replace": ["rx", "rxm"]
         },
         "y_rotation": {
-            "parse_type": "INT_RANGE"
+            "parse_type": "INT_RANGE",
+            "range_replace": ["ry", "rym"]
         },
         "level": {
-            "parse_type": "INT_RANGE"
+            "parse_type": "INT_RANGE",
+            "range_replace": ["l", "lm"]
         },
 
         "m": {
-            "args": ["0", "1", "2", "3"]
+            "parse_type": "VALUES",
+            "values": ["0", "1", "2", "3"]
         },
 
         "type": {

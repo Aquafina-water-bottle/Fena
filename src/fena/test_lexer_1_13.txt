@@ -1,37 +1,39 @@
-# WE HAVE GOD DAMN NAMESPACES NOW
-!using namespace LMAO
+# all round brackets () are only used when:
+# defining execute shortcut
+# surrounding coords
+# surrounding a selector argument value
+# creating a selector group
 
 # selector -> as(selector) -> as selector
 # vec3 -> pos(vec3) -> positioned vec3
 # pos(selector) -> positioned as selector
+# at(feet) -> anchored feet positioned ^ ^ ^
+# at(eyes) -> anchored eyes positioned ^ ^ ^
 # at(selector) -> at selector
-# at(feet) -> anchored feet
-# at(eyes) -> anchored eyes
 # at(axes) -> align axes (axes = combination of xyz)
 # at(vec3 vec2) -> positioned vec3 facing vec2
 # facing(vec3) -> facing vec3
 # facing(selector) -> facing(selector feet) -> facing selector feet
 # facing(selector eyes) -> facing selector eyes
-# ast(selector) -> as selector at @s
 # rot(selector) -> rotated as selector
 # rot(vec2) -> rotated vec2
+# anchor(feet) -> anchored feet
+# anchor(eyes) -> anchored eyes
 # in(dimension) -> in dimension
+# ast(selector) -> as selector at @s
 
 # if(selector) -> if entity selector
-# if(block_type) -> if block ~ ~ ~ block_type
+# if(block_type) -> if(block_type ~ ~ ~)
 # if(block_type vec3) -> if block vec3 block_type
-# if(vec3 vec3 == vec3) -> if blocks vec3 vec3 vec3 all
+# if(vec3 vec3 == vec3) -> if(vec3 vec3 == vec3 all) -> if blocks vec3 vec3 vec3 all
 # if(vec3 vec3 == vec3 masked) -> if blocks vec3 vec3 vec3 masked
 # if(target objective operator target2 objective2) -> if score target objective operator target2 objective
-# if(objective operator int) -> if(@s objective operator int)
-# if(objective in int..int) -> if(@s objective in int..int)
 # if(target objective == int) -> if score target objective matches int
 # if(target objective < int) -> if score target objective matches ..(int-1)
 # if(target objective <= int) -> if score target objective matches ..(int)
 # if(target objective > int) -> if score target objective matches (int+1)..
 # if(target objective >= int) -> if score target objective matches (int)..
 # if(target objective in int..int) -> if score target objective matches int..int
-# if(objective in int..int) -> if score @s objective matches int..int
 # unless(...) -> ifnot(...) -> (Literally any if statement but replace "if" with "unless")
 
 # note that auto_type = smallest stored value for integers, double when integer
@@ -72,7 +74,7 @@
         # if(stone_brick ~ ~-1 ~) -> execute if block ~ ~-1 ~ stone_brick
         # if(@r _ti == @s _st, stone_brick ~ ~-1 ~) -> execute if score @r _ti = @s _st if block ~ ~ ~ stone_brick ...
         # at(feet) -> execute anchored feet ...
-        if(@r _ti == @s _st, stone_brick) at(feet): say @a
+        if(@r _ti == @s _st, stone_brick ~ ~-1 ~) at(feet): say @a
         
         # ifnot(stone_brick 2 3 4 3 4 5) -> execute unless block 2 3 4 3 4 5 stone_brick ...
         # at(@a) -> execute at @a ...
@@ -142,45 +144,183 @@
     # bossbar shortcut for adding and removing: add -> create
 
     # bossbar get <id> max -> integer
-    bossbar get _lol max
+    bossbar _lol <- max
     # bossbar get <id> value -> integer
-    bossbar get _lol value
+    bossbar _lol <- value
     # bossbar get <id> players -> displays all players ??? (can it be useful to detect any players who are in the bossbar?)
-    bossbar get _lol players
+    bossbar _lol <- players
     # bossbar get <id> vlsible -> boolean 0, 1
-    bossbar get _lol visible
+    bossbar _lol <- visible
 
     # bossbar set <id> color <color>
     # color ::= ["white", "pink", "red", "yellow", "green", "blue", "purple"]
     # with "white" as default
-    bossbar set _lol color red
+    # bossbar set _lol color red
+    bossbar _lol color = red
 
     # bossbar set <id> name <name>
     # name ::= json
-    bossbar set _lol name {"text":"asdf"}
+    # bossbar set _lol name {"text":"asdf"}
+    bossbar _lol name = asdf
+    bossbar _lol name = {"text":"asdf"}
 
     # bossbar set <id> players <players>
     # players ::= selector, STR
-    bossbar set _lol players @a
+    # bossbar set _lol players @a
+    bossbar _lol players = @a
 
     # bossbar set <id> style <style>
-    # style ::= ["0": "progress", "6": "notched_6", "10": "notched_10", "12": "notched_12", "20": "notched_20"]
+    # style ::= {"0": "progress", "6": "notched_6", "10": "notched_10", "12": "notched_12", "20": "notched_20"}
     # with "progress" as default
     # such that notched x has that many lines in between the bar, and progress has no lines
-    bossbar set _lol style progress
-    bossbar set _lol style notched_12
+    # bossbar set _lol style progress
+    # bossbar set _lol style notched_12
+    bossbar _lol style = 0
+    bossbar _lol style = 12
 
     # bossbar set <id> value <value>
     # value ::= INT
     # bossbar set value _lol 5
     bossbar set _lol value 5
+    bossbar _lol value = 5
     
     # bossbar set <id> max <max>
     # max ::= INT
     # bossbar set max _lol 5
     bossbar set _lol max 5
+    bossbar _lol max = 5
 
     # bossbar set <id> visible <true, false>
     bossbar set visible _lol true
+    bossbar _lol = visible
     bossbar set visible _lol false
+    bossbar _lol = invisible
 
+!mfunc team_test
+    # team add <team> <display_name> (no shortcut)
+    team add _team team_test
+
+    # team empty <team> (no shortcut)
+    team empty _team
+    
+    # team join <team> <targets>
+    # team join team_name @a
+    team team_name += @a
+
+    # team leave <targets> (no shortcut)
+    team leave @a
+
+    # team option <option> <value>
+    team _team showFriendlyInvisibles = true
+
+    # team remove <team> (no shortcut)
+    team remove _team
+
+!mfunc effect_test
+    # effect clear <selector>
+    # effect clear @a
+    effect @a - all
+
+    # effect clear <selector> <effect>
+    # effect @a - minecraft:saturation
+    # effect clear @a minecraft:saturation
+    effect @a - saturation
+
+    # effect give <selector> <effect> <seconds> <amplifier> <hideParticles>
+    # effect <selector> + <effect> [seconds] [amplifier] [hideParticles=true]
+    # effect give @a minecraft:saturation 10000000 0 true
+    effect @a + saturation 1000000 0
+
+    # effect give @a minecraft:saturation 10000000 0 false
+    effect @a + saturation 1000000 false
+
+!mfunc data_test
+    # data get block <vec3> [path] [scale]
+    # data <vec3> <- [path] [scale]
+    data (~ ~ ~) <-
+    data (23 102 64) <- Items.0
+    data 23 102 64 <- Items.0 100
+
+    # data get entity <selector> [path] [scale]
+    # data <selector> <- [path] [scale]
+    data @e[type=armor_stand,limit=1] <- 
+    data @e[type=armor_stand,limit=1] <- Movement.2
+    data @e[type=armor_stand,limit=1] <- Movement.2 100
+
+    # data merge block <vec3> <nbt>
+    # data <vec3> + {SomeNBT:5b}
+    # data <vec3> + {SomeNBT:5b}
+
+    # data merge entity <selector> <nbt>
+    # data <selector> + <nbt>
+    data @e[type=pig,c=1] + {SomeNBT:5b}
+
+    # data remove block <vec3> <path>
+    # data <vec3> - <path>
+    data (~ ~ ~) - Items.0
+
+    # data remove entity <selector> <path>
+    # data <selector> - <path>
+    data @e[type=item,c=1] - Movement.2
+
+!mfunc scoreboard_test
+    @a _ti - 1
+    @a _ti = 10
+    @a reset _ti
+    @a enable _ti
+    @a get _ti
+    @a + _timer
+    @a - _timer
+    team add _d_y display yellow
+    team @a + _d_y
+    team leave @a
+    team empty _d_y
+    team remove _d_y
+
+!mfunc tags_test
+    # tag <selector> add <tag>
+    # tag <selector> + <tag>
+    tag @e[type=pig,name=test] + _lol
+
+    # tag <selector> remove <tag>
+    # tag <selector> - <tag>
+    tag @e[type=pig,name=test] - _lol
+
+!mfunc xp_test
+    # xp add <selector> amount ["levels", "points"]
+    # xp query <selector> ["levels", "points"]
+    # xp set <selector> amount ["levels", "points"]
+
+    # xp <selector> + INT
+    # xp add <selector> INT points
+    xp @s + 5
+
+    # xp <selector> + INT levels
+    # xp add <selector> INT levels
+    xp @s + 5 levels
+    
+    # xp <selector> - INT
+    # xp add <selector> -INT points
+    xp @s - 5
+
+    # xp <selector> - INT L
+    # xp add <selector> -INT levels
+    xp @s - 5 levels
+
+
+    # xp <selector> <- levels
+    # xp query <selector> levels
+    xp @s <- levels
+    
+    # xp <selector> <- points
+    # xp query <selector> points
+    xp @s <- levels
+
+
+    # xp <selector> = NONNEG_INT
+    # xp set <selector> NONNEG_INT points
+    xp @s = 0
+
+    # xp <selector> = NONNEG_INT levels
+    # xp set <selector> NONNEG_INT points
+    xp @s = 0 levels

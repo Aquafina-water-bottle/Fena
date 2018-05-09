@@ -1,55 +1,5 @@
-import re
-
 from token_classes import TypedToken
-
-_alpha = re.compile("[A-Za-z_]")
-
-def is_number(string):
-    """
-    Checks whether the string has a proper number format for minecraft
-
-    Args:
-        string
-
-    Returns:
-        bool
-
-    Examples:
-        >>> is_number("25.6")
-        True
-        >>> is_number("-1964")
-        True
-
-        >>> is_number("6e5")
-        False
-        >>> is_number("1_964")
-        False
-        >>> is_number("NaN")
-        False
-        >>> is_number("None")
-        False
-        >>> is_number("27j+5")
-        False
-        >>> is_number("abcdefg")
-        False
-        >>> is_number("12345abcdefg")
-        False
-        >>> is_number("~26.3")
-        False
-        >>> is_number("^26.3")
-        False
-    """
-
-    try:
-        float(string)
-    except ValueError:
-        return False
-
-    # checks whether there is an alphabetical value is inside the number
-    if re.search(_alpha, string) is not None:
-        return False
-    return True
-    
+from number_utils import is_number
 
 def is_coord(string):
     """

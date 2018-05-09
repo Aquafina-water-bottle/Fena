@@ -13,6 +13,42 @@ class ConfigData:
 
     Sets its own attributes based off of:
         https://stackoverflow.com/questions/2466191/set-attributes-from-dictionary-in-python
+
+    Attributes:
+        version (str)
+        leading_commands (list of strs)
+        plugin_conflict_commands (list of strs)
+
+        selector_variables (list of strs)
+        selector_arguments (list of strs)
+        selector_replacements (dict): maps the shorthand version to the minecraft selector argument
+        selector_argument_details (dict): maps each selector argument to the parse type and any other details
+            - Uses the command json parse type
+
+        commands (list of strs): All possible command keywords
+        blocks (list of strs)
+        entities (list of strs)
+
+    command json parse type:
+        "parse_type":
+            "VALUES": It has a "values" attribute that should have a containment check on it
+                - This might also have a "value_replace" attribute
+            "STR": Anything contained inside a string containing [A-Za-z_.-]
+            "SIGNED_INT": Any (possibly negative) integer value (Z)
+            "POS_INT": Any positive integer value (Z+)
+            "NONNEG_INT": Any nonnegatie integer value (Z nonneg)
+            "INT_RANGE": Any signed integer around ".." (either one on the LHS, one on the RHS or around both)
+            "NUMBER": Any signed integer or signed decimal number
+            "NUMBER_RANGE": Any number around ".." (either one on the LHS, one on the RHS or around both)
+            "ENTITIES": Matches any entity specified under ``entities``
+            "SELECTOR": Matches a selector
+            "ADVANCEMENT_GROUP": Special parsing type specifically for advancements
+            "SHORTCUT_ERROR": Raises an error because a shortcut should be able to take care of this
+        "group": (only for selector arguments)
+            "negation": A group with round brackets is possible with a "!" before it
+                eg. type=!(pig, armor_stand, player)
+        "values": A list of all possible selector argument values
+        "value_replace": A dictionary mapping all possible shorthands to the corresponding selector argument value
     """
     def __init__(self, **options):
         # for key in options:
@@ -21,6 +57,7 @@ class ConfigData:
         # changing the above to having all customly defined for pylint
         if options:
             self.version = options["version"]
+            self.ego = options["ego"]
             self.leading_commands = options["leading_commands"]
             self.plugin_conflict_commands = options["plugin_conflict_commands"]
 
@@ -29,9 +66,11 @@ class ConfigData:
             self.selector_replacements = options["selector_replacements"]
             self.selector_argument_details = options["selector_argument_details"]
 
-            self.commands = options["commands"]
             self.blocks = options["blocks"]
+            self.bossbar = options["bossbar"]
+            self.command_names = options["command_names"]
             self.entities = options["entities"]
+            self.team_options = options["team_options"]
 
     def __new__(cls, **options):
         """
@@ -62,7 +101,7 @@ def _get_file_str(file_name):
     return file_data
 
 
-def _get_file_name(version, option_name, extension="txt"):
+def _get_file_name(option_name, version=None, extension="txt"):
     """
     Gets the data inside the file given the version, option and extension
 
@@ -71,6 +110,8 @@ def _get_file_name(version, option_name, extension="txt"):
         option_name (str)
         extension (str)
     """
+    if version is None:
+        return "{option}.{extension}".format(option=option_name, extension=extension)
     return "{option}_{version}.{extension}".format(option=option_name, version=version, extension=extension)
 
 
@@ -104,7 +145,7 @@ def _get_config_data(file_data=None):
     # gets the list as a split through "," on the RHS unless it is the version
     for line in lines:
         option, data = line.split("=")
-        if option == "version":
+        if option in ("version", "ego"):
             options[option] = data
         else:
             options[option] = data.split(",")
@@ -121,7 +162,7 @@ def _get_selector_config_data(version):
             It is default to none so the config file can be read.
     """
     # the config file should be placed one directory below
-    file_name = _get_file_name(version, "selector", extension="json")
+    file_name = _get_file_name("selector", version=version, extension="json")
     file_str = _get_file_str(file_name)
     return json.loads(file_str)
 
@@ -129,21 +170,30 @@ def _get_selector_config_data(version):
 def _get_other_config_data(version):
     """
     Gets data from:
-        blocks
-        commands
-        entities
+        blocks_version.txt
+        command_names_version.txt
+        entities_version.txt
+        bossbar.json
+        team_options.json
 
     Returns:
-        dict: Maps "blocks", "commands" and "entities" to their respective lists
+        dict: Maps "blocks", "command_names" and "entities" to their respective lists
     """
     other_options = {}
-    option_names = ("blocks", "commands", "entities")
+    option_names = ("blocks", "command_names", "entities")
+    json_option_names = ("bossbar", "team_options")
 
     for option in option_names:
-        file_name = _get_file_name(version, option)
-        file_data = _get_file_str(file_name)
-        data = [line for line in file_data.splitlines() if line]
+        file_name = _get_file_name(option, version=version)
+        file_str = _get_file_str(file_name)
+        data = [line for line in file_str.splitlines() if line]
         other_options[option] = data
+
+    for option in json_option_names:
+        file_name = _get_file_name(option, extension="json")
+        file_str = _get_file_str(file_name)
+        file_json = json.loads(file_str)
+        other_options[option] = file_json
 
     return other_options
 
@@ -173,7 +223,7 @@ def _get_all_data():
     """
     # gets all config data from config.ini and validates
     general_options = _get_config_data()
-    valid_general_options = frozenset({"version", "leading_commands", "plugin_conflict_commands"})
+    valid_general_options = frozenset({"version", "ego", "leading_commands", "plugin_conflict_commands"})
     _validate_options(general_options, valid_general_options)
 
     # makes sure the version is correct
@@ -181,6 +231,17 @@ def _get_all_data():
     version = general_options["version"]
     if version not in valid_versions:
         raise SyntaxError("{}: Invalid version in config (must be in {})".format(version, valid_versions))
+
+    # makes sure "ego" is set to true or false (with any capitalization)
+    valid_bool = frozenset({"true", "false"})
+    ego = general_options["ego"].lower()
+    if ego in valid_bool:
+        if ego == "true":
+            general_options["ego"] = True
+        else:
+            general_options["ego"] = False
+    else:
+        raise SyntaxError("{}: Invalid ego boolean value (must be in {})".format(ego, valid_bool))
 
     # gets all selector config options from the config data
     selector_options = _get_selector_config_data(version)
@@ -202,7 +263,6 @@ _get_all_data()
 def test():
     file_data = """
         # comment=lol,lolol
-        commands=totally_a_command,yep
         leading_commands=execute
         plugin_conflict_commands=nope,avi
 

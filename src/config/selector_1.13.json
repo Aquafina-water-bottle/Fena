@@ -54,12 +54,12 @@
         },
 
         "team": {
-            "parse_type": "STR",
-            "group": "negation"
-        },
-        "name": {
             "group": "negation",
             "parse_type": "STR"
+        },
+        "name": {
+            "parse_type": "STR",
+            "group": "negation"
         },
         "limit": {
             "parse_type": "POS_INT"
@@ -73,23 +73,25 @@
             "group": "negation"
         },
         "gamemode": {
+            "parse_type": "VALUES",
             "group": "negation",
-            "arg_replace": {
+            "value_replace": {
                 "0": "survival",
                 "1": "creative",
                 "2": "adventure",
                 "3": "spectator"
             },
-            "args": ["survival", "creative", "adventure", "spectator"]
+            "values": ["survival", "creative", "adventure", "spectator"]
         },
         "sort": {
-            "arg_replace": {
+            "parse_type": "VALUES",
+            "value_replace": {
                 "a": "arbitrary",
                 "r": "random",
                 "c": "closest",
                 "f": "furthest"
             },
-            "args": ["arbitrary", "random", "closest", "furthest"]
+            "values": ["arbitrary", "random", "closest", "furthest"]
         },
 
         "nbt": {

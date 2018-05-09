@@ -35,11 +35,9 @@ class TypedToken(Enum):
     STRING = auto()
     LITERAL_STRING = auto()
     COORD = auto()
-    COORDS = auto()
-    NBT = auto()
-    JSON = auto()
     BLOCK = auto()
-    SELECTOR = auto()
+    EOF = auto()
+    
 
 class SimpleToken(Enum):
     """
