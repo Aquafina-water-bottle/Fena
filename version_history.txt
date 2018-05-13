@@ -188,6 +188,7 @@ s7.0.0      v0.4.0
             - json is used instead of a regular ini because more formatting is required (lists and dicts)
 
     TODO:
+        - Change string formatting to use literal string interpolation
         - Revamp parser into making a parse tree and interpreter class
             - Get the prefix, constobj and function file paths through a global symbol table node visitor
             - Get commands and mcfunctions through the regular interpreter node visitor

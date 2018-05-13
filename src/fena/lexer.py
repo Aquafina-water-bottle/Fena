@@ -4,7 +4,8 @@ if __name__ == "__main__":
 import logging
 import json
 
-from token_classes import WhitespaceSimpleToken, StatementSimpleToken, NBTSimpleToken, SimpleToken, SelectorSimpleToken, NBTSimpleToken, NBTNumberEndSimpleToken
+from token_classes import WhitespaceSimpleToken, StatementSimpleToken, NBTSimpleToken, SimpleToken
+from token_classes import SelectorSimpleToken, NBTSimpleToken, NBTNumberEndSimpleToken
 from token_classes import TypedToken, SelectorTypedToken, TokenValues
 
 from config_data import ConfigData
@@ -52,7 +53,7 @@ class Lexer:
             yield self.get_dedent()
 
         # gets one last EOF token
-        yield self.create_new_token(TypedToken.EOF)
+        yield self.create_new_token(SimpleToken.EOF)
 
     def advance(self, increment=1):
         """
@@ -344,11 +345,13 @@ class Lexer:
         Yields:
             Token: Selector tokens (Selector variables and all selector arguments)
         """
-        # checks for valid selector var as @a, @e, @r, @s, @p (or whatever is specified in the config)
-        if self.get_chars(2) not in Lexer.config_data.selector_variables:
-            self.error("Invalid selector variable: {}".format(repr(self.get_chars(2))))
+        # checks for valid selector var as a, e, r, s, p (or whatever is specified in the config)
+        yield self.create_new_token(SelectorSimpleToken.BEGIN, advance=True)
 
-        yield self.create_new_token(SelectorTypedToken.SELECTOR_VARIABLE, value=self.get_chars(2), advance=True)
+        if self.get_char() not in Lexer.config_data.selector_variable_specifiers:
+            self.error("Invalid selector variable: '@{}'".format(self.get_char()))
+
+        yield self.create_new_token(SelectorTypedToken.SELECTOR_VARIABLE_SPECIFIER, value=self.get_char(), advance=True)
 
         # starts getting the tokens inside square brackets including the square brackets
         if self.current_chars_are(SelectorSimpleToken.OPEN_BRACKET.value):
@@ -447,7 +450,8 @@ class Lexer:
 
     def get_json(self):
         """
-        WTF PYTHON IS SO CONVIENENT
+        Yields:
+            Token: Complete json object
         """
         decoder = json.JSONDecoder()
         json_object, position = decoder.raw_decode(self.text[self.recorder.char_pos:])

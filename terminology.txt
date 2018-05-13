@@ -33,8 +33,11 @@ targets: Both target selectors and full (fake or real) names
 (target) selectors: All formats with a selector variable and optional selector arguments to select a target
     eg. @a[type=armor_stand,RREntity,RRst=1]
 
-(target) selector variables: The minecraft selector beginning with "@" and a character
+(target) selector variables: The minecraft selector beginning with "@" and a target selector variable specifier
     eg. @r, @a, @p
+
+(target) selector variable specifier: The letter that specifies what the selector variable does
+    eg. r, a, p
 
 (target) selector arguments: All arguments provided inside the square brackets of a selector variable
     eg. limit, dx, dy, dz, tag
@@ -83,6 +86,8 @@ execute sub command arguments:
 execute sub command keyword: Any keyword shortcut inside a leading execute command
     eg. if, ast
 
+
+entity_path: Either a selector or vec3 (as a tuple of 3 coordinates)
 
 LHS: Left hand side
 RHS: Right hand side

@@ -1,7 +1,6 @@
 from abc import ABC
 from config_data import ConfigData
 from in_file_config import InFileConfig
-from builder import Builder
 from lexical_token import Token
 
 in_file_config = InFileConfig()
@@ -15,6 +14,14 @@ class CmdNode(Node, ABC):
 
 class StmtNode(Node, ABC):
     pass
+
+class JsonParseNode(Node, ABC):
+    """
+    Specifically holds an arg and an arg value
+    """
+    def __init__(self, arg, arg_value):
+        self.arg = arg
+        self.arg_value = arg_value
 
 class ProgramNode(Node):
     """
@@ -35,10 +42,10 @@ class McFunctionNode(StmtNode):
         name (Token): The mcfunction name
         command_nodes (list of CommandNode objects)
     """
-    def __init__(self, full_path, command_nodes):
-        assert isinstance(full_path, Token)
+    def __init__(self, name, command_nodes):
+        assert isinstance(name, Token)
         assert isinstance(command_nodes, list)
-        self.full_path = full_path
+        self.name = name
         self.command_nodes = command_nodes
 
 class FolderNode(StmtNode):
@@ -78,7 +85,7 @@ class FenaCmdNode(CmdNode):
     Holds all command segments for a command node
 
     Args:
-        command_segment_nodes (list of specialized CmdNode objects)
+        cmd_segment_nodes (list of specialized CmdNode objects)
     
     Attributes:
         execute_node (ExecuteCmdNode)
@@ -86,60 +93,34 @@ class FenaCmdNode(CmdNode):
         function_node (FunctionCmdNode)
         simple_node (SimpleCmdNode)
     """
-    def __init__(self, command_segment_nodes):
-        self.command_segment_nodes = command_segment_nodes
+    def __init__(self, cmd_segment_nodes):
+        self.cmd_segment_nodes = cmd_segment_nodes
 
-    def build(self):
-        return " ".join(x.build() for x in self.command_segment_nodes)
-
-
-class ExecuteCmdNode_1_12(CmdNode):
+class ExecuteCmdNode(CmdNode):
+    """
+    Attributes:
+        sub_cmd_nodes (list of ExecuteSub{type}Arg objects)
+    """
     def __init__(self, sub_cmd_nodes):
         self.sub_cmd_nodes = sub_cmd_nodes
 
-    def build(self):
-        return " ".join(x.build() for x in self.sub_cmd_nodes)
-
-class ExecuteSubCmdNode_1_12(CmdNode):
+class ExecuteSubLegacyArg(CmdNode):
     """
+    Execute node for all versions under 1.12 inclusive
+
     Attributes:
         selector (SelectorNode)
         coords (Vec3Node)
-        sub_if (ExecuteSubIfArgBlock)
+        sub_if (ExecuteSubIfBlockArg)
     """
     def __init__(self, selector, coords, sub_if):
         assert isinstance(selector, SelectorNode)
         assert isinstance(coords, Vec3Node)
-        assert isinstance(sub_if, ExecuteSubIfArgBlock)
+        assert isinstance(sub_if, ExecuteSubIfBlockArg)
 
         self.selector = selector
         self.coords = coords
         self.sub_if = sub_if
-
-    def build(self):
-        if self.coords is None:
-            coords = "~ ~ ~"
-        else:
-            coords = self.coords.build()
-        selector = self.selector.build()
-
-        if self.sub_if is None:
-            return f"execute {selector} {coords}"
-        else:
-            sub_if = self.sub_if.build()
-            return f"execute {selector} {coords} {sub_if}"
-
-class ExecuteCmdNode_1_13(CmdNode):
-    """
-    Attributes:
-        exec_sub_cmd_nodes (list of children types of ExecuteSubIfArg)
-    """
-    def __init__(self, exec_sub_cmd_nodes):
-        assert isinstance(exec_sub_cmd_nodes, list)
-        self.exec_sub_cmd_nodes = exec_sub_cmd_nodes 
-
-    def build(self):
-        return " ".join(x.build() for x in self.exec_sub_cmd_nodes)
 
 class ExecuteSubAsArg(CmdNode):
     pass
@@ -178,7 +159,7 @@ class ExecuteSubIfArg(CmdNode):
         assert isinstance(negated, bool)
         self.sub_cmd = ("unless" if negated else "if")
 
-class ExecuteSubIfArgSelector(ExecuteSubIfArg):
+class ExecuteSubIfSelectorArg(ExecuteSubIfArg):
     """
     Args:
         selector (SelectorNode)
@@ -192,11 +173,11 @@ class ExecuteSubIfArgSelector(ExecuteSubIfArg):
         super().__init__(negated)
         self.selector = selector
 
-    def build(self):
-        selector = self.selector.build()
-        return f"{self.sub_cmd} entity {selector}"
+    # def build(self):
+    #     selector = self.selector.build()
+    #     return f"{self.sub_cmd} entity {selector}"
 
-class ExecuteSubIfArgBlock(ExecuteSubIfArg):
+class ExecuteSubIfBlockArg(ExecuteSubIfArg):
     """
     Args:
         block (BlockNode)
@@ -213,18 +194,18 @@ class ExecuteSubIfArgBlock(ExecuteSubIfArg):
         self.coords = coords
         self.version = version
 
-    def build(self):
-        if self.coords is None:
-            coords = "~ ~ ~"
-        else:
-            coords = self.coords.build()
+    # def build(self):
+    #     if self.coords is None:
+    #         coords = "~ ~ ~"
+    #     else:
+    #         coords = self.coords.build()
 
-        block = self.block.build()
-        if self.version == "1.12":
-            return f"detect {coords} {block}"
-        return f"{self.sub_cmd} block {coords} {block}"
+    #     block = self.block.build()
+    #     if self.version == "1.12":
+    #         return f"detect {coords} {block}"
+    #     return f"{self.sub_cmd} block {coords} {block}"
     
-class ExecuteSubIfArgBlocks(ExecuteSubIfArg):
+class ExecuteSubIfBlocksArg(ExecuteSubIfArg):
     """
     Args:
         coords1 (CoordNode)
@@ -243,18 +224,18 @@ class ExecuteSubIfArgBlocks(ExecuteSubIfArg):
         self.coords3 = coords3
         self.masked = masked
 
-    def build(self):
-        if self.masked:
-            cmd_param = "masked"
-        else:
-            cmd_param = "all"
-            
-        coords1 = self.coords1.build()
-        coords2 = self.coords2.build()
-        coords3 = self.coords3.build()
-        return f"{self.sub_cmd} blocks {coords1} {coords2} {coords3} {cmd_param}"
+    # def build(self):
+    #     if self.masked:
+    #         cmd_param = "masked"
+    #     else:
+    #         cmd_param = "all"
+    #         
+    #     coords1 = self.coords1.build()
+    #     coords2 = self.coords2.build()
+    #     coords3 = self.coords3.build()
+    #     return f"{self.sub_cmd} blocks {coords1} {coords2} {coords3} {cmd_param}"
 
-class ExecuteSubIfArgCompareEntity(ExecuteSubIfArg):
+class ExecuteSubIfCompareEntityArg(ExecuteSubIfArg):
     """
     Args:
         selector1 (SelectorNode)
@@ -266,7 +247,7 @@ class ExecuteSubIfArgCompareEntity(ExecuteSubIfArg):
     Usage:
         if(target objective operator target2 objective2) -> if score target objective operator target2 objective
     """
-    valid_operators = frozenset({"==", "<", "<=", ">", ">="})
+    # valid_operators = frozenset({"==", "<", "<=", ">", ">="})
 
     def __init__(self, selector1, objective1, operator, selector2, objective2, negated=False):
         super().__init__(negated)
@@ -276,15 +257,12 @@ class ExecuteSubIfArgCompareEntity(ExecuteSubIfArg):
         self.selector2 = selector2
         self.objective2 = objective2
 
-        if self.operator.value not in ExecuteSubIfArgCompareEntity.valid_operators:
-            raise SyntaxError("{}: Invalid operator type, operators must be within {}".format(self.operator, ExecuteSubIfArgCompareEntity.valid_operators))
+    # def build(self):
+    #     return "{} score {} {} {} {} {}".format(
+    #         self.sub_cmd, self.selector1.build(), self.objective1.build(prefix=True),
+    #         self.operator.build(replacements={"==": "="}), self.selector2.build(), self.objective2.build(prefix=True))
 
-    def build(self):
-        return "{} score {} {} {} {} {}".format(
-            self.sub_cmd, self.selector1.build(), self.objective1.build(prefix=True),
-            self.operator.build(replacements={"==": "="}), self.selector2.build(), self.objective2.build(prefix=True))
-
-class ExecuteSubIfArgCompareInt(ExecuteSubIfArg):
+class ExecuteSubIfCompareIntArg(ExecuteSubIfArg):
     """
     Args:
         selector (SelectorNode)
@@ -299,7 +277,7 @@ class ExecuteSubIfArgCompareInt(ExecuteSubIfArg):
         if(target objective > int) -> if score target objective matches (int+1)..
         if(target objective >= int) -> if score target objective matches (int)..
     """
-    valid_operators = frozenset({"==", "<", "<=", ">", ">="})
+    # valid_operators = frozenset({"==", "<", "<=", ">", ">="})
 
     def __init__(self, selector, objective, operator, value, negated=False):
         super().__init__(negated)
@@ -308,27 +286,24 @@ class ExecuteSubIfArgCompareInt(ExecuteSubIfArg):
         self.operator = operator
         self.value = value
 
-        if self.operator.value not in ExecuteSubIfArgCompareInt.valid_operators:
-            raise SyntaxError("{}: Invalid operator type, operators must be within {}".format(self.operator, ExecuteSubIfArgCompareInt.valid_operators))
+    # def build(self):
+    #     int_value = self.value.value
+    #     if self.operator.value == "==":
+    #         int_range = int_value
+    #     elif self.operator.value == "<":
+    #         int_range = "..{}".format(int_value-1)
+    #     elif self.operator.value == "<=":
+    #         int_range = "..{}".format(int_value)
+    #     elif self.operator.value == ">":
+    #         int_range = "{}..".format(int_value+1)
+    #     elif self.operator.value == ">=":
+    #         int_range = "{}..".format(int_value)
+    #     else:
+    #         raise SyntaxError("Unknown default case")
 
-    def build(self):
-        int_value = self.value.value
-        if self.operator.value == "==":
-            int_range = int_value
-        elif self.operator.value == "<":
-            int_range = "..{}".format(int_value-1)
-        elif self.operator.value == "<=":
-            int_range = "..{}".format(int_value)
-        elif self.operator.value == ">":
-            int_range = "{}..".format(int_value+1)
-        elif self.operator.value == ">=":
-            int_range = "{}..".format(int_value)
-        else:
-            raise SyntaxError("Unknown default case")
+    #     return "{} score {} {} matches {}".format(self.sub_cmd, self.selector.build(), self.objective.build(prefix=True), int_range)
 
-        return "{} score {} {} matches {}".format(self.sub_cmd, self.selector.build(), self.objective.build(prefix=True), int_range)
-
-class ExecuteSubIfArgRange(ExecuteSubIfArg):
+class ExecuteSubIfRangeArg(ExecuteSubIfArg):
     """
     Args:
         selector1 (SelectorNode)
@@ -344,8 +319,8 @@ class ExecuteSubIfArgRange(ExecuteSubIfArg):
         self.objective = objective
         self.int_range = int_range
 
-    def build(self):
-        return "{} score {} {} matches {}".format(self.sub_cmd, self.selector.build(), self.objective.build(prefix=True), self.int_range.build())
+    # def build(self):
+    #     return "{} score {} {} matches {}".format(self.sub_cmd, self.selector.build(), self.objective.build(prefix=True), self.int_range.build())
 
 
 class ExecuteSubResultArg(CmdNode):
@@ -372,14 +347,6 @@ class ScoreboardCmdMathNode(CmdNode):
         self.end_target = end_target
         self.end_objective = end_objective
 
-    def build(self):
-        begin_target = self.begin_target.build()
-        begin_objective = self.begin_objective.build()
-        operator = self.operator.build()
-        end_target = self.end_target.build()
-        end_objective = self.end_objective.build()
-        return f"scoreboard players operation {begin_target} {begin_objective} {operator} {end_target} {end_objective}"
-
 class ScoreboardCmdMathValueNode(CmdNode):
     """
     Args:
@@ -394,35 +361,6 @@ class ScoreboardCmdMathValueNode(CmdNode):
         self.operator = operator
         self.value = value
 
-    def build(self):
-        target = self.target.build()
-        objective = self.objective.build()
-        operator = self.operator.build()
-        value = self.value.build()
-        constobj = in_file_config.constobj
-
-        if operator == "=":
-            return f"scoreboard players set {target} {objective} {value}"
-        elif operator == "+=":
-            return f"scoreboard players add {target} {objective} {value}"
-        elif operator == "-=":
-            return f"scoreboard players add {target} {objective} {value}"
-        elif operator in ("*=", "/=", "%="):
-            return f"scoreboard players operation {target} {objective} {operator} {value} {constobj}"
-        elif operator == "<=":
-            # sets the target to the score if and only if the target has a larger score compared to the value
-            # therefore making the target score less than or equal to the value
-            return f"scoreboard players operation {target} {objective} < {value} {constobj}"
-        elif operator == ">=":
-            # sets the target to the score if and only if the target has a smaller score compared to the value
-            # therefore making the target score greater than or equal to the value
-            return f"scoreboard players operation {target} {objective} > {value} {constobj}"
-        elif operator in ("swap"):
-            # no reason to swap with a constant value
-            raise SyntaxError("Cannot swap with a constant value")
-        else:
-            raise SyntaxError("Unknown default case")
-
 class ScoreboardCmdSpecialNode(CmdNode):
     """
     Args:
@@ -435,13 +373,157 @@ class ScoreboardCmdSpecialNode(CmdNode):
         self.sub_cmd = sub_cmd
         self.objective = objective
 
-        assert self.sub_cmd in ("enable", "reset", "<-")
+class SimpleCmdNode(CmdNode):
+    """
+    Attributes:
+        tokens (list of Token objects)
+    """
+    def __init__(self, tokens):
+        assert isinstance(tokens, list)
+        self.tokens = tokens
 
-    def build(self):
-        sub_cmd = self.sub_cmd.build(replacements={"<-": "get"})
-        target = self.target.build()
-        objective = self.objective.build(prefix=True)
-        return f"scoreboard players {sub_cmd} {target} {objective}"
+
+class BossbarCmdNode(CmdNode):
+    pass
+
+class BossbarAddNode(BossbarCmdNode):
+    """
+    Attributes:
+        bossbar_id (Token)
+        display_name (Token)
+        json (JsonNode)
+    """
+    def __init__(self, bossbar_id, display_name=None, json=None):
+        # makes sure that at least one is none since the only possible
+        # options are for both to be none, or one to be not none
+        assert display_name is None or json is None
+        self.bossbar_id = bossbar_id
+        self.display_name = display_name
+        self.json = json
+
+class BossbarRemoveNode(BossbarCmdNode):
+    """
+    Attributes:
+        bossbar_id (Token)
+    """
+    def __init__(self, bossbar_id):
+        self.bossbar_id = bossbar_id
+
+class BossbarGetNode(BossbarCmdNode):
+    """
+    Attributes:
+        sub_cmd (Token)
+    """
+    def __init__(self, bossbar_id, sub_cmd):
+        self.bossbar_id = bossbar_id
+        self.sub_cmd = sub_cmd
+
+# class BossbarSetMaxNode(BossbarCmdNode):
+#     """
+#     Attributes:
+#         bossbar_id (Token)
+#         max (Token)
+#     """
+#     def __init__(self, bossbar_id, max):
+#         self.bossbar_id = bossbar_id
+#         self.max = max
+# 
+# class BossbarSetValueNode(BossbarCmdNode):
+#     """
+#     Attributes:
+#         sub_cmd (Token)
+#         value (Token)
+#     """
+#     def __init__(self, bossbar_id, value):
+#         self.bossbar_id = bossbar_id
+#         self.value = value
+# 
+# class BossbarSetPlayersNode(BossbarCmdNode):
+#     """
+#     Attributes:
+#         sub_cmd (Token)
+#         selector (SelectorNode)
+#     """
+#     def __init__(self, bossbar_id, selector):
+#         self.bossbar_id = bossbar_id
+#         self.selector = selector
+# 
+# class BossbarSetVisibleNode(BossbarCmdNode):
+#     """
+#     Attributes:
+#         sub_cmd (Token)
+#         visible (Token)
+#     """
+#     def __init__(self, bossbar_id, visible):
+#         self.bossbar_id = bossbar_id
+#         self.visible = visible
+# 
+# class BossbarSetColorNode(BossbarCmdNode):
+#     """
+#     Attributes:
+#         sub_cmd (Token)
+#         color (Token)
+#     """
+#     def __init__(self, bossbar_id, color):
+#         self.bossbar_id = bossbar_id
+#         self.color = color
+# 
+# class BossbarSetStyleNode(BossbarCmdNode):
+#     """
+#     Attributes:
+#         sub_cmd (Token)
+#         style (Token)
+#     """
+#     def __init__(self, bossbar_id, style):
+#         self.bossbar_id = bossbar_id
+#         self.style = style
+
+
+class DataCmdNode(CmdNode):
+    pass
+
+class DataGetNode(DataCmdNode):
+    """
+    Attributes:
+        entity_vec3 (SelectorNode, Vec3Node)
+        path (Vec3Node)
+    """
+    def __init__(self, entity_vec3, path, scale=None):
+        self.entity_vec3 = entity_vec3
+        self.path = path
+        self.scale = scale
+
+class DataMergeNode(DataCmdNode):
+    """
+    Attributes:
+        nbt (NbtNode)
+    """
+    def __init__(self, nbt):
+        self.nbt = nbt
+
+class DataRemoveNode(DataCmdNode):
+    """
+    Attributes:
+        path (Vec3Node)
+    """
+    def __init__(self, path):
+        self.path = path
+
+
+class EffectCmdNode(CmdNode):
+    pass
+
+class EffectClearNode(EffectCmdNode):
+    def __init__(self, effect=None):
+        self.effect = effect
+
+class EffectGiveNode(EffectCmdNode):
+    def __init__(self, effect, duration=None, level=None, show_particles=False):
+        self.effect = effect
+        self.duration = duration
+        self.level = level
+        self.show_particles = show_particles
+
 
 class FunctionCmdNode(CmdNode):
     """
@@ -451,22 +533,6 @@ class FunctionCmdNode(CmdNode):
     def __init__(self, function_name):
         assert isinstance(function_name, str)
         self.function_name = function_name
-
-    def build(self):
-        function = in_file_config.functions[self.function_name]
-        return f"function {function}"
-
-class SimpleCmdNode(CmdNode):
-    """
-    Attributes:
-        tokens (list of Token objects)
-    """
-    def __init__(self, tokens):
-        assert isinstance(tokens, list)
-        self.tokens = tokens
-    
-    def build(self):
-        return " ".join(x.build() for x in self.tokens)
 
 class TeamCmdNode(CmdNode):
     """
@@ -495,14 +561,6 @@ class TeamAddNode(TeamCmdNode):
         self.team_name = team_name
         self.display_name = display_name
 
-    def build(self):
-        team_name = self.team_name.build()
-        if self.display_name is None:
-            return f"{self.begin_cmd} add {team_name}"
-
-        display_name = self.display_name.build()
-        return f"{self.begin_cmd} add {team_name} {display_name}"
-
 class TeamJoinNode(TeamCmdNode):
     """
     team_join ::= STR && "+=" && target
@@ -516,11 +574,6 @@ class TeamJoinNode(TeamCmdNode):
         self.team_name = team_name
         self.target = target
 
-    def build(self):
-        team_name = self.team_name.build()
-        target = self.target.build()
-        return f"{self.begin_cmd} join {team_name} {target}"
-
 class TeamLeaveNode(TeamCmdNode):
     """
     team_leave ::= "leave" && target
@@ -531,10 +584,6 @@ class TeamLeaveNode(TeamCmdNode):
     def __init__(self, target):
         super().__init__()
         self.target = target
-
-    def build(self):
-        target = self.target.build()
-        return f"{self.begin_cmd} leave {target}"
 
 class TeamEmptyNode(TeamCmdNode):
     """
@@ -548,61 +597,196 @@ class TeamEmptyNode(TeamCmdNode):
         self.team_name = team_name
         self.target = target
 
-    def build(self):
-        team_name = self.team_name.build()
-        target = self.target.build()
-        return f"{self.begin_cmd} join {team_name} {target}"
-
 class TeamOptionNode(TeamCmdNode):
-    pass
+    """
+    Attributes:
+        team_name (Token)
+        option (Token)
+        value (Token)
+    """
+    def __init__(self, team_name, option, value):
+        super().__init__()
+        self.team_name = team_name
+        self.option = option
+        self.value = value
 
 class TeamRemoveNode(TeamCmdNode):
-    pass
+    """
+    Attributes:
+        team_name (Token)
+    """
+    def __init__(self, team_name):
+        super().__init__()
+        self.team_name = team_name
 
-class BossbarCmdNode(CmdNode):
-    pass
 
 class TagCmdNode(CmdNode):
     pass
-    
-class DataCmdNode(CmdNode):
-    pass
 
+class TagAddNode(TagCmdNode):
+    """
+    Attributes:
+        tag (Token)
+    """
+    def __init__(self, tag):
+        self.tag = tag
+
+class TagRemoveNode(TagCmdNode):
+    """
+    Attributes:
+        tag (Token)
+    """
+    def __init__(self, tag):
+        self.tag = tag
+    
 
 class SelectorNode(CmdNode):
     """
-    selector ::= selector_var & ("[" & selector_args & "]")?
-    # selector_var is defined under selector_version.json as "selector_variables"
-    selector_args ::= (single_arg)? | (single_arg & ("," & single_arg)*)?
-    single_arg ::= [simple_arg, range_arg, tag_arg]
-
-    simple_arg ::= default_arg & "=" & ("!")? & [STR, signed_int]
-    # default_arg is defined under selector_version.json as "selector_arguments"
-    tag_arg ::= STR
-    range_arg ::= STR & ("=" & range)?
-    range ::= [nonneg_int, (nonneg_int & ".."), (".." & nonneg_int), (nonneg_int & ".." & nonneg_int)]
-
     Attributes:
-        selector_var (Token)
+        selector_var_specifier (Token)
         selector_args (list of SelectorArgNode objects)
     """
-    def __init__(self, selector_var, selector_args):
-        assert isinstance(selector_var, Token)
+    def __init__(self, selector_var_specifier, selector_args):
+        assert isinstance(selector_var_specifier, Token)
         assert isinstance(selector_args, list)
 
-        self.selector_var = selector_var
+        self.selector_var_specifier = selector_var_specifier
         self.selector_args = selector_args
 
-    def build(self):
-        selector_var = self.selector_var.build()
-        selector_args = ",".join(x.build() for x in self.selector_args)
-        return f"{selector_var}[{selector_args}]"
+class SelectorScoreArgNode(CmdNode):
+    """
+    Attributes:
+        objective (Token)
+        int_range (IntRangeNode)
+    """
+    def __init__(self, objective, int_range):
+        self.objective = objective
+        self.int_range = int_range
+
+class SelectorDefaultArgNode(CmdNode):
+    """
+    Attributes:
+        arg (Token)
+        arg_value (SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode)
+    """
+    def __init__(self, arg, arg_value):
+        self.arg = arg
+        self.arg_value = arg_value
+
+class SelectorDefaultArgValueNode(CmdNode):
+    """
+    Attributes:
+        arg_value (Token, NumberRangeNode, IntRangeNode)
+        negated (bool)
+    """
+    def __init__(self, arg_value, negated=False):
+        self.arg_value = arg_value
+        self.negated = negated
+
+class SelectorDefaultGroupArgValueNode(CmdNode):
+    """
+    Attributes:
+        arg_values (list of Token objects)
+        negated (bool)
+    """
+    def __init__(self, arg_values, negated=False):
+        self.arg_values = arg_values
+        self.negated = negated
+
+class SelectorTagArgNode(CmdNode):
+    """
+    Attributes:
+        tag (Token)
+    """
+    def __init__(self, tag):
+        self.tag = tag
+
+class SelectorNBTArgNode(CmdNode):
+    """
+    Attributes:
+        nbt (NbtNode)
+    """
+    def __init__(self, nbt):
+        self.nbt = nbt
+
+class SelectorAdvancementArgNode(CmdNode):
+    """
+    Attributes:
+        advancements (?)
+    """
+    def __init__(self, advancements):
+        self.advancements = advancements 
+
+
+class IntRangeNode(CmdNode):
+    """
+    Note that a range can be a singular number. If so, left_int is the same as right_int
+
+    Attributes:
+        left_int (Token)
+        right_int (Token)
+    """
+    def __init__(self, left_int, right_int):
+        self.left_int = left_int
+        self.right_int = right_int
+
+class NumberRangeNode(CmdNode):
+    """
+    Note that a range can be a singular number. If so, left_number is the same as right_number
+
+    Attributes:
+        left_number (Token)
+        right_number (Token)
+    """
+    def __init__(self, left_number, right_number):
+        self.left_number = left_number
+        self.right_number = right_number
 
 class BlockNode(CmdNode):
-    pass
+    """
+    Attributes:
+        block (Token)
+        states (list of BlockStateNode objects)
+        nbt (NbtNode)
+    """
+    def __init__(self, block, states, nbt):
+        self.block = block
+        self.states = states
+        self.nbt = nbt
+
+
+class CoordsNode(CmdNode):
+    """
+    Factory for getting a vec2 or vec3 node
+    This is literally here because linting is stupid
+    """
+    def __new__(self, coords):
+        if len(coords) == 3:
+            return Vec3Node(*coords)
+        elif len(coords) == 2:
+            return Vec2Node(*coords)
+        else:
+            raise SyntaxError("Invalid number of coordinates to make a Vec3Node or Vec2Node")
 
 class Vec2Node(CmdNode):
-    pass
+    """
+    Attributes:
+        coord1 (Token)
+        coord2 (Token)
+    """
+    def __init__(self, coord1, coord2):
+        self.coord1 = coord1
+        self.coord2 = coord2
 
 class Vec3Node(CmdNode):
-    pass
+    """
+    Attributes:
+        coord1 (Token)
+        coord2 (Token)
+        coord3 (Token)
+    """
+    def __init__(self, coord1, coord2, coord3):
+        self.coord1 = coord1
+        self.coord2 = coord2
+        self.coord3 = coord3
+    

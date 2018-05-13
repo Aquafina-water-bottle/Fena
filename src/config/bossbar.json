@@ -13,7 +13,7 @@
 
     "visible": {
         "parse_type": "VALUES",
-        "values": ["visible", "invisible"]
+        "values": ["true", "false"]
     },
 
     "color": {

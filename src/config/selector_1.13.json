@@ -1,5 +1,5 @@
 {   
-    "selector_variables": ["@a", "@e", "@r", "@p", "@s"],
+    "selector_variable_specifiers": ["a", "e", "r", "p", "s"],
 
     "selector_arguments": [
         "x", "y", "z", "dx", "dy", "dz",
@@ -55,11 +55,13 @@
 
         "team": {
             "group": "negation",
-            "parse_type": "STR"
+            "parse_type": "STR",
+            "negation": true
         },
         "name": {
             "parse_type": "STR",
-            "group": "negation"
+            "group": "negation",
+            "negation": true
         },
         "limit": {
             "parse_type": "POS_INT"
@@ -70,7 +72,8 @@
 
         "type": {
             "parse_type": "ENTITIES",
-            "group": "negation"
+            "group": "negation",
+            "negation": true
         },
         "gamemode": {
             "parse_type": "VALUES",
@@ -81,7 +84,8 @@
                 "2": "adventure",
                 "3": "spectator"
             },
-            "values": ["survival", "creative", "adventure", "spectator"]
+            "values": ["survival", "creative", "adventure", "spectator"],
+            "negation": true
         },
         "sort": {
             "parse_type": "VALUES",
@@ -95,7 +99,8 @@
         },
 
         "nbt": {
-            "parse_type": "SHORTCUT_ERROR"
+            "parse_type": "SHORTCUT_ERROR",
+            "negation": true
         },
         "scores": {
             "parse_type": "SHORTCUT_ERROR"
@@ -103,6 +108,5 @@
         "advancements": {
             "parse_type": "ADVANCEMENT_GROUP"
         }
-
     }
 }

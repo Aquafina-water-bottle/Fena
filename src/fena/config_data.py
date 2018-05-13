@@ -19,7 +19,7 @@ class ConfigData:
         leading_commands (list of strs)
         plugin_conflict_commands (list of strs)
 
-        selector_variables (list of strs)
+        selector_variable_specifiers (list of strs)
         selector_arguments (list of strs)
         selector_replacements (dict): maps the shorthand version to the minecraft selector argument
         selector_argument_details (dict): maps each selector argument to the parse type and any other details
@@ -29,26 +29,6 @@ class ConfigData:
         blocks (list of strs)
         entities (list of strs)
 
-    command json parse type:
-        "parse_type":
-            "VALUES": It has a "values" attribute that should have a containment check on it
-                - This might also have a "value_replace" attribute
-            "STR": Anything contained inside a string containing [A-Za-z_.-]
-            "SIGNED_INT": Any (possibly negative) integer value (Z)
-            "POS_INT": Any positive integer value (Z+)
-            "NONNEG_INT": Any nonnegatie integer value (Z nonneg)
-            "INT_RANGE": Any signed integer around ".." (either one on the LHS, one on the RHS or around both)
-            "NUMBER": Any signed integer or signed decimal number
-            "NUMBER_RANGE": Any number around ".." (either one on the LHS, one on the RHS or around both)
-            "ENTITIES": Matches any entity specified under ``entities``
-            "SELECTOR": Matches a selector
-            "ADVANCEMENT_GROUP": Special parsing type specifically for advancements
-            "SHORTCUT_ERROR": Raises an error because a shortcut should be able to take care of this
-        "group": (only for selector arguments)
-            "negation": A group with round brackets is possible with a "!" before it
-                eg. type=!(pig, armor_stand, player)
-        "values": A list of all possible selector argument values
-        "value_replace": A dictionary mapping all possible shorthands to the corresponding selector argument value
     """
     def __init__(self, **options):
         # for key in options:
@@ -61,7 +41,7 @@ class ConfigData:
             self.leading_commands = options["leading_commands"]
             self.plugin_conflict_commands = options["plugin_conflict_commands"]
 
-            self.selector_variables = options["selector_variables"]
+            self.selector_variable_specifiers = options["selector_variable_specifiers"]
             self.selector_arguments = options["selector_arguments"]
             self.selector_replacements = options["selector_replacements"]
             self.selector_argument_details = options["selector_argument_details"]
@@ -245,7 +225,7 @@ def _get_all_data():
 
     # gets all selector config options from the config data
     selector_options = _get_selector_config_data(version)
-    valid_selector_options = frozenset({"selector_variables", "selector_arguments", "selector_replacements", "selector_argument_details"})
+    valid_selector_options = frozenset({"selector_variable_specifiers", "selector_arguments", "selector_replacements", "selector_argument_details"})
     _validate_options(selector_options, valid_selector_options)
 
     # gets all blocks, commands and entities

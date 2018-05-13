@@ -36,8 +36,7 @@ class TypedToken(Enum):
     LITERAL_STRING = auto()
     COORD = auto()
     BLOCK = auto()
-    EOF = auto()
-    
+    JSON = auto()
 
 class SimpleToken(Enum):
     """
@@ -49,6 +48,7 @@ class SimpleToken(Enum):
     COMMA = ","
     OPEN_PARENTHESES = "("
     CLOSE_PARENTHESES = ")"
+    EOF = None
 
 class WhitespaceSimpleToken(Enum):
     COMMENT = "#"
@@ -127,8 +127,7 @@ class ExecuteArgsSimpleToken(Enum):
 
 
 class SelectorTypedToken(Enum):
-    SELECTOR_VARIABLE = auto()
-    SELECTOR_ARGUMENT = auto()
+    SELECTOR_VARIABLE_SPECIFIER = auto()
 
 class SelectorSimpleToken(Enum):
     BEGIN = "@"

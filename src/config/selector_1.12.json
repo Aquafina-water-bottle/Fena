@@ -1,5 +1,5 @@
 {   
-    "selector_variables": ["@a", "@e", "@r", "@p", "@s"],
+    "selector_variable_specifiers": ["a", "e", "r", "p", "s"],
 
     "selector_arguments": [
         "x", "y", "z", "dx", "dy", "dz", "r", "rm", "rx", "rxm", "ry", "rym",
@@ -63,10 +63,12 @@
         },
 
         "team": {
-            "parse_type": "STR"
+            "parse_type": "STR",
+            "negation": true
         },
         "name": {
-            "parse_type": "STR"
+            "parse_type": "STR",
+            "negation": true
         },
 
         "tag": {
@@ -92,11 +94,13 @@
 
         "m": {
             "parse_type": "VALUES",
-            "values": ["0", "1", "2", "3"]
+            "values": ["0", "1", "2", "3"],
+            "negation": true
         },
 
         "type": {
-            "parse_type": "ENTITIES"
+            "parse_type": "ENTITIES",
+            "negation": true
         }
     }
 }

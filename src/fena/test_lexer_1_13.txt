@@ -181,20 +181,16 @@
     # bossbar set <id> value <value>
     # value ::= INT
     # bossbar set value _lol 5
-    bossbar set _lol value 5
     bossbar _lol value = 5
     
     # bossbar set <id> max <max>
     # max ::= INT
     # bossbar set max _lol 5
-    bossbar set _lol max 5
     bossbar _lol max = 5
 
     # bossbar set <id> visible <true, false>
-    bossbar set visible _lol true
-    bossbar _lol = visible
-    bossbar set visible _lol false
-    bossbar _lol = invisible
+    bossbar _lol visible = true
+    bossbar _lol visible = false
 
 !mfunc team_test
     # team add <team> <display_name> (no shortcut)
