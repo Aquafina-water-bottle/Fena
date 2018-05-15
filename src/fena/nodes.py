@@ -104,23 +104,29 @@ class ExecuteCmdNode(CmdNode):
     def __init__(self, sub_cmd_nodes):
         self.sub_cmd_nodes = sub_cmd_nodes
 
+    def __repr__(self):
+        return f"ExecuteCmdNode[sub_cmd_nodes={self.sub_cmd_nodes}]"
+
 class ExecuteSubLegacyArg(CmdNode):
     """
     Execute node for all versions under 1.12 inclusive
 
     Attributes:
         selector (SelectorNode)
-        coords (Vec3Node)
-        sub_if (ExecuteSubIfBlockArg)
+        coords (Vec3Node or None)
+        sub_if (ExecuteSubIfBlockArg or None)
     """
-    def __init__(self, selector, coords, sub_if):
+    def __init__(self, selector, coords=None, sub_if=None):
         assert isinstance(selector, SelectorNode)
-        assert isinstance(coords, Vec3Node)
-        assert isinstance(sub_if, ExecuteSubIfBlockArg)
+        assert coords is None or isinstance(coords, Vec3Node)
+        assert sub_if is None or isinstance(sub_if, ExecuteSubIfBlockArg)
 
         self.selector = selector
         self.coords = coords
         self.sub_if = sub_if
+
+    def __repr__(self):
+        return f"SelectorNode[selector={self.selector}, coords={self.coords}, sub_if={self.sub_if}]"
 
 class ExecuteSubAsArg(CmdNode):
     pass
@@ -376,7 +382,7 @@ class ScoreboardCmdSpecialNode(CmdNode):
 class SimpleCmdNode(CmdNode):
     """
     Attributes:
-        tokens (list of Token objects)
+        nodes (list of Token, SelectorNode, JsonNode and NBTNode objects)
     """
     def __init__(self, tokens):
         assert isinstance(tokens, list)
@@ -496,7 +502,7 @@ class DataGetNode(DataCmdNode):
 class DataMergeNode(DataCmdNode):
     """
     Attributes:
-        nbt (NbtNode)
+        nbt (NBTNode)
     """
     def __init__(self, nbt):
         self.nbt = nbt
@@ -643,15 +649,29 @@ class TagRemoveNode(TagCmdNode):
 class SelectorNode(CmdNode):
     """
     Attributes:
-        selector_var_specifier (Token)
-        selector_args (list of SelectorArgNode objects)
+        selector_var (SelectorVarNode)
+        selector_args (list of SelectorArgNode objects or None)
     """
-    def __init__(self, selector_var_specifier, selector_args):
-        assert isinstance(selector_var_specifier, Token)
-        assert isinstance(selector_args, list)
+    def __init__(self, selector_var, selector_args=None):
+        assert isinstance(selector_var, SelectorVarNode)
+        assert selector_args is None or isinstance(selector_args, list)
 
-        self.selector_var_specifier = selector_var_specifier
+        self.selector_var = selector_var
         self.selector_args = selector_args
+
+    def __repr__(self):
+        return f"SelectorNode[selector_var={self.selector_var}, selector_args={self.selector_args}]"
+
+class SelectorVarNode(CmdNode):
+    """
+    Attributes:
+        selector_var_specifier (Token)
+    """
+    def __init__(self, selector_var_specifier):
+        self.selector_var_specifier = selector_var_specifier
+
+    def __repr__(self):
+        return f"SelectorVarNode[selector_var_specifier={self.selector_var_specifier}]"
 
 class SelectorScoreArgNode(CmdNode):
     """
@@ -660,8 +680,13 @@ class SelectorScoreArgNode(CmdNode):
         int_range (IntRangeNode)
     """
     def __init__(self, objective, int_range):
+        assert isinstance(objective, Token), repr(objective)
+        assert isinstance(int_range, IntRangeNode)
         self.objective = objective
         self.int_range = int_range
+
+    def __repr__(self):
+        return f"SelectorScoreArgNode[objective={self.objective}, int_range={self.int_range}]"
 
 class SelectorDefaultArgNode(CmdNode):
     """
@@ -670,8 +695,13 @@ class SelectorDefaultArgNode(CmdNode):
         arg_value (SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode)
     """
     def __init__(self, arg, arg_value):
+        assert isinstance(arg, Token), repr(arg)
+        assert isinstance(arg_value, (SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode)), repr(arg_value)
         self.arg = arg
         self.arg_value = arg_value
+
+    def __repr__(self):
+        return f"SelectorDefaultArgNode[arg={self.arg}, arg_value={self.arg_value}]"
 
 class SelectorDefaultArgValueNode(CmdNode):
     """
@@ -683,6 +713,9 @@ class SelectorDefaultArgValueNode(CmdNode):
         self.arg_value = arg_value
         self.negated = negated
 
+    def __repr__(self):
+        return f"SelectorDefaultArgValueNode[arg_value={self.arg_value}, negated={self.negated}]"
+
 class SelectorDefaultGroupArgValueNode(CmdNode):
     """
     Attributes:
@@ -690,6 +723,8 @@ class SelectorDefaultGroupArgValueNode(CmdNode):
         negated (bool)
     """
     def __init__(self, arg_values, negated=False):
+        assert isinstance(arg_values, list)
+        assert isinstance(negated, bool)
         self.arg_values = arg_values
         self.negated = negated
 
@@ -699,14 +734,19 @@ class SelectorTagArgNode(CmdNode):
         tag (Token)
     """
     def __init__(self, tag):
+        assert isinstance(tag, Token)
         self.tag = tag
+
+    def __repr__(self):
+        return f"SelectorTagArgNode[tag={self.tag}]"
 
 class SelectorNBTArgNode(CmdNode):
     """
     Attributes:
-        nbt (NbtNode)
+        nbt (NBTNode)
     """
     def __init__(self, nbt):
+        # assert isinstance(nbt, NBTNode)
         self.nbt = nbt
 
 class SelectorAdvancementArgNode(CmdNode):
@@ -723,33 +763,43 @@ class IntRangeNode(CmdNode):
     Note that a range can be a singular number. If so, left_int is the same as right_int
 
     Attributes:
-        left_int (Token)
-        right_int (Token)
+        min_int (Token)
+        max_int (Token)
     """
-    def __init__(self, left_int, right_int):
-        self.left_int = left_int
-        self.right_int = right_int
+    def __init__(self, min_int, max_int):
+        assert min_int is None or isinstance(min_int, Token)
+        assert max_int is None or isinstance(max_int, Token)
+        self.min_int = min_int
+        self.max_int = max_int
+
+    def __repr__(self):
+        return f"IntRangeNode[min={self.min_int}, max={self.max_int}]"
 
 class NumberRangeNode(CmdNode):
     """
-    Note that a range can be a singular number. If so, left_number is the same as right_number
+    Note that a range can be a singular number. If so, min_number is the same as max_number
 
     Attributes:
-        left_number (Token)
-        right_number (Token)
+        min_number (Token or None)
+        max_number (Token or None)
     """
-    def __init__(self, left_number, right_number):
-        self.left_number = left_number
-        self.right_number = right_number
+    def __init__(self, min_number, max_number):
+        assert min_number is None or isinstance(min_number, Token)
+        assert max_number is None or isinstance(max_number, Token)
+        self.min_number = min_number
+        self.max_number = max_number
 
 class BlockNode(CmdNode):
     """
     Attributes:
         block (Token)
         states (list of BlockStateNode objects)
-        nbt (NbtNode)
+        nbt (NBTNode or None)
     """
-    def __init__(self, block, states, nbt):
+    def __init__(self, block, states, nbt=None):
+        assert isinstance(block, Token)
+        assert isinstance(states, list)
+        # assert nbt is None or isinstance(nbt, NBTNode)
         self.block = block
         self.states = states
         self.nbt = nbt
@@ -789,4 +839,7 @@ class Vec3Node(CmdNode):
         self.coord1 = coord1
         self.coord2 = coord2
         self.coord3 = coord3
+
+    def __repr__(self):
+        return f"Vec3Node[coord1={self.coord1}, coord2={self.coord2}, coord3={self.coord3}]"
     

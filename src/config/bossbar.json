@@ -1,35 +1,46 @@
 {
-    "max": {
-        "parse_type": "POS_INT"
+    "1.12": {
+        "bossbar_get": null,
+        "bossbar_set": null
     },
 
-    "value": {
-        "parse_type": "NONNEG_INT"
-    },
+    "1.13": {
+        "bossbar_get": ["max", "value", "players", "visible"],
 
-    "players": {
-        "parse_type": "SELECTOR"
-    },
+        "bossbar_set": {
+            "max": {
+                "parse_type": "POS_INT"
+            },
 
-    "visible": {
-        "parse_type": "VALUES",
-        "values": ["true", "false"]
-    },
+            "value": {
+                "parse_type": "NONNEG_INT"
+            },
 
-    "color": {
-        "parse_type": "VALUES",
-        "values": ["white", "pink", "red", "yellow", "green", "blue", "purple"]
-    },
+            "players": {
+                "parse_type": "SELECTOR"
+            },
 
-    "style": {
-        "parse_type": "VALUES",
-        "value_replace": {
-            "0": "progress",
-            "6": "notched_6",
-            "10": "notched_10",
-            "12": "notched_12",
-            "20": "notched_20"
-        },
-        "values": ["progress", "notched_6", "notched_10", "notched_12", "notched_20"]
+            "visible": {
+                "parse_type": "VALUES",
+                "values": ["true", "false"]
+            },
+
+            "color": {
+                "parse_type": "VALUES",
+                "values": ["white", "pink", "red", "yellow", "green", "blue", "purple"]
+            },
+
+            "style": {
+                "parse_type": "VALUES",
+                "value_replace": {
+                    "0": "progress",
+                    "6": "notched_6",
+                    "10": "notched_10",
+                    "12": "notched_12",
+                    "20": "notched_20"
+                },
+                "values": ["progress", "notched_6", "notched_10", "notched_12", "notched_20"]
+            }
+        }
     }
 }

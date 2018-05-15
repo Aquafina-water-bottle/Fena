@@ -192,44 +192,6 @@
     bossbar _lol visible = true
     bossbar _lol visible = false
 
-!mfunc team_test
-    # team add <team> <display_name> (no shortcut)
-    team add _team team_test
-
-    # team empty <team> (no shortcut)
-    team empty _team
-    
-    # team join <team> <targets>
-    # team join team_name @a
-    team team_name += @a
-
-    # team leave <targets> (no shortcut)
-    team leave @a
-
-    # team option <option> <value>
-    team _team showFriendlyInvisibles = true
-
-    # team remove <team> (no shortcut)
-    team remove _team
-
-!mfunc effect_test
-    # effect clear <selector>
-    # effect clear @a
-    effect @a - all
-
-    # effect clear <selector> <effect>
-    # effect @a - minecraft:saturation
-    # effect clear @a minecraft:saturation
-    effect @a - saturation
-
-    # effect give <selector> <effect> <seconds> <amplifier> <hideParticles>
-    # effect <selector> + <effect> [seconds] [amplifier] [hideParticles=true]
-    # effect give @a minecraft:saturation 10000000 0 true
-    effect @a + saturation 1000000 0
-
-    # effect give @a minecraft:saturation 10000000 0 false
-    effect @a + saturation 1000000 false
-
 !mfunc data_test
     # data get block <vec3> [path] [scale]
     # data <vec3> <- [path] [scale]
@@ -259,6 +221,24 @@
     # data <selector> - <path>
     data @e[type=item,c=1] - Movement.2
 
+!mfunc effect_test
+    # effect clear <selector>
+    # effect clear @a
+    effect @a - all
+
+    # effect clear <selector> <effect>
+    # effect @a - minecraft:saturation
+    # effect clear @a minecraft:saturation
+    effect @a - saturation
+
+    # effect give <selector> <effect> <seconds> <amplifier> <hideParticles>
+    # effect <selector> + <effect> [seconds] [amplifier] [hideParticles=true]
+    # effect give @a minecraft:saturation 10000000 0 true
+    effect @a + saturation 1000000 0
+
+    # effect give @a minecraft:saturation 10000000 0 false
+    effect @a + saturation 1000000 false
+
 !mfunc scoreboard_test
     @a _ti - 1
     @a _ti = 10
@@ -281,6 +261,26 @@
     # tag <selector> remove <tag>
     # tag <selector> - <tag>
     tag @e[type=pig,name=test] - _lol
+
+!mfunc team_test
+    # team add <team> <display_name> (no shortcut)
+    team add _team team_test
+
+    # team empty <team> (no shortcut)
+    team empty _team
+    
+    # team join <team> <targets>
+    # team join team_name @a
+    team team_name += @a
+
+    # team leave <targets> (no shortcut)
+    team leave @a
+
+    # team option <option> <value>
+    team _team showFriendlyInvisibles = true
+
+    # team remove <team> (no shortcut)
+    team remove _team
 
 !mfunc xp_test
     # xp add <selector> amount ["levels", "points"]
@@ -310,8 +310,7 @@
     
     # xp <selector> <- points
     # xp query <selector> points
-    xp @s <- levels
-
+    xp @s <- points
 
     # xp <selector> = NONNEG_INT
     # xp set <selector> NONNEG_INT points

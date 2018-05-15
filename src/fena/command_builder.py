@@ -1,5 +1,5 @@
 """
-The command builder for specifically building 1.12 commands
+Contains node visitors for the AST of a command to build itself
 """
 
 import logging

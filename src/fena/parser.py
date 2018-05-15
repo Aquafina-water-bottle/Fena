@@ -5,22 +5,22 @@ import os
 import logging
 
 from lexical_token import Token
-from token_classes import SimpleToken, WhitespaceSimpleToken, StatementSimpleToken, SelectorSimpleToken, ExecuteSimpleToken
+from token_classes import SimpleToken, WhitespaceSimpleToken, StatementSimpleToken, SelectorSimpleToken, ExecuteSimpleToken, NBTSimpleToken
 from token_classes import TypedToken, SelectorTypedToken, TokenValues
 from token_classes import ALL_TYPED_TOKEN_TYPES
 from nodes import ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode
 from nodes import ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode
 from nodes import ExecuteCmdNode, ExecuteSubIfBlockArg, ExecuteSubLegacyArg
-from nodes import SelectorNode, SelectorTagArgNode, SelectorScoreArgNode
+from nodes import SelectorNode, SelectorVarNode, SelectorTagArgNode, SelectorScoreArgNode
 from nodes import SelectorDefaultArgNode, SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode
 from nodes import BossbarAddNode, BossbarRemoveNode, BossbarGetNode
-from nodes import CoordsNode, Vec3Node, Vec2Node
+from nodes import CoordsNode, Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode
 from node_visitors import NodeBuilder, NodeVisitor
 from coord_utils import is_coord_token, are_coords
 from config_data import ConfigData
 from number_utils import is_signed_int, is_nonneg_int, is_pos_int, is_number
 
-"""
+r"""
 Organizes all lines into their respective mcfunctions
 
 program ::= statement_suite
@@ -34,7 +34,7 @@ constobj_stmt ::= "constobj" && STR
 
 command_suite ::= [NEWLINE, (command, NEWLINE)]*
 command ::= (execute_cmd)? && [sb_cmd, simple_cmd]
-simple_cmd ::= [bossbar_cmd, data_cmd, effect_cmd, function_cmd, tag_cmd, team_cmd, (COMMAND_KEYWORD && (STR)*)]
+simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, tag_cmd, team_cmd, xp_cmd, (COMMAND_KEYWORD && (STR, selector, nbt, json)*)]
 
 execute_cmd_1_12 ::= selector && (vec3)? && (exec_sub_if)? && (execute_cmd_1_12)? && ":"
 execute_cmd_1_13 ::= [selector, vec3, exec_sub_cmds]+ && ":"
@@ -43,7 +43,7 @@ exec_sub_cmd_keywords ::= ("as", "pos", "at", "facing", "rot", "anchor", "in", "
 exec_sub_cmds ::= [rio.rule("exec_sub_" + rule) for (str rule) in exec_sub_cmd_keywords]
 for (str rule) in exec_sub_cmd_keywords:
     rule_arg ::= rio.rule("exec_sub_" + rule + "_arg)
-    rio.rule("exec_sub_" + "rule") ::= rule && "(" && rule_arg && ("," && rule_arg)* && ")"
+    rio.rule("exec_sub_" + rule) ::= rule && "(" && rule_arg && ("," && rule_arg)* && ")"
 
 exec_sub_as_arg ::= selector
 exec_sub_pos_arg ::= vec3
@@ -86,17 +86,9 @@ bossbar_get ::= STR && "<-" && ["max", "value", "players", "visible"]
 bossbar_set ::= STR && bossbar_arg && bossbar_arg_value
 # bossbar_option_arg, bossbar_option_arg_value are defined in the bossbar_version.json
 
-# bossbar_set ::= [bossbar_set_max, bossbar_set_value, bossbar_set_players, bossbar_set_visible, bossbar_set_color, bossbar_set_style]
-# bossbar_set_max ::= STR && "max" && "=" && pos_int
-# bossbar_set_value ::= STR && "value" && "=" && nonneg_int
-# bossbar_set_players ::= STR && "players" && "=" && selector
-# bossbar_set_visible ::= STR && "=" && ["visible", "invisible"]
-# bossbar_set_color ::= STR && "color" && "=" && ["white", "pink", "red", "yellow", "green", "blue", "purple"]
-# bossbar_set_style ::= STR && "style" && "=" && ["0", "6", "10", "12", "20"]
-
 data_cmd ::= "data" && [data_get, data_merge, data_remove]
 data_get ::= entity_vec3 && "<-" && (STR && (signed_int)?)?
-data_merge ::= entity_vec3 && "+" && nbt_tag
+data_merge ::= entity_vec3 && "+" && nbt
 data_remove ::= entity_vec3 && "-" && STR
 
 effect_cmd ::= "effect" && [effect_give, effect_clear]
@@ -115,10 +107,14 @@ team_add ::= "add" && STR && (STR)*
 team_join ::= STR && "+" && target
 team_leave ::= "leave" && target
 team_empty ::= "empty" && STR
-team_option ::= STR && json_parse
+# team_option ::= STR && json_parse
 team_option ::= STR && team_option_arg && "=" && team_option_arg_value
 # team_option_arg, team_option_arg_value are defined in the team_options_version.json
 team_remove ::= "remove" && STR
+
+xp_cmd ::= "xp" && [xp_math, xp_get]
+xp_math ::= ["=", "+", "-"] && nonneg_int && ["points", "levels"]?
+xp_get ::= "<-" && ["points", "levels"]
 
 selector ::= selector_var & ("[" & selector_args & "]")?
 selector_var ::= "@" & selector_var_specifier
@@ -134,8 +130,14 @@ default_arg_values ::= (default_arg_value)? | (single_arg & ("," & single_arg)*)
 tag_arg ::= STR
 score_arg ::= STR & ("=" & int_range)?
 
-nbt_tag ::= pass
-json_tag ::= pass
+nbt ::= nbt_object
+nbt_object ::= "{" && (STR && ":" && nbt_value)* && "}"
+nbt_array ::= "[" && (nbt_value)* && "]"
+nbt_array_begin ::= ["I", "L", "B"]
+nbt_value ::= [literal_str, nbt_number, "true", "false", "null", nbt_object, nbt_array]
+nbt_number = (signed_int && ["b", "s", "l"]?) | (signed_float && ["f", "d"]?)
+
+json ::= json_object
 
 nonneg_int ::= INT  # Z nonneg
 signed_int ::= ("-")? && INT  # Z
@@ -144,8 +146,10 @@ pos_int ::= INT, ::/= 0  # Z+
 float ::= (INT)? && "." && INT  # R, R <= 0
 signed_float ::= ("-")? && float  # R
 
+number ::= [signed_float, signed_int]
 int_range ::= [signed_int, (signed_int & ".."), (".." & signed_int), (signed_int & ".." & signed_int)]
 number_range ::= [signed_float, (signed_float & ".."), (".." & signed_float), (signed_float & ".." & signed_float)]
+literal_str ::= "\"" && ([\A, "\\\"", "\\\\"])* &&  && "\""
 
 target ::= [selector, STR]
 entity_vec3 ::= [selector, vec3]
@@ -154,7 +158,9 @@ vec2 ::= coord && coord
 vec3 ::= coord && coord && coord
 data_type ::= ["byte", "short", "int", "long", "float", "double"]
 coord ::= ("^", "~")? & [signed_int, signed_float]
-block ::= block_type & ("[" & (block_states)? & "]")? & (nbt_tag)?
+block ::= block_type & ("[" & (block_states)? & "]")? & (nbt)?
+block_states ::= (block_state)? | (block_state & ("," & block_state)*)?
+block_state ::= 
 """
 
 class Parser:
@@ -169,19 +175,24 @@ class Parser:
     """
 
     config_data = ConfigData()
+
+    nbt_number_ends = frozenset({"b", "s", "l", "f", "d"})
+    nbt_array_start = frozenset({"I", "B", "L"})
     sb_special_operators = frozenset({"enable", "reset", "<-"})
     sb_math_operators = frozenset({"=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="})
-    json_parse_options = frozenset({"bossbar", "team_options", "selector"})
+    statement_keywords = frozenset({"mfunc", "folder", "prefix", "constobj"})
+    execute_keywords = frozenset({"as", "pos", "at", "facing", "ast", "if", "ifnot", "unless", "result", "success"})
 
-    def __init__(self, lexer, file_path):
+    json_parse_options = {
+        "bossbar": "bossbar",
+        "team_options": "team_options",
+        "selector": "selector_argument_details"
+    }
+
+    def __init__(self, lexer):
         self.iterator = iter(lexer)
         self.current_token = None
         self.advance()
-
-        # self.symbol_table = ScopedSymbolTable()
-        # self.in_file_config = InFileConfig()
-        # self.file_path = file_path
-        # self.mcfunctions = []
 
     def parse(self):
         """
@@ -203,9 +214,12 @@ class Parser:
     def advance(self):
         """
         Gets the next token from the lexer without checking any type
+
+        Returns:
+            Token: The token that was just advanced over
         """
         previous_token = self.current_token
-        self.current_token = next(self.iterator)
+        self.current_token = next(self.iterator, None)
         logging.debug("Advanced to {}".format(repr(self.current_token)))
         return previous_token
 
@@ -229,9 +243,8 @@ class Parser:
         assert values is None or value is None
 
         if (self.current_token.matches_any_of(*token_types) and
-                (values is None or (self.current_token.value in values)) and
-                (value is None or (self.current_token.value == value)) and
-                self.current_token.type in ALL_TYPED_TOKEN_TYPES):
+                (values is None or (self.current_token.value in values and self.current_token.type in ALL_TYPED_TOKEN_TYPES)) and
+                (value is None or (self.current_token.value == value) and self.current_token.type in ALL_TYPED_TOKEN_TYPES)):
             return self.advance()
 
         if error_message is None:
@@ -247,28 +260,30 @@ class Parser:
 
         self.error(error_message)
 
-    def json_parse_arg(self, json_type):
+    def json_parse_arg(self, json_type, arg_token=None):
         """
         Args:
             json_type (str)
+            arg_token (Token or None)
 
         Returns:
-            dict: pass
+            Token: Token that was gotten to determine the json arg details if an arg_token was not provided already
+            dict: json arg details to see the parse type and other information
         """
         assert json_type in Parser.json_parse_options 
 
-        config_data_attr_dict = {
-            "bossbar": "bossbar",
-            "team_options": "team_options",
-            "selector": "selector_argument_details"
-        }
-
-        config_data_attr = config_data_attr_dict.get(json_type)
+        config_data_attr = Parser.json_parse_options.get(json_type)
         json_object = getattr(Parser.config_data, config_data_attr)
 
-        if self.current_token.value in json_object:
-            token = self.eat(TypedToken.STRING)
-            return json_object[token.value]
+        provided_token = True
+        if arg_token is None:
+            arg_token = self.eat(TypedToken.STRING)
+            provided_token = False
+
+        if arg_token.value in json_object:
+            if provided_token:
+                return json_object[arg_token.value]
+            return arg_token, json_object[arg_token.value]
 
         self.error("Expected a token inside {}".format(list(json_object)))
 
@@ -290,14 +305,17 @@ class Parser:
             "SELECTOR": Matches a selector
             "ADVANCEMENT_GROUP": Special parsing type specifically for advancements
             "SHORTCUT_ERROR": Raises an error because a shortcut should be able to take care of this
-        "group": (only for selector arguments)
-            "negation": A group with round brackets is possible with a "!" before it
-                eg. type=!(pig, armor_stand, player)
         "values": A list of all possible selector argument values
         "value_replace": A dictionary mapping all possible shorthands to the corresponding selector argument value
 
         Args:
             arg_details (dict)
+
+        Returns:
+            Token: if the parse type was not a range or selector
+            SelectorNode: if the parse type was a selector
+            IntRangeNode: if the parse type is an int range
+            NumberRangeNode: if the parse type is a number range
         """
         parse_type = arg_details["parse_type"]
 
@@ -319,6 +337,7 @@ class Parser:
                     self.error(f"Expected one of {valid_values} if shorthands are {replacement_values})")
                 self.error(f"Expected one of {valid_values})")
 
+            self.current_token.cast(TypedToken.STRING)
             arg_value_token = self.eat(TypedToken.STRING)
             arg_value_token.replacement = arg_value
             return arg_value_token
@@ -604,7 +623,7 @@ class Parser:
 
     def selector_begin_cmd(self):
         """
-        Intermediary function to determine whether a selector at the beginning
+        Intermediary function to determine whether a selector at the beginning, IntRangeNode, NumberRangeNode
         of a command is part of a scoreboard shortcut or execute shortcut
 
         It is an execute shortcut if the second token is a selector, coordinate, part of the ExecuteSimpleToken class or a colon
@@ -661,7 +680,7 @@ class Parser:
                 coords_node = None
 
             if self.current_token.value == "if":
-                exec_sub_if_nodes = self.exec_sub_if_arg()
+                exec_sub_if_nodes = self.exec_sub_cmds()
             else:
                 exec_sub_if_nodes = None
 
@@ -674,7 +693,7 @@ class Parser:
                 self.advance()
                 break
 
-            return ExecuteCmdNode(execute_nodes)
+        return ExecuteCmdNode(execute_nodes)
 
     def execute_cmd_1_13(self, begin_selector=None):
         """
@@ -722,14 +741,14 @@ class Parser:
         Returns:
             list of ExecSubArg Nodes
         """
-        assert Parser.config_data.version == "1.13"
+        # assert Parser.config_data.version == "1.13"
 
         # skips past the first part of the execute sub command
-        self.advance()
+        sub_cmd_token = self.eat(TypedToken.STRING)
         self.eat(SimpleToken.OPEN_PARENTHESES)
 
         # gets the attribute of "exec_sub_(sub_command)"
-        method_name = "exec_sub_{}_arg".format(self.current_token.value)
+        method_name = "exec_sub_{}_arg".format(sub_cmd_token.value)
         exec_sub_arg_method = getattr(self, method_name) 
 
         # contains the list of nodes gotten from the arg method
@@ -764,18 +783,14 @@ class Parser:
             ExecuteSubIfArgBlock
         """
         if Parser.config_data.version == "1.12":
-            if self.current_token.value not in Parser.config_data.blocks:
-                self.error("Expected a block inside the if argument")
-
-            self.current_token.cast(TypedToken.BLOCK)
-            block_token = self.advance()
+            block_node = self.block()
 
             if is_coord_token(self.current_token):
                 coord_node = self.vec3()
             else:
                 coord_node = None
 
-            return ExecuteSubIfBlockArg(block_token, coord_node)
+            return ExecuteSubIfBlockArg(block_node, coord_node)
 
         else:
             raise NotImplementedError
@@ -797,7 +812,7 @@ class Parser:
         else:
             self.sb_players_special(target=begin_target)
 
-    def sb_players_math(self, begin_target):
+    def sb_players_math(self, begin_target, begin_objective=None):
         """
         sb_players_math ::= target && STR && ["=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="] && (signed_int | target && (STR)?)
 
@@ -806,7 +821,8 @@ class Parser:
             ScoreboardCmdMathValueNode: pass
         """
 
-        begin_objective = self.eat(TypedToken.STRING)
+        if begin_objective is None:
+            begin_objective = self.eat(TypedToken.STRING)
         operator = self.eat(TypedToken.STRING, values=Parser.sb_math_operators)
 
         if self.current_token.matches(SelectorSimpleToken.BEGIN):
@@ -839,7 +855,7 @@ class Parser:
 
     def simple_cmd(self):
         """
-        simple_cmd ::= [team_cmd, tag_cmd, data_cmd, bossbar_cmd, effect_cmd, function_cmd, (COMMAND_KEYWORD && (STR, selector, tag)*)]
+        simple_cmd ::= [team_cmd, tag_cmd, data_cmd, bossbar_cmd, effect_cmd, function_cmd, (COMMAND_KEYWORD && (STR, selector, nbt, json)*)]
 
         Note that a simple command can turn into a scoreboard command
         because "tp" can be a fake player name being set to a scoreboard value
@@ -847,10 +863,10 @@ class Parser:
         """
         command_name = self.current_token.value
         if command_name not in self.config_data.command_names:
-            self.error("Expected a command name (specifed under fena/src/config/command_names_{version}.txt")
+            self.error("Expected a command name (specifed under fena/src/config/command_names.json")
 
         # advances the command name
-        command_token_value = self.advance()
+        command_name_token = self.advance()
 
         if command_name == "bossbar":
             return self.bossbar_cmd()
@@ -871,8 +887,39 @@ class Parser:
             return self.team_cmd()
 
         # should get all values until the next newline
-        # note that the second token is automatically gotten
-        raise NotImplementedError
+        if self.current_token.matches(WhitespaceSimpleToken.NEWLINE):
+            return SimpleCmdNode([command_name_token])
+
+        # if the second token exists and it is a string, it might still be a scoreboard shortcut
+        if self.current_token.matches(TypedToken.STRING):
+            second_token = self.eat(TypedToken.STRING)
+            if self.current_token.value in Parser.sb_math_operators:
+                return self.sb_players_math(begin_target=command_name_token, begin_objective=second_token)
+
+            nodes = [command_name_token, second_token]
+        else:
+            nodes = [command_name_token]
+
+        # STR, selector, nbt, json
+        while not self.current_token.matches(WhitespaceSimpleToken.NEWLINE):
+            if self.current_token.matches(SelectorSimpleToken.BEGIN):
+                selector_node = self.selector()
+                nodes.append(selector_node)
+
+            # TODO change json
+            elif self.current_token.matches(TypedToken.JSON):
+                json_token = self.eat(TypedToken.JSON)
+                nodes.append(json_token)
+
+            elif self.current_token.matches(NBTSimpleToken.BEGIN):
+                nbt_node = self.nbt()
+                nodes.append(nbt_node)
+            
+            else:
+                str_token = self.eat(TypedToken.STRING)
+                nodes.append(str_token)
+
+        return SimpleCmdNode(nodes)
 
     def bossbar_cmd(self):
         """
@@ -920,7 +967,7 @@ class Parser:
         bossbar_get ::= STR && "<-" && ["max", "value", "players", "visible"]
         """
         self.eat(TypedToken.STRING, value="<-")
-        sub_cmd = self.eat(TypedToken.STIRNG, values=Parser.bossbar_get_sub_cmds)
+        sub_cmd = self.eat(TypedToken.STIRNG, values=Parser.config_data.bossbar_get)
 
         return BossbarGetNode(bossbar_id, sub_cmd)
 
@@ -930,21 +977,21 @@ class Parser:
         # bossbar_option_arg, bossbar_option_arg_value are defined in the bossbar_version.json
         """
         sub_cmd = self.current_token.value
-        if sub_cmd not in Parser.bossbar_set_sub_cmds:
-            self.error("Expected token in {} for a bossbar set shortcut".format(Parser.bossbar_set_sub_cmds))
+        if sub_cmd not in Parser.config_data.bossbar_set:
+            self.error("Expected token in {} for a bossbar set shortcut".format(Parser.config_data.bossbar_set))
 
-        if sub_cmd == "max":
-            return self.bossbar_set_max(bossbar_id)
-        if sub_cmd == "value":
-            return self.bossbar_set_value(bossbar_id)
-        if sub_cmd == "players":
-            return self.bossbar_set_players(bossbar_id)
-        if sub_cmd == "=":
-            return self.bossbar_set_visible(bossbar_id)
-        if sub_cmd == "color":
-            return self.bossbar_set_color(bossbar_id)
-        if sub_cmd == "style":
-            return self.bossbar_set_style(bossbar_id)
+        # if sub_cmd == "max":
+        #     return self.bossbar_set_max(bossbar_id)
+        # if sub_cmd == "value":
+        #     return self.bossbar_set_value(bossbar_id)
+        # if sub_cmd == "players":
+        #     return self.bossbar_set_players(bossbar_id)
+        # if sub_cmd == "=":
+        #     return self.bossbar_set_visible(bossbar_id)
+        # if sub_cmd == "color":
+        #     return self.bossbar_set_color(bossbar_id)
+        # if sub_cmd == "style":
+        #     return self.bossbar_set_style(bossbar_id)
 
     def bossbar_set_max(self, bossbar_id):
         """
@@ -1012,14 +1059,30 @@ class Parser:
         Returns:
             SelectorNode
         """
-        selector_var = self.eat(SelectorSimpleToken.BEGIN)
+        # selector_var = self.eat(SelectorSimpleToken.BEGIN)
+        selector_var = self.selector_var()
 
         if self.current_token.matches(SelectorSimpleToken.OPEN_BRACKET):
             self.eat(SelectorSimpleToken.OPEN_BRACKET)
             selector_args = self.selector_args()
             self.eat(SelectorSimpleToken.CLOSE_BRACKET)
+            return SelectorNode(selector_var, selector_args)
 
-        return SelectorNode(selector_var, selector_args)
+        return SelectorNode(selector_var)
+
+    def selector_var(self):
+        """
+        selector_var ::= "@" & selector_var_specifier
+        """
+        self.eat(SelectorSimpleToken.BEGIN)
+        specifier = self.selector_var_specifier()
+        return SelectorVarNode(specifier)
+
+    def selector_var_specifier(self):
+        """
+        # selector_var_specifier is defined under selector_version.json as "selector_variable_specifiers"
+        """
+        return self.eat(SelectorTypedToken.SELECTOR_VARIABLE_SPECIFIER, values=Parser.config_data.selector_variable_specifiers)
 
     def selector_args(self):
         """
@@ -1028,11 +1091,20 @@ class Parser:
         Returns:
             list of Selector{type}ArgNode objects
         """
-        selector_args = []
+        if self.current_token.matches(SelectorSimpleToken.CLOSE_BRACKET):
+            return []
 
-        while not self.current_token.matches(SelectorSimpleToken.CLOSE_BRACKET) and self.current_token.matches(SelectorSimpleToken.COMMA):
+        selector_args = []
+        while True:
             selector_arg = self.single_arg()
             selector_args.append(selector_arg)
+
+            if self.current_token.matches(SelectorSimpleToken.COMMA):
+                self.advance()
+            elif self.current_token.matches(SelectorSimpleToken.CLOSE_BRACKET):
+                break
+            else:
+                self.error("Expected a comma or closing square bracket")
 
         return selector_args
 
@@ -1040,16 +1112,21 @@ class Parser:
         """
         single_arg ::= [simple_arg, score_arg, tag_arg]
         """
-        selector_arg_token = self.current_token.eat(TypedToken.STRING)
+        # note that this can be anything and it doesn't have to be specified under selector.json
+        selector_arg_token = self.eat(TypedToken.STRING)
         if not self.current_token.matches(SelectorSimpleToken.EQUALS):
             return self.tag_arg(selector_arg_token)
 
         # gets any replacements
         selector_arg = selector_arg_token.value
-        selector_arg = Parser.config_data.selector_replacements.get(selector_arg, selector_arg)
+        replacement = Parser.config_data.selector_replacements.get(selector_arg, selector_arg)
 
         if selector_arg in Parser.config_data.selector_arguments:
-            self.simple_arg(selector_arg_token, selector_arg)
+            selector_arg_token.replacement = replacement
+            return self.simple_arg(selector_arg_token)
+
+        # otherwise, score arg
+        return self.score_arg(selector_arg_token)
 
     def tag_arg(self, tag_arg):
         """
@@ -1067,6 +1144,9 @@ class Parser:
         """
         score_arg ::= STR & ("=" & int_range)?
 
+        Args:
+            objective_arg (Token)
+
         Returns:
             SelectorScoreArgNode
         """
@@ -1074,39 +1154,40 @@ class Parser:
         int_range = self.int_range()
         return SelectorScoreArgNode(objective_arg, int_range)
 
-    def simple_arg(self, simple_arg_token, simple_arg):
+    def simple_arg(self, simple_arg_token):
         """
         simple_arg ::= default_arg & "=" & default_arg_value_group
         """
-        default_arg = self.default_arg()
+        json_arg_details = self.json_parse_arg(json_type="selector", arg_token=simple_arg_token)
         self.eat(SelectorSimpleToken.EQUALS)
-        arg_details = Parser.config_data.selector_argument_details[default_arg.value]
-        default_arg_value = self.default_arg_value_group(arg_details)
-        return SelectorDefaultArgNode(default_arg, default_arg_value)
+        default_arg_value = self.default_arg_value_group(json_arg_details)
 
-    def default_arg_value_group(self, arg_details):
+        return SelectorDefaultArgNode(simple_arg_token, default_arg_value)
+
+    def default_arg_value_group(self, json_arg_details):
         """
         default_arg_value_group = ("!")? & (default_arg_value | ("(" && default_arg_values && ")"))
+        # default_arg_value is defined under selector_version.json as "selector_argument_details"
 
         Args:
-            arg_details (dict): pass
+            json_arg_details (dict): pass
 
         Returns:
             SelectorDefaultArgValueNode: if the value is a range, number or string
             SelectorDefaultGroupArgValueNode: if the value is actually a group surrounded by "(" and ")"
         """
         # checks for negation
-        if (arg_details.get("negation", False) and self.current_token.matches(SelectorSimpleToken.NOT)):
+        if (json_arg_details.get("negation", False) and self.current_token.matches(SelectorSimpleToken.NOT)):
             self.advance()
             negated = True
         else:
             negated = False
 
         # checks for group
-        if arg_details.get("group", False) and self.current_token.matches(SimpleToken.OPEN_PARENTHESES):
-            if ((arg_details["group"] == "negation" and negated) or
-                    (arg_details["group"] == "default" and not negated) or
-                    (arg_details["group"] == "any")):
+        if json_arg_details.get("group", False) and self.current_token.matches(SimpleToken.OPEN_PARENTHESES):
+            if ((json_arg_details["group"] == "negation" and negated) or
+                    (json_arg_details["group"] == "default" and not negated) or
+                    (json_arg_details["group"] == "any")):
                 group = True
             else:
                 # open parenthesis shows there is a group defined in the wrong context
@@ -1117,123 +1198,34 @@ class Parser:
         # gets group values
         if group:
             self.eat(SimpleToken.OPEN_PARENTHESES)
-            value_nodes = self.default_arg_values(arg_details)
+            value_nodes = self.default_arg_values(json_arg_details)
             self.eat(SimpleToken.CLOSE_PARENTHESES)
 
             return SelectorDefaultGroupArgValueNode(value_nodes, negated)
 
         # gets one single argument
-        arg_value_token = self.default_arg_value(arg_details)
+        arg_value_token = self.json_parse_arg_value(json_arg_details)
         return SelectorDefaultArgValueNode(arg_value_token, negated)
 
-    def default_arg_values(self, arg_details):
+    def default_arg_values(self, json_arg_details):
         """
         default_arg_values ::= (default_arg_value)? | (single_arg & ("," & single_arg)*)?
+        # default_arg_value is defined under selector_version.json as "selector_argument_details"
 
         Returns:
             list: Contains any combination of Token, IntRangeNode and, NumberRangeNode objects
         """
         default_arg_values = []
         while not self.current_token.matches(SimpleToken.CLOSE_PARENTHESES):
-            value = self.default_arg_value(arg_details)
+            value = self.json_parse_arg_value(json_arg_details)
             default_arg_values.append(value)
-
         return default_arg_values
 
-    def default_arg(self):
-        """
-        # default_arg is defined under selector_version.json as "selector_arguments"
-        """
-        if self.current_token.value not in Parser.config_data.selector_arguments:
-            self.error("Unknown selector argument")
+    def nbt(self):
+        raise NotImplementedError
 
-        return self.eat(TypedToken.STRING)
-
-    def default_arg_value(self, arg_details):
-        """
-        # default_arg_value is defined under selector_version.json as "selector_argument_details"
-
-        Args:
-            arg_details (dict): Holds all information for the specific selector argument
-
-        Returns:
-            Token: if the parse type was not a range or selector
-            SelectorNode: if the parse type was a selector
-            IntRangeNode: if the parse type is an int range
-            NumberRangeNode: if the parse type is a number range
-        """
-
-        # parse_type = arg_details["parse_type"]
-
-        # # determines if the value is within the group of specified values
-        # # as long as the replacement dictionary is applied
-        # if parse_type == "VALUES":
-        #     arg_value = self.current_token.value
-        #     assert "values" in arg_details, "If the parse type is 'VALUES', a 'values' list must be present in the json"
-        #     valid_values = arg_details["values"]
-
-        #     # checks whether there are any values that have to be replaced
-        #     if "value_replace" in arg_details:
-        #         replacement_values = arg_details["value_replace"]
-        #         arg_value = replacement_values.get(arg_value, arg_value)
-
-        #     # checks if the arg value is actually in the default given "values"
-        #     if arg_value not in arg_details["values"]:
-        #         if "value_replace" in arg_details:
-        #             self.error(f"Expected one of {valid_values} if shorthands are {replacement_values})")
-        #         self.error(f"Expected one of {valid_values})")
-
-        #     arg_value_token = self.eat(TypedToken.STRING)
-        #     arg_value_token.replacement = arg_value
-        #     return arg_value_token
-
-        # # the value can be literally one of anything
-        # if parse_type == "STR":
-        #     return self.eat(TypedToken.STRING)
-
-        # # requires a form of integer, and then stored as an integer
-        # if parse_type == "SIGNED_INT":
-        #     return self.signed_int()
-        # if parse_type == "POS_INT":
-        #     return self.pos_int()
-        # if parse_type == "NONNEG_INT":
-        #     return self.nonneg_int()
-
-        # # requires an integer or floating point value
-        # # note that this doesn't convert it into a float to prevent loss in precision
-        # if parse_type == "NUMBER":
-        #     arg_value = self.current_token.value
-        #     if not is_number(arg_value):
-        #         self.error("Expected a real number (sadly, no complex numbers are allowed in minecraft)")
-        #     arg_value_token = self.eat(TypedToken.STRING)
-        #     arg_value_token.cast(TypedToken.FLOAT)
-        #     return arg_value_token
-
-        # if parse_type == "INT_RANGE":
-        #     return self.int_range()
-
-        # if parse_type == "NUMBER_RANGE":
-        #     return self.number_range()
-
-        # # checks if the value is a valid entity, and then returns it as a string token
-        # if parse_type == "ENTITIES":
-        #     arg_value = self.current_token.value
-        #     if arg_value not in Parser.config_data.entities:
-        #         self.error("Expected an entity type")
-        #     return self.eat(TypedToken.STRING)
-
-        # if parse_type == "SELECTOR":
-        #     return self.selector()
-
-        # if parse_type == "ADVANCEMENT_GROUP":
-        #     raise NotImplementedError 
-
-        # if parse_type == "SHORTCUT_ERROR":
-        #     self.error("Shortcut error (There is most likely a shortcut version of this that should be used)")
-
-        # self.error("Unknown default value")
-
-        self.json_parse_arg_value(arg_details)
+    def json(self):
+        raise NotImplementedError
 
     def nonneg_int(self):
         """
@@ -1241,6 +1233,7 @@ class Parser:
         """
         if not is_nonneg_int(self.current_token.value):
             self.error("Expected a nonnegative integer (all integers greater than or equal to 0)")
+        return self._get_int()
 
     def signed_int(self):
         """
@@ -1248,7 +1241,6 @@ class Parser:
         """
         if not is_signed_int(self.current_token.value):
             self.error("Expected a signed integer (possibly negative integer)")
-
         return self._get_int()
 
     def pos_int(self):
@@ -1257,7 +1249,6 @@ class Parser:
         """
         if not is_pos_int(self.current_token.value):
             self.error("Expected a positive integer (all integers greater than 0)")
-
         return self._get_int()
 
     def _get_int(self):
@@ -1265,8 +1256,9 @@ class Parser:
         Returns:
             Token: Token with type TypedToken.INT
         """
-        token = self.eat(TypedToken.STRING)
-        token.cast(TypedToken.INT)
+        token = self.eat(TypedToken.STRING, TypedToken.INT)
+        if token.matches(TypedToken.STRING):
+            token.cast(TypedToken.INT)
         return token
 
     def nonneg_float(self):
@@ -1291,14 +1283,42 @@ class Parser:
         return self.eat(TypedToken.STRING)
 
     def int_range(self):
-        raise NotImplementedError
+        """
+        int_range ::= [signed_int, (signed_int & ".."), (".." & signed_int), (signed_int & ".." & signed_int)]
+        """
+        min_int = None
+        max_int = None
+
+        if self.current_token.matches(TypedToken.INT):
+            min_int = self.eat(TypedToken.INT)
+
+        # singular integer
+        if not self.current_token.matches(SelectorSimpleToken.RANGE):
+            return IntRangeNode(min_int, min_int)
+
+        # if it isn't a singular integer, it requires a range
+        self.eat(SelectorSimpleToken.RANGE)
+        if self.current_token.matches(TypedToken.INT):
+            max_int = self.eat(TypedToken.INT)
+
+        # a range cannot just be ".."
+        if min_int is None and max_int is None:
+            self.error("Expected at least one integer in an integer range")
+
+        return IntRangeNode(min_int, max_int)
 
     def number_range(self):
+        """
+        number_range ::= [signed_float, (signed_float & ".."), (".." & signed_float), (signed_float & ".." & signed_float)]
+        """
         raise NotImplementedError
 
     def target(self):
         """
         target ::= [selector, STR]
+
+        Returns:
+            SelectorNode or Token
         """
         if self.current_token.matches(SelectorSimpleToken.BEGIN):
             return self.selector()
@@ -1308,6 +1328,9 @@ class Parser:
     def entity_vec3(self):
         """
         entity_vec3 ::= [selector, vec3]
+
+        Returns:
+            SelectorNode or Vec3Node
         """
         if self.current_token.matches(SelectorSimpleToken.BEGIN):
             return self.selector()
@@ -1316,6 +1339,8 @@ class Parser:
     
     def vec2(self):
         """
+        vec2 ::= coord && coord
+
         Returns:
             Vec2Node
         """
@@ -1325,6 +1350,8 @@ class Parser:
 
     def vec3(self):
         """
+        vec3 ::= coord && coord && coord
+
         Returns:
             Vec3Node
         """
@@ -1333,6 +1360,10 @@ class Parser:
         return coords_node
 
     def _coords(self, coord_num):
+        """
+        Returns:
+            Vec2Node or Vec3Node
+        """
         assert coord_num in (2, 3)
 
         coords = []
@@ -1350,6 +1381,23 @@ class Parser:
 
         return CoordsNode(coords)
 
+    def block(self):
+        """
+        block ::= block_type & ("[" & (block_states)? & "]")? & (nbt)?
+
+        Returns:
+            BlockNode
+        """
+        if self.current_token.value not in Parser.config_data.blocks:
+            self.error("Expected a block inside the if argument")
+
+        block_token = self.eat(TypedToken.STRING)
+        block_token.cast(TypedToken.BLOCK)
+
+        # checks for block states
+
+        raise NotImplementedError
+
     def __repr__(self):
         return "Parser[iterator={}, current_token={}]".format(repr(self.iterator), repr(self.current_token))
 
@@ -1362,7 +1410,8 @@ if __name__ == "__main__":
         text = file.read()
     lexer = Lexer(text)
 
-    parser = Parser(lexer, r"C:\Users\Austin-zs\AppData\Roaming\.minecraft\saves\Snapshot 17w18b\data\functions\ego\event_name")
+    r"C:\Users\Austin-zs\AppData\Roaming\.minecraft\saves\Snapshot 17w18b\data\functions\ego\event_name"
+    parser = Parser(lexer)
 
     try:
         parser.parse()
@@ -1375,3 +1424,8 @@ if __name__ == "__main__":
     #     logging.debug(str(mcfunction))
     #     for command in mcfunction.commands:
     #         logging.debug(repr(command))
+
+    # lexer = Lexer("@e[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,c=5, team=bruh,name=lol, a_tag.of.epic_proportions, RRar=3..5, type=cow, dist=2..4, lvl=5, x_rot=..7, y_rot=1..]")
+    # parser = Parser(lexer.get_selector())
+    # tree = parser.selector()
+    # print(tree)

@@ -4,9 +4,10 @@ if __name__ == "__main__":
 import logging
 import json
 
-from token_classes import WhitespaceSimpleToken, StatementSimpleToken, NBTSimpleToken, SimpleToken
-from token_classes import SelectorSimpleToken, NBTSimpleToken, NBTNumberEndSimpleToken
-from token_classes import TypedToken, SelectorTypedToken, TokenValues
+# from token_classes import WhitespaceSimpleToken, StatementSimpleToken, NBTSimpleToken, SimpleToken
+# from token_classes import SelectorSimpleToken, NBTSimpleToken, NBTNumberEndSimpleToken
+# from token_classes import TypedToken, SelectorTypedToken, TokenValues
+from token_classes import TypedToken, DelimiterToken, WhitespaceToken
 
 from config_data import ConfigData
 from lexical_token import Token
@@ -30,8 +31,10 @@ class Lexer:
 
     def __iter__(self):
         """
-        This method is responsible for breaking a sentence
-        apart into tokens, one token at a time.
+        Breaks apart the entire document into a sequence of tokens.
+        
+        Yields:
+            Token: For each token that exists in the document
         """
         yield from self.handle_line_begin()
 
@@ -313,7 +316,7 @@ class Lexer:
             self.advance()
 
         # checks if the result is a 0 length string: error
-        assert self.get_locked_chars()
+        assert self.get_locked_chars(), "Cannot be a 0 length string bruh wtf is this"
         return self.create_new_token(TypedToken.STRING, unlock=True)
 
     def get_command(self):
@@ -334,7 +337,7 @@ class Lexer:
                 yield from self.get_tag()
                 
             else:
-                yield self.get_until_space(",:()")
+                yield self.get_until_space(",:()[]")
 
             self.skip_whitespace()
 
@@ -381,7 +384,7 @@ class Lexer:
             elif self.get_char().isdigit() or self.get_char() == "-":
                 yield self.get_number()
             elif self.get_char().isalpha() or self.get_char() in "_.":
-                yield self.get_until_space(exempt_chars=r"!=.,()[]{}")
+                yield self.get_until_space(exempt_chars=r"!=,()[]{}")
             else:
                 self.error()
 
@@ -396,13 +399,13 @@ class Lexer:
         self.advance()
 
         while not self.current_chars_are(SimpleToken.QUOTE.value):
-            # Skips past any \" since it doesn't count as a string end
-            if self.current_chars_are(r'\"'):
+            # Skips past any \" or \\ since it doesn't count as a string end
+            if self.current_chars_are(r'\"') or self.current_chars_are(r'\\'):
                 self.advance(2)
 
             # There shouldn't ever be a newline in a string
             elif self.current_chars_are(WhitespaceSimpleToken.NEWLINE.value):
-                self.error()
+                self.error("Unexpected newline during a string declaration")
 
             # Advances normally
             else:

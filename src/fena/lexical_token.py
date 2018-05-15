@@ -64,6 +64,9 @@ class Token:
             token_type (any token type): What token type this token should change into
             error_message (str or None): What will be displayed in the error message
         """
+        if token_type == self.type:
+            return
+
         if isinstance(token_type, TypedToken):
             # checks if coordinate, block or int
             if (token_type == TypedToken.COORD and is_coord(self.value) or 
@@ -73,6 +76,10 @@ class Token:
                 if token_type == TypedToken.INT:
                     self.value = int(self.value)
 
+                self._cast_token_type(token_type)
+
+            elif token_type == TypedToken.STRING:
+                self.value = str(self.value)
                 self._cast_token_type(token_type)
 
             else:

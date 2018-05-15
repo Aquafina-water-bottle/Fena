@@ -194,7 +194,7 @@
     
 !mfunc selector_test
     # say @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,RRar>=3<=5] @a[RRpl>=3<5] @a[RRpl>=3] 3
-    say @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,gamemode=2,RRar=3..5] @a[RRpl=3..4] @a[RRpl=3..] 3
+    say @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,RRar=3..5] @a[RRpl=3..4] @a[RRpl=3..] 3
     
     # say @a[RRpl<=5>=3] @a[RRpl<=5>3] @a[RRpl<=3]
     say @a[RRpl=3..5] @a[RRpl=4..5] @a[RRpl=..3]

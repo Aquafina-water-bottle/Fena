@@ -96,16 +96,6 @@ s7.0.0      v0.4.0
             - All commands, selectors and nbt tags will be separated into its own tokens
         - Added some new delimiter tokens as ":", ",", "(" and ")" for execute and chained commands
 
-    scoped_symbol_table.py: (created)
-        - Created an object to handle basic information gotten from statements
-            - General handling is separated from the original parser
-        - Contains:
-            - all folders to the mcfunction
-            - current mcfunction
-            - prefix
-            - constobj
-            - current command builder
-
     parser.py:
         - Added a !folder statement block to define what file all the defined mcfunctions will be in
         - Added a one liner !prefix statement to determine what prefix will be used throughout the file
@@ -114,15 +104,12 @@ s7.0.0      v0.4.0
         - Added a command chain option by having a command end with ":" and starting as a new block -> REMOVED
             - Equivalent to CBP or CCUv1 "USE"
 
-    builder.py: (created)
-        - Made a simple class that all builders must inherit from
-            - Requires all builder classes to have the "build" method
+    mcfunction.py:
+        - A simple object to hold the full path to the mcfunction and all commands as strings within it
+        - Used to hold a list of Command objects, which hold a list of token objects
 
     coord_utils.py: (created)
         - Made a bunch of functions to assist in validating coord types from strings and tokens
-
-    coroutine.py: (created)
-        - Made a decorator for coroutines (might not be used due to asyncio maddness)
 
     in_file_config.py: (created)
         - Singleton class to hold information gotten from the parser:
@@ -136,29 +123,69 @@ s7.0.0      v0.4.0
     nodes.py: (created)
         - Made a node class to be inherited from all other node classes
             - Only an ABC class with no abstract methods
-        - Node visitor class taken straight from the tutorial
+        - Node visitor class taken straight from the tutorial -> moved to node_visitors.py
+        - Each section that can contain more than one token will be a node
+        - It used to have its own build method, but that has been moved to command_builder.py
+
+    node_visitors.py: (created)
+        - Created a general base visitor for statement visiting and command building
 
     command_builder.py: (created)
-        - Added a bunch of builder classes (command, execute, scoreboard, function, simplecommand)
+        - Added a bunch of builder classes (command, execute, scoreboard, function, simplecommand) -> DELETED
             - The general command builder class will have all class vars moved to in_file_config.py
-
-    commands.py: (created)
-        - Might be deleted
+        - Changed to be a node visitor that builds all individual nodes for either 1.12 or 1.13 depending on the object
 
     terminology.txt: (created)
         - Created a general list of terms that will remain constant throughout the code documentation and naming conventions
 
-    config/selector_1.12.json, config/selector_1.13.json: (created)
+    token_types.py: (created -> renamed to token_classes.py)
+        - Renamed after setting the terminology.txt as the standard across all files
+        
+    commands.py: (created -> renamed to command_builder.py)
+
+    config files (created to hold info for versions 1.12 and 1.13):
+        blocks.json: contains the list of all blocks
+        bossbar.json: contains how to parse "bossbar set" and contains "bossbar get" values
+        command_names.json: contains all command names
+        entities.json: contains all entities
+        execute.json: contains how to parse dimension names and comparison operators for 1.13 executes
+        scoreboard.json: contains how to parse math and special operators given to scoreboard shortcuts
+        selector.json: contains how to parse selector arguments, what selector arguments exist and what selector variable specifiers exist
+        team_options.json: contains all arguments and values for team options
+
+
+    config/selector_1.12.json, config/selector_1.13.json: (created -> DELETED)
         - Holds all config data specifically for selector based things for 1.12
             - json is used instead of a regular ini because more complex formatting is required (lists and dicts)
 
     config/blocks_1.12.txt, config/blocks_1.13.txt,
     config/commands_1.12.txt, config/commands_1.13.txt,
-    config/entities_1.12.txt, config/entites_1.13.txt: (created):
+    config/entities_1.12.txt, config/entites_1.13.txt: (created -> DELETED):
         - Holds all data as said by the file name (formatted with each line being a valid item)
 
-    token_types.py: (created -> renamed to token_classes.py)
-        - Renamed after setting the terminology.txt as the standard across all files
+    exec_nodes.py: (created -> DELETED)
+        - used to hold all nodes for the execute shortcut
+        - all nodes are now moved over to nodes.py
+
+    optional.py: (DELETED)
+        - literally useless
+
+    scoped_symbol_table.py: (created -> DELETED)
+        - Created an object to handle basic information gotten from statements
+            - General handling is separated from the original parser
+        - Contains:
+            - all folders to the mcfunction
+            - current mcfunction
+            - prefix
+            - constobj
+            - current command builder
+
+    builder.py: (created -> DELETED)
+        - Made a simple class that all builders must inherit from
+            - Requires all builder classes to have the "build" method
+
+    coroutine.py: (created -> DELETED)
+        - Made a decorator for coroutines (might not be used due to asyncio maddness)
 
     constants.py: (DELETED)
         - Replaced with token_types.py and config_data.py

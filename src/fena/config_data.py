@@ -16,6 +16,7 @@ class ConfigData:
 
     Attributes:
         version (str)
+        ego (bool)
         leading_commands (list of strs)
         plugin_conflict_commands (list of strs)
 
@@ -25,7 +26,9 @@ class ConfigData:
         selector_argument_details (dict): maps each selector argument to the parse type and any other details
             - Uses the command json parse type
 
-        commands (list of strs): All possible command keywords
+        commands (list of str objects): All possible command keywords
+        bossbar_get (list of str objects)
+        bossbar_set (dict)
         blocks (list of strs)
         entities (list of strs)
 
@@ -47,7 +50,8 @@ class ConfigData:
             self.selector_argument_details = options["selector_argument_details"]
 
             self.blocks = options["blocks"]
-            self.bossbar = options["bossbar"]
+            self.bossbar_set = options["bossbar_set"]
+            self.bossbar_get = options["bossbar_get"]
             self.command_names = options["command_names"]
             self.entities = options["entities"]
             self.team_options = options["team_options"]
@@ -81,7 +85,7 @@ def _get_file_str(file_name):
     return file_data
 
 
-def _get_file_name(option_name, version=None, extension="txt"):
+def _get_file_name(option_name, extension="txt"):
     """
     Gets the data inside the file given the version, option and extension
 
@@ -90,12 +94,10 @@ def _get_file_name(option_name, version=None, extension="txt"):
         option_name (str)
         extension (str)
     """
-    if version is None:
-        return "{option}.{extension}".format(option=option_name, extension=extension)
-    return "{option}_{version}.{extension}".format(option=option_name, version=version, extension=extension)
+    return f"{option_name}.{extension}"
 
 
-def _get_config_data(file_data=None):
+def _get_config_data():
     """
     Gets all data from config.ini
 
@@ -114,10 +116,8 @@ def _get_config_data(file_data=None):
 
     # the config file should be placed one directory below
     config_name = "config.ini"
+    file_data = _get_file_str(config_name)
     options = {}
-
-    if file_data is None:
-        file_data = _get_file_str(config_name)
 
     # gets rid of empty lines, trailing whitespace and comments
     lines = [line.strip() for line in file_data.splitlines() if line.strip() if line.strip()[0] != "#"]
@@ -133,49 +133,45 @@ def _get_config_data(file_data=None):
     return options
 
 
-def _get_selector_config_data(version):
-    """
-    Gets the full json file with the standard library json decoder
-
-    Args:
-        file_data (str): The file contents for testing purposes
-            It is default to none so the config file can be read.
-    """
-    # the config file should be placed one directory below
-    file_name = _get_file_name("selector", version=version, extension="json")
-    file_str = _get_file_str(file_name)
-    return json.loads(file_str)
-
-
-def _get_other_config_data(version):
+def _get_json_config_data(version):
     """
     Gets data from:
-        blocks_version.txt
-        command_names_version.txt
-        entities_version.txt
+        blocks.json
         bossbar.json
+        command_names.json
+        entities.json
+        selector.json
         team_options.json
 
     Returns:
         dict: Maps "blocks", "command_names" and "entities" to their respective lists
     """
-    other_options = {}
-    option_names = ("blocks", "command_names", "entities")
-    json_option_names = ("bossbar", "team_options")
+    json_options = {}
+    option_names = ("blocks", "bossbar", "command_names", "entities", "selector", "team_options")
 
-    for option in option_names:
-        file_name = _get_file_name(option, version=version)
+    for option_name in option_names:
+        file_name = _get_file_name(option_name, extension="json")
         file_str = _get_file_str(file_name)
-        data = [line for line in file_str.splitlines() if line]
-        other_options[option] = data
+        json_object = json.loads(file_str)
 
-    for option in json_option_names:
-        file_name = _get_file_name(option, extension="json")
-        file_str = _get_file_str(file_name)
-        file_json = json.loads(file_str)
-        other_options[option] = file_json
+        # if it's a string, it refers back to a new version
+        while isinstance(json_object[version], str):
+            # gets the new version
+            # note that this does not prevent recursion
+            version = json_object[version]
 
-    return other_options
+        # when config data has new versions
+        if isinstance(json_object[version], list):
+            json_options[option_name] = json_object[version]
+        elif isinstance(json_object[version], dict):
+            for option in json_object[version]:
+                json_options[option] = json_object[version][option]
+        elif json_object[version] is None:
+            pass
+        else:
+            raise SyntaxError("Unexpected default case")
+
+    return json_options
 
 
 def _validate_options(options, valid_options):
@@ -224,15 +220,20 @@ def _get_all_data():
         raise SyntaxError("{}: Invalid ego boolean value (must be in {})".format(ego, valid_bool))
 
     # gets all selector config options from the config data
-    selector_options = _get_selector_config_data(version)
-    valid_selector_options = frozenset({"selector_variable_specifiers", "selector_arguments", "selector_replacements", "selector_argument_details"})
-    _validate_options(selector_options, valid_selector_options)
+    # selector_options = _get_selector_config_data(version)
 
     # gets all blocks, commands and entities
-    other_options = _get_other_config_data(version)
+    json_options = _get_json_config_data(version)
+
+    selector_json_args = {"selector_variable_specifiers", "selector_arguments", "selector_replacements", "selector_argument_details"}
+    general_json_args = {"blocks", "command_names", "entities", "team_options"}
+    bossbar_json_args  = {"bossbar_set", "bossbar_get"}
+
+    all_json_args = (selector_json_args | general_json_args | bossbar_json_args)
+    _validate_options(json_options, all_json_args)
 
     # ensures that this is the first instance of the ConfigData object
-    all_options = {**general_options, **selector_options, **other_options}
+    all_options = {**general_options, **json_options}
     config_data = ConfigData(**all_options)
     logging.debug("Got the config data: {}".format(config_data))
 
@@ -241,28 +242,21 @@ def _get_all_data():
 _get_all_data()
 
 def test():
-    file_data = """
-        # comment=lol,lolol
-        leading_commands=execute
-        plugin_conflict_commands=nope,avi
-
-        version=1.13
-    """
-
     # should be the original from the config file
     config_data = ConfigData()
     print(config_data)
 
     # completely different options
-    _get_config_data(file_data)
-    print(config_data)
+    # _get_config_data(file_data)
+    # print(config_data)
 
     # check id value
     config_data_2 = ConfigData()
-    print(id(config_data), id(config_data_2))
+    assert id(config_data) == id(config_data_2), (id(config_data), id(config_data_2))
 
 if __name__ == "__main__":
     config_data = ConfigData()
     print(json.dumps(vars(config_data), indent=4))
+    print(list(vars(config_data)))
     # print(config_data)
     # test()
