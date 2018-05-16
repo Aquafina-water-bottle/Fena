@@ -1,10 +1,14 @@
 import logging
 
-from token_classes import ALL_SIMPLE_TOKEN_TYPES, ALL_TYPED_TOKEN_TYPES, ALL_TOKEN_TYPES, TypedToken
+from token_classes import TokenTypes, TypedToken, DelimiterToken, WhitespaceToken
 from coord_utils import is_coord
 from config_data import ConfigData
 
 class Token:
+    typed_tokens = frozenset(TypedToken)
+    simple_token_types = TokenTypes.get(DelimiterToken, WhitespaceToken)
+    all_token_types = typed_tokens | simple_token_types
+
     config_data = ConfigData()
 
     def __init__(self, pos, token_type, value=None):
@@ -22,8 +26,8 @@ class Token:
         self.replacement = None
 
         if self.value is None:
-            assert not self.type in ALL_TYPED_TOKEN_TYPES, "A value is required for a token type (type={}, pos={})".format(self.type, self.pos)
-            assert self.type in ALL_SIMPLE_TOKEN_TYPES, "The type {} must be a simple token type {}".format(ALL_SIMPLE_TOKEN_TYPES, repr(token_type))
+            assert not self.type in Token.typed_tokens, f"{self!r}: A value is required for the given token type"
+            assert self.type in Token.simple_token_types, f"The type {token_type} must be a simple token type within {Token.simple_token_types!r}"
             self.value = self.type.value
 
     def matches(self, token_type, value=None):
@@ -37,7 +41,7 @@ class Token:
         Returns:
             bool: Whether the type matches the given type
         """
-        assert token_type in ALL_TOKEN_TYPES
+        assert token_type in Token.all_token_types
         return (self.type == token_type) and (value is None or self.value == value)
 
     def matches_any_of(self, *types):
@@ -99,41 +103,44 @@ class Token:
             token_type (any token type): What token type this token should change into
         """
         new_type = token_type
-        logging.debug("Converted token {} to type {}".format(repr(self), new_type))
+        logging.debug("Converted token {!r} to type {}".format(repr(self), new_type))
         self.type = new_type
 
     def _cast_token_class(self, token_class):
         """
         """
         new_type = token_class(self.value)
-        logging.debug("Converted token {} to type {}".format(repr(self), new_type))
+        logging.debug("Converted token {} to type {}".format(self, new_type))
         self.type = new_type
 
     def _cast_error(self, token_type, message=None):
         if message is None:
             message = "Invalid type casting"
-        raise TypeError("{} cast to {}: {}".format(self, repr(token_type), message))
+        raise TypeError("{!r} cast to {!r}: {}".format(self, token_type, message))
 
 
     def __str__(self):
         return "Token[{!r} at {}]".format(self.value, self.pos)
 
     def __repr__(self):
+        if self.replacement is None:
+            return 'Token[{!r}: type={!r}, value={!r}]'.format(self.pos, self.type, self.value)
         return 'Token[{!r}: type={!r}, value={!r}, replacement={!r}]'.format(self.pos, self.type, self.value, self.replacement)
 
 
 def test():
     from token_position import TokenPosition
-    from token_classes import SimpleToken
+    # from token_classes import SimpleToken
 
     token_pos = TokenPosition(row=5, column=2, char_pos=167)
 
-    token = Token(token_pos, SimpleToken.PLUS)
+    # token = Token(token_pos, SimpleToken.PLUS)
+    token = Token(token_pos, DelimiterToken.EQUALS)
     print(token)
     print(repr(token))
 
-    print(token.type in ALL_TOKEN_TYPES)
-    print(token.type in SimpleToken)
+    # print(token.type in ALL_TOKEN_TYPES)
+    # print(token.type in SimpleToken)
 
     # error since it requires a value
     # integer = Token(token_pos, TypedToken.INT)

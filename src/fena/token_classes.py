@@ -12,6 +12,21 @@ class TokenValues:
 
         return TokenValues.cache[token_class]
 
+class TokenTypes:
+    cache = {}
+    
+    @staticmethod
+    def get(*token_classes):
+        total_token_types = frozenset()
+        for token_class in token_classes:
+            if token_class not in TokenValues.cache:
+                values = frozenset(token_class)
+                TokenTypes.cache[token_class] = values
+
+            total_token_types |= TokenTypes.cache[token_class]
+
+        return total_token_types
+
 def get_token_types(token_classes):
     """
     Args:
@@ -47,9 +62,10 @@ class DelimiterToken(Enum):
     COMMA = ","
     AT = "@"
     EQUALS = "="
-    EXCLAIMATION_MARK = "!"
+    EXCLAMATION_MARK = "!"
     RANGE = ".."
     SEMICOLON = ";"
+    GROUP_TAG = "#"
 
     OPEN_PARENTHESES = "("
     CLOSE_PARENTHESES = ")"
@@ -65,6 +81,7 @@ class WhitespaceToken(Enum):
     DEDENT = "dedent"
     NEWLINE = "\n"
     EOF = None
+
 
 
 # class StatementKeywordToken(Enum):

@@ -5,9 +5,10 @@ import os
 import logging
 
 from lexical_token import Token
-from token_classes import SimpleToken, WhitespaceSimpleToken, StatementSimpleToken, SelectorSimpleToken, ExecuteSimpleToken, NBTSimpleToken
-from token_classes import TypedToken, SelectorTypedToken, TokenValues
-from token_classes import ALL_TYPED_TOKEN_TYPES
+# from token_classes import SimpleToken, WhitespaceToken, StatementSimpleToken, SelectorSimpleToken, ExecuteSimpleToken, NBTSimpleToken
+# from token_classes import TypedToken, SelectorTypedToken, TokenValues
+# from token_classes import ALL_TYPED_TOKEN_TYPES
+from token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
 from nodes import ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode
 from nodes import ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode
 from nodes import ExecuteCmdNode, ExecuteSubIfBlockArg, ExecuteSubLegacyArg
@@ -243,8 +244,8 @@ class Parser:
         assert values is None or value is None
 
         if (self.current_token.matches_any_of(*token_types) and
-                (values is None or (self.current_token.value in values and self.current_token.type in ALL_TYPED_TOKEN_TYPES)) and
-                (value is None or (self.current_token.value == value) and self.current_token.type in ALL_TYPED_TOKEN_TYPES)):
+                (values is None or (self.current_token.value in values and self.current_token.type in TypedToken)) and
+                (value is None or (self.current_token.value == value) and self.current_token.type in TypedToken)):
             return self.advance()
 
         if error_message is None:
@@ -417,12 +418,12 @@ class Parser:
         statement_nodes = []
 
         # note that this is essentially a do-while since it never starts out as a newline
-        while self.current_token.matches_any_of(WhitespaceSimpleToken.NEWLINE, StatementSimpleToken.STATEMENT_SPECIFIER):
+        while self.current_token.matches_any_of(WhitespaceToken.NEWLINE, DelimiterToken.EXCLAMATION_MARK):
             # base case is if a newline is not met
-            if self.current_token.matches(WhitespaceSimpleToken.NEWLINE):
-                self.eat(WhitespaceSimpleToken.NEWLINE)
+            if self.current_token.matches(WhitespaceToken.NEWLINE):
+                self.eat(WhitespaceToken.NEWLINE)
 
-            elif self.current_token.matches(StatementSimpleToken.STATEMENT_SPECIFIER):
+            elif self.current_token.matches(DelimiterToken.EXCLAMATION_MARK):
                 statement_node = self.statement()
                 statement_nodes.append(statement_node)
 
@@ -446,12 +447,12 @@ class Parser:
         command_nodes = []
 
         # note that this is essentially a do-while since it never starts out as a newline
-        while self.current_token.matches_any_of(WhitespaceSimpleToken.NEWLINE, TypedToken.STRING, SelectorSimpleToken.BEGIN):
+        while self.current_token.matches_any_of(WhitespaceToken.NEWLINE, TypedToken.STRING, DelimiterToken.AT):
             # base case is if a newline is not met
-            if self.current_token.matches(WhitespaceSimpleToken.NEWLINE):
-                self.eat(WhitespaceSimpleToken.NEWLINE)
+            if self.current_token.matches(WhitespaceToken.NEWLINE):
+                self.eat(WhitespaceToken.NEWLINE)
 
-            elif self.current_token.matches_any_of(TypedToken.STRING, SelectorSimpleToken.BEGIN):
+            elif self.current_token.matches_any_of(TypedToken.STRING, DelimiterToken.AT):
                 command_node = self.command()
                 command_nodes.append(command_node)
 
@@ -475,15 +476,15 @@ class Parser:
             ConstObjNode: if the statement was a constobj statement
         """
         # all here should start with "!"
-        self.eat(StatementSimpleToken.STATEMENT_SPECIFIER)
+        self.eat(DelimiterToken.EXCLAMATION_MARK)
 
-        if self.current_token.matches(StatementSimpleToken.MFUNC):
+        if self.current_token.matches(TypedToken.STRING, value="mfunc"):
             return self.mfunc_stmt()
-        if self.current_token.matches(StatementSimpleToken.FOLDER):
+        if self.current_token.matches(TypedToken.STRING, value="folder"):
             return self.folder_stmt()
-        if self.current_token.matches(StatementSimpleToken.PREFIX):
+        if self.current_token.matches(TypedToken.STRING, value="prefix"):
             return self.prefix_stmt()
-        if self.current_token.matches(StatementSimpleToken.CONSTOBJ):
+        if self.current_token.matches(TypedToken.STRING, value="constobj"):
             return self.constobj_stmt()
 
         self.error("Invalid statement")
@@ -495,7 +496,7 @@ class Parser:
         Returns:
             McFunctionNode: The mcfunction node to define the mcfunction in the parse tree
         """
-        self.eat(StatementSimpleToken.MFUNC)
+        self.eat(TypedToken.STRING, value="mfunc")
 
         # if self.symbol_table.function is not None:
         #     self.error("Cannot define a mcfunction inside an mcfunction")
@@ -508,12 +509,12 @@ class Parser:
         #     full_path = os.path.join(self.file_path, self.symbol_table.folders, name)
 
         # skips any and all newlines right after a mfunc statement
-        while self.current_token.matches(WhitespaceSimpleToken.NEWLINE):
-            self.eat(WhitespaceSimpleToken.NEWLINE)
+        while self.current_token.matches(WhitespaceToken.NEWLINE):
+            self.eat(WhitespaceToken.NEWLINE)
 
-        self.eat(WhitespaceSimpleToken.INDENT)
+        self.eat(WhitespaceToken.INDENT)
         command_nodes = self.command_suite()
-        self.eat(WhitespaceSimpleToken.DEDENT)
+        self.eat(WhitespaceToken.DEDENT)
 
         return McFunctionNode(mfunc_name, command_nodes)
 
@@ -524,7 +525,7 @@ class Parser:
         Returns:
             FolderNode
         """
-        self.eat(StatementSimpleToken.FOLDER)
+        self.eat(TypedToken.STRING, value="folder")
 
         # requires there to be no current mcfunction since a folder statement
         # always occurs outside a mfunc statement
@@ -537,12 +538,12 @@ class Parser:
         folder_token = self.eat(TypedToken.STRING)
 
         # skips any and all newlines right after a folder statement
-        while self.current_token.matches(WhitespaceSimpleToken.NEWLINE):
-            self.eat(WhitespaceSimpleToken.NEWLINE)
+        while self.current_token.matches(WhitespaceToken.NEWLINE):
+            self.eat(WhitespaceToken.NEWLINE)
 
-        self.eat(WhitespaceSimpleToken.INDENT)
+        self.eat(WhitespaceToken.INDENT)
         statement_nodes = self.statement_suite()
-        self.eat(WhitespaceSimpleToken.DEDENT)
+        self.eat(WhitespaceToken.DEDENT)
 
         # resets the current folder
         # self.symbol_table = self.symbol_table.enclosing_scope
@@ -556,7 +557,7 @@ class Parser:
         Returns:
             PrefixNode
         """
-        self.eat(StatementSimpleToken.PREFIX)
+        self.eat(TypedToken.STRING, value="prefix")
         prefix_token = self.eat(TypedToken.STRING, error_message="Expected a string after a prefix statement")
 
         # requires the prefix to be defined in the global scope
@@ -573,7 +574,7 @@ class Parser:
         Returns:
             ConstObjNode
         """
-        self.eat(StatementSimpleToken.CONSTOBJ)
+        self.eat(TypedToken.STRING, value="constobj")
         constobj_token = self.eat(TypedToken.STRING, error_message="Expected a string after a constobj statement")
 
         # requires the constobj to be defined in the global scope
@@ -593,17 +594,17 @@ class Parser:
         command_segment_nodes = []
 
         # gets either the execute command or a scoreboard shortcut command
-        if self.current_token.matches(SelectorSimpleToken.BEGIN):
+        if self.current_token.matches(DelimiterToken.AT):
             selector_begin_node = self.selector_begin_cmd()
             command_segment_nodes.append(selector_begin_node)
         elif (Parser.config_data.version == "1.13" and 
-                self.current_token.value in TokenValues.get(ExecuteSimpleToken) or is_coord_token(self.current_token)):
+                (self.current_token.value in Parser.execute_keywords or is_coord_token(self.current_token))):
             execute_node = self.execute_cmd()
             command_segment_nodes.append(execute_node)
 
-        if not self.current_token.matches(WhitespaceSimpleToken.NEWLINE):
+        if not self.current_token.matches(WhitespaceToken.NEWLINE):
             # guaranteed to be a scoreboard shortcut command with a selector
-            if self.current_token.matches(SelectorSimpleToken.BEGIN):
+            if self.current_token.matches(DelimiterToken.AT):
                 sb_cmd_node = self.sb_cmd()
                 command_segment_nodes.append(sb_cmd_node)
 
@@ -626,7 +627,7 @@ class Parser:
         Intermediary function to determine whether a selector at the beginning, IntRangeNode, NumberRangeNode
         of a command is part of a scoreboard shortcut or execute shortcut
 
-        It is an execute shortcut if the second token is a selector, coordinate, part of the ExecuteSimpleToken class or a colon
+        It is an execute shortcut if the second token is a selector, coordinate, part of execute_keywords or a colon
         It is (assumed to be) a scoreboard shortcut otherwise
 
         Returns:
@@ -636,8 +637,8 @@ class Parser:
         """
         selector_node = self.selector()
         # assumes scoreboard objectives will not be the same as the execute shortcut simple tokens
-        if (self.current_token.value in TokenValues.get(ExecuteSimpleToken) or is_coord_token(self.current_token) or 
-                self.current_token.matches_any_of(SelectorSimpleToken.BEGIN, SimpleToken.COLON)):
+        if (self.current_token.value in Parser.execute_keywords or is_coord_token(self.current_token) or 
+                self.current_token.matches_any_of(DelimiterToken.AT, DelimiterToken.COLON)):
             return self.execute_cmd(begin_selector=selector_node)
         return self.sb_cmd(begin_target=selector_node)
 
@@ -689,7 +690,7 @@ class Parser:
             execute_nodes.append(execute_node)
 
             begin_selector = None
-            if self.current_token.matches(SimpleToken.COLON):
+            if self.current_token.matches(DelimiterToken.COLON):
                 self.advance()
                 break
 
@@ -708,11 +709,11 @@ class Parser:
             execute_nodes.append(begin_selector)
 
         while True:
-            if self.current_token.value in TokenValues.get(ExecuteSimpleToken):
+            if self.current_token.value in Parser.execute_keywords:
                 exec_sub_node = self.exec_sub_cmds()
                 execute_nodes.append(exec_sub_node)
 
-            elif self.current_token.matches(SelectorSimpleToken.BEGIN):
+            elif self.current_token.matches(DelimiterToken.AT):
                 selector_node = self.selector()
                 execute_nodes.append(selector_node)
 
@@ -720,7 +721,7 @@ class Parser:
                 coords_node = self.vec3()
                 execute_nodes.append(coords_node)
         
-            elif self.current_token.matches(SimpleToken.COLON):
+            elif self.current_token.matches(DelimiterToken.COLON):
                 self.advance()
                 break
 
@@ -735,7 +736,7 @@ class Parser:
         exec_sub_cmd_keywords ::= ("as", "pos", "at", "facing", "rot", "anchor", "in", "ast", "if", "ifnot", "unless", "result" ,"success")
         exec_sub_cmds ::= [rio.rule("exec_sub_" + rule) for (str rule) in exec_sub_cmd_keywords]
 
-        Chooses a method between each token value in token_classes.ExecuteSimpleToken
+        Chooses a method between each token value in execute_keywords
         This assumes that the current token value matches one token value inside the ExecuteSimpleToken
 
         Returns:
@@ -745,7 +746,7 @@ class Parser:
 
         # skips past the first part of the execute sub command
         sub_cmd_token = self.eat(TypedToken.STRING)
-        self.eat(SimpleToken.OPEN_PARENTHESES)
+        self.eat(DelimiterToken.OPEN_PARENTHESES)
 
         # gets the attribute of "exec_sub_(sub_command)"
         method_name = "exec_sub_{}_arg".format(sub_cmd_token.value)
@@ -758,12 +759,12 @@ class Parser:
             exec_sub_arg_node = exec_sub_arg_method()
             exec_sub_arg_nodes.append(exec_sub_arg_node)
 
-            if self.current_token.matches(SimpleToken.COLON):
+            if self.current_token.matches(DelimiterToken.COLON):
                 self.advance()
-            elif self.current_token.matches(SimpleToken.CLOSE_PARENTHESES):
+            elif self.current_token.matches(DelimiterToken.CLOSE_PARENTHESES):
                 break
 
-        self.eat(SimpleToken.CLOSE_PARENTHESES)
+        self.eat(DelimiterToken.CLOSE_PARENTHESES)
 
         # gets the proper node for the execute sub command
         return exec_sub_arg_nodes
@@ -825,7 +826,7 @@ class Parser:
             begin_objective = self.eat(TypedToken.STRING)
         operator = self.eat(TypedToken.STRING, values=Parser.sb_math_operators)
 
-        if self.current_token.matches(SelectorSimpleToken.BEGIN):
+        if self.current_token.matches(DelimiterToken.AT):
             end_target = self.selector
         else:
             # target might be a signed int if it is a string
@@ -887,7 +888,7 @@ class Parser:
             return self.team_cmd()
 
         # should get all values until the next newline
-        if self.current_token.matches(WhitespaceSimpleToken.NEWLINE):
+        if self.current_token.matches(WhitespaceToken.NEWLINE):
             return SimpleCmdNode([command_name_token])
 
         # if the second token exists and it is a string, it might still be a scoreboard shortcut
@@ -901,8 +902,8 @@ class Parser:
             nodes = [command_name_token]
 
         # STR, selector, nbt, json
-        while not self.current_token.matches(WhitespaceSimpleToken.NEWLINE):
-            if self.current_token.matches(SelectorSimpleToken.BEGIN):
+        while not self.current_token.matches(WhitespaceToken.NEWLINE):
+            if self.current_token.matches(DelimiterToken.AT):
                 selector_node = self.selector()
                 nodes.append(selector_node)
 
@@ -911,7 +912,7 @@ class Parser:
                 json_token = self.eat(TypedToken.JSON)
                 nodes.append(json_token)
 
-            elif self.current_token.matches(NBTSimpleToken.BEGIN):
+            elif self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
                 nbt_node = self.nbt()
                 nodes.append(nbt_node)
             
@@ -1059,13 +1060,13 @@ class Parser:
         Returns:
             SelectorNode
         """
-        # selector_var = self.eat(SelectorSimpleToken.BEGIN)
+        # selector_var = self.eat(DelimiterToken.AT)
         selector_var = self.selector_var()
 
-        if self.current_token.matches(SelectorSimpleToken.OPEN_BRACKET):
-            self.eat(SelectorSimpleToken.OPEN_BRACKET)
+        if self.current_token.matches(DelimiterToken.OPEN_SQUARE_BRACKET):
+            self.eat(DelimiterToken.OPEN_SQUARE_BRACKET)
             selector_args = self.selector_args()
-            self.eat(SelectorSimpleToken.CLOSE_BRACKET)
+            self.eat(DelimiterToken.CLOSE_SQUARE_BRACKET)
             return SelectorNode(selector_var, selector_args)
 
         return SelectorNode(selector_var)
@@ -1074,7 +1075,7 @@ class Parser:
         """
         selector_var ::= "@" & selector_var_specifier
         """
-        self.eat(SelectorSimpleToken.BEGIN)
+        self.eat(DelimiterToken.AT)
         specifier = self.selector_var_specifier()
         return SelectorVarNode(specifier)
 
@@ -1082,7 +1083,7 @@ class Parser:
         """
         # selector_var_specifier is defined under selector_version.json as "selector_variable_specifiers"
         """
-        return self.eat(SelectorTypedToken.SELECTOR_VARIABLE_SPECIFIER, values=Parser.config_data.selector_variable_specifiers)
+        return self.eat(TypedToken.SELECTOR_VARIABLE_SPECIFIER, values=Parser.config_data.selector_variable_specifiers)
 
     def selector_args(self):
         """
@@ -1091,7 +1092,7 @@ class Parser:
         Returns:
             list of Selector{type}ArgNode objects
         """
-        if self.current_token.matches(SelectorSimpleToken.CLOSE_BRACKET):
+        if self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
             return []
 
         selector_args = []
@@ -1099,9 +1100,9 @@ class Parser:
             selector_arg = self.single_arg()
             selector_args.append(selector_arg)
 
-            if self.current_token.matches(SelectorSimpleToken.COMMA):
+            if self.current_token.matches(DelimiterToken.COMMA):
                 self.advance()
-            elif self.current_token.matches(SelectorSimpleToken.CLOSE_BRACKET):
+            elif self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
                 break
             else:
                 self.error("Expected a comma or closing square bracket")
@@ -1114,7 +1115,7 @@ class Parser:
         """
         # note that this can be anything and it doesn't have to be specified under selector.json
         selector_arg_token = self.eat(TypedToken.STRING)
-        if not self.current_token.matches(SelectorSimpleToken.EQUALS):
+        if not self.current_token.matches(DelimiterToken.EQUALS):
             return self.tag_arg(selector_arg_token)
 
         # gets any replacements
@@ -1150,7 +1151,7 @@ class Parser:
         Returns:
             SelectorScoreArgNode
         """
-        self.eat(SelectorSimpleToken.EQUALS)
+        self.eat(DelimiterToken.EQUALS)
         int_range = self.int_range()
         return SelectorScoreArgNode(objective_arg, int_range)
 
@@ -1159,7 +1160,7 @@ class Parser:
         simple_arg ::= default_arg & "=" & default_arg_value_group
         """
         json_arg_details = self.json_parse_arg(json_type="selector", arg_token=simple_arg_token)
-        self.eat(SelectorSimpleToken.EQUALS)
+        self.eat(DelimiterToken.EQUALS)
         default_arg_value = self.default_arg_value_group(json_arg_details)
 
         return SelectorDefaultArgNode(simple_arg_token, default_arg_value)
@@ -1177,14 +1178,14 @@ class Parser:
             SelectorDefaultGroupArgValueNode: if the value is actually a group surrounded by "(" and ")"
         """
         # checks for negation
-        if (json_arg_details.get("negation", False) and self.current_token.matches(SelectorSimpleToken.NOT)):
+        if (json_arg_details.get("negation", False) and self.current_token.matches(DelimiterToken.EXCLAMATION_MARK)):
             self.advance()
             negated = True
         else:
             negated = False
 
         # checks for group
-        if json_arg_details.get("group", False) and self.current_token.matches(SimpleToken.OPEN_PARENTHESES):
+        if json_arg_details.get("group", False) and self.current_token.matches(DelimiterToken.OPEN_PARENTHESES):
             if ((json_arg_details["group"] == "negation" and negated) or
                     (json_arg_details["group"] == "default" and not negated) or
                     (json_arg_details["group"] == "any")):
@@ -1197,9 +1198,9 @@ class Parser:
 
         # gets group values
         if group:
-            self.eat(SimpleToken.OPEN_PARENTHESES)
+            self.eat(DelimiterToken.OPEN_PARENTHESES)
             value_nodes = self.default_arg_values(json_arg_details)
-            self.eat(SimpleToken.CLOSE_PARENTHESES)
+            self.eat(DelimiterToken.CLOSE_PARENTHESES)
 
             return SelectorDefaultGroupArgValueNode(value_nodes, negated)
 
@@ -1216,7 +1217,7 @@ class Parser:
             list: Contains any combination of Token, IntRangeNode and, NumberRangeNode objects
         """
         default_arg_values = []
-        while not self.current_token.matches(SimpleToken.CLOSE_PARENTHESES):
+        while not self.current_token.matches(DelimiterToken.CLOSE_PARENTHESES):
             value = self.json_parse_arg_value(json_arg_details)
             default_arg_values.append(value)
         return default_arg_values
@@ -1293,11 +1294,11 @@ class Parser:
             min_int = self.eat(TypedToken.INT)
 
         # singular integer
-        if not self.current_token.matches(SelectorSimpleToken.RANGE):
+        if not self.current_token.matches(DelimiterToken.RANGE):
             return IntRangeNode(min_int, min_int)
 
         # if it isn't a singular integer, it requires a range
-        self.eat(SelectorSimpleToken.RANGE)
+        self.eat(DelimiterToken.RANGE)
         if self.current_token.matches(TypedToken.INT):
             max_int = self.eat(TypedToken.INT)
 
@@ -1320,7 +1321,7 @@ class Parser:
         Returns:
             SelectorNode or Token
         """
-        if self.current_token.matches(SelectorSimpleToken.BEGIN):
+        if self.current_token.matches(DelimiterToken.AT):
             return self.selector()
 
         return self.eat(TypedToken.STRING)
@@ -1332,7 +1333,7 @@ class Parser:
         Returns:
             SelectorNode or Vec3Node
         """
-        if self.current_token.matches(SelectorSimpleToken.BEGIN):
+        if self.current_token.matches(DelimiterToken.AT):
             return self.selector()
 
         return self.vec3()
