@@ -9,12 +9,13 @@ from lexical_token import Token
 # from token_classes import TypedToken, SelectorTypedToken, TokenValues
 # from token_classes import ALL_TYPED_TOKEN_TYPES
 from token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
+from lexer import Lexer
 from nodes import ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode
 from nodes import ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode
 from nodes import ExecuteCmdNode, ExecuteSubIfBlockArg, ExecuteSubLegacyArg
 from nodes import SelectorNode, SelectorVarNode, SelectorTagArgNode, SelectorScoreArgNode
 from nodes import SelectorDefaultArgNode, SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode
-from nodes import BossbarAddNode, BossbarRemoveNode, BossbarGetNode
+from nodes import BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode
 from nodes import CoordsNode, Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode
 from node_visitors import NodeBuilder, NodeVisitor
 from coord_utils import is_coord_token, are_coords
@@ -168,11 +169,18 @@ class Parser:
     """
     Makes the mcfunction builders while building all datatags and selectors
 
+    Args:
+        lexer (iterator function or iterator)
+            
     Attributes:
         lexer (Lexer)
-        symbol_table (ScopedSymbolTable): Stores all symbols acquired dealing with statements and statement scopes
-        file_path (str): Main output file path of the mcfunctions
-        mcfunctions (list): All mcfunction builders made by the parser
+        current_token (Token or None)
+        iterator (iterator object)
+        return_eof (bool): Whether the parser should manually return an EOF token as the last token or not
+            - This is not necessary unless the iterator is a method of the lexer
+            - The lexer as an iterator itself should return an EOF
+            - This defaults to False
+            - If set to True, once it returns an EOF token, it is set back to false
     """
 
     config_data = ConfigData()
@@ -190,8 +198,19 @@ class Parser:
         "selector": "selector_argument_details"
     }
 
-    def __init__(self, lexer):
-        self.iterator = iter(lexer)
+    def __init__(self, lexer, lexer_method=None):
+        assert isinstance(lexer, Lexer)
+        assert lexer_method is None or isinstance(lexer_method, str)
+
+        self.lexer = lexer
+        if lexer_method is None:
+            self.iterator = iter(lexer)
+            self.return_eof = False
+        else:
+            lexer_method = getattr(lexer, lexer_method)
+            self.iterator = iter(lexer_method)
+            self.return_eof = True
+
         self.current_token = None
         self.advance()
 
@@ -221,6 +240,12 @@ class Parser:
         """
         previous_token = self.current_token
         self.current_token = next(self.iterator, None)
+
+        if self.current_token is None and self.return_eof:
+            if self.return_eof:
+                return 
+            self.error("Cannot advance past the last token")
+
         logging.debug("Advanced to {}".format(repr(self.current_token)))
         return previous_token
 
@@ -946,10 +971,9 @@ class Parser:
         self.eat(TypedToken.STRING, value="add")
         bossbar_id = self.eat(TypedToken.STRING)
 
-        if self.current_token.matches(TypedToken.JSON):
-            # TODO change to json node
-            json_token = self.eat(TypedToken.JSON)
-            return BossbarAddNode(bossbar_id, json=json_token)
+        if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
+            json_node = self.json()
+            return BossbarAddNode(bossbar_id, json=json_node)
 
         if self.current_token.matches(TypedToken.STRING):
             display_name = self.eat(TypedToken.STRING)
@@ -977,66 +1001,11 @@ class Parser:
         bossbar_set ::= STR && bossbar_arg && bossbar_arg_value
         # bossbar_option_arg, bossbar_option_arg_value are defined in the bossbar_version.json
         """
-        sub_cmd = self.current_token.value
-        if sub_cmd not in Parser.config_data.bossbar_set:
-            self.error("Expected token in {} for a bossbar set shortcut".format(Parser.config_data.bossbar_set))
+        arg_token, json_arg_details = self.json_parse_arg(json_type="bossbar")
+        self.eat(DelimiterToken.EQUALS)
+        arg_value_token = self.json_parse_arg_value(json_arg_details)
 
-        # if sub_cmd == "max":
-        #     return self.bossbar_set_max(bossbar_id)
-        # if sub_cmd == "value":
-        #     return self.bossbar_set_value(bossbar_id)
-        # if sub_cmd == "players":
-        #     return self.bossbar_set_players(bossbar_id)
-        # if sub_cmd == "=":
-        #     return self.bossbar_set_visible(bossbar_id)
-        # if sub_cmd == "color":
-        #     return self.bossbar_set_color(bossbar_id)
-        # if sub_cmd == "style":
-        #     return self.bossbar_set_style(bossbar_id)
-
-    def bossbar_set_max(self, bossbar_id):
-        """
-        bossbar_set_max ::= STR && "max" && "=" && pos_int
-        """
-        self.eat(TypedToken.STRING, value="max")
-        max_value = self.pos_int()
-        return BossbarSetMaxNode(bossbar_id, max_value)
-
-    def bossbar_set_value(self, bossbar_id):
-        """
-        bossbar_set_value ::= STR && "value" && "=" && nonneg_int
-        """
-        self.eat(TypedToken.STRING, value="value")
-        value = self.nonneg_int()
-        return BossbarSetMaxNode(bossbar_id, value)
-
-    def bossbar_set_players(self, bossbar_id):
-        """
-        bossbar_set_players ::= STR && "players" && "=" && selector
-        """
-        self.eat(TypedToken.STRING, value="players")
-        players = self.selector()
-        return BossbarSetMaxNode(bossbar_id, players)
-
-    def bossbar_set_visible(self, bossbar_id):
-        """
-        bossbar_set_visible ::= STR && "=" && ["visible", "invisible"]
-        """
-        self.eat(TypedToken.STRING, value="=")
-        self.eat(TypedToken.STRING, values={"visible", "invisible"})
-
-    def bossbar_set_color(self, bossbar_id):
-        """
-        bossbar_set_color ::= STR && "color" && "=" && ["white", "pink", "red", "yellow", "green", "blue", "purple"]
-        """
-        self.eat(TypedToken.STRING, value="color")
-
-    def bossbar_set_style(self, bossbar_id):
-        """
-        bossbar_set_style ::= STR && "style" && "=" && ["0", "6", "10", "12", "20"]
-        """
-        self.eat(TypedToken.STRING, value="style")
-
+        return BossbarSetNode(bossbar_id, arg_token, arg_value_token)
 
     def data_cmd(self):
         raise NotImplementedError
@@ -1407,17 +1376,17 @@ if __name__ == "__main__":
 
     logging_setup.format_file_name("test_lexer.txt")
 
-    with open("test_lexer.txt") as file:
-        text = file.read()
-    lexer = Lexer(text)
+    # with open("test_lexer.txt") as file:
+    #     text = file.read()
+    # lexer = Lexer(text)
 
-    r"C:\Users\Austin-zs\AppData\Roaming\.minecraft\saves\Snapshot 17w18b\data\functions\ego\event_name"
-    parser = Parser(lexer)
+    # r"C:\Users\Austin-zs\AppData\Roaming\.minecraft\saves\Snapshot 17w18b\data\functions\ego\event_name"
+    # parser = Parser(lexer)
 
-    try:
-        parser.parse()
-    except Exception as e:
-        logging.exception(e)
+    # try:
+    #     parser.parse()
+    # except Exception as e:
+    #     logging.exception(e)
 
     # mcfunctions = parser.mcfunctions
     # for mcfunction in mcfunctions:
@@ -1430,3 +1399,6 @@ if __name__ == "__main__":
     # parser = Parser(lexer.get_selector())
     # tree = parser.selector()
     # print(tree)
+
+    lexer = Lexer("bossbar add ayylmao")
+    parser = Parser(lexer.get_command(), )

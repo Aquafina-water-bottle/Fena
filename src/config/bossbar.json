@@ -16,6 +16,10 @@
                 "parse_type": "NONNEG_INT"
             },
 
+            "name": {
+                "parse_type": "JSON"
+            },
+
             "players": {
                 "parse_type": "SELECTOR"
             },

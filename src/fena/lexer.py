@@ -4,11 +4,7 @@ if __name__ == "__main__":
 import logging
 import json
 
-# from token_classes import WhitespaceToken, StatementSimpleToken, NBTSimpleToken, SimpleToken
-# from token_classes import SelectorSimpleToken, NBTSimpleToken, NBTNumberEndSimpleToken
-# from token_classes import TypedToken, SelectorTypedToken, TokenValues
 from token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
-
 from config_data import ConfigData
 from lexical_token import Token
 from token_position import TokenPosition, TokenPositionRecorder
@@ -283,14 +279,6 @@ class Lexer:
         yield self.create_new_token(DelimiterToken.EXCLAMATION_MARK, advance=True)
         self.skip_whitespace()
 
-        # keyword_token = self.get_until_space()
-        # if keyword_token.value not in TokenValues.get(StatementSimpleToken):
-        #     self.error("Statement keyword {} does not exist".format(repr(keyword_token.value)))
-
-        # keyword_token.cast(StatementSimpleToken)
-        # yield keyword_token
-        # self.skip_whitespace()
-
         # assumes the rest are strings until newline
         while not self.reached_eof and self.get_char() != "\n":
             if self.get_char().isspace():
@@ -446,80 +434,6 @@ class Lexer:
             return self.create_new_token(float_type, value=float(self.get_locked_chars()), unlock=True)
         return self.create_new_token(int_type, value=int(self.get_locked_chars()), unlock=True)
 
-    # def get_tag(self):
-    #     """
-    #     Yields:
-    #         Token: NBT tag tokens or JSON tokens
-    #     """
-    #     if self.current_chars_are('{"'):
-    #         yield self.get_json()
-    #     else:
-    #         yield from self.get_nbt()
-
-    # def get_json(self):
-    #     """
-    #     Yields:
-    #         Token: Complete json object
-    #     """
-    #     decoder = json.JSONDecoder()
-    #     json_object, position = decoder.raw_decode(self.text[self.recorder.char_pos:])
-    #     self.advance(position)
-    #     return self.create_new_token(TypedToken.JSON, value=json_object)
-
-    # def get_nbt(self, nbt_array=False):
-    #     """
-    #     Get all relevant nbt tokens
-    #     """
-    #     # gets the beginning bracket token
-    #     if nbt_array:
-    #         begin_type = DelimiterToken.OPEN_SQUARE_BRACKET
-    #         end_type = DelimiterToken.CLOSE_SQUARE_BRACKET
-    #     else:
-    #         begin_type = DelimiterToken.OPEN_CURLY_BRACKET
-    #         end_type = DelimiterToken.CLOSE_CURLY_BRACKET
-
-    #     yield self.create_new_token(begin_type, advance=True)
-
-    #     while not self.current_chars_are(end_type.value):
-    #         if self.get_char().isspace() and self.get_char() != WhitespaceToken.NEWLINE.value:
-    #             self.skip_whitespace()
-
-    #         # skips comments inside nbt tags
-    #         if self.current_chars_are(WhitespaceToken.NEWLINE.value):
-    #             self.advance()
-    #             self.skip_whitespace()
-    #             if self.current_chars_are(WhitespaceToken.COMMENT.value):
-    #                 self.skip_comment()
-
-    #         elif self.get_char() in (DelimiterToken.COLON.value, DelimiterToken.COMMA.value):
-    #             yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
-
-    #         elif self.current_chars_are(DelimiterToken.OPEN_CURLY_BRACKET.value):
-    #             # recursive call to get nbt in {}
-    #             yield from self.get_nbt()
-
-    #         elif self.current_chars_are(DelimiterToken.OPEN_SQUARE_BRACKET.value):
-    #             # recursive call to get nbt in []
-    #             yield from self.get_nbt(nbt_array=True)
-
-    #         elif self.get_char() == DelimiterToken.QUOTE.value:
-    #             yield self.get_literal_string()
-    #         elif self.get_char().isdigit() or self.get_char() == "-":
-    #             yield self.get_number()
-    #             # sees if the number has a type by seeing if there is a letter after a number
-    #             # if self.get_char().isalpha():
-    #             #     if self.get_char() in TokenValues.get(NBTNumberEndSimpleToken):
-    #             #         yield self.create_new_token(NBTNumberEndSimpleToken(self.get_char()), advance=True)
-    #             #     else:
-    #             #         self.error("Unknown alphabetical value ending")
-    #         elif self.get_char().isalpha():
-    #             yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
-    #         else:
-    #             self.error()
-
-    #     # gets the ending bracket token
-    #     yield self.create_new_token(end_type, advance=True)
-
     def get_tag(self, array=False):
         """
         Get all relevant nbt tag or json tokens
@@ -562,12 +476,6 @@ class Lexer:
                 yield self.get_literal_string()
             elif self.get_char().isdigit() or self.get_char() == "-":
                 yield self.get_number()
-                # sees if the number has a type by seeing if there is a letter after a number
-                # if self.get_char().isalpha():
-                #     if self.get_char() in TokenValues.get(NBTNumberEndSimpleToken):
-                #         yield self.create_new_token(NBTNumberEndSimpleToken(self.get_char()), advance=True)
-                #     else:
-                #         self.error("Unknown alphabetical value ending")
             elif self.get_char().isalpha():
                 yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
             else:

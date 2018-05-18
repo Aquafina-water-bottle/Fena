@@ -277,7 +277,17 @@
     team leave @a
 
     # team option <option> <value>
-    team _team showFriendlyInvisibles = true
+    # all are defined under team_options.json
+    team _team friendlyfire = true
+    team _team color = green
+    team _team seeFriendlyInvisibles = false
+    team _team nametagVisiblity = hideForOwnTeam
+    team _team deathMessageVisibility = never
+    team _team collisionRule = pushOwnTeam
+
+    # new in 1.13
+    team _team prefix = {"text":"PREFIX","color":"blue"}
+    team _team suffix = {"text":"SUFFIX","color":"red"}
 
     # team remove <team> (no shortcut)
     team remove _team

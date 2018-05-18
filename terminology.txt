@@ -88,6 +88,7 @@ execute sub command keyword: Any keyword shortcut inside a leading execute comma
 
 
 entity_path: Either a selector or vec3 (as a tuple of 3 coordinates)
+???: The group of bossbars, objectives, and teams
 
 LHS: Left hand side
 RHS: Right hand side

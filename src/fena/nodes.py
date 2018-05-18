@@ -382,7 +382,7 @@ class ScoreboardCmdSpecialNode(CmdNode):
 class SimpleCmdNode(CmdNode):
     """
     Attributes:
-        nodes (list of Token, SelectorNode, JsonNode and NBTNode objects)
+        nodes (list of Token, SelectorNode, JsonNode and NbtNode objects)
     """
     def __init__(self, tokens):
         assert isinstance(tokens, list)
@@ -400,9 +400,16 @@ class BossbarAddNode(BossbarCmdNode):
         json (JsonNode)
     """
     def __init__(self, bossbar_id, display_name=None, json=None):
+        assert isinstance(bossbar_id, Token)
+
         # makes sure that at least one is none since the only possible
         # options are for both to be none, or one to be not none
         assert display_name is None or json is None
+        if display_name is not None:
+            assert isinstance(display_name, Token)
+        if json is not None:
+            assert isinstance(json, JsonNode)
+
         self.bossbar_id = bossbar_id
         self.display_name = display_name
         self.json = json
@@ -413,76 +420,35 @@ class BossbarRemoveNode(BossbarCmdNode):
         bossbar_id (Token)
     """
     def __init__(self, bossbar_id):
+        assert isinstance(bossbar_id, Token)
         self.bossbar_id = bossbar_id
 
 class BossbarGetNode(BossbarCmdNode):
     """
     Attributes:
+        bossbar_id (Token)
         sub_cmd (Token)
     """
     def __init__(self, bossbar_id, sub_cmd):
+        assert isinstance(bossbar_id, Token)
+        assert isinstance(sub_cmd, Token)
         self.bossbar_id = bossbar_id
         self.sub_cmd = sub_cmd
 
-# class BossbarSetMaxNode(BossbarCmdNode):
-#     """
-#     Attributes:
-#         bossbar_id (Token)
-#         max (Token)
-#     """
-#     def __init__(self, bossbar_id, max):
-#         self.bossbar_id = bossbar_id
-#         self.max = max
-# 
-# class BossbarSetValueNode(BossbarCmdNode):
-#     """
-#     Attributes:
-#         sub_cmd (Token)
-#         value (Token)
-#     """
-#     def __init__(self, bossbar_id, value):
-#         self.bossbar_id = bossbar_id
-#         self.value = value
-# 
-# class BossbarSetPlayersNode(BossbarCmdNode):
-#     """
-#     Attributes:
-#         sub_cmd (Token)
-#         selector (SelectorNode)
-#     """
-#     def __init__(self, bossbar_id, selector):
-#         self.bossbar_id = bossbar_id
-#         self.selector = selector
-# 
-# class BossbarSetVisibleNode(BossbarCmdNode):
-#     """
-#     Attributes:
-#         sub_cmd (Token)
-#         visible (Token)
-#     """
-#     def __init__(self, bossbar_id, visible):
-#         self.bossbar_id = bossbar_id
-#         self.visible = visible
-# 
-# class BossbarSetColorNode(BossbarCmdNode):
-#     """
-#     Attributes:
-#         sub_cmd (Token)
-#         color (Token)
-#     """
-#     def __init__(self, bossbar_id, color):
-#         self.bossbar_id = bossbar_id
-#         self.color = color
-# 
-# class BossbarSetStyleNode(BossbarCmdNode):
-#     """
-#     Attributes:
-#         sub_cmd (Token)
-#         style (Token)
-#     """
-#     def __init__(self, bossbar_id, style):
-#         self.bossbar_id = bossbar_id
-#         self.style = style
+class BossbarSetNode(BossbarCmdNode):
+    """
+    Attributes:
+        bossbar_id (Token)
+        arg (Token)
+        value (Token)
+    """
+    def __init__(self, bossbar_id, arg, arg_value):
+        assert isinstance(bossbar_id, Token)
+        assert isinstance(arg, Token)
+        assert isinstance(arg_value, Token)
+        self.bossbar_id = bossbar_id
+        self.arg = arg
+        self.arg_value = arg_value
 
 
 class DataCmdNode(CmdNode):
@@ -502,7 +468,7 @@ class DataGetNode(DataCmdNode):
 class DataMergeNode(DataCmdNode):
     """
     Attributes:
-        nbt (NBTNode)
+        nbt (NbtNode)
     """
     def __init__(self, nbt):
         self.nbt = nbt
@@ -740,13 +706,13 @@ class SelectorTagArgNode(CmdNode):
     def __repr__(self):
         return f"SelectorTagArgNode[tag={self.tag}]"
 
-class SelectorNBTArgNode(CmdNode):
+class SelectorNbtArgNode(CmdNode):
     """
     Attributes:
-        nbt (NBTNode)
+        nbt (NbtNode)
     """
     def __init__(self, nbt):
-        # assert isinstance(nbt, NBTNode)
+        # assert isinstance(nbt, NbtNode)
         self.nbt = nbt
 
 class SelectorAdvancementArgNode(CmdNode):
@@ -757,6 +723,13 @@ class SelectorAdvancementArgNode(CmdNode):
     def __init__(self, advancements):
         self.advancements = advancements 
 
+
+
+class NbtNode(CmdNode):
+    pass
+
+class JsonNode(CmdNode):
+    pass
 
 class IntRangeNode(CmdNode):
     """
@@ -794,12 +767,12 @@ class BlockNode(CmdNode):
     Attributes:
         block (Token)
         states (list of BlockStateNode objects)
-        nbt (NBTNode or None)
+        nbt (NbtNode or None)
     """
     def __init__(self, block, states, nbt=None):
         assert isinstance(block, Token)
         assert isinstance(states, list)
-        # assert nbt is None or isinstance(nbt, NBTNode)
+        # assert nbt is None or isinstance(nbt, NbtNode)
         self.block = block
         self.states = states
         self.nbt = nbt
