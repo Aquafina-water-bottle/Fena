@@ -23,7 +23,9 @@ from config_data import ConfigData
 from number_utils import is_signed_int, is_nonneg_int, is_pos_int, is_number
 
 r"""
-Organizes all lines into their respective mcfunctions
+Organizes all tokens into nodes of an abstract syntax tree (AST)
+
+Grammar:
 
 program ::= statement_suite
 statement_suite ::= [NEWLINE, (statement, NEWLINE)]*
@@ -133,13 +135,22 @@ tag_arg ::= STR
 score_arg ::= STR & ("=" & int_range)?
 
 nbt ::= nbt_object
-nbt_object ::= "{" && (STR && ":" && nbt_value)* && "}"
-nbt_array ::= "[" && (nbt_value)* && "]"
+nbt_object ::= "{" && ((nbt_map)? | (nbt_map && ("," && nbt_map)*)) && "}"
+nbt_map ::= STR && ":" && nbt_value
+nbt_array ::= nbt_array_begin? && ";" && "[" && (nbt_values)* && "]"
 nbt_array_begin ::= ["I", "L", "B"]
+nbt_values ::= (nbt_value)? | (nbt_value && ("," && nbt_value)*)
 nbt_value ::= [literal_str, nbt_number, "true", "false", "null", nbt_object, nbt_array]
 nbt_number = (signed_int && ["b", "s", "l"]?) | (signed_float && ["f", "d"]?)
 
+# specified under https://www.json.org
+# json objects = dictionaries, json arrays = lists
 json ::= json_object
+json_object ::= "{" && ((json_map)? | (json_map && ("," && json_map)*)) && "}"
+json_map ::= literal_str && ":" && json_value
+json_array ::= "[" && (json_value)* && "]"
+json_value ::= [literal_str, json_number, "true", "false", "null", json_object, json_array]
+json_number ::= signed_java_number
 
 nonneg_int ::= INT  # Z nonneg
 signed_int ::= ("-")? && INT  # Z
@@ -147,6 +158,7 @@ pos_int ::= INT, ::/= 0  # Z+
 
 float ::= (INT)? && "." && INT  # R, R <= 0
 signed_float ::= ("-")? && float  # R
+signed_java_number ::= ("-")? && INT && ("." && INT)? && (["e", "E"] && ["+", "-"] && INT)?
 
 number ::= [signed_float, signed_int]
 int_range ::= [signed_int, (signed_int & ".."), (".." & signed_int), (signed_int & ".." & signed_int)]
@@ -227,6 +239,9 @@ class Parser:
         return parse_tree
 
     def error(self, message=None):
+        """
+        Raises a generic syntax error with an optional message
+        """
         if message is None:
             message = "Invalid syntax"
         raise SyntaxError("{}: {}".format(self.current_token, message))
@@ -237,13 +252,20 @@ class Parser:
 
         Returns:
             Token: The token that was just advanced over
+
+        Raises:
+            SyntaxError: if the there are no more tokens to advance to (the token after the EOF token)
         """
         previous_token = self.current_token
         self.current_token = next(self.iterator, None)
 
-        if self.current_token is None and self.return_eof:
+        if self.current_token is None:
+            # Returns only 1 EOF token
             if self.return_eof:
-                return 
+                self.return_eof = False
+                self.current_token = self.lexer.create_new_token(WhitespaceToken.EOF)
+
+            # otherwise, creates error
             self.error("Cannot advance past the last token")
 
         logging.debug("Advanced to {}".format(repr(self.current_token)))
@@ -255,7 +277,8 @@ class Parser:
 
         Args:
             token_types (any token type)
-            values (any or None): Any specified value that should exist within the body of a typed token
+            value (any or None): Any specified value that should equal the value of a typed token
+            values (any or None): Any specified values that should equal the value of a typed token
             error_message (str or None): What the error message should say in case there is a syntax error
 
         Returns:
@@ -288,6 +311,8 @@ class Parser:
 
     def json_parse_arg(self, json_type, arg_token=None):
         """
+        Get the argument of a generic json parse type specified in a config file
+
         Args:
             json_type (str)
             arg_token (Token or None)
@@ -295,6 +320,9 @@ class Parser:
         Returns:
             Token: Token that was gotten to determine the json arg details if an arg_token was not provided already
             dict: json arg details to see the parse type and other information
+
+        Raises:
+            SyntaxError: if the token value is not within the specified json type arguments 
         """
         assert json_type in Parser.json_parse_options 
 
@@ -311,15 +339,15 @@ class Parser:
                 return json_object[arg_token.value]
             return arg_token, json_object[arg_token.value]
 
-        self.error("Expected a token inside {}".format(list(json_object)))
+        self.error(f"Expected {arg_token} value inside {list(json_object)}")
 
     def json_parse_arg_value(self, arg_details):
         """
-        Does whatever the parse type is, and uses other string objects depending on the parse type
+        Parses the argument value according to the specified parse_type found in the arg_details dict
 
         "parse_type":
             "VALUES": It has a "values" attribute that should have a containment check on it
-                - This might also have a "value_replace" attribute
+                - This might also have a "value_replace" attribute as a dictionary to replace strings as shorthands
             "STR": Anything contained inside a string containing [A-Za-z_.-]
             "SIGNED_INT": Any (possibly negative) integer value (Z)
             "POS_INT": Any positive integer value (Z+)
@@ -418,7 +446,7 @@ class Parser:
 
     def program(self):
         """
-        program ::= (statement)*
+        program ::= statement_suite
 
         Returns:
             ProgramNode: The parse tree parent

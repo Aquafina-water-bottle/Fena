@@ -7,7 +7,7 @@ class McFunction:
     Attributes:
         full_path (str): The full path to the mcfunction file
         mfunc_name (str)
-        commands (list or tuple): The full list of strings in an mcfunction
+        commands (list or tuple): The full sequence of strings in an mcfunction
     """
     def __init__(self, mfunc_name, full_path):
         self.full_path = full_path
@@ -22,6 +22,7 @@ class McFunction:
             command (str)
         """
         assert isinstance(command, str)
+        assert isinstance(self.commands, list), "Cannot add a command if finalized"
         self.commands.append(command)
 
     def finalize(self):

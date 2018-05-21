@@ -33,6 +33,8 @@ class InFileConfig:
         functions (dict): All function shortcuts present in the file
             - Maps any version of the function shortcut to the function path
     """
+    default_prefix = "fena"
+    default_constobj = "g.number"
 
     def __init__(self):
         self.objectives = {}
@@ -119,6 +121,9 @@ class InFileConfig:
             raise SyntaxError("Path {} must have a folder inside the functions/ folder".format(full_path))
 
         shortcuts, mcfunction_path = self._get_all_shortcuts(directories)
+
+        # updates the functions dictionary to map the entire list of shortcuts to the mcfunction_path string
+        # TODO use function_conflicts 
         self.functions.update(dict.fromkeys(shortcuts, mcfunction_path))
 
     def _get_all_shortcuts(self, directories):
@@ -153,15 +158,19 @@ class InFileConfig:
         return shortcuts, mcfunction_path
 
     def finalize(self):
+        """
+        Sets the prefix and the constobj to their default values if none were found
+        TODO make finalized bool, use types.MappingProxyType, frozenset, and make setters inaccessible
+        """
         # default for prefix is "fena"
         if self.prefix is None:
-            self.prefix = "fena"
-            logging.warning("Using the default prefix of {}".format(self.prefix))
+            self.prefix = InFileConfig.default_prefix
+            logging.warning("Using the default prefix of {}".format(InFileConfig.prefix))
         
         # default for constobj is "g.number"
         if self.constobj is None:
-            self.constobj = "g.number"
-            logging.warning("Using the default constobj of {}".format(self.constobj))
+            self.prefix = InFileConfig.default_constobj
+            logging.warning("Using the default constobj of {}".format(InFileConfig.constobj))
 
 
 if __name__ == "__main__":

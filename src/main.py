@@ -14,7 +14,7 @@ import os
 import fena.logging_setup
 import fena.file
 import fena.lexer
-import fena.parser
+import fena.parse_tree
 import fena.writer
 # import fena.interpreter
 
@@ -58,10 +58,10 @@ def main():
     fena.logging_setup.format_file_name(file_name)
 
     lexer = fena.lexer.Lexer(text)
-    parser = fena.parser.Parser(lexer, output_path)
-    parser.parse()
+    parser = fena.parse_tree.Parser(lexer)
+    interpreter = fena.interpreter.Interpreter(parser, output_path)
 
-    writer = fena.writer.Writer(parser.mcfunctions, args)
+    writer = fena.writer.Writer(interpreter.interpret(), args)
     writer.write()
 
     # interpreter = fena.interpreter.Interpreter(parser)
