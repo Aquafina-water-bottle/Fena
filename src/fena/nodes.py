@@ -1,9 +1,7 @@
 from abc import ABC
 from config_data import ConfigData
-from in_file_config import InFileConfig
 from lexical_token import Token
 
-in_file_config = InFileConfig()
 config_data = ConfigData()
 
 class Node(ABC):

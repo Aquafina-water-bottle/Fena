@@ -4,6 +4,14 @@ if __name__ == "__main__":
 import logging
 import json
 
+# if __name__ == "__main__":
+#     import sys
+#     sys.path.append("..")
+# 
+# from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
+# from fena.config_data import ConfigData
+# from fena.lexical_token import Token
+# from fena.token_position import TokenPosition, TokenPositionRecorder
 from token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
 from config_data import ConfigData
 from lexical_token import Token
@@ -501,7 +509,7 @@ if __name__ == "__main__":
         logging.debug(repr(token))
 
     # gets only selector tokens
-    lexer = Lexer("@e[x=5,y=4,z=2, type=armor_stand,_entity, _pl=(5..6), {CustomNameVisible:1b}]")
-    for token in lexer.get_selector():
-        logging.debug(repr(token))
+    # lexer = Lexer("@e[x=5,y=4,z=2, type=armor_stand,_entity, _pl=(5..6), {CustomNameVisible:1b}]")
+    # for token in lexer.get_selector():
+    #     logging.debug(repr(token))
 

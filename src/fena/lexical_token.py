@@ -26,8 +26,8 @@ class Token:
         self.replacement = None
 
         if self.value is None:
-            assert not self.type in Token.typed_tokens, f"{self!r}: A value is required for the given token type"
-            assert self.type in Token.simple_token_types, f"The type {token_type} must be a simple token type within {Token.simple_token_types!r}"
+            assert not token_type in Token.typed_tokens, f"{self!r}: A value is required for the given token type"
+            assert token_type in Token.simple_token_types, f"The type {token_type} must be a simple token type within {Token.simple_token_types!r}"
             self.value = self.type.value
 
     def matches(self, token_type, value=None):

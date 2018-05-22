@@ -11,11 +11,11 @@ import logging
 import sys
 import os
 
-import fena.logging_setup
-import fena.file
-import fena.lexer
-import fena.parse_tree
-import fena.writer
+# import fena.logging_setup
+# import fena.file
+# import fena.lexer
+# import fena.parse_tree
+# import fena.writer
 # import fena.interpreter
 
 semantic_version = "s6.0.0"
@@ -41,6 +41,8 @@ def get_args():
     args = parser.parse_args()
     args.output_path = os.path.abspath(args.output_path)
 
+    print(repr(args))
+    print(type(args))
     return args
 
 
@@ -72,7 +74,8 @@ def main():
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except Exception as e:
-        logging.exception(e)
+    # try:
+    #     main()
+    # except Exception as e:
+    #     logging.exception(e)
+    get_args()
