@@ -13,8 +13,13 @@ import logging
 import os.path
 from collections import deque
 
-from mcfunction import McFunction
-from lexical_token import Token
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+from fena.mcfunction import McFunction
+from fena.lexical_token import Token
 
 class InFileConfig:
     """

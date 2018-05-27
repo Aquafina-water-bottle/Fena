@@ -1,4 +1,9 @@
-from nodes import CmdNode, StmtNode
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+from fena.nodes import CmdNode, StmtNode
 
 class TreePostfixTraversal:
     """

@@ -1,5 +1,11 @@
-from parse_tree import Parser
-from node_visitors import NodeVisitor
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+from fena.assert_utils import assert_type
+from fena.parser import Parser
+from fena.node_visitors import NodeVisitor
 
 class Interpreter(NodeVisitor):
     """
@@ -8,8 +14,8 @@ class Interpreter(NodeVisitor):
         output_path (str)
     """
     def __init__(self, parser, output_path):
-        assert isinstance(parser, Parser)
-        assert isinstance(output_path, str)
+        assert_type(parser, Parser)
+        assert_type(output_path, str)
         self.parser = parser
         self.output_path = output_path 
 

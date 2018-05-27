@@ -1,13 +1,26 @@
 import logging
 
-from token_classes import TokenTypes, TypedToken, DelimiterToken, WhitespaceToken
-from coord_utils import is_coord
-from config_data import ConfigData
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+from fena.token_position import TokenPosition
+from fena.assert_utils import assert_type
+from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken
+from fena.token_classes import SimpleTokenClass, TokenClass
+from fena.coord_utils import is_coord
+from fena.config_data import ConfigData
+
+"""
+Note that this file is named "lexical_token" because if it was named "token",
+it would interfere with the token used from the default logging module
+"""
 
 class Token:
-    typed_tokens = frozenset(TypedToken)
-    simple_token_types = TokenTypes.get(DelimiterToken, WhitespaceToken)
-    all_token_types = typed_tokens | simple_token_types
+    # typed_tokens = frozenset(TypedToken)
+    # simple_token_types = TokenTypes.get(DelimiterToken, WhitespaceToken)
+    # all_token_types = typed_tokens | simple_token_types
 
     config_data = ConfigData()
 
@@ -20,14 +33,18 @@ class Token:
             replacement (any): an optional custom value to be set as a replacement of the token type
                 - this will be used only when building instead of returning the value
         """
+        assert_type(pos, TokenPosition)
+        assert_type(token_type, TokenClass)
+        assert_type(value, str, optional=True)
+
         self.pos = pos
         self.type = token_type
         self.value = value
         self.replacement = None
 
         if self.value is None:
-            assert not token_type in Token.typed_tokens, f"{self!r}: A value is required for the given token type"
-            assert token_type in Token.simple_token_types, f"The type {token_type} must be a simple token type within {Token.simple_token_types!r}"
+            assert_type(TypedToken.INT, TypedToken, additional_message="A value is required for a typed token")
+            assert_type(token_type, SimpleTokenClass)
             self.value = self.type.value
 
     def matches(self, token_type, value=None):
@@ -41,7 +58,7 @@ class Token:
         Returns:
             bool: Whether the type matches the given type
         """
-        assert token_type in Token.all_token_types
+        assert_type(token_type, TokenClass)
         return (self.type == token_type) and (value is None or self.value == value)
 
     def matches_any_of(self, *types):
@@ -114,6 +131,7 @@ class Token:
         self.type = new_type
 
     def _cast_error(self, token_type, message=None):
+        assert_type(message, str, optional=True)
         if message is None:
             message = "Invalid type casting"
         raise TypeError("{!r} cast to {!r}: {}".format(self, token_type, message))

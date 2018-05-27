@@ -1,4 +1,9 @@
-from mcfunction import McFunction
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+from fena.mcfunction import McFunction
 
 class Writer:
     """

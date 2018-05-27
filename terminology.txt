@@ -68,6 +68,10 @@ minecraft commands: Any full command in minecraft
     eg. (1.12): execute @a[score_gSA_min=1,score_gSA=1,m=!3] ~ ~ ~ detect ~ 19 ~ coal_block * scoreboard players set @s gTEMP 1
     eg. (1.13): execute as @a[scores={gSA=1},gamemode=!spectator] if block ~ 19 ~ coal_block run scoreboard players set @s gTEMP 1
 
+main (fena) commands: Any simple fena command, or a full fena execute command
+    eg. @a[gSA=1,m=!3] if(coal_block ~ 19 ~)
+    eg. @s gTEMP = 1
+
 command name: The first part of any command
     eg. scoreboard, execute, kill, effect
 

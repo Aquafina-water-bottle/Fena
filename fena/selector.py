@@ -12,6 +12,8 @@ range ::= [INTEGER, (INTEGER & ".."), (".." & INTEGER), (INTEGER & ".." & INTEGE
 
 import logging
 
+# TODO will delete later
+
 class Selector:
     arg_shortcut = {
         "limit": "c",

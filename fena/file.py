@@ -4,6 +4,8 @@ import logging
 import sys
 import os
 
+# TODO will remove soon, using this as a backup
+
 
 def get_content(args):
     """

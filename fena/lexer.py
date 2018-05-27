@@ -1,23 +1,31 @@
-if __name__ == "__main__":
-    import logging_setup
-
 import logging
 import json
+import re
 
-# if __name__ == "__main__":
-#     import sys
-#     sys.path.append("..")
-# 
-# from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
-# from fena.config_data import ConfigData
-# from fena.lexical_token import Token
-# from fena.token_position import TokenPosition, TokenPositionRecorder
-from token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
-from config_data import ConfigData
-from lexical_token import Token
-from token_position import TokenPosition, TokenPositionRecorder
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+    import fena.logging_setup
+
+from fena.assert_utils import assert_type
+from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
+from fena.config_data import ConfigData
+from fena.lexical_token import Token
+from fena.token_position import TokenPosition, TokenPositionRecorder
 
 class Lexer:
+    """
+    Args:
+        text (str)
+
+    Attributes:
+        text (str)
+        recorder (TokenPositionRecorder)
+        reached_eof (bool)
+        indents (int)
+    """
     config_data = ConfigData()
 
     def __init__(self, text):
@@ -69,7 +77,7 @@ class Lexer:
         Args:
             increment (int): Number of chars that will be incremented
         """
-        assert isinstance(increment, int)
+        assert_type(increment, int)
 
         # while loop to increment the self.recorder variable
         while increment > 0 and not self.reached_eof:
@@ -95,8 +103,9 @@ class Lexer:
                 Defaults to None, which will display a generic message containing the current character
         """
         if message is None:
-            message = "Invalid character {char}".format(char=repr(self.get_char()))
-        raise TypeError("Lexer{pos}: {message}".format(pos=self.recorder, message=message))
+            char = self.get_char()
+            message = f"Invalid character {char!r}"
+        raise TypeError(f"Lexer{self.recorder}: {message}")
 
     def skip_whitespace(self, skip_newline=False):
         """
@@ -116,7 +125,7 @@ class Lexer:
         Args:
             chars (str)
         """
-        assert isinstance(chars, str)
+        assert_type(chars, str)
         self.advance(len(chars))
 
     def get_char(self):
@@ -135,11 +144,12 @@ class Lexer:
     def get_chars(self, length):
         """
         Args:
-            length (int, optional) number of characters from the current position
+            length (int) number of characters from the current position
 
         Returns:
             str: current characters from the current position given the length
         """
+        assert_type(length, int)
         char_pos = self.recorder.char_pos
         return self.text[char_pos: char_pos + length]
 
@@ -161,6 +171,7 @@ class Lexer:
         Returns
             bool: whether the characters provided equal to the current string
         """
+        assert_type(chars, str)
         length = len(chars)
         return chars == self.get_chars(length)
 
@@ -171,6 +182,7 @@ class Lexer:
         If the current state of the position is locked, it gets the locked chars instead
 
         Args:
+            token_type (any TokenType)
             value (any, defaults to None): What value the token should have
             position (TokenPosition, defaults to None): The position of the current token
             advance (bool, defaults to False): Whether to advance after creating the token or not
@@ -178,6 +190,7 @@ class Lexer:
         """
         if position is None:
             position = self.recorder.position
+        assert_type(position, TokenPosition)
 
         if self.recorder.locked:
             value = self.get_locked_chars()
@@ -374,18 +387,19 @@ class Lexer:
             elif self.current_chars_are(DelimiterToken.OPEN_CURLY_BRACKET.value):
                 yield from self.get_tag()
 
-            # Gets simple delimiter tokens
-            elif self.get_char() in TokenValues.get(DelimiterToken):
-                yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
-            elif self.get_chars(2) in TokenValues.get(DelimiterToken):
-                yield self.create_new_token(DelimiterToken(self.get_chars(2)), advance=True)
-
             elif self.current_chars_are('"'):
                 yield self.get_literal_string()
             elif self.get_char().isdigit() or self.get_char() == "-":
                 yield self.get_number()
             elif self.get_char().isalpha() or self.get_char() in "_.":
                 yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
+
+            # Gets simple delimiter tokens
+            elif self.get_char() in TokenValues.get(DelimiterToken):
+                yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
+            elif self.get_chars(2) in TokenValues.get(DelimiterToken):
+                yield self.create_new_token(DelimiterToken(self.get_chars(2)), advance=True)
+
             else:
                 self.error()
 
@@ -417,30 +431,48 @@ class Lexer:
 
         return self.create_new_token(TypedToken.LITERAL_STRING, unlock=True)
 
-    def get_number(self, int_type=TypedToken.INT, float_type=TypedToken.FLOAT):
+    def get_number(self):
         """
         Gets a number token as either an integer or float token
         Format: ("-")? & (INT)+ & ("." & (INT)+)?
 
-        Args:
-            int_type: Type of the token if the number is an integer
-            float_type: Type of the token if the number is a float
-
         Returns:
-            Token: Integer or Float token with the provided type
+            Token: integer or float token with TypedToken.INT or TypedToken.FLOAT
         """
+        is_float = False
+
         self.recorder.lock()
         if self.get_char() == "-":
             self.advance()
 
         while self.get_char().isdigit():
             self.advance()
-        if self.get_char() == "." and self.get_chars(2) != "..":  # float
+
+        # float type, assuming it is not ".." which indicates a range
+        # a range will be separated into its individual tokens (number, range delimiter, number)
+        if self.get_char() == "." and self.get_chars(2) != "..":
+            is_float = True
+            self.advance()
             while self.get_char().isdigit():
                 self.advance()
 
-            return self.create_new_token(float_type, value=float(self.get_locked_chars()), unlock=True)
-        return self.create_new_token(int_type, value=int(self.get_locked_chars()), unlock=True)
+        # exponential value, meaning that the type of float will now be TypedToken.EXPONENTIAL_FLOAT
+        if self.get_char().lower() == "e":
+            is_float = True
+            self.advance()
+
+            # allows either + or - after e or E
+            if self.get_char().lower() in ("+", "-"):
+                self.advance()
+
+            # requires at least one digit
+            if not self.get_char().isdigit():
+                self.error(f"Got {self.get_char()!r} but expected a digit after an exponential 'e' or 'E' for a float")
+            while self.get_char().isdigit():
+                self.advance()
+
+        token_type = TypedToken.FLOAT if is_float else TypedToken.INT
+        return self.create_new_token(token_type, unlock=True)
 
     def get_tag(self, array=False):
         """

@@ -1,5 +1,10 @@
-from token_classes import TypedToken
-from number_utils import is_number
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+from fena.token_classes import TypedToken
+from fena.number_utils import is_number
 
 def is_coord(string):
     """
@@ -55,7 +60,7 @@ def are_coords(*tokens):
         return False
 
     for token in tokens:
-        if not is_coord_token(token) or not token.matches(TypedToken.COORD):
+        if not is_coord_token(token):
             return False
 
         coord_type = get_token_coord_type(token)
@@ -98,8 +103,8 @@ if __name__ == "__main__":
     test_coord_type("^26.3")
 
     print()
-    from token_position import TokenPosition
-    from lexical_token import Token
+    from fena.token_position import TokenPosition
+    from fena.lexical_token import Token
     position = TokenPosition(row=1, column=5, char_pos=3)
     coord1 = Token(position, TypedToken.COORD, value="25.6")
     coord2 = Token(position, TypedToken.COORD, value="^25.6")

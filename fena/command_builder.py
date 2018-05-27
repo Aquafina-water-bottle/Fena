@@ -3,10 +3,16 @@ Contains node visitors for the AST of a command to build itself
 """
 
 import logging
-from config_data import ConfigData
-from in_file_config import InFileConfig
-from node_visitors import NodeBuilder
-from nodes import FenaCmdNode
+
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+from fena.config_data import ConfigData
+from fena.in_file_config import InFileConfig
+from fena.node_visitors import NodeBuilder
+from fena.nodes import FenaCmdNode
 
 class CommandBuilder_1_12(NodeBuilder):
     """

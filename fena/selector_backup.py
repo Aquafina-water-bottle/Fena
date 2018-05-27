@@ -1,3 +1,5 @@
+# TODO will delete later
+
 # """
 # A module for getting the selector shortcut from a selector token
 # 

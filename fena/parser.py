@@ -1,26 +1,30 @@
-if __name__ == "__main__":
-    import logging_setup
-
 import os
 import logging
 
-from lexical_token import Token
-# from token_classes import SimpleToken, WhitespaceToken, StatementSimpleToken, SelectorSimpleToken, ExecuteSimpleToken, NBTSimpleToken
-# from token_classes import TypedToken, SelectorTypedToken, TokenValues
-# from token_classes import ALL_TYPED_TOKEN_TYPES
-from token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
-from lexer import Lexer
-from nodes import ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode
-from nodes import ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode
-from nodes import ExecuteCmdNode, ExecuteSubIfBlockArg, ExecuteSubLegacyArg
-from nodes import SelectorNode, SelectorVarNode, SelectorTagArgNode, SelectorScoreArgNode
-from nodes import SelectorDefaultArgNode, SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode
-from nodes import BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode
-from nodes import CoordsNode, Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode
-from node_visitors import NodeBuilder, NodeVisitor
-from coord_utils import is_coord_token, are_coords
-from config_data import ConfigData
-from number_utils import is_signed_int, is_nonneg_int, is_pos_int, is_number
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+    import fena.logging_setup as logging_setup
+
+from fena.assert_utils import assert_type
+from fena.lexical_token import Token
+from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken
+from fena.lexer import Lexer
+# from fena.nodes import *
+from fena.nodes import ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode
+from fena.nodes import ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode
+from fena.nodes import ExecuteCmdNode, ExecuteSubIfBlockArg, ExecuteSubLegacyArg
+from fena.nodes import SelectorNode, SelectorVarNode, SelectorTagArgNode, SelectorScoreArgNode
+from fena.nodes import SelectorDefaultArgNode, SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode
+from fena.nodes import JsonObjectNode, JsonMapNode, JsonArrayNode
+from fena.nodes import BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode
+from fena.nodes import Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode
+from fena.node_visitors import NodeBuilder, NodeVisitor
+from fena.coord_utils import is_coord_token, are_coords
+from fena.config_data import ConfigData
+from fena.number_utils import is_signed_int, is_nonneg_int, is_pos_int, is_number, is_json_number, is_nbt_float
 
 r"""
 Organizes all tokens into nodes of an abstract syntax tree (AST)
@@ -31,8 +35,8 @@ program ::= statement_suite
 statement_suite ::= [NEWLINE, (statement, NEWLINE)]*
 
 statement ::= "!" && [folder_stmt, mfunc_stmt, prefix_stmt, constobj_stmt]
-folder_stmt ::= "folder" && STR && (NEWLINE)* & INDENT && statement_suite && DEDENT
-mfunc_stmt ::= "mfunc" && STR && (NEWLINE)* & INDENT && command_suite && DEDENT
+folder_stmt ::= "folder" && STR && ":" && (NEWLINE)* & INDENT && statement_suite && DEDENT
+mfunc_stmt ::= "mfunc" && [STR, literal_str] && ":" && (NEWLINE)* & INDENT && command_suite && DEDENT
 prefix_stmt ::= "prefix" && STR
 constobj_stmt ::= "constobj" && STR
 
@@ -75,7 +79,7 @@ exec_sub_unless_arg ::= exec_sub_if_arg
 
 exec_sub_result_arg ::= [exec_sub_result_arg_data, exec_sub_result_arg_score, exec_sub_result_arg_bossbar]
 exec_sub_result_arg_data ::= entity_vec3 && STR && (data_type)? && signed_int
-exec_sub_result_arg_score ::= selector && STR
+exec_sub_result_arg_score ::= target && STR
 exec_sub_result_arg_bossbar ::= STR && ["max", "value"]
 exec_sub_success_arg ::= exec_sub_result_arg 
 
@@ -141,16 +145,16 @@ nbt_array ::= nbt_array_begin? && ";" && "[" && (nbt_values)* && "]"
 nbt_array_begin ::= ["I", "L", "B"]
 nbt_values ::= (nbt_value)? | (nbt_value && ("," && nbt_value)*)
 nbt_value ::= [literal_str, nbt_number, "true", "false", "null", nbt_object, nbt_array]
-nbt_number = (signed_int && ["b", "s", "l"]?) | (signed_float && ["f", "d"]?)
+nbt_number = (signed_int & ["b", "s", "L"]?) | json_number & ["d", "f"]?
 
 # specified under https://www.json.org
 # json objects = dictionaries, json arrays = lists
 json ::= json_object
 json_object ::= "{" && ((json_map)? | (json_map && ("," && json_map)*)) && "}"
 json_map ::= literal_str && ":" && json_value
-json_array ::= "[" && (json_value)* && "]"
+json_array ::= "[" && ((json_value)? | (json_value && ("," && json_value)*)) && "]"
 json_value ::= [literal_str, json_number, "true", "false", "null", json_object, json_array]
-json_number ::= signed_java_number
+json_number ::= ("-")? && INT && ("." && INT)? && (["e", "E"] && ["+", "-"] && INT)?
 
 nonneg_int ::= INT  # Z nonneg
 signed_int ::= ("-")? && INT  # Z
@@ -158,7 +162,6 @@ pos_int ::= INT, ::/= 0  # Z+
 
 float ::= (INT)? && "." && INT  # R, R <= 0
 signed_float ::= ("-")? && float  # R
-signed_java_number ::= ("-")? && INT && ("." && INT)? && (["e", "E"] && ["+", "-"] && INT)?
 
 number ::= [signed_float, signed_int]
 int_range ::= [signed_int, (signed_int & ".."), (".." & signed_int), (signed_int & ".." & signed_int)]
@@ -197,7 +200,8 @@ class Parser:
 
     config_data = ConfigData()
 
-    nbt_number_ends = frozenset({"b", "s", "l", "f", "d"})
+    nbt_int_ends = frozenset({"b", "s", "L"})
+    nbt_number_ends = frozenset({"b", "s", "L", "f", "d"})
     nbt_array_start = frozenset({"I", "B", "L"})
     sb_special_operators = frozenset({"enable", "reset", "<-"})
     sb_math_operators = frozenset({"=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="})
@@ -210,41 +214,43 @@ class Parser:
         "selector": "selector_argument_details"
     }
 
-    def __init__(self, lexer, lexer_method=None):
-        assert isinstance(lexer, Lexer)
-        assert lexer_method is None or isinstance(lexer_method, str)
+    def __init__(self, lexer, method_name=None):
+        assert_type(lexer, Lexer)
 
         self.lexer = lexer
-        if lexer_method is None:
+        if method_name is None:
             self.iterator = iter(lexer)
             self.return_eof = False
         else:
-            lexer_method = getattr(lexer, lexer_method)
-            self.iterator = iter(lexer_method)
+            assert_type(method_name, str)
+            lexer_method = getattr(lexer, method_name)
+            self.iterator = iter(lexer_method())
             self.return_eof = True
 
         self.current_token = None
         self.advance()
 
-    def parse(self):
+    def parse(self, method_name="program"):
         """
         Returns:
             ProgramNode: The parse tree parent
         """
-        # logging.debug("Original symbol table: {}".format(repr(self.symbol_table)))
-        parse_tree = self.program()
-        # logging.debug("Final symbol table: {}".format(repr(self.symbol_table)))
+        parser_method = getattr(self, method_name)
+        assert_type(method_name, str)
+        ast = parser_method()
         logging.debug("")
 
-        return parse_tree
+        if not self.current_token.matches(WhitespaceToken.EOF):
+            self.error("Expected the EOF token at the end of parsing")
 
-    def error(self, message=None):
+        return ast
+
+    def error(self, message="Invalid syntax"):
         """
         Raises a generic syntax error with an optional message
         """
-        if message is None:
-            message = "Invalid syntax"
-        raise SyntaxError("{}: {}".format(self.current_token, message))
+        assert_type(message, str)
+        raise SyntaxError(f"{self.current_token}: {message}")
 
     def advance(self):
         """
@@ -264,11 +270,11 @@ class Parser:
             if self.return_eof:
                 self.return_eof = False
                 self.current_token = self.lexer.create_new_token(WhitespaceToken.EOF)
+            else:
+                # otherwise, creates error
+                self.error("Cannot advance past the last token")
 
-            # otherwise, creates error
-            self.error("Cannot advance past the last token")
-
-        logging.debug("Advanced to {}".format(repr(self.current_token)))
+        logging.debug(f"Advanced to {self.current_token!r}")
         return previous_token
 
     def eat(self, *token_types, values=None, value=None, error_message=None):
@@ -276,7 +282,7 @@ class Parser:
         Advances given the token type and values match up with the current token
 
         Args:
-            token_types (any token type)
+            token_types (any token type): Any token type that can be advanced
             value (any or None): Any specified value that should equal the value of a typed token
             values (any or None): Any specified values that should equal the value of a typed token
             error_message (str or None): What the error message should say in case there is a syntax error
@@ -298,14 +304,15 @@ class Parser:
 
         if error_message is None:
             if len(token_types) == 1:
-                error_message = "Expected {}".format(token_types[0])
+                expected_type = token_types[0]
+                error_message = f"Expected {expected_type}"
             else:
-                error_message = "Expected one of {}".format(token_types)
+                error_message = f"Expected one of {token_types}"
 
         if values is not None:
-            error_message += " with any value from {}".format(values)
+            error_message += f" with any value from {values}"
         elif value is not None:
-            error_message += " with a value of {}".format(value)
+            error_message += f" with a value of {value}"
 
         self.error(error_message)
 
@@ -451,9 +458,9 @@ class Parser:
         Returns:
             ProgramNode: The parse tree parent
         """
-        logging.debug("Begin program at {}".format(repr(self.current_token)))
+        logging.debug(f"Begin program at {self.current_token!r}")
         statement_nodes = self.statement_suite()
-        logging.debug("End program at {}".format(repr(self.current_token)))
+        logging.debug(f"End program at {self.current_token!r}")
 
         program = ProgramNode(statement_nodes)
         return program
@@ -465,7 +472,7 @@ class Parser:
         Returns:
             list of McFunctionNode, FolderNode, PrefixNode, ConstObjNode objects
         """
-        logging.debug("Begin statement compound at {}".format(repr(self.current_token)))
+        logging.debug(f"Begin statement compound at {self.current_token!r}")
         # logging.debug("with scoped symbol table = {}".format(repr(self.symbol_table)))
 
         statement_nodes = []
@@ -483,7 +490,7 @@ class Parser:
             else:
                 self.error("Expected a newline or statement specifier")
 
-        logging.debug("End statement compound at {}".format(repr(self.current_token)))
+        logging.debug(f"End statement compound at {self.current_token!r}")
 
         return statement_nodes
 
@@ -494,7 +501,7 @@ class Parser:
         Returns:
             list of FenaCmdNode objects
         """
-        logging.debug("Begin command compound at {}".format(repr(self.current_token)))
+        logging.debug(f"Begin command compound at {self.current_token!r}")
         # logging.debug("with scoped symbol table = {}".format(repr(self.symbol_table)))
 
         command_nodes = []
@@ -512,7 +519,7 @@ class Parser:
             else:
                 self.error("Expected a newline, command or statement specifier")
 
-        logging.debug("End command compound at {}".format(repr(self.current_token)))
+        logging.debug(f"End command compound at {self.current_token!r}")
 
         return command_nodes
 
@@ -802,7 +809,7 @@ class Parser:
         self.eat(DelimiterToken.OPEN_PARENTHESES)
 
         # gets the attribute of "exec_sub_(sub_command)"
-        method_name = "exec_sub_{}_arg".format(sub_cmd_token.value)
+        method_name = f"exec_sub_{sub_cmd_token.value}_arg"
         exec_sub_arg_method = getattr(self, method_name) 
 
         # contains the list of nodes gotten from the arg method
@@ -994,18 +1001,16 @@ class Parser:
 
     def bossbar_add(self):
         """
-        bossbar_add ::= "add" && STR && [json, STR]?
+        bossbar_add ::= "add" && STR && json
         """
         self.eat(TypedToken.STRING, value="add")
         bossbar_id = self.eat(TypedToken.STRING)
 
         if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
             json_node = self.json()
-            return BossbarAddNode(bossbar_id, json=json_node)
+            return BossbarAddNode(bossbar_id, json_node)
 
-        if self.current_token.matches(TypedToken.STRING):
-            display_name = self.eat(TypedToken.STRING)
-            return BossbarAddNode(bossbar_id, display_name=display_name)
+        self.error("Expected a json object")
 
     def bossbar_remove(self):
         """
@@ -1223,6 +1228,110 @@ class Parser:
         raise NotImplementedError
 
     def json(self):
+        """
+        json ::= json_object
+
+        Returns:
+            JsonObjectNode
+        """
+        return self.json_object()
+
+    def json_object(self):
+        """
+        json_object ::= "{" && ((json_map)? | (json_map && ("," && json_map)*)) && "}"
+
+        Returns:
+            JsonObjectNode
+        """
+        mappings = []
+        self.eat(DelimiterToken.OPEN_CURLY_BRACKET)
+
+        while True:
+            # TODO fix
+            if self.current_token.matches(TypedToken.LITERAL_STRING):
+                json_map = self.json_map()
+                mappings.append(json_map)
+
+            if self.current_token.matches(DelimiterToken.COMMA):
+                self.advance()
+
+            elif self.current_token.matches(DelimiterToken.CLOSE_CURLY_BRACKET):
+                break
+
+        self.eat(DelimiterToken.CLOSE_CURLY_BRACKET)
+
+        return JsonObjectNode(mappings)
+
+    def json_map(self):
+        """
+        json_map ::= literal_str && ":" && json_value
+        """
+        while self.current_token.matches(TypedToken.LITERAL_STRING):
+            arg = self.eat(TypedToken.LITERAL_STRING)
+            self.eat(DelimiterToken.COLON)
+            value = self.json_value()
+
+        return JsonMapNode(arg, value)
+
+    def json_array(self):
+        """
+        json_array ::= "[" && ((json_value)? | (json_value && ("," && json_value)*)) && "]"
+        """
+
+        # if not self.current_char == ")":
+        #     while self.current_char.isdigit():
+        #         self.advance()
+
+        #         if self.current_char == ",":
+        #             self.advance()
+        #         elif self.current_char == ")":
+        #             break
+        #     else:
+        #         raise SyntaxError(f"Unexpected character {self.current_char}")
+
+        # self.eat(")")
+
+        self.eat(DelimiterToken.OPEN_SQUARE_BRACKET)
+        json_values = []
+
+        if not self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
+            # matches any json value
+            while self.current_token.matches_any_of(TypedToken.LITERAL_STRING, TypedToken.STRING, TypedToken.INT,
+                    TypedToken.FLOAT, DelimiterToken.OPEN_CURLY_BRACKET, DelimiterToken.OPEN_SQUARE_BRACKET):
+                json_value = self.json_value()
+                json_values.append(json_value)
+
+                if self.current_token.matches(DelimiterToken.COMMA):
+                    self.advance()
+                if self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
+                    break
+
+            # while else loop
+            # this is only ran if the while loop ends with a false condition
+            # if it ended with a "break", this is not called
+            else:
+                self.error("Expected a json value")
+
+        return JsonArrayNode(json_values)
+
+    def json_value(self):
+        """
+        json_value ::= [literal_str, json_number, "true", "false", "null", json_object, json_array]
+        """
+        if self.current_token.matches(TypedToken.STRING):
+            return self.eat(TypedToken.STRING, values=("true", "false", "null"))
+        if self.current_token.matches_any_of(TypedToken.LITERAL_STRING, TypedToken.INT, TypedToken.FLOAT):
+            return self.eat(TypedToken.LITERAL_STRING)
+        if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
+            return self.json_object()
+        if self.current_token.matches(DelimiterToken.OPEN_SQUARE_BRACKET):
+            return self.json_array()
+        self.error("Unexpected default case")
+
+    def json_number(self):
+        """
+        json_number ::= ("-")? && INT && ("." && INT)? && (["e", "E"] && ["+", "-"] && INT)?
+        """
         raise NotImplementedError
 
     def nonneg_int(self):
@@ -1343,7 +1452,7 @@ class Parser:
             Vec2Node
         """
         coords_node = self._coords(3)
-        assert isinstance(coords_node, Vec3Node)
+        assert_type(coords_node, Vec3Node)
         return coords_node
 
     def vec3(self):
@@ -1354,7 +1463,7 @@ class Parser:
             Vec3Node
         """
         coords_node = self._coords(3)
-        assert isinstance(coords_node, Vec3Node)
+        assert_type(coords_node, Vec3Node)
         return coords_node
 
     def _coords(self, coord_num):
@@ -1368,16 +1477,23 @@ class Parser:
         for _ in range(coord_num):
             if is_coord_token(self.current_token):
                 coord = self.eat(TypedToken.STRING)
-                coord.cast(TypedToken.COORD)
                 coords.append(coord)
             else:
                 self.error("Expected a coord token")
 
         if not are_coords(*coords):
             coords_str = " ".join(str(c) for c in coords)
-            self.error("Expected a proper coord type given all coordinates ({})".format(coords_str))
+            self.error(f"Expected a proper coord type given all coordinates ({coords_str})")
 
-        return CoordsNode(coords)
+        # pylint to disable possible error with the length of the coords object
+        if coord_num == 2:
+            # pylint: disable-msg=E1120
+            return Vec2Node(*coords)
+        elif coord_num == 3:
+            # pylint: disable-msg=E1120
+            return Vec3Node(*coords)
+        else:
+            self.error("Unknown base case")
 
     def block(self):
         """
@@ -1389,18 +1505,18 @@ class Parser:
         if self.current_token.value not in Parser.config_data.blocks:
             self.error("Expected a block inside the if argument")
 
-        block_token = self.eat(TypedToken.STRING)
-        block_token.cast(TypedToken.BLOCK)
+        block_type = self.eat(TypedToken.STRING)
+        # block_token.cast(TypedToken.BLOCK)
 
         # checks for block states
 
         raise NotImplementedError
 
     def __repr__(self):
-        return "Parser[iterator={}, current_token={}]".format(repr(self.iterator), repr(self.current_token))
+        return f"Parser[iterator={self.iterator!r}, current_token={self.current_token!r}]"
 
 if __name__ == "__main__":
-    from lexer import Lexer
+    from fena.lexer import Lexer
 
     logging_setup.format_file_name("test_lexer.txt")
 
@@ -1428,5 +1544,11 @@ if __name__ == "__main__":
     # tree = parser.selector()
     # print(tree)
 
-    lexer = Lexer("bossbar add ayylmao")
-    parser = Parser(lexer.get_command(), )
+
+    def test(cmd):
+        lexer = Lexer(cmd)
+        parser = Parser(lexer, "get_command")
+        print(parser.command())
+        print(repr(lexer))
+
+    test('bossbar add ayylmao {"text":"oh damn it is json"}')

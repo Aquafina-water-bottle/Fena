@@ -1,19 +1,17 @@
 from abc import ABC
-from config_data import ConfigData
-from lexical_token import Token
 
-config_data = ConfigData()
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+from fena.assert_utils import assert_type, assert_list_types
+from fena.lexical_token import Token
 
 class Node(ABC):
     pass
 
-class CmdNode(Node, ABC):
-    pass
-
-class StmtNode(Node, ABC):
-    pass
-
-class JsonParseNode(Node, ABC):
+class JsonParseNode(Node):
     """
     Specifically holds an arg and an arg value
     """
@@ -26,11 +24,22 @@ class ProgramNode(Node):
     Holds all statements found inside the global scope of the program
 
     Attributes:
-        statement_nodes (list of McFunctionNodes, FolderNodes, PrefixNodes, ConstObjNodes)
+        statement_nodes (list of nodes inherited from StmtNode)
     """
     def __init__(self, statement_nodes):
-        assert isinstance(statement_nodes, list)
+        assert_type(statement_nodes, list)
+        assert_list_types(statement_nodes, StmtNode)
         self.statement_nodes = statement_nodes
+
+    def __repr__(self):
+        return f"ProgramNode[statement_nodes={self.statement_nodes}]"
+
+
+class StmtNode(Node, ABC):
+    """
+    General node to be inherited from all specialized statement nodes
+    """
+    pass
 
 class McFunctionNode(StmtNode):
     """
@@ -38,11 +47,12 @@ class McFunctionNode(StmtNode):
 
     Attributes:
         name (Token): The mcfunction name
-        command_nodes (list of CommandNode objects)
+        command_nodes (list of CmdNode objects)
     """
     def __init__(self, name, command_nodes):
-        assert isinstance(name, Token)
-        assert isinstance(command_nodes, list)
+        assert_type(name, Token)
+        assert_type(command_nodes, list)
+        assert_list_types(command_nodes, CmdNode)
         self.name = name
         self.command_nodes = command_nodes
 
@@ -52,11 +62,12 @@ class FolderNode(StmtNode):
 
     Attributes:
         folder (Token)
-        statement_nodes (list of McFunctionNodes, FolderNodes, PrefixNodes, ConstObjNodes)
+        statement_nodes (list of nodes inherited from StmtNode)
     """
     def __init__(self, folder, statement_nodes):
-        assert isinstance(folder, Token)
-        assert isinstance(statement_nodes, list)
+        assert_type(folder, Token)
+        assert_type(statement_nodes, list)
+        assert_list_types(statement_nodes, StmtNode)
         self.folder = folder
         self.statement_nodes = statement_nodes
 
@@ -66,7 +77,7 @@ class PrefixNode(StmtNode):
         prefix (Token)
     """
     def __init__(self, prefix):
-        assert isinstance(prefix, Token)
+        assert_type(prefix, Token)
         self.prefix = prefix
 
 class ConstObjNode(StmtNode):
@@ -75,26 +86,39 @@ class ConstObjNode(StmtNode):
         constobj (Token)
     """
     def __init__(self, constobj):
-        assert isinstance(constobj, Token)
+        assert_type(constobj, Token)
         self.constobj = constobj
+
+
+class CmdNode(Node, ABC):
+    """
+    General node to be inherited from all nodes relating to commands
+    """
+    pass
 
 class FenaCmdNode(CmdNode):
     """
     Holds all command segments for a command node
 
     Args:
-        cmd_segment_nodes (list of specialized CmdNode objects)
-    
-    Attributes:
-        execute_node (ExecuteCmdNode)
-        scoreboard_node (ScoreboardCmdNode) 
-        function_node (FunctionCmdNode)
-        simple_node (SimpleCmdNode)
+        cmd_segment_nodes (list of MainCmdNode objects)
+            - should contain one of {ExecuteCmdNode, ScoreboardCmdNode, FunctionCmdNode, SimpleCmdNode}
     """
     def __init__(self, cmd_segment_nodes):
+        assert_type(cmd_segment_nodes, list)
+        assert_list_types(cmd_segment_nodes, MainCmdNode)
         self.cmd_segment_nodes = cmd_segment_nodes
 
-class ExecuteCmdNode(CmdNode):
+
+class MainCmdNode(CmdNode, ABC):
+    """
+    General node to be inherited from all children nodes to the FenaCmdNode
+        - Nodes that a command is made up of in the most general context
+        - eg. ExecuteCmdNode, SimpleCmdNode
+    """
+    pass
+
+class ExecuteCmdNode(MainCmdNode):
     """
     Attributes:
         sub_cmd_nodes (list of ExecuteSub{type}Arg objects)
@@ -105,7 +129,7 @@ class ExecuteCmdNode(CmdNode):
     def __repr__(self):
         return f"ExecuteCmdNode[sub_cmd_nodes={self.sub_cmd_nodes}]"
 
-class ExecuteSubLegacyArg(CmdNode):
+class ExecuteSubLegacyArg(MainCmdNode):
     """
     Execute node for all versions under 1.12 inclusive
 
@@ -115,10 +139,9 @@ class ExecuteSubLegacyArg(CmdNode):
         sub_if (ExecuteSubIfBlockArg or None)
     """
     def __init__(self, selector, coords=None, sub_if=None):
-        assert isinstance(selector, SelectorNode)
-        assert coords is None or isinstance(coords, Vec3Node)
-        assert sub_if is None or isinstance(sub_if, ExecuteSubIfBlockArg)
-
+        assert_type(selector, SelectorNode)
+        assert_type(coords, Vec3Node, optional=True)
+        assert_type(sub_if, ExecuteSubIfBlockArg, optional=True)
         self.selector = selector
         self.coords = coords
         self.sub_if = sub_if
@@ -160,7 +183,7 @@ class ExecuteSubIfArg(CmdNode):
         sub_cmd (str): Either "if" if negated is false, or "unless" if negated is true
     """
     def __init__(self, negated):
-        assert isinstance(negated, bool)
+        assert_type(negated, bool)
         self.sub_cmd = ("unless" if negated else "if")
 
 class ExecuteSubIfSelectorArg(ExecuteSubIfArg):
@@ -172,7 +195,7 @@ class ExecuteSubIfSelectorArg(ExecuteSubIfArg):
         if(selector) -> if entity selector
     """
     def __init__(self, selector, negated=False):
-        assert isinstance(selector, SelectorNode)
+        assert_type(selector, SelectorNode)
 
         super().__init__(negated)
         self.selector = selector
@@ -185,7 +208,7 @@ class ExecuteSubIfBlockArg(ExecuteSubIfArg):
     """
     Args:
         block (BlockNode)
-        coords (CoordNode or None)
+        coords (Vec3Node)
         version (str): Minecraft version
 
     Usage:
@@ -193,6 +216,10 @@ class ExecuteSubIfBlockArg(ExecuteSubIfArg):
         if(block_type vec3) -> if block vec3 block_type
     """
     def __init__(self, block, coords, negated=False, version="1.13"):
+        assert_type(block, BlockNode)
+        assert_type(coords, Vec3Node)
+        assert_type(version, str)
+
         super().__init__(negated)
         self.block = block
         self.coords = coords
@@ -212,9 +239,9 @@ class ExecuteSubIfBlockArg(ExecuteSubIfArg):
 class ExecuteSubIfBlocksArg(ExecuteSubIfArg):
     """
     Args:
-        coords1 (CoordNode)
-        coords2 (CoordNode)
-        coords3 (CoordNode)
+        coords1 (Vec3Node)
+        coords2 (Vec3Node)
+        coords3 (Vec3Node)
         masked (bool)
     
     Usage:
@@ -222,6 +249,11 @@ class ExecuteSubIfBlocksArg(ExecuteSubIfArg):
         if(vec3 vec3 == vec3 masked) -> if blocks vec3 vec3 vec3 masked
     """
     def __init__(self, coords1, coords2, coords3, masked=False, negated=False):
+        assert_type(coords1, Vec3Node)
+        assert_type(coords2, Vec3Node)
+        assert_type(coords3, Vec3Node)
+        assert_type(masked, bool)
+
         super().__init__(negated)
         self.coords1 = coords1
         self.coords2 = coords2
@@ -242,24 +274,30 @@ class ExecuteSubIfBlocksArg(ExecuteSubIfArg):
 class ExecuteSubIfCompareEntityArg(ExecuteSubIfArg):
     """
     Args:
-        selector1 (SelectorNode)
-        objective1 (Token)
+        target (SelectorNode or Token)
+        objective (Token)
         operator (Token)
-        selector2 (SelectorNode)
-        objective2 (Token)
+        target_get (SelectorNode)
+        objective_get (Token)
 
     Usage:
-        if(target objective operator target2 objective2) -> if score target objective operator target2 objective
+        if(target objective operator target_get objective_get) -> if score target objective operator target_get objective_get
     """
     # valid_operators = frozenset({"==", "<", "<=", ">", ">="})
 
-    def __init__(self, selector1, objective1, operator, selector2, objective2, negated=False):
+    def __init__(self, target, target_objective, operator, selector, objective, negated=False):
+        assert_type(target, SelectorNode, Token)
+        assert_type(target_objective, Token)
+        assert_type(operator, Token)
+        assert_type(selector, SelectorNode)
+        assert_type(objective, Token)
+
         super().__init__(negated)
-        self.selector1 = selector1
-        self.objective1 = objective1
+        self.target = target
+        self.target_objective = target_objective
         self.operator = operator
-        self.selector2 = selector2
-        self.objective2 = objective2
+        self.selector = selector
+        self.objective = objective
 
     # def build(self):
     #     return "{} score {} {} {} {} {}".format(
@@ -269,7 +307,7 @@ class ExecuteSubIfCompareEntityArg(ExecuteSubIfArg):
 class ExecuteSubIfCompareIntArg(ExecuteSubIfArg):
     """
     Args:
-        selector (SelectorNode)
+        target (SelectorNode or Token)
         objective (Token)
         operator (Token)
         value (Token)
@@ -283,9 +321,14 @@ class ExecuteSubIfCompareIntArg(ExecuteSubIfArg):
     """
     # valid_operators = frozenset({"==", "<", "<=", ">", ">="})
 
-    def __init__(self, selector, objective, operator, value, negated=False):
+    def __init__(self, target, objective, operator, value, negated=False):
+        assert_type(target, SelectorNode, Token)
+        assert_type(objective, Token)
+        assert_type(operator, Token)
+        assert_type(value, Token)
+
         super().__init__(negated)
-        self.selector = selector
+        self.target = target
         self.objective = objective
         self.operator = operator
         self.value = value
@@ -310,16 +353,20 @@ class ExecuteSubIfCompareIntArg(ExecuteSubIfArg):
 class ExecuteSubIfRangeArg(ExecuteSubIfArg):
     """
     Args:
-        selector1 (SelectorNode)
-        objective1 (Token)
-        int_range (RangeNode)
+        target (SelectorNode or Token)
+        objective (Token)
+        int_range (IntRangeNode)
 
     Usage:
         if(target objective in int..int) -> if score target objective matches int..int
     """
-    def __init__(self, selector, objective, int_range, negated=False):
+    def __init__(self, target, objective, int_range, negated=False):
+        assert_type(target, SelectorNode, Token)
+        assert_type(objective, Token)
+        assert_type(int_range, IntRangeNode)
+
         super().__init__(negated)
-        self.selector = selector
+        self.target = target
         self.objective = objective
         self.int_range = int_range
 
@@ -334,24 +381,30 @@ class ExecuteSubResultArg(CmdNode):
 #     pass
 
 
-class ScoreboardCmdMathNode(CmdNode):
+class ScoreboardCmdMathNode(MainCmdNode):
     """
     Args:
-        begin_target (SelectorNode or Token)
-        begin_objective (Token)
+        target (SelectorNode or Token)
+        objective (Token)
         operator (Token)
-        end_target (SelectorNode or Token)
-        end_objective (Token or None)
+        target_get (SelectorNode or Token)
+        objective_get (Token or None)
     """
 
-    def __init__(self, begin_target, begin_objective, operator, end_target, end_objective=None):
-        self.begin_target = begin_target
-        self.begin_objective = begin_objective
-        self.operator = operator
-        self.end_target = end_target
-        self.end_objective = end_objective
+    def __init__(self, target, objective, operator, target_get, objective_get=None):
+        assert_type(target, SelectorNode, Token)
+        assert_type(objective, Token)
+        assert_type(operator, Token)
+        assert_type(target_get, SelectorNode, Token)
+        assert_type(objective_get, Token, optional=True)
 
-class ScoreboardCmdMathValueNode(CmdNode):
+        self.target = target
+        self.objective = objective
+        self.operator = operator
+        self.target_get = target_get
+        self.objective_get = objective_get
+
+class ScoreboardCmdMathValueNode(MainCmdNode):
     """
     Args:
         target (SelectorNode or Token)
@@ -360,6 +413,11 @@ class ScoreboardCmdMathValueNode(CmdNode):
         value (Token)
     """
     def __init__(self, target, objective, operator, value):
+        assert_type(target, SelectorNode, Token)
+        assert_type(objective, Token)
+        assert_type(operator, Token)
+        assert_type(value, Token)
+
         self.target = target
         self.objective = objective
         self.operator = operator
@@ -373,43 +431,38 @@ class ScoreboardCmdSpecialNode(CmdNode):
         objective (Token)
     """
     def __init__(self, target, sub_cmd, objective):
+        assert_type(target, SelectorNode, Token)
+        assert_type(sub_cmd, Token)
+        assert_type(objective, Token)
+
         self.target = target
         self.sub_cmd = sub_cmd
         self.objective = objective
 
-class SimpleCmdNode(CmdNode):
+class SimpleCmdNode(MainCmdNode):
     """
     Attributes:
         nodes (list of Token, SelectorNode, JsonNode and NbtNode objects)
     """
     def __init__(self, tokens):
-        assert isinstance(tokens, list)
+        assert_type(tokens, list)
+        assert_list_types(tokens, Token, SelectorNode, JsonNode, NbtNode)
         self.tokens = tokens
 
-
-class BossbarCmdNode(CmdNode):
+class BossbarCmdNode(MainCmdNode):
     pass
 
 class BossbarAddNode(BossbarCmdNode):
     """
     Attributes:
-        bossbar_id (Token)
-        display_name (Token)
+        bossbar_id (NamespaceIdNode)
         json (JsonNode)
     """
-    def __init__(self, bossbar_id, display_name=None, json=None):
-        assert isinstance(bossbar_id, Token)
-
-        # makes sure that at least one is none since the only possible
-        # options are for both to be none, or one to be not none
-        assert display_name is None or json is None
-        if display_name is not None:
-            assert isinstance(display_name, Token)
-        if json is not None:
-            assert isinstance(json, JsonNode)
+    def __init__(self, bossbar_id, json):
+        assert_type(bossbar_id, Token)
+        assert_type(json, JsonNode)
 
         self.bossbar_id = bossbar_id
-        self.display_name = display_name
         self.json = json
 
 class BossbarRemoveNode(BossbarCmdNode):
@@ -449,7 +502,7 @@ class BossbarSetNode(BossbarCmdNode):
         self.arg_value = arg_value
 
 
-class DataCmdNode(CmdNode):
+class DataCmdNode(MainCmdNode):
     pass
 
 class DataGetNode(DataCmdNode):
@@ -480,7 +533,7 @@ class DataRemoveNode(DataCmdNode):
         self.path = path
 
 
-class EffectCmdNode(CmdNode):
+class EffectCmdNode(MainCmdNode):
     pass
 
 class EffectClearNode(EffectCmdNode):
@@ -495,7 +548,7 @@ class EffectGiveNode(EffectCmdNode):
         self.show_particles = show_particles
 
 
-class FunctionCmdNode(CmdNode):
+class FunctionCmdNode(MainCmdNode):
     """
     Attributes:
         function_name (str): The mcfunction shortcut for the mcfunction name
@@ -504,93 +557,8 @@ class FunctionCmdNode(CmdNode):
         assert isinstance(function_name, str)
         self.function_name = function_name
 
-class TeamCmdNode(CmdNode):
-    """
-    team_cmd ::= "team" && [team_add, team_join, team_leave, team_empty, team_option, team_remove]
-    team_empty ::= "empty" && target
-    team_option ::= STR && team_option_arg && "=" && team_option_arg_value
-    # team_option_arg, team_option_arg_value are defined in the team_options_version.json
-    team_remove ::= "remove" && STR
-    """
-    def __init__(self):
-        if config_data.version == "1.12":
-            self.begin_cmd = "scoreboard teams"
-        elif config_data.version == "1.13":
-            self.begin_cmd = "team"
 
-class TeamAddNode(TeamCmdNode):
-    """
-    team_add ::= "add" && STR && (STR)*
-
-    Attributes:
-        team_name (Token)
-        display_name (Token or None)
-    """
-    def __init__(self, team_name, display_name=None):
-        super().__init__()
-        self.team_name = team_name
-        self.display_name = display_name
-
-class TeamJoinNode(TeamCmdNode):
-    """
-    team_join ::= STR && "+=" && target
-
-    Attributes:
-        team_name (Token)
-        target (SelectorNode or Token)
-    """
-    def __init__(self, team_name, target):
-        super().__init__()
-        self.team_name = team_name
-        self.target = target
-
-class TeamLeaveNode(TeamCmdNode):
-    """
-    team_leave ::= "leave" && target
-
-    Attributes:
-        target (SelectorNode or Token)
-    """
-    def __init__(self, target):
-        super().__init__()
-        self.target = target
-
-class TeamEmptyNode(TeamCmdNode):
-    """
-    team_empty ::= "empty" && STR
-
-    Attributes:
-        team_name (Token)
-    """
-    def __init__(self, team_name, target):
-        super().__init__()
-        self.team_name = team_name
-        self.target = target
-
-class TeamOptionNode(TeamCmdNode):
-    """
-    Attributes:
-        team_name (Token)
-        option (Token)
-        value (Token)
-    """
-    def __init__(self, team_name, option, value):
-        super().__init__()
-        self.team_name = team_name
-        self.option = option
-        self.value = value
-
-class TeamRemoveNode(TeamCmdNode):
-    """
-    Attributes:
-        team_name (Token)
-    """
-    def __init__(self, team_name):
-        super().__init__()
-        self.team_name = team_name
-
-
-class TagCmdNode(CmdNode):
+class TagCmdNode(MainCmdNode):
     pass
 
 class TagAddNode(TagCmdNode):
@@ -608,7 +576,76 @@ class TagRemoveNode(TagCmdNode):
     """
     def __init__(self, tag):
         self.tag = tag
-    
+
+
+class TeamCmdNode(MainCmdNode, ABC):
+    pass
+
+class TeamAddNode(TeamCmdNode):
+    """
+    team_add ::= "add" && STR && (STR)*
+
+    Attributes:
+        team_name (Token)
+        display_name (Token or None)
+    """
+    def __init__(self, team_name, display_name=None):
+        self.team_name = team_name
+        self.display_name = display_name
+
+class TeamJoinNode(TeamCmdNode):
+    """
+    team_join ::= STR && "+=" && target
+
+    Attributes:
+        team_name (Token)
+        target (SelectorNode or Token)
+    """
+    def __init__(self, team_name, target):
+        self.team_name = team_name
+        self.target = target
+
+class TeamLeaveNode(TeamCmdNode):
+    """
+    team_leave ::= "leave" && target
+
+    Attributes:
+        target (SelectorNode or Token)
+    """
+    def __init__(self, target):
+        self.target = target
+
+class TeamEmptyNode(TeamCmdNode):
+    """
+    team_empty ::= "empty" && STR
+
+    Attributes:
+        team_name (Token)
+    """
+    def __init__(self, team_name, target):
+        self.team_name = team_name
+        self.target = target
+
+class TeamOptionNode(TeamCmdNode):
+    """
+    Attributes:
+        team_name (Token)
+        option (Token)
+        value (Token)
+    """
+    def __init__(self, team_name, option, value):
+        self.team_name = team_name
+        self.option = option
+        self.value = value
+
+class TeamRemoveNode(TeamCmdNode):
+    """
+    Attributes:
+        team_name (Token)
+    """
+    def __init__(self, team_name):
+        self.team_name = team_name
+
 
 class SelectorNode(CmdNode):
     """
@@ -722,12 +759,62 @@ class SelectorAdvancementArgNode(CmdNode):
         self.advancements = advancements 
 
 
-
-class NbtNode(CmdNode):
+class NbtNode(CmdNode, ABC):
     pass
 
-class JsonNode(CmdNode):
+class NbtObjectNode(NbtNode):
+    def __init__(self, mappings):
+        pass
+
+class NbtMapNode(NbtNode):
+    def __init__(self, arg, value):
+        pass
+
+class NbtArrayNode(NbtNode):
+    def __init__(self, type_specifier, values):
+        pass
+
+class NbtIntegerNode(NbtNode):
+    def __init__(self, int_value, int_type):
+        pass
+
+class NbtFloatNode(NbtNode):
+    def __init__(self, float_value, float_type):
+        pass
+
+
+class JsonNode(CmdNode, ABC):
     pass
+
+class JsonObjectNode(JsonNode):
+    """
+    Attributes:
+        mappings (list of JsonMapNode objects)
+    """
+    def __init__(self, mappings):
+        assert_list_types(mappings, JsonMapNode)
+        self.mappings = mappings
+
+class JsonMapNode(JsonNode):
+    """
+    Attributes:
+        arg (Token)
+        value (Token, JsonArrayNode, JsonObjectNode)
+    """
+    def __init__(self, arg, value):
+        assert_type(arg, Token)
+        assert_type(value, Token, JsonArrayNode, JsonObjectNode)
+        self.arg = arg
+        self.value = value
+
+class JsonArrayNode(JsonNode):
+    """
+    Attributes:
+        values (list of Token, JsonArrayNode, JsonObjectNode)
+    """
+    def __init__(self, values):
+        assert_list_types(values, Token, JsonArrayNode, JsonObjectNode)
+        self.values = values
 
 class IntRangeNode(CmdNode):
     """
@@ -770,24 +857,24 @@ class BlockNode(CmdNode):
     def __init__(self, block, states, nbt=None):
         assert isinstance(block, Token)
         assert isinstance(states, list)
+        assert isinstance(states, list)
         # assert nbt is None or isinstance(nbt, NbtNode)
         self.block = block
         self.states = states
         self.nbt = nbt
 
+class BlockStateNode(CmdNode):
+    """
+    Attributes:
+        arg (Token)
+        value (Token)
+    """
+    def __init__(self, arg, value):
+        assert_type(arg, Token)
+        assert_type(value, Token)
+        self.arg = arg
+        self.value = value
 
-class CoordsNode(CmdNode):
-    """
-    Factory for getting a vec2 or vec3 node
-    This is literally here because linting is stupid
-    """
-    def __new__(self, coords):
-        if len(coords) == 3:
-            return Vec3Node(*coords)
-        elif len(coords) == 2:
-            return Vec2Node(*coords)
-        else:
-            raise SyntaxError("Invalid number of coordinates to make a Vec3Node or Vec2Node")
 
 class Vec2Node(CmdNode):
     """
@@ -796,6 +883,8 @@ class Vec2Node(CmdNode):
         coord2 (Token)
     """
     def __init__(self, coord1, coord2):
+        assert_type(coord1, Token)
+        assert_type(coord2, Token)
         self.coord1 = coord1
         self.coord2 = coord2
 
@@ -807,10 +896,12 @@ class Vec3Node(CmdNode):
         coord3 (Token)
     """
     def __init__(self, coord1, coord2, coord3):
+        assert_type(coord1, Token)
+        assert_type(coord2, Token)
+        assert_type(coord3, Token)
         self.coord1 = coord1
         self.coord2 = coord2
         self.coord3 = coord3
 
     def __repr__(self):
         return f"Vec3Node[coord1={self.coord1}, coord2={self.coord2}, coord3={self.coord3}]"
-    

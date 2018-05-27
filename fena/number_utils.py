@@ -1,6 +1,22 @@
 import re
 
 _alpha = re.compile("[A-Za-z_]")
+_json_number = re.compile(r"-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?")
+_nbt_float = re.compile(r"-?(0|[1-9]\d*)(\.\d+)([eE][+-]?\d+)?")
+
+def is_json_number(string):
+    """
+    json_number ::= ("-")? && INT && ("." && INT)? && (["e", "E"] && ["+", "-"] && INT)?
+    Follwing the picture for a general json number:
+        http://www.json.org/number.gif
+    """
+    return bool(re.fullmatch(_json_number, string))
+
+def is_nbt_float(string):
+    """
+    nbt_float ::= ("-")? && INT && "." && INT && (["e", "E"] && ["+", "-"] && INT)?
+    """
+    return bool(re.fullmatch(_nbt_float, string))
 
 def is_number(string):
     """

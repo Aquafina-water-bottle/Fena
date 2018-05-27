@@ -181,13 +181,15 @@
         Invulnerable:1,
         PersistenceRequired:1,
         Invisible:1,
-        Rotation:[0f,0f],
-        Pose:{Body:[0f,0f,0f],
-        Head:[0f,0f,0f],
-        LeftArm:[0f,0f,0f],
-        RightArm:[0f,0f,0f],
-        LeftLeg:[0f,0f,0f],
-        RightLeg:[0f,0f,0f]},
+        Rotation:[0e1f,0.0e1f],
+        Pose:{
+            Body:[0.0f,0.0e+0f,0.0e-0f],
+            Head:[-10e-0f,20e+0f,5e0f],
+            LeftArm:[30f,0f,0f],
+            RightArm:[210f,0f,0f],
+            LeftLeg:[15f,0f,-5f],
+            RightLeg:[2f,0f,5f]
+        },
         ArmorItems:[{},{},{},
             {id:quartz_stairs,Count:1}]}
 
