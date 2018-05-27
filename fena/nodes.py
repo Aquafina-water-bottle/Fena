@@ -5,10 +5,17 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
+from fena.repr_utils import addrepr
 from fena.assert_utils import assert_type, assert_list_types
 from fena.lexical_token import Token
 
+@addrepr
 class Node(ABC):
+    """
+    All nodes specified below will inherit from this parent class
+
+    Adds a simple __repr__ method to all of its classes to display its own variables
+    """
     pass
 
 class JsonParseNode(Node):
@@ -30,9 +37,6 @@ class ProgramNode(Node):
         assert_type(statement_nodes, list)
         assert_list_types(statement_nodes, StmtNode)
         self.statement_nodes = statement_nodes
-
-    def __repr__(self):
-        return f"ProgramNode[statement_nodes={self.statement_nodes}]"
 
 
 class StmtNode(Node, ABC):
@@ -109,7 +113,6 @@ class FenaCmdNode(CmdNode):
         assert_list_types(cmd_segment_nodes, MainCmdNode)
         self.cmd_segment_nodes = cmd_segment_nodes
 
-
 class MainCmdNode(CmdNode, ABC):
     """
     General node to be inherited from all children nodes to the FenaCmdNode
@@ -125,9 +128,6 @@ class ExecuteCmdNode(MainCmdNode):
     """
     def __init__(self, sub_cmd_nodes):
         self.sub_cmd_nodes = sub_cmd_nodes
-
-    def __repr__(self):
-        return f"ExecuteCmdNode[sub_cmd_nodes={self.sub_cmd_nodes}]"
 
 class ExecuteSubLegacyArg(MainCmdNode):
     """
@@ -145,9 +145,6 @@ class ExecuteSubLegacyArg(MainCmdNode):
         self.selector = selector
         self.coords = coords
         self.sub_if = sub_if
-
-    def __repr__(self):
-        return f"SelectorNode[selector={self.selector}, coords={self.coords}, sub_if={self.sub_if}]"
 
 class ExecuteSubAsArg(CmdNode):
     pass
@@ -660,9 +657,6 @@ class SelectorNode(CmdNode):
         self.selector_var = selector_var
         self.selector_args = selector_args
 
-    def __repr__(self):
-        return f"SelectorNode[selector_var={self.selector_var}, selector_args={self.selector_args}]"
-
 class SelectorVarNode(CmdNode):
     """
     Attributes:
@@ -670,9 +664,6 @@ class SelectorVarNode(CmdNode):
     """
     def __init__(self, selector_var_specifier):
         self.selector_var_specifier = selector_var_specifier
-
-    def __repr__(self):
-        return f"SelectorVarNode[selector_var_specifier={self.selector_var_specifier}]"
 
 class SelectorScoreArgNode(CmdNode):
     """
@@ -686,9 +677,6 @@ class SelectorScoreArgNode(CmdNode):
         self.objective = objective
         self.int_range = int_range
 
-    def __repr__(self):
-        return f"SelectorScoreArgNode[objective={self.objective}, int_range={self.int_range}]"
-
 class SelectorDefaultArgNode(CmdNode):
     """
     Attributes:
@@ -701,9 +689,6 @@ class SelectorDefaultArgNode(CmdNode):
         self.arg = arg
         self.arg_value = arg_value
 
-    def __repr__(self):
-        return f"SelectorDefaultArgNode[arg={self.arg}, arg_value={self.arg_value}]"
-
 class SelectorDefaultArgValueNode(CmdNode):
     """
     Attributes:
@@ -713,9 +698,6 @@ class SelectorDefaultArgValueNode(CmdNode):
     def __init__(self, arg_value, negated=False):
         self.arg_value = arg_value
         self.negated = negated
-
-    def __repr__(self):
-        return f"SelectorDefaultArgValueNode[arg_value={self.arg_value}, negated={self.negated}]"
 
 class SelectorDefaultGroupArgValueNode(CmdNode):
     """
@@ -737,9 +719,6 @@ class SelectorTagArgNode(CmdNode):
     def __init__(self, tag):
         assert isinstance(tag, Token)
         self.tag = tag
-
-    def __repr__(self):
-        return f"SelectorTagArgNode[tag={self.tag}]"
 
 class SelectorNbtArgNode(CmdNode):
     """
@@ -830,9 +809,6 @@ class IntRangeNode(CmdNode):
         self.min_int = min_int
         self.max_int = max_int
 
-    def __repr__(self):
-        return f"IntRangeNode[min={self.min_int}, max={self.max_int}]"
-
 class NumberRangeNode(CmdNode):
     """
     Note that a range can be a singular number. If so, min_number is the same as max_number
@@ -902,6 +878,3 @@ class Vec3Node(CmdNode):
         self.coord1 = coord1
         self.coord2 = coord2
         self.coord3 = coord3
-
-    def __repr__(self):
-        return f"Vec3Node[coord1={self.coord1}, coord2={self.coord2}, coord3={self.coord3}]"

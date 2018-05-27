@@ -20,7 +20,7 @@ from fena.nodes import SelectorNode, SelectorVarNode, SelectorTagArgNode, Select
 from fena.nodes import SelectorDefaultArgNode, SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode
 from fena.nodes import JsonObjectNode, JsonMapNode, JsonArrayNode
 from fena.nodes import BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode
-from fena.nodes import Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode
+from fena.nodes import Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode
 from fena.node_visitors import NodeBuilder, NodeVisitor
 from fena.coord_utils import is_coord_token, are_coords
 from fena.config_data import ConfigData
@@ -88,11 +88,12 @@ sb_players_math ::= target && STR && ["=", "<=", ">=", "swap", "+=", "-=", "*=",
 sb_players_special ::= target && ["enable", "reset", "<-"] && STR
 
 bossbar_cmd ::= "bossbar" && [bossbar_add, bossbar_remove, bossbar_get, bossbar_set]
-bossbar_add ::= "add" && STR && [json, STR]?
-bossbar_remove ::= "remove" && STR
-bossbar_get ::= STR && "<-" && ["max", "value", "players", "visible"]
-bossbar_set ::= STR && bossbar_arg && bossbar_arg_value
+bossbar_add ::= "add" && bossbar_id && [json, STR]?
+bossbar_remove ::= "remove" && bossbar_id
+bossbar_get ::= bossbar_id && "<-" && ["max", "value", "players", "visible"]
+bossbar_set ::= bossbar_id && bossbar_arg && "=" && bossbar_arg_value
 # bossbar_option_arg, bossbar_option_arg_value are defined in the bossbar_version.json
+bossbar_id ::= STR && (":" && STR)?
 
 data_cmd ::= "data" && [data_get, data_merge, data_remove]
 data_get ::= entity_vec3 && "<-" && (STR && (signed_int)?)?
@@ -102,7 +103,7 @@ data_remove ::= entity_vec3 && "-" && STR
 effect_cmd ::= "effect" && [effect_give, effect_clear]
 effect_clear ::= selector && "-" && ["all", effect_id]
 effect_give ::= selector && "+" && effect_id && (pos_int && ((nonneg_int)? && ["true", "false"]? )? )?
-# effect_id are defined under effects_version.txt
+# effect_id are defined under effects.json
 
 function_cmd ::= "function" && STR
 
@@ -175,9 +176,11 @@ vec2 ::= coord && coord
 vec3 ::= coord && coord && coord
 data_type ::= ["byte", "short", "int", "long", "float", "double"]
 coord ::= ("^", "~")? & [signed_int, signed_float]
-block ::= block_type & ("[" & (block_states)? & "]")? & (nbt)?
+block ::= block_id & ("[" & (block_states)? & "]")? & (nbt)?
+block_id ::= ("minecraft" && ":")? && block_type
+# block_type is defined under blocks.json
 block_states ::= (block_state)? | (block_state & ("," & block_state)*)?
-block_state ::= 
+block_state ::= STR && "=" && STR
 """
 
 class Parser:
@@ -223,7 +226,7 @@ class Parser:
             self.return_eof = False
         else:
             assert_type(method_name, str)
-            lexer_method = getattr(lexer, method_name)
+            lexer_method = getattr(lexer, method_name, "error")
             self.iterator = iter(lexer_method())
             self.return_eof = True
 
@@ -235,7 +238,7 @@ class Parser:
         Returns:
             ProgramNode: The parse tree parent
         """
-        parser_method = getattr(self, method_name)
+        parser_method = getattr(self, method_name, "error")
         assert_type(method_name, str)
         ast = parser_method()
         logging.debug("")
@@ -334,7 +337,7 @@ class Parser:
         assert json_type in Parser.json_parse_options 
 
         config_data_attr = Parser.json_parse_options.get(json_type)
-        json_object = getattr(Parser.config_data, config_data_attr)
+        json_object = getattr(Parser.config_data, config_data_attr, "error")
 
         provided_token = True
         if arg_token is None:
@@ -444,7 +447,7 @@ class Parser:
             return self.selector()
 
         if parse_type == "ADVANCEMENT_GROUP":
-            raise NotImplementedError 
+            raise NotImplementedError("1.13")
 
         if parse_type == "SHORTCUT_ERROR":
             self.error("Shortcut error (There is most likely a shortcut version of this that should be used)")
@@ -810,7 +813,7 @@ class Parser:
 
         # gets the attribute of "exec_sub_(sub_command)"
         method_name = f"exec_sub_{sub_cmd_token.value}_arg"
-        exec_sub_arg_method = getattr(self, method_name) 
+        exec_sub_arg_method = getattr(self, method_name, "error") 
 
         # contains the list of nodes gotten from the arg method
         exec_sub_arg_nodes = []
@@ -854,7 +857,7 @@ class Parser:
             return ExecuteSubIfBlockArg(block_node, coord_node)
 
         else:
-            raise NotImplementedError
+            raise NotImplementedError("1.13")
             
 
     def sb_cmd(self, begin_target=None):
@@ -916,7 +919,7 @@ class Parser:
 
     def simple_cmd(self):
         """
-        simple_cmd ::= [team_cmd, tag_cmd, data_cmd, bossbar_cmd, effect_cmd, function_cmd, (COMMAND_KEYWORD && (STR, selector, nbt, json)*)]
+        simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, tag_cmd, team_cmd, xp_cmd, (COMMAND_KEYWORD && (STR, selector, nbt, json)*)]
 
         Note that a simple command can turn into a scoreboard command
         because "tp" can be a fake player name being set to a scoreboard value
@@ -929,23 +932,11 @@ class Parser:
         # advances the command name
         command_name_token = self.advance()
 
-        if command_name == "bossbar":
-            return self.bossbar_cmd()
-
-        if command_name == "data":
-            return self.data_cmd()
-
-        if command_name == "effect":
-            return self.effect_cmd()
-
-        if command_name == "function":
-            return self.function_cmd()
-
-        if command_name == "tag":
-            return self.tag_cmd()
-
-        if command_name == "team":
-            return self.team_cmd()
+        if command_name in ("bossbar", "data", "effect", "function", "tag", "team", "xp"):
+            # for each command name, does something like self.bossbar_cmd()
+            method_name = f"{command_name}_cmd"
+            method = getattr(self, method_name, "error")
+            return method()
 
         # should get all values until the next newline
         if self.current_token.matches(WhitespaceToken.NEWLINE):
@@ -1041,18 +1032,57 @@ class Parser:
         return BossbarSetNode(bossbar_id, arg_token, arg_value_token)
 
     def data_cmd(self):
+        """
+        data_cmd ::= "data" && [data_get, data_merge, data_remove]
+        data_get ::= entity_vec3 && "<-" && (STR && (signed_int)?)?
+        data_merge ::= entity_vec3 && "+" && nbt
+        data_remove ::= entity_vec3 && "-" && STR
+        """
         raise NotImplementedError
 
     def effect_cmd(self):
+        """
+        effect_cmd ::= "effect" && [effect_give, effect_clear]
+        effect_clear ::= selector && "-" && ["all", effect_id]
+        effect_give ::= selector && "+" && effect_id && (pos_int && ((nonneg_int)? && ["true", "false"]? )? )?
+        # effect_id are defined under effects_version.txt
+        """
         raise NotImplementedError
 
     def function_cmd(self):
+        """
+        function_cmd ::= "function" && STR
+        """
         raise NotImplementedError
 
     def tag_cmd(self):
+        """
+        tag_cmd ::= "tag" && [tag_add, tag_remove]
+        tag_add ::= selector && "+" && STR
+        tag_remove ::= selector && "-" && STR
+        """
         raise NotImplementedError
 
     def team_cmd(self):
+        """
+        team_cmd ::= "team" && [team_add, team_join, team_leave, team_empty, team_option, team_remove]
+        team_add ::= "add" && STR && (STR)*
+        team_join ::= STR && "+" && target
+        team_leave ::= "leave" && target
+        team_empty ::= "empty" && STR
+        # team_option ::= STR && json_parse
+        team_option ::= STR && team_option_arg && "=" && team_option_arg_value
+        # team_option_arg, team_option_arg_value are defined in the team_options_version.json
+        team_remove ::= "remove" && STR
+        """
+        raise NotImplementedError
+
+    def xp_cmd(self):
+        """
+        xp_cmd ::= "xp" && [xp_math, xp_get]
+        xp_math ::= ["=", "+", "-"] && nonneg_int && ["points", "levels"]?
+        xp_get ::= "<-" && ["points", "levels"]
+        """
         raise NotImplementedError
 
     def selector(self):
@@ -1497,7 +1527,9 @@ class Parser:
 
     def block(self):
         """
-        block ::= block_type & ("[" & (block_states)? & "]")? & (nbt)?
+        block ::= block_id & ("[" & (block_states)? & "]")? & (nbt)?
+        block_id ::= ("minecraft" && ":")? && block_type
+        # block_type is defined under blocks.json
 
         Returns:
             BlockNode
@@ -1506,10 +1538,44 @@ class Parser:
             self.error("Expected a block inside the if argument")
 
         block_type = self.eat(TypedToken.STRING)
-        # block_token.cast(TypedToken.BLOCK)
 
         # checks for block states
+        if self.current_token.matches(DelimiterToken.OPEN_SQUARE_BRACKET):
+            self.advance()
+            block_states = self.block_states()
+            self.eat(DelimiterToken.CLOSE_SQUARE_BRACKET)
+        else:
+            block_states = None
 
+        if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
+            nbt = self.nbt()
+        else:
+            nbt = None
+
+        return BlockNode(block_type, block_states, nbt)
+
+    def block_id(self):
+        """
+        block_id ::= ("minecraft" && ":")? && block_type
+        """
+        raise NotImplementedError
+
+    def block_type(self):
+        """
+        # block_type is defined under blocks.json
+        """
+        raise NotImplementedError
+
+    def block_states(self):
+        """
+        block_states ::= (block_state)? | (block_state & ("," & block_state)*)?
+        """
+        raise NotImplementedError
+
+    def block_state(self):
+        """
+        block_state ::= STR && "=" && STR
+        """
         raise NotImplementedError
 
     def __repr__(self):
@@ -1548,7 +1614,7 @@ if __name__ == "__main__":
     def test(cmd):
         lexer = Lexer(cmd)
         parser = Parser(lexer, "get_command")
-        print(parser.command())
-        print(repr(lexer))
+        print(parser.parse(method_name="command"))
 
-    test('bossbar add ayylmao {"text":"oh damn it is json"}')
+    test('bossbar add ayylmao {"text":"oh damn it is json","color":"yo mama"}')
+    test('bossbar remove minecraft:ayylmao')
