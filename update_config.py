@@ -19,12 +19,13 @@ path_to_arcensoth = r"../../Github/Minecraft-Arcensoth-Generated/generated/repor
 path_to_config = r"config/"
 
 def update(version):
-    update_blocks(version, path_to_arcensoth + "blocks.json", path_to_config + "blocks.json")
-    update_command_names(version, path_to_arcensoth + "commands.json", path_to_config + "command_names.json")
-    update_effects(version, path_to_pepijn + "potion_colors.json", path_to_config + "effects.json")
-    update_entities(version, path_to_pepijn + "entities.txt", path_to_config + "entities.json")
+    update_blocks(path_to_arcensoth + "blocks.json", path_to_config + "blocks.json")
+    update_command_names(path_to_arcensoth + "commands.json", path_to_config + "command_names.json")
+    update_effects(path_to_pepijn + "potion_colors.json", path_to_config + "effects.json")
+    update_entities(path_to_pepijn + "entities.txt", path_to_config + "entities.json")
+    update_items(path_to_arcensoth + "items.json", path_to_config + "items.json")
 
-def update_blocks(version, input_file, config_file):
+def update_blocks(input_file, config_file):
     """
     Updates blocks by converting the file into a json object
     and getting all the keys from the main json object
@@ -33,9 +34,9 @@ def update_blocks(version, input_file, config_file):
         json_object = json.load(file)
 
     json_list = sorted(remove_id(block) for block in json_object)
-    update_file(version, config_file, json_list)
+    update_file(config_file, json_list)
 
-def update_command_names(version, input_file, config_file):
+def update_command_names(input_file, config_file):
     """
     Updates command names by converting the file into a json object
     and getting all the args from "children" from the main json object
@@ -44,9 +45,9 @@ def update_command_names(version, input_file, config_file):
         json_object = json.load(file)
 
     json_list = sorted(json_object["children"])
-    update_file(version, config_file, json_list)
+    update_file(config_file, json_list)
 
-def update_effects(version, input_file, config_file):
+def update_effects(input_file, config_file):
     """
     Updates effects from getting the all string arguments
     from the main json object of pepijn/potion_colors.json
@@ -56,9 +57,9 @@ def update_effects(version, input_file, config_file):
 
     # removes all "minecraft:" from the effects
     json_list = sorted(remove_id(effect) for effect in json_object)
-    update_file(version, config_file, json_list)
+    update_file(config_file, json_list)
 
-def update_entities(version, input_file, config_file):
+def update_entities(input_file, config_file):
     """
     Updates entities by reading each line under entities.txt and putting it into a list
     """
@@ -67,15 +68,29 @@ def update_entities(version, input_file, config_file):
     with open(input_file) as file:
         json_list = sorted(remove_id(line) for line in file.read().splitlines() if line)
 
-    update_file(version, config_file, json_list)
+    update_file(config_file, json_list)
+
+def update_items(input_file, config_file):
+    """
+    Updates items by converting the file into a json object
+    and getting all the keys from the main json object
+    """
+
+    # removes all "minecraft:" from the entities.txt file
+    with open(input_file) as file:
+        json_object = json.load(file)
+
+    json_list = sorted(remove_id(item) for item in json_object)
+    update_file(config_file, json_list)
 
 def remove_id(string):
     """
     Removes "minecraft:" at the beginning of a string
     """
+    assert string.startswith("minecraft:"), string
     return string[len("minecraft:"):]
 
-def update_file(version, input_file, json_value):
+def update_file(input_file, json_value):
     """
     Updates the input_file by replacing the main json object's version (json argument)
     with the given json value

@@ -10,11 +10,13 @@ if __name__ == "__main__":
     import fena.logging_setup
 
 from fena.assert_utils import assert_type
+from fena.repr_utils import addrepr
 from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
 from fena.config_data import ConfigData
 from fena.lexical_token import Token
 from fena.token_position import TokenPosition, TokenPositionRecorder
 
+@addrepr
 class Lexer:
     """
     Args:
@@ -55,6 +57,7 @@ class Lexer:
             # skips all whitespace until \n
             if self.get_char().isspace() and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
                 self.skip_whitespace()
+                continue
 
             # handles indents and dedents after newline
             elif self.current_chars_are(WhitespaceToken.NEWLINE.value):
@@ -95,17 +98,24 @@ class Lexer:
 
             increment -= 1
 
-    def error(self, message=None):
+    def error(self, message=None, expected=None):
         """
         Args:
             class_name (str): Name of the class that will implement this
             message (str or None): Message to be displayed with the error.
                 Defaults to None, which will display a generic message containing the current character
         """
+        # message and expected cannot both be used
         if message is None:
             char = self.get_char()
-            message = f"Invalid character {char!r}"
+            if expected is None:
+                message = f"Invalid character {char!r}"
+            else:
+                message = f"Expected {expected!r} but got {char!r}"
         raise TypeError(f"Lexer{self.recorder}: {message}")
+
+    def invalid_method(self, *args, **kwargs):
+        raise NotImplementedError(f"Lexer{self.recorder}: Invalid method")
 
     def skip_whitespace(self, skip_newline=False):
         """
@@ -137,7 +147,8 @@ class Lexer:
             int: current characters from the current position given the length
         """
         if self.reached_eof:
-            return None
+            self.error("Cannot get a character when the end of file has been reached")
+
         char_pos = self.recorder.char_pos
         return self.text[char_pos]
 
@@ -149,6 +160,9 @@ class Lexer:
         Returns:
             str: current characters from the current position given the length
         """
+        if self.reached_eof:
+            self.error("Cannot get a character when the end of file has been reached")
+
         assert_type(length, int)
         char_pos = self.recorder.char_pos
         return self.text[char_pos: char_pos + length]
@@ -268,7 +282,7 @@ class Lexer:
         # checks whether the indenting whitespace is actually valid (4 spaces)
         # boolean value of any integer is False if 0, True for anything else
         if len(whitespace) % len(WhitespaceToken.INDENT.value):
-            self.error("Invalid whitespace: {} (requires indentation of 4 spaces)".format(repr(whitespace)))
+            self.error(f"Invalid whitespace: {whitespace!r} (requires indentation of 4 spaces)")
 
         # gets the number of indents at the current area
         current_indents = whitespace.count(WhitespaceToken.INDENT.value)
@@ -278,7 +292,8 @@ class Lexer:
                 yield self.get_indent()
 
             else:
-                self.error("Too many indents (Expected one, got {}".format(current_indents - self.indents))
+                indent_num = current_indents - self.indents
+                self.error(f"Too many indents (Expected one, got {indent_num}")
 
         # gets all possible dedent tokens
         while current_indents < self.indents:
@@ -304,6 +319,7 @@ class Lexer:
         while not self.reached_eof and self.get_char() != "\n":
             if self.get_char().isspace():
                 self.skip_whitespace()
+                continue
 
             yield self.get_until_space()
 
@@ -313,10 +329,9 @@ class Lexer:
         character is within the exempt chars
         """
         if self.get_char() in exempt_chars:
-            self.error("Cannot get a string because the string starts with {}, but cannot be within {}".format(
-                repr(self.get_char()), repr(exempt_chars)))
+            self.error(f"Cannot get a string because the string starts with {self.get_char()!r}, but cannot be within {exempt_chars}")
         if self.get_char().isspace():
-            self.error("Cannot get a string because the string starts a whitespace {}".format(repr(self.get_char())))
+            self.error(f"Cannot get a string because the string starts a whitespace {self.get_char()!r}")
         if self.reached_eof:
             self.error("Cannot get a string because the end of the file has been reached")
 
@@ -336,11 +351,15 @@ class Lexer:
             Token: Delimiter, NBT, Selector, String tokens
         """
         while not self.reached_eof and not self.current_chars_are(WhitespaceToken.NEWLINE.value):
+            if self.get_char().isspace():
+                self.skip_whitespace()
+                continue
+
             if self.current_chars_are(DelimiterToken.AT.value):
                 yield from self.get_selector()
 
             elif self.current_chars_are(DelimiterToken.OPEN_CURLY_BRACKET.value):
-                yield from self.get_tag()
+                yield from self.get_curly_bracket_tag()
 
             # elif self.current_chars_are(DelimiterToken.QUOTE.value):
             #     yield self.get_literal_string()
@@ -353,8 +372,6 @@ class Lexer:
             else:
                 yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
 
-            self.skip_whitespace()
-
     def get_selector(self):
         """
         Gets all selector tokens (handles selector variables and brackets)
@@ -366,12 +383,12 @@ class Lexer:
         yield self.create_new_token(DelimiterToken.AT, advance=True)
 
         if self.get_char() not in Lexer.config_data.selector_variable_specifiers:
-            self.error("Invalid selector variable: '@{}'".format(self.get_char()))
+            self.error(f"Invalid selector variable: '@{self.get_char()}'")
 
         yield self.create_new_token(TypedToken.SELECTOR_VARIABLE_SPECIFIER, value=self.get_char(), advance=True)
 
         # starts getting the tokens inside square brackets including the square brackets
-        if self.current_chars_are(DelimiterToken.OPEN_SQUARE_BRACKET.value):
+        if not self.reached_eof and self.current_chars_are(DelimiterToken.OPEN_SQUARE_BRACKET.value):
             yield self.create_new_token(DelimiterToken.OPEN_SQUARE_BRACKET, advance=True)
             yield from self.get_selector_arguments()
             yield self.create_new_token(DelimiterToken.CLOSE_SQUARE_BRACKET, advance=True)
@@ -383,22 +400,28 @@ class Lexer:
         while not self.current_chars_are(DelimiterToken.CLOSE_SQUARE_BRACKET.value):
             if self.get_char().isspace():
                 self.skip_whitespace()
+                continue
 
             elif self.current_chars_are(DelimiterToken.OPEN_CURLY_BRACKET.value):
-                yield from self.get_tag()
+                yield from self.get_curly_bracket_tag()
 
             elif self.current_chars_are('"'):
                 yield self.get_literal_string()
             elif self.get_char().isdigit() or self.get_char() == "-":
                 yield self.get_number()
-            elif self.get_char().isalpha() or self.get_char() in "_.":
-                yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
 
             # Gets simple delimiter tokens
             elif self.get_char() in TokenValues.get(DelimiterToken):
                 yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
             elif self.get_chars(2) in TokenValues.get(DelimiterToken):
                 yield self.create_new_token(DelimiterToken(self.get_chars(2)), advance=True)
+
+            elif self.current_chars_are("*"):
+                yield self.create_new_token(TypedToken.STRING, value=self.get_char(), advance=True)
+
+            # otherwise, general string
+            elif self.get_char().isalpha() or self.get_char() in "_.":
+                yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
 
             else:
                 self.error()
@@ -408,9 +431,11 @@ class Lexer:
         Returns:
             Token: Literal string with quotes enclosing it
         """
+        self.recorder.lock()
 
         # advances the first "
-        self.recorder.lock()
+        if not self.current_chars_are(DelimiterToken.QUOTE.value):
+            self.error(expected=DelimiterToken.QUOTE.value)
         self.advance()
 
         while not self.current_chars_are(DelimiterToken.QUOTE.value):
@@ -474,7 +499,7 @@ class Lexer:
         token_type = TypedToken.FLOAT if is_float else TypedToken.INT
         return self.create_new_token(token_type, unlock=True)
 
-    def get_tag(self, array=False):
+    def get_curly_bracket_tag(self, array=False):
         """
         Get all relevant nbt tag or json tokens
 
@@ -488,11 +513,14 @@ class Lexer:
             begin_type = DelimiterToken.OPEN_CURLY_BRACKET
             end_type = DelimiterToken.CLOSE_CURLY_BRACKET
 
+        if not self.current_chars_are(begin_type.value):
+            self.error(expected=begin_type.value)
         yield self.create_new_token(begin_type, advance=True)
 
         while not self.current_chars_are(end_type.value):
             if self.get_char().isspace() and self.get_char() != WhitespaceToken.NEWLINE.value:
                 self.skip_whitespace()
+                continue
 
             # skips comments inside nbt tags
             if self.current_chars_are(WhitespaceToken.NEWLINE.value):
@@ -500,17 +528,18 @@ class Lexer:
                 self.skip_whitespace()
                 if self.current_chars_are(WhitespaceToken.COMMENT.value):
                     self.skip_comment()
+                continue
 
             elif self.get_char() in (DelimiterToken.COLON.value, DelimiterToken.COMMA.value):
                 yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
 
             elif self.current_chars_are(DelimiterToken.OPEN_CURLY_BRACKET.value):
                 # recursive call to get nbt in {}
-                yield from self.get_tag()
+                yield from self.get_curly_bracket_tag()
 
             elif self.current_chars_are(DelimiterToken.OPEN_SQUARE_BRACKET.value):
                 # recursive call to get nbt in []
-                yield from self.get_tag(array=True)
+                yield from self.get_curly_bracket_tag(array=True)
 
             elif self.get_char() == DelimiterToken.QUOTE.value:
                 yield self.get_literal_string()
@@ -519,13 +548,10 @@ class Lexer:
             elif self.get_char().isalpha():
                 yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
             else:
-                self.error("Invalid character '{}' inside tag".format(self.get_char()))
+                self.error(f"Invalid character {self.get_char()!r} inside tag")
 
         # gets the ending bracket token
         yield self.create_new_token(end_type, advance=True)
-
-    def __repr__(self):
-        return "Lexer[text={!r}, recorder={!r}, indents={}, reached_eof={}]".format(self.text, self.recorder, self.indents, self.reached_eof)
 
 if __name__ == "__main__":
     # import timeit

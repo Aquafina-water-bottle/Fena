@@ -5,8 +5,8 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-from fena.token_position import TokenPosition
 from fena.assert_utils import assert_type
+from fena.token_position import TokenPosition
 from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken
 from fena.token_classes import SimpleTokenClass, TokenClass
 from fena.coord_utils import is_coord
@@ -24,28 +24,27 @@ class Token:
 
     config_data = ConfigData()
 
-    def __init__(self, pos, token_type, value=None):
+    def __init__(self, position, token_type, value=None):
         """
         Args:
-            pos (TokenPosition): position inside the file formatted as (row, column)
+            position (TokenPosition): position inside the file formatted as (row, column)
             type (TypedToken, SimpleToken, WhitespaceToken, StatementToken) type of the token
             value (any): an optional custom value
             replacement (any): an optional custom value to be set as a replacement of the token type
                 - this will be used only when building instead of returning the value
         """
-        assert_type(pos, TokenPosition)
+        assert_type(position, TokenPosition)
         assert_type(token_type, TokenClass)
         assert_type(value, str, optional=True)
 
-        self.pos = pos
-        self.type = token_type
+        self.position = position
+        self.token_type = token_type
         self.value = value
         self.replacement = None
 
         if self.value is None:
-            assert_type(TypedToken.INT, TypedToken, additional_message="A value is required for a typed token")
             assert_type(token_type, SimpleTokenClass)
-            self.value = self.type.value
+            self.value = self.token_type.value
 
     def matches(self, token_type, value=None):
         """
@@ -59,7 +58,7 @@ class Token:
             bool: Whether the type matches the given type
         """
         assert_type(token_type, TokenClass)
-        return (self.type == token_type) and (value is None or self.value == value)
+        return (self.token_type == token_type) and (value is None or self.value == value)
 
     def matches_any_of(self, *types):
         """
@@ -75,75 +74,14 @@ class Token:
             if self.matches(token_type):
                 return True
         return False
-
-    def cast(self, token_type, error_message=None):
-        """
-        Changes the type of this token without adequate checks, so
-        checking is based off of where this method was ran
-
-        Args:
-            token_type (any token type): What token type this token should change into
-            error_message (str or None): What will be displayed in the error message
-        """
-        if token_type == self.type:
-            return
-
-        if isinstance(token_type, TypedToken):
-            # checks if coordinate, block or int
-            if (token_type == TypedToken.COORD and is_coord(self.value) or 
-                    token_type == TypedToken.BLOCK and self.value in Token.config_data.blocks or
-                    token_type == TypedToken.INT):
-
-                if token_type == TypedToken.INT:
-                    self.value = int(self.value)
-
-                self._cast_token_type(token_type)
-
-            elif token_type == TypedToken.STRING:
-                self.value = str(self.value)
-                self._cast_token_type(token_type)
-
-            else:
-                self._cast_error(token_type, message=error_message)
-            return
-
-        # guaranteed not to be TypedToken
-        try:
-            self._cast_token_class(token_type)
-        except ValueError:
-            # repr of self shows the token type
-            self._cast_error(token_type, message=error_message)
-
-    def _cast_token_type(self, token_type):
-        """
-        Args:
-            token_type (any token type): What token type this token should change into
-        """
-        new_type = token_type
-        logging.debug("Converted token {!r} to type {}".format(repr(self), new_type))
-        self.type = new_type
-
-    def _cast_token_class(self, token_class):
-        """
-        """
-        new_type = token_class(self.value)
-        logging.debug("Converted token {} to type {}".format(self, new_type))
-        self.type = new_type
-
-    def _cast_error(self, token_type, message=None):
-        assert_type(message, str, optional=True)
-        if message is None:
-            message = "Invalid type casting"
-        raise TypeError("{!r} cast to {!r}: {}".format(self, token_type, message))
-
-
+    
     def __str__(self):
-        return "Token[{!r} at {}]".format(self.value, self.pos)
+        return f"Token[{self.value!r} at {self.position}]"
 
     def __repr__(self):
         if self.replacement is None:
-            return 'Token[{!r}: type={!r}, value={!r}]'.format(self.pos, self.type, self.value)
-        return 'Token[{!r}: type={!r}, value={!r}, replacement={!r}]'.format(self.pos, self.type, self.value, self.replacement)
+            return f'Token[{self.position!r}: type={self.token_type!r}, value={self.value!r}]'
+        return f'Token[{self.position!r}: type={self.token_type!r}, value={self.value!r}, replacement={self.replacement!r}]'
 
 
 def test():

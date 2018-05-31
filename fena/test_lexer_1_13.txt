@@ -29,6 +29,8 @@
 # if(vec3 vec3 == vec3 masked) -> if blocks vec3 vec3 vec3 masked
 # if(target objective operator target2 objective2) -> if score target objective operator target2 objective
 # if(target objective == int) -> if score target objective matches int
+# if(target objective == *) -> if score target objective matches -2147483648..
+# if(target objective != int) -> unless(target objective == int)
 # if(target objective < int) -> if score target objective matches ..(int-1)
 # if(target objective <= int) -> if score target objective matches ..(int)
 # if(target objective > int) -> if score target objective matches (int+1)..
@@ -120,6 +122,11 @@
 !mfunc selector_test
     # @a[advancements={minecraft:story/mine_diamond={diamond=true},minecraft:story/iron_tools=true}]
     # naturally @a[advancements={story/mine_diamond={diamond=true},story/iron_tools=true}]
+    say @a[adv=(story/mine_diamond=(diamond),story/iron_tools)]
+
+    # @a[advancements={minecraft:story/mine_diamond={diamond=false},minecraft:story/iron_tools=false}]
+    # naturally @a[advancements={story/mine_diamond={diamond=false},story/iron_tools=false}]
+    say @a[adv=(story/mine_diamond=(!diamond),!story/iron_tools)]
 
 # Note that bossbars are actually extremely weird
 # They have almost the same purpose as scoreboard objectives setdisplay

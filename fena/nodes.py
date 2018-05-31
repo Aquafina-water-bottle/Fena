@@ -6,7 +6,7 @@ if __name__ == "__main__":
     del sys
 
 from fena.repr_utils import addrepr
-from fena.assert_utils import assert_type, assert_list_types
+from fena.assert_utils import assert_type, assert_list_types, assert_tuple_types
 from fena.lexical_token import Token
 
 @addrepr
@@ -212,15 +212,13 @@ class ExecuteSubIfBlockArg(ExecuteSubIfArg):
         if(block_type) -> if(block_type ~ ~ ~)
         if(block_type vec3) -> if block vec3 block_type
     """
-    def __init__(self, block, coords, negated=False, version="1.13"):
+    def __init__(self, block, coords, negated=False):
         assert_type(block, BlockNode)
         assert_type(coords, Vec3Node)
-        assert_type(version, str)
 
         super().__init__(negated)
         self.block = block
         self.coords = coords
-        self.version = version
 
     # def build(self):
     #     if self.coords is None:
@@ -439,11 +437,11 @@ class ScoreboardCmdSpecialNode(CmdNode):
 class SimpleCmdNode(MainCmdNode):
     """
     Attributes:
-        nodes (list of Token, SelectorNode, JsonNode and NbtNode objects)
+        nodes (list of Token, SelectorNode, JsonObjectNode and NbtNode objects)
     """
     def __init__(self, tokens):
         assert_type(tokens, list)
-        assert_list_types(tokens, Token, SelectorNode, JsonNode, NbtNode)
+        assert_list_types(tokens, Token, SelectorNode, JsonObjectNode, NbtNode)
         self.tokens = tokens
 
 class BossbarCmdNode(MainCmdNode):
@@ -453,11 +451,11 @@ class BossbarAddNode(BossbarCmdNode):
     """
     Attributes:
         bossbar_id (NamespaceIdNode)
-        json (JsonNode)
+        json (JsonObjectNode)
     """
     def __init__(self, bossbar_id, json):
-        assert_type(bossbar_id, Token)
-        assert_type(json, JsonNode)
+        assert_type(bossbar_id, NamespaceIdNode)
+        assert_type(json, JsonObjectNode)
 
         self.bossbar_id = bossbar_id
         self.json = json
@@ -465,39 +463,38 @@ class BossbarAddNode(BossbarCmdNode):
 class BossbarRemoveNode(BossbarCmdNode):
     """
     Attributes:
-        bossbar_id (Token)
+        bossbar_id (NamespaceIdNode)
     """
     def __init__(self, bossbar_id):
-        assert isinstance(bossbar_id, Token)
+        assert_type(bossbar_id, NamespaceIdNode)
         self.bossbar_id = bossbar_id
 
 class BossbarGetNode(BossbarCmdNode):
     """
     Attributes:
-        bossbar_id (Token)
+        bossbar_id (NamespaceIdNode)
         sub_cmd (Token)
     """
     def __init__(self, bossbar_id, sub_cmd):
-        assert isinstance(bossbar_id, Token)
-        assert isinstance(sub_cmd, Token)
+        assert_type(bossbar_id, NamespaceIdNode)
+        assert_type(sub_cmd, Token)
         self.bossbar_id = bossbar_id
         self.sub_cmd = sub_cmd
 
 class BossbarSetNode(BossbarCmdNode):
     """
     Attributes:
-        bossbar_id (Token)
+        bossbar_id (NamespaceIdNode)
         arg (Token)
-        value (Token)
+        value (Token, JsonObjectNode)
     """
     def __init__(self, bossbar_id, arg, arg_value):
-        assert isinstance(bossbar_id, Token)
-        assert isinstance(arg, Token)
-        assert isinstance(arg_value, Token)
+        assert_type(bossbar_id, NamespaceIdNode)
+        assert_type(arg, Token)
+        assert_type(arg_value, Token, JsonObjectNode)
         self.bossbar_id = bossbar_id
         self.arg = arg
         self.arg_value = arg_value
-
 
 class DataCmdNode(MainCmdNode):
     pass
@@ -548,10 +545,10 @@ class EffectGiveNode(EffectCmdNode):
 class FunctionCmdNode(MainCmdNode):
     """
     Attributes:
-        function_name (str): The mcfunction shortcut for the mcfunction name
+        function_name (Token): The mcfunction shortcut for the mcfunction name
     """
     def __init__(self, function_name):
-        assert isinstance(function_name, str)
+        assert_type(function_name, Token)
         self.function_name = function_name
 
 
@@ -648,11 +645,11 @@ class SelectorNode(CmdNode):
     """
     Attributes:
         selector_var (SelectorVarNode)
-        selector_args (list of SelectorArgNode objects or None)
+        selector_args (SelectorArgsNode or None)
     """
     def __init__(self, selector_var, selector_args=None):
-        assert isinstance(selector_var, SelectorVarNode)
-        assert selector_args is None or isinstance(selector_args, list)
+        assert_type(selector_var, SelectorVarNode)
+        assert_type(selector_args, SelectorArgsNode, optional=True)
 
         self.selector_var = selector_var
         self.selector_args = selector_args
@@ -663,19 +660,41 @@ class SelectorVarNode(CmdNode):
         selector_var_specifier (Token)
     """
     def __init__(self, selector_var_specifier):
+        assert_type(selector_var_specifier, Token)
         self.selector_var_specifier = selector_var_specifier
+
+class SelectorArgsNode(CmdNode):
+    """
+    Attributes:
+        default_args (list of SelectorDefaultArgNode objects)
+        score_args (list of SelectorScoreArgNode objects)
+        tag_args (list ofSelectorTagArgNode objects)
+        nbt_args (list ofSelectorNbtArgNode objects)
+        advancement_args (list ofSelectorAdvancementArgNode objects)
+    """
+    def __init__(self, default_args, score_args, tag_args, nbt_args, advancement_args):
+        assert_list_types(default_args, SelectorDefaultArgNode)
+        assert_list_types(score_args, SelectorScoreArgNode)
+        assert_list_types(tag_args, SelectorTagArgNode)
+        assert_list_types(nbt_args, SelectorNbtArgNode)
+        assert_list_types(advancement_args, SelectorAdvancementArgNode)
+        self.default_args = default_args
+        self.score_args = score_args
+        self.tag_args = tag_args
+        self.nbt_args = nbt_args
+        self.advancement_args = advancement_args
 
 class SelectorScoreArgNode(CmdNode):
     """
     Attributes:
         objective (Token)
-        int_range (IntRangeNode)
+        value (IntRangeNode, Token)
     """
-    def __init__(self, objective, int_range):
-        assert isinstance(objective, Token), repr(objective)
-        assert isinstance(int_range, IntRangeNode)
+    def __init__(self, objective, value):
+        assert_type(objective, Token)
+        assert_type(value, IntRangeNode, Token)
         self.objective = objective
-        self.int_range = int_range
+        self.value = value
 
 class SelectorDefaultArgNode(CmdNode):
     """
@@ -684,8 +703,8 @@ class SelectorDefaultArgNode(CmdNode):
         arg_value (SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode)
     """
     def __init__(self, arg, arg_value):
-        assert isinstance(arg, Token), repr(arg)
-        assert isinstance(arg_value, (SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode)), repr(arg_value)
+        assert_type(arg, Token)
+        assert_type(arg_value, (SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode))
         self.arg = arg
         self.arg_value = arg_value
 
@@ -706,8 +725,8 @@ class SelectorDefaultGroupArgValueNode(CmdNode):
         negated (bool)
     """
     def __init__(self, arg_values, negated=False):
-        assert isinstance(arg_values, list)
-        assert isinstance(negated, bool)
+        assert_list_types(arg_values, Token)
+        assert_type(negated, bool)
         self.arg_values = arg_values
         self.negated = negated
 
@@ -715,19 +734,25 @@ class SelectorTagArgNode(CmdNode):
     """
     Attributes:
         tag (Token)
+        negated (bool)
     """
-    def __init__(self, tag):
-        assert isinstance(tag, Token)
+    def __init__(self, tag, negated=False):
+        assert_type(tag, Token)
+        assert_type(negated, bool)
         self.tag = tag
+        self.negated = negated
 
 class SelectorNbtArgNode(CmdNode):
     """
     Attributes:
         nbt (NbtNode)
+        negated (bool)
     """
-    def __init__(self, nbt):
-        # assert isinstance(nbt, NbtNode)
+    def __init__(self, nbt, negated=False):
+        assert_type(nbt, NbtNode)
+        assert_type(negated, bool)
         self.nbt = nbt
+        self.negated = negated
 
 class SelectorAdvancementArgNode(CmdNode):
     """
@@ -800,14 +825,29 @@ class IntRangeNode(CmdNode):
     Note that a range can be a singular number. If so, left_int is the same as right_int
 
     Attributes:
-        min_int (Token)
-        max_int (Token)
+        min_int (Token or None)
+        max_int (Token or None)
+        args (tuple of 2 strs or None): Contains the argument for the min int and the max int (eg. (rm, r))
     """
-    def __init__(self, min_int, max_int):
-        assert min_int is None or isinstance(min_int, Token)
-        assert max_int is None or isinstance(max_int, Token)
+    def __init__(self, min_int, max_int, args=()):
+        assert_type(min_int, Token, optional=True)
+        assert_type(max_int, Token, optional=True)
+        assert not (min_int is None and max_int is None)
+        assert_tuple_types(args, str, lengths=(0, 2))
+
+        # checks whether the number actually works as a 32 bit signed int
+        if min_int is not None:
+            assert (-1<<31) <= int(min_int.value) <= ((1<<31)-1)
+        if max_int is not None:
+            assert (-1<<31) <= int(max_int.value) <= ((1<<31)-1)
+
+        # checks whether the max int is actually greater than or equal to the min int if they both exist
+        if min_int is not None and max_int is not None:
+            assert int(max_int.value) >= int(min_int.value)
+
         self.min_int = min_int
         self.max_int = max_int
+        self.args = args
 
 class NumberRangeNode(CmdNode):
     """
@@ -818,8 +858,8 @@ class NumberRangeNode(CmdNode):
         max_number (Token or None)
     """
     def __init__(self, min_number, max_number):
-        assert min_number is None or isinstance(min_number, Token)
-        assert max_number is None or isinstance(max_number, Token)
+        assert_type(min_number, Token)
+        assert_type(max_number, Token)
         self.min_number = min_number
         self.max_number = max_number
 
@@ -831,10 +871,9 @@ class BlockNode(CmdNode):
         nbt (NbtNode or None)
     """
     def __init__(self, block, states, nbt=None):
-        assert isinstance(block, Token)
-        assert isinstance(states, list)
-        assert isinstance(states, list)
-        # assert nbt is None or isinstance(nbt, NbtNode)
+        assert_type(block, Token)
+        assert_list_types(states, BlockStateNode)
+        assert_type(nbt, NbtNode, optional=True)
         self.block = block
         self.states = states
         self.nbt = nbt
@@ -878,3 +917,16 @@ class Vec3Node(CmdNode):
         self.coord1 = coord1
         self.coord2 = coord2
         self.coord3 = coord3
+
+
+class NamespaceIdNode(BossbarCmdNode):
+    """
+    Attributes:
+        namespace (Token or None)
+        id_value (Token)
+    """
+    def __init__(self, id_value, namespace=None):
+        assert_type(namespace, Token, optional=True)
+        assert_type(id_value, Token)
+        self.id_value = id_value
+        self.namespace = namespace

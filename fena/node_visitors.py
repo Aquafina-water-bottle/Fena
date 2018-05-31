@@ -3,12 +3,15 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
+from fena.assert_utils import assert_type
+from fena.lexical_token import Token
 from fena.nodes import CmdNode, StmtNode
 
 class TreePostfixTraversal:
     """
     Visitor from https://ruslanspivak.com/
     """
+
 
     def _visit(self, method_start, node, **kwargs):
         """
@@ -22,9 +25,14 @@ class TreePostfixTraversal:
         Returns:
             Whatever is gotten with the visitor method
         """
-        assert isinstance(method_start, str)
-        method_name = '{}_{}'.format(method_start, type(node).__name__)
-        visitor_method = getattr(self, method_name)
+        assert_type(method_start, str)
+        class_name = type(node).__name__
+        method_name = f"{method_start}_{class_name}"
+        visitor_method = getattr(self, method_name, "invalid")
+
+        if visitor_method == "invalid":
+            raise NotImplementedError(f"Invalid method: {method_name}")
+
         return visitor_method(node, **kwargs)
 
 class NodeVisitor(TreePostfixTraversal):
@@ -39,7 +47,7 @@ class NodeVisitor(TreePostfixTraversal):
         Returns:
             Whatever is gotten with the visitor method
         """
-        assert isinstance(node, StmtNode)
+        assert_type(node, StmtNode, Token)
         return self._visit("visit", node, **kwargs)
 
 class NodeBuilder(TreePostfixTraversal):
@@ -57,7 +65,7 @@ class NodeBuilder(TreePostfixTraversal):
         Returns:
             str: Whatever is gotten with the build method
         """
-        assert isinstance(node, CmdNode)
+        assert_type(node, CmdNode, Token)
         return self._visit("build", node, **kwargs)
 
     def iter_build(self, nodes):
@@ -69,5 +77,3 @@ class NodeBuilder(TreePostfixTraversal):
             generator: generator to map all nodes to the build method
         """
         return map(self.build, nodes)
-
-

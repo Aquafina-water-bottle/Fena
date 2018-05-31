@@ -26,12 +26,14 @@ class ConfigData:
         selector_argument_details (dict): maps each selector argument to the parse type and any other details
             - Uses the command json parse type
 
-        commands (list of str objects): All possible command keywords
+        blocks (list of strs)
+        command_names (list of str objects): All possible command names
         bossbar_get (list of str objects)
         bossbar_set (dict)
-        blocks (list of strs)
+        effects (list of strs)
         entities (list of strs)
-
+        items (list of str objects)
+        team_options (dict): maps each team option to its possible values
     """
     def __init__(self, **options):
         # for key in options:
@@ -53,7 +55,9 @@ class ConfigData:
             self.bossbar_set = options["bossbar_set"]
             self.bossbar_get = options["bossbar_get"]
             self.command_names = options["command_names"]
+            self.effects = options["effects"]
             self.entities = options["entities"]
+            self.items = options["items"]
             self.team_options = options["team_options"]
 
     def __new__(cls, **options):
@@ -139,15 +143,17 @@ def _get_json_config_data(version):
         blocks.json
         bossbar.json
         command_names.json
+        effects.json
         entities.json
         selector.json
+        items.json
         team_options.json
 
     Returns:
         dict: Maps "blocks", "command_names" and "entities" to their respective lists
     """
     json_options = {}
-    option_names = ("blocks", "bossbar", "command_names", "entities", "selector", "team_options")
+    option_names = ("blocks", "bossbar", "command_names", "effects", "entities", "items", "selector", "team_options")
 
     for option_name in option_names:
         file_name = _get_file_name(option_name, extension="json")
@@ -226,7 +232,7 @@ def _get_all_data():
     json_options = _get_json_config_data(version)
 
     selector_json_args = {"selector_variable_specifiers", "selector_arguments", "selector_replacements", "selector_argument_details"}
-    general_json_args = {"blocks", "command_names", "entities", "team_options"}
+    general_json_args = {"blocks", "command_names", "effects", "entities", "items", "team_options"}
     bossbar_json_args  = {"bossbar_set", "bossbar_get"}
 
     all_json_args = (selector_json_args | general_json_args | bossbar_json_args)

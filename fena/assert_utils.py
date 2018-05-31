@@ -45,30 +45,43 @@ def assert_type(checked_object, *valid_types, additional_message=None, optional=
             full_message += f" {additional_message}"
         raise AssertionError(full_message)
 
-def assert_list_types(checked_list, *valid_types):
+def assert_iterable_types(checked_iterable, *valid_types, lengths=None):
     """
-    Checks whether all objects in a list are instances of one of the valid types
+    Checks whether all objects in a iterable are instances of one of the valid types
 
     Args:
-        checked_list (list)
+        checked_iterable (iterable)
         valid_types (any)
+        lengths (container of ints): Any possible lengths the checked_iterable object can have
 
     Examples:
-        >>> assert_list_types([1, 3, 2], int)
-        >>> assert_list_types(["a", "b", "c"], str)
-        >>> assert_list_types(["a", "b", "c"], int, str)
-        >>> assert_list_types(["a", "b", "c"], int)
+        >>> assert_iterable_types([1, 3, 2], int)
+        >>> assert_iterable_types(["a", "b", "c"], str)
+        >>> assert_iterable_types(("a", "b", "c"), int, str)
+        >>> assert_iterable_types(["a", "b", "c"], int)
         Traceback (most recent call last):
             ...
-        AssertionError: Expected type of 'a' to be <class 'int'> but got <class 'str'> in index 0 of list ['a', 'b', 'c']
+        AssertionError: Expected type of 'a' to be <class 'int'> but got <class 'str'> in index 0 of iterable ['a', 'b', 'c']
 
-        >>> assert_list_types([23, "b", 327.4], int, str)
+        >>> assert_iterable_types([23, "b", 327.4], int, str)
         Traceback (most recent call last):
             ...
-        AssertionError: Expected type of 327.4 to be one of (<class 'int'>, <class 'str'>) but got <class 'float'> in index 2 of list [23, 'b', 327.4]
+        AssertionError: Expected type of 327.4 to be one of (<class 'int'>, <class 'str'>) but got <class 'float'> in index 2 of iterable [23, 'b', 327.4]
     """
-    for index, item in enumerate(checked_list):
-        assert_type(item, *valid_types, additional_message=f"in index {index} of list {checked_list}")
+    assert_type(lengths, tuple, optional=True)
+    if lengths is not None:
+        assert len(checked_iterable) in lengths
+
+    for index, item in enumerate(checked_iterable):
+        assert_type(item, *valid_types, additional_message=f"in index {index} of iterable {checked_iterable}")
+
+def assert_list_types(checked_list, *valid_types, lengths=None):
+    assert_type(checked_list, list)
+    assert_iterable_types(checked_list, *valid_types, lengths=lengths)
+
+def assert_tuple_types(checked_tuple, *valid_types, lengths=None):
+    assert_type(checked_tuple, tuple)
+    assert_iterable_types(checked_tuple, *valid_types, lengths=lengths)
 
 if __name__ == "__main__":
     import doctest

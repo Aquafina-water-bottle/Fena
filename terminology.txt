@@ -9,22 +9,22 @@ mcfunction full path: the path to the actual mcfunction file specified by the gi
 
 
 token: The full token containing the token type, value and position (lexical_token.Token object)
-    eg. Token[TokenPosition[row=1, column=3, char_pos=2]: type=<SelectorSimpleToken.OPEN_BRACKET: '['>, value='[']
+    eg. Token[TokenPosition[row=1, column=3, char_pos=2]: type=<DelimiterToken.OPEN_SQUARE_BRACKET: '['>, value='[']
 
 token type: The general group of simple tokens and typed tokens, one of which is carried by a token object
-    eg. SimpleToken.COLON, TypedToken.INT
+    eg. DelimiterToken.COLON, TypedToken.INT
 
 simple tokens: All tokens with a predefined value
-    eg. SimpleToken.COLON, StatementSimpleToken.STATEMENT_SPECIFIER
+    eg. DelimiterToken.COLON, DelimiterToken.EXCLAMATION_MARK
 
 typed tokens: All tokens that carry a specific type and value
-    eg. TypedToken.INT, SelectorTypedToken.TARGET_SELECTOR_VARIABLE
+    eg. TypedToken.INT, TypedToken.FLOAT
 
 token class: The actual enum class that holds all tokens
-    eg. TypedToken, SimpleToken, StatementSimpleToken
+    eg. TypedToken, DelimiterToken
 
 token values: All values held by each individual simple and typed token
-    eg. ":" for SimpleToken.COLON
+    eg. ":" for DelimiterToken.COLON
 
 
 targets: Both target selectors and full (fake or real) names
@@ -55,7 +55,7 @@ relative coordinates: All coordinates specified with ~
 absolute coordinates: All coordinates specified just as a numeric value
     eg. 25, 75.3, -23.4
     
-world coordinates: Both absolute and relative coordinates
+world coordinates: Either absolute and relative coordinates
     eg. 785, ~-27.1, 33.4
 
 
@@ -90,6 +90,32 @@ execute sub command arguments:
 execute sub command keyword: Any keyword shortcut inside a leading execute command
     eg. if, ast
 
+
+# TODO update all to match the following tag specifications
+tag: the full command `/scoreboard players tag` in 1.12 or `/tag` in 1.13+
+
+group tag: all items, blocks, and functions defined in json files under data/namespace/tags
+    - selected by #namespace:path_to_json
+    eg. #minecraft:anvil
+
+nbt tag: specifically nbt
+    eg. {Command:"say nou"}
+
+curly bracket tag: refering to either json or nbt
+    eg. {Command:"say nou"}
+    eg. {"text":"nou"}
+
+something id: Anything that can contain a namespace followed by a string
+    eg. setblock ~ ~ ~ minecraft:stone_brick
+    eg. fill ~ ~ ~ ~ ~ ~ minecraft:stone_brick replace #minecraft:acacia_logs
+    eg. summon minecraft:creeper
+    eg. give @s minecraft:diamond_pickaxe
+    eg. clear @s #minecraft:acacia_logs
+    eg. playsound minecraft:entity.generic.explode @s
+    eg. particle minecraft:happy_villager @s (1.13+ only)
+    eg. effect give minecraft:saturation
+    eg. bossbar add minecraft:green {"text":"green"} (id doesn't have to be 'minecraft')
+    eg. advancement grant @s only minecraft:story/iron_tools (id doesn't have to be 'minecraft')
 
 entity_path: Either a selector or vec3 (as a tuple of 3 coordinates)
 ???: The group of bossbars, objectives, and teams

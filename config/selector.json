@@ -12,7 +12,10 @@
             "dist": "distance",
             "xrot": "x_rotation",
             "yrot": "y_rotation",
-            "lvl": "level"
+            "lvl": "level",
+
+            "limit": "c",
+            "gamemode": "m"
         },
 
         "selector_argument_details": {
@@ -77,25 +80,35 @@
             },
 
             "distance": {
-                "parse_type": "INT_RANGE",
+                "parse_type": "INT_RANGE_BRACKET",
                 "range_replace": ["rm", "r"]
             },
             "x_rotation": {
-                "parse_type": "INT_RANGE",
-                "range_replace": ["rx", "rxm"]
+                "parse_type": "INT_RANGE_BRACKET",
+                "range_replace": ["rxm", "rx"]
             },
             "y_rotation": {
-                "parse_type": "INT_RANGE",
-                "range_replace": ["ry", "rym"]
+                "parse_type": "INT_RANGE_BRACKET",
+                "range_replace": ["rym", "ry"]
             },
             "level": {
-                "parse_type": "INT_RANGE",
-                "range_replace": ["l", "lm"]
+                "parse_type": "INT_RANGE_BRACKET",
+                "range_replace": ["lm", "l"]
             },
 
             "m": {
                 "parse_type": "VALUES",
                 "values": ["0", "1", "2", "3"],
+                "value_replace": {
+                    "survival": "0",
+                    "s": "0",
+                    "creative": "1",
+                    "c": "1",
+                    "adventure": "2",
+                    "a": "2",
+                    "spectator": "3",
+                    "sp": "3"
+                },
                 "negation": true
             },
 
