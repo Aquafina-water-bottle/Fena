@@ -348,14 +348,14 @@ class Parser:
         if error_message is None:
             if len(token_types) == 1:
                 expected_type = token_types[0]
-                error_message = f"Expected {expected_type}"
+                error_message = f"Expected {expected_type!r}"
             else:
                 error_message = f"Expected one of {token_types}"
 
-        if values is not None:
-            error_message += f" with any value from {values}"
-        elif value is not None:
-            error_message += f" with a value of {value}"
+            if values is not None:
+                error_message += f" with any value from {values}"
+            elif value is not None:
+                error_message += f" with a value of {value}"
 
         self.error(error_message)
 
@@ -1277,7 +1277,7 @@ class Parser:
         score_arg_value ::= [int_range, "*"] | "(" & score_arg_value & ")"
         """
         if self.current_token.matches(TypedToken.STRING):
-            value = self.eat(TypedToken.STRING, value="*")
+            value = self.eat(TypedToken.STRING, value="*", error_message="If the value is a string token, expected '*'")
         elif self.current_token.matches(DelimiterToken.OPEN_PARENTHESES):
             self.eat(DelimiterToken.OPEN_PARENTHESES)
             value = self.score_arg_value()
@@ -1676,7 +1676,8 @@ class Parser:
         if arg_value not in Parser.config_data.entities:
             self.error("Expected an entity type")
 
-        return self.eat(TypedToken.STRING)
+        entity_token = self.eat(TypedToken.STRING)
+        return NamespaceIdNode(entity_token)
         # entity_token = self.eat(TypedToken.STRING)
         # entity_token.replacement = "minecraft:" + entity_token.value
         # return entity_token

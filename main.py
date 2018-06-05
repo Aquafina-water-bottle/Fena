@@ -11,12 +11,12 @@ import logging
 import sys
 import os
 
-# import fena.logging_setup
+import fena.logging_setup
 # import fena.file
-# import fena.lexer
-# import fena.parse_tree
-# import fena.writer
-# import fena.interpreter
+import fena.lexer
+# import fena.parser
+import fena.writer
+import fena.interpreter
 
 semantic_version = "s6.0.0"
 public_version = "v0.3.0-ALPHA"
@@ -60,10 +60,11 @@ def main():
     fena.logging_setup.format_file_name(file_name)
 
     lexer = fena.lexer.Lexer(text)
-    parser = fena.parse_tree.Parser(lexer)
+    parser = fena.parser.Parser(lexer)
     interpreter = fena.interpreter.Interpreter(parser, output_path)
+    mcfunctions = interpreter.interpret()
 
-    writer = fena.writer.Writer(interpreter.interpret(), args)
+    writer = fena.writer.Writer(mcfunctions, args)
     writer.write()
 
     # interpreter = fena.interpreter.Interpreter(parser)

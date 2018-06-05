@@ -363,6 +363,19 @@ class CommandBuilder_1_12(NodeBuilder):
 
         return ",".join(result)
 
+    def build_NamespaceIdNode(self, node):
+        """
+        Attributes:
+            id_value (Token)
+            namespace (Token or None)
+        """
+        id_value = self.build(node.id_value)
+        if node.namespace is None:
+            return f"minecraft:{id_value}"
+
+        namespace = self.build(node.namespace)
+        return f"{namespace}:{id_value}"
+
     def build_Token(self, token, prefix=False, replacements=None):
         """
         Returns its value with a prefix if avaliable
@@ -404,138 +417,3 @@ class CommandBuilder_1_12(NodeBuilder):
 class CommandBuilder_1_13(CommandBuilder_1_12):
     def __init__(self, cmd_root):
         super().__init__(self, cmd_root)
-
-if __name__ == "__main__":
-    logging_setup.format_file_name("test_lexer.txt")
-
-    from fena.lexer import Lexer
-    from fena.parser import Parser
-
-    def test(string, lexer_method, parser_method, expected=None, expect_error=False, version="1.12", print_ast=False):
-        if version == "1.12":
-            CommandBuilder = CommandBuilder_1_12
-        elif version == "1.13":
-            CommandBuilder = CommandBuilder_1_13
-        else:
-            raise RuntimeError
-
-        try:
-            lexer = Lexer(string)
-            parser = Parser(lexer, lexer_method)
-            ast = parser.parse(method_name=parser_method)
-            command_builder = CommandBuilder(ast)
-            output = command_builder.interpret()
-
-            if expected is None:
-                expected = string
-
-        except Exception as e:
-            print(f"input={string!r}, output={e!r}")
-            if not expect_error:
-                raise RuntimeError
-        else:
-            print(f"input={string!r}, output={output!r}")
-            if print_ast:
-                print(ast)
-
-            if expected != output:
-                raise RuntimeError(f"""
-                Input:    {string!r}
-                Expected: {expected!r}
-                Output:   {output!r}""")
-
-    def test_selector(selector, expected=None, expect_error=False, print_ast=False):
-        test(selector, "get_selector", "selector", expected, expect_error, print_ast=print_ast)
-
-    def test_selectors():
-        test_selector("@p")
-        test_selector("@a[]")
-        test_selector("@e[type=armor_stand]", "@e[type=minecraft:armor_stand]")
-        test_selector("@e[type=minecraft:armor_stand]")
-        test_selector("@e[type=armor_stand,c=1]", "@e[type=minecraft:armor_stand,c=1]")
-        test_selector("@e[type=armor_stand,dist=1..2]", "@e[type=minecraft:armor_stand,rm=1,r=2]")
-        test_selector("@a[x]", "@a[tag=x]")
-
-        test_selector("@a[RRpl=3..4]", "@a[score_RRpl_min=3,score_RRpl=4]")
-        test_selector("@a[RRpl=3..]", "@a[score_RRpl_min=3]")
-        test_selector("@a[RRpl=..3]", "@a[score_RRpl=3]")
-        test_selector("@a[RRpl=3]", "@a[score_RRpl_min=3,score_RRpl=3]")
-        test_selector("@a[RRpl=*]", "@a[score_RRpl_min=-2147483648]")
-        test_selector("@a[RRpl=(3..4)]", "@a[score_RRpl_min=3,score_RRpl=4]")
-        test_selector("@a[RRpl=(3..)]", "@a[score_RRpl_min=3]")
-        test_selector("@a[RRpl=(..3)]", "@a[score_RRpl=3]")
-        test_selector("@a[RRpl=(3)]", "@a[score_RRpl_min=3,score_RRpl=3]")
-        test_selector("@a[RRpl=(*)]", "@a[score_RRpl_min=-2147483648]")
-        test_selector("@a[RRpl=((((3..))))]", "@a[score_RRpl_min=3]")
-
-        test_selector("@a[distance=2..5]", "@a[rm=2,r=5]")
-        test_selector("@a[distance=5]", "@a[rm=5,r=5]")
-        test_selector("@a[distance=2..]", "@a[rm=2]")
-        test_selector("@a[distance=..5]", "@a[r=5]")
-        test_selector("@a[dist=2..5]", "@a[rm=2,r=5]")
-        test_selector("@a[dist=5]", "@a[rm=5,r=5]")
-        test_selector("@a[dist=2..]", "@a[rm=2]")
-        test_selector("@a[dist=..5]", "@a[r=5]")
-        test_selector("@a[dist=(2..5)]", "@a[rm=2,r=5]")
-        test_selector("@a[dist=(5)]", "@a[rm=5,r=5]")
-        test_selector("@a[dist=(2..)]", "@a[rm=2]")
-        test_selector("@a[dist=(..5)]", "@a[r=5]")
-
-        test_selector("@a[level=2..5]", "@a[lm=2,l=5]")
-        test_selector("@a[level=5]", "@a[lm=5,l=5]")
-        test_selector("@a[level=2..]", "@a[lm=2]")
-        test_selector("@a[level=..5]", "@a[l=5]")
-        test_selector("@a[lvl=2..5]", "@a[lm=2,l=5]")
-        test_selector("@a[lvl=5]", "@a[lm=5,l=5]")
-        test_selector("@a[lvl=2..]", "@a[lm=2]")
-        test_selector("@a[lvl=..5]", "@a[l=5]")
-        test_selector("@a[lvl=(2..5)]", "@a[lm=2,l=5]")
-        test_selector("@a[lvl=(5)]", "@a[lm=5,l=5]")
-        test_selector("@a[lvl=(2..)]", "@a[lm=2]")
-        test_selector("@a[lvl=(..5)]", "@a[l=5]")
-
-        test_selector("@a[x_rotation=2..5]", "@a[rxm=2,rx=5]")
-        test_selector("@a[x_rotation=5]", "@a[rxm=5,rx=5]")
-        test_selector("@a[x_rotation=2..]", "@a[rxm=2]")
-        test_selector("@a[x_rotation=..5]", "@a[rx=5]")
-        test_selector("@a[xrot=2..5]", "@a[rxm=2,rx=5]")
-        test_selector("@a[xrot=5]", "@a[rxm=5,rx=5]")
-        test_selector("@a[xrot=2..]", "@a[rxm=2]")
-        test_selector("@a[xrot=..5]", "@a[rx=5]")
-        test_selector("@a[xrot=(2..5)]", "@a[rxm=2,rx=5]")
-        test_selector("@a[xrot=(5)]", "@a[rxm=5,rx=5]")
-        test_selector("@a[xrot=(2..)]", "@a[rxm=2]")
-        test_selector("@a[xrot=(..5)]", "@a[rx=5]")
-
-        test_selector("@a[y_rotation=2..5]", "@a[rym=2,ry=5]")
-        test_selector("@a[y_rotation=5]", "@a[rym=5,ry=5]")
-        test_selector("@a[y_rotation=2..]", "@a[rym=2]")
-        test_selector("@a[y_rotation=..5]", "@a[ry=5]")
-        test_selector("@a[yrot=2..5]", "@a[rym=2,ry=5]")
-        test_selector("@a[yrot=5]", "@a[rym=5,ry=5]")
-        test_selector("@a[yrot=2..]", "@a[rym=2]")
-        test_selector("@a[yrot=..5]", "@a[ry=5]")
-        test_selector("@a[yrot=(2..5)]", "@a[rym=2,ry=5]")
-        test_selector("@a[yrot=(5)]", "@a[rym=5,ry=5]")
-        test_selector("@a[yrot=(2..)]", "@a[rym=2]")
-        test_selector("@a[yrot=(..5)]", "@a[ry=5]")
-
-        test_selector("@a[limit=5,gamemode=creative]", "@a[c=5,m=1]")
-
-        test_selector("@a[hello]", "@a[tag=hello]")
-        test_selector("@a[hello,objective=2..,x=5]", "@a[x=5,score_objective_min=2,tag=hello]")
-        
-        test_selector(
-            "@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,RRar=3..5]",
-            "@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRar_min=3,score_RRar=5]")
-
-        test_selector(
-            "@a[g.hello=5,x=-153,y=0,z=299,RRar=3..5]",
-            "@a[x=-153,y=0,z=299,score_g.hello_min=5,score_g.hello=5,score_RRar_min=3,score_RRar=5]")
-
-        test_selector("@3", expect_error=True)
-        test_selector("@a[a,b,c]", expect_error=True)
-        test_selector("@a[a,]", expect_error=True)
-
-    test_selectors()
-

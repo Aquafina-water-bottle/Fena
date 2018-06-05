@@ -45,14 +45,16 @@ def assert_type(checked_object, *valid_types, additional_message=None, optional=
             full_message += f" {additional_message}"
         raise AssertionError(full_message)
 
-def assert_iterable_types(checked_iterable, *valid_types, lengths=None):
+def assert_iterable_types(checked_iterable, *valid_types, duplicate_key=None):
     """
     Checks whether all objects in a iterable are instances of one of the valid types
 
     Args:
         checked_iterable (iterable)
         valid_types (any)
-        lengths (container of ints): Any possible lengths the checked_iterable object can have
+        duplicate_key (None or callable): A function to give the value to check for duplicates
+            Note that if you want to detect duplicates with itself, just do `duplicate_key=lambda x: x`
+            If the option is None, no duplicate checking will be done
 
     Examples:
         >>> assert_iterable_types([1, 3, 2], int)
@@ -67,21 +69,46 @@ def assert_iterable_types(checked_iterable, *valid_types, lengths=None):
         Traceback (most recent call last):
             ...
         AssertionError: Expected type of 327.4 to be one of (<class 'int'>, <class 'str'>) but got <class 'float'> in index 2 of iterable [23, 'b', 327.4]
-    """
-    assert_type(lengths, tuple, optional=True)
-    if lengths is not None:
-        assert len(checked_iterable) in lengths
 
+        >>> assert_iterable_types([23, "b", 327.4], int, str, duplicate_key=lambda x: x)
+        Traceback (most recent call last):
+            ...
+        AssertionError: Expected type of 327.4 to be one of (<class 'int'>, <class 'str'>) but got <class 'float'> in index 2 of iterable [23, 'b', 327.4]
+
+        >>> assert_iterable_types(("a", "b", "c"), str, duplicate_key=lambda x: x)
+        >>> assert_iterable_types(("a", "b", "a"), str, duplicate_key=lambda x: x)
+        Traceback (most recent call last):
+            ...
+        AssertionError: Found a duplicate of 'a' in iterable ('a', 'b', 'a')
+
+        >>> assert_iterable_types(["123", "142", "225"], str, duplicate_key=lambda x: x[0])
+        Traceback (most recent call last):
+            ...
+        AssertionError: Found a duplicate of '1' in iterable ['123', '142', '225']
+    """
     for index, item in enumerate(checked_iterable):
         assert_type(item, *valid_types, additional_message=f"in index {index} of iterable {checked_iterable}")
 
-def assert_list_types(checked_list, *valid_types, lengths=None):
-    assert_type(checked_list, list)
-    assert_iterable_types(checked_list, *valid_types, lengths=lengths)
+    # checks for duplicates
+    if duplicate_key is not None:
+        assert callable(duplicate_key), "The duplicate key must be a function"
 
-def assert_tuple_types(checked_tuple, *valid_types, lengths=None):
+        # uses a set because only the containment of an item matters
+        found_objects = set()
+
+        # iterates through each checked object to see if its within the found objects
+        for checked_object in checked_iterable:
+            result_object = duplicate_key(checked_object)
+            assert result_object not in found_objects, f"Found a duplicate of {result_object!r} in iterable {checked_iterable}"
+            found_objects.add(result_object)
+
+def assert_list_types(checked_list, *valid_types, **kwargs):
+    assert_type(checked_list, list)
+    assert_iterable_types(checked_list, *valid_types, **kwargs)
+
+def assert_tuple_types(checked_tuple, *valid_types, **kwargs):
     assert_type(checked_tuple, tuple)
-    assert_iterable_types(checked_tuple, *valid_types, lengths=lengths)
+    assert_iterable_types(checked_tuple, *valid_types, **kwargs)
 
 if __name__ == "__main__":
     import doctest

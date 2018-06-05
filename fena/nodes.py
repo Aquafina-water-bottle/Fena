@@ -673,11 +673,20 @@ class SelectorArgsNode(CmdNode):
         advancement_args (list ofSelectorAdvancementArgNode objects)
     """
     def __init__(self, default_args, score_args, tag_args, nbt_args, advancement_args):
-        assert_list_types(default_args, SelectorDefaultArgNode)
-        assert_list_types(score_args, SelectorScoreArgNode)
-        assert_list_types(tag_args, SelectorTagArgNode)
+        assert_list_types(default_args, SelectorDefaultArgNode, duplicate_key=lambda x: x.arg.value)
+        assert_list_types(score_args, SelectorScoreArgNode, duplicate_key=lambda x: x.objective.value)
+        assert_list_types(tag_args, SelectorTagArgNode, duplicate_key=lambda x: x.tag.value)
         assert_list_types(nbt_args, SelectorNbtArgNode)
         assert_list_types(advancement_args, SelectorAdvancementArgNode)
+
+        # makes sure that all scoreboard objectives are unique by getting the string value of each objective token
+        # in general, if there is a duplicate, objectives will be less than score_args
+        objectives = [node.objective.value for node in score_args]
+        if len(objectives) > len(set(objectives)):
+            raise SyntaxError(f"Found multiple objectives containing the same name: {tuple(objectives & set(objectives))}")
+        elif len(score_args) < len(objectives):
+            raise SyntaxError(f"Unexpected: more objectives {objectives} found compared to score args {score_args}")
+        
         self.default_args = default_args
         self.score_args = score_args
         self.tag_args = tag_args
@@ -833,7 +842,8 @@ class IntRangeNode(CmdNode):
         assert_type(min_int, Token, optional=True)
         assert_type(max_int, Token, optional=True)
         assert not (min_int is None and max_int is None)
-        assert_tuple_types(args, str, lengths=(0, 2))
+        assert_tuple_types(args, str)
+        assert len(args) in (0, 2)
 
         # checks whether the number actually works as a 32 bit signed int
         if min_int is not None:
@@ -919,14 +929,14 @@ class Vec3Node(CmdNode):
         self.coord3 = coord3
 
 
-class NamespaceIdNode(BossbarCmdNode):
+class NamespaceIdNode(CmdNode):
     """
     Attributes:
         namespace (Token or None)
         id_value (Token)
     """
     def __init__(self, id_value, namespace=None):
-        assert_type(namespace, Token, optional=True)
         assert_type(id_value, Token)
+        assert_type(namespace, Token, optional=True)
         self.id_value = id_value
         self.namespace = namespace

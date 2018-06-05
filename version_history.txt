@@ -216,7 +216,13 @@ s7.0.0      v0.4.0
 
     TODO:
         - Allow all forms of "minecraft:"
-        - Make 1.13 selectors work
+        - Include type hinting as introduced by python 3.5+ (unless it requires 3.7+)
+        - Organize all test cases into its component folders and modules (fena/test/version)
+            - Import each version by using the private method in config_data.py
+            - Modify said method to include a pre-specified version
+        - Look into using dataclasses or NamedTuple for various objects (eg. nodes)
+        - Make 1.13 selectors work to be certain that this AST is fine for both versions
+
         - Revamp parser into making a parse tree and interpreter class
             - Get the prefix, constobj and function file paths through a global symbol table node visitor
             - Get commands and mcfunctions through the regular interpreter node visitor

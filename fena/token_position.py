@@ -1,3 +1,4 @@
+from fena.assert_utils import assert_type
 import logging
 
 class TokenPositionRecorder:
@@ -57,7 +58,7 @@ class TokenPositionRecorder:
         Args:
             position (TokenPosition): Position that the recorder will be changed to
         """
-        assert isinstance(position, TokenPosition)
+        assert_type(position, TokenPosition)
 
         # self.char_pos = position.char_pos
         self.row = position.row
@@ -83,7 +84,7 @@ class TokenPositionRecorder:
             >>> r
             TokenPositionRecorder[row=1, column=7, char_pos=6]
         """
-        assert isinstance(columns, int)
+        assert_type(columns, int)
         self.column += columns
         self.char_pos += columns
 
@@ -194,9 +195,9 @@ class TokenPosition(tuple):
     __slots__ = []
 
     def __new__(cls, row, column, char_pos, row_end=None, column_end=None, char_pos_end=None):
-        assert isinstance(row, int) and row > 0
-        assert isinstance(column, int) and column > 0
-        assert isinstance(char_pos, int) and char_pos >= 0
+        assert_type(row, int) and row > 0
+        assert_type(column, int) and column > 0
+        assert_type(char_pos, int) and char_pos >= 0
         
         if row_end is None:
             row_end = row
@@ -205,9 +206,9 @@ class TokenPosition(tuple):
         if char_pos_end is None:
             char_pos_end = char_pos
 
-        assert isinstance(row_end, int) and row_end > 0
-        assert isinstance(column_end, int) and column_end > 0
-        assert isinstance(char_pos_end, int) and char_pos_end >= 0
+        assert_type(row_end, int) and row_end > 0
+        assert_type(column_end, int) and column_end > 0
+        assert_type(char_pos_end, int) and char_pos_end >= 0
         return super().__new__(cls, (row, row_end, column, column_end, char_pos, char_pos_end))
 
         # self._row_begin = row

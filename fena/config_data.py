@@ -2,6 +2,8 @@ import os
 import json
 import logging
 
+from fena.assert_utils import assert_type
+
 """
 Gets all config data from the config folder
 """
@@ -89,19 +91,19 @@ def _get_file_str(file_name):
     return file_data
 
 
-def _get_file_name(option_name, extension="txt"):
-    """
-    Gets the data inside the file given the version, option and extension
+# def _get_file_name(option_name, extension="txt"):
+#     """
+#     Gets the data inside the file given the version, option and extension
+# 
+#     Args:
+#         version (str)
+#         option_name (str)
+#         extension (str)
+#     """
+#     return f"{option_name}.{extension}"
 
-    Args:
-        version (str)
-        option_name (str)
-        extension (str)
-    """
-    return f"{option_name}.{extension}"
 
-
-def _get_config_data():
+def _get_config_data(version=None):
     """
     Gets all data from config.ini
 
@@ -111,12 +113,12 @@ def _get_config_data():
      - creates the first of the singleton class of ConfigData
 
     Args:
-        file_data (str): The file contents for testing purposes
-            It is default to none so the config file can be read.
+        version (str or None): The file contents for testing purposes
 
     Returns:
         dict: All options found in config.ini
     """
+    assert_type(version, str, optional=True)
 
     # the config file should be placed one directory below
     config_name = "config.ini"
@@ -129,7 +131,9 @@ def _get_config_data():
     # gets the list as a split through "," on the RHS unless it is the version
     for line in lines:
         option, data = line.split("=")
-        if option in ("version", "ego"):
+        if option == "version":
+            options[option] = (data if version is None else version)
+        elif option == "ego":
             options[option] = data
         else:
             options[option] = data.split(",")
@@ -152,18 +156,18 @@ def _get_json_config_data(version):
     Returns:
         dict: Maps "blocks", "command_names" and "entities" to their respective lists
     """
+    # result for all files
     json_options = {}
     option_names = ("blocks", "bossbar", "command_names", "effects", "entities", "items", "selector", "team_options")
 
     for option_name in option_names:
-        file_name = _get_file_name(option_name, extension="json")
+        file_name = f"{option_name}.json"
         file_str = _get_file_str(file_name)
         json_object = json.loads(file_str)
 
-        # if it's a string, it refers back to a new version
+        # if it's a string, it refers back to the previous version completely
+        # note that this does not prevent recursion
         while isinstance(json_object[version], str):
-            # gets the new version
-            # note that this does not prevent recursion
             version = json_object[version]
 
         # when config data has new versions
@@ -173,6 +177,7 @@ def _get_json_config_data(version):
             for option in json_object[version]:
                 json_options[option] = json_object[version][option]
         elif json_object[version] is None:
+            # doesn't do anything since there is no need to replace None with a different value
             pass
         else:
             raise SyntaxError("Unexpected default case")
@@ -199,12 +204,16 @@ def _validate_options(options, valid_options):
         raise SyntaxError("{}: Extra option(s) were detected".format(set(extra_options)))
 
 
-def _get_all_data():
+def get_all_data(version=None):
     """
     Main function to get all data from all config files
+    If a minecraft version needs to be specified, use this function with the requested version
+
+    Args:
+        version (str or None): Optional version to force the config to be read with a specific version
     """
     # gets all config data from config.ini and validates
-    general_options = _get_config_data()
+    general_options = _get_config_data(version=version)
     valid_general_options = frozenset({"version", "ego", "leading_commands", "plugin_conflict_commands"})
     _validate_options(general_options, valid_general_options)
 
@@ -244,8 +253,7 @@ def _get_all_data():
     logging.debug("Got the config data: {}".format(config_data))
 
 
-# this should only be ran inside this folder, hence why it is private
-_get_all_data()
+get_all_data()
 
 def test():
     # should be the original from the config file
