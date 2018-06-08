@@ -678,14 +678,6 @@ class SelectorArgsNode(CmdNode):
         assert_list_types(tag_args, SelectorTagArgNode, duplicate_key=lambda x: x.tag.value)
         assert_list_types(nbt_args, SelectorNbtArgNode)
         assert_list_types(advancement_args, SelectorAdvancementArgNode)
-
-        # makes sure that all scoreboard objectives are unique by getting the string value of each objective token
-        # in general, if there is a duplicate, objectives will be less than score_args
-        objectives = [node.objective.value for node in score_args]
-        if len(objectives) > len(set(objectives)):
-            raise SyntaxError(f"Found multiple objectives containing the same name: {tuple(objectives & set(objectives))}")
-        elif len(score_args) < len(objectives):
-            raise SyntaxError(f"Unexpected: more objectives {objectives} found compared to score args {score_args}")
         
         self.default_args = default_args
         self.score_args = score_args

@@ -76,6 +76,9 @@ def test_selectors():
     test_selector("@a[limit=5,gamemode=creative]", "@a[c=5,m=1]")
 
     test_selector("@a[hello]", "@a[tag=hello]")
+
+    # note that things will become rearranged in the following order:
+    # defaults, scores, tags
     test_selector("@a[hello,objective=2..,x=5]", "@a[x=5,score_objective_min=2,tag=hello]")
     
     test_selector(

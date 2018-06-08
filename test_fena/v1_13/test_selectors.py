@@ -124,18 +124,38 @@ def test_selectors():
     test_selector("@a[limit=5,gamemode=creative]")
 
     test_selector("@a[hello]", "@a[tag=hello]")
-    test_selector("@a[hello,objective=2..,x=5]", "@a[x=5,score_objective_min=2,tag=hello]")
+    test_selector("@a[hello,objective=2..,x=5]", "@a[x=5,scores={objective=2..},tag=hello]")
     
     test_selector(
         "@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,RRar=3..5]",
-        "@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,score_RRar_min=3,score_RRar=5]")
+        "@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,scores={RRar=3..5}]")
 
     test_selector(
         "@a[g.hello=5,x=-153,y=0,z=299,RRar=3..5]",
-        "@a[x=-153,y=0,z=299,score_g.hello_min=5,score_g.hello=5,score_RRar_min=3,score_RRar=5]")
+        "@a[x=-153,y=0,z=299,scores={g.hello=5,RRar=3..5}]")
+
+    # multiple tags are fine
+    test_selector("@a[a,b,c]", "@a[tag=a,tag=b,tag=c]")
+    test_selector("@a[!a,!b,!c]", "@a[tag=!a,tag=!b,tag=!c]")
+    test_selector("@a[!a,b,!c]", "@a[tag=!a,tag=b,tag=!c]")
+
+    # testing grouping of type, team, name and gamemode
+    test_selector("@a[m=!(1, 2)]", "@a[gamemode=!creative,gamemode=!adventure]")
+    test_selector("@a[type=!(armor_stand, player)]", "@a[type=!armor_stand,type=!player]")
+    test_selector("@a[team=!(rr.g, rr.b)]", "@a[team=!rr.g,team=!rr.b]")
+
+    # note that names can be both strings and literal strings
+    test_selector('@a[name=!(aquafina, daa)]", "@a[name=!aquafina,name=!daa]')
+    test_selector('@a[name=!(ENFORCER_GAMING, "is a scrub")]", "@a[name=!ENFORCER_GAMING,name=!"is a scrub"]')
+    test_selector('@a[name=!("broke it", "daddy daa")]", "@a[name=!"broke it",name=!"daddy daa"]')
+    
+    # literally no grouping can be a non-negation grouping
+    test_selector("@a[m=(1, 2)]", expect_error=True)
+    test_selector("@a[type=(armor_stand, player)]", expect_error=True)
+    test_selector("@a[team=(rr.g, rr.b)]", expect_error=True)
+    test_selector("@a[name=(aquafina, daa)]", expect_error=True)
 
     test_selector("@3", expect_error=True)
-    test_selector("@a[a,b,c]", expect_error=True)
     test_selector("@a[a,]", expect_error=True)
     test_selector("@a[a,", expect_error=True)
     test_selector("@a[a", expect_error=True)
@@ -147,3 +167,7 @@ def test_selectors():
     test_selector("@[]", expect_error=True)
     test_selector("nahfam", expect_error=True)
     test_selector("@a[obj=number]", expect_error=True)
+
+    test_selector("@a[obj=25,obj=24]", expect_error=True)
+    test_selector("@a[tag1,tag1]", expect_error=True)
+    test_selector("@a[x=5,x=4]", expect_error=True)

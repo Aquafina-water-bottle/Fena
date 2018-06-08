@@ -403,6 +403,7 @@ class Parser:
             "VALUES": It has a "values" attribute that should have a containment check on it
                 - This might also have a "value_replace" attribute as a dictionary to replace strings as shorthands
             "STR": Anything contained inside a string containing [A-Za-z_.-]
+            "LITERAL_STR": Anything contained inside two quotations
             "JSON": A general json object
             "SIGNED_INT": Any (possibly negative) integer value (Z)
             "POS_INT": Any positive integer value (Z+)
@@ -433,6 +434,12 @@ class Parser:
 
         # determines if the value is within the group of specified values
         # as long as the replacement dictionary is applied
+        if isinstance(parse_type, list):
+            # currently, only supports two possible options (literal_str or str)
+            if ("LITERAL_STR" in parse_type and self.current_token.matches(TypedToken.LITERAL_STR) or
+                    "STR" in parse_type and self.current_token.matches(TypedToken.STRING)):
+                return self.advance()
+            
         if parse_type == "VALUES":
             arg_value = self.current_token.value
             assert "values" in arg_details, "If the parse type is 'VALUES', a 'values' list must be present in the json"
@@ -460,6 +467,9 @@ class Parser:
         # the value can be literally one of anything
         if parse_type == "STR":
             return self.eat(TypedToken.STRING)
+
+        if parse_type == "LITERAL_STR":
+            return self.eat(TypedToken.LITERAL_STRING)
 
         # requires a form of integer, and then stored as an integer
         if parse_type == "SIGNED_INT":

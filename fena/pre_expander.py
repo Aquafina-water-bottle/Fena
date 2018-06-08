@@ -204,7 +204,7 @@ $endif
             replaceitem entity @s[porkchop=$(x)] slot.hotbar.$(x) porkchop 1 0
 """
 
-output_str = """
+    output_str = """
 # python code
 $py(
 code = "unchanged"

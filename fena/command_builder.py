@@ -1,7 +1,4 @@
-"""
-Contains node visitors for the AST of a command to build itself
-"""
-
+""" Contains node visitors for the AST of a command to build itself """ 
 import logging
 
 if __name__ == "__main__":
@@ -29,6 +26,7 @@ class CommandBuilder_1_12(NodeBuilder):
 
     def __init__(self, cmd_root):
         assert_type(cmd_root, CmdNode)
+        assert CommandBuilder_1_12.in_file_config.finalized
         self.cmd_root = cmd_root
 
     def interpret(self):
@@ -240,7 +238,6 @@ class CommandBuilder_1_12(NodeBuilder):
             advancement_args (list of SelectorAdvancementArgNode objects)
         """
         all_args = (node.default_args, node.score_args, node.tag_args, node.nbt_args, node.advancement_args)
-        # print(all_args)
 
         # requires the tag args to be less than one for length
         if len(node.tag_args) > 1:
@@ -248,10 +245,6 @@ class CommandBuilder_1_12(NodeBuilder):
 
         # note that map returns a generator
         all_built_args = map(lambda x: ",".join(self.iter_build(x)), all_args)
-
-        # result = ",".join(x for x in all_built_args if x)
-        # print(result)
-        # return result
 
         # removes any 0 length strings
         return ",".join(x for x in all_built_args if x)
@@ -262,7 +255,7 @@ class CommandBuilder_1_12(NodeBuilder):
             objective (Token)
             value (IntRangeNode, Token)
         """
-        objective = self.build(node.objective)
+        objective = self.build(node.objective, prefix=True)
         result = []
 
         # checks if the value is an IntRangeNode or a TypedToken.STIRNG with value="*"
@@ -370,10 +363,7 @@ class CommandBuilder_1_12(NodeBuilder):
             namespace (Token or None)
         """
         id_value = self.build(node.id_value)
-        if node.namespace is None:
-            return f"minecraft:{id_value}"
-
-        namespace = self.build(node.namespace)
+        namespace = ("minecraft" if node.namespace is None else self.build(node.namespace))
         return f"{namespace}:{id_value}"
 
     def build_Token(self, token, prefix=False, replacements=None):
@@ -417,3 +407,42 @@ class CommandBuilder_1_12(NodeBuilder):
 class CommandBuilder_1_13(CommandBuilder_1_12):
     def __init__(self, cmd_root):
         super().__init__(self, cmd_root)
+
+    def build_SelectorArgsNode(self, node):
+        """
+        Node Attributes:
+            default_args (list of SelectorDefaultArgNode objects)
+            score_args (list of SelectorScoreArgNode objects)
+            tag_args (list of SelectorTagArgNode objects)
+            nbt_args (list of SelectorNbtArgNode objects)
+            advancement_args (list of SelectorAdvancementArgNode objects)
+        """
+        # note that map returns a generator
+        default_built = ",".join(self.iter_build(node.default_args))
+        score_built = "scores={" + ",".join(self.iter_build(node.score_args)) + "}" if node.score_args else ""
+        tag_built = ",".join(self.iter_build(node.tag_args))
+        nbt_built = "nbt={" + "},nbt={".join(self.iter_build(node.nbt_args)) + "}" if node.nbt_args else ""
+        advancement_built = "advancements={" + ",".join(self.iter_build(node.advancement_args)) + "}" if node.advancement_args else ""
+        all_built_args = (default_built, score_built, tag_built, nbt_built, advancement_built)
+
+        # removes any 0 length strings
+        return ",".join(x for x in all_built_args if x)
+
+    def build_IntRangeNode(self, node):
+        """
+        Note that a range can be a singular number. If so, left_int is the same as right_int
+
+        Node Attributes:
+            min_int (Token or None)
+            max_int (Token or None)
+            args (tuple of 2 strs or None): Contains the argument for the min int and the max int (eg. (rm, r))
+        """
+        # means that max_arg is also not none
+        assert len(node.args) == 0
+
+        # gets each individual min or max selector arg/value pair
+        min_int = ("" if node.min_int is None else self.build(node.min_int))
+        max_int = ("" if node.max_int is None else self.build(node.max_int))
+
+        return f"{min_int}..{max_int}"
+

@@ -12,12 +12,14 @@ Singleton class that contains:
 import logging
 import os.path
 from collections import deque
+from types import MappingProxyType
 
 if __name__ == "__main__":
     import sys
     sys.path.append("..")
     del sys
 
+from fena.assert_utils import assert_type
 from fena.mcfunction import McFunction
 from fena.lexical_token import Token
 
@@ -27,28 +29,19 @@ class InFileConfig:
     Args:
         prefix (str): Any prefix to objectives, teams or tags
         constobj (str): The objective used for scoreboard players operation with a constant value
-        objectives (dict): Holds all properly named objectives and shortcut objectives
-        tags (dict): Holds all properly named tags and shortcut objectives
-            - Note that tags are also defined in nbt data
-        teams (dict): Holds all properly named teams and shortcut objectives
-            - Note that a team can also be defined in nbt data
-                - objectives, tags and teams all map to _name -> prefix.name and prefix.name -> prefix.name
-                - the reason for prefix.name -> prefix.name is for containment tests and
-                  for ensuring all objs/tags/teams can be mapped if contained
         functions (dict): All function shortcuts present in the file
             - Maps any version of the function shortcut to the function path
+        function_conflicts (set): pass
     """
     default_prefix = "fena"
     default_constobj = "g.number"
 
     def __init__(self):
-        self.objectives = {}
-        self.tags = {}
-        self.teams = {}
-        self.functions = {}
-        self.function_conflicts = set()
+        self._functions = {}
+        self._function_conflicts = set()
         self._prefix = None
         self._constobj = None
+        self.finalized = False
     
     def __new__(cls):
         """
@@ -73,8 +66,8 @@ class InFileConfig:
         if self._prefix is not None:
             raise SyntaxError("{}: Cannot set a prefix twice".format(prefix))
 
-        assert isinstance(prefix, Token)
-        assert isinstance(prefix.value, str)
+        assert_type(prefix, Token)
+        assert_type(prefix.value, str)
         self._prefix = prefix.value
 
     @property
@@ -92,9 +85,17 @@ class InFileConfig:
         if self._constobj is not None:
             raise SyntaxError("{}: Cannot set a constobj twice".format(constobj))
 
-        assert isinstance(constobj, Token)
-        assert isinstance(constobj.value, str)
+        assert_type(constobj, Token)
+        assert_type(constobj.value, str)
         self._constobj = constobj.value
+
+    @property
+    def functions(self):
+        return self._functions
+
+    @property
+    def function_conflicts(self):
+        return self._function_conflicts
 
     def add_function(self, mcfunction):
         """
@@ -103,7 +104,7 @@ class InFileConfig:
         Args:
             mcfunction (McFunction)
         """
-        assert isinstance(mcfunction, McFunction)
+        assert_type(mcfunction, McFunction)
         full_path = mcfunction.full_path
 
         # strips away ".mcfunction"
@@ -129,12 +130,12 @@ class InFileConfig:
 
         # updates the functions dictionary to map the entire list of shortcuts to the mcfunction_path string
         # TODO use function_conflicts 
-        self.functions.update(dict.fromkeys(shortcuts, mcfunction_path))
+        self._functions.update(dict.fromkeys(shortcuts, mcfunction_path))
 
     def _get_all_shortcuts(self, directories):
         """
         Args:
-            directories (list of strs): All directories up to but excluding the function folder
+            directories (deque of str objects): All directories up to but excluding the function folder
 
         Returns:
             list: All possible shortcuts to the mcfunction path
@@ -165,17 +166,24 @@ class InFileConfig:
     def finalize(self):
         """
         Sets the prefix and the constobj to their default values if none were found
-        TODO make finalized bool, use types.MappingProxyType, frozenset, and make setters inaccessible
         """
+        assert not self.finalized
+
         # default for prefix is "fena"
-        if self.prefix is None:
-            self.prefix = InFileConfig.default_prefix
-            logging.warning("Using the default prefix of {}".format(InFileConfig.prefix))
+        if self._prefix is None:
+            self._prefix = InFileConfig.default_prefix
+            logging.warning(f"Using the default prefix {self._prefix!r}")
         
         # default for constobj is "g.number"
-        if self.constobj is None:
-            self.prefix = InFileConfig.default_constobj
-            logging.warning("Using the default constobj of {}".format(InFileConfig.constobj))
+        if self._constobj is None:
+            self._constobj = InFileConfig.default_constobj
+            logging.warning(f"Using the default constobj {self._constobj!r}")
+
+        # sets previously mutable types as immutable
+        self._functions = MappingProxyType(self._functions)
+        self._function_conflicts = frozenset(self._function_conflicts)
+
+        self.finalized = True
 
 
 if __name__ == "__main__":

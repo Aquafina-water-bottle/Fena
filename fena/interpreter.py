@@ -6,6 +6,12 @@ if __name__ == "__main__":
 from fena.assert_utils import assert_type
 from fena.parser import Parser
 from fena.node_visitors import NodeVisitor
+from fena.in_file_config import InFileConfig
+
+class GetInFileConfig(NodeVisitor):
+    """
+    Node Visitor specifically to visit only statements and set the in file config
+    """
 
 class Interpreter(NodeVisitor):
     """

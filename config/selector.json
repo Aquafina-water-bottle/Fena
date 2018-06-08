@@ -180,7 +180,7 @@
                 "negation": true
             },
             "name": {
-                "parse_type": "STR",
+                "parse_type": ["STR", "LITERAL_STR"],
                 "group": "negation",
                 "negation": true
             },
