@@ -362,16 +362,19 @@ class Lexer:
             elif self.current_chars_are(DelimiterToken.OPEN_CURLY_BRACKET.value):
                 yield from self.get_curly_bracket_tag()
 
+            elif self.current_chars_are(DelimiterToken.OPEN_SQUARE_BRACKET.value):
+                yield from self.get_block_states()
+
             # elif self.current_chars_are(DelimiterToken.QUOTE.value):
             #     yield self.get_literal_string()
 
-            elif self.get_char() in TokenValues.get(DelimiterToken):
-                yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
             elif self.get_chars(2) in TokenValues.get(DelimiterToken):
                 yield self.create_new_token(DelimiterToken(self.get_chars(2)), advance=True)
+            elif self.get_char() in TokenValues.get(DelimiterToken) - {"="}:
+                yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
 
             else:
-                yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
+                yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken) - {"="})
 
     def get_selector(self):
         """
@@ -546,13 +549,24 @@ class Lexer:
                 yield self.get_literal_string()
             elif self.get_char().isdigit() or self.get_char() == "-":
                 yield self.get_number()
-            elif self.get_char().isalpha():
+            elif self.get_char().isalpha() or self.get_char() in "_.":
                 yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
             else:
                 self.error(f"Invalid character {self.get_char()!r} inside tag")
 
         # gets the ending bracket token
         yield self.create_new_token(end_type, advance=True)
+
+    def get_block_states(self):
+        """
+        Hack to not separate "=" with an operator such as "+="
+        """
+        yield from self.get_curly_bracket_tag(array=True)
+        # yield self.create_new_token(DelimiterToken.OPEN_SQUARE_BRACKET, advance=True)
+        # while not self.current_chars_are(DelimiterToken.CLOSE_SQUARE_BRACKET.value):
+        #     if 
+        # yield self.create_new_token(DelimiterToken.CLOSE_SQUARE_BRACKET, advance=True)
+        # pass
 
 if __name__ == "__main__":
     # import timeit
@@ -575,5 +589,9 @@ if __name__ == "__main__":
     #     print(repr(token))
     #     logging.debug(repr(token))
 
-    lexer = Lexer("_pl")
-    print(lexer.get_until_space())
+    # lexer = Lexer("_pl")
+    # print(lexer.get_until_space())
+    # lexer = Lexer("@s _ti += players _ti2")
+    lexer = Lexer("setblock _ti <= players _ti2")
+    for token in lexer.get_command():
+        print(repr(token))

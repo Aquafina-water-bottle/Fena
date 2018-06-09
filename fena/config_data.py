@@ -1,3 +1,10 @@
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+    import fena.logging_setup as logging_setup
+
 import os
 import json
 import logging
@@ -28,6 +35,9 @@ class ConfigData:
         selector_argument_details (dict): maps each selector argument to the parse type and any other details
             - Uses the command json parse type
 
+        scoreboard_math (dict)
+        scoreboard_special (dict)
+
         blocks (list of strs)
         command_names (list of str objects): All possible command names
         bossbar_get (list of str objects)
@@ -52,6 +62,9 @@ class ConfigData:
             self.selector_arguments = options["selector_arguments"]
             self.selector_replacements = options["selector_replacements"]
             self.selector_argument_details = options["selector_argument_details"]
+
+            self.scoreboard_math = options["scoreboard_math"]
+            self.scoreboard_special = options["scoreboard_special"]
 
             self.blocks = options["blocks"]
             self.bossbar_set = options["bossbar_set"]
@@ -149,8 +162,9 @@ def _get_json_config_data(version):
         command_names.json
         effects.json
         entities.json
-        selector.json
         items.json
+        scoreboard.json
+        selector.json
         team_options.json
 
     Returns:
@@ -158,7 +172,7 @@ def _get_json_config_data(version):
     """
     # result for all files
     json_options = {}
-    option_names = ("blocks", "bossbar", "command_names", "effects", "entities", "items", "selector", "team_options")
+    option_names = ("blocks", "bossbar", "command_names", "effects", "entities", "items", "selector", "scoreboard", "team_options")
 
     for option_name in option_names:
         file_name = f"{option_name}.json"
@@ -241,10 +255,11 @@ def get_all_data(version=None):
     json_options = _get_json_config_data(version)
 
     selector_json_args = {"selector_variable_specifiers", "selector_arguments", "selector_replacements", "selector_argument_details"}
+    scoreboard_json_args = {"scoreboard_math", "scoreboard_special"}
     general_json_args = {"blocks", "command_names", "effects", "entities", "items", "team_options"}
-    bossbar_json_args  = {"bossbar_set", "bossbar_get"}
+    bossbar_json_args = {"bossbar_set", "bossbar_get"}
 
-    all_json_args = (selector_json_args | general_json_args | bossbar_json_args)
+    all_json_args = (selector_json_args | scoreboard_json_args | general_json_args | bossbar_json_args)
     _validate_options(json_options, all_json_args)
 
     # ensures that this is the first instance of the ConfigData object

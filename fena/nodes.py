@@ -406,19 +406,22 @@ class ScoreboardCmdMathValueNode(MainCmdNode):
         objective (Token)
         operator (Token)
         value (Token)
+        nbt (NbtObjectNode or None)
     """
-    def __init__(self, target, objective, operator, value):
+    def __init__(self, target, objective, operator, value, nbt=None):
         assert_type(target, SelectorNode, Token)
         assert_type(objective, Token)
         assert_type(operator, Token)
         assert_type(value, Token)
+        assert_type(nbt, NbtObjectNode, optional=True)
 
         self.target = target
         self.objective = objective
         self.operator = operator
         self.value = value
+        self.nbt = nbt
 
-class ScoreboardCmdSpecialNode(CmdNode):
+class ScoreboardCmdSpecialNode(MainCmdNode):
     """
     Args:
         target (SelectorNode or Token)
@@ -797,7 +800,7 @@ class NbtObjectNode(NbtNode):
         mappings (list of NbtMapNode objects)
     """
     def __init__(self, mappings):
-        assert_list_types(mappings, NbtMapNode)
+        assert_list_types(mappings, NbtMapNode, duplicate_key=lambda x: x.arg.value)
         self.mappings = mappings
 
 class NbtMapNode(NbtNode):

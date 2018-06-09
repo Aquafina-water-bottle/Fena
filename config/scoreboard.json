@@ -1,6 +1,6 @@
 {
     "1.12": {
-        "math": {
+        "scoreboard_math": {
             "parse_type": "VALUES",
             "value_replace": {
                 "=": "=",
@@ -16,7 +16,7 @@
             "values": ["=", "<", ">", "><", "+=", "-=", "*=", "/=", "%="]
         },
 
-        "special": {
+        "scoreboard_special": {
             "parse_type": "VALUES",
             "value_replace": {
                 "enable": "enable",
@@ -27,7 +27,7 @@
     },
 
     "1.13": {
-        "math": {
+        "scoreboard_math": {
             "parse_type": "VALUES",
             "value_replace": {
                 "=": "=",
@@ -43,7 +43,7 @@
             "values": ["=", "<", ">", "><", "+=", "-=", "*=", "/=", "%="]
         },
 
-        "special": {
+        "scoreboard_special": {
             "parse_type": "VALUES",
             "value_replace": {
                 "enable": "enable",

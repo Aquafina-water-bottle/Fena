@@ -247,12 +247,12 @@ class Parser:
 
     config_data = ConfigData()
 
-    nbt_int_ends = frozenset({"b", "s", "L"})
-    nbt_number_ends = frozenset({"b", "s", "L", "f", "d"})
-    nbt_array_start = frozenset({"I", "B", "L"})
-    sb_special_operators = frozenset({"enable", "reset", "<-"})
-    sb_math_operators = frozenset({"=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="})
-    statement_keywords = frozenset({"mfunc", "folder", "prefix", "constobj"})
+    # nbt_int_ends = frozenset({"b", "s", "L"})
+    # nbt_number_ends = frozenset({"b", "s", "L", "f", "d"})
+    # nbt_array_start = frozenset({"I", "B", "L"})
+    # sb_special_operators = frozenset({"enable", "reset", "<-"})
+    # sb_math_operators = frozenset({"=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="})
+    # statement_keywords = frozenset({"mfunc", "folder", "prefix", "constobj"})
     execute_keywords = frozenset({"as", "pos", "at", "facing", "ast", "if", "ifnot", "unless", "result", "success"})
 
     json_parse_options = {
@@ -752,7 +752,7 @@ class Parser:
             execute_node = self.execute_cmd()
             command_segment_nodes.append(execute_node)
 
-        if not self.current_token.matches(WhitespaceToken.NEWLINE):
+        if not self.current_token.matches_any_of(WhitespaceToken.NEWLINE, WhitespaceToken.EOF):
             # guaranteed to be a scoreboard shortcut command with a selector
             if self.current_token.matches(DelimiterToken.AT):
                 sb_cmd_node = self.sb_cmd()
@@ -946,7 +946,6 @@ class Parser:
         else:
             raise NotImplementedError("1.13")
             
-
     def sb_cmd(self, begin_target=None):
         """
         sb_cmd ::= [sb_players_math, sb_players_special]
@@ -958,10 +957,10 @@ class Parser:
         if begin_target is None:
             begin_target = self.target()
 
-        if self.current_token.value in Parser.sb_special_operators:
-            self.sb_players_math(begin_target=begin_target)
-        else:
-            self.sb_players_special(target=begin_target)
+        if (self.current_token.value in Parser.config_data.scoreboard_special["values"] or
+                self.current_token.value in Parser.config_data.scoreboard_special["value_replace"]):
+            return self.sb_players_special(begin_target=begin_target)
+        return self.sb_players_math(begin_target=begin_target)
 
     def sb_players_math(self, begin_target, begin_objective=None):
         """
@@ -974,10 +973,11 @@ class Parser:
 
         if begin_objective is None:
             begin_objective = self.eat(TypedToken.STRING)
-        operator = self.eat(TypedToken.STRING, values=Parser.sb_math_operators)
+        # operator = self.eat(TypedToken.STRING, values=Parser.sb_math_operators)
+        operator = self.json_parse_arg_value(Parser.config_data.scoreboard_math)
 
         if self.current_token.matches(DelimiterToken.AT):
-            end_target = self.selector
+            end_target = self.selector()
         else:
             # target might be a signed int if it is a string
             end_target = self.eat(TypedToken.STRING)
@@ -990,19 +990,22 @@ class Parser:
 
         # checks whether the target is just a signed int, meaning the target is just a constant number
         if isinstance(end_target, Token) and is_signed_int(end_target.value):
-            return ScoreboardCmdMathValueNode(begin_target, begin_objective, operator, end_target)
+            # allows nbt if possible
+            nbt = (self.nbt() if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET) else None)
+            return ScoreboardCmdMathValueNode(begin_target, begin_objective, operator, end_target, nbt)
+
         return ScoreboardCmdMathNode(begin_target, begin_objective, operator, end_target)
 
-
-    def sb_players_special(self, target):
+    def sb_players_special(self, begin_target):
         """
         sb_players_special ::= target && ["enable", "reset", "<-"] && STR
         """
 
-        sub_cmd = self.eat(TypedToken.STRING, values=Parser.sb_special_operators)
+        # sub_cmd = self.eat(TypedToken.STRING, values=Parser.sb_special_operators)
+        sub_cmd = self.json_parse_arg_value(Parser.config_data.scoreboard_special)
         objective = self.eat(TypedToken.STRING)
 
-        return ScoreboardCmdSpecialNode(target, sub_cmd, objective)
+        return ScoreboardCmdSpecialNode(begin_target, sub_cmd, objective)
 
     def simple_cmd(self):
         """
@@ -1031,8 +1034,12 @@ class Parser:
 
         # if the second token exists and it is a string, it might still be a scoreboard shortcut
         if self.current_token.matches(TypedToken.STRING):
+            if (self.current_token.value in Parser.config_data.scoreboard_special["values"] or
+                    self.current_token.value in Parser.config_data.scoreboard_special["value_replace"]):
+                return self.sb_players_special(begin_target=command_name_token)
             second_token = self.eat(TypedToken.STRING)
-            if self.current_token.value in Parser.sb_math_operators:
+            if (self.current_token.value in Parser.config_data.scoreboard_math["values"] or
+                    self.current_token.value in Parser.config_data.scoreboard_math["value_replace"]):
                 return self.sb_players_math(begin_target=command_name_token, begin_objective=second_token)
 
             nodes = [command_name_token, second_token]
@@ -1040,7 +1047,7 @@ class Parser:
             nodes = [command_name_token]
 
         # STR, selector, nbt, json
-        while not self.current_token.matches(WhitespaceToken.NEWLINE):
+        while not self.current_token.matches_any_of(WhitespaceToken.NEWLINE, WhitespaceToken.EOF):
             if self.current_token.matches(DelimiterToken.AT):
                 selector_node = self.selector()
                 nodes.append(selector_node)
@@ -2030,21 +2037,11 @@ if __name__ == "__main__":
         test_json(r'{"asdf', expect_error=True)
         test_json(r'{"asdf":1}a', expect_error=True)
 
-    def test_selector(selector, expect_error=False):
-        test(selector, "get_selector", "selector", expect_error)
-
-    def tests_selector():
-        test_selector("@a")
-        test_selector("@p")
-        test_selector("@3", expect_error=True)
-        test_selector("@e[type=armor_stand]")
-        test_selector("@e[type=armor_stand,c=1]")
-
     # tests_bossbar()
     # tests_json()
     # tests_selector()
     # test_json(r'{"nou":[1, 2,]}', expect_error=True)
-    test(r'{HurtByTimestamp: 0, Attributes: [{Base: 1.0E7d, Name: "generic.maxHealth"}, {Base: 0.0d, Name: "generic.knockbackResistance"}, {Base: 0.25d, Name: "generic.movementSpeed"}, {Base: 0.0d, Name: "generic.armor"}, {Base: 0.0d, Name: "generic.armorToughness"}, {Base: 16.0d, Modifiers: [{UUIDMost: 5954586636154850795L, UUIDLeast: -5021346310275855673L, Amount: -0.012159221696308982d, Operation: 1, Name: "Random spawn bonus"}], Name: "generic.followRange"}], Invulnerable: 0b, FallFlying: 0b, ForcedAge: 0, PortalCooldown: 0, AbsorptionAmount: 0.0f, Saddle: 0b, FallDistance: 0.0f, InLove: 0, DeathTime: 0s, HandDropChances: [0.085f, 0.085f], PersistenceRequired: 0b, Age: 0, Motion: [0.0d, -0.0784000015258789d, 0.0d], Leashed: 0b, UUIDLeast: -8543204344868739349L, Health: 79.2f, LeftHanded: 0b, Air: 300s, OnGround: 1b, Dimension: 0, Rotation: [214.95569f, 0.0f], HandItems: [{}, {}], ArmorDropChances: [0.085f, 0.085f, 0.085f, 0.085f], UUIDMost: 900863262324051519L, Pos: [724.3034218419358d, 4.0d, 280.78117600802693d], Fire: -1s, ArmorItems: [{}, {}, {}, {}], CanPickUpLoot: 0b, HurtTime: 0s}', "get_curly_bracket_tag", "nbt")
+    # test(r'{HurtByTimestamp: 0, Attributes: [{Base: 1.0E7d, Name: "generic.maxHealth"}, {Base: 0.0d, Name: "generic.knockbackResistance"}, {Base: 0.25d, Name: "generic.movementSpeed"}, {Base: 0.0d, Name: "generic.armor"}, {Base: 0.0d, Name: "generic.armorToughness"}, {Base: 16.0d, Modifiers: [{UUIDMost: 5954586636154850795L, UUIDLeast: -5021346310275855673L, Amount: -0.012159221696308982d, Operation: 1, Name: "Random spawn bonus"}], Name: "generic.followRange"}], Invulnerable: 0b, FallFlying: 0b, ForcedAge: 0, PortalCooldown: 0, AbsorptionAmount: 0.0f, Saddle: 0b, FallDistance: 0.0f, InLove: 0, DeathTime: 0s, HandDropChances: [0.085f, 0.085f], PersistenceRequired: 0b, Age: 0, Motion: [0.0d, -0.0784000015258789d, 0.0d], Leashed: 0b, UUIDLeast: -8543204344868739349L, Health: 79.2f, LeftHanded: 0b, Air: 300s, OnGround: 1b, Dimension: 0, Rotation: [214.95569f, 0.0f], HandItems: [{}, {}], ArmorDropChances: [0.085f, 0.085f, 0.085f, 0.085f], UUIDMost: 900863262324051519L, Pos: [724.3034218419358d, 4.0d, 280.78117600802693d], Fire: -1s, ArmorItems: [{}, {}, {}, {}], CanPickUpLoot: 0b, HurtTime: 0s}', "get_curly_bracket_tag", "nbt")
 
     # import doctest
     # doctest.testmod()

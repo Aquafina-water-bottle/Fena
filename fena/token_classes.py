@@ -12,34 +12,6 @@ class TokenValues:
 
         return TokenValues.cache[token_class]
 
-# class TokenTypes:
-#     cache = {}
-#     
-#     @staticmethod
-#     def get(*token_classes):
-#         total_token_types = frozenset()
-#         for token_class in token_classes:
-#             if token_class not in TokenValues.cache:
-#                 values = frozenset(token_class)
-#                 TokenTypes.cache[token_class] = values
-# 
-#             total_token_types |= TokenTypes.cache[token_class]
-# 
-#         return total_token_types
-
-# def get_token_types(token_classes):
-#     """
-#     Args:
-#         token_classes (Enum)
-# 
-#     Returns:
-#         frozenset: The set containing all tokens
-#     """
-#     token_type_set = set()
-#     for token_type in token_classes:
-#         token_type_set |= set(token_type)
-#     return frozenset(token_type_set)
-
 class TokenClass:
     pass
 

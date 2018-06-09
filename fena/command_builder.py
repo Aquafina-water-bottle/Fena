@@ -29,7 +29,7 @@ class CommandBuilder_1_12(NodeBuilder):
 
     def __init__(self, cmd_root):
         assert_type(cmd_root, CmdNode)
-        assert CommandBuilder_1_12.in_file_config.finalized
+        assert self.in_file_config.finalized
         self.cmd_root = cmd_root
 
     def interpret(self):
@@ -85,46 +85,64 @@ class CommandBuilder_1_12(NodeBuilder):
 
     def build_ScoreboardCmdMathNode(self, node):
         """
-        Args:
-            node (ScoreboardCmdMathNode)
+        Node Attributes:
+            target (SelectorNode or Token)
+            objective (Token)
+            operator (Token)
+            target_get (SelectorNode or Token)
+            objective_get (Token or None)
         """
-        begin_target = self.build(node.begin_target)
-        begin_objective = self.build(node.begin_objective)
+        target = self.build(node.target)
+        objective = self.build(node.objective, prefix=True)
         operator = self.build(node.operator)
-        end_target = self.build(node.end_target)
-        end_objective = self.build(node.end_objective)
-        return f"scoreboard players operation {begin_target} {begin_objective} {operator} {end_target} {end_objective}"
+        target_get = self.build(node.target_get)
+        objective_get = self.build(node.objective_get, prefix=True)
+        return f"scoreboard players operation {target} {objective} {operator} {target_get} {objective_get}"
 
     def build_ScoreboardCmdMathValueNode(self, node):
         """
-        Args:
-            node (ScoreboardCmdMathValueNode)
+        Node Attributes:
+            target (SelectorNode or Token)
+            objective (Token)
+            operator (Token)
+            value (Token)
+            nbt (NbtObjectNode)
         """
         target = self.build(node.target)
-        objective = self.build(node.objective)
+        objective = self.build(node.objective, prefix=True)
         operator = self.build(node.operator)
         value = self.build(node.value)
+        nbt = "" if node.nbt is None else self.build(node.nbt)
+
+        # simply cannot have nbt data in 1.13
+        if node.nbt is not None and self.config_data.version == "1.13":
+            raise SyntaxError(f"NBT arguments are not allowed in 1.13: {node.nbt}")
+
+        # simple command that can contain nbt
+        operation_dict = {"=": "set", "+=": "add", "-=": "remove"}
+        if operator in operation_dict:
+            operation = operation_dict[operator]
+            if nbt:
+                return f"scoreboard players {operation} {target} {objective} {value} {nbt}"
+            return f"scoreboard players {operation} {target} {objective} {value}"
+
+        # otherwise, scoreboard players operation
+        if node.nbt is not None:
+            raise SyntaxError(f"NBT arguments are not allowed with 'scoreboard players operation' {node.nbt}")
+
         constobj = self.in_file_config.constobj
 
-        if operator == "=":
-            return f"scoreboard players set {target} {objective} {value}"
-        if operator == "+=":
-            return f"scoreboard players add {target} {objective} {value}"
-        if operator == "-=":
-            return f"scoreboard players add {target} {objective} {value}"
-        if operator in ("*=", "/=", "%="):
+        # <= sets the target to the score if and only if the target has a larger score compared to the value
+        # therefore making the target score less than or equal to the value
+        # >= sets the target to the score if and only if the target has a smaller score compared to the value
+        # therefore making the target score greater than or equal to the value
+
+        if operator in ("*=", "/=", "%=", "<", ">"):
             return f"scoreboard players operation {target} {objective} {operator} {value} {constobj}"
-        if operator == "<=":
-            # sets the target to the score if and only if the target has a larger score compared to the value
-            # therefore making the target score less than or equal to the value
-            return f"scoreboard players operation {target} {objective} < {value} {constobj}"
-        if operator == ">=":
-            # sets the target to the score if and only if the target has a smaller score compared to the value
-            # therefore making the target score greater than or equal to the value
-            return f"scoreboard players operation {target} {objective} > {value} {constobj}"
-        if operator in ("swap"):
+
+        if operator == "><":
             # no reason to swap with a constant value
-            raise SyntaxError("Cannot swap with a constant value")
+            raise SyntaxError(f"Cannot swap with a constant value in {node.operator}")
 
         raise SyntaxError("Unknown default case")
 
@@ -137,7 +155,7 @@ class CommandBuilder_1_12(NodeBuilder):
         sub_cmd = self.build(node.sub_cmd)
         target = self.build(node.target)
         objective = self.build(node.objective, prefix=True)
-        return f"scoreboard players {sub_cmd} {target} {objective}"
+        return f"scoreboard players {sub_cmd} {objective} {target}"
 
     def build_FunctionCmdNode(self, node):
         """

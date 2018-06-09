@@ -14,13 +14,13 @@
         {"text":"]","color":"gray"},
         {"text":": "},
         {"text":"The correct combo is ","color":"green"},
-        {"selector":"@e[type=armor_stand,score_MMrn_min=3,score_MMrn=3,tag=MMCorrect1]"},
+        {"selector":"@e[type=armor_stand,MMrn=3,MMCorrect1]"},
         {"text":", ","color":"green"},
-        {"selector":"@e[type=armor_stand,score_MMrn_min=3,score_MMrn=3,tag=MMCorrect2]"},
+        {"selector":"@e[type=armor_stand,MMrn=3,MMCorrect2]"},
         {"text":", ","color":"green"},
-        {"selector":"@e[type=armor_stand,score_MMrn_min=3,score_MMrn=3,tag=MMCorrect3]"},
+        {"selector":"@e[type=armor_stand,MMrn=3,MMCorrect3]"},
         {"text":" and ","color":"green"},
-        {"selector":"@e[type=armor_stand,score_MMrn_min=3,score_MMrn=3,tag=MMCorrect4]"},
+        {"selector":"@e[type=armor_stand,MMrn=3,MMCorrect4]"},
         {"text":"!","color":"green"}]}
 
 !mfunc execute_test

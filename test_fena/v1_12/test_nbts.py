@@ -68,3 +68,26 @@ def test_nbts():
             }
         }''',
         r'{LifeTime:20,FireworksItem:{id:"minecraft:fireworks",Count:1b,tag:{Fireworks:{Explosions:[{Type:0,Trail:0,Colors:[I;41728,65280],Flicker:1,FadeColors:[I;2883328]}]}},Damage:0s}}')
+
+    # using byte and long int arrays
+    test_nbt(r'{Bytes:[B;1b,3b,5b],Longs:[L;1L,3L,5L]}')
+
+    test_nbt(r'{}')
+
+    test_nbt(r'{', expect_error=True)
+    test_nbt(r'}', expect_error=True)
+    test_nbt(r'{"test":1}', expect_error=True)
+    test_nbt(r'{test:1,}', expect_error=True)
+    test_nbt(r'{,test:2}', expect_error=True)
+    test_nbt(r'{test:1, test:2, test:3}', expect_error=True)
+    test_nbt(r'{test:1, test2:2, test3:3, }', expect_error=True)
+    test_nbt(r'{test:1, test2:2, test3:3{', expect_error=True)
+    test_nbt(r'{test:1 test2:2}', expect_error=True)
+    test_nbt(r'{test:}', expect_error=True)
+    test_nbt(r'{test:somestring}', expect_error=True)
+    test_nbt(r'{test:some string}', expect_error=True)
+    test_nbt(r'nou', expect_error=True)
+    test_nbt(r'{nou}', expect_error=True)
+    test_nbt(r'{nou:1, nou}', expect_error=True)
+    test_nbt(r'{nou:1, []}', expect_error=True)
+    test_nbt(r'{nou:[1, 2,]}', expect_error=True)

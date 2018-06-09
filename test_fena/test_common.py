@@ -73,3 +73,6 @@ def test_json(json, expected=None, **kwargs):
 
 def test_nbt(nbt, expected=None, **kwargs):
     test_builder(nbt, "get_curly_bracket_tag", "nbt", expected=expected, **kwargs)
+
+def test_cmd(cmd, expected=None, **kwargs):
+    test_builder(cmd, "get_command", "command", expected=expected, **kwargs)
