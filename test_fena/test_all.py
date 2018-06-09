@@ -1,3 +1,8 @@
+"""
+The main testing module for fena
+Note that this is named "test_fena" because the "test" module is already taken
+"""
+
 if __name__ == "__main__":
     import sys
     sys.path.append("..")

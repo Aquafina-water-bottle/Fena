@@ -559,14 +559,25 @@ class Lexer:
 
     def get_block_states(self):
         """
-        Hack to not separate "=" with an operator such as "+="
+        Gets the minimal amount of tokens required for a block states area
         """
-        yield from self.get_curly_bracket_tag(array=True)
-        # yield self.create_new_token(DelimiterToken.OPEN_SQUARE_BRACKET, advance=True)
-        # while not self.current_chars_are(DelimiterToken.CLOSE_SQUARE_BRACKET.value):
-        #     if 
-        # yield self.create_new_token(DelimiterToken.CLOSE_SQUARE_BRACKET, advance=True)
-        # pass
+        yield self.create_new_token(DelimiterToken.OPEN_SQUARE_BRACKET, advance=True)
+
+        while not self.current_chars_are(DelimiterToken.CLOSE_SQUARE_BRACKET.value):
+            if self.get_char().isspace() and self.get_char() != WhitespaceToken.NEWLINE.value:
+                self.skip_whitespace()
+                continue
+
+            if self.get_char().isalpha() or self.get_char() == "*":
+                yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
+            elif self.get_char().isdigit() or self.get_char() == "-":
+                yield self.get_number()
+            elif self.get_char() in (DelimiterToken.COMMA.value, DelimiterToken.EQUALS.value):
+                yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
+            else:
+                self.error(f"Invalid character {self.get_char()!r} inside block states")
+                
+        yield self.create_new_token(DelimiterToken.CLOSE_SQUARE_BRACKET, advance=True)
 
 if __name__ == "__main__":
     # import timeit
@@ -592,6 +603,7 @@ if __name__ == "__main__":
     # lexer = Lexer("_pl")
     # print(lexer.get_until_space())
     # lexer = Lexer("@s _ti += players _ti2")
-    lexer = Lexer("setblock _ti <= players _ti2")
+    # lexer = Lexer("setblock _ti <= players _ti2")
+    lexer = Lexer("stonebrick[variant=mossy_stonebrick]")
     for token in lexer.get_command():
         print(repr(token))

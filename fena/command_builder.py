@@ -115,8 +115,7 @@ class CommandBuilder_1_12(NodeBuilder):
         nbt = "" if node.nbt is None else self.build(node.nbt)
 
         # simply cannot have nbt data in 1.13
-        if node.nbt is not None and self.config_data.version == "1.13":
-            raise SyntaxError(f"NBT arguments are not allowed in 1.13: {node.nbt}")
+        assert node.nbt is None or (node.nbt is not None and self.config_data.version == "1.12")
 
         # simple command that can contain nbt
         operation_dict = {"=": "set", "+=": "add", "-=": "remove"}
@@ -142,7 +141,7 @@ class CommandBuilder_1_12(NodeBuilder):
 
         if operator == "><":
             # no reason to swap with a constant value
-            raise SyntaxError(f"Cannot swap with a constant value in {node.operator}")
+            raise SyntaxError(f"Cannot swap with a constant value with operator {node.operator}")
 
         raise SyntaxError("Unknown default case")
 
@@ -544,6 +543,41 @@ class CommandBuilder_1_12(NodeBuilder):
         namespace = ("minecraft" if node.namespace is None else self.build(node.namespace))
         return f"{namespace}:{id_value}"
 
+    def build_BlockNode(self, node):
+        """
+        Node Attributes:
+            block (Token)
+            states (Token or list of BlockStateNode objects or None)
+            nbt (NbtObjectNode or None)
+        """
+        block = self.build(node.block)
+
+        # counts for if node.states is None or an empty list
+        if not node.states:
+            states = "*"
+        elif isinstance(node.states, list):
+            states = self.iter_build(node.states, ",")
+        elif isinstance(node.states, Token):
+            states = self.build(node.states)
+        else:
+            raise SyntaxError("Unexpected default case")
+
+        if node.nbt is None:
+            return f"minecraft:{block} {states}"
+
+        nbt = self.build(node.nbt)
+        return f"minecraft:{block} {states} replace {nbt}"
+
+    def build_BlockStateNode(self, node):
+        """
+        Attributes:
+            arg (Token)
+            value (Token)
+        """
+        arg = self.build(node.arg)
+        value = self.build(node.value)
+        return f"{arg}={value}"
+
     def build_Token(self, token, prefix=False, replacements=None):
         """
         Returns its value with a prefix if avaliable
@@ -708,3 +742,36 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             return min_number
         return f"{min_number}..{max_number}"
 
+    def build_BlockNode(self, node):
+        """
+        Node Attributes:
+            block (Token)
+            states (Token or list of BlockStateNode objects or None)
+            nbt (NbtObjectNode or None)
+        """
+        block = self.build(node.block)
+
+        # just making sure, shis should've been checked at parsing
+        assert not isinstance(node.states, Token)
+
+        # counts for if node.states is None or an empty list
+        if not node.states:
+            states = ""
+        elif isinstance(node.states, list):
+            states = "[" + self.iter_build(node.states, ",") + "]"
+        else:
+            raise SyntaxError("Unexpected default case")
+
+        nbt = "" if node.nbt is None else self.build(node.nbt)
+
+        return f"minecraft:{block}{states}{nbt}"
+
+    def build_BlockStateNode(self, node):
+        """
+        Attributes:
+            arg (Token)
+            value (Token)
+        """
+        arg = self.build(node.arg)
+        value = self.build(node.value)
+        return f"{arg}={value}"

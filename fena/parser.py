@@ -24,7 +24,7 @@ from fena.nodes import SelectorDefaultArgValueNode, SelectorDefaultGroupArgValue
 from fena.nodes import JsonObjectNode, JsonMapNode, JsonArrayNode
 from fena.nodes import NbtObjectNode, NbtMapNode, NbtArrayNode, NbtIntegerNode, NbtFloatNode
 from fena.nodes import BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode
-from fena.nodes import Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, NamespaceIdNode
+from fena.nodes import Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, BlockStateNode, NamespaceIdNode
 from fena.node_visitors import NodeBuilder, NodeVisitor
 from fena.coord_utils import is_coord_token, are_coords
 from fena.config_data import ConfigData
@@ -111,7 +111,7 @@ exec_sub_result_arg_bossbar ::= STR && ["max", "value"]
 exec_sub_success_arg ::= exec_sub_result_arg 
 
 sb_cmd ::= [sb_players_math, sb_players_special]
-sb_players_math ::= target && STR && ["=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="] && (signed_int | target && (STR)?)
+sb_players_math ::= target && STR && ["=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="] && (signed_int && (nbt)? | target && (STR)?)
 sb_players_special ::= target && ["enable", "reset", "<-"] && STR
 
 bossbar_cmd ::= "bossbar" && [bossbar_add, bossbar_remove, bossbar_get, bossbar_set]
@@ -220,7 +220,7 @@ coord ::= ("^", "~")? & [signed_int, signed_float]
 block ::= block_id & ("[" & (block_states)? & "]")? & (nbt)?
 block_id ::= ("minecraft" && ":")? && block_type
 # block_type is defined under blocks.json
-block_states ::= (block_state)? | (block_state & ("," & block_state)*)?
+block_states ::= ((block_state)? | (block_state & ("," & block_state)*)?) | INT | "*"
 block_state ::= STR && "=" && STR
 
 data_type ::= ["byte", "short", "int", "long", "float", "double"]
@@ -964,7 +964,7 @@ class Parser:
 
     def sb_players_math(self, begin_target, begin_objective=None):
         """
-        sb_players_math ::= target && STR && ["=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="] && (signed_int | target && (STR)?)
+        sb_players_math ::= target && STR && ["=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="] && (signed_int && (nbt)? | target && (STR)?)
 
         Returns:
             ScoreboardCmdMathNode: pass
@@ -991,10 +991,18 @@ class Parser:
         # checks whether the target is just a signed int, meaning the target is just a constant number
         if isinstance(end_target, Token) and is_signed_int(end_target.value):
             # allows nbt if possible
-            nbt = (self.nbt() if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET) else None)
-            return ScoreboardCmdMathValueNode(begin_target, begin_objective, operator, end_target, nbt)
+            if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
+                if Parser.config_data.version != "1.12":
+                    # error because nbt is only allowed in 1.12 with this type of command
+                    self.error(f"Cannot have an nbt tag after a scoreboard players command in 1.13 for {self.current_token}")
+                nbt = self.nbt()
+                return ScoreboardCmdMathValueNode(begin_target, begin_objective, operator, end_target, nbt)
 
-        return ScoreboardCmdMathNode(begin_target, begin_objective, operator, end_target)
+            # regular value node without nbt
+            return ScoreboardCmdMathValueNode(begin_target, begin_objective, operator, end_target)
+
+        # scoreboard players operation node
+        return ScoreboardCmdMathNode(begin_target, begin_objective, operator, end_target, nbt)
 
     def sb_players_special(self, begin_target):
         """
@@ -1142,7 +1150,7 @@ class Parser:
         data_merge ::= entity_vec3 && "+" && nbt
         data_remove ::= entity_vec3 && "-" && STR
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def effect_cmd(self):
         """
@@ -1151,13 +1159,13 @@ class Parser:
         effect_give ::= selector && "+" && effect_id && (pos_int && ((nonneg_int)? && ["true", "false"]? )? )?
         # effect_id are defined under effects_version.txt
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def function_cmd(self):
         """
         function_cmd ::= "function" && STR
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def tag_cmd(self):
         """
@@ -1165,7 +1173,7 @@ class Parser:
         tag_add ::= selector && "+" && STR
         tag_remove ::= selector && "-" && STR
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def team_cmd(self):
         """
@@ -1179,7 +1187,7 @@ class Parser:
         # team_option_arg, team_option_arg_value are defined in the team_options_version.json
         team_remove ::= "remove" && STR
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def xp_cmd(self):
         """
@@ -1187,7 +1195,7 @@ class Parser:
         xp_math ::= ["=", "+", "-"] && nonneg_int && ["points", "levels"]?
         xp_get ::= "<-" && ["points", "levels"]
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def selector(self):
         """
@@ -1655,11 +1663,11 @@ class Parser:
             return self.json_array()
         self.error("Unexpected default case")
 
-    def json_number(self):
-        """
-        json_number ::= ("-")? && INT && ("." && INT)? && (["e", "E"] && ["+", "-"] && INT)?
-        """
-        raise NotImplementedError
+    # def json_number(self):
+    #     """
+    #     json_number ::= ("-")? && INT && ("." && INT)? && (["e", "E"] && ["+", "-"] && INT)?
+    #     """
+    #     raise NotImplementedError()
 
     def nonneg_int(self):
         """
@@ -1886,16 +1894,12 @@ class Parser:
     def block(self):
         """
         block ::= block_id & ("[" & (block_states)? & "]")? & (nbt)?
-        block_id ::= ("minecraft" && ":")? && block_type
-        # block_type is defined under blocks.json
 
         Returns:
             BlockNode
         """
-        if self.current_token.value not in Parser.config_data.blocks:
-            self.error("Expected a block inside the if argument")
-
-        block_type = self.eat(TypedToken.STRING)
+        # block_type = self.eat(TypedToken.STRING)
+        block_id = self.block_id()
 
         # checks for block states
         if self.current_token.matches(DelimiterToken.OPEN_SQUARE_BRACKET):
@@ -1910,31 +1914,69 @@ class Parser:
         else:
             nbt = None
 
-        return BlockNode(block_type, block_states, nbt)
+        return BlockNode(block_id, block_states, nbt)
 
     def block_id(self):
         """
         block_id ::= ("minecraft" && ":")? && block_type
         """
-        raise NotImplementedError
+        if self.current_token.matches(TypedToken.STRING, value="minecraft"):
+            self.advance()
+            self.eat(DelimiterToken.COLON)
+
+        return self.block_type()
 
     def block_type(self):
         """
         # block_type is defined under blocks.json
         """
-        raise NotImplementedError
+        if self.current_token.value not in Parser.config_data.blocks:
+            self.error("Expected a block proper block type")
+
+        return self.eat(TypedToken.STRING, values=Parser.config_data.blocks)
 
     def block_states(self):
         """
         block_states ::= (block_state)? | (block_state & ("," & block_state)*)?
         """
-        raise NotImplementedError
+        # allows either an integer or "*" if the version is 1.12
+        if self.current_token.matches(TypedToken.INT):
+        # if self.current_token.matches(TypedToken.STRING) and is_signed_int(self.current_token.value):
+            if Parser.config_data.version != "1.12":
+                self.error(f"Cannot have an integer in place of the block states unless it is 1.12")
+            return self.advance()
+        
+        if self.current_token.matches(TypedToken.STRING, value="*"):
+            if Parser.config_data.version != "1.12":
+                self.error(f"Cannot have '*' in place of the block states unless it is 1.12")
+            return self.advance()
+
+        # otherwise, list
+        block_states = []
+        if not self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
+            while self.current_token.matches(TypedToken.STRING):
+                block_state = self.block_state()
+                block_states.append(block_state)
+
+                if self.current_token.matches(DelimiterToken.COMMA):
+                    self.advance()
+                elif self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
+                    break
+                else:
+                    self.error("Expected a comma or closing square bracket")
+            else:
+                self.error("Expected a block state")
+
+        return block_states
 
     def block_state(self):
         """
         block_state ::= STR && "=" && STR
         """
-        raise NotImplementedError
+        arg = self.eat(TypedToken.STRING)
+        self.eat(DelimiterToken.EQUALS)
+        value = self.eat(TypedToken.STRING)
+        return BlockStateNode(arg, value)
 
     def namespace_id(self):
         """

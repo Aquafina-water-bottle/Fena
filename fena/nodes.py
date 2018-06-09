@@ -935,12 +935,12 @@ class BlockNode(CmdNode):
     """
     Attributes:
         block (Token)
-        states (list of BlockStateNode objects)
+        states (Token or list of BlockStateNode objects or None)
         nbt (NbtObjectNode or None)
     """
     def __init__(self, block, states, nbt=None):
         assert_type(block, Token)
-        assert_list_types(states, BlockStateNode)
+        assert_list_types(states, BlockStateNode) if isinstance(states, list) else assert_type(states, Token, optional=True)
         assert_type(nbt, NbtObjectNode, optional=True)
         self.block = block
         self.states = states
@@ -957,7 +957,6 @@ class BlockStateNode(CmdNode):
         assert_type(value, Token)
         self.arg = arg
         self.value = value
-
 
 class Vec2Node(CmdNode):
     """

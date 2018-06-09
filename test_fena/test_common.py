@@ -63,7 +63,8 @@ def test_builder(string, lexer_method, parser_method, expected=None, expect_erro
             raise RuntimeError(f"""
             Input:    {string!r}
             Expected: {expected!r}
-            Output:   {output!r}""")
+            Output:   {output!r}
+            AST:      {ast!r}""")
 
 def test_selector(selector, expected=None, **kwargs):
     test_builder(selector, "get_selector", "selector", expected=expected, **kwargs)
@@ -76,3 +77,6 @@ def test_nbt(nbt, expected=None, **kwargs):
 
 def test_cmd(cmd, expected=None, **kwargs):
     test_builder(cmd, "get_command", "command", expected=expected, **kwargs)
+
+def test_block(block, expected=None, **kwargs):
+    test_builder(block, "get_command", "block", expected=expected, **kwargs)
