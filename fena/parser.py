@@ -1847,9 +1847,13 @@ class Parser:
         Returns:
             Vec2Node
         """
-        coords_node = self._coords(3)
-        assert_type(coords_node, Vec3Node)
-        return coords_node
+        coord1 = self.coord()
+        coord2 = self.coord()
+        
+        if not are_coords(coord1, coord2):
+            self.error(f"Expected a proper coord type given all coordinates ({coord1} {coord2})")
+
+        return Vec2Node(coord1, coord2)
 
     def vec3(self):
         """
@@ -1858,38 +1862,51 @@ class Parser:
         Returns:
             Vec3Node
         """
-        coords_node = self._coords(3)
-        assert_type(coords_node, Vec3Node)
-        return coords_node
+        coord1 = self.coord()
+        coord2 = self.coord()
+        coord3 = self.coord()
+        
+        if not are_coords(coord1, coord2, coord3):
+            self.error(f"Expected a proper coord type given all coordinates ({coord1} {coord2} {coord3})")
 
-    def _coords(self, coord_num):
+        return Vec3Node(coord1, coord2, coord3)
+
+    def coord(self):
         """
-        Returns:
-            Vec2Node or Vec3Node
+        coord ::= ("^", "~")? & [signed_int, signed_float]
         """
-        assert coord_num in (2, 3)
+        if is_coord_token(self.current_token):
+            return self.eat(TypedToken.STRING)
+        self.error("Expected a coordinate token")
 
-        coords = []
-        for _ in range(coord_num):
-            if is_coord_token(self.current_token):
-                coord = self.eat(TypedToken.STRING)
-                coords.append(coord)
-            else:
-                self.error("Expected a coord token")
+    # def _coords(self, coord_num):
+    #     """
+    #     Returns:
+    #         Vec2Node or Vec3Node
+    #     """
+    #     assert coord_num in (2, 3)
 
-        if not are_coords(*coords):
-            coords_str = " ".join(str(c) for c in coords)
-            self.error(f"Expected a proper coord type given all coordinates ({coords_str})")
+    #     coords = []
+    #     for _ in range(coord_num):
+    #         if is_coord_token(self.current_token):
+    #             coord = self.eat(TypedToken.STRING)
+    #             coords.append(coord)
+    #         else:
+    #             self.error("Expected a coord token")
 
-        # pylint to disable possible error with the length of the coords object
-        if coord_num == 2:
-            # pylint: disable-msg=E1120
-            return Vec2Node(*coords)
-        elif coord_num == 3:
-            # pylint: disable-msg=E1120
-            return Vec3Node(*coords)
-        else:
-            self.error("Unknown base case")
+    #     if not are_coords(*coords):
+    #         coords_str = " ".join(str(c) for c in coords)
+    #         self.error(f"Expected a proper coord type given all coordinates ({coords_str})")
+
+    #     # pylint to disable possible error with the length of the coords object
+    #     if coord_num == 2:
+    #         # pylint: disable-msg=E1120
+    #         return Vec2Node(*coords)
+    #     elif coord_num == 3:
+    #         # pylint: disable-msg=E1120
+    #         return Vec3Node(*coords)
+    #     else:
+    #         self.error("Unknown base case")
 
     def block(self):
         """

@@ -80,3 +80,12 @@ def test_cmd(cmd, expected=None, **kwargs):
 
 def test_block(block, expected=None, **kwargs):
     test_builder(block, "get_command", "block", expected=expected, **kwargs)
+
+def test_coord(coord, expected=None, **kwargs):
+    test_builder(coord, "get_until_space", "coord", expected=expected, **kwargs)
+
+def test_vec2(vec2, expected=None, **kwargs):
+    test_builder(vec2, "get_command", "vec2", expected=expected, **kwargs)
+
+def test_vec3(vec3, expected=None, **kwargs):
+    test_builder(vec3, "get_command", "vec3", expected=expected, **kwargs)

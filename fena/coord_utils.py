@@ -3,8 +3,11 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
+from fena.config_data import ConfigData
 from fena.token_classes import TypedToken
 from fena.number_utils import is_number
+
+config_data = ConfigData()
 
 def is_coord(string):
     """
@@ -16,7 +19,9 @@ def is_coord(string):
     Returns:
         bool: Whether the token value can be a coordinate
     """
-    return string and (string[0] in "~^" and is_number(string[1:])) or is_number(string)
+    if config_data.version == "1.12":
+        return string and (string[0] in "~" and (len(string) == 1 or is_number(string[1:]))) or is_number(string)
+    return string and (string[0] in "~^" and (len(string) == 1 or is_number(string[1:]))) or is_number(string)
 
 def is_coord_token(token):
     """

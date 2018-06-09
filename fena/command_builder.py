@@ -28,7 +28,7 @@ class CommandBuilder_1_12(NodeBuilder):
     in_file_config = InFileConfig()
 
     def __init__(self, cmd_root):
-        assert_type(cmd_root, CmdNode)
+        assert_type(cmd_root, CmdNode, Token)
         assert self.in_file_config.finalized
         self.cmd_root = cmd_root
 
@@ -533,16 +533,6 @@ class CommandBuilder_1_12(NodeBuilder):
     def build_NumberRangeNode(self, node):
         raise NotImplementedError("1.13+")
 
-    def build_NamespaceIdNode(self, node):
-        """
-        Attributes:
-            id_value (Token)
-            namespace (Token or None)
-        """
-        id_value = self.build(node.id_value)
-        namespace = ("minecraft" if node.namespace is None else self.build(node.namespace))
-        return f"{namespace}:{id_value}"
-
     def build_BlockNode(self, node):
         """
         Node Attributes:
@@ -577,6 +567,27 @@ class CommandBuilder_1_12(NodeBuilder):
         arg = self.build(node.arg)
         value = self.build(node.value)
         return f"{arg}={value}"
+
+    def build_Vec2Node(self, node):
+        coord1 = self.build(node.coord1)
+        coord2 = self.build(node.coord2)
+        return f"{coord1} {coord2}"
+
+    def build_Vec3Node(self, node):
+        coord1 = self.build(node.coord1)
+        coord2 = self.build(node.coord2)
+        coord3 = self.build(node.coord3)
+        return f"{coord1} {coord2} {coord3}"
+
+    def build_NamespaceIdNode(self, node):
+        """
+        Attributes:
+            id_value (Token)
+            namespace (Token or None)
+        """
+        id_value = self.build(node.id_value)
+        namespace = ("minecraft" if node.namespace is None else self.build(node.namespace))
+        return f"{namespace}:{id_value}"
 
     def build_Token(self, token, prefix=False, replacements=None):
         """
