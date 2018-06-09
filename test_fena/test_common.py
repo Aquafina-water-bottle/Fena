@@ -1,3 +1,5 @@
+import logging
+
 if __name__ == "__main__":
     import sys
     sys.path.append("..")
@@ -8,12 +10,14 @@ from fena.config_data import ConfigData
 from fena.lexer import Lexer
 from fena.parser import Parser
 
-VERSION = ConfigData().version
+config_data = ConfigData()
+
+# global variable (oh no) that determines whether output should be printed or not
 
 def test_builder(string, lexer_method, parser_method, expected=None, expect_error=False, print_ast=False):
-    if VERSION == "1.12":
+    if config_data.version == "1.12":
         CommandBuilder = CommandBuilder_1_12
-    elif VERSION == "1.13":
+    elif config_data.version == "1.13":
         CommandBuilder = CommandBuilder_1_13
     else:
         raise RuntimeError
@@ -31,11 +35,11 @@ def test_builder(string, lexer_method, parser_method, expected=None, expect_erro
     except Exception as e:
         # simply outputs the result of the error
         if expect_error:
-            print(f"input={string!r}, output={e!r}")
+            logging.debug(f"input={string!r}, output={e!r}")
 
         else:
             # otherwise, unexpected error
-            print(f"input={string!r}, output={e!r} as UNEXPECTED ERROR")
+            logging.error(f"input={string!r}, output={e!r} as UNEXPECTED ERROR")
 
             # uses traceback from previous exception as found in:
             # https://docs.python.org/3/library/exceptions.html#BaseException
@@ -43,9 +47,10 @@ def test_builder(string, lexer_method, parser_method, expected=None, expect_erro
             tb = sys.exc_info()[2]
             raise e.with_traceback(tb)
     else:
-        print(f"input={string!r}, output={output!r}")
+        logging.debug(f"input={string!r}, output={output!r}")
+
         if print_ast:
-            print(ast)
+            logging.debug(ast)
 
         if expect_error:
             raise RuntimeError(f"""
@@ -60,8 +65,11 @@ def test_builder(string, lexer_method, parser_method, expected=None, expect_erro
             Expected: {expected!r}
             Output:   {output!r}""")
 
-def test_selector(selector, expected=None, expect_error=False, print_ast=False):
-    test_builder(selector, "get_selector", "selector", expected=expected, expect_error=expect_error, print_ast=print_ast)
+def test_selector(selector, expected=None, **kwargs):
+    test_builder(selector, "get_selector", "selector", expected=expected, **kwargs)
 
-def test_json(json, expected=None, expect_error=False, print_ast=False):
-    test_builder(json, "get_curly_bracket_tag", "json", expected=expected, expect_error=expect_error, print_ast=print_ast)
+def test_json(json, expected=None, **kwargs):
+    test_builder(json, "get_curly_bracket_tag", "json", expected=expected, **kwargs)
+
+def test_nbt(nbt, expected=None, **kwargs):
+    test_builder(nbt, "get_curly_bracket_tag", "nbt", expected=expected, **kwargs)

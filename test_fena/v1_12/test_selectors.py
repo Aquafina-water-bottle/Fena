@@ -9,6 +9,8 @@ def test_selectors():
     test_selector("@e[type=armor_stand,dist=1..2]", "@e[type=minecraft:armor_stand,rm=1,r=2]")
     test_selector("@a[x]", "@a[tag=x]")
 
+    test_selector("@a[_pl=3..4]", "@a[score_fena.pl_min=3,score_fena.pl=4]")
+    test_selector("@a[__pl=3..4]", "@a[score_fena._pl_min=3,score_fena._pl=4]")
     test_selector("@a[RRpl=3..4]", "@a[score_RRpl_min=3,score_RRpl=4]")
     test_selector("@a[RRpl=3..]", "@a[score_RRpl_min=3]")
     test_selector("@a[RRpl=..3]", "@a[score_RRpl=3]")
@@ -76,6 +78,8 @@ def test_selectors():
     test_selector("@a[limit=5,gamemode=creative]", "@a[c=5,m=1]")
 
     test_selector("@a[hello]", "@a[tag=hello]")
+    test_selector("@a[_hello]", "@a[tag=fena.hello]")
+    test_selector("@a[__hello]", "@a[tag=fena._hello]")
 
     # note that things will become rearranged in the following order:
     # defaults, scores, tags

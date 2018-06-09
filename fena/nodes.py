@@ -18,13 +18,13 @@ class Node(ABC):
     """
     pass
 
-class JsonParseNode(Node):
-    """
-    Specifically holds an arg and an arg value
-    """
-    def __init__(self, arg, arg_value):
-        self.arg = arg
-        self.arg_value = arg_value
+# class JsonParseNode(Node):
+#     """
+#     Specifically holds an arg and an arg value
+#     """
+#     def __init__(self, arg, arg_value):
+#         self.arg = arg
+#         self.arg_value = arg_value
 
 class ProgramNode(Node):
     """
@@ -55,7 +55,6 @@ class McFunctionNode(StmtNode):
     """
     def __init__(self, name, command_nodes):
         assert_type(name, Token)
-        assert_type(command_nodes, list)
         assert_list_types(command_nodes, CmdNode)
         self.name = name
         self.command_nodes = command_nodes
@@ -70,7 +69,6 @@ class FolderNode(StmtNode):
     """
     def __init__(self, folder, statement_nodes):
         assert_type(folder, Token)
-        assert_type(statement_nodes, list)
         assert_list_types(statement_nodes, StmtNode)
         self.folder = folder
         self.statement_nodes = statement_nodes
@@ -109,7 +107,6 @@ class FenaCmdNode(CmdNode):
             - should contain one of {ExecuteCmdNode, ScoreboardCmdNode, FunctionCmdNode, SimpleCmdNode}
     """
     def __init__(self, cmd_segment_nodes):
-        assert_type(cmd_segment_nodes, list)
         assert_list_types(cmd_segment_nodes, MainCmdNode)
         self.cmd_segment_nodes = cmd_segment_nodes
 
@@ -146,32 +143,35 @@ class ExecuteSubLegacyArg(MainCmdNode):
         self.coords = coords
         self.sub_if = sub_if
 
-class ExecuteSubAsArg(CmdNode):
+class ExecuteSubArgNode(CmdNode, ABC):
     pass
 
-class ExecuteSubPosArg(CmdNode):
+class ExecuteSubAsArg(ExecuteSubArgNode):
     pass
 
-class ExecuteSubAtArg(CmdNode):
+class ExecuteSubPosArg(ExecuteSubArgNode):
     pass
 
-class ExecuteSubFacingArg(CmdNode):
+class ExecuteSubAtArg(ExecuteSubArgNode):
     pass
 
-class ExecuteSubRotArg(CmdNode):
+class ExecuteSubFacingArg(ExecuteSubArgNode):
     pass
 
-class ExecuteSubAnchorArg(CmdNode):
+class ExecuteSubRotArg(ExecuteSubArgNode):
     pass
 
-class ExecuteSubAstArg(CmdNode):
+class ExecuteSubAnchorArg(ExecuteSubArgNode):
     pass
 
-class ExecuteSubInArg(CmdNode):
+class ExecuteSubAstArg(ExecuteSubArgNode):
+    pass
+
+class ExecuteSubInArg(ExecuteSubArgNode):
     pass
 
 
-class ExecuteSubIfArg(CmdNode):
+class ExecuteSubIfArg(ExecuteSubArgNode):
     """
     Args:
         negated (bool): Whether the statement argument should be negated or not when built
@@ -369,10 +369,10 @@ class ExecuteSubIfRangeArg(ExecuteSubIfArg):
     #     return "{} score {} {} matches {}".format(self.sub_cmd, self.selector.build(), self.objective.build(prefix=True), self.int_range.build())
 
 
-class ExecuteSubResultArg(CmdNode):
+class ExecuteSubResultArg(ExecuteSubArgNode):
     pass
 
-# class ExecuteSubSuccessArg(CmdNode):
+# class ExecuteSubSuccessArg(ExecuteSubArgNode):
 #     pass
 
 
@@ -437,11 +437,11 @@ class ScoreboardCmdSpecialNode(CmdNode):
 class SimpleCmdNode(MainCmdNode):
     """
     Attributes:
-        nodes (list of Token, SelectorNode, JsonObjectNode and NbtNode objects)
+        nodes (list of Token, SelectorNode, JsonObjectNode and NbtObjectNode objects)
     """
     def __init__(self, tokens):
         assert_type(tokens, list)
-        assert_list_types(tokens, Token, SelectorNode, JsonObjectNode, NbtNode)
+        assert_list_types(tokens, Token, SelectorNode, JsonObjectNode, NbtObjectNode)
         self.tokens = tokens
 
 class BossbarCmdNode(MainCmdNode):
@@ -513,7 +513,7 @@ class DataGetNode(DataCmdNode):
 class DataMergeNode(DataCmdNode):
     """
     Attributes:
-        nbt (NbtNode)
+        nbt (NbtObjectNode)
     """
     def __init__(self, nbt):
         self.nbt = nbt
@@ -667,23 +667,32 @@ class SelectorArgsNode(CmdNode):
     """
     Attributes:
         default_args (list of SelectorDefaultArgNode objects)
-        score_args (list of SelectorScoreArgNode objects)
-        tag_args (list ofSelectorTagArgNode objects)
-        nbt_args (list ofSelectorNbtArgNode objects)
-        advancement_args (list ofSelectorAdvancementArgNode objects)
+        score_args (SelectorScoreArgsNode)
+        tag_args (SelectorTagArgsNode)
+        nbt_args (SelectorNbtArgsNode)
+        advancement_args (SelectorAdvancementGroupArgNode)
     """
     def __init__(self, default_args, score_args, tag_args, nbt_args, advancement_args):
         assert_list_types(default_args, SelectorDefaultArgNode, duplicate_key=lambda x: x.arg.value)
-        assert_list_types(score_args, SelectorScoreArgNode, duplicate_key=lambda x: x.objective.value)
-        assert_list_types(tag_args, SelectorTagArgNode, duplicate_key=lambda x: x.tag.value)
-        assert_list_types(nbt_args, SelectorNbtArgNode)
-        assert_list_types(advancement_args, SelectorAdvancementArgNode)
+        assert_type(score_args, SelectorScoreArgsNode)
+        assert_type(tag_args, SelectorTagArgsNode)
+        assert_type(nbt_args, SelectorNbtArgsNode)
+        assert_type(advancement_args, SelectorAdvancementGroupArgNode)
         
         self.default_args = default_args
         self.score_args = score_args
         self.tag_args = tag_args
         self.nbt_args = nbt_args
         self.advancement_args = advancement_args
+
+class SelectorScoreArgsNode(CmdNode):
+    """
+    Attributes:
+        score_args (list of SelectorScoreArgNode objects)
+    """
+    def __init__(self, score_args):
+        assert_list_types(score_args, SelectorScoreArgNode, duplicate_key=lambda x: x.objective.value)
+        self.score_args = score_args
 
 class SelectorScoreArgNode(CmdNode):
     """
@@ -722,14 +731,20 @@ class SelectorDefaultArgValueNode(CmdNode):
 class SelectorDefaultGroupArgValueNode(CmdNode):
     """
     Attributes:
-        arg_values (list of Token objects)
-        negated (bool)
+        arg_values (list of SelectorDefaultArgValueNode objects)
     """
-    def __init__(self, arg_values, negated=False):
-        assert_list_types(arg_values, Token)
-        assert_type(negated, bool)
+    def __init__(self, arg_values):
+        assert_list_types(arg_values, SelectorDefaultArgValueNode)
         self.arg_values = arg_values
-        self.negated = negated
+
+class SelectorTagArgsNode(CmdNode):
+    """
+    Attributes:
+        tag_args (list of SelectorTagArgNode objects)
+    """
+    def __init__(self, tag_args):
+        assert_list_types(tag_args, SelectorTagArgNode, duplicate_key=lambda x: x.tag.value)
+        self.tag_args = tag_args
 
 class SelectorTagArgNode(CmdNode):
     """
@@ -743,19 +758,28 @@ class SelectorTagArgNode(CmdNode):
         self.tag = tag
         self.negated = negated
 
+class SelectorNbtArgsNode(CmdNode):
+    """
+    Attributes:
+        nbt_args (list of SelectorTagArgNode objects)
+    """
+    def __init__(self, nbt_args):
+        assert_list_types(nbt_args, SelectorTagArgNode)
+        self.nbt_args = nbt_args
+
 class SelectorNbtArgNode(CmdNode):
     """
     Attributes:
-        nbt (NbtNode)
+        nbt (NbtObjectNode)
         negated (bool)
     """
     def __init__(self, nbt, negated=False):
-        assert_type(nbt, NbtNode)
+        assert_type(nbt, NbtObjectNode)
         assert_type(negated, bool)
         self.nbt = nbt
         self.negated = negated
 
-class SelectorAdvancementArgNode(CmdNode):
+class SelectorAdvancementGroupArgNode(CmdNode):
     """
     Attributes:
         advancements (?)
@@ -768,24 +792,61 @@ class NbtNode(CmdNode, ABC):
     pass
 
 class NbtObjectNode(NbtNode):
+    """
+    Attributes:
+        mappings (list of NbtMapNode objects)
+    """
     def __init__(self, mappings):
-        pass
+        assert_list_types(mappings, NbtMapNode)
+        self.mappings = mappings
 
 class NbtMapNode(NbtNode):
+    """
+    Attributes:
+        arg (Token)
+        value (Token, NbtObjectNode, NbtArrayNode, NbtIntegerNode, NbtFloatNode)
+    """
     def __init__(self, arg, value):
-        pass
+        assert_type(arg, Token)
+        assert_type(value, Token, NbtObjectNode, NbtArrayNode, NbtIntegerNode, NbtFloatNode)
+        self.arg = arg
+        self.value = value
 
 class NbtArrayNode(NbtNode):
-    def __init__(self, type_specifier, values):
-        pass
+    """
+    Attributes:
+        values (list of NbtNode objects)
+        type_specifier (Token or None)
+    """
+    def __init__(self, values, type_specifier=None):
+        assert_list_types(values, Token, NbtObjectNode, NbtArrayNode, NbtIntegerNode, NbtFloatNode)
+        assert_type(type_specifier, Token, optional=True)
+        self.values = values
+        self.type_specifier = type_specifier
 
 class NbtIntegerNode(NbtNode):
-    def __init__(self, int_value, int_type):
-        pass
+    """
+    Attributes:
+        int_value (Token)
+        int_type (Token or None)
+    """
+    def __init__(self, int_value, int_type=None):
+        assert_type(int_value, Token)
+        assert_type(int_type, Token, optional=True)
+        self.int_value = int_value
+        self.int_type = int_type
 
 class NbtFloatNode(NbtNode):
-    def __init__(self, float_value, float_type):
-        pass
+    """
+    Attributes:
+        float_value (Token)
+        float_type (Token or None)
+    """
+    def __init__(self, float_value, float_type=None):
+        assert_type(float_value, Token)
+        assert_type(float_type, Token, optional=True)
+        self.float_value = float_value
+        self.float_type = float_type
 
 
 class JsonNode(CmdNode, ABC):
@@ -797,7 +858,7 @@ class JsonObjectNode(JsonNode):
         mappings (list of JsonMapNode objects)
     """
     def __init__(self, mappings):
-        assert_list_types(mappings, JsonMapNode)
+        assert_list_types(mappings, JsonMapNode, duplicate_key=lambda x: x.arg.value)
         self.mappings = mappings
 
 class JsonMapNode(JsonNode):
@@ -820,6 +881,7 @@ class JsonArrayNode(JsonNode):
     def __init__(self, values):
         assert_list_types(values, Token, JsonArrayNode, JsonObjectNode)
         self.values = values
+
 
 class IntRangeNode(CmdNode):
     """
@@ -860,8 +922,9 @@ class NumberRangeNode(CmdNode):
         max_number (Token or None)
     """
     def __init__(self, min_number, max_number):
-        assert_type(min_number, Token)
-        assert_type(max_number, Token)
+        assert_type(min_number, Token, optional=True)
+        assert_type(max_number, Token, optional=True)
+        assert not (min_number is None and max_number is None)
         self.min_number = min_number
         self.max_number = max_number
 
@@ -870,12 +933,12 @@ class BlockNode(CmdNode):
     Attributes:
         block (Token)
         states (list of BlockStateNode objects)
-        nbt (NbtNode or None)
+        nbt (NbtObjectNode or None)
     """
     def __init__(self, block, states, nbt=None):
         assert_type(block, Token)
         assert_list_types(states, BlockStateNode)
-        assert_type(nbt, NbtNode, optional=True)
+        assert_type(nbt, NbtObjectNode, optional=True)
         self.block = block
         self.states = states
         self.nbt = nbt

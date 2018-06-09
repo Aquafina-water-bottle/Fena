@@ -19,7 +19,7 @@ def test_selectors():
     test_selector("@a[RRpl=(..3)]", "@a[scores={RRpl=..3}]")
     test_selector("@a[RRpl=(3)]", "@a[scores={RRpl=3}]")
     test_selector("@a[RRpl=(*)]", "@a[scores={RRpl=-2147483648..}]")
-    test_selector("@a[RRpl=((((*)))]", "@a[scores={RRpl=-2147483648..}]")
+    test_selector("@a[RRpl=((((*))))]", "@a[scores={RRpl=-2147483648..}]")
 
     test_selector("@a[distance=2..5]")
     test_selector("@a[distance=5]")
@@ -128,7 +128,7 @@ def test_selectors():
     
     test_selector(
         "@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,RRar=3..5]",
-        "@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,scores={RRar=3..5}]")
+        "@a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,gamemode=adventure,scores={RRar=3..5}]")
 
     test_selector(
         "@a[g.hello=5,x=-153,y=0,z=299,RRar=3..5]",
@@ -141,13 +141,25 @@ def test_selectors():
 
     # testing grouping of type, team, name and gamemode
     test_selector("@a[m=!(1, 2)]", "@a[gamemode=!creative,gamemode=!adventure]")
-    test_selector("@a[type=!(armor_stand, player)]", "@a[type=!armor_stand,type=!player]")
+    test_selector("@a[type=!(armor_stand, player)]", "@a[type=!minecraft:armor_stand,type=!minecraft:player]")
     test_selector("@a[team=!(rr.g, rr.b)]", "@a[team=!rr.g,team=!rr.b]")
 
     # note that names can be both strings and literal strings
-    test_selector('@a[name=!(aquafina, daa)]", "@a[name=!aquafina,name=!daa]')
-    test_selector('@a[name=!(ENFORCER_GAMING, "is a scrub")]", "@a[name=!ENFORCER_GAMING,name=!"is a scrub"]')
-    test_selector('@a[name=!("broke it", "daddy daa")]", "@a[name=!"broke it",name=!"daddy daa"]')
+    test_selector('@a[name=!(aquafina, daa)]', '@a[name=!aquafina,name=!daa]')
+    test_selector('@a[name=!(ENFORCER_GAMING, "is a scrub")]', '@a[name=!ENFORCER_GAMING,name=!"is a scrub"]')
+    test_selector('@a[name=!("broke it", "daddy daa")]', '@a[name=!"broke it",name=!"daddy daa"]')
+
+    # nbt tags
+    # test_selector(r"@e[{Invulnerable:1b}]")
+
+    # advancements
+    # test_selector(
+    #     r"@a[adv=(story/mine_diamond=(diamond),story/iron_tools)]",
+    #     r"@a[advancements={minecraft:story/mine_diamond={diamond=true},minecraft:story/iron_tools=true}]")
+
+    # test_selector(
+    #     r"@a[adv=(story/mine_diamond=(!diamond),!story/iron_tools)]",
+    #     r"@a[advancements={minecraft:story/mine_diamond={diamond=false},minecraft:story/iron_tools=false}]")
     
     # literally no grouping can be a non-negation grouping
     test_selector("@a[m=(1, 2)]", expect_error=True)
@@ -163,6 +175,7 @@ def test_selectors():
     test_selector("@a[obj=25,", expect_error=True)
     test_selector("@a[obj=25", expect_error=True)
     test_selector("@a[tag=hello]", expect_error=True)
+    test_selector("@a[name=has spaces]", expect_error=True)
     test_selector("@a[rm=5,rm=7]", expect_error=True)
     test_selector("@[]", expect_error=True)
     test_selector("nahfam", expect_error=True)

@@ -162,16 +162,16 @@
             },
 
             "distance": {
-                "parse_type": "NUMBER_RANGE"
+                "parse_type": "NUMBER_RANGE_BRACKET"
             },
             "x_rotation": {
-                "parse_type": "NUMBER_RANGE"
+                "parse_type": "NUMBER_RANGE_BRACKET"
             },
             "y_rotation": {
-                "parse_type": "NUMBER_RANGE"
+                "parse_type": "NUMBER_RANGE_BRACKET"
             },
             "level": {
-                "parse_type": "NUMBER_RANGE"
+                "parse_type": "NUMBER_RANGE_BRACKET"
             },
 
             "team": {

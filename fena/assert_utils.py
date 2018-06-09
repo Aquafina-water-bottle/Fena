@@ -79,12 +79,12 @@ def assert_iterable_types(checked_iterable, *valid_types, duplicate_key=None):
         >>> assert_iterable_types(("a", "b", "a"), str, duplicate_key=lambda x: x)
         Traceback (most recent call last):
             ...
-        AssertionError: Found a duplicate of 'a' in iterable ('a', 'b', 'a')
+        AssertionError: Found a duplicate of 'a' in 'a'
 
         >>> assert_iterable_types(["123", "142", "225"], str, duplicate_key=lambda x: x[0])
         Traceback (most recent call last):
             ...
-        AssertionError: Found a duplicate of '1' in iterable ['123', '142', '225']
+        AssertionError: Found a duplicate of '1' in '142'
     """
     for index, item in enumerate(checked_iterable):
         assert_type(item, *valid_types, additional_message=f"in index {index} of iterable {checked_iterable}")
@@ -99,7 +99,8 @@ def assert_iterable_types(checked_iterable, *valid_types, duplicate_key=None):
         # iterates through each checked object to see if its within the found objects
         for checked_object in checked_iterable:
             result_object = duplicate_key(checked_object)
-            assert result_object not in found_objects, f"Found a duplicate of {result_object!r} in iterable {checked_iterable}"
+            # assert result_object not in found_objects, f"Found a duplicate of {result_object!r} in iterable {checked_iterable}"
+            assert result_object not in found_objects, f"Found a duplicate of {result_object!r} in {result_object}"
             found_objects.add(result_object)
 
 def assert_list_types(checked_list, *valid_types, **kwargs):

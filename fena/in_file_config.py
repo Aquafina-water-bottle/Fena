@@ -20,9 +20,11 @@ if __name__ == "__main__":
     del sys
 
 from fena.assert_utils import assert_type
+from fena.repr_utils import addrepr
 from fena.mcfunction import McFunction
 from fena.lexical_token import Token
 
+@addrepr
 class InFileConfig:
     """
     Holds branching simple commands using a builder model

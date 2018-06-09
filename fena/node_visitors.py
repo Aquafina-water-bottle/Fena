@@ -68,12 +68,20 @@ class NodeBuilder(TreePostfixTraversal):
         assert_type(node, CmdNode, Token)
         return self._visit("build", node, **kwargs)
 
-    def iter_build(self, nodes):
+    def iter_build(self, nodes, join_value=None):
         """
         Args:
-            nodes (iterable object):
+            nodes (iterable object)
+            join_value (str or None)
 
         Returns:
-            generator: generator to map all nodes to the build method
+            generator (if join_value is None): generator to map all nodes to the build method
+            str (if join_value is str): Full string of built objects from its nodes joined by the join_value
         """
-        return map(self.build, nodes)
+        assert_type(join_value, str, optional=True)
+
+        build_generator = map(self.build, nodes)
+        if join_value is None:
+            return build_generator
+
+        return join_value.join(build_generator)

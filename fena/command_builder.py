@@ -13,7 +13,10 @@ from fena.lexical_token import Token
 from fena.config_data import ConfigData
 from fena.in_file_config import InFileConfig
 from fena.node_visitors import NodeBuilder
-from fena.nodes import CmdNode, IntRangeNode
+from fena.nodes import CmdNode, IntRangeNode, SelectorDefaultGroupArgValueNode, JsonObjectNode, JsonMapNode
+from fena.str_utils import encode_str, decode_str
+from fena.lexer import Lexer
+from fena.parser import Parser
 
 class CommandBuilder_1_12(NodeBuilder):
     """
@@ -39,14 +42,14 @@ class CommandBuilder_1_12(NodeBuilder):
         return self.build(self.cmd_root)
 
     def build_FenaCmdNode(self, node):
-        return " ".join(self.iter_build(self.cmd_root.cmd_segment_nodes))
+        return self.iter_build(self.cmd_root.cmd_segment_nodes, " ")
 
     def build_ExecuteCmdNode(self, node):
         """
         Args:
             node (ExecuteCmdNode)
         """
-        return " ".join(self.iter_build(node.sub_cmd_nodes))
+        return self.iter_build(node.sub_cmd_nodes, " ")
 
     def build_ExecuteSubLegacyArg(self, node):
         """
@@ -149,7 +152,7 @@ class CommandBuilder_1_12(NodeBuilder):
         Args:
             node (SimpleCmdNode)
         """
-        return " ".join(self.iter_build(node.tokens))
+        return self.iter_build(node.tokens, " ")
 
     def build_TeamAddNode(self, node):
         """
@@ -230,24 +233,33 @@ class CommandBuilder_1_12(NodeBuilder):
 
     def build_SelectorArgsNode(self, node):
         """
-        Node Attributes:
+        Attributes:
             default_args (list of SelectorDefaultArgNode objects)
-            score_args (list of SelectorScoreArgNode objects)
-            tag_args (list of SelectorTagArgNode objects)
-            nbt_args (list of SelectorNbtArgNode objects)
-            advancement_args (list of SelectorAdvancementArgNode objects)
+            score_args (SelectorScoreArgsNode)
+            tag_args (SelectorTagArgsNode)
+            nbt_args (SelectorNbtArgsNode)
+            advancement_args (SelectorAdvancementGroupArgNode)
         """
-        all_args = (node.default_args, node.score_args, node.tag_args, node.nbt_args, node.advancement_args)
-
-        # requires the tag args to be less than one for length
-        if len(node.tag_args) > 1:
-            raise SyntaxError("Cannot have more than one tag inside a selector for 1.12")
+        # all_args = (node.default_args, node.score_args, node.tag_args, node.nbt_args, node.advancement_args)
 
         # note that map returns a generator
-        all_built_args = map(lambda x: ",".join(self.iter_build(x)), all_args)
+        # all_built_args = map(lambda x: ",".join(self.iter_build(x)), all_args)
+        default_args = self.iter_build(node.default_args, ",")
+        score_args = self.build(node.score_args)
+        tag_args = self.build(node.tag_args)
+        nbt_args = self.build(node.nbt_args)
+        advancement_args = self.build(node.advancement_args)
 
+        all_built_args = (default_args, score_args, tag_args, nbt_args, advancement_args)
         # removes any 0 length strings
         return ",".join(x for x in all_built_args if x)
+
+    def build_SelectorScoreArgsNode(self, node):
+        """
+        Node Attributes:
+            score_args (list of SelectorScoreArgNode objects)
+        """
+        return self.iter_build(node.score_args, ",")
 
     def build_SelectorScoreArgNode(self, node):
         """
@@ -305,9 +317,19 @@ class CommandBuilder_1_12(NodeBuilder):
         """
         Node Attributes:
             arg_values (list of Token objects)
-            negated (bool)
         """
         raise SyntaxError("Cannot build a selector group value node in 1.12")
+
+    def build_SelectorTagArgsNode(self, node):
+        """
+        Node Attributes:
+            tag_args (list of SelectorTagArgNode objects)
+        """
+        # requires the tag args to be less than one for length
+        if len(node.tag_args) > 1:
+            raise SyntaxError("Cannot have more than one tag inside a selector for 1.12")
+
+        return self.iter_build(node.tag_args, ",")
 
     def build_SelectorTagArgNode(self, node):
         """
@@ -316,8 +338,17 @@ class CommandBuilder_1_12(NodeBuilder):
             negated (bool)
         """
         negated = "!" if node.negated else ""
-        tag = self.build(node.tag)
+        tag = self.build(node.tag, prefix=True)
         return f"tag={negated}{tag}"
+
+    def build_SelectorNbtArgsNode(self, node):
+        """
+        Node Attributes:
+            nbt_args (list of SelectorTagArgNode objects)
+        """
+        if node.nbt_args:
+            raise SyntaxError("Cannot build a selector nbt node in 1.12")
+        return ""
 
     def build_SelectorNbtArgNode(self, node):
         """
@@ -327,8 +358,134 @@ class CommandBuilder_1_12(NodeBuilder):
         """
         raise SyntaxError("Cannot build a selector nbt node in 1.12")
 
-    def build_SelectorAdvancementArgNode(self, node):
-        raise SyntaxError("Cannot build a selector nbt node in 1.12")
+    def build_SelectorAdvancementGroupArgNode(self, node):
+        """
+        Attributes:
+            advancements (?)
+        """
+        if node.advancements:
+            raise SyntaxError("Cannot build a selector advancement node in 1.12")
+        return ""
+
+    def build_NbtObjectNode(self, node):
+        """
+        Node Attributes:
+            mappings (list of NbtMapNode objects)
+        """
+        return "{" + self.iter_build(node.mappings, ",") + "}"
+
+    def build_NbtMapNode(self, node):
+        """
+        Node Attributes:
+            arg (Token)
+            value (Token)
+        """
+        arg = self.build(node.arg)
+        value = self.build(node.value)
+        return f"{arg}:{value}"
+
+    def build_NbtArrayNode(self, node):
+        """
+        Node Attributes:
+            values (list of NbtNode objects)
+            type_specifier (Token or None)
+        """
+        values = self.iter_build(node.values, ",")
+        type_specifier = ("" if node.type_specifier is None else f"{self.build(node.type_specifier)};")
+        return f"[{type_specifier}{values}]"
+
+    def build_NbtIntegerNode(self, node):
+        """
+        Node Attributes:
+            int_value (Token)
+            int_type (Token or None)
+        """
+        int_value = self.build(node.int_value)
+        if node.int_type is None:
+            return int_value
+
+        int_type = self.build(node.int_type)
+        return f"{int_value}{int_type}"
+
+    def build_NbtFloatNode(self, node):
+        """
+        Node Attributes:
+            float_value (Token)
+            float_type (Token or None)
+        """
+        float_value = self.build(node.float_value)
+        if node.float_type is None:
+            return float_value
+
+        float_type = self.build(node.float_type)
+        return f"{float_value}{float_type}"
+
+    def build_JsonObjectNode(self, node, previous_arg=None):
+        """
+        Attributes:
+            mappings (list of JsonMapNode objects)
+        """
+        result = []
+        for mapping in node.mappings:
+            if isinstance(mapping, JsonMapNode):
+                result.append(self.build(mapping, previous_arg=previous_arg))
+            else:
+                result.append(self.build(mapping))
+
+        return "{" + ",".join(result) + "}"
+
+    def build_JsonMapNode(self, node, previous_arg=None):
+        """
+        Attributes:
+            arg (Token)
+            value (Token, JsonArrayNode, JsonObjectNode)
+        """
+        arg = self.build(node.arg)
+
+        # only passes on the current argument down if the value is also a json map node
+        if isinstance(node.value, JsonObjectNode):
+            # passes the argument "score" in so the "name" arg under "score" can be converted into a proper selector
+            current_arg = '"score"' if arg == '"score"' else None
+            value = self.build(node.value, previous_arg=current_arg)
+        else:
+            value = self.build(node.value)
+
+        # if the argument is a selector, it builds a selector
+        if arg == '"selector"':
+            selector = decode_str(value)
+            lexer = Lexer(selector)
+            parser = Parser(lexer, method_name="get_selector")
+            ast = parser.parse(method_name="selector")
+            result = self.build_SelectorNode(ast)
+            value = encode_str(result)
+
+        if previous_arg == '"score"':
+            # gets one token, and builds it with a possible prefix
+            if arg == '"objective"':
+                target = decode_str(value)
+                lexer = Lexer(target)
+                parser = Parser(lexer, method_name="get_until_space")
+                ast = parser.parse(method_name="advance")
+                result = self.build_Token(ast, prefix=True)
+                value = encode_str(result)
+
+            # gets some target, so the get_command is versatile enough to get either a selector or single token
+            elif arg == '"name"':
+                target = decode_str(value)
+                lexer = Lexer(target)
+                parser = Parser(lexer, method_name="get_command")
+                ast = parser.parse(method_name="target")
+                result = self.build(ast)
+                value = encode_str(result)
+
+        return f"{arg}:{value}"
+
+    def build_JsonArrayNode(self, node):
+        """
+        Attributes:
+            values (list of Token, JsonArrayNode, JsonObjectNode)
+        """
+        return "[" + self.iter_build(node.values, ",") + "]"
 
     def build_IntRangeNode(self, node):
         """
@@ -355,6 +512,9 @@ class CommandBuilder_1_12(NodeBuilder):
             result.append(f"{max_arg}={max_int}")
 
         return ",".join(result)
+
+    def build_NumberRangeNode(self, node):
+        raise NotImplementedError("1.13+")
 
     def build_NamespaceIdNode(self, node):
         """
@@ -385,12 +545,13 @@ class CommandBuilder_1_12(NodeBuilder):
         
         if prefix:
             if string.startswith("_"):
-                # prefix=rr, string=__ti -> rr._ti
-                # prefix=rr, string=_ti -> rr.ti
-                return self.in_file_config.prefix + "." + string[1:]
+                # string=__ti -> fena._ti
+                # string=_ti -> fena.ti
+                prefix_str = self.in_file_config.prefix
+                return f"{prefix_str}.{string[1:]}"
 
             if "." not in string and self.config_data.ego:
-                logging.warning("No prefix given to {!r}".format(token))
+                logging.warning(f"No prefix given to {token!r}")
 
         if replacements is not None:
             return replacements.get(string, string)
@@ -406,27 +567,94 @@ class CommandBuilder_1_12(NodeBuilder):
 # TODO finish 1.13
 class CommandBuilder_1_13(CommandBuilder_1_12):
     def __init__(self, cmd_root):
-        super().__init__(self, cmd_root)
+        super().__init__(cmd_root)
 
-    def build_SelectorArgsNode(self, node):
+    def build_SelectorScoreArgsNode(self, node):
         """
         Node Attributes:
-            default_args (list of SelectorDefaultArgNode objects)
             score_args (list of SelectorScoreArgNode objects)
-            tag_args (list of SelectorTagArgNode objects)
-            nbt_args (list of SelectorNbtArgNode objects)
-            advancement_args (list of SelectorAdvancementArgNode objects)
         """
-        # note that map returns a generator
-        default_built = ",".join(self.iter_build(node.default_args))
-        score_built = "scores={" + ",".join(self.iter_build(node.score_args)) + "}" if node.score_args else ""
-        tag_built = ",".join(self.iter_build(node.tag_args))
-        nbt_built = "nbt={" + "},nbt={".join(self.iter_build(node.nbt_args)) + "}" if node.nbt_args else ""
-        advancement_built = "advancements={" + ",".join(self.iter_build(node.advancement_args)) + "}" if node.advancement_args else ""
-        all_built_args = (default_built, score_built, tag_built, nbt_built, advancement_built)
+        return "scores={" + self.iter_build(node.score_args, ",") + "}" if node.score_args else ""
 
-        # removes any 0 length strings
-        return ",".join(x for x in all_built_args if x)
+    def build_SelectorScoreArgNode(self, node):
+        """
+        Node Attributes:
+            objective (Token)
+            value (IntRangeNode, Token)
+        """
+        objective = self.build(node.objective, prefix=True)
+
+        # checks if the value is an IntRangeNode or a TypedToken.STIRNG with value="*"
+        if isinstance(node.value, Token):
+            # gets the smallest value of a 32 bit signed integer and select all above that
+            min_int = -1<<31
+            return f"{objective}={min_int}.."
+
+        # actually uses the values of the min_int from the integer range
+        range_str = self.build(node.value)
+        return f"{objective}={range_str}"
+
+    def build_SelectorDefaultArgNode(self, node):
+        """
+        Node Attributes:
+            arg (Token)
+            arg_value (SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode)
+        """
+        arg = self.build(node.arg)
+        if isinstance(node.arg_value, SelectorDefaultGroupArgValueNode):
+            result = []
+            for arg_value in self.iter_build(node.arg_value.arg_values):
+                result.append(f"{arg}={arg_value}")
+            return ",".join(result)
+        
+        # otherwise, a regular argument value
+        arg_value = self.build(node.arg_value)
+        return f"{arg}={arg_value}"
+
+    def build_SelectorTagArgsNode(self, node):
+        """
+        Node Attributes:
+            tag_args (list of SelectorTagArgNode objects)
+        """
+        return self.iter_build(node.tag_args, ",")
+
+    def build_SelectorNbtArgsNode(self, node):
+        """
+        Node Attributes:
+            nbt_args (list of SelectorTagArgNode objects)
+        """
+        # concatenates all negated and non-negated nbt tags into their own lists
+        negated_nbt = []
+        non_negated_nbt = []
+
+        for nbt_arg in node.nbt_args:
+            built_nbt_arg = self.build(nbt_arg)
+            if nbt_arg.negated:
+                negated_nbt.append(built_nbt_arg)
+            else:
+                non_negated_nbt.append(built_nbt_arg)
+
+        built_negated = "nbt={" + ",".join(negated_nbt) + "}" if negated_nbt else ""
+        built_non_negated = "nbt=!{" + ",".join(non_negated_nbt) + "}" if non_negated_nbt else ""
+        all_built_nbt = (nbt for nbt in (built_negated, built_non_negated) if nbt)
+        return ",".join(all_built_nbt)
+
+    def build_SelectorNbtArgNode(self, node):
+        """
+        Node Attributes:
+            nbt (NbtNode)
+            negated (bool)
+        """
+        nbt = self.build(node.nbt)
+        negated = "!" if node.negated else ""
+        return f"{negated}{nbt}"
+
+    def build_SelectorAdvancementGroupArgNode(self, node):
+        """
+        Attributes:
+            advancements (?)
+        """
+        return self.iter_build(node.advancements, ",")
 
     def build_IntRangeNode(self, node):
         """
@@ -443,6 +671,22 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
         # gets each individual min or max selector arg/value pair
         min_int = ("" if node.min_int is None else self.build(node.min_int))
         max_int = ("" if node.max_int is None else self.build(node.max_int))
-
+        if min_int == max_int:
+            return min_int
         return f"{min_int}..{max_int}"
+
+    def build_NumberRangeNode(self, node):
+        """
+        Note that a range can be a singular number. If so, left_int is the same as right_int
+
+        Node Attributes:
+            min_number (Token or None)
+            max_number (Token or None)
+        """
+        # gets each individual min or max selector arg/value pair
+        min_number = ("" if node.min_number is None else self.build(node.min_number))
+        max_number = ("" if node.max_number is None else self.build(node.max_number))
+        if min_number == max_number:
+            return min_number
+        return f"{min_number}..{max_number}"
 

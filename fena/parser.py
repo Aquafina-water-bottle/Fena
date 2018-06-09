@@ -1,5 +1,6 @@
 import os
 import logging
+import inspect
 
 if __name__ == "__main__":
     import sys
@@ -17,9 +18,11 @@ from fena.nodes import ProgramNode, McFunctionNode, FolderNode, PrefixNode, Cons
 from fena.nodes import ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode
 from fena.nodes import ExecuteCmdNode, ExecuteSubIfBlockArg, ExecuteSubLegacyArg
 from fena.nodes import SelectorNode, SelectorVarNode, SelectorArgsNode
-from fena.nodes import SelectorDefaultArgNode, SelectorScoreArgNode, SelectorTagArgNode, SelectorNbtArgNode, SelectorAdvancementArgNode
+from fena.nodes import SelectorDefaultArgNode, SelectorScoreArgNode, SelectorTagArgNode, SelectorNbtArgNode
+from fena.nodes import SelectorScoreArgsNode, SelectorTagArgsNode, SelectorNbtArgsNode, SelectorAdvancementGroupArgNode
 from fena.nodes import SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode
 from fena.nodes import JsonObjectNode, JsonMapNode, JsonArrayNode
+from fena.nodes import NbtObjectNode, NbtMapNode, NbtArrayNode, NbtIntegerNode, NbtFloatNode
 from fena.nodes import BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode
 from fena.nodes import Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, NamespaceIdNode
 from fena.node_visitors import NodeBuilder, NodeVisitor
@@ -43,6 +46,8 @@ def parse8(self):
                 self.advance()
             elif self.current_char == ")":
                 break
+            else:
+                self.error("Expected a comma or closing square bracket")
         else:
             raise SyntaxError(f"Unexpected character {self.current_char}")
 
@@ -150,29 +155,36 @@ selector ::= selector_var & ("[" & selector_args & "]")?
 selector_var ::= "@" & selector_var_specifier
 # selector_var_specifier is defined under selector_version.json as "selector_variable_specifiers"
 selector_args ::= (single_arg)? | (single_arg & ("," & single_arg)*)?
-single_arg ::= [simple_arg, score_arg, tag_arg]
+single_arg ::= [simple_arg, score_arg, tag_arg, nbt_arg]
 
 # note that all selector argument values can have round brackets surrounding it
 simple_arg ::= default_arg & "=" & default_arg_value_group
 # default_arg is defined under selector_version.json as "selector_arguments"
 
-default_arg_value_group = ("!")? & (default_arg_value | ("(" && default_arg_values && ")"))
-
 # requires at least one value, otherwise completely useless
+default_arg_value_group = ("!")? & (default_arg_value | ("(" && default_arg_values && ")"))
 default_arg_values ::= default_arg_value | (default_arg_value & ("," & default_arg_value)*)?
 # default_arg_value is defined under selector_version.json as "selector_argument_details"
 
-tag_arg ::= STR
+tag_arg ::= ("!")? & STR
 score_arg ::= (STR & "=" & score_arg_value)
 score_arg_value ::= [int_range, "*"] | "(" & score_arg_value & ")"
+nbt_arg ::= ("!")? & nbt
+
+# note that this is part of the default_arg_values thing
+# @a[adv=(story/mine_diamond=(diamond),story/iron_tools)]
+adv_arg_group ::= "(" && adv_args && ")"
+adv_args ::= (adv_arg)? | (adv_arg & ("," & adv_arg)*)
+adv_arg ::= ("!")? & STR & ("=" & "(" & adv_arg_values & ")")?
+adv_arg_values ::= adv_arg_value & ("," & adv_arg_value?)
+adv_arg_value ::= ("!")? & STR
 
 nbt ::= nbt_object
 nbt_object ::= "{" && ((nbt_map)? | (nbt_map && ("," && nbt_map)*)) && "}"
 nbt_map ::= STR && ":" && nbt_value
-nbt_array ::= nbt_array_begin? && ";" && "[" && (nbt_values)* && "]"
+nbt_array ::= "[" && (nbt_array_begin && ";")? && nbt_value)? | (nbt_value && ("," && nbt_value)*) && "]"
 nbt_array_begin ::= ["I", "L", "B"]
-nbt_values ::= (nbt_value)? | (nbt_value && ("," && nbt_value)*)
-nbt_value ::= [literal_str, nbt_number, "true", "false", "null", nbt_object, nbt_array]
+nbt_value ::= [literal_str, nbt_number, nbt_object, nbt_array]
 nbt_number = (signed_int & ["b", "s", "L"]?) | json_number & ["d", "f"]?
 
 # specified under https://www.json.org
@@ -261,7 +273,17 @@ class Parser:
         else:
             assert_type(method_name, str)
             lexer_method = getattr(lexer, method_name, lexer.invalid_method)
-            self.iterator = iter(lexer_method())
+
+            # note that try/except with iter() actually primes the function and only raises the error once the method reaches "return"
+            # therefore, using inspect.isgeneratorfunction to prevent unnecessary priming
+            if inspect.isgeneratorfunction(lexer_method):
+                self.iterator = iter(lexer_method())
+            else:
+                # simply makes some the method a generator that only yields one object
+                def temp():
+                    yield lexer_method()
+                self.iterator = iter(temp())
+
             self.return_eof = True
 
         self.current_token = None
@@ -272,8 +294,8 @@ class Parser:
         Returns:
             ProgramNode: The parse tree parent
         """
-        parser_method = getattr(self, method_name, self.invalid_method)
         assert_type(method_name, str)
+        parser_method = getattr(self, method_name, self.invalid_method)
         ast = parser_method()
         logging.debug("")
 
@@ -436,9 +458,10 @@ class Parser:
         # as long as the replacement dictionary is applied
         if isinstance(parse_type, list):
             # currently, only supports two possible options (literal_str or str)
-            if ("LITERAL_STR" in parse_type and self.current_token.matches(TypedToken.LITERAL_STR) or
+            if ("LITERAL_STR" in parse_type and self.current_token.matches(TypedToken.LITERAL_STRING) or
                     "STR" in parse_type and self.current_token.matches(TypedToken.STRING)):
                 return self.advance()
+            self.error("Something stupid happened")
             
         if parse_type == "VALUES":
             arg_value = self.current_token.value
@@ -487,7 +510,7 @@ class Parser:
             arg_value = self.current_token.value
             if not is_number(arg_value):
                 self.error("Expected a real number (sadly, no complex numbers are allowed in minecraft)")
-            arg_value_token = self.eat(TypedToken.STRING)
+            arg_value_token = self.eat(TypedToken.INT, TypedToken.FLOAT)
             # arg_value_token.cast(TypedToken.FLOAT)
             return arg_value_token
 
@@ -511,7 +534,7 @@ class Parser:
             return self.selector()
 
         if parse_type == "ADVANCEMENT_GROUP":
-            raise NotImplementedError("1.13")
+            return self.adv_arg_group()
 
         if parse_type == "SHORTCUT_ERROR":
             self.error("Shortcut error (There is most likely a shortcut version of this that should be used)")
@@ -1212,39 +1235,67 @@ class Parser:
             SelectorScoreArgNode: [],
             SelectorTagArgNode: [],
             SelectorNbtArgNode: [],
-            SelectorAdvancementArgNode: [],
+            SelectorAdvancementGroupArgNode: None,
         }
 
         if not self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
-            while self.current_token.matches(TypedToken.STRING):
+            while self.current_token.matches_any_of(TypedToken.STRING, DelimiterToken.EXCLAMATION_MARK, DelimiterToken.OPEN_CURLY_BRACKET):
                 selector_arg = self.single_arg()
                 arg_type = type(selector_arg)
 
                 # makes sure that the argument type is actually inside the dictionary
                 # this is contained in an assert stmt because this should never happen
                 assert arg_type in all_selector_args, f"Expected {arg_type} to be in {list(all_selector_args)}"
+
+                # if it isn't a list, it only allows one argument
+                if not isinstance(all_selector_args[arg_type], list):
+                    if not all_selector_args[arg_type] is None:
+                        self.error(f"Found an extra argument {selector_arg}")
+                    all_selector_args[arg_type] = selector_arg
                 all_selector_args[arg_type].append(selector_arg)
 
                 if self.current_token.matches(DelimiterToken.COMMA):
                     self.advance()
                 elif self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
                     break
+                else:
+                    self.error("Expected a comma or closing square bracket")
 
             else:
-                self.error("Expected a string as a selector argument")
+                self.error("Expected a string or exclamation mark as a selector argument")
 
-        return SelectorArgsNode(*all_selector_args.values())
+        default_args = all_selector_args[SelectorDefaultArgNode]
+        score_args = SelectorScoreArgsNode(all_selector_args[SelectorScoreArgNode])
+        tag_args = SelectorTagArgsNode(all_selector_args[SelectorTagArgNode])
+        nbt_args = SelectorNbtArgsNode(all_selector_args[SelectorNbtArgNode])
+        adv_args = all_selector_args[SelectorAdvancementGroupArgNode]
+        if adv_args is None:
+            adv_args = SelectorAdvancementGroupArgNode([])
+
+        return SelectorArgsNode(default_args, score_args, tag_args, nbt_args, adv_args)
+
+        # all_selector_args[SelectorNbtArgNode] = SelectorNbtArgsNode(all_selector_args[SelectorNbtArgNode])
+        # return SelectorArgsNode(*all_selector_args.values())
 
     def single_arg(self):
         """
-        single_arg ::= [simple_arg, score_arg, tag_arg]
+        single_arg ::= [simple_arg, score_arg, tag_arg, nbt_arg]
         """
         # note that this can be anything and it doesn't have to be specified under selector.json
         # literally can be any string, even if it matches a default arg
+        negated = self.current_token.matches(DelimiterToken.EXCLAMATION_MARK)
+        if negated:
+            self.advance()
+
+        # checks whether it is an nbt argument
+        if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
+            return self.nbt_arg(negated)
+
         selector_arg_token = self.eat(TypedToken.STRING)
         if not self.current_token.matches(DelimiterToken.EQUALS):
-            return self.tag_arg(selector_arg_token)
+            return self.tag_arg(selector_arg_token, negated)
 
+        # guaranteed to be a default arg
         # gets any replacements
         selector_arg = selector_arg_token.value
         replacement = Parser.config_data.selector_replacements.get(selector_arg, selector_arg)
@@ -1256,9 +1307,9 @@ class Parser:
         # otherwise, score arg
         return self.score_arg(selector_arg_token)
 
-    def tag_arg(self, tag_arg):
+    def tag_arg(self, tag_arg, negated):
         """
-        tag_arg ::= STR
+        tag_arg ::= ("!")? & STR
 
         Args:
             tag_arg (Token)
@@ -1266,7 +1317,7 @@ class Parser:
         Returns:
             SelectorTagArgNode
         """
-        return SelectorTagArgNode(tag_arg)
+        return SelectorTagArgNode(tag_arg, negated)
 
     def score_arg(self, objective_arg):
         """
@@ -1296,6 +1347,13 @@ class Parser:
             value = self.int_range()
 
         return value
+
+    def nbt_arg(self, negated):
+        """
+        nbt_arg ::= ("!")? & nbt
+        """
+        nbt = self.nbt()
+        return SelectorNbtArgNode(nbt, negated)
 
     def simple_arg(self, simple_arg_token):
         """
@@ -1344,16 +1402,16 @@ class Parser:
         # gets group values
         if group:
             self.eat(DelimiterToken.OPEN_PARENTHESES)
-            value_nodes = self.default_arg_values(json_arg_details)
+            value_nodes = self.default_arg_values(json_arg_details, negated)
             self.eat(DelimiterToken.CLOSE_PARENTHESES)
 
-            return SelectorDefaultGroupArgValueNode(value_nodes, negated)
+            return SelectorDefaultGroupArgValueNode(value_nodes)
 
         # gets one single argument
         arg_value_token = self.json_parse_arg_value(json_arg_details)
         return SelectorDefaultArgValueNode(arg_value_token, negated)
 
-    def default_arg_values(self, json_arg_details):
+    def default_arg_values(self, json_arg_details, negated):
         """
         default_arg_values ::= (default_arg_value)? | (single_arg & ("," & single_arg)*)?
         # default_arg_value is defined under selector_version.json as "selector_argument_details"
@@ -1364,24 +1422,142 @@ class Parser:
         default_arg_values = []
         while not self.current_token.matches_any_of(DelimiterToken.CLOSE_PARENTHESES, DelimiterToken.COMMA):
             value = self.json_parse_arg_value(json_arg_details)
-            default_arg_values.append(value)
+            arg_value = SelectorDefaultArgValueNode(value, negated)
+            default_arg_values.append(arg_value)
 
             if self.current_token.matches(DelimiterToken.COMMA):
                 self.advance()
-
             elif self.current_token.matches(DelimiterToken.CLOSE_PARENTHESES):
                 break
+            else:
+                self.error("Expected a comma or closing parentheses")
 
         else:
             self.error("Expected a value for the group argument")
 
         return default_arg_values
 
-    def nbt_object(self, past_curly_bracket=True):
-        raise NotImplementedError
+    def adv_arg_group(self):
+        raise NotImplementedError()
+
+    def nbt_object(self, past_curly_bracket=False):
+        """
+        nbt_object ::= "{" && ((nbt_map)? | (nbt_map && ("," && nbt_map)*)) && "}"
+
+        Returns:
+            NbtObjectNode
+        """
+        mappings = []
+
+        if not past_curly_bracket:
+            self.eat(DelimiterToken.OPEN_CURLY_BRACKET)
+
+        if not self.current_token.matches(DelimiterToken.CLOSE_CURLY_BRACKET):
+            while self.current_token.matches(TypedToken.STRING):
+                nbt_map = self.nbt_map()
+                mappings.append(nbt_map)
+
+                if self.current_token.matches(DelimiterToken.COMMA):
+                    self.advance()
+                elif self.current_token.matches(DelimiterToken.CLOSE_CURLY_BRACKET):
+                    break
+                else:
+                    self.error("Expected a comma or closing curly bracket")
+
+            else:
+                self.error("Expected a literal string to begin a nbt map")
+
+        self.eat(DelimiterToken.CLOSE_CURLY_BRACKET)
+
+        return NbtObjectNode(mappings)
 
     # nbt ::= nbt_object
     nbt = nbt_object
+
+    def nbt_map(self):
+        """
+        nbt_map ::= STR && ":" && nbt_value
+        """
+        arg = self.eat(TypedToken.STRING)
+        self.eat(DelimiterToken.COLON)
+        value = self.nbt_value()
+
+        return NbtMapNode(arg, value)
+
+    def nbt_array(self):
+        """
+        nbt_array ::= "[" && (nbt_array_begin && ";")? && nbt_value)? | (nbt_value && ("," && nbt_value)*) && "]"
+        """
+        # getes the type specifier if it exists
+        self.eat(DelimiterToken.OPEN_SQUARE_BRACKET)
+        nbt_values = []
+
+        if self.current_token.matches(TypedToken.STRING):
+            type_specifier = self.nbt_array_begin()
+            self.eat(DelimiterToken.SEMICOLON)
+        else:
+            type_specifier = None
+
+        if not self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
+            while self.current_token.matches_any_of(TypedToken.LITERAL_STRING, TypedToken.INT, TypedToken.FLOAT,
+                    DelimiterToken.OPEN_CURLY_BRACKET, DelimiterToken.OPEN_SQUARE_BRACKET):
+                nbt_value = self.nbt_value()
+                nbt_values.append(nbt_value)
+
+                if self.current_token.matches(DelimiterToken.COMMA):
+                    self.advance()
+                elif self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
+                    break
+                else:
+                    self.error("Expected a comma or closing square bracket")
+
+            else:
+                self.error("Expected a nbt value")
+
+        self.eat(DelimiterToken.CLOSE_SQUARE_BRACKET)
+        return NbtArrayNode(nbt_values, type_specifier=type_specifier)
+
+    def nbt_array_begin(self):
+        """
+        nbt_array_begin ::= ["I", "L", "B"]
+        """
+        return self.eat(TypedToken.STRING, values=("I", "L", "B"))
+
+    def nbt_value(self):
+        """
+        nbt_value ::= [literal_str, nbt_number, nbt_object, nbt_array]
+        """
+        if self.current_token.matches_any_of(DelimiterToken.OPEN_SQUARE_BRACKET):
+            return self.nbt_array()
+        if self.current_token.matches(TypedToken.LITERAL_STRING):
+            return self.advance()
+        if self.current_token.matches_any_of(TypedToken.INT, TypedToken.FLOAT):
+            return self.nbt_number()
+        if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
+            return self.nbt_object()
+        self.error("Unexpected default case")
+
+    def nbt_number(self):
+        """
+        nbt_number = (signed_int & ["b", "s", "L"]?) | json_number & ["d", "f"]?
+        """
+        if self.current_token.matches(TypedToken.INT):
+            int_value = self.advance()
+            if self.current_token.matches(TypedToken.STRING):
+                int_type = self.eat(TypedToken.STRING, values=("b", "s", "L"))
+            else:
+                int_type = None
+            return NbtIntegerNode(int_value, int_type)
+
+        if self.current_token.matches(TypedToken.FLOAT):
+            float_value = self.advance()
+            if self.current_token.matches(TypedToken.STRING):
+                float_type = self.eat(TypedToken.STRING, values=("f", "d"))
+            else:
+                float_type = None
+            return NbtFloatNode(float_value, float_type)
+        
+        self.error("Unexpected default case")
 
     def json_object(self, past_curly_bracket=False):
         """
@@ -1389,79 +1565,6 @@ class Parser:
 
         Returns:
             JsonObjectNode
-
-        Examples:
-            >>> def test(json_str):
-            ...     lexer = Lexer(json_str)
-            ...     parser = Parser(lexer, "get_tag")
-            ...     parser.parse(method_name="json")
-
-            >>> test(r'{"asdf":1, "asdf2":2, "asdf3":3}')
-            >>> test(r'{"asdf":1, "asdf2":2}')
-            >>> test(r'{"asdf":1}')
-            >>> test(r'{"asdf": [{"arg": "value"}, 1, 1.2, 1e1, 1.2e1, 1.2e+1, [1, 2, 3], "hello", true, false, null]}')
-            >>> test(r'{}')
-
-            >>> test(r'{')
-            Traceback (most recent call last):
-                ...
-            TypeError: Lexer[row=1, col=2]: Cannot get a character when the end of file has been reached
-
-            >>> test(r'}')
-            Traceback (most recent call last):
-                ...
-            TypeError: Lexer[row=1, col=1]: Expected '{' but got '}'
-
-            >>> test(r'{"test":1,}')
-            Traceback (most recent call last):
-                ...
-            SyntaxError: Token['}' at [row=1, col=11]]: Expected a literal string to begin a json map
-
-            >>> test(r'{,"test":2}')
-            Traceback (most recent call last):
-                ...
-            SyntaxError: Token[',' at [row=1, col=2]]: Expected a literal string to begin a json map
-
-            >>> test(r'{"test":1, "test":2, "test":3, }')
-            Traceback (most recent call last):
-                ...
-            SyntaxError: Token['}' at [row=1, col=32]]: Expected a literal string to begin a json map
-
-            >>> test(r'{"test":1, "test":2, "test":3{')
-            Traceback (most recent call last):
-                ...
-            SyntaxError: Token['{' at [row=1, col=30]]: Expected a literal string to begin a json map
-
-            >>> test(r'nou')
-            Traceback (most recent call last):
-                ...
-            TypeError: Lexer[row=1, col=1]: Expected '{' but got 'n'
-
-            >>> test(r'{nou}')
-            Traceback (most recent call last):
-                ...
-            SyntaxError: Token['nou' at [row=1, col=(2 to 5)]]: Expected a literal string to begin a json map
-
-            >>> test(r'{"nou":1, nou}')
-            Traceback (most recent call last):
-                ...
-            SyntaxError: Token['nou' at [row=1, col=(11 to 14)]]: Expected a literal string to begin a json map
-
-            >>> test(r'{"nou":1, nou}')
-            Traceback (most recent call last):
-                ...
-            SyntaxError: Token['nou' at [row=1, col=(11 to 14)]]: Expected a literal string to begin a json map
-
-
-            >>> test(r'{"nou":1, []}')
-            Traceback (most recent call last):
-                ...
-            SyntaxError: Token['[' at [row=1, col=11]]: Expected a literal string to begin a json map
-
-            >>> test(r'{"nou":[1, 2,]}')
-            Traceback (most recent call last):
-                ...
-            SyntaxError: Token[']' at [row=1, col=14]]: Expected a json value
         """
         mappings = []
 
@@ -1475,9 +1578,10 @@ class Parser:
 
                 if self.current_token.matches(DelimiterToken.COMMA):
                     self.advance()
-
                 elif self.current_token.matches(DelimiterToken.CLOSE_CURLY_BRACKET):
                     break
+                else:
+                    self.error("Expected a comma or closing curly bracket")
 
             # while else loop
             # this is only ran if the while loop ends with a false condition
@@ -1496,10 +1600,9 @@ class Parser:
         """
         json_map ::= literal_str && ":" && json_value
         """
-        while self.current_token.matches(TypedToken.LITERAL_STRING):
-            arg = self.eat(TypedToken.LITERAL_STRING)
-            self.eat(DelimiterToken.COLON)
-            value = self.json_value()
+        arg = self.eat(TypedToken.LITERAL_STRING)
+        self.eat(DelimiterToken.COLON)
+        value = self.json_value()
 
         return JsonMapNode(arg, value)
 
@@ -1521,6 +1624,8 @@ class Parser:
                     self.advance()
                 elif self.current_token.matches(DelimiterToken.CLOSE_SQUARE_BRACKET):
                     break
+                else:
+                    self.error("Expected a comma or closing square bracket")
 
             else:
                 self.error("Expected a json value")
@@ -1642,13 +1747,41 @@ class Parser:
         return IntRangeNode(min_int, max_int, args)
 
     def number_range_bracket(self):
-        raise NotImplementedError
+        if self.current_token.matches_any_of(TypedToken.INT, TypedToken.FLOAT, DelimiterToken.RANGE):
+            return self.number_range()
+        elif self.current_token.matches(DelimiterToken.OPEN_PARENTHESES):
+            self.eat(DelimiterToken.OPEN_PARENTHESES)
+            result = self.number_range_bracket()
+            self.eat(DelimiterToken.CLOSE_PARENTHESES)
+            return result
+        else:
+            self.error("Expected an integer, '..' or open parenthesis")
 
     def number_range(self):
         """
         number_range ::= [signed_float, (signed_float & ".."), (".." & signed_float), (signed_float & ".." & signed_float)]
         """
-        raise NotImplementedError
+        min_num = None
+        max_num = None
+
+        if self.current_token.matches_any_of(TypedToken.INT, TypedToken.FLOAT):
+            min_num = self.advance()
+
+        # if it isn't a singular integer, it requires a range
+        if self.current_token.matches(DelimiterToken.RANGE):
+            self.advance()
+            if self.current_token.matches_any_of(TypedToken.INT, TypedToken.FLOAT):
+                max_num = self.advance()
+
+        # singular number
+        else:
+            max_num = min_num
+
+        # a range cannot just be ".."
+        if min_num is None and max_num is None:
+            self.error("Expected at least one number in a number range")
+
+        return NumberRangeNode(min_num, max_num)
 
     def target(self):
         """
@@ -1909,8 +2042,9 @@ if __name__ == "__main__":
 
     # tests_bossbar()
     # tests_json()
-    tests_selector()
+    # tests_selector()
     # test_json(r'{"nou":[1, 2,]}', expect_error=True)
+    test(r'{HurtByTimestamp: 0, Attributes: [{Base: 1.0E7d, Name: "generic.maxHealth"}, {Base: 0.0d, Name: "generic.knockbackResistance"}, {Base: 0.25d, Name: "generic.movementSpeed"}, {Base: 0.0d, Name: "generic.armor"}, {Base: 0.0d, Name: "generic.armorToughness"}, {Base: 16.0d, Modifiers: [{UUIDMost: 5954586636154850795L, UUIDLeast: -5021346310275855673L, Amount: -0.012159221696308982d, Operation: 1, Name: "Random spawn bonus"}], Name: "generic.followRange"}], Invulnerable: 0b, FallFlying: 0b, ForcedAge: 0, PortalCooldown: 0, AbsorptionAmount: 0.0f, Saddle: 0b, FallDistance: 0.0f, InLove: 0, DeathTime: 0s, HandDropChances: [0.085f, 0.085f], PersistenceRequired: 0b, Age: 0, Motion: [0.0d, -0.0784000015258789d, 0.0d], Leashed: 0b, UUIDLeast: -8543204344868739349L, Health: 79.2f, LeftHanded: 0b, Air: 300s, OnGround: 1b, Dimension: 0, Rotation: [214.95569f, 0.0f], HandItems: [{}, {}], ArmorDropChances: [0.085f, 0.085f, 0.085f, 0.085f], UUIDMost: 900863262324051519L, Pos: [724.3034218419358d, 4.0d, 280.78117600802693d], Fire: -1s, ArmorItems: [{}, {}, {}, {}], CanPickUpLoot: 0b, HurtTime: 0s}', "get_curly_bracket_tag", "nbt")
 
     # import doctest
     # doctest.testmod()

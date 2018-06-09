@@ -113,6 +113,7 @@ class Lexer:
             else:
                 message = f"Expected {expected!r} but got {char!r}"
         raise TypeError(f"Lexer{self.recorder}: {message}")
+        # raise TypeError(f"{self!r}: {message}")
 
     def invalid_method(self, *args, **kwargs):
         raise NotImplementedError(f"Lexer{self.recorder}: Invalid method")
@@ -530,7 +531,7 @@ class Lexer:
                     self.skip_comment()
                 continue
 
-            elif self.get_char() in (DelimiterToken.COLON.value, DelimiterToken.COMMA.value):
+            elif self.get_char() in (DelimiterToken.COLON.value, DelimiterToken.COMMA.value, DelimiterToken.SEMICOLON.value):
                 yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
 
             elif self.current_chars_are(DelimiterToken.OPEN_CURLY_BRACKET.value):
@@ -556,18 +557,23 @@ class Lexer:
 if __name__ == "__main__":
     # import timeit
 
-    with open("test_lexer.txt") as file:
-        text = file.read()
+    # with open("test_lexer.txt") as file:
+    #     text = file.read()
 
-    # number = 20
-    # print(timeit.timeit("lexer = Lexer(text); lexer.test()", number=number, globals=globals()))
-    lexer = Lexer(text)
+    # lexer = Lexer(text)
 
-    for token in lexer:
-        logging.debug(repr(token))
+    # for token in lexer:
+    #     logging.debug(repr(token))
 
     # gets only selector tokens
     # lexer = Lexer("@e[x=5,y=4,z=2, type=armor_stand,_entity, _pl=(5..6), {CustomNameVisible:1b}]")
     # for token in lexer.get_selector():
     #     logging.debug(repr(token))
 
+    # lexer = Lexer(r'{"test":1 "test":2}')
+    # for token in lexer.get_curly_bracket_tag():
+    #     print(repr(token))
+    #     logging.debug(repr(token))
+
+    lexer = Lexer("_pl")
+    print(lexer.get_until_space())
