@@ -29,7 +29,7 @@ def test_coords():
     test_coord("~-1.5E1", expect_error=True)
 
     test_vec2("~ ~")
-    test_vec2("^ ^")
+    test_vec2("^ ^", expect_error=True)
     test_vec2("~1 ~2")
     test_vec2("~1 2")
     test_vec2("~-1 -2")
@@ -39,7 +39,7 @@ def test_coords():
     test_vec2("~1 2.1")
     test_vec2("~-1 -2.1")
     test_vec2("-1 -2")
-    test_vec2("^-1 ^-2")
+    test_vec2("^-1 ^-2", expect_error=True)
 
     test_vec3("~ ~ ~")
     test_vec3("^ ^ ^")

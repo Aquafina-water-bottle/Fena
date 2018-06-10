@@ -312,7 +312,7 @@ class Parser:
         Raises a generic syntax error with an optional message
         """
         assert_type(message, str)
-        raise SyntaxError(f"{self.current_token}: {message}")
+        raise SyntaxError(f"{self.current_token!r}: {message}")
 
     def invalid_method(self, *args, **kwargs):
         raise NotImplementedError(f"Invalid parser method")
@@ -833,7 +833,7 @@ class Parser:
             if self.current_token.value == "if":
                 exec_sub_if_nodes = self.exec_sub_cmds()
             else:
-                exec_sub_if_nodes = None
+                exec_sub_if_nodes = []
 
             # this execute node format is specific to 1.12
             execute_node = ExecuteSubLegacyArg(selector=selector_node, coords=coords_node, sub_if=exec_sub_if_nodes)
@@ -905,14 +905,18 @@ class Parser:
         # contains the list of nodes gotten from the arg method
         exec_sub_arg_nodes = []
 
-        while True:
+        while not self.current_token.matches_any_of(DelimiterToken.COMMA, DelimiterToken.CLOSE_PARENTHESES):
             exec_sub_arg_node = exec_sub_arg_method()
             exec_sub_arg_nodes.append(exec_sub_arg_node)
 
-            if self.current_token.matches(DelimiterToken.COLON):
+            if self.current_token.matches(DelimiterToken.COMMA):
                 self.advance()
             elif self.current_token.matches(DelimiterToken.CLOSE_PARENTHESES):
                 break
+            else:
+                self.error("Expected a comma or closing square bracket")
+        else:
+            self.error("Expected an execute sub argument")
 
         self.eat(DelimiterToken.CLOSE_PARENTHESES)
 
@@ -1851,7 +1855,7 @@ class Parser:
         coord2 = self.coord()
         
         if not are_coords(coord1, coord2):
-            self.error(f"Expected a proper coord type given all coordinates ({coord1} {coord2})")
+            self.error(f"Expected either only world or relative coordinates ({coord1} {coord2})")
 
         return Vec2Node(coord1, coord2)
 
@@ -1867,7 +1871,7 @@ class Parser:
         coord3 = self.coord()
         
         if not are_coords(coord1, coord2, coord3):
-            self.error(f"Expected a proper coord type given all coordinates ({coord1} {coord2} {coord3})")
+            self.error(f"Expected either only world or relative coordinates ({coord1} {coord2} {coord3})")
 
         return Vec3Node(coord1, coord2, coord3)
 

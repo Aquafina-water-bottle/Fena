@@ -133,12 +133,12 @@ class ExecuteSubLegacyArg(MainCmdNode):
     Attributes:
         selector (SelectorNode)
         coords (Vec3Node or None)
-        sub_if (ExecuteSubIfBlockArg or None)
+        sub_if (list of ExecuteSubIfBlockArg objects)
     """
     def __init__(self, selector, coords=None, sub_if=None):
         assert_type(selector, SelectorNode)
         assert_type(coords, Vec3Node, optional=True)
-        assert_type(sub_if, ExecuteSubIfBlockArg, optional=True)
+        assert_list_types(sub_if, ExecuteSubIfBlockArg)
         self.selector = selector
         self.coords = coords
         self.sub_if = sub_if
@@ -203,18 +203,13 @@ class ExecuteSubIfSelectorArg(ExecuteSubIfArg):
 
 class ExecuteSubIfBlockArg(ExecuteSubIfArg):
     """
-    Args:
+    Attributes:
         block (BlockNode)
-        coords (Vec3Node)
-        version (str): Minecraft version
-
-    Usage:
-        if(block_type) -> if(block_type ~ ~ ~)
-        if(block_type vec3) -> if block vec3 block_type
+        coords (Vec3Node or None)
     """
     def __init__(self, block, coords, negated=False):
         assert_type(block, BlockNode)
-        assert_type(coords, Vec3Node)
+        assert_type(coords, Vec3Node, optional=True)
 
         super().__init__(negated)
         self.block = block

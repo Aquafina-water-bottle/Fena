@@ -56,6 +56,7 @@ def are_coords(*tokens):
     Checks whether a group of tokens:
         - Have a length of 2 or 3 tokens
         - Have the same type (local, or world (absolute and relative) coordinates)
+            - if the length is 2, then it can only contain world coordinates
         - All have the type of TypedToken.COORD
     """
     # records the supposed global coord type as either "relative" or "local", as to skip absolute
@@ -77,6 +78,8 @@ def are_coords(*tokens):
         elif overall_coord_type != coord_type:
             return False
 
+    if overall_coord_type == "local" and len(tokens) == 2:
+        return False
     return True
 
 if __name__ == "__main__":
@@ -111,9 +114,9 @@ if __name__ == "__main__":
     from fena.token_position import TokenPosition
     from fena.lexical_token import Token
     position = TokenPosition(row=1, column=5, char_pos=3)
-    coord1 = Token(position, TypedToken.COORD, value="25.6")
-    coord2 = Token(position, TypedToken.COORD, value="^25.6")
-    coord3 = Token(position, TypedToken.COORD, value="~25.6")
+    coord1 = Token(position, TypedToken.STRING, value="25.6")
+    coord2 = Token(position, TypedToken.STRING, value="^25.6")
+    coord3 = Token(position, TypedToken.STRING, value="~25.6")
 
     print(are_coords(coord1, coord1, coord1)) # true
     print(are_coords(coord2, coord2, coord2)) # true

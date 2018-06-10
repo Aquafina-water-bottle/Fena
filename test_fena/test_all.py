@@ -9,6 +9,7 @@ if __name__ == "__main__":
     del sys
 
 import logging
+import time
 
 import fena.logging_setup as logging_setup
 from fena.config_data import get_all_data, ConfigData
@@ -26,6 +27,8 @@ in_file_config.finalize()
 
 config_data = ConfigData()
 
+begin = time.perf_counter()
+
 try:
     logging.debug("\n\n1.12")
     get_all_data("1.12")
@@ -37,7 +40,10 @@ try:
     get_all_data("1.13")
     config_data.ego = False
     test_fena.v1_13.test_all.test_all()
-
 except Exception as e:
     # ignores the mypy warning idk
     logging.exception(e)  # type: ignore
+else:
+    end = time.perf_counter()
+    logging.warn(f"Test cases finished in {end-begin} seconds")
+

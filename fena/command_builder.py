@@ -55,8 +55,10 @@ class CommandBuilder_1_12(NodeBuilder):
         """
         turns to <selector> <vec3> [detect vec3 block_type data_value]
 
-        Args:
-            node (ExecuteSubLegacyArg)
+        Node Attributes:
+            selector (SelectorNode)
+            coords (Vec3Node or None)
+            sub_if (list of ExecuteSubIfBlockArg objects)
         """
         if node.coords is None:
             coords = "~ ~ ~"
@@ -64,16 +66,25 @@ class CommandBuilder_1_12(NodeBuilder):
             coords = self.build(node.coords)
         selector = self.build(node.selector)
 
-        if node.sub_if is None:
+        # no detect area
+        if not node.sub_if:
             return f"execute {selector} {coords}"
 
-        sub_if = self.build(node.sub_if)
-        return f"execute {selector} {coords} {sub_if}"
+        # can have one or more detect areas
+        result = []
+        for index, sub_if in enumerate(node.sub_if):
+            sub_if = self.build(sub_if)
+            if index == 0:
+                result.append(f"execute {selector} {coords} {sub_if}")
+            else:
+                result.append(f"execute @s {coords} {sub_if}")
+        return " ".join(result)
 
     def build_ExecuteSubIfBlockArg(self, node):
         """
-        Args:
-            node (ExecuteSubIfBlockArg)
+        Node Attributes:
+            block (BlockNode)
+            coords (Vec3Node or None)
         """
         if node.coords is None:
             coords = "~ ~ ~"

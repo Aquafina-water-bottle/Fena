@@ -14,3 +14,4 @@ def test_all():
     test_blocks()
     test_blocks()
     test_coords()
+    test_executes()
