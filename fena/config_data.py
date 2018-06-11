@@ -35,6 +35,11 @@ class ConfigData:
         selector_argument_details (dict): maps each selector argument to the parse type and any other details
             - Uses the command json parse type
 
+        execute_dimensions (dict)
+        execute_comparison_operators (dict)
+        execute_keywords (list)
+        execute_data_types (list)
+
         scoreboard_math (dict)
         scoreboard_special (dict)
 
@@ -62,6 +67,11 @@ class ConfigData:
             self.selector_arguments = options["selector_arguments"]
             self.selector_replacements = options["selector_replacements"]
             self.selector_argument_details = options["selector_argument_details"]
+
+            self.execute_dimensions = options["execute_dimensions"]
+            self.execute_keywords = options["execute_keywords"]
+            self.execute_data_types = options["execute_data_types"]
+            self.execute_comparison_operators = options["execute_comparison_operators"]
 
             self.scoreboard_math = options["scoreboard_math"]
             self.scoreboard_special = options["scoreboard_special"]
@@ -107,7 +117,7 @@ def _get_file_str(file_name):
 # def _get_file_name(option_name, extension="txt"):
 #     """
 #     Gets the data inside the file given the version, option and extension
-# 
+#
 #     Args:
 #         version (str)
 #         option_name (str)
@@ -162,6 +172,7 @@ def _get_json_config_data(version):
         command_names.json
         effects.json
         entities.json
+        execute.json
         items.json
         scoreboard.json
         selector.json
@@ -172,7 +183,7 @@ def _get_json_config_data(version):
     """
     # result for all files
     json_options = {}
-    option_names = ("blocks", "bossbar", "command_names", "effects", "entities", "items", "selector", "scoreboard", "team_options")
+    option_names = ("blocks", "bossbar", "command_names", "effects", "entities", "execute", "items", "selector", "scoreboard", "team_options")
 
     for option_name in option_names:
         file_name = f"{option_name}.json"
@@ -256,10 +267,11 @@ def get_all_data(version=None):
 
     selector_json_args = {"selector_variable_specifiers", "selector_arguments", "selector_replacements", "selector_argument_details"}
     scoreboard_json_args = {"scoreboard_math", "scoreboard_special"}
+    execute_json_args = {"execute_dimensions", "execute_keywords", "execute_data_types", "execute_comparison_operators"}
     general_json_args = {"blocks", "command_names", "effects", "entities", "items", "team_options"}
     bossbar_json_args = {"bossbar_set", "bossbar_get"}
 
-    all_json_args = (selector_json_args | scoreboard_json_args | general_json_args | bossbar_json_args)
+    all_json_args = (selector_json_args | scoreboard_json_args | execute_json_args | general_json_args | bossbar_json_args)
     _validate_options(json_options, all_json_args)
 
     # ensures that this is the first instance of the ConfigData object

@@ -1,15 +1,43 @@
 from test_fena.test_common import test_vec2, test_vec3, test_coord
 
 def test_coords():
+    test_coord("0")
     test_coord("1")
     test_coord("1.5")
     test_coord("-1")
     test_coord("-1.5")
-    test_coord("1e1", expect_error=True)
+    test_coord("1e1", expect_error=True) # invalid numbers
     test_coord("1.5e1", expect_error=True)
     test_coord("-1E1", expect_error=True)
     test_coord("-1.5E1", expect_error=True)
+    test_coord("6e5", expect_error=True)
+    test_coord("1_964", expect_error=True)
+    test_coord("NaN", expect_error=True)
+    test_coord("None", expect_error=True)
+    test_coord("27j", expect_error=True)
+    test_coord("27j+5", expect_error=True)
+    test_coord("abcdefg", expect_error=True)
+    test_coord("12345a", expect_error=True)
 
+    test_coord("~0")
+    test_coord("~1")
+    test_coord("~1.5")
+    test_coord("~-1")
+    test_coord("~-1.5")
+    test_coord("~1e1", expect_error=True) # invalid numbers
+    test_coord("~1.5e1", expect_error=True)
+    test_coord("~-1E1", expect_error=True)
+    test_coord("~-1.5E1", expect_error=True)
+    test_coord("~6e5", expect_error=True)
+    test_coord("~1_964", expect_error=True)
+    test_coord("~NaN", expect_error=True)
+    test_coord("~None", expect_error=True)
+    test_coord("~27j", expect_error=True)
+    test_coord("~27j+5", expect_error=True)
+    test_coord("~abcdefg", expect_error=True)
+    test_coord("~12345a", expect_error=True)
+
+    test_coord("^0", expect_error=True) # no local coords
     test_coord("^1", expect_error=True)
     test_coord("^1.5", expect_error=True)
     test_coord("^-1", expect_error=True)
@@ -18,18 +46,16 @@ def test_coords():
     test_coord("^1.5e1", expect_error=True)
     test_coord("^-1E1", expect_error=True)
     test_coord("^-1.5E1", expect_error=True)
-
-    test_coord("~1")
-    test_coord("~1.5")
-    test_coord("~-1")
-    test_coord("~-1.5")
-    test_coord("~1e1", expect_error=True)
-    test_coord("~1.5e1", expect_error=True)
-    test_coord("~-1E1", expect_error=True)
-    test_coord("~-1.5E1", expect_error=True)
+    test_coord("^6e5", expect_error=True)
+    test_coord("^1_964", expect_error=True)
+    test_coord("^NaN", expect_error=True)
+    test_coord("^None", expect_error=True)
+    test_coord("^27j", expect_error=True)
+    test_coord("^27j+5", expect_error=True)
+    test_coord("^abcdefg", expect_error=True)
+    test_coord("^12345a", expect_error=True)
 
     test_vec2("~ ~")
-    test_vec2("^ ^", expect_error=True)
     test_vec2("~1 ~2")
     test_vec2("~1 2")
     test_vec2("~-1 -2")
@@ -39,10 +65,10 @@ def test_coords():
     test_vec2("~1 2.1")
     test_vec2("~-1 -2.1")
     test_vec2("-1 -2")
+    test_vec2("^ ^", expect_error=True) # no local coords
     test_vec2("^-1 ^-2", expect_error=True)
 
     test_vec3("~ ~ ~")
-    test_vec3("^ ^ ^", expect_error=True)
     test_vec3("~1 ~2 ~3")
     test_vec3("~1 2 ~3")
     test_vec3("~-1 -2 ~3")
@@ -52,11 +78,14 @@ def test_coords():
     test_vec3("~1 2.1 ~3")
     test_vec3("~-1 -2.1 ~3")
     test_vec3("-1 -2 3.1")
+    test_vec3("^ ^ ^", expect_error=True)
     test_vec3("^-1 ^-2 ^3.1", expect_error=True)
 
-    test_vec3("1 2 ^3", expect_error=True)
+    test_vec3("1 2 ^3", expect_error=True) # mix of world and local
     test_vec3("~1 2 ^3", expect_error=True)
     test_vec3("~1 ~2 ^3", expect_error=True)
-    test_vec3("-1 -2 3.1e5", expect_error=True)
+
+    test_vec3("-1 -2 3.1e5", expect_error=True) # invalid numbers
     test_vec3("-1 -2e5 3.1", expect_error=True)
     test_vec3("-2 3.1", expect_error=True)
+

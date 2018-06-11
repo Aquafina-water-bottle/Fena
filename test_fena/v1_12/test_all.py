@@ -3,8 +3,8 @@ from test_fena.v1_12.test_jsons import test_jsons
 from test_fena.v1_12.test_nbts import test_nbts
 from test_fena.v1_12.test_scoreboards import test_scoreboards
 from test_fena.v1_12.test_blocks import test_blocks
-from test_fena.v1_12.test_executes import test_executes
 from test_fena.v1_12.test_coords import test_coords
+from test_fena.v1_12.test_executes import test_executes
 
 def test_all():
     test_selectors()

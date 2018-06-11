@@ -57,7 +57,6 @@ def are_coords(*tokens):
         - Have a length of 2 or 3 tokens
         - Have the same type (local, or world (absolute and relative) coordinates)
             - if the length is 2, then it can only contain world coordinates
-        - All have the type of TypedToken.COORD
     """
     # records the supposed global coord type as either "relative" or "local", as to skip absolute
 

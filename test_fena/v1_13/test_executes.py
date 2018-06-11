@@ -9,166 +9,324 @@ def test_executes():
     test_cmd("1 1 1: say test",      "execute positioned 1 1 1 run say test")
     test_cmd("~ ~ ~: say test",      "execute positioned ~ ~ ~ run say test")
     test_cmd("^ ^ ^: say test",      "execute positioned ^ ^ ^ run say test")
+
+    # pos(selector) -> positioned as selector
     test_cmd("pos(1 1 1): say test", "execute positioned 1 1 1 run say test")
     test_cmd("pos(~ ~ ~): say test", "execute positioned ~ ~ ~ run say test")
     test_cmd("pos(^ ^ ^): say test", "execute positioned ^ ^ ^ run say test")
     test_cmd("pos(@a): say test",    "execute positioned as @a run say test")
 
-    test_cmd("at(feet): say test", "execute anchored feet positioned ^ ^ ^ run say test")
-    test_cmd("at(eyes): say test", "execute anchored eyes positioned ^ ^ ^ run say test")
-    test_cmd("at(@a): say test",   "execute at @a run say test")
+    # at(feet) -> anchored feet positioned ^ ^ ^
+    # at(eyes) -> anchored eyes positioned ^ ^ ^
+    # at(selector) -> at selector
+    # at(vec3 vec2) -> positioned vec3 facing vec2
+    test_cmd("at(feet): say test",      "execute anchored feet positioned ^ ^ ^ run say test")
+    test_cmd("at(eyes): say test",      "execute anchored eyes positioned ^ ^ ^ run say test")
+    test_cmd("at(@a): say test",        "execute at @a run say test")
+    test_cmd("at(1 2 3 4 5): say test", "execute positioned 1 2 3 facing 4 5 run say test")
+    test_cmd("at(1 2 3 4): say test",   expect_error=True) # invalid coords
+    test_cmd("at(1 2 3): say test",     expect_error=True)
 
-    test_cmd("at(x): say test",    "execute allign axes x run say test")
-    test_cmd("at(y): say test",    "execute allign axes y run say test")
-    test_cmd("at(z): say test",    "execute allign axes z run say test")
-    test_cmd("at(xy): say test",   "execute allign axes xy run say test")
-    test_cmd("at(xz): say test",   "execute allign axes xz run say test")
-    test_cmd("at(yx): say test",   "execute allign axes yx run say test")
-    test_cmd("at(yz): say test",   "execute allign axes yz run say test")
-    test_cmd("at(zx): say test",   "execute allign axes zx run say test")
-    test_cmd("at(zy): say test",   "execute allign axes zy run say test")
-    test_cmd("at(xyz): say test",  "execute allign axes xyz run say test")
-    test_cmd("at(xzy): say test",  "execute allign axes xzy run say test")
-    test_cmd("at(yxz): say test",  "execute allign axes yxz run say test")
-    test_cmd("at(yzx): say test",  "execute allign axes yzx run say test")
-    test_cmd("at(zxy): say test",  "execute allign axes zxy run say test")
-    test_cmd("at(zyx): say test",  "execute allign axes zyx run say test")
+    # at(axes) -> align axes (axes = combination of xyz)
+    test_cmd("at(x): say test",    "execute align x run say test")
+    test_cmd("at(y): say test",    "execute align y run say test")
+    test_cmd("at(z): say test",    "execute align z run say test")
+    test_cmd("at(xy): say test",   "execute align xy run say test")
+    test_cmd("at(xz): say test",   "execute align xz run say test")
+    test_cmd("at(yx): say test",   "execute align yx run say test")
+    test_cmd("at(yz): say test",   "execute align yz run say test")
+    test_cmd("at(zx): say test",   "execute align zx run say test")
+    test_cmd("at(zy): say test",   "execute align zy run say test")
+    test_cmd("at(xyz): say test",  "execute align xyz run say test")
+    test_cmd("at(xzy): say test",  "execute align xzy run say test")
+    test_cmd("at(yxz): say test",  "execute align yxz run say test")
+    test_cmd("at(yzx): say test",  "execute align yzx run say test")
+    test_cmd("at(zxy): say test",  "execute align zxy run say test")
+    test_cmd("at(zyx): say test",  "execute align zyx run say test")
     test_cmd("at(a): say test",    expect_error=True) # invalid swizzles
     test_cmd("at(xyzx): say test", expect_error=True)
     test_cmd("at(xa): say test",   expect_error=True)
 
-    # at(axes) -> align axes (axes = combination of xyz)
-    # at(vec3 vec2) -> positioned vec3 facing vec2
     # facing(vec3) -> facing vec3
     # facing(selector) -> facing(selector feet) -> facing selector feet
     # facing(selector eyes) -> facing selector eyes
+    test_cmd("facing(@r): say test",      "execute facing entity @r feet run say test")
+    test_cmd("facing(~ ~): say test",     expect_error=True) # invalid coords
+    test_cmd("facing(~ ~ ~): say test",   "execute facing ~ ~ ~ run say test")
+    test_cmd("facing(@r feet): say test", "execute facing entity @r feet run say test")
+    test_cmd("facing(@r eyes): say test", "execute facing entity @r eyes run say test")
+    test_cmd("facing(@r nou): say test",  expect_error=True) # invalid position
+
     # rot(selector) -> rotated as selector
     # rot(vec2) -> rotated vec2
+    test_cmd("rot(@r): say test",    "execute rotated as @r run say test")
+    test_cmd("rot(~ ~): say test",   "execute rotated ~ ~ run say test")
+    test_cmd("rot(~ ~ ~): say test", expect_error=True) # too many coords
+
     # anchor(feet) -> anchored feet
     # anchor(eyes) -> anchored eyes
+    test_cmd("anchor(feet): say test", "execute anchored feet run say test")
+    test_cmd("anchor(eyes): say test", "execute anchored eyes run say test")
+    test_cmd("anchor(nou): say test",  expect_error=True) # not "feet" or "eyes"
+
     # in(dimension) -> in dimension
+    test_cmd("in(overworld): say test",  "execute in overworld run say test")
+    test_cmd("in(nether): say test",     "execute in the_nether run say test")
+    test_cmd("in(the_nether): say test", "execute in the_nether run say test")
+    test_cmd("in(end): say test",        "execute in the_end run say test")
+    test_cmd("in(the_end): say test",    "execute in the_end run say test")
+    test_cmd("in(the_nou): say test",    expect_error=True) # invalid dimensions
+    test_cmd("in(nou): say test",    expect_error=True)
+
     # ast(selector) -> as selector at @s
+    test_cmd("ast(@r): say test",  "execute as @r at @s run say test")
+    test_cmd("ast(nou): say test", expect_error=True) # invalid selectors
+    test_cmd("ast(1): say test",   expect_error=True)
 
-"""
-# all round brackets () are only used when:
-# defining execute shortcut
-# surrounding coords
-# surrounding a selector argument value
-# creating a selector group
 
-# selector -> as(selector) -> as selector
-# vec3 -> pos(vec3) -> positioned vec3
-# pos(selector) -> positioned as selector
-# at(feet) -> anchored feet positioned ^ ^ ^
-# at(eyes) -> anchored eyes positioned ^ ^ ^
-# at(selector) -> at selector
-# at(axes) -> align axes (axes = combination of xyz)
-# at(vec3 vec2) -> positioned vec3 facing vec2
-# facing(vec3) -> facing vec3
-# facing(selector) -> facing(selector feet) -> facing selector feet
-# facing(selector eyes) -> facing selector eyes
-# rot(selector) -> rotated as selector
-# rot(vec2) -> rotated vec2
-# anchor(feet) -> anchored feet
-# anchor(eyes) -> anchored eyes
-# in(dimension) -> in dimension
-# ast(selector) -> as selector at @s
+    # if(selector) -> if entity selector
+    # if(block_type) -> if(~ ~ ~ block_type)
+    # if(block_type vec3) -> if block vec3 block_type
+    test_cmd("if(@r): say test",                   "execute if entity @r run say test")
+    test_cmd("if(nou): say test",                  expect_error=True)
+    test_cmd("if(stone_bricks): say test",         "execute if block ~ ~ ~ minecraft:stone_bricks run say test")
+    test_cmd("if(stone_bricks ~ ~-1 ~): say test", "execute if block ~ ~-1 ~ minecraft:stone_bricks run say test")
 
-# if(selector) -> if entity selector
-# if(block_type) -> if(block_type ~ ~ ~)
-# if(block_type vec3) -> if block vec3 block_type
-# if(vec3 vec3 == vec3) -> if(vec3 vec3 == vec3 all) -> if blocks vec3 vec3 vec3 all
-# if(vec3 vec3 == vec3 masked) -> if blocks vec3 vec3 vec3 masked
-# if(target objective operator target2 objective2) -> if score target objective operator target2 objective
-# if(target objective == int) -> if score target objective matches int
-# if(target objective == *) -> if score target objective matches -2147483648..
-# if(target objective != int) -> unless(target objective == int)
-# if(target objective < int) -> if score target objective matches ..(int-1)
-# if(target objective <= int) -> if score target objective matches ..(int)
-# if(target objective > int) -> if score target objective matches (int+1)..
-# if(target objective >= int) -> if score target objective matches (int)..
-# if(target objective in int..int) -> if score target objective matches int..int
-# unless(...) -> ifnot(...) -> (Literally any if statement but replace "if" with "unless")
+    # if(vec3 vec3 == vec3) -> if(vec3 vec3 == vec3 all) -> if blocks vec3 vec3 vec3 all
+    # if(vec3 vec3 == vec3 masked) -> if blocks vec3 vec3 vec3 masked
+    test_cmd("if(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498): say test",        "execute if blocks ~1 ~1 ~1 ~-1 ~-1 ~-1 252 12 -498 all run say test")
+    test_cmd("if(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498 all): say test",    "execute if blocks ~1 ~1 ~1 ~-1 ~-1 ~-1 252 12 -498 all run say test")
+    test_cmd("if(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498 masked): say test", "execute if blocks ~1 ~1 ~1 ~-1 ~-1 ~-1 252 12 -498 masked run say test")
+    test_cmd("if(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498 nou): say test",    expect_error=True) # not "masked" or "all"
 
-# note that auto_type = smallest stored value for integers, double when integer
-# eg. 6 -> byte, 8234 -> short, 628137057 -> int, 2345766241356 -> long, 36.73461 and 5.0 -> double
-# result(vec3 data_path scale) -> store result block vec3 data_path auto_type scale
-# success(vec3 data_path scale) -> store success block vec3 data_path auto_type scale
-# result(selector data_path scale) -> store result entity selector data_path auto_type scale
-# success(selector data_path scale) -> store success entity selector data_path auto_type scale
+    # if(target objective operator target2 objective2) -> if score target objective operator target2 objective
+    test_cmd("if(@s _pl = @r _pl): say test",    "execute if score @s fena.pl = @r fena.pl run say test")
+    test_cmd("if(@s _pl == @r _pl): say test",   "execute if score @s fena.pl = @r fena.pl run say test")
+    test_cmd("if(@s _pl < @r _pl): say test",    "execute if score @s fena.pl < @r fena.pl run say test")
+    test_cmd("if(@s _pl > @r _pl): say test",    "execute if score @s fena.pl > @r fena.pl run say test")
+    test_cmd("if(@s _pl <= @r _pl): say test",   "execute if score @s fena.pl <= @r fena.pl run say test")
+    test_cmd("if(@s _pl >= @r _pl): say test",   "execute if score @s fena.pl >= @r fena.pl run say test")
+    test_cmd("if(@s _pl asdf @r _pl): say test", expect_error=True) # invalid operator
 
-# result(vec3 data_path type scale) -> store result block vec3 data_path type scale
-# success(vec3 data_path type scale) -> store success block vec3 data_path type scale
-# result(selector data_path type scale) -> store result entity selector data_path type scale
-# success(selector data_path type scale) -> store success entity selector data_path type scale
+    # if(target objective == *) -> if score target objective matches -2147483648..
+    # if(target objective == int) -> if score target objective matches int
+    test_cmd("if(@s _pl == *): say test", "execute if score @s fena.pl matches -2147483648.. run say test")
+    test_cmd("if(@s _pl == 0): say test", "execute if score @s fena.pl matches 0 run say test")
+    test_cmd("if(@s _pl == a): say test", expect_error=True) # invalid number
 
-# result(bossbar_id max) -> store result bossbar bossbar_id max
-# result(bossbar_id value) -> store result bossbar bossbar_id value
-# success(bossbar_id max) -> store success bossbar bossbar_id max
-# success(bossbar_id value) -> store success bossbar bossbar_id value
-# result(selector objective) -> store result score selector objective
-# success(selector objective) -> store success score selector objective
+    # if(target objective < int) -> if score target objective matches ..(int-1)
+    # if(target objective <= int) -> if score target objective matches ..(int)
+    # if(target objective > int) -> if score target objective matches (int+1)..
+    # if(target objective >= int) -> if score target objective matches (int)..
+    test_cmd("if(@s _pl < 0): say test",  "execute if score @s fena.pl matches ..-1 run say test")
+    test_cmd("if(@s _pl <= 0): say test", "execute if score @s fena.pl matches ..0 run say test")
+    test_cmd("if(@s _pl > 0): say test",  "execute if score @s fena.pl matches 1.. run say test")
+    test_cmd("if(@s _pl >= 0): say test", "execute if score @s fena.pl matches 0.. run say test")
 
-!mfunc execute_test
-    @p ~2 ~1 ~-1 at(@a) 3 5.2 -2 @s @r if(2 ~-1 ~ stone_brick) @e if(stone_brick): say @a
-    
-    # @s @r -> execute as @s as @r ...
-    # pos(@p) -> execute positioned as @p ...
-    # rot(@a) -> execute rotated as @a ...
-    # 3 5.2 -2 -> execute positioned 3 5.2 -2 ...
-    pos(@p) rot(@a) 3 5.2 -2 @s @r:
+    # if(target objective in int..int) -> if score target objective matches int..int
+    test_cmd("if(@s _pl in 0..1): say test", "execute if score @s fena.pl matches 0..1 run say test")
 
-        # if(@a) -> execute if entity @a ...
-        # if(stone_brick) -> execute if block ~ ~ ~ stone_brick ...
-        # in(nether) -> execute in nether ...
-        if(@a) if(stone_brick) @e in(nether): say @a
-        if(@a, stone_brick) @e in(nether): say @a
 
-        # if(@r _ti == @s _st) -> execute if score @r _ti = @s _st ...
-        # if(stone_brick ~ ~-1 ~) -> execute if block ~ ~-1 ~ stone_brick
-        # if(@r _ti == @s _st, stone_brick ~ ~-1 ~) -> execute if score @r _ti = @s _st if block ~ ~ ~ stone_brick ...
-        # at(feet) -> execute anchored feet ...
-        if(@r _ti == @s _st, stone_brick ~ ~-1 ~) at(feet): say @a
-        
-        # ifnot(stone_brick 2 3 4 3 4 5) -> execute unless block 2 3 4 3 4 5 stone_brick ...
-        # at(@a) -> execute at @a ...
-        ifnot(stone_brick 2 3 4 3 4 5) at(@a; feet): say @a
+    # unless(selector) -> unless entity selector
+    # unless(block_type) -> unless(~ ~ ~ block_type)
+    # unless(block_type vec3) -> unless block vec3 block_type
+    test_cmd("unless(@r): say test",                   "execute unless entity @r run say test")
+    test_cmd("unless(nou): say test",                  expect_error=True)
+    test_cmd("unless(stone_bricks): say test",         "execute unless block ~ ~ ~ minecraft:stone_bricks run say test")
+    test_cmd("unless(stone_bricks ~ ~-1 ~): say test", "execute unless block ~ ~-1 ~ minecraft:stone_bricks run say test")
 
-    # at(xy) -> execute align xy ...
-    # facing(2 3 4) -> execute facing 2 3 4 ...
-    # facing(@r) -> facing(@r feet) -> execute facing @r feet...
-    # facing(@r eyes) -> execute facing @r eyes...
-    at(xy) ~3 ~2 ~5 facing(2 3 4, @r feet, @r): say @a
+    # unless(vec3 vec3 == vec3) -> unless(vec3 vec3 == vec3 all) -> unless blocks vec3 vec3 vec3 all
+    # unless(vec3 vec3 == vec3 masked) -> unless blocks vec3 vec3 vec3 masked
+    test_cmd("unless(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498): say test",        "execute unless blocks ~1 ~1 ~1 ~-1 ~-1 ~-1 252 12 -498 all run say test")
+    test_cmd("unless(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498 all): say test",    "execute unless blocks ~1 ~1 ~1 ~-1 ~-1 ~-1 252 12 -498 all run say test")
+    test_cmd("unless(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498 masked): say test", "execute unless blocks ~1 ~1 ~1 ~-1 ~-1 ~-1 252 12 -498 masked run say test")
+    test_cmd("unless(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498 nou): say test",    expect_error=True) # not "masked" or "all"
 
-    # rot(7, ~3) -> execute rotated 7 ~3 ...
-    # ast(@s[_tag]) -> execute as @s[_tag] at @s ...
-    # result(@s _af) -> execute store result score @s _af ...
-    rot(7 ~3) ast(@s[_tag]) result(@s _af): say @a
+    # unless(target objective operator target2 objective2) -> unless score target objective operator target2 objective
+    test_cmd("unless(@s _pl = @r _pl): say test",    "execute unless score @s fena.pl = @r fena.pl run say test")
+    test_cmd("unless(@s _pl == @r _pl): say test",   "execute unless score @s fena.pl = @r fena.pl run say test")
+    test_cmd("unless(@s _pl < @r _pl): say test",    "execute unless score @s fena.pl < @r fena.pl run say test")
+    test_cmd("unless(@s _pl > @r _pl): say test",    "execute unless score @s fena.pl > @r fena.pl run say test")
+    test_cmd("unless(@s _pl <= @r _pl): say test",   "execute unless score @s fena.pl <= @r fena.pl run say test")
+    test_cmd("unless(@s _pl >= @r _pl): say test",   "execute unless score @s fena.pl >= @r fena.pl run say test")
+    test_cmd("unless(@s _pl asdf @r _pl): say test", expect_error=True) # invalid operator
+
+    # unless(target objective == *) -> unless score target objective matches -2147483648..
+    # unless(target objective == int) -> unless score target objective matches int
+    test_cmd("unless(@s _pl == *): say test", "execute unless score @s fena.pl matches -2147483648.. run say test")
+    test_cmd("unless(@s _pl == 0): say test", "execute unless score @s fena.pl matches 0 run say test")
+    test_cmd("unless(@s _pl == a): say test", expect_error=True) # invalid number
+
+    # unless(target objective < int) -> unless score target objective matches ..(int-1)
+    # unless(target objective <= int) -> unless score target objective matches ..(int)
+    # unless(target objective > int) -> unless score target objective matches (int+1)..
+    # unless(target objective >= int) -> unless score target objective matches (int)..
+    test_cmd("unless(@s _pl < 0): say test",  "execute unless score @s fena.pl matches ..-1 run say test")
+    test_cmd("unless(@s _pl <= 0): say test", "execute unless score @s fena.pl matches ..0 run say test")
+    test_cmd("unless(@s _pl > 0): say test",  "execute unless score @s fena.pl matches 1.. run say test")
+    test_cmd("unless(@s _pl >= 0): say test", "execute unless score @s fena.pl matches 0.. run say test")
+
+    # unless(target objective in int..int) -> unless score target objective matches int..int
+    test_cmd("unless(@s _pl in 0..1): say test", "execute unless score @s fena.pl matches 0..1 run say test")
+
+
+    # ifnot(selector) -> unless entity selector
+    # ifnot(block_type) -> ifnot(~ ~ ~ block_type)
+    # ifnot(block_type vec3) -> unless block vec3 block_type
+    test_cmd("ifnot(@r): say test",                   "execute unless entity @r run say test")
+    test_cmd("ifnot(nou): say test",                  expect_error=True)
+    test_cmd("ifnot(stone_bricks): say test",         "execute unless block ~ ~ ~ minecraft:stone_bricks run say test")
+    test_cmd("ifnot(stone_bricks ~ ~-1 ~): say test", "execute unless block ~ ~-1 ~ minecraft:stone_bricks run say test")
+
+    # ifnot(vec3 vec3 == vec3) -> ifnot(vec3 vec3 == vec3 all) -> unless blocks vec3 vec3 vec3 all
+    # ifnot(vec3 vec3 == vec3 masked) -> unless blocks vec3 vec3 vec3 masked
+    test_cmd("ifnot(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498): say test",        "execute unless blocks ~1 ~1 ~1 ~-1 ~-1 ~-1 252 12 -498 all run say test")
+    test_cmd("ifnot(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498 all): say test",    "execute unless blocks ~1 ~1 ~1 ~-1 ~-1 ~-1 252 12 -498 all run say test")
+    test_cmd("ifnot(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498 masked): say test", "execute unless blocks ~1 ~1 ~1 ~-1 ~-1 ~-1 252 12 -498 masked run say test")
+    test_cmd("ifnot(~1 ~1 ~1 ~-1 ~-1 ~-1 == 252 12 -498 nou): say test",    expect_error=True) # not "masked" or "all"
+
+    # ifnot(target objective operator target2 objective2) -> unless score target objective operator target2 objective
+    test_cmd("ifnot(@s _pl = @r _pl): say test",    "execute unless score @s fena.pl = @r fena.pl run say test")
+    test_cmd("ifnot(@s _pl == @r _pl): say test",   "execute unless score @s fena.pl = @r fena.pl run say test")
+    test_cmd("ifnot(@s _pl < @r _pl): say test",    "execute unless score @s fena.pl < @r fena.pl run say test")
+    test_cmd("ifnot(@s _pl > @r _pl): say test",    "execute unless score @s fena.pl > @r fena.pl run say test")
+    test_cmd("ifnot(@s _pl <= @r _pl): say test",   "execute unless score @s fena.pl <= @r fena.pl run say test")
+    test_cmd("ifnot(@s _pl >= @r _pl): say test",   "execute unless score @s fena.pl >= @r fena.pl run say test")
+    test_cmd("ifnot(@s _pl asdf @r _pl): say test", expect_error=True) # invalid operator
+
+    # ifnot(target objective == *) -> unless score target objective matches -2147483648..
+    # ifnot(target objective == int) -> unless score target objective matches int
+    test_cmd("ifnot(@s _pl == *): say test", "execute unless score @s fena.pl matches -2147483648.. run say test")
+    test_cmd("ifnot(@s _pl == 0): say test", "execute unless score @s fena.pl matches 0 run say test")
+    test_cmd("ifnot(@s _pl == a): say test", expect_error=True) # invalid number
+
+    # ifnot(target objective < int) -> unless score target objective matches ..(int-1)
+    # ifnot(target objective <= int) -> unless score target objective matches ..(int)
+    # ifnot(target objective > int) -> unless score target objective matches (int+1)..
+    # ifnot(target objective >= int) -> unless score target objective matches (int)..
+    test_cmd("ifnot(@s _pl < 0): say test",  "execute unless score @s fena.pl matches ..-1 run say test")
+    test_cmd("ifnot(@s _pl <= 0): say test", "execute unless score @s fena.pl matches ..0 run say test")
+    test_cmd("ifnot(@s _pl > 0): say test",  "execute unless score @s fena.pl matches 1.. run say test")
+    test_cmd("ifnot(@s _pl >= 0): say test", "execute unless score @s fena.pl matches 0.. run say test")
+
+    # ifnot(target objective in int..int) -> unless score target objective matches int..int
+    test_cmd("ifnot(@s _pl in 0..1): say test", "execute unless score @s fena.pl matches 0..1 run say test")
+
+
+    # result(vec3 data_path scale) -> store result block vec3 data_path long scale
+    # result(vec3 data_path type scale) -> store result block vec3 data_path type scale
+    test_cmd("result(~ ~-1 ~ Items[0].Count 1): say test",      "execute store result block ~ ~-1 ~ Items[0].Count long 1 run say test")
+    test_cmd("result(~ ~-1 ~ Items 1): say test",               "execute store result block ~ ~-1 ~ Items long 1 run say test")
+    test_cmd("result(~ ~-1 ~ Items[0].Count int 1): say test",  "execute store result block ~ ~-1 ~ Items[0].Count int 1 run say test")
+    test_cmd("result(~ ~-1 ~ Items int 1): say test",           "execute store result block ~ ~-1 ~ Items int 1 run say test")
+    test_cmd("result(~ ~-1 ~ Items[0].Count 1.1): say test",      "execute store result block ~ ~-1 ~ Items[0].Count double 1.1 run say test")
+    test_cmd("result(~ ~-1 ~ Items 1.1): say test",               "execute store result block ~ ~-1 ~ Items double 1.1 run say test")
+    test_cmd("result(~ ~-1 ~ Items[0].Count int 1.1): say test",  "execute store result block ~ ~-1 ~ Items[0].Count int 1.1 run say test")
+    test_cmd("result(~ ~-1 ~ Items int 1.1): say test",           "execute store result block ~ ~-1 ~ Items int 1.1 run say test")
+
+    # result(selector data_path scale) -> store result entity selector data_path long scale
+    # result(selector data_path type scale) -> store result entity selector data_path type scale
+    test_cmd("result(@s Attributes[0].Name 1): say test",       "execute store result entity @s Attributes[0].Name long 1 run say test")
+    test_cmd("result(@s Invulnerable 1): say test",             "execute store result entity @s Invulnerable long 1 run say test")
+    test_cmd("result(@s Attributes[0].Name int 1): say test",   "execute store result entity @s Attributes[0].Name int 1 run say test")
+    test_cmd("result(@s Invulnerable int 1): say test",         "execute store result entity @s Invulnerable int 1 run say test")
+    test_cmd("result(@s Attributes[0].Name 1.1): say test",     "execute store result entity @s Attributes[0].Name double 1.1 run say test")
+    test_cmd("result(@s Invulnerable 1.1): say test",           "execute store result entity @s Invulnerable double 1.1 run say test")
+    test_cmd("result(@s Attributes[0].Name int 1.1): say test", "execute store result entity @s Attributes[0].Name int 1.1 run say test")
+    test_cmd("result(@s Invulnerable int 1.1): say test",       "execute store result entity @s Invulnerable int 1.1 run say test")
+
+    # result(bossbar_id max) -> store result bossbar bossbar_id max
+    # result(bossbar_id value) -> store result bossbar bossbar_id value
+    test_cmd("result(_xp max): say test",   "execute store result bossbar minecraft:fena.xp max run say test")
+    test_cmd("result(_xp value): say test", "execute store result bossbar minecraft:fena.xp value run say test")
+
+    # result(target objective) -> store result score target objective
+    test_cmd("result(@s _pl): say test",  "execute store result score @s fena.pl run say test")
+    test_cmd("result(target _pl): say test",  "execute store result score target fena.pl run say test")
+
+    # note that whether it's storing a bossbar is determined primarly by if the objective is 'max' or 'value
+    test_cmd("result(_xp nou): say test", "execute store result score _xp nou run say test")
+
+
+    # success(vec3 data_path scale) -> store success block vec3 data_path long scale
+    # success(vec3 data_path type scale) -> store success block vec3 data_path type scale
+    test_cmd("success(~ ~-1 ~ Items[0].Count 1): say test",      "execute store success block ~ ~-1 ~ Items[0].Count long 1 run say test")
+    test_cmd("success(~ ~-1 ~ Items 1): say test",               "execute store success block ~ ~-1 ~ Items long 1 run say test")
+    test_cmd("success(~ ~-1 ~ Items[0].Count int 1): say test",  "execute store success block ~ ~-1 ~ Items[0].Count int 1 run say test")
+    test_cmd("success(~ ~-1 ~ Items int 1): say test",           "execute store success block ~ ~-1 ~ Items int 1 run say test")
+    test_cmd("success(~ ~-1 ~ Items[0].Count 1.1): say test",      "execute store success block ~ ~-1 ~ Items[0].Count double 1.1 run say test")
+    test_cmd("success(~ ~-1 ~ Items 1.1): say test",               "execute store success block ~ ~-1 ~ Items double 1.1 run say test")
+    test_cmd("success(~ ~-1 ~ Items[0].Count int 1.1): say test",  "execute store success block ~ ~-1 ~ Items[0].Count int 1.1 run say test")
+    test_cmd("success(~ ~-1 ~ Items int 1.1): say test",           "execute store success block ~ ~-1 ~ Items int 1.1 run say test")
+
+    # success(selector data_path scale) -> store success entity selector data_path long scale
+    # success(selector data_path type scale) -> store success entity selector data_path type scale
+    test_cmd("success(@s Attributes[0].Name 1): say test",       "execute store success entity @s Attributes[0].Name long 1 run say test")
+    test_cmd("success(@s Invulnerable 1): say test",             "execute store success entity @s Invulnerable long 1 run say test")
+    test_cmd("success(@s Attributes[0].Name int 1): say test",   "execute store success entity @s Attributes[0].Name int 1 run say test")
+    test_cmd("success(@s Invulnerable int 1): say test",         "execute store success entity @s Invulnerable int 1 run say test")
+    test_cmd("success(@s Attributes[0].Name 1.1): say test",     "execute store success entity @s Attributes[0].Name double 1.1 run say test")
+    test_cmd("success(@s Invulnerable 1.1): say test",           "execute store success entity @s Invulnerable double 1.1 run say test")
+    test_cmd("success(@s Attributes[0].Name int 1.1): say test", "execute store success entity @s Attributes[0].Name int 1.1 run say test")
+    test_cmd("success(@s Invulnerable int 1.1): say test",       "execute store success entity @s Invulnerable int 1.1 run say test")
+
+    # success(bossbar_id max) -> store success bossbar bossbar_id max
+    # success(bossbar_id value) -> store success bossbar bossbar_id value
+    test_cmd("success(_xp max): say test",   "execute store success bossbar minecraft:fena.xp max run say test")
+    test_cmd("success(_xp value): say test", "execute store success bossbar minecraft:fena.xp value run say test")
+
+    # success(target objective) -> store success score target objective
+    test_cmd("success(@s _pl): say test",  "execute store success score @s fena.pl run say test")
+    test_cmd("success(target _pl): say test",  "execute store success score target fena.pl run say test")
+
+    # note that whether it's storing a bossbar is determined primarly by if the objective is 'max' or 'value
+    test_cmd("success(_xp nou): say test", "execute store success score _xp nou run say test")
+
+
+    test_cmd(
+        "@p ~2 ~1 ~-1 at(@a) 3 5.2 -2 @s @r if(stone_bricks 2 ~-1 ~) @e if(stone_bricks): say @a",
+        "execute as @p positioned ~2 ~1 ~-1 at @a positioned 3 5.2 -2 as @s as @r if block 2 ~-1 ~ minecraft:stone_bricks as @e if block ~ ~ ~ minecraft:stone_bricks run say @a"
+    )
+
+    test_cmd("pos(@p) rot(@s) 3 5.2 -2 @s @r", "execute positioned as @p rotated as @s positioned 3 5.2 -2 as @s as @r")
+
+    test_cmd(
+        "if(@a) if(stone_bricks) @e in(nether): say @a",
+        "execute if entity @a if block ~ ~ ~ minecraft:stone_bricks as @e in the_nether run say @a"
+        )
+
+    test_cmd(
+        "if(@a, minecraft:stone_bricks) @e in(nether): say @a",
+        "execute if entity @a if block ~ ~ ~ minecraft:stone_bricks as @e in the_nether run say @a"
+        )
+
+    test_cmd(
+        "if(@r _ti == @s _st, stone_bricks ~ ~-1 ~) at(feet): say @a",
+        "execute if score @r fena.ti = @s fena.st if block ~ ~-1 ~ minecraft:stone_bricks anchored feet positioned ^ ^ ^ run say @a"
+    )
+
+    test_cmd(
+        "ifnot(2 3 4 3 4 5 == ~1 ~1 ~1) at(@a, feet): say @a",
+        "execute unless blocks 2 3 4 3 4 5 ~1 ~1 ~1 all at @a anchored feet positioned ^ ^ ^ run say @a"
+    )
+
+    test_cmd(
+        "at(xy) ~3 ~2 ~5 facing(2 3 4, @r feet, @r): say @a",
+        "execute align xy positioned ~3 ~2 ~5 facing 2 3 4 facing entity @r feet facing entity @r feet run say @a"
+    )
 
     # note that some execute commands don't require a leading command to still be a functional command
-    @a result(@s _pl) if(@e[type=pig])
+    test_cmd(
+        "@a result(@s _pl) if(@e[type=pig])",
+        "execute as @a store result score @s fena.pl if entity @e[type=minecraft:pig]"
+    )
 
-    # and scoreboard shortcuts can start with selectors too
-    @s _tp + 1
+    test_cmd(
+        "success(~ ~ ~ Items[0].Count 2): say @a",
+        "execute store success block ~ ~ ~ Items[0].Count long 2 run say @a"
+    )
 
-    # success(~ ~ ~ Items[0].Count 2) -> execute store success block ~ ~ ~ Items[0].Count byte 2 run ...
-    success(~ ~ ~ Items[0].Count 2): say @a
-
-    # automatically assigns the type
-    # if there are no decimals, it assigns it to the lowest numeric type
-    # if there are, it autmomatically assigns double precision
-    # result(@s Attributes[0].Base 5) -> execute store result entity @s Attributes[0].Base byte 5 ...
-    # result(@s Attributes[1].Base 2.5) -> execute store result entity @s Attributes[1].Base double 2.5 ...
-    # result(@s Attributes[2].Base int 2.5) -> execute store result entity @s Attributes[1].Base int 2.5 ...
-    result(@s Attributes[0].Base 5, @s Attributes[1].Base 2.5, @s Attributes[2].Base int 2.5): say @a
-
-    # note that data merge requires the entire nbt tag, while execute store result entity just requires a position and integer
-    # execute store result score @s a run data get entity @e[type=pig,limit=1] Attributes[0].Base 2
-    # execute store result entity @e[type=pig,limit=1] Attributes[0].Base double 2 say @s
-
-    # to store bossbar, note that we have to store either max or value too
-    # result(minecraft:green max) -> execute store result bossbar minecraft:green max ...
-    # success(idk value) -> execute store success bossbar minecraft:idk value ...
-
-
-"""
+    test_cmd(
+        "result(@s Attributes[0].Base 5, @s Attributes[1].Base 2.5, @s Attributes[2].Base int 2.5): say @a",
+        "execute store result entity @s Attributes[0].Base long 5 store result entity @s Attributes[1].Base double 2.5 store result entity @s Attributes[2].Base int 2.5 run say @a"
+    )

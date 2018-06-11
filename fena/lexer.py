@@ -46,7 +46,7 @@ class Lexer:
     def __iter__(self):
         """
         Breaks apart the entire document into a sequence of tokens.
-        
+
         Yields:
             Token: For each token that exists in the document
         """
@@ -182,7 +182,7 @@ class Lexer:
 
         Args:
             chars (str): characters provided to compare to the current string
-        
+
         Returns
             bool: whether the characters provided equal to the current string
         """
@@ -576,7 +576,7 @@ class Lexer:
                 yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
             else:
                 self.error(f"Invalid character {self.get_char()!r} inside block states")
-                
+
         yield self.create_new_token(DelimiterToken.CLOSE_SQUARE_BRACKET, advance=True)
 
 if __name__ == "__main__":

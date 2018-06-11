@@ -46,7 +46,7 @@ class Token:
             assert_type(token_type, SimpleTokenClass)
             self.value = self.token_type.value
 
-    def matches(self, token_type, value=None):
+    def matches(self, token_type, value=None, values=None):
         """
         returns whether the token matches the given type and/or value
 
@@ -58,7 +58,14 @@ class Token:
             bool: Whether the type matches the given type
         """
         assert_type(token_type, TokenClass)
-        return (self.token_type == token_type) and (value is None or self.value == value)
+        assert not (value is not None and values is not None)
+        if value is not None:
+            return (self.token_type == token_type) and self.value == value
+
+        if values is not None:
+            return (self.token_type == token_type) and self.value in values
+
+        return self.token_type == token_type
 
     def matches_any_of(self, *types):
         """
@@ -66,7 +73,7 @@ class Token:
 
         Args:
             types (any token type): any number of types to compare the token with
-        
+
         Returns:
             bool: Whether the token matches any of the provided types
         """
@@ -74,9 +81,9 @@ class Token:
             if self.matches(token_type):
                 return True
         return False
-    
+
     def __str__(self):
-        return f"Token[{self.value!r} at {self.position}]"
+        return f"Token[{self.value!r} ({str(self.token_type)}) at {self.position}]"
 
     def __repr__(self):
         if self.replacement is None:

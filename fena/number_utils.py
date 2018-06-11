@@ -12,12 +12,6 @@ def is_json_number(string):
     """
     return bool(re.fullmatch(_json_number, string))
 
-def is_nbt_float(string):
-    """
-    nbt_float ::= ("-")? && INT && "." && INT && (["e", "E"] && ["+", "-"] && INT)?
-    """
-    return bool(re.fullmatch(_nbt_float, string))
-
 def is_number(string):
     """
     Checks whether the string has a proper signed number format for minecraft

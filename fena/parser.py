@@ -1,6 +1,7 @@
 import os
 import logging
 import inspect
+import itertools
 
 if __name__ == "__main__":
     import sys
@@ -14,21 +15,37 @@ from fena.lexical_token import Token
 from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken
 from fena.lexer import Lexer
 # from fena.nodes import *
-from fena.nodes import ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode
-from fena.nodes import ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode
-from fena.nodes import ExecuteCmdNode, ExecuteSubIfBlockArg, ExecuteSubLegacyArg
-from fena.nodes import SelectorNode, SelectorVarNode, SelectorArgsNode
-from fena.nodes import SelectorDefaultArgNode, SelectorScoreArgNode, SelectorTagArgNode, SelectorNbtArgNode
-from fena.nodes import SelectorScoreArgsNode, SelectorTagArgsNode, SelectorNbtArgsNode, SelectorAdvancementGroupArgNode
-from fena.nodes import SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode
-from fena.nodes import JsonObjectNode, JsonMapNode, JsonArrayNode
-from fena.nodes import NbtObjectNode, NbtMapNode, NbtArrayNode, NbtIntegerNode, NbtFloatNode
-from fena.nodes import BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode
-from fena.nodes import Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, BlockStateNode, NamespaceIdNode
+
+from fena.nodes import (ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode,
+    ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode,
+
+    ExecuteCmdNode, ExecuteSubLegacyArg,
+    ExecuteSubAsArg,
+    ExecuteSubPosSelectorArg, ExecuteSubPosVec3Arg,
+    ExecuteSubAtAnchorArg, ExecuteSubAtSelectorArg, ExecuteSubAtCoordsArg, ExecuteSubAtAxesArg,
+    ExecuteSubFacingSelectorArg, ExecuteSubFacingVec3Arg,
+    ExecuteSubRotSelectorArg, ExecuteSubRotVec2Arg,
+    ExecuteSubAnchorArg,
+    ExecuteSubInArg,
+    ExecuteSubAstArg,
+    ExecuteSubIfBlockArg, ExecuteSubIfBlocksArg, ExecuteSubIfCompareEntityArg, ExecuteSubIfCompareIntArg, ExecuteSubIfRangeArg, ExecuteSubIfSelectorArg,
+    ExecuteSubStoreVec3DataArg, ExecuteSubStoreSelectorDataArg, ExecuteSubStoreScoreArg, ExecuteSubStoreBossbarArg,
+
+    SelectorNode, SelectorVarNode, SelectorArgsNode,
+    SelectorDefaultArgNode, SelectorScoreArgNode, SelectorTagArgNode, SelectorNbtArgNode,
+    SelectorScoreArgsNode, SelectorTagArgsNode, SelectorNbtArgsNode, SelectorAdvancementGroupArgNode,
+    SelectorDefaultArgValueNode, SelectorDefaultGroupArgValueNode,
+
+    JsonObjectNode, JsonMapNode, JsonArrayNode,
+    NbtObjectNode, NbtMapNode, NbtArrayNode, NbtIntegerNode, NbtFloatNode,
+
+    BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode,
+    Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, BlockStateNode, NamespaceIdNode, DataPathNode)
+
 from fena.node_visitors import NodeBuilder, NodeVisitor
 from fena.coord_utils import is_coord_token, are_coords
 from fena.config_data import ConfigData
-from fena.number_utils import is_signed_int, is_nonneg_int, is_pos_int, is_number, is_json_number, is_nbt_float
+from fena.number_utils import is_signed_int, is_nonneg_int, is_pos_int, is_number
 
 
 """
@@ -81,16 +98,11 @@ for (str rule) in exec_sub_cmd_keywords:
     rio.rule("exec_sub_" + rule) ::= rule && "(" && rule_arg && ("," && rule_arg)* && ")"
 
 exec_sub_as_arg ::= selector
-exec_sub_pos_arg ::= vec3
-
-exec_sub_at_arg ::= [exec_sub_at_arg_anchor, exec_sub_at_arg_selctor, exec_sub_at_arg_axes, exec_sub_at_arg_pos]
-exec_sub_at_arg_anchor ::= ["feet", "eyes"]
-exec_sub_at_arg_selctor ::= selector
-exec_sub_at_arg_axes ::= rio.rand.combo("xyz")
-exec_sub_at_arg_pos ::= vec3 && vec2
+exec_sub_pos_arg ::= [vec3, selector]
+exec_sub_at_arg ::= ["feet", "eyes", selector, rio.rand.combo("xyz"), vec3 && vec2]
 
 exec_sub_facing_arg ::= [vec3, selector && ("eyes", "feet")?]
-exec_sub_rot_arg ::= entity_vec3
+exec_sub_rot_arg ::= [selector, vec2]
 exec_sub_anchor_arg ::= ["feet", "eyes"]
 exec_sub_in_arg ::= ["overworld", "nether", "end"]
 exec_sub_ast_arg ::= selector
@@ -99,16 +111,16 @@ exec_sub_if_arg ::= [exec_sub_if_arg_selector, exec_sub_if_arg_block, exec_sub_i
 exec_sub_if_arg_selector ::= selector
 exec_sub_if_arg_block ::= block && (vec3)?
 exec_sub_if_arg_blocks ::= vec3 && vec3 && "==" && vec3 && ["all", "masked"]?
-exec_sub_if_arg_compare ::= (target)? && STR && ["==", "<", "<=", ">", ">=" , "!="] && ((target && STR) | [signed_int, "*"])
+exec_sub_if_arg_compare ::= (target)? && STR && ["==", "<", "<=", ">", ">="] && ((target && STR) | [signed_int, "*"])
 exec_sub_if_arg_range ::= (target)? && STR && "in" && int_range
-exec_sub_ifnot_arg ::= exec_sub_if_arg
-exec_sub_unless_arg ::= exec_sub_if_arg
 
-exec_sub_result_arg ::= [exec_sub_result_arg_data, exec_sub_result_arg_score, exec_sub_result_arg_bossbar]
-exec_sub_result_arg_data ::= entity_vec3 && STR && (data_type)? && signed_int
-exec_sub_result_arg_score ::= target && STR
-exec_sub_result_arg_bossbar ::= STR && ["max", "value"]
-exec_sub_success_arg ::= exec_sub_result_arg 
+exec_sub_store_arg ::= [exec_sub_result_arg_data, exec_sub_result_arg_score, exec_sub_result_arg_bossbar]
+exec_sub_store_arg_data ::= entity_vec3 && data_path && (data_type)? && [signed_float, signed_int]
+exec_sub_store_arg_score ::= target && STR
+exec_sub_store_arg_bossbar ::= bossbar_id && ["max", "value"]
+exec_sub_success_arg ::= exec_sub_store_arg
+exec_sub_result_arg ::= exec_sub_store_arg
+data_path ::= STR, ([".", "[" && INT && "]"] && STR)*
 
 sb_cmd ::= [sb_players_math, sb_players_special]
 sb_players_math ::= target && STR && ["=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="] && (signed_int && (nbt)? | target && (STR)?)
@@ -120,6 +132,7 @@ bossbar_remove ::= "remove" && bossbar_id
 bossbar_get ::= bossbar_id && "<-" && ["max", "value", "players", "visible"]
 bossbar_set ::= bossbar_id && bossbar_arg && "=" && bossbar_arg_value
 # bossbar_option_arg, bossbar_option_arg_value are defined in the bossbar_version.json
+bossbar_id ::= namespace_id
 
 data_cmd ::= "data" && [data_get, data_merge, data_remove]
 data_get ::= entity_vec3 && "<-" && (STR && (signed_int)?)?
@@ -227,13 +240,24 @@ data_type ::= ["byte", "short", "int", "long", "float", "double"]
 namespace_id ::= STR && (":" && STR)?
 """
 
+def all_permutations(iterable):
+    # in case the iterable only works once as a generator
+    # also means that the iterable cannot be an infinite generator
+    all_objects = tuple(iterable)
+
+    for r in range(1, len(iterable)+1):
+        # essentially becomes a generator since itertools.permutations is also a generator
+        yield from itertools.permutations(all_objects, r)
+
+valid_axes = tuple("".join(x) for x in all_permutations("xyz"))
+
 class Parser:
     """
     Makes the mcfunction builders while building all datatags and selectors
 
     Args:
         lexer (iterator function or iterator)
-            
+
     Attributes:
         lexer (Lexer)
         current_token (Token or None)
@@ -253,7 +277,6 @@ class Parser:
     # sb_special_operators = frozenset({"enable", "reset", "<-"})
     # sb_math_operators = frozenset({"=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="})
     # statement_keywords = frozenset({"mfunc", "folder", "prefix", "constobj"})
-    execute_keywords = frozenset({"as", "pos", "at", "facing", "ast", "if", "ifnot", "unless", "result", "success"})
 
     json_parse_options = {
         "bossbar_set": "bossbar_set",
@@ -312,10 +335,10 @@ class Parser:
         Raises a generic syntax error with an optional message
         """
         assert_type(message, str)
-        raise SyntaxError(f"{self.current_token!r}: {message}")
+        raise SyntaxError(f"{self.current_token}: {message}")
 
-    def invalid_method(self, *args, **kwargs):
-        raise NotImplementedError(f"Invalid parser method")
+    def invalid_method(self, method_name):
+        raise NotImplementedError(f"Invalid parser method: {method_name}")
 
     def advance(self):
         """
@@ -394,9 +417,9 @@ class Parser:
             dict: json arg details to see the parse type and other information
 
         Raises:
-            SyntaxError: if the token value is not within the specified json type arguments 
+            SyntaxError: if the token value is not within the specified json type arguments
         """
-        assert json_type in Parser.json_parse_options 
+        assert json_type in Parser.json_parse_options
 
         config_data_attr = Parser.json_parse_options.get(json_type)
         json_object = getattr(Parser.config_data, config_data_attr, self.invalid_method)
@@ -406,7 +429,7 @@ class Parser:
         if arg_token is None:
             arg_token = self.eat(TypedToken.STRING)
             provided_token = False
-        
+
         # gets the replacement if it exists, otherwise gets the value
         arg_str = arg_token.replacement if (arg_token.replacement is not None) else str(arg_token.value)
 
@@ -462,7 +485,7 @@ class Parser:
                     "STR" in parse_type and self.current_token.matches(TypedToken.STRING)):
                 return self.advance()
             self.error("Something stupid happened")
-            
+
         if parse_type == "VALUES":
             arg_value = self.current_token.value
             assert "values" in arg_details, "If the parse type is 'VALUES', a 'values' list must be present in the json"
@@ -747,8 +770,8 @@ class Parser:
         if self.current_token.matches(DelimiterToken.AT):
             selector_begin_node = self.selector_begin_cmd()
             command_segment_nodes.append(selector_begin_node)
-        elif (Parser.config_data.version == "1.13" and 
-                (self.current_token.value in Parser.execute_keywords or is_coord_token(self.current_token))):
+        elif (Parser.config_data.version != "1.12" and
+                (self.current_token.value in Parser.config_data.execute_keywords or is_coord_token(self.current_token))):
             execute_node = self.execute_cmd()
             command_segment_nodes.append(execute_node)
 
@@ -787,7 +810,8 @@ class Parser:
         """
         selector_node = self.selector()
         # assumes scoreboard objectives will not be the same as the execute shortcut simple tokens
-        if (self.current_token.value in Parser.execute_keywords or is_coord_token(self.current_token) or 
+        if (self.current_token.value in Parser.config_data.execute_keywords or
+                is_coord_token(self.current_token) or
                 self.current_token.matches_any_of(DelimiterToken.AT, DelimiterToken.COLON)):
             return self.execute_cmd(begin_selector=selector_node)
         return self.sb_cmd(begin_target=selector_node)
@@ -798,8 +822,7 @@ class Parser:
         execute_cmd ::= {"1.12": execute_cmd_1_12, "1.13": execute_cmd_1_13}
 
         Returns:
-            ExecuteCmdNode_1_12
-            ExecuteCmdNode_1_13
+            ExecuteCmdNode
         """
 
         if Parser.config_data.version == "1.12":
@@ -821,7 +844,7 @@ class Parser:
         while True:
             # begin_selector is always set back to none at the beginning
             if begin_selector is None:
-                selector_node = self.selector() 
+                selector_node = self.selector()
             else:
                 selector_node = begin_selector
 
@@ -856,27 +879,26 @@ class Parser:
         execute_nodes = []
 
         if begin_selector is not None:
-            execute_nodes.append(begin_selector)
+            execute_nodes.append(ExecuteSubAsArg(begin_selector))
 
-        while True:
-            if self.current_token.value in Parser.execute_keywords:
-                exec_sub_node = self.exec_sub_cmds()
-                execute_nodes.append(exec_sub_node)
+        while not self.current_token.matches_any_of(DelimiterToken.COLON, WhitespaceToken.NEWLINE, WhitespaceToken.EOF):
+            if self.current_token.value in Parser.config_data.execute_keywords:
+                exec_sub_nodes = self.exec_sub_cmds()
+                execute_nodes.extend(exec_sub_nodes)
 
             elif self.current_token.matches(DelimiterToken.AT):
-                selector_node = self.selector()
+                selector_node = ExecuteSubAsArg(self.selector())
                 execute_nodes.append(selector_node)
 
             elif is_coord_token(self.current_token):
-                coords_node = self.vec3()
+                coords_node = ExecuteSubPosVec3Arg(self.vec3())
                 execute_nodes.append(coords_node)
-        
-            elif self.current_token.matches(DelimiterToken.COLON):
-                self.advance()
-                break
 
             else:
                 self.error("Unknown argument for an execute shortcut")
+
+        if self.current_token.matches(DelimiterToken.COLON):
+            self.advance()
 
         execute_node = ExecuteCmdNode(execute_nodes)
         return execute_node
@@ -900,12 +922,14 @@ class Parser:
 
         # gets the attribute of "exec_sub_(sub_command)"
         method_name = f"exec_sub_{sub_cmd_token.value}_arg"
-        exec_sub_arg_method = getattr(self, method_name, self.invalid_method) 
+        exec_sub_arg_method = getattr(self, method_name, "ERROR")
+        if exec_sub_arg_method == "ERROR":
+            self.invalid_method(method_name)
 
         # contains the list of nodes gotten from the arg method
         exec_sub_arg_nodes = []
 
-        while not self.current_token.matches_any_of(DelimiterToken.COMMA, DelimiterToken.CLOSE_PARENTHESES):
+        while not self.current_token.matches_any_of(DelimiterToken.CLOSE_PARENTHESES):
             exec_sub_arg_node = exec_sub_arg_method()
             exec_sub_arg_nodes.append(exec_sub_arg_node)
 
@@ -923,33 +947,307 @@ class Parser:
         # gets the proper node for the execute sub command
         return exec_sub_arg_nodes
 
-    def exec_sub_if_arg(self):
+    def exec_sub_as_arg(self):
+        """
+        exec_sub_as_arg ::= selector
+        """
+        return ExecuteSubAsArg(self.selector())
+
+    def exec_sub_pos_arg(self):
+        """
+        exec_sub_pos_arg ::= [vec3, selector]
+        """
+        if self.current_token.matches(DelimiterToken.AT):
+            return ExecuteSubPosSelectorArg(self.selector())
+        if is_coord_token(self.current_token):
+            return ExecuteSubPosVec3Arg(self.vec3())
+        self.error("Expected a selector or vec3")
+
+    def exec_sub_at_arg(self):
+        """
+        exec_sub_at_arg ::= ["feet", "eyes", selector, rio.rand.combo("xyz"), vec3 && vec2]
+
+        Returns:
+            ExecuteSubAtSelectorArg: if selectors
+            ExecuteSubAtAnchorArg: if feet or eyes
+            ExecuteSubAtAxesArg: if axes
+            ExecuteSubPosVec3Arg: if coords
+        """
+        if self.current_token.matches(DelimiterToken.AT):
+            return ExecuteSubAtSelectorArg(self.selector())
+        if self.current_token.matches(TypedToken.STRING, values=("feet", "eyes")):
+            return ExecuteSubAtAnchorArg(self.advance())
+        if self.current_token.matches(TypedToken.STRING, values=valid_axes):
+            return ExecuteSubAtAxesArg(self.advance())
+        if is_coord_token(self.current_token):
+            return ExecuteSubAtCoordsArg(self.vec3(), self.vec2())
+        self.error("Expected a selector, set of 5 coordinates, ('feet', 'eyes'), or a combination of axes")
+
+    def exec_sub_facing_arg(self):
+        """
+        exec_sub_facing_arg ::= [vec3, selector && ("eyes", "feet")?]
+
+        Returns:
+            ExecuteSubFacingSelectorArg: if selectors
+            ExecuteSubFacingVec3Arg: if vec3
+        """
+        if self.current_token.matches(DelimiterToken.AT):
+            selector_node = self.selector()
+            if self.current_token.matches(TypedToken.STRING, values=("feet", "eyes")):
+                anchor = self.advance()
+                return ExecuteSubFacingSelectorArg(selector_node, anchor)
+            return ExecuteSubFacingSelectorArg(selector_node)
+
+        if is_coord_token(self.current_token):
+            return ExecuteSubFacingVec3Arg(self.vec3())
+
+        self.error("Expected a selector or vec2")
+
+    def exec_sub_rot_arg(self):
+        """
+        exec_sub_rot_arg ::= [selector, vec2]
+        Returns:
+            ExecuteSubRotSelectorArg
+            ExecuteSubRotVec2Arg
+        """
+        if self.current_token.matches(DelimiterToken.AT):
+            return ExecuteSubRotSelectorArg(self.selector())
+        elif is_coord_token(self.current_token):
+            return ExecuteSubRotVec2Arg(self.vec2())
+
+        self.error("Expected a selector or vec2")
+
+    def exec_sub_anchor_arg(self):
+        """
+        exec_sub_anchor_arg ::= ["feet", "eyes"]
+
+        Returns:
+            ExecuteSubAnchorArg
+        """
+        anchor = self.eat(TypedToken.STRING, values=("feet", "eyes"))
+        return ExecuteSubAnchorArg(anchor)
+
+    def exec_sub_in_arg(self):
+        """
+        exec_sub_in_arg ::= ["overworld", "nether", "end"]
+
+        Returns:
+            ExecuteSubInArg
+        """
+        dimension = self.json_parse_arg_value(Parser.config_data.execute_dimensions)
+        return ExecuteSubInArg(dimension)
+
+    def exec_sub_ast_arg(self):
+        """
+        exec_sub_ast_arg ::= selector
+
+        Returns:
+            ExecuteSubAstArg
+        """
+        return ExecuteSubAstArg(self.selector())
+
+    def exec_sub_if_arg(self, negated=False):
         """
         exec_sub_if_arg ::= [exec_sub_if_arg_selector, exec_sub_if_arg_block, exec_sub_if_arg_blocks, exec_sub_if_arg_compare, exec_sub_if_arg_range]
-
-        exec_sub_if_arg_selector ::= selector
         exec_sub_if_arg_block ::= block && (vec3)?
         exec_sub_if_arg_blocks ::= vec3 && vec3 && "==" && vec3 && ["all", "masked"]?
-        exec_sub_if_arg_compare ::= (target)? && STR && ["==", "<", "<=", ">", ">="] && (target && STR) | (INT)
-        exec_sub_if_arg_range ::= (target)? && STR && in && range
+        exec_sub_if_arg_selector ::= selector
+        exec_sub_if_arg_compare ::= (target)? && STR && ["==", "<", "<=", ">", ">=" , "!="] && ((target && STR) | [signed_int, "*"])
+        exec_sub_if_arg_range ::= (target)? && STR && "in" && int_range
 
-        1.12
         Returns:
             ExecuteSubIfArgBlock
         """
-        if Parser.config_data.version == "1.12":
+        # exec_sub_if_arg_block ::= block && (vec3)?
+        if self.current_token.matches(TypedToken.STRING, values=Parser.config_data.blocks + ["minecraft"]):
             block_node = self.block()
 
             if is_coord_token(self.current_token):
                 coord_node = self.vec3()
+                return ExecuteSubIfBlockArg(block_node, coord_node, negated=negated)
+            return ExecuteSubIfBlockArg(block_node, negated=negated)
+
+        if Parser.config_data.version == "1.12":
+            self.error("Expected a block")
+
+        # 1.13 only
+        # exec_sub_if_arg_blocks ::= vec3 && vec3 && "==" && vec3 && ["all", "masked"]?
+        if is_coord_token(self.current_token):
+            coords1 = self.vec3()
+            coords2 = self.vec3()
+            self.eat(TypedToken.STRING, value="==")
+            coords3 = self.vec3()
+
+            if self.current_token.matches(TypedToken.STRING, values=("masked", "all")):
+                option = self.advance()
+                return ExecuteSubIfBlocksArg(coords1, coords2, coords3, option, negated=negated)
+            return ExecuteSubIfBlocksArg(coords1, coords2, coords3, negated=negated)
+
+        if self.current_token.matches_any_of(DelimiterToken.AT, TypedToken.STRING):
+            target_node = self.target()
+            if not self.current_token.matches(TypedToken.STRING):
+                # exec_sub_if_arg_selector ::= selector
+                # if not isinstance(target_node, SelectorNode):
+                #     self.error("Expected only one selector")
+                return ExecuteSubIfSelectorArg(target_node, negated=negated)
+            objective = self.advance()
+
+            if self.current_token.matches(TypedToken.STRING, value="in"):
+                # exec_sub_if_arg_range ::= (target)? && STR && "in" && int_range
+                self.advance()
+
+                # note that the lexer doesn't actually get an integer range, so a manual check must be done
+                # int_range_node = self.int_range()
+                if not self.current_token.matches(TypedToken.STRING):
+                    self.error("Expected an int range")
+                ints = self.current_token.value.split("..")
+                if len(ints) not in (1, 2):
+                    self.error("Expected a proper int range with only one '..'")
+                for integer in ints:
+                    if not is_signed_int(integer):
+                        self.error(f"Expected a proper integer with {integer}")
+
+                int_range_token = self.eat(TypedToken.STRING)
+
+                return ExecuteSubIfRangeArg(target_node, objective, int_range_token, negated=negated)
+
+            # exec_sub_if_arg_compare ::= (target)? && STR && ["==", "<", "<=", ">", ">=" , "!="] && ((target && STR) | [signed_int, "*"])
+            operator = self.json_parse_arg_value(Parser.config_data.execute_comparison_operators)
+
+            if self.current_token.matches(TypedToken.STRING):
+                if is_signed_int(self.current_token.value) or self.current_token.value == "*":
+                    if self.current_token.value == "*" and operator.value not in ("==", "!="):
+                        self.error("Integers cannot be greater than or less than all integers")
+                    value_token = self.advance()
+                    return ExecuteSubIfCompareIntArg(target_node, objective, operator, value_token, negated=negated)
+
+            if not self.current_token.matches_any_of(TypedToken.STRING, DelimiterToken.AT):
+                self.error("Expected an integer, target or '*'")
+
+            target_node_get = self.target()
+            objective_get = self.eat(TypedToken.STRING)
+            return ExecuteSubIfCompareEntityArg(target_node, objective, operator, target_node_get, objective_get, negated=negated)
+
+        self.error("Expected a block, target or vec3")
+
+    def exec_sub_unless_arg(self):
+        """
+        exec_sub_unless_arg ::= exec_sub_if_arg
+        """
+        return self.exec_sub_if_arg(negated=True)
+
+    def exec_sub_ifnot_arg(self):
+        """
+        exec_sub_ifnot_arg ::= exec_sub_if_arg
+        """
+        return self.exec_sub_if_arg(negated=True)
+
+    def exec_sub_success_arg(self):
+        """
+        exec_sub_success_arg ::= exec_sub_store_arg
+        """
+        return self.exec_sub_store_arg(store_type="success")
+
+    def exec_sub_result_arg(self):
+        """
+        exec_sub_result_arg ::= exec_sub_store_arg
+        """
+        return self.exec_sub_store_arg(store_type="result")
+
+    def exec_sub_store_arg(self, store_type):
+        """
+        exec_sub_store_arg ::= [exec_sub_result_arg_data, exec_sub_result_arg_score, exec_sub_result_arg_bossbar]
+        exec_sub_store_arg_data ::= entity_vec3 && data_path && (data_type)? && [signed_float, signed_int]
+        exec_sub_store_arg_score ::= target && STR
+        exec_sub_store_arg_bossbar ::= bossbar_id && ["max", "value"]
+        """
+        if self.current_token.matches(DelimiterToken.AT):
+            # could be a target or the entity_vec3
+            selector = self.selector()
+            objective = self.eat(TypedToken.STRING)
+
+            # exec_sub_store_arg_data ::= entity_vec3 && data_path && (data_type)? && [signed_float, signed_int]
+            if (self.current_token.matches(TypedToken.STRING) and self.current_token.value.startswith(".") or
+                    self.current_token.matches(DelimiterToken.OPEN_SQUARE_BRACKET)):
+                data_path = self.data_path(begin_path=objective)
+            elif (self.current_token.matches(TypedToken.STRING) and
+                    (is_number(self.current_token.value) or self.current_token.value in Parser.config_data.execute_data_types)):
+                data_path = DataPathNode([objective])
             else:
-                coord_node = None
+                # exec_sub_store_arg_score ::= target && STR
+                return ExecuteSubStoreScoreArg(store_type, selector, objective)
 
-            return ExecuteSubIfBlockArg(block_node, coord_node)
+            if self.current_token.matches(TypedToken.STRING, values=Parser.config_data.execute_data_types):
+                data_type = self.data_type()
+            else:
+                data_type = None
 
-        else:
-            raise NotImplementedError("1.13")
-            
+            if is_number(self.current_token.value):
+                scale = self.eat(TypedToken.STRING)
+                return ExecuteSubStoreSelectorDataArg(store_type, selector, data_path, scale, data_type=data_type)
+            self.error("Expected a number as as scale")
+
+        if self.current_token.matches(TypedToken.STRING):
+            # exec_sub_store_arg_data ::= entity_vec3 && data_path && (data_type)? && [signed_float, signed_int]
+            if is_coord_token(self.current_token):
+                vec3 = self.vec3()
+                data_path = self.data_path()
+                if is_number(self.current_token.value):
+                    scale = self.eat(TypedToken.STRING)
+                    return ExecuteSubStoreVec3DataArg(store_type, vec3, data_path, scale)
+                data_type = self.data_type()
+                scale = self.signed_float()
+                return ExecuteSubStoreVec3DataArg(store_type, vec3, data_path, scale, data_type=data_type)
+
+            # could be a beginning of a bossbar_id or an actual target
+            target = self.advance()
+
+            if self.current_token.matches(DelimiterToken.COLON) or self.current_token.matches(TypedToken.STRING, values=("max", "value")):
+                # exec_sub_store_arg_bossbar ::= bossbar_id && ["max", "value"]
+                bossbar_id = self.bossbar_id(begin_id=target)
+                bossbar_sub_cmd = self.eat(TypedToken.STRING, values=("max", "value"))
+                return ExecuteSubStoreBossbarArg(store_type, bossbar_id, bossbar_sub_cmd)
+
+            # exec_sub_store_arg_score ::= target && STR
+            objective = self.eat(TypedToken.STRING)
+            return ExecuteSubStoreScoreArg(store_type, target, objective)
+
+    def data_type(self):
+        """
+        data_type ::= ["byte", "short", "int", "long", "float", "double"]
+        """
+        return self.eat(TypedToken.STRING, values=Parser.config_data.execute_data_types)
+
+    def data_path(self, begin_path=None):
+        """
+        data_path ::= STR, [("." && STR), "[" && INT && "]"]*
+
+        Note that "." isn't a delimiter token, and is grouped up with the TypedToken.STRING type
+
+        Returns:
+            DataPathNode
+        """
+        tokens = []
+
+        if begin_path is None:
+            begin_path = self.eat(TypedToken.STRING)
+
+        if begin_path.value.endswith("."):
+            self.error("Cannot have a singular period at the end of a data path")
+
+        tokens.append(begin_path)
+
+        while self.current_token.matches(DelimiterToken.OPEN_SQUARE_BRACKET):
+            tokens.append(self.advance())
+            tokens.append(self.eat(TypedToken.INT))
+            tokens.append(self.eat(DelimiterToken.CLOSE_SQUARE_BRACKET))
+
+            if (self.current_token.matches(TypedToken.STRING) and self.current_token.value.startswith(".") and
+                    not self.current_token.value.endswith(".")):
+                tokens.append(self.eat(TypedToken.STRING))
+
+        return DataPathNode(tokens)
+
     def sb_cmd(self, begin_target=None):
         """
         sb_cmd ::= [sb_players_math, sb_players_special]
@@ -1067,7 +1365,7 @@ class Parser:
             elif self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
                 tag_node = self.curly_bracket_tag()
                 nodes.append(tag_node)
-            
+
             else:
                 str_token = self.eat(TypedToken.STRING)
                 nodes.append(str_token)
@@ -1141,11 +1439,11 @@ class Parser:
 
         return BossbarSetNode(bossbar_id, arg_token, arg_value_token)
 
-    def bossbar_id(self):
+    def bossbar_id(self, begin_id=None):
         """
         bossbar_id ::= namespace_id
         """
-        return self.namespace_id()
+        return self.namespace_id(begin_id=begin_id)
 
     def data_cmd(self):
         """
@@ -1351,7 +1649,7 @@ class Parser:
         self.eat(DelimiterToken.EQUALS)
         value = self.score_arg_value()
         return SelectorScoreArgNode(objective_arg, value)
-    
+
     def score_arg_value(self):
         """
         score_arg_value ::= [int_range, "*"] | "(" & score_arg_value & ")"
@@ -1575,7 +1873,7 @@ class Parser:
             else:
                 float_type = None
             return NbtFloatNode(float_value, float_type)
-        
+
         self.error("Unexpected default case")
 
     def json_object(self, past_curly_bracket=False):
@@ -1711,7 +2009,7 @@ class Parser:
         """
         nonneg_float ::= (INT)? && "." && INT  # R, R <= 0
         """
-        if is_number(self.current_token.value):
+        if not is_number(self.current_token.value):
             self.error("Expected any proper number")
 
         if float(self.current_token.value) < 0:
@@ -1723,7 +2021,7 @@ class Parser:
         """
         signed_float ::= ("-")? && nonneg_float  # R
         """
-        if is_number(self.current_token.value):
+        if not is_number(self.current_token.value):
             self.error("Expected any proper number")
 
         return self.eat(TypedToken.STRING)
@@ -1825,7 +2123,7 @@ class Parser:
             return self.selector()
 
         return self.vec3()
-    
+
     def entity_id(self):
         """
         entity_id ::= ("minecraft" & ":")? & entity_name
@@ -1853,9 +2151,9 @@ class Parser:
         """
         coord1 = self.coord()
         coord2 = self.coord()
-        
+
         if not are_coords(coord1, coord2):
-            self.error(f"Expected either only world or relative coordinates ({coord1} {coord2})")
+            self.error(f"Expected either only world or local coordinates ({coord1} {coord2})")
 
         return Vec2Node(coord1, coord2)
 
@@ -1869,7 +2167,7 @@ class Parser:
         coord1 = self.coord()
         coord2 = self.coord()
         coord3 = self.coord()
-        
+
         if not are_coords(coord1, coord2, coord3):
             self.error(f"Expected either only world or relative coordinates ({coord1} {coord2} {coord3})")
 
@@ -1966,7 +2264,7 @@ class Parser:
             if Parser.config_data.version != "1.12":
                 self.error(f"Cannot have an integer in place of the block states unless it is 1.12")
             return self.advance()
-        
+
         if self.current_token.matches(TypedToken.STRING, value="*"):
             if Parser.config_data.version != "1.12":
                 self.error(f"Cannot have '*' in place of the block states unless it is 1.12")
@@ -1999,13 +2297,13 @@ class Parser:
         value = self.eat(TypedToken.STRING)
         return BlockStateNode(arg, value)
 
-    def namespace_id(self):
+    def namespace_id(self, begin_id=None):
         """
         namespace_id ::= STR && (":" && STR)?
         """
         # possible namespace if ":" exists
         # otherwise, namespace is the id_value
-        id_value = self.eat(TypedToken.STRING)
+        id_value = begin_id if begin_id is not None else self.eat(TypedToken.STRING)
 
         if self.current_token.matches(DelimiterToken.COLON):
             self.advance()
@@ -2069,7 +2367,7 @@ if __name__ == "__main__":
                 print(f"success: {ast!r}")
 
         print()
-    
+
     def test_cmd(cmd, expect_error=False):
         test(cmd, "get_command", "command", expect_error)
 

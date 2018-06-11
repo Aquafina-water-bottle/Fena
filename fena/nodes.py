@@ -5,9 +5,12 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
+from fena.config_data import ConfigData
 from fena.repr_utils import addrepr
 from fena.assert_utils import assert_type, assert_list_types, assert_tuple_types
 from fena.lexical_token import Token
+
+config_data = ConfigData()
 
 @addrepr
 class Node(ABC):
@@ -121,9 +124,13 @@ class MainCmdNode(CmdNode, ABC):
 class ExecuteCmdNode(MainCmdNode):
     """
     Attributes:
-        sub_cmd_nodes (list of ExecuteSub{type}Arg objects)
+        sub_cmd_nodes (list of ExecuteSubArgNode, SelectorNode and Vec3Node objects or list of ExecuteSubLegacyArg in 1.12)
     """
     def __init__(self, sub_cmd_nodes):
+        if config_data.version == "1.12":
+            assert_list_types(sub_cmd_nodes, ExecuteSubLegacyArg)
+        else:
+            assert_list_types(sub_cmd_nodes, ExecuteSubArgNode, SelectorNode, Vec3Node)
         self.sub_cmd_nodes = sub_cmd_nodes
 
 class ExecuteSubLegacyArg(MainCmdNode):
@@ -146,30 +153,124 @@ class ExecuteSubLegacyArg(MainCmdNode):
 class ExecuteSubArgNode(CmdNode, ABC):
     pass
 
-class ExecuteSubAsArg(ExecuteSubArgNode):
+class ExecuteSubArgSelectorNode(ExecuteSubArgNode, ABC):
+    """
+    Attributes:
+        selector (SelectorNode)
+    """
+    def __init__(self, selector):
+        assert_type(selector, SelectorNode)
+        self.selector = selector
+
+class ExecuteSubArgVec2Node(ExecuteSubArgNode, ABC):
+    """
+    Attributes:
+        vec2 (Vec2Node)
+    """
+    def __init__(self, vec2):
+        assert_type(vec2, Vec2Node)
+        self.vec2 = vec2
+
+class ExecuteSubArgVec3Node(ExecuteSubArgNode, ABC):
+    """
+    Attributes:
+        vec3 (Vec3Node)
+    """
+    def __init__(self, vec3):
+        assert_type(vec3, Vec3Node)
+        self.vec3 = vec3
+
+class ExecuteSubAsArg(ExecuteSubArgSelectorNode):
     pass
 
-class ExecuteSubPosArg(ExecuteSubArgNode):
+class ExecuteSubPosVec3Arg(ExecuteSubArgVec3Node):
     pass
 
-class ExecuteSubAtArg(ExecuteSubArgNode):
+class ExecuteSubPosSelectorArg(ExecuteSubArgSelectorNode):
     pass
 
-class ExecuteSubFacingArg(ExecuteSubArgNode):
+class ExecuteSubAtAnchorArg(ExecuteSubArgNode):
+    """
+    Attributes:
+        anchor (Token)
+    """
+    def __init__(self, anchor):
+        assert_type(anchor, Token)
+        self.anchor = anchor
+
+class ExecuteSubAtSelectorArg(ExecuteSubArgSelectorNode):
     pass
 
-class ExecuteSubRotArg(ExecuteSubArgNode):
+class ExecuteSubAtCoordsArg(ExecuteSubArgNode):
+    """
+    Attributes:
+        vec3 (Vec3Node)
+        vec2 (Vec2Node)
+    """
+    def __init__(self, vec3, vec2):
+        assert_type(vec3, Vec3Node)
+        assert_type(vec2, Vec2Node)
+        self.vec3 = vec3
+        self.vec2 = vec2
+
+class ExecuteSubAtAxesArg(ExecuteSubArgNode):
+    """
+    Attributes:
+        axes (Token)
+    """
+    def __init__(self, axes):
+        assert_type(axes, Token)
+        self.axes = axes
+
+class ExecuteSubFacingVec3Arg(ExecuteSubArgVec3Node):
+    """
+    Attributes:
+        vec3 (Vec3Node)
+    """
+    pass
+
+class ExecuteSubFacingSelectorArg(ExecuteSubArgNode):
+    """
+    Attributes:
+        selector (SelectorNode)
+        anchor (Token or None)
+    """
+    def __init__(self, selector, anchor=None):
+        assert_type(selector, SelectorNode)
+        assert_type(anchor, Token, optional=True)
+        self.selector = selector
+        self.anchor = anchor
+
+class ExecuteSubRotSelectorArg(ExecuteSubArgSelectorNode):
+    pass
+
+class ExecuteSubRotVec2Arg(ExecuteSubArgVec2Node):
+    """
+    Attributes:
+        vec2 (Vec2Node)
+    """
     pass
 
 class ExecuteSubAnchorArg(ExecuteSubArgNode):
-    pass
-
-class ExecuteSubAstArg(ExecuteSubArgNode):
-    pass
+    """
+    Attributes:
+        axes (Token)
+    """
+    def __init__(self, axes):
+        assert_type(axes, Token)
+        self.axes = axes
 
 class ExecuteSubInArg(ExecuteSubArgNode):
-    pass
+    """
+    Attributes:
+        dimension (Token)
+    """
+    def __init__(self, dimension):
+        assert_type(dimension, Token)
+        self.dimension = dimension
 
+class ExecuteSubAstArg(ExecuteSubArgSelectorNode):
+    pass
 
 class ExecuteSubIfArg(ExecuteSubArgNode):
     """
@@ -185,21 +286,13 @@ class ExecuteSubIfArg(ExecuteSubArgNode):
 
 class ExecuteSubIfSelectorArg(ExecuteSubIfArg):
     """
-    Args:
+    Attributes:
         selector (SelectorNode)
-
-    Usage:
-        if(selector) -> if entity selector
     """
     def __init__(self, selector, negated=False):
         assert_type(selector, SelectorNode)
-
         super().__init__(negated)
         self.selector = selector
-
-    # def build(self):
-    #     selector = self.selector.build()
-    #     return f"{self.sub_cmd} entity {selector}"
 
 class ExecuteSubIfBlockArg(ExecuteSubIfArg):
     """
@@ -207,7 +300,7 @@ class ExecuteSubIfBlockArg(ExecuteSubIfArg):
         block (BlockNode)
         coords (Vec3Node or None)
     """
-    def __init__(self, block, coords, negated=False):
+    def __init__(self, block, coords=None, negated=False):
         assert_type(block, BlockNode)
         assert_type(coords, Vec3Node, optional=True)
 
@@ -215,88 +308,52 @@ class ExecuteSubIfBlockArg(ExecuteSubIfArg):
         self.block = block
         self.coords = coords
 
-    # def build(self):
-    #     if self.coords is None:
-    #         coords = "~ ~ ~"
-    #     else:
-    #         coords = self.coords.build()
-
-    #     block = self.block.build()
-    #     if self.version == "1.12":
-    #         return f"detect {coords} {block}"
-    #     return f"{self.sub_cmd} block {coords} {block}"
-    
 class ExecuteSubIfBlocksArg(ExecuteSubIfArg):
     """
-    Args:
+    Attributes:
         coords1 (Vec3Node)
         coords2 (Vec3Node)
         coords3 (Vec3Node)
-        masked (bool)
-    
-    Usage:
-        if(vec3 vec3 == vec3) -> if(vec3 vec3 == vec3 all) -> if blocks vec3 vec3 vec3 all
-        if(vec3 vec3 == vec3 masked) -> if blocks vec3 vec3 vec3 masked
+        option (Token or None)
     """
-    def __init__(self, coords1, coords2, coords3, masked=False, negated=False):
+    def __init__(self, coords1, coords2, coords3, option=None, negated=False):
         assert_type(coords1, Vec3Node)
         assert_type(coords2, Vec3Node)
         assert_type(coords3, Vec3Node)
-        assert_type(masked, bool)
+        assert_type(option, Token, optional=True)
 
         super().__init__(negated)
         self.coords1 = coords1
         self.coords2 = coords2
         self.coords3 = coords3
-        self.masked = masked
-
-    # def build(self):
-    #     if self.masked:
-    #         cmd_param = "masked"
-    #     else:
-    #         cmd_param = "all"
-    #         
-    #     coords1 = self.coords1.build()
-    #     coords2 = self.coords2.build()
-    #     coords3 = self.coords3.build()
-    #     return f"{self.sub_cmd} blocks {coords1} {coords2} {coords3} {cmd_param}"
+        self.option = option
 
 class ExecuteSubIfCompareEntityArg(ExecuteSubIfArg):
     """
-    Args:
+    Attributes:
         target (SelectorNode or Token)
         objective (Token)
         operator (Token)
         target_get (SelectorNode)
         objective_get (Token)
-
-    Usage:
-        if(target objective operator target_get objective_get) -> if score target objective operator target_get objective_get
     """
-    # valid_operators = frozenset({"==", "<", "<=", ">", ">="})
-
-    def __init__(self, target, target_objective, operator, selector, objective, negated=False):
+    def __init__(self, target, objective, operator, target_get, objective_get, negated=False):
         assert_type(target, SelectorNode, Token)
-        assert_type(target_objective, Token)
-        assert_type(operator, Token)
-        assert_type(selector, SelectorNode)
         assert_type(objective, Token)
+        assert_type(operator, Token)
+        assert_type(target_get, SelectorNode)
+        assert_type(objective_get, Token)
 
         super().__init__(negated)
         self.target = target
-        self.target_objective = target_objective
-        self.operator = operator
-        self.selector = selector
         self.objective = objective
-
-    # def build(self):
-    #     return "{} score {} {} {} {} {}".format(
-    #         self.sub_cmd, self.selector1.build(), self.objective1.build(prefix=True),
-    #         self.operator.build(replacements={"==": "="}), self.selector2.build(), self.objective2.build(prefix=True))
+        self.operator = operator
+        self.target_get = target_get
+        self.objective_get = objective_get
 
 class ExecuteSubIfCompareIntArg(ExecuteSubIfArg):
     """
-    Args:
+    Attributes:
         target (SelectorNode or Token)
         objective (Token)
         operator (Token)
@@ -309,8 +366,6 @@ class ExecuteSubIfCompareIntArg(ExecuteSubIfArg):
         if(target objective > int) -> if score target objective matches (int+1)..
         if(target objective >= int) -> if score target objective matches (int)..
     """
-    # valid_operators = frozenset({"==", "<", "<=", ">", ">="})
-
     def __init__(self, target, objective, operator, value, negated=False):
         assert_type(target, SelectorNode, Token)
         assert_type(objective, Token)
@@ -323,29 +378,12 @@ class ExecuteSubIfCompareIntArg(ExecuteSubIfArg):
         self.operator = operator
         self.value = value
 
-    # def build(self):
-    #     int_value = self.value.value
-    #     if self.operator.value == "==":
-    #         int_range = int_value
-    #     elif self.operator.value == "<":
-    #         int_range = "..{}".format(int_value-1)
-    #     elif self.operator.value == "<=":
-    #         int_range = "..{}".format(int_value)
-    #     elif self.operator.value == ">":
-    #         int_range = "{}..".format(int_value+1)
-    #     elif self.operator.value == ">=":
-    #         int_range = "{}..".format(int_value)
-    #     else:
-    #         raise SyntaxError("Unknown default case")
-
-    #     return "{} score {} {} matches {}".format(self.sub_cmd, self.selector.build(), self.objective.build(prefix=True), int_range)
-
 class ExecuteSubIfRangeArg(ExecuteSubIfArg):
     """
-    Args:
+    Attributes:
         target (SelectorNode or Token)
         objective (Token)
-        int_range (IntRangeNode)
+        int_range (Token)
 
     Usage:
         if(target objective in int..int) -> if score target objective matches int..int
@@ -353,22 +391,92 @@ class ExecuteSubIfRangeArg(ExecuteSubIfArg):
     def __init__(self, target, objective, int_range, negated=False):
         assert_type(target, SelectorNode, Token)
         assert_type(objective, Token)
-        assert_type(int_range, IntRangeNode)
+        assert_type(int_range, Token)
 
         super().__init__(negated)
         self.target = target
         self.objective = objective
         self.int_range = int_range
 
-    # def build(self):
-    #     return "{} score {} {} matches {}".format(self.sub_cmd, self.selector.build(), self.objective.build(prefix=True), self.int_range.build())
+class ExecuteSubStoreArg(ExecuteSubArgNode):
+    def __init__(self, store_type):
+        assert_type(store_type, str)
+        self.store_type = store_type
 
+class ExecuteSubStoreSelectorDataArg(ExecuteSubStoreArg):
+    """
+    Attributes:
+        selector (SelectorNode)
+        data_path (DataPathNode)
+        scale (Token)
+        data_type (Token)
+    """
+    def __init__(self, store_type, selector, data_path, scale, data_type=None):
+        super().__init__(store_type)
+        assert_type(selector, SelectorNode)
+        assert_type(data_path, DataPathNode)
+        assert_type(scale, Token)
+        assert_type(data_type, Token, optional=True)
 
-class ExecuteSubResultArg(ExecuteSubArgNode):
+        self.selector = selector
+        self.data_path = data_path
+        self.scale = scale
+        self.data_type = data_type
+
+class ExecuteSubStoreVec3DataArg(ExecuteSubStoreArg):
+    """
+    Attributes:
+        vec3 (Vec3Node)
+        data_path (DataPathNode)
+        scale (Token)
+        data_type (Token)
+    """
+    def __init__(self, store_type, vec3, data_path, scale, data_type=None):
+        super().__init__(store_type)
+        assert_type(vec3, SelectorNode, Vec3Node)
+        assert_type(data_path, DataPathNode)
+        assert_type(scale, Token)
+        assert_type(data_type, Token, optional=True)
+
+        self.vec3 = vec3
+        self.data_path = data_path
+        self.scale = scale
+        self.data_type = data_type
+
+class ExecuteSubStoreScoreArg(ExecuteSubStoreArg):
+    """
+    Attributes:
+        target (SelectorNode or Token)
+        objective (Token)
+    """
+    def __init__(self, store_type, target, objective):
+        super().__init__(store_type)
+        assert_type(target, SelectorNode, Token)
+        assert_type(objective, Token)
+        self.target = target
+        self.objective = objective
+
+class ExecuteSubStoreBossbarArg(ExecuteSubStoreArg):
+    """
+    Attributes:
+        bossbar_id (NamespaceIdNode)
+        sub_cmd (Token)
+    """
+    def __init__(self, store_type, bossbar_id, sub_cmd):
+        super().__init__(store_type)
+        assert_type(bossbar_id, NamespaceIdNode)
+        assert_type(sub_cmd, Token)
+        self.bossbar_id = bossbar_id
+        self.sub_cmd = sub_cmd
+
+class ExecuteSubDataArg(ExecuteSubStoreArg):
     pass
 
-# class ExecuteSubSuccessArg(ExecuteSubArgNode):
-#     pass
+class ExecuteSubScoreArg(ExecuteSubStoreArg):
+    pass
+
+class ExecuteSubBossbarArg(ExecuteSubStoreArg):
+    pass
 
 
 class ScoreboardCmdMathNode(MainCmdNode):
@@ -676,7 +784,7 @@ class SelectorArgsNode(CmdNode):
         assert_type(tag_args, SelectorTagArgsNode)
         assert_type(nbt_args, SelectorNbtArgsNode)
         assert_type(advancement_args, SelectorAdvancementGroupArgNode)
-        
+
         self.default_args = default_args
         self.score_args = score_args
         self.tag_args = tag_args
@@ -783,7 +891,7 @@ class SelectorAdvancementGroupArgNode(CmdNode):
         advancements (?)
     """
     def __init__(self, advancements):
-        self.advancements = advancements 
+        self.advancements = advancements
 
 
 class NbtNode(CmdNode, ABC):
@@ -980,7 +1088,6 @@ class Vec3Node(CmdNode):
         self.coord2 = coord2
         self.coord3 = coord3
 
-
 class NamespaceIdNode(CmdNode):
     """
     Attributes:
@@ -992,3 +1099,13 @@ class NamespaceIdNode(CmdNode):
         assert_type(namespace, Token, optional=True)
         self.id_value = id_value
         self.namespace = namespace
+
+class DataPathNode(CmdNode):
+    """
+    Attributes:
+        path_tokens (list of Token objects)
+    """
+    def __init__(self, path_tokens):
+        assert_list_types(path_tokens, Token)
+        self.path_tokens = path_tokens
+

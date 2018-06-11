@@ -11,6 +11,8 @@ import logging
 import sys
 import os
 
+import pyexpander.lib as pyexpander
+
 import fena.logging_setup
 # import fena.file
 import fena.lexer
@@ -41,9 +43,35 @@ def get_args():
     args = parser.parse_args()
     args.output_path = os.path.abspath(args.output_path)
 
-    print(repr(args))
-    print(type(args))
+    # print(repr(args))
+    # print(type(args))
     return args
+
+
+def get_content(args):
+    """
+    Gets the file contents within the main file
+
+    -if there is no contents within the file:
+        EOFError
+    """
+
+    file_name = args.file_name
+
+    # gets the file path of the main ccu file
+    with open(file_name, "r") as file:
+        dir_path = os.path.dirname(os.path.realpath(file.name))
+
+        # add the directory of the file to the import path
+        # allows any py commands in the file to import py files relative to said file
+        sys.path.append(dir_path)
+        source_file_text = file.read()
+
+        # raises an exception if pyexpander fails to parse
+        text = pyexpander.expandToStr(source_file_text, filename=file_name)[0]
+        logging.debug("\n" + text)
+
+    return text
 
 
 def main():
@@ -52,7 +80,7 @@ def main():
     args = get_args()
 
     # required to get relative path of the config, debug_info and parsed_cmds file
-    text = fena.file.get_content(args)
+    text = get_content(args)
     file_name = args.file_name
     output_path = args.output_path
 

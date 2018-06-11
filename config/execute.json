@@ -1,11 +1,13 @@
 {
     "1.12": {
-        "dimensions": null,
-        "comparison_opeators": null
+        "execute_dimensions": null,
+        "execute_comparison_operators": null,
+        "execute_keywords": ["if"],
+        "execute_data_types": null
     },
 
     "1.13": {
-        "dimensions": {
+        "execute_dimensions": {
             "parse_type": "VALUES",
             "value_replace": {
                 "overworld": "overworld",
@@ -14,7 +16,8 @@
             },
             "values": ["overworld", "the_nether", "the_end"]
         },
-        "comparison_operators": {
+
+        "execute_comparison_operators": {
             "parse_type": "VALUES",
             "value_replace": {
                 "==": "=",
@@ -24,6 +27,9 @@
                 "<=": "<="
             },
             "values": ["=", ">", ">=", "<", "<="]
-        }
+        },
+
+        "execute_keywords": ["as", "pos", "at", "facing", "rot", "anchor", "in", "ast", "if", "ifnot", "unless", "result", "success"],
+        "execute_data_types": ["byte", "short", "int", "long", "float", "double"]
     }
 }

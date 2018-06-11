@@ -1,4 +1,4 @@
-""" Contains node visitors for the AST of a command to build itself """ 
+""" Contains node visitors for the AST of a command to build itself """
 import logging
 
 if __name__ == "__main__":
@@ -14,6 +14,7 @@ from fena.config_data import ConfigData
 from fena.in_file_config import InFileConfig
 from fena.node_visitors import NodeBuilder
 from fena.nodes import CmdNode, IntRangeNode, SelectorDefaultGroupArgValueNode, JsonObjectNode, JsonMapNode
+from fena.number_utils import is_signed_int
 from fena.str_utils import encode_str, decode_str
 from fena.lexer import Lexer
 from fena.parser import Parser
@@ -42,14 +43,14 @@ class CommandBuilder_1_12(NodeBuilder):
         return self.build(self.cmd_root)
 
     def build_FenaCmdNode(self, node):
-        return self.iter_build(self.cmd_root.cmd_segment_nodes, " ")
+        return self.iter_build(node.cmd_segment_nodes, " ")
 
     def build_ExecuteCmdNode(self, node):
         """
-        Args:
-            node (ExecuteCmdNode)
+        Node Attributes:
+            sub_cmd_nodes (list of ExecuteSubArgNode objects)
         """
-        return self.iter_build(node.sub_cmd_nodes, " ")
+        return self.iter_build(node.sub_cmd_nodes, ' ')
 
     def build_ExecuteSubLegacyArg(self, node):
         """
@@ -596,7 +597,7 @@ class CommandBuilder_1_12(NodeBuilder):
             id_value (Token)
             namespace (Token or None)
         """
-        id_value = self.build(node.id_value)
+        id_value = self.build(node.id_value, prefix=True)
         namespace = ("minecraft" if node.namespace is None else self.build(node.namespace))
         return f"{namespace}:{id_value}"
 
@@ -616,7 +617,7 @@ class CommandBuilder_1_12(NodeBuilder):
 
         # prioritizes replacement over value
         string = token.replacement if (token.replacement is not None) else str(token.value)
-        
+
         if prefix:
             if string.startswith("_"):
                 # string=__ti -> fena._ti
@@ -642,6 +643,13 @@ class CommandBuilder_1_12(NodeBuilder):
 class CommandBuilder_1_13(CommandBuilder_1_12):
     def __init__(self, cmd_root):
         super().__init__(cmd_root)
+
+    def build_FenaCmdNode(self, node):
+        # gets rid of a trailing " run" if it exists
+        command = self.iter_build(node.cmd_segment_nodes, " ")
+        if command.endswith(" run"):
+            return command[:-len(" run")]
+        return command
 
     def build_SelectorScoreArgsNode(self, node):
         """
@@ -680,7 +688,7 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             for arg_value in self.iter_build(node.arg_value.arg_values):
                 result.append(f"{arg}={arg_value}")
             return ",".join(result)
-        
+
         # otherwise, a regular argument value
         arg_value = self.build(node.arg_value)
         return f"{arg}={arg_value}"
@@ -725,7 +733,7 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
 
     def build_SelectorAdvancementGroupArgNode(self, node):
         """
-        Attributes:
+        Node Attributes:
             advancements (?)
         """
         return self.iter_build(node.advancements, ",")
@@ -790,10 +798,309 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
 
     def build_BlockStateNode(self, node):
         """
-        Attributes:
+        Node Attributes:
             arg (Token)
             value (Token)
         """
         arg = self.build(node.arg)
         value = self.build(node.value)
         return f"{arg}={value}"
+
+    def build_ExecuteCmdNode(self, node):
+        """
+        Node Attributes:
+            sub_cmd_nodes (list of ExecuteSubArgNode objects)
+        """
+        return f"execute {self.iter_build(node.sub_cmd_nodes, ' ')} run"
+
+    def build_ExecuteSubAsArg(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+        """
+        selector = self.build(node.selector)
+        return f"as {selector}"
+
+    def build_ExecuteSubPosVec3Arg(self, node):
+        """
+        Node Attributes:
+            vec3 (Vec3Node)
+        """
+        vec3 = self.build(node.vec3)
+        return f"positioned {vec3}"
+
+    def build_ExecuteSubPosSelectorArg(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+        """
+        selector = self.build(node.selector)
+        return f"positioned as {selector}"
+
+    def build_ExecuteSubAtAnchorArg(self, node):
+        """
+        Node Attributes:
+            anchor (Token)
+        """
+        anchor = self.build(node.anchor)
+        return f"anchored {anchor} positioned ^ ^ ^"
+
+    def build_ExecuteSubAtSelectorArg(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+        """
+        selector = self.build(node.selector)
+        return f"at {selector}"
+
+    def build_ExecuteSubAtCoordsArg(self, node):
+        """
+        Node Attributes:
+            vec3 (Vec3Node)
+            vec2 (Vec2Node)
+        """
+        vec3 = self.build(node.vec3)
+        vec2 = self.build(node.vec2)
+        return f"positioned {vec3} facing {vec2}"
+
+    def build_ExecuteSubAtAxesArg(self, node):
+        """
+        Node Attributes:
+            axes (Token)
+        """
+        axes = self.build(node.axes)
+        return f"align {axes}"
+
+    def build_ExecuteSubFacingVec3Arg(self, node):
+        """
+        Node Attributes:
+            vec2 (Vec2Node)
+        """
+        vec3 = self.build(node.vec3)
+        return f"facing {vec3}"
+
+    def build_ExecuteSubFacingSelectorArg(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            anchor (Token or None)
+        """
+        selector = self.build(node.selector)
+        if node.anchor is None:
+            anchor = "feet"
+        else:
+            anchor = self.build(node.anchor)
+        return f"facing entity {selector} {anchor}"
+
+    def build_ExecuteSubRotSelectorArg(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+        """
+        selector = self.build(node.selector)
+        return f"rotated as {selector}"
+
+    def build_ExecuteSubRotVec2Arg(self, node):
+        """
+        Node Attributes:
+            vec2 (Vec2Node)
+        """
+        vec2 = self.build(node.vec2)
+        return f"rotated {vec2}"
+
+    def build_ExecuteSubAnchorArg(self, node):
+        """
+        Node Attributes:
+            axes (Token)
+        """
+        axes = self.build(node.axes)
+        return f"anchored {axes}"
+
+    def build_ExecuteSubInArg(self, node):
+        """
+        Node Attributes:
+            dimension (Token)
+        """
+        dimension = self.build(node.dimension)
+        return f"in {dimension}"
+
+    def build_ExecuteSubAstArg(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+        """
+        selector = self.build(node.selector)
+        return f"as {selector} at @s"
+
+    def build_ExecuteSubIfSelectorArg(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+        """
+        selector = self.build(node.selector)
+        return f"{node.sub_cmd} entity {selector}"
+
+    def build_ExecuteSubIfBlockArg(self, node):
+        """
+        Node Attributes:
+            block (BlockNode)
+            coords (Vec3Node or None)
+        """
+
+        if node.coords is None:
+            coords = "~ ~ ~"
+        else:
+            coords = self.build(node.coords)
+        block = self.build(node.block)
+
+        return f"{node.sub_cmd} block {coords} {block}"
+
+    def build_ExecuteSubIfBlocksArg(self, node):
+        """
+        Node Attributes:
+            coords1 (Vec3Node)
+            coords2 (Vec3Node)
+            coords3 (Vec3Node)
+            option (Token or None)
+        """
+
+        coords1 = self.build(node.coords1)
+        coords2 = self.build(node.coords2)
+        coords3 = self.build(node.coords3)
+
+        if node.option is None:
+            option = "all"
+        else:
+            option = self.build(node.option)
+
+        return f"{node.sub_cmd} blocks {coords1} {coords2} {coords3} {option}"
+
+    def build_ExecuteSubIfCompareEntityArg(self, node):
+        """
+        Node Attributes:
+            target (SelectorNode or Token)
+            objective (Token)
+            operator (Token)
+            target_get (SelectorNode)
+            objective_get (Token)
+        """
+        target = self.build(node.target)
+        objective = self.build(node.objective, prefix=True)
+        operator = self.build(node.operator)
+        target_get = self.build(node.target_get)
+        objective_get = self.build(node.objective_get, prefix=True)
+
+        return f"{node.sub_cmd} score {target} {objective} {operator} {target_get} {objective_get}"
+
+    def build_ExecuteSubIfCompareIntArg(self, node):
+        """
+        Node Attributes:
+            target (SelectorNode or Token)
+            objective (Token)
+            operator (Token)
+            value (Token)
+        """
+        target = self.build(node.target)
+        objective = self.build(node.objective, prefix=True)
+        operator = self.build(node.operator)
+        int_value = self.build(node.value)
+        sub_cmd = node.sub_cmd
+
+        if int_value == "*":
+            int_value = f"{-(1<<31)}.."
+        else:
+            int_value = int(int_value)
+
+        if operator == "=":
+            int_range = int_value
+        elif operator == "<":
+            int_range = "..{}".format(int_value-1)
+        elif operator == "<=":
+            int_range = "..{}".format(int_value)
+        elif operator == ">":
+            int_range = "{}..".format(int_value+1)
+        elif operator == ">=":
+            int_range = "{}..".format(int_value)
+        else:
+            raise SyntaxError("Unknown default case")
+
+        return f"{sub_cmd} score {target} {objective} matches {int_range}"
+
+    def build_ExecuteSubIfRangeArg(self, node):
+        """
+        Node Attributes:
+            target (SelectorNode or Token)
+            objective (Token)
+            int_range (IntRangeNode)
+        """
+        target = self.build(node.target)
+        objective = self.build(node.objective, prefix=True)
+        int_range = self.build(node.int_range)
+        return f"{node.sub_cmd} score {target} {objective} matches {int_range}"
+
+    def build_ExecuteSubStoreSelectorDataArg(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode, Vec3Node)
+            data_path (DataPathNode)
+            scale (Token)
+            data_type (Token)
+        """
+        selector = self.build(node.selector)
+        data_path = self.build(node.data_path)
+        scale = self.build(node.scale)
+        if node.data_type is None:
+            if is_signed_int(scale):
+                data_type = "long"
+            else:
+                data_type = "double"
+        else:
+            data_type = self.build(node.data_type)
+        return f"store {node.store_type} entity {selector} {data_path} {data_type} {scale}"
+
+    def build_ExecuteSubStoreVec3DataArg(self, node):
+        """
+        Node Attributes:
+            vec3 (SelectorNode, Vec3Node)
+            data_path (DataPathNode)
+            scale (Token)
+            data_type (Token)
+        """
+        vec3 = self.build(node.vec3)
+        data_path = self.build(node.data_path)
+        scale = self.build(node.scale)
+        if node.data_type is None:
+            if is_signed_int(scale):
+                data_type = "long"
+            else:
+                data_type = "double"
+        else:
+            data_type = self.build(node.data_type)
+        return f"store {node.store_type} block {vec3} {data_path} {data_type} {scale}"
+
+    def build_ExecuteSubStoreScoreArg(self, node):
+        """
+        Node Attributes:
+            target (SelectorNode or Token)
+            objective (Token)
+        """
+        target = self.build(node.target)
+        objective = self.build(node.objective, prefix=True)
+        return f"store {node.store_type} score {target} {objective}"
+
+    def build_ExecuteSubStoreBossbarArg(self, node):
+        """
+        Node Attributes:
+            bossbar_id (NamespaceIdNode)
+            sub_cmd (Token)
+        """
+        bossbar_id = self.build(node.bossbar_id)
+        sub_cmd = self.build(node.sub_cmd)
+        return f"store {node.store_type} bossbar {bossbar_id} {sub_cmd}"
+
+    def build_DataPathNode(self, node):
+        """
+        Node Attributes:
+            path_tokens (list of Token objects)
+        """
+        return self.iter_build(node.path_tokens, "")

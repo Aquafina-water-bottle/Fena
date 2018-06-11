@@ -54,7 +54,7 @@ relative coordinates: All coordinates specified with ~
 
 absolute coordinates: All coordinates specified just as a numeric value
     eg. 25, 75.3, -23.4
-    
+
 world coordinates: Either absolute and relative coordinates
     eg. 785, ~-27.1, 33.4
 

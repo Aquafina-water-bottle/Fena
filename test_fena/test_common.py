@@ -89,3 +89,6 @@ def test_vec2(vec2, expected=None, **kwargs):
 
 def test_vec3(vec3, expected=None, **kwargs):
     test_builder(vec3, "get_command", "vec3", expected=expected, **kwargs)
+
+def test_data_path(vec3, expected=None, **kwargs):
+    test_builder(vec3, "get_command", "data_path", expected=expected, **kwargs)
