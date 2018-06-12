@@ -40,6 +40,8 @@ from fena.nodes import (ProgramNode, McFunctionNode, FolderNode, PrefixNode, Con
     NbtObjectNode, NbtMapNode, NbtArrayNode, NbtIntegerNode, NbtFloatNode,
 
     BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode,
+    DataGetNode, DataMergeNode, DataRemoveNode,
+    EffectClearNode, EffectGiveNode,
     Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, BlockStateNode, NamespaceIdNode, DataPathNode)
 
 from fena.node_visitors import NodeBuilder, NodeVisitor
@@ -135,12 +137,12 @@ bossbar_set ::= bossbar_id && bossbar_arg && "=" && bossbar_arg_value
 bossbar_id ::= namespace_id
 
 data_cmd ::= "data" && [data_get, data_merge, data_remove]
-data_get ::= entity_vec3 && "<-" && (STR && (signed_int)?)?
-data_merge ::= entity_vec3 && "+" && nbt
-data_remove ::= entity_vec3 && "-" && STR
+data_get ::= entity_vec3_bracket && "<-" && (data_path && (signed_int)?)?
+data_merge ::= entity_vec_bracket3 && "+" && nbt
+data_remove ::= entity_vec_bracket3 && "-" && STR
 
 effect_cmd ::= "effect" && [effect_give, effect_clear]
-effect_clear ::= selector && "-" && ["all", effect_id]
+effect_clear ::= selector && "-" && ["*", effect_id]
 effect_give ::= selector && "+" && effect_id && (pos_int && ((nonneg_int)? && ["true", "false"]? )? )?
 # effect_id are defined under effects.json
 
@@ -222,6 +224,7 @@ number_range ::= [signed_float, (signed_float & ".."), (".." & signed_float), (s
 literal_str ::= "\"" && ([\A, "\\\"", "\\\\"])* &&  && "\""
 
 target ::= [selector, STR]
+entity_vec3_bracket ::= ("(" && entity_vec3_bracket && ")") | entity_vec3
 entity_vec3 ::= [selector, vec3]
 entity_id ::= ("minecraft" & ":")? & entity_name
 # entity_name is defined under entites.json
@@ -400,7 +403,7 @@ class Parser:
             if values is not None:
                 error_message += f" with any value from {values}"
             elif value is not None:
-                error_message += f" with a value of {value}"
+                error_message += f" with a value of {value!r}"
 
         self.error(error_message)
 
@@ -438,7 +441,7 @@ class Parser:
                 return json_object[arg_str]
             return arg_token, json_object[arg_str]
 
-        self.error(f"Expected {arg_str} value inside {list(json_object)}")
+        self.error(f"Expected {arg_str!r} value inside {list(json_object)}")
 
     def json_parse_arg_value(self, arg_details):
         """
@@ -1394,7 +1397,7 @@ class Parser:
 
         bossbar_id = self.bossbar_id()
 
-        if self.current_token == "<-":
+        if self.current_token.matches(TypedToken.STRING, value="<-"):
             return self.bossbar_get(bossbar_id)
         return self.bossbar_set(bossbar_id)
 
@@ -1424,7 +1427,7 @@ class Parser:
         bossbar_get ::= bossbar_id && "<-" && ["max", "value", "players", "visible"]
         """
         self.eat(TypedToken.STRING, value="<-")
-        sub_cmd = self.eat(TypedToken.STIRNG, values=Parser.config_data.bossbar_get)
+        sub_cmd = self.eat(TypedToken.STRING, values=Parser.config_data.bossbar_get)
 
         return BossbarGetNode(bossbar_id, sub_cmd)
 
@@ -1434,7 +1437,9 @@ class Parser:
         # bossbar_option_arg, bossbar_option_arg_value are defined in the bossbar_version.json
         """
         arg_token, json_arg_details = self.json_parse_arg(json_type="bossbar_set")
-        self.eat(DelimiterToken.EQUALS)
+        # note that the lexer is changed so it doesn't automatically get an equals delimiter
+        # self.eat(DelimiterToken.EQUALS)
+        self.eat(TypedToken.STRING, value="=")
         arg_value_token = self.json_parse_arg_value(json_arg_details)
 
         return BossbarSetNode(bossbar_id, arg_token, arg_value_token)
@@ -1448,20 +1453,122 @@ class Parser:
     def data_cmd(self):
         """
         data_cmd ::= "data" && [data_get, data_merge, data_remove]
-        data_get ::= entity_vec3 && "<-" && (STR && (signed_int)?)?
-        data_merge ::= entity_vec3 && "+" && nbt
-        data_remove ::= entity_vec3 && "-" && STR
         """
-        raise NotImplementedError()
+        entity_vec3 = self.entity_vec3_bracket()
+
+        # 1.12 only has one option which is '+'
+        if Parser.config_data.version == "1.12" or self.current_token.matches(TypedToken.STRING, value="+"):
+            return self.data_merge(entity_vec3)
+
+        if self.current_token.matches(TypedToken.STRING, value="<-"):
+            return self.data_get(entity_vec3)
+        if self.current_token.matches(TypedToken.STRING, value="-"):
+            return self.data_remove(entity_vec3)
+
+        self.error("Expected a string token with '<-', '+' or '-'")
+
+    def data_get(self, entity_vec3):
+        """
+        data_get ::= entity_vec3_bracket && "<-" && (data_path && (signed_int)?)?
+        """
+        self.eat(TypedToken.STRING, value="<-")
+        if not self.current_token.matches(TypedToken.STRING):
+            return DataGetNode(entity_vec3)
+
+        data_path = self.data_path()
+        if not (self.current_token.matches(TypedToken.STRING) and is_number(self.current_token.value)):
+            return DataGetNode(entity_vec3, data_path)
+
+        scale = self.advance()
+        return DataGetNode(entity_vec3, data_path, scale)
+
+    def data_merge(self, entity_vec3):
+        """
+        data_merge ::= entity_vec_bracket3 && "+" && nbt
+        """
+        self.eat(TypedToken.STRING, value="+")
+        nbt = self.nbt()
+        return DataMergeNode(entity_vec3, nbt)
+
+    def data_remove(self, entity_vec3):
+        """
+        data_remove ::= entity_vec_bracket3 && "-" && STR
+        """
+        self.eat(TypedToken.STRING, value="-")
+        data_path = self.data_path()
+        return DataRemoveNode(entity_vec3, data_path)
 
     def effect_cmd(self):
         """
         effect_cmd ::= "effect" && [effect_give, effect_clear]
-        effect_clear ::= selector && "-" && ["all", effect_id]
+
+        Returns:
+            EffectClearNode
+            EffectGiveNode
+        """
+        selector = self.selector()
+        if self.current_token.matches(TypedToken.STRING, value="+"):
+            return self.effect_give(selector)
+        if self.current_token.matches(TypedToken.STRING, value="-"):
+            return self.effect_clear(selector)
+
+        self.error("Expected a string token with '+' or '-'")
+
+    def effect_give(self, selector):
+        """
         effect_give ::= selector && "+" && effect_id && (pos_int && ((nonneg_int)? && ["true", "false"]? )? )?
         # effect_id are defined under effects_version.txt
+
+        Returns:
+            EffectGiveNode
         """
-        raise NotImplementedError()
+        self.eat(TypedToken.STRING, value="+")
+        effect_id = self.effect_id()
+
+        if not (self.current_token.matches(TypedToken.STRING) and is_pos_int(self.current_token.value)):
+            # without duration
+            return EffectGiveNode(selector, effect_id)
+        duration = self.advance()
+
+        if not (self.current_token.matches(TypedToken.STRING) and is_pos_int(self.current_token.value)):
+            # without level
+            return EffectGiveNode(selector, effect_id, duration)
+        level = self.advance()
+
+        if not self.current_token.matches(TypedToken.STRING, values=("true", "false")):
+            # without hide_particles
+            return EffectGiveNode(selector, effect_id, duration, level)
+
+        # all effect options
+        hide_particles = True if self.current_token.value == "true" else False
+        self.advance()
+        return EffectGiveNode(selector, effect_id, duration, level, hide_particles)
+
+    def effect_clear(self, selector):
+        """
+        # effect_id are defined under effects_version.txt
+        effect_clear ::= selector && "-" && ["*", effect_id]
+
+        Returns:
+            EffectClearNode
+        """
+        self.eat(TypedToken.STRING, value="-")
+
+        if self.current_token.matches(TypedToken.STRING, value="*"):
+            self.advance()
+            # sets to none since it doesn't clear a specific effect
+            return EffectClearNode(selector)
+
+        effect_id = self.effect_id()
+        return EffectClearNode(selector, effect_id)
+
+    def effect_id(self):
+        if self.current_token.matches(TypedToken.STRING, value="minecraft"):
+            self.advance()
+            self.eat(DelimiterToken.COLON)
+
+        effect_id_value = self.eat(TypedToken.STRING, values=Parser.config_data.effects)
+        return NamespaceIdNode(effect_id_value)
 
     def function_cmd(self):
         """
@@ -2112,6 +2219,21 @@ class Parser:
 
         return self.eat(TypedToken.STRING)
 
+    def entity_vec3_bracket(self):
+        """
+        entity_vec3_bracket ::= ("(" && entity_vec3_bracket && ")") | entity_vec3
+
+        Returns:
+            SelectorNode or Vec3Node
+        """
+        if self.current_token.matches(DelimiterToken.OPEN_PARENTHESES):
+            self.advance()
+            entity_vec3_node = self.entity_vec3_bracket()
+            self.eat(DelimiterToken.CLOSE_PARENTHESES)
+        else:
+            entity_vec3_node = self.entity_vec3()
+        return entity_vec3_node
+
     def entity_vec3(self):
         """
         entity_vec3 ::= [selector, vec3]
@@ -2344,60 +2466,6 @@ if __name__ == "__main__":
     # parser = Parser(lexer.get_selector())
     # tree = parser.selector()
     # print(tree)
-
-    import traceback
-
-    def test(string, lexer_method, parser_method, expect_error=False):
-        print(f"    {string}:")
-        try:
-            lexer = Lexer(string)
-            parser = Parser(lexer, lexer_method)
-            ast = parser.parse(method_name=parser_method)
-        except Exception:
-            if expect_error:
-                print(f"success: expected error")
-            else:
-                print(f"failure: did not expect error")
-                raise Exception
-        else:
-            if expect_error:
-                print(f"failure: expected error for {ast!r}")
-                raise Exception
-            else:
-                print(f"success: {ast!r}")
-
-        print()
-
-    def test_cmd(cmd, expect_error=False):
-        test(cmd, "get_command", "command", expect_error)
-
-    def tests_bossbar():
-        test_cmd(r'bossbar add ayylmao {"text":"oh damn it is json","color":"yo mama"}')
-        test_cmd(r'bossbar add nou:ayylmao {"text":"oh damn it is json","color":"yo mama"}')
-        test_cmd(r'bossbar remove ayylmao')
-        test_cmd(r'bossbar remove minecraft:ayylmao')
-        test_cmd(r'bossbar minecraft:ayylmao color = nou', expect_error=True)
-        test_cmd(r'bossbar minecraft:ayylmao color = green')
-        test_cmd(r'bossbar minecraft:ayylmao max = -1', expect_error=True)
-        test_cmd(r'bossbar minecraft:ayylmao max = 0', expect_error=True)
-        test_cmd(r'bossbar minecraft:ayylmao max = 1')
-        test_cmd(r'bossbar minecraft:ayylmao name = 1', expect_error=True)
-        test_cmd(r'bossbar minecraft:ayylmao name = {}')
-        test_cmd(r'bossbar minecraft:ayylmao name = {"text":"yo mama"}')
-
-    def test_json(json, expect_error=False):
-        test(json, "get_curly_bracket_tag", "json", expect_error)
-
-    def tests_json():
-        test_json(r'{"asdf":1, "asdf2":2, "asdf3":3}')
-        test_json(r'{"asdf":1, "asdf2":2}')
-        test_json(r'{"asdf":1}')
-        test_json(r'{"asdf": [{"arg": "value"}, 1, 1.2, 1e1, 1.2e1, 1.2e+1, [1, 2, 3], "hello", true, false, null]}')
-        test_json(r'{}')
-        test_json(r'{"test":1, "test":2, "test":3, }', expect_error=True)
-        test_json(r'{"asdf', expect_error=True)
-        test_json(r'{"asdf":1}a', expect_error=True)
-
     # tests_bossbar()
     # tests_json()
     # tests_selector()

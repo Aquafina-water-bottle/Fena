@@ -40,6 +40,9 @@ def get_args():
     # debug
     parser.add_argument("-d", "--debug", help="puts say commands at the front of each mcfunction", action="store_true")
 
+    # debug log
+    parser.add_argument("-dl", "--debug-log", help="outputs the debug log to see all debug info from the Fena language", action="store_true")
+
     args = parser.parse_args()
     args.output_path = os.path.abspath(args.output_path)
 
@@ -52,8 +55,8 @@ def get_content(args):
     """
     Gets the file contents within the main file
 
-    -if there is no contents within the file:
-        EOFError
+    Raises:
+        EOFError: if there is literally no content on the main file
     """
 
     file_name = args.file_name
@@ -92,15 +95,8 @@ def main():
     interpreter = fena.interpreter.Interpreter(parser, output_path)
     mcfunctions = interpreter.interpret()
 
-    writer = fena.writer.Writer(mcfunctions, args)
+    writer = fena.writer.Writer(mcfunctions, args.clean, args.debug)
     writer.write()
-
-    # interpreter = fena.interpreter.Interpreter(parser)
-    # mcfunctions = interpreter.interpret(output_path)
-
-    # fena.file.write_parsed_cmds(mcfunctions, args)
-    # fena.file.write_mc_functions(mcfunctions, args)
-
 
 if __name__ == '__main__':
     # try:

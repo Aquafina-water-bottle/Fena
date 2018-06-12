@@ -13,7 +13,7 @@ from fena.lexical_token import Token
 from fena.config_data import ConfigData
 from fena.in_file_config import InFileConfig
 from fena.node_visitors import NodeBuilder
-from fena.nodes import CmdNode, IntRangeNode, SelectorDefaultGroupArgValueNode, JsonObjectNode, JsonMapNode
+from fena.nodes import CmdNode, IntRangeNode, SelectorDefaultGroupArgValueNode, JsonObjectNode, JsonMapNode, SelectorNode
 from fena.number_utils import is_signed_int
 from fena.str_utils import encode_str, decode_str
 from fena.lexer import Lexer
@@ -95,6 +95,17 @@ class CommandBuilder_1_12(NodeBuilder):
         block = self.build(node.block)
         return f"detect {coords} {block}"
 
+    def build_DataMergeNode(self, node):
+        """
+        Node Attributes:
+            entity_vec3 (SelectorNode, Vec3Node)
+            nbt (NbtObjectNode)
+        """
+        data_select_type = "entitydata" if isinstance(node.entity_vec3, SelectorNode) else "blockdata"
+        entity_vec3 = self.build(node.entity_vec3)
+        nbt = self.build(node.nbt)
+        return f"{data_select_type} {entity_vec3} {nbt}"
+
     def build_ScoreboardCmdMathNode(self, node):
         """
         Node Attributes:
@@ -167,6 +178,35 @@ class CommandBuilder_1_12(NodeBuilder):
         target = self.build(node.target)
         objective = self.build(node.objective, prefix=True)
         return f"scoreboard players {sub_cmd} {objective} {target}"
+
+    def build_EffectClearNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            effect_id (NamespaceIdNode or None)
+        """
+        selector = self.build(node.selector)
+        if node.effect_id is None:
+            return f"effect {selector} clear"
+
+        effect_id = self.build(node.effect_id)
+        return f"effect {selector} {effect_id} 0 0 true"
+
+    def build_EffectGiveNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            effect_id (NamespaceIdNode)
+            duration (Token or None)
+            level (Token or None)
+            hide_particles (bool)
+        """
+        selector = self.build(node.selector)
+        effect_id = self.build(node.effect_id)
+        duration = "2" if node.duration is None else self.build(node.duration)
+        level = "0" if node.level is None else self.build(node.level)
+        hide_particles = "true" if node.hide_particles else "false"
+        return f"effect {selector} {effect_id} {duration} {level} {hide_particles}"
 
     def build_FunctionCmdNode(self, node):
         """
@@ -1097,6 +1137,117 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
         bossbar_id = self.build(node.bossbar_id)
         sub_cmd = self.build(node.sub_cmd)
         return f"store {node.store_type} bossbar {bossbar_id} {sub_cmd}"
+
+    def build_BossbarAddNode(self, node):
+        """
+        Node Attributes:
+            bossbar_id (NamespaceIdNode)
+            json (JsonObjectNode)
+        """
+        bossbar_id = self.build(node.bossbar_id)
+        json = self.build(node.json)
+        return f"bossbar add {bossbar_id} {json}"
+
+    def build_BossbarRemoveNode(self, node):
+        """
+        Node Attributes:
+            bossbar_id (NamespaceIdNode)
+        """
+        bossbar_id = self.build(node.bossbar_id)
+        return f"bossbar remove {bossbar_id}"
+
+    def build_BossbarGetNode(self, node):
+        """
+        Node Attributes:
+            bossbar_id (NamespaceIdNode)
+            sub_cmd (Token)
+        """
+        bossbar_id = self.build(node.bossbar_id)
+        sub_cmd = self.build(node.sub_cmd)
+        return f"bossbar get {bossbar_id} {sub_cmd}"
+
+    def build_BossbarSetNode(self, node):
+        """
+        Node Attributes:
+            bossbar_id (NamespaceIdNode)
+            arg (Token)
+            arg_value (Token, JsonObjectNode)
+        """
+        bossbar_id = self.build(node.bossbar_id)
+        arg = self.build(node.arg)
+        arg_value = self.build(node.arg_value)
+        return f"bossbar set {bossbar_id} {arg} {arg_value}"
+
+    def build_DataGetNode(self, node):
+        """
+        Node Attributes:
+            entity_vec3 (SelectorNode, Vec3Node)
+            data_path (DataPathNode or None)
+            scale (Token or None)
+        """
+        data_select_type = "entity" if isinstance(node.entity_vec3, SelectorNode) else "block"
+        entity_vec3 = self.build(node.entity_vec3)
+
+        if node.data_path is None:
+            return f"data get {data_select_type} {entity_vec3}"
+        data_path = self.build(node.data_path)
+
+        if node.scale is None:
+            return f"data get {data_select_type} {entity_vec3} {data_path}"
+
+        scale = self.build(node.scale)
+        return f"data get {data_select_type} {entity_vec3} {data_path} {scale}"
+
+    def build_DataMergeNode(self, node):
+        """
+        Node Attributes:
+            entity_vec3 (SelectorNode, Vec3Node)
+            nbt (NbtObjectNode)
+        """
+        data_select_type = "entity" if isinstance(node.entity_vec3, SelectorNode) else "block"
+        entity_vec3 = self.build(node.entity_vec3)
+        nbt = self.build(node.nbt)
+        return f"data merge {data_select_type} {entity_vec3} {nbt}"
+
+    def build_DataRemoveNode(self, node):
+        """
+        Node Attributes:
+            entity_vec3 (SelectorNode, Vec3Node)
+            data_path (DataPathNode)
+        """
+        data_select_type = "entity" if isinstance(node.entity_vec3, SelectorNode) else "block"
+        entity_vec3 = self.build(node.entity_vec3)
+        data_path = self.build(node.data_path)
+        return f"data remove {data_select_type} {entity_vec3} {data_path}"
+
+    def build_EffectClearNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            effect_id (NamespaceIdNode or None)
+        """
+        selector = self.build(node.selector)
+        if node.effect_id is None:
+            return f"effect clear {selector}"
+
+        effect_id = self.build(node.effect_id)
+        return f"effect clear {selector} {effect_id}"
+
+    def build_EffectGiveNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            effect_id (NamespaceIdNode)
+            duration (Token or None)
+            level (Token or None)
+            hide_particles (bool)
+        """
+        selector = self.build(node.selector)
+        effect_id = self.build(node.effect_id)
+        duration = "2" if node.duration is None else self.build(node.duration)
+        level = "0" if node.level is None else self.build(node.level)
+        hide_particles = "true" if node.hide_particles else "false"
+        return f"effect give {selector} {effect_id} {duration} {level} {hide_particles}"
 
     def build_DataPathNode(self, node):
         """

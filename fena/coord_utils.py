@@ -82,45 +82,5 @@ def are_coords(*tokens):
     return True
 
 if __name__ == "__main__":
-    def test(string, *functions):
-        print("string={}".format(repr(string)), *(("{}={}".format(function.__name__, repr(function(string)))) for function in functions), sep=", ")
-
-    def test_number(string):
-        return test(string, is_number, is_coord)
-
-    def test_coord_type(string):
-        return test(string, get_coord_type)
-
-    test_number("25.6")
-    test_number("6e5")
-    test_number("-1964")
-    test_number("1_964")
-    test_number("NaN")
-    test_number("None")
-    test_number("27j+5")
-    test_number("abcdefg")
-    test_number("12345abcdefg")
-    test_number("~26.3")
-    test_number("^26.3")
-
-    print()
-    test_coord_type("25.6")
-    test_coord_type("-1964")
-    test_coord_type("~26.3")
-    test_coord_type("^26.3")
-
-    print()
-    from fena.token_position import TokenPosition
-    from fena.lexical_token import Token
-    position = TokenPosition(row=1, column=5, char_pos=3)
-    coord1 = Token(position, TypedToken.STRING, value="25.6")
-    coord2 = Token(position, TypedToken.STRING, value="^25.6")
-    coord3 = Token(position, TypedToken.STRING, value="~25.6")
-
-    print(are_coords(coord1, coord1, coord1)) # true
-    print(are_coords(coord2, coord2, coord2)) # true
-    print(are_coords(coord3, coord3, coord3)) # true
-    print(are_coords(coord1, coord3, coord3)) # true because relative and world
-    print(are_coords(coord2, coord1, coord2)) # false because all must be local
-    print(are_coords(coord2, coord1, coord3)) # false because all different
-    print(are_coords(coord2, coord2, coord3)) # false because all must be local
+    # test cases for this are under test_fena/ now
+    pass

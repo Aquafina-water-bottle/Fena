@@ -217,11 +217,7 @@ s7.0.0      v0.4.0
     TODO:
         - Allow all forms of "minecraft:"
         - Include type hinting as introduced by python 3.5+ (unless it requires 3.7+)
-        - Organize all test cases into its component folders and modules (fena/test/version)
-            - Import each version by using the private method in config_data.py
-            - Modify said method to include a pre-specified version
         - Look into using dataclasses or NamedTuple for various objects (eg. nodes)
-        - Make 1.13 selectors work to be certain that this AST is fine for both versions
 
         - Revamp parser into making a parse tree and interpreter class
             - Get the prefix, constobj and function file paths through a global symbol table node visitor
@@ -229,7 +225,7 @@ s7.0.0      v0.4.0
         - Remove a bunch of useless files once the parser is done
         - Make the writer work (doesn't require anything else to work other than having a McFunction object)
         - Command line arguments:
-            - Debug file only when "-l" or "--debug-log"
+            - Debug file only when "-dl" or "--debug-log"
             - Specify custom version under "-v" or "--version" as 1.12 or 1.13 that overrides the config specification
 
         1.13:

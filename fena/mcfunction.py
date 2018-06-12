@@ -1,3 +1,7 @@
+from fena.assert_utils import assert_type, assert_list_types
+from fena.repr_utils import addrepr
+
+@addrepr
 class McFunction:
     """
     Args:
@@ -10,9 +14,16 @@ class McFunction:
         commands (list or tuple): The full sequence of strings in an mcfunction
     """
     def __init__(self, mfunc_name, full_path):
-        self.full_path = full_path
+        assert_type(mfunc_name, str)
+        assert_type(full_path, str)
         self.mfunc_name = mfunc_name
+        self.full_path = full_path
         self.commands = []
+        self._finalized = False
+
+    @property
+    def finalized(self):
+        return self._finalized
 
     def add_command(self, command):
         """
@@ -21,19 +32,18 @@ class McFunction:
         Args:
             command (str)
         """
-        assert isinstance(command, str)
-        assert isinstance(self.commands, list), "Cannot add a command if finalized"
+        assert_type(command, str)
+        assert not self._finalized, "Cannot add a command if finalized"
         self.commands.append(command)
 
     def finalize(self):
         """
         Converts all mutable attributes into immutable attributes
         """
-        assert isinstance(self.commands, list)
+        assert_type(self.commands, list)
+        assert not self._finalized
         self.commands = tuple(self.commands)
+        self._finalized = True
 
     def __str__(self):
-        pass
-
-    def __repr__(self):
-        pass
+        return f"McFunction[{self.mfunc_name}]"

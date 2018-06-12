@@ -100,11 +100,11 @@
                 "parse_type": "VALUES",
                 "values": ["always", "never", "pushOwnTeam", "pushOtherTeams"]
             },
-            
+
             "prefix": {
                 "parse_type": "JSON"
             },
-            
+
             "suffix": {
                 "parse_type": "JSON"
             }

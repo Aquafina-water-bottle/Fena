@@ -550,7 +550,7 @@ class SimpleCmdNode(MainCmdNode):
         assert_list_types(tokens, Token, SelectorNode, JsonObjectNode, NbtObjectNode)
         self.tokens = tokens
 
-class BossbarCmdNode(MainCmdNode):
+class BossbarCmdNode(MainCmdNode, ABC):
     pass
 
 class BossbarAddNode(BossbarCmdNode):
@@ -562,7 +562,6 @@ class BossbarAddNode(BossbarCmdNode):
     def __init__(self, bossbar_id, json):
         assert_type(bossbar_id, NamespaceIdNode)
         assert_type(json, JsonObjectNode)
-
         self.bossbar_id = bossbar_id
         self.json = json
 
@@ -592,12 +591,12 @@ class BossbarSetNode(BossbarCmdNode):
     Attributes:
         bossbar_id (NamespaceIdNode)
         arg (Token)
-        value (Token, JsonObjectNode)
+        arg_value (Token, JsonObjectNode, SelectorNode)
     """
     def __init__(self, bossbar_id, arg, arg_value):
         assert_type(bossbar_id, NamespaceIdNode)
         assert_type(arg, Token)
-        assert_type(arg_value, Token, JsonObjectNode)
+        assert_type(arg_value, Token, JsonObjectNode, SelectorNode)
         self.bossbar_id = bossbar_id
         self.arg = arg
         self.arg_value = arg_value
@@ -609,44 +608,77 @@ class DataGetNode(DataCmdNode):
     """
     Attributes:
         entity_vec3 (SelectorNode, Vec3Node)
-        path (Vec3Node)
+        data_path (DataPathNode or None)
+        scale (Token or None)
     """
-    def __init__(self, entity_vec3, path, scale=None):
+    def __init__(self, entity_vec3, data_path=None, scale=None):
+        assert_type(entity_vec3, SelectorNode, Vec3Node)
+        assert_type(data_path, DataPathNode, optional=True)
+        assert_type(scale, Token, optional=True)
         self.entity_vec3 = entity_vec3
-        self.path = path
+        self.data_path = data_path
         self.scale = scale
 
 class DataMergeNode(DataCmdNode):
     """
     Attributes:
+        entity_vec3 (SelectorNode, Vec3Node)
         nbt (NbtObjectNode)
     """
-    def __init__(self, nbt):
+    def __init__(self, entity_vec3, nbt):
+        assert_type(entity_vec3, SelectorNode, Vec3Node)
+        assert_type(nbt, NbtObjectNode)
+        self.entity_vec3 = entity_vec3
         self.nbt = nbt
 
 class DataRemoveNode(DataCmdNode):
     """
     Attributes:
-        path (Vec3Node)
+        entity_vec3 (SelectorNode, Vec3Node)
+        data_path (DataPathNode)
     """
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, entity_vec3, data_path):
+        assert_type(entity_vec3, SelectorNode, Vec3Node)
+        assert_type(data_path, DataPathNode)
+        self.entity_vec3 = entity_vec3
+        self.data_path = data_path
 
 
 class EffectCmdNode(MainCmdNode):
     pass
 
 class EffectClearNode(EffectCmdNode):
-    def __init__(self, effect=None):
-        self.effect = effect
+    """
+    Attributes:
+        selector (SelectorNode)
+        effect_id (NamespaceIdNode or None)
+    """
+    def __init__(self, selector, effect_id=None):
+        assert_type(selector, SelectorNode)
+        assert_type(effect_id, NamespaceIdNode, optional=True)
+        self.selector = selector
+        self.effect_id = effect_id
 
 class EffectGiveNode(EffectCmdNode):
-    def __init__(self, effect, duration=None, level=None, show_particles=False):
-        self.effect = effect
+    """
+    Attributes:
+        selector (SelectorNode)
+        effect_id (NamespaceIdNode)
+        duration (Token or None)
+        level (Token or None)
+        hide_particles (bool)
+    """
+    def __init__(self, selector, effect_id, duration=None, level=None, hide_particles=True):
+        assert_type(selector, SelectorNode)
+        assert_type(effect_id, NamespaceIdNode)
+        assert_type(duration, Token, optional=True)
+        assert_type(level, Token, optional=True)
+        assert_type(hide_particles, bool)
+        self.selector = selector
+        self.effect_id = effect_id
         self.duration = duration
         self.level = level
-        self.show_particles = show_particles
-
+        self.hide_particles = hide_particles
 
 class FunctionCmdNode(MainCmdNode):
     """

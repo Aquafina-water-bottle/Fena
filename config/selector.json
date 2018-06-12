@@ -119,7 +119,7 @@
         }
     },
 
-    "1.13": {   
+    "1.13": {
         "selector_variable_specifiers": ["a", "e", "r", "p", "s"],
 
         "selector_arguments": [

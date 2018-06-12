@@ -5,6 +5,7 @@
         "blockdata",
         "clear",
         "clone",
+        "data",
         "debug",
         "defaultgamemode",
         "difficulty",

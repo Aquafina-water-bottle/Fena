@@ -1,30 +1,13 @@
 import os
-# import shutil
+import logging
 
-# from fena.mcfunction import McFunction
+if __name__ == "__main__":
+    import sys
+    sys.path.append("..")
+    del sys
+
+from fena.mcfunction import McFunction
 from fena.assert_utils import assert_type, assert_list_types
-
-class McFunction:
-    """
-    Temporary mcfunction class to replace the fena.mcfunction class
-
-    Args:
-        full_path (str)
-        name (str)
-        command (tuple)
-
-    Attributes:
-        name (str): pass
-        full_path (str): The full path to the mcfunction file
-        commands (tuple): The full sequence of strings in an mcfunction
-    """
-    def __init__(self, name, full_path, commands):
-        self.name = name
-        self.full_path = full_path
-        self.commands = commands
-
-    def __repr__(self):
-        return f"McFunction[name={self.name}, path={self.full_path}, commands={self.commands}]"
 
 class Writer:
     """
@@ -43,7 +26,7 @@ class Writer:
         assert_list_types(mcfunctions, McFunction)
         assert_type(clean, bool)
         assert_type(debug, bool)
-        self.mcfunctions = mcfunctions
+        self.mcfunctions = tuple(mcfunctions)
         self.clean = clean
         self.debug = debug
 
@@ -70,6 +53,7 @@ class Writer:
                 for path in os.listdir(mfunc_dir):
                     full_path = os.path.join(mfunc_dir, path)
                     if os.path.isfile(full_path) and path.endswith(".mcfunction"):
+                        logging.debug(f"Deleted function file {full_path}")
                         os.remove(full_path)
 
     def write(self):
@@ -81,38 +65,75 @@ class Writer:
         if self.clean:
             self.clean_files()
 
+        self.write_parsed_commands()
+
         for mcfunction in self.mcfunctions:
+            assert mcfunction.finalized
+
             directories = os.path.dirname(mcfunction.full_path)
             if not os.path.exists(directories):
                 os.makedirs(directories)
 
             with open(mcfunction.full_path, "w") as file:
                 if self.debug:
-                    file.write(f"say debug: running {mcfunction.name}\n")
-                file.write("\n".join(mcfunction.commands))
+                    file.write(f"say debug mode: running {mcfunction.mfunc_name}\n")
+                file.write("\n".join(mcfunction.commands) + "\n")
+
+            logging.debug(f"Wrote function file {mcfunction.full_path}")
+
+    def write_parsed_commands(self):
+        # gets the directory path of this current file path
+        current_dir_path = os.path.dirname(__file__)
+        parsed_cmds_path = os.path.join(current_dir_path, "../parsed_cmds.txt")
+
+        with open(parsed_cmds_path, "w") as file:
+            for mcfunction in self.mcfunctions:
+                assert mcfunction.finalized
+                file.write(mcfunction.full_path + "\n    ")
+                file.write("\n    ".join(mcfunction.commands) + "\n\n")
 
 if __name__ == "__main__":
-    commands = (
-        "say test1",
-        "say test2",
-        "say test3",
+    command_template = (
+        "say test1 inside function {mfunc_name}",
+        "say test2 inside function {mfunc_name}",
+        "say test3 inside function {mfunc_name}",
     )
 
     def add_function(commands, function_name):
         return tuple(f"{command} with function {function_name}" for command in commands)
 
     def get_full_path(path):
-        dir_path = os.path.dirname(__file__)
+        dir_path = os.path.dirname(os.path.realpath(__file__))
         return os.path.join(dir_path, path) + ".mcfunction"
 
-    mcfunc1 = McFunction("ego:test/test1", get_full_path("functions/ego/test/test1"), add_function(commands, "ego:test/test1"))
-    mcfunc2 = McFunction("ego:test/test2", get_full_path("functions/ego/test/test2"), add_function(commands, "ego:test/test2"))
-    mcfuncwithin1 = McFunction("ego:test/within_test/test1", get_full_path("functions/ego/test/within_test/test1"), add_function(commands, "ego:test/within_test/test1"))
-    mcfuncwithin2 = McFunction("ego:test/within_test/test2", get_full_path("functions/ego/test/within_test/test2"), add_function(commands, "ego:test/within_test/test2"))
-    mcfuncwithin22 = McFunction("ego:test/within_test2/test2", get_full_path("functions/ego/test/within_test2/test2"), add_function(commands, "ego:test/within_test2/test2"))
+    def get_mfunc_name(full_path):
+        # wtf is this code even
+        # substring to the left of the last instance of functions
+        # removes the first character of the string
+        # replaces the first instance of '/' with ':'
+        return full_path.split("functions")[-1][1:].replace("/", ":", 1)
 
-    mcfunctions = (mcfunc1, mcfunc2, mcfuncwithin1, mcfuncwithin2)
-    print(mcfunc1, mcfunc2, mcfuncwithin1, mcfuncwithin2)
+    def create_mfunc(relative_path):
+        full_path = get_full_path(relative_path)
+        mfunc_name = get_mfunc_name(full_path)
+
+        mcfunction = McFunction(mfunc_name, full_path)
+        for command in command_template:
+            mcfunction.add_command(command.format(mfunc_name=mfunc_name))
+        mcfunction.finalize()
+
+        return mcfunction
+
+    mcfunc1 = create_mfunc("functions/ego/test/test1")
+    mcfunc2 = create_mfunc("functions/ego/test/test2")
+    mcfuncwithin1 = create_mfunc("functions/ego/test/within_test/test1")
+    mcfuncwithin2 = create_mfunc("functions/ego/test/within_test/test2")
+    mcfuncwithin22 = create_mfunc("functions/ego/test/within_test2/test2")
+
+    mcfunctions = [mcfunc1, mcfunc2, mcfuncwithin1, mcfuncwithin2, mcfuncwithin22]
+    # mcfunctions = [mcfunc1, mcfuncwithin1, mcfuncwithin2, mcfuncwithin22]
+    for mcfunction in mcfunctions:
+        print(repr(mcfunction))
 
     writer = Writer(mcfunctions, clean=True, debug=True)
     writer.write()

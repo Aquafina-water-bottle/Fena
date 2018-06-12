@@ -6,6 +6,9 @@ from test_fena.v1_13.test_coords import test_coords
 from test_fena.v1_13.test_blocks import test_blocks
 from test_fena.v1_13.test_data_paths import test_data_paths
 from test_fena.v1_13.test_executes import test_executes
+from test_fena.v1_13.test_bossbars import test_bossbars
+from test_fena.v1_13.test_datas import test_datas
+from test_fena.v1_13.test_effects import test_effects
 
 def test_all():
     test_selectors()
@@ -16,3 +19,6 @@ def test_all():
     test_coords()
     test_data_paths()
     test_executes()
+    test_bossbars()
+    test_datas()
+    test_effects()

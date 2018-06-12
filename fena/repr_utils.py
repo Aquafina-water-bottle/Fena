@@ -42,7 +42,7 @@ def addrepr(cls):
         variables_str = ", ".join(variables)
 
         return f"{class_name}[{variables_str}]"
-    
+
     # sets the __repr__ method as the defined __repr__ because methods can be defined outside classes
     # take that 1st year university test questions
     cls.__repr__ = __repr__

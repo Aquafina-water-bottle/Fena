@@ -44,7 +44,7 @@ class InFileConfig:
         self._prefix = None
         self._constobj = None
         self.finalized = False
-    
+
     def __new__(cls):
         """
         Ensures they are the same class
@@ -131,7 +131,7 @@ class InFileConfig:
         shortcuts, mcfunction_path = self._get_all_shortcuts(directories)
 
         # updates the functions dictionary to map the entire list of shortcuts to the mcfunction_path string
-        # TODO use function_conflicts 
+        # TODO use function_conflicts
         self._functions.update(dict.fromkeys(shortcuts, mcfunction_path))
 
     def _get_all_shortcuts(self, directories):
@@ -175,7 +175,7 @@ class InFileConfig:
         if self._prefix is None:
             self._prefix = InFileConfig.default_prefix
             logging.warning(f"Using the default prefix {self._prefix!r}")
-        
+
         # default for constobj is "g.number"
         if self._constobj is None:
             self._constobj = InFileConfig.default_constobj
@@ -196,4 +196,4 @@ if __name__ == "__main__":
     # print(in_file_config.functions)
     import doctest
     doctest.testmod()
-    
+

@@ -23,7 +23,7 @@ class Interpreter(NodeVisitor):
         assert_type(parser, Parser)
         assert_type(output_path, str)
         self.parser = parser
-        self.output_path = output_path 
+        self.output_path = output_path
 
     def interpret(self):
         """
