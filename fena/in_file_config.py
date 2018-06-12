@@ -91,14 +91,6 @@ class InFileConfig:
         assert_type(constobj.value, str)
         self._constobj = constobj.value
 
-    @property
-    def functions(self):
-        return self._functions
-
-    @property
-    def function_conflicts(self):
-        return self._function_conflicts
-
     def add_function(self, mcfunction):
         """
         Gets the function paths all the way until "functions"
@@ -131,8 +123,12 @@ class InFileConfig:
         shortcuts, mcfunction_path = self._get_all_shortcuts(directories)
 
         # updates the functions dictionary to map the entire list of shortcuts to the mcfunction_path string
-        # TODO use function_conflicts
-        self._functions.update(dict.fromkeys(shortcuts, mcfunction_path))
+        for shortcut in shortcuts:
+            if shortcut in self._functions:
+                self._functions.pop(shortcut, None)
+                self._function_conflicts.add(shortcut)
+            else:
+                self._functions[shortcut] = mcfunction_path
 
     def _get_all_shortcuts(self, directories):
         """
@@ -194,6 +190,52 @@ if __name__ == "__main__":
 
     # in_file_config.add_function(mcfunction)
     # print(in_file_config.functions)
-    import doctest
-    doctest.testmod()
+    # import doctest
+    # doctest.testmod()
+
+    command_template = (
+        "say test1 inside function {mfunc_name}",
+        "say test2 inside function {mfunc_name}",
+        "say test3 inside function {mfunc_name}",
+    )
+
+    def add_function(commands, function_name):
+        return tuple(f"{command} with function {function_name}" for command in commands)
+
+    def get_full_path(path):
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        return os.path.join(dir_path, path) + ".mcfunction"
+
+    def get_mfunc_name(full_path):
+        # wtf is this code even
+        # substring to the left of the last instance of functions
+        # removes the first character of the string
+        # replaces the first instance of '/' with ':'
+        return full_path.split("functions")[-1][1:].replace("/", ":", 1)
+
+    def create_mfunc(relative_path):
+        full_path = get_full_path(relative_path)
+        mfunc_name = get_mfunc_name(full_path)
+
+        mcfunction = McFunction(mfunc_name, full_path)
+        for command in command_template:
+            mcfunction.add_command(command.format(mfunc_name=mfunc_name))
+        mcfunction.finalize()
+
+        return mcfunction
+
+    mcfunc1 = create_mfunc("functions/ego/test/test1")
+    mcfunc2 = create_mfunc("functions/ego/test/test2")
+    mcfuncwithin1 = create_mfunc("functions/ego/test/within_test/test1")
+    mcfuncwithin2 = create_mfunc("functions/ego/test/within_test/test2")
+    mcfuncwithin22 = create_mfunc("functions/ego/test/within_test2/test2")
+
+    in_file_config = InFileConfig()
+    in_file_config.add_function(mcfunc1)
+    in_file_config.add_function(mcfunc2)
+    in_file_config.add_function(mcfuncwithin1)
+    in_file_config.add_function(mcfuncwithin2)
+    in_file_config.add_function(mcfuncwithin22)
+    print(repr(in_file_config))
+
 

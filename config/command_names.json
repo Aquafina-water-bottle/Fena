@@ -41,6 +41,8 @@
         "stats",
         "stopsound",
         "summon",
+        "tag",
+        "team",
         "teleport",
         "tell",
         "tellraw",

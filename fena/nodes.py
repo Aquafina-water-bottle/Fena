@@ -680,14 +680,19 @@ class EffectGiveNode(EffectCmdNode):
         self.level = level
         self.hide_particles = hide_particles
 
+
 class FunctionCmdNode(MainCmdNode):
     """
     Attributes:
         function_name (Token): The mcfunction shortcut for the mcfunction name
+        current_folder (str): Full path to the directory folder to be used for smart searching
     """
+    # def __init__(self, function_name, current_folder):
     def __init__(self, function_name):
         assert_type(function_name, Token)
+        # assert_type(current_folder, str)
         self.function_name = function_name
+        # self.current_folder = current_folder
 
 
 class TagCmdNode(MainCmdNode):
@@ -696,18 +701,32 @@ class TagCmdNode(MainCmdNode):
 class TagAddNode(TagCmdNode):
     """
     Attributes:
+        selector (SelectorNode)
         tag (Token)
+        nbt (NbtObjectNode or None)
     """
-    def __init__(self, tag):
+    def __init__(self, selector, tag, nbt=None):
+        assert_type(selector, SelectorNode)
+        assert_type(tag, Token)
+        assert_type(nbt, NbtObjectNode, optional=True)
+        self.selector = selector
         self.tag = tag
+        self.nbt = nbt
 
 class TagRemoveNode(TagCmdNode):
     """
     Attributes:
+        selector (SelectorNode)
         tag (Token)
+        nbt (NbtObjectNode or None)
     """
-    def __init__(self, tag):
+    def __init__(self, selector, tag, nbt=None):
+        assert_type(selector, SelectorNode)
+        assert_type(tag, Token)
+        assert_type(nbt, NbtObjectNode, optional=True)
+        self.selector = selector
         self.tag = tag
+        self.nbt = nbt
 
 
 class TeamCmdNode(MainCmdNode, ABC):
@@ -719,9 +738,11 @@ class TeamAddNode(TeamCmdNode):
 
     Attributes:
         team_name (Token)
-        display_name (Token or None)
+        display_name (list of Token objects)
     """
-    def __init__(self, team_name, display_name=None):
+    def __init__(self, team_name, display_name):
+        assert_type(team_name, Token)
+        assert_list_types(display_name, Token)
         self.team_name = team_name
         self.display_name = display_name
 
@@ -734,6 +755,8 @@ class TeamJoinNode(TeamCmdNode):
         target (SelectorNode or Token)
     """
     def __init__(self, team_name, target):
+        assert_type(team_name, Token)
+        assert_type(target, Token, SelectorNode)
         self.team_name = team_name
         self.target = target
 
@@ -745,6 +768,7 @@ class TeamLeaveNode(TeamCmdNode):
         target (SelectorNode or Token)
     """
     def __init__(self, target):
+        assert_type(target, SelectorNode, Token)
         self.target = target
 
 class TeamEmptyNode(TeamCmdNode):
@@ -754,18 +778,21 @@ class TeamEmptyNode(TeamCmdNode):
     Attributes:
         team_name (Token)
     """
-    def __init__(self, team_name, target):
+    def __init__(self, team_name):
+        assert_type(team_name, Token)
         self.team_name = team_name
-        self.target = target
 
 class TeamOptionNode(TeamCmdNode):
     """
     Attributes:
         team_name (Token)
         option (Token)
-        value (Token)
+        value (Token, JsonObjectNode)
     """
     def __init__(self, team_name, option, value):
+        assert_type(team_name, Token)
+        assert_type(option, Token)
+        assert_type(value, Token, JsonObjectNode)
         self.team_name = team_name
         self.option = option
         self.value = value
@@ -776,8 +803,41 @@ class TeamRemoveNode(TeamCmdNode):
         team_name (Token)
     """
     def __init__(self, team_name):
+        assert_type(team_name, Token)
         self.team_name = team_name
 
+class XpCmdNode(MainCmdNode, ABC):
+    pass
+
+class XpMathNode(XpCmdNode):
+    """
+    Attributes:
+        selector (SelectorNode)
+        operator (Token)
+        value (Token)
+        sub_cmd (Token or None)
+    """
+    def __init__(self, selector, operator, value, sub_cmd=None):
+        assert_type(selector, SelectorNode)
+        assert_type(operator, Token)
+        assert_type(value, Token)
+        assert_type(sub_cmd, Token, optional=True)
+        self.selector = selector
+        self.operator = operator
+        self.value = value
+        self.sub_cmd = sub_cmd
+
+class XpGetNode(XpCmdNode):
+    """
+    Attributes:
+        selector (SelectorNode)
+        sub_cmd (Token)
+    """
+    def __init__(self, selector, sub_cmd):
+        assert_type(selector, SelectorNode)
+        assert_type(sub_cmd, Token)
+        self.selector = selector
+        self.sub_cmd = sub_cmd
 
 class SelectorNode(CmdNode):
     """

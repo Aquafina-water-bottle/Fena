@@ -14,9 +14,8 @@ import os
 import pyexpander.lib as pyexpander
 
 import fena.logging_setup
-# import fena.file
 import fena.lexer
-# import fena.parser
+import fena.parser
 import fena.writer
 import fena.interpreter
 
@@ -45,9 +44,6 @@ def get_args():
 
     args = parser.parse_args()
     args.output_path = os.path.abspath(args.output_path)
-
-    # print(repr(args))
-    # print(type(args))
     return args
 
 

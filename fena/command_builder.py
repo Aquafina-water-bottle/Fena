@@ -1,4 +1,5 @@
 """ Contains node visitors for the AST of a command to build itself """
+
 import logging
 
 if __name__ == "__main__":
@@ -213,8 +214,9 @@ class CommandBuilder_1_12(NodeBuilder):
         Args:
             node (FunctionCmdNode)
         """
-        function = self.in_file_config.functions[node.function_name]
-        return f"function {function}"
+        raise NotImplementedError()
+        # function = self.in_file_config.functions[node.function_name]
+        # return f"function {function}"
 
     def build_SimpleCmdNode(self, node):
         """
@@ -223,16 +225,48 @@ class CommandBuilder_1_12(NodeBuilder):
         """
         return self.iter_build(node.tokens, " ")
 
+    def build_TagAddNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            tag (Token)
+            nbt (NbtObjectNode or None)
+        """
+        selector = self.build(node.selector)
+        tag = self.build(node.tag, prefix=True)
+        if node.nbt is None:
+            return f"scoreboard players tag {selector} add {tag}"
+
+        nbt = self.build(node.nbt)
+        return f"scoreboard players tag {selector} add {tag} {nbt}"
+
+    def build_TagRemoveNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            tag (Token)
+            nbt (NbtObjectNode or None)
+        """
+        selector = self.build(node.selector)
+        tag = self.build(node.tag, prefix=True)
+        if node.nbt is None:
+            return f"scoreboard players tag {selector} remove {tag}"
+
+        nbt = self.build(node.nbt)
+        return f"scoreboard players tag {selector} remove {tag} {nbt}"
+
+
     def build_TeamAddNode(self, node):
         """
         Args:
             node (TeamAddNode)
+            display_name (list of Token objects)
         """
         team_name = self.build(node.team_name, prefix=True)
-        if node.display_name is None:
+        if not node.display_name:
             return f"scoreboard teams add {team_name}"
 
-        display_name = self.build(node.display_name)
+        display_name = self.iter_build(node.display_name, " ")
         return f"scoreboard teams add {team_name} {display_name}"
 
     def build_TeamJoinNode(self, node):
@@ -258,7 +292,7 @@ class CommandBuilder_1_12(NodeBuilder):
             node (TeamEmptyNode)
         """
         team_name = self.build(node.team_name, prefix=True)
-        return f"scoreboard teams leave {team_name}"
+        return f"scoreboard teams empty {team_name}"
 
     def build_TeamOptionNode(self, node):
         """
@@ -277,6 +311,29 @@ class CommandBuilder_1_12(NodeBuilder):
         """
         team_name = self.build(node.team_name, prefix=True)
         return f"scoreboard teams remove {team_name}"
+
+    def build_XpMathNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            operator (Token)
+            value (Token)
+            sub_cmd (Token or None)
+        """
+        selector = self.build(node.selector)
+        operator = self.build(node.operator)
+        value = self.build(node.value)
+        sub_cmd = "points" if node.sub_cmd is None else self.build(node.sub_cmd)
+
+        if operator == "=":
+            raise SyntaxError(f"Xp cannot be set to a specific amount in 1.12 with {node}")
+        if operator == "-" and sub_cmd == "points":
+            raise SyntaxError(f"Xp cannot be removed in point increments in 1.12 with {node}")
+
+        value_ending = "" if sub_cmd == "points" else "L"
+        negative = "-" if operator == "-" else ""
+
+        return f"xp {selector} {negative}{value}{value_ending}"
 
     def build_SelectorNode(self, node):
         """
@@ -1255,3 +1312,117 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             path_tokens (list of Token objects)
         """
         return self.iter_build(node.path_tokens, "")
+
+    def build_TagAddNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            tag (Token)
+            nbt (NbtObjectNode or None)
+        """
+        selector = self.build(node.selector)
+        tag = self.build(node.tag, prefix=True)
+        assert node.nbt is None
+        return f"tag {selector} add {tag}"
+
+    def build_TagRemoveNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            tag (Token)
+            nbt (NbtObjectNode or None)
+        """
+        selector = self.build(node.selector)
+        tag = self.build(node.tag, prefix=True)
+        assert node.nbt is None
+        return f"tag {selector} remove {tag}"
+
+    def build_TeamAddNode(self, node):
+        """
+        Args:
+            node (TeamAddNode)
+            display_name (list of Token objects)
+        """
+        team_name = self.build(node.team_name, prefix=True)
+        if not node.display_name:
+            return f"team add {team_name}"
+
+        display_name = self.iter_build(node.display_name, " ")
+        return f"team add {team_name} {display_name}"
+
+    def build_TeamJoinNode(self, node):
+        """
+        Args:
+            node (TeamJoinNode)
+        """
+        team_name = self.build(node.team_name, prefix=True)
+        target = self.build(node.target)
+        return f"team join {team_name} {target}"
+
+    def build_TeamLeaveNode(self, node):
+        """
+        Args:
+            node (TeamLeaveNode)
+        """
+        target = self.build(node.target)
+        return f"team leave {target}"
+
+    def build_TeamEmptyNode(self, node):
+        """
+        Args:
+            node (TeamEmptyNode)
+        """
+        team_name = self.build(node.team_name, prefix=True)
+        return f"team empty {team_name}"
+
+    def build_TeamOptionNode(self, node):
+        """
+        Args:
+            node (TeamOptionNode)
+        """
+        team_name = self.build(node.team_name, prefix=True)
+        option = self.build(node.option)
+        value = self.build(node.value)
+        return f"team option {team_name} {option} {value}"
+
+    def build_TeamRemoveNode(self, node):
+        """
+        Args:
+            node (TeamRemoveNode)
+        """
+        team_name = self.build(node.team_name, prefix=True)
+        return f"team remove {team_name}"
+
+    def build_XpMathNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            operator (Token)
+            value (Token)
+            sub_cmd (Token or None)
+        """
+        selector = self.build(node.selector)
+        operator = self.build(node.operator)
+        value = self.build(node.value)
+        sub_cmd = "points" if node.sub_cmd is None else self.build(node.sub_cmd)
+
+        if operator == "=":
+            return f"xp set {selector} {value} {sub_cmd}"
+        if operator == "+":
+            return f"xp add {selector} {value} {sub_cmd}"
+        if operator == "-":
+            return f"xp add {selector} -{value} {sub_cmd}"
+
+        raise SyntaxError("Unknown default case")
+
+    def build_XpGetNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            sub_cmd (Token)
+        """
+        selector = self.build(node.selector)
+        sub_cmd = self.build(node.sub_cmd)
+
+        return f"xp get {selector} {sub_cmd}"
+

@@ -42,6 +42,10 @@ from fena.nodes import (ProgramNode, McFunctionNode, FolderNode, PrefixNode, Con
     BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode,
     DataGetNode, DataMergeNode, DataRemoveNode,
     EffectClearNode, EffectGiveNode,
+    TagAddNode, TagRemoveNode,
+    TeamAddNode, TeamRemoveNode, TeamEmptyNode, TeamJoinNode, TeamLeaveNode, TeamOptionNode,
+    XpGetNode, XpMathNode,
+
     Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, BlockStateNode, NamespaceIdNode, DataPathNode)
 
 from fena.node_visitors import NodeBuilder, NodeVisitor
@@ -157,14 +161,13 @@ team_add ::= "add" && STR && (STR)*
 team_join ::= STR && "+" && target
 team_leave ::= "leave" && target
 team_empty ::= "empty" && STR
-# team_option ::= STR && json_parse
 team_option ::= STR && team_option_arg && "=" && team_option_arg_value
 # team_option_arg, team_option_arg_value are defined in the team_options_version.json
 team_remove ::= "remove" && STR
 
 xp_cmd ::= "xp" && [xp_math, xp_get]
-xp_math ::= ["=", "+", "-"] && nonneg_int && ["points", "levels"]?
-xp_get ::= "<-" && ["points", "levels"]
+xp_math ::= selector && ["=", "+", "-"] && nonneg_int && ["points", "levels"]?
+xp_get ::= selector && "<-" && ["points", "levels"]
 
 selector ::= selector_var & ("[" & selector_args & "]")?
 selector_var ::= "@" & selector_var_specifier
@@ -422,7 +425,7 @@ class Parser:
         Raises:
             SyntaxError: if the token value is not within the specified json type arguments
         """
-        assert json_type in Parser.json_parse_options
+        assert json_type in Parser.json_parse_options, f"{json_type} is not in {list(Parser.json_parse_options)}"
 
         config_data_attr = Parser.json_parse_options.get(json_type)
         json_object = getattr(Parser.config_data, config_data_attr, self.invalid_method)
@@ -1582,29 +1585,132 @@ class Parser:
         tag_add ::= selector && "+" && STR
         tag_remove ::= selector && "-" && STR
         """
-        raise NotImplementedError()
+        selector = self.selector()
+        if self.current_token.matches(TypedToken.STRING, value="+"):
+            TagNode = TagAddNode
+        elif self.current_token.matches(TypedToken.STRING, value="-"):
+            TagNode = TagRemoveNode
+        else:
+            self.error("Expected either '+' or '-' for a tag shortcut")
+
+        # passes the operator
+        self.advance()
+
+        tag = self.eat(TypedToken.STRING)
+        if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
+            if Parser.config_data.version != "1.12":
+                self.error("Cannot have an nbt argument after a tag in 1.13+")
+            nbt = self.nbt()
+            return TagNode(selector, tag, nbt)
+        return TagNode(selector, tag)
 
     def team_cmd(self):
         """
         team_cmd ::= "team" && [team_add, team_join, team_leave, team_empty, team_option, team_remove]
+        """
+        if self.current_token.matches(TypedToken.STRING, value="add"):
+            return self.team_add()
+        if self.current_token.matches(TypedToken.STRING, value="remove"):
+            return self.team_remove()
+        if self.current_token.matches(TypedToken.STRING, value="leave"):
+            return self.team_leave()
+        if self.current_token.matches(TypedToken.STRING, value="empty"):
+            return self.team_empty()
+
+        team_name = self.eat(TypedToken.STRING)
+        if self.current_token.matches(TypedToken.STRING, value="+"):
+            return self.team_join(team_name)
+        return self.team_option(team_name)
+
+    def team_add(self):
+        """
         team_add ::= "add" && STR && (STR)*
-        team_join ::= STR && "+" && target
-        team_leave ::= "leave" && target
-        team_empty ::= "empty" && STR
-        # team_option ::= STR && json_parse
-        team_option ::= STR && team_option_arg && "=" && team_option_arg_value
-        # team_option_arg, team_option_arg_value are defined in the team_options_version.json
+        """
+        self.eat(TypedToken.STRING, value="add")
+        team_name = self.eat(TypedToken.STRING)
+        team_display_tokens = []
+
+        while not self.current_token.matches_any_of(WhitespaceToken.NEWLINE, WhitespaceToken.EOF):
+            team_display = self.eat(TypedToken.STRING)
+            team_display_tokens.append(team_display)
+
+        return TeamAddNode(team_name, team_display_tokens)
+
+    def team_remove(self):
+        """
         team_remove ::= "remove" && STR
         """
-        raise NotImplementedError()
+        self.eat(TypedToken.STRING, value="remove")
+        team_name = self.eat(TypedToken.STRING)
+        return TeamRemoveNode(team_name)
+
+    def team_leave(self):
+        """
+        team_leave ::= "leave" && target
+        """
+        self.eat(TypedToken.STRING, value="leave")
+        target = self.target()
+        return TeamLeaveNode(target)
+
+    def team_empty(self):
+        """
+        team_empty ::= "empty" && STR
+        """
+        self.eat(TypedToken.STRING, value="empty")
+        team_name = self.eat(TypedToken.STRING)
+        return TeamEmptyNode(team_name)
+
+    def team_join(self, team_name):
+        """
+        team_join ::= STR && "+" && target
+        """
+        self.eat(TypedToken.STRING, value="+")
+        target = self.target()
+        return TeamJoinNode(team_name, target)
+
+    def team_option(self, team_name):
+        """
+        team_option ::= STR && team_option_arg && "=" && team_option_arg_value
+        # team_option_arg, team_option_arg_value are defined in the team_options_version.json
+        """
+        arg_token, arg_details = self.json_parse_arg("team_options")
+        self.eat(TypedToken.STRING, value="=")
+        arg_value_token = self.json_parse_arg_value(arg_details)
+        return TeamOptionNode(team_name, arg_token, arg_value_token)
 
     def xp_cmd(self):
         """
         xp_cmd ::= "xp" && [xp_math, xp_get]
-        xp_math ::= ["=", "+", "-"] && nonneg_int && ["points", "levels"]?
-        xp_get ::= "<-" && ["points", "levels"]
         """
-        raise NotImplementedError()
+        selector = self.selector()
+        if self.current_token.matches(TypedToken.STRING, values=("=", "+", "-")):
+            return self.xp_math(selector)
+        if self.current_token.matches(TypedToken.STRING, values="<-"):
+            return self.xp_get(selector)
+        self.error("Expected one of '=', '+', '-' or '<-' in an xp shortcut")
+
+    def xp_math(self, selector):
+        """
+        xp_math ::= selector && ["=", "+", "-"] && nonneg_int && ["points", "levels"]?
+        """
+        operator = self.eat(TypedToken.STRING, values=("=", "+", "-"))
+        if not is_nonneg_int(self.current_token.value):
+            self.error("Expected a nonnegative integer")
+        value = self.eat(TypedToken.STRING)
+        if self.current_token.matches(TypedToken.STRING, values=("points", "levels")):
+            sub_cmd = self.advance()
+            return XpMathNode(selector, operator, value, sub_cmd)
+        return XpMathNode(selector, operator, value)
+
+    def xp_get(self, selector):
+        """
+        xp_get ::= selector && "<-" && ["points", "levels"]
+        """
+        if Parser.config_data.version == "1.12":
+            self.error("Cannot query xp directly from the xp command in 1.12")
+        self.eat(TypedToken.STRING, value="<-")
+        sub_cmd = self.eat(TypedToken.STRING, values=("points", "levels"))
+        return XpGetNode(selector, sub_cmd)
 
     def selector(self):
         """
@@ -2071,12 +2177,6 @@ class Parser:
         if self.current_token.matches(DelimiterToken.OPEN_SQUARE_BRACKET):
             return self.json_array()
         self.error("Unexpected default case")
-
-    # def json_number(self):
-    #     """
-    #     json_number ::= ("-")? && INT && ("." && INT)? && (["e", "E"] && ["+", "-"] && INT)?
-    #     """
-    #     raise NotImplementedError()
 
     def nonneg_int(self):
         """
