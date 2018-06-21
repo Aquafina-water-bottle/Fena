@@ -1440,7 +1440,7 @@ def processToList(parse_list, filename=None,
                     # evaluate all the named arguments:
                     args= block.eval_("__pyexpander_helper(%s)" % tp.args())
                     # first argument may be the name of the substfile,
-                    # this is undocumented and usually not used:
+                    # this is undocumented and usually not used: TRIGGEREDDD
                     fn= args[0]
                     if fn is not None:
                         block.set_substfile(fn, tp)
