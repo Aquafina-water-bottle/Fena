@@ -9,3 +9,4 @@ output/
 functions/
 venv/
 .idea/
+pyexpander_fena/*.txt

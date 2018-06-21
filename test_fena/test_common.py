@@ -1,9 +1,9 @@
 import logging
+import os
+import sys
 
 if __name__ == "__main__":
-    import sys
     sys.path.append("..")
-    del sys
 
 from fena.command_builder import CommandBuilder_1_12, CommandBuilder_1_13
 from fena.config_data import ConfigData
@@ -11,6 +11,7 @@ from fena.lexer import Lexer
 from fena.parser import Parser
 
 config_data = ConfigData()
+full_dir_path = os.path.realpath("functions/fena")
 
 # global variable (oh no) that determines whether output should be printed or not
 
@@ -26,7 +27,7 @@ def test_builder(string, lexer_method, parser_method, expected=None, expect_erro
         lexer = Lexer(string)
         parser = Parser(lexer, method_name=lexer_method)
         ast = parser.parse(method_name=parser_method)
-        command_builder = CommandBuilder(ast)
+        command_builder = CommandBuilder(ast, full_dir_path)
         output = command_builder.interpret()
 
         if expected is None:
@@ -43,7 +44,6 @@ def test_builder(string, lexer_method, parser_method, expected=None, expect_erro
 
             # uses traceback from previous exception as found in:
             # https://docs.python.org/3/library/exceptions.html#BaseException
-            import sys
             tb = sys.exc_info()[2]
             raise e.with_traceback(tb)
     else:
@@ -65,6 +65,40 @@ def test_builder(string, lexer_method, parser_method, expected=None, expect_erro
             Expected: {expected!r}
             Output:   {output!r}
             AST:      {ast!r}""")
+
+
+def test_lexer(text, expected_token_types=(), expect_error=False):
+    """
+    Args:
+        text (str)
+        expected_token_types (iterable): if empty tuple, won't check for expected tokens
+    """
+    try:
+        lexer = Lexer(text)
+        received_tokens = []
+        for token in lexer:
+            logging.debug(token)
+            received_tokens.append(token)
+
+    except Exception as e:
+        if not expect_error:
+            logging.error(f"input={text!r}, output={e!r} as UNEXPECTED ERROR")
+            tb = sys.exc_info()[2]
+            raise e.with_traceback(tb)
+    else:
+        if expect_error:
+            raise RuntimeError(f"""
+            Input:    {text!r}
+            Expected: 'ERROR'""")
+
+        if expected_token_types:
+            for index, token in enumerate(received_tokens):
+                if not token.matches(expected_token_types[index]):
+                    raise RuntimeError(f"""
+                    Input:    {text!r}
+                    Expected: {expected_token_types[index]!r}
+                    Output:   {token!r}""")
+
 
 def test_selector(selector, expected=None, **kwargs):
     test_builder(selector, "get_selector", "selector", expected=expected, **kwargs)

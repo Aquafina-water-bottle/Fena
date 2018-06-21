@@ -42,7 +42,7 @@ class DelimiterToken(SimpleTokenClass, Enum):
     EXCLAMATION_MARK = "!"
     RANGE = ".."
     SEMICOLON = ";"
-    GROUP_TAG = "#"
+    NUMBER_SIGN = "#"
 
     OPEN_PARENTHESES = "("
     CLOSE_PARENTHESES = ")"

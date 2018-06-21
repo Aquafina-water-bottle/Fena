@@ -14,6 +14,7 @@ import os
 import pyexpander.lib as pyexpander
 
 import fena.logging_setup
+import fena.config_data
 import fena.lexer
 import fena.parser
 import fena.writer
@@ -27,23 +28,26 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     # requires input file
-    parser.add_argument("file_name", help="main ccu file")
+    parser.add_argument("file_name", help="main fena file")
 
     # optional output directory
-    defaultOutputPath = "functions/ccu"
-    parser.add_argument("output_path", nargs="?", default=defaultOutputPath, help="the directory in which all mcfunctions will be created, with the default being 'functions/ccu'")
+    default_output_path = "functions/fena"
+    parser.add_argument("output_path", nargs="?", default=default_output_path, help="the directory in which all mcfunctions will be created, with the default being 'functions/fena'")
 
     # cleans mcfunctions
     parser.add_argument("-c", "--clean", help="removes all mcfunction files inside the output directory", action="store_true")
 
     # debug
-    parser.add_argument("-d", "--debug", help="puts say commands at the front of each mcfunction", action="store_true")
+    parser.add_argument("-d", "--debug", help="puts say commands at the front of each mcfunction to show who is running it", action="store_true")
 
     # debug log
     parser.add_argument("-dl", "--debug-log", help="outputs the debug log to see all debug info from the Fena language", action="store_true")
 
+    # custom version
+    parser.add_argument("-v", "--version", nargs="?", default=None, help="custom version to override the config file if provided")
+
     args = parser.parse_args()
-    args.output_path = os.path.abspath(args.output_path)
+    args.output_path = os.path.realpath(args.output_path)
     return args
 
 
@@ -57,7 +61,7 @@ def get_content(args):
 
     file_name = args.file_name
 
-    # gets the file path of the main ccu file
+    # gets the file path of the main fena file
     with open(file_name, "r") as file:
         dir_path = os.path.dirname(os.path.realpath(file.name))
 
@@ -76,7 +80,12 @@ def get_content(args):
 def main():
     print("Fena:", "semantic_version={}".format(semantic_version), "public_version={}".format(public_version), sep="\n")
 
+    # gets all command line arguments
     args = get_args()
+
+    #  overrides the version if necessary
+    if args.version is not None:
+        fena.config_data.get_all_data(args.version)
 
     # required to get relative path of the config, debug_info and parsed_cmds file
     text = get_content(args)
@@ -95,8 +104,8 @@ def main():
     writer.write()
 
 if __name__ == '__main__':
-    # try:
-    #     main()
-    # except Exception as e:
-    #     logging.exception(e)
-    get_args()
+    try:
+        main()
+    except Exception as e:
+        logging.exception(e) # type: ignore
+    # print(get_args())

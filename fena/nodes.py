@@ -21,14 +21,6 @@ class Node(ABC):
     """
     pass
 
-# class JsonParseNode(Node):
-#     """
-#     Specifically holds an arg and an arg value
-#     """
-#     def __init__(self, arg, arg_value):
-#         self.arg = arg
-#         self.arg_value = arg_value
-
 class ProgramNode(Node):
     """
     Holds all statements found inside the global scope of the program
@@ -54,7 +46,7 @@ class McFunctionNode(StmtNode):
 
     Attributes:
         name (Token): The mcfunction name
-        command_nodes (list of CmdNode objects)
+        command_nodes (list of FenaCmdNode objects)
     """
     def __init__(self, name, command_nodes):
         assert_type(name, Token)
@@ -684,15 +676,14 @@ class EffectGiveNode(EffectCmdNode):
 class FunctionCmdNode(MainCmdNode):
     """
     Attributes:
-        function_name (Token): The mcfunction shortcut for the mcfunction name
-        current_folder (str): Full path to the directory folder to be used for smart searching
+        value (Token)
+        namespace (Token or None)
     """
-    # def __init__(self, function_name, current_folder):
-    def __init__(self, function_name):
-        assert_type(function_name, Token)
-        # assert_type(current_folder, str)
-        self.function_name = function_name
-        # self.current_folder = current_folder
+    def __init__(self, value, namespace=None):
+        assert_type(value, Token)
+        assert_type(namespace, Token, optional=True)
+        self.value = value
+        self.namespace = namespace
 
 
 class TagCmdNode(MainCmdNode):
@@ -1180,6 +1171,18 @@ class Vec3Node(CmdNode):
         self.coord2 = coord2
         self.coord3 = coord3
 
+class ItemNode(CmdNode):
+    """
+    Attributes:
+        item_id (Token)
+        nbt (NbtObjectNode or None)
+    """
+    def __init__(self, item_id, nbt=None):
+        assert_type(item_id, Token)
+        assert_type(nbt, NbtObjectNode, optional=True)
+        self.item_id = item_id
+        self.nbt = nbt
+
 class NamespaceIdNode(CmdNode):
     """
     Attributes:
@@ -1201,3 +1204,14 @@ class DataPathNode(CmdNode):
         assert_list_types(path_tokens, Token)
         self.path_tokens = path_tokens
 
+
+if __name__ == "__main__":
+    # testing random hashes
+    class A:
+        def __init__(self, x, y):
+            self.x = x
+            self.y = y
+
+    a = A(1, [2, 3, 4])
+    some_dict = {a: 1}
+    print(some_dict)

@@ -63,14 +63,13 @@ class InFileConfig:
         Does not allow the constobj to be set multiple times
 
         Args:
-            prefix (Token)
+            prefix (str)
         """
         if self._prefix is not None:
             raise SyntaxError("{}: Cannot set a prefix twice".format(prefix))
 
-        assert_type(prefix, Token)
-        assert_type(prefix.value, str)
-        self._prefix = prefix.value
+        assert_type(prefix, str)
+        self._prefix = prefix
 
     @property
     def constobj(self):
@@ -82,14 +81,21 @@ class InFileConfig:
         Does not allow the constobj to be set multiple times
 
         Args:
-            prefix (Token)
+            prefix (str)
         """
         if self._constobj is not None:
             raise SyntaxError("{}: Cannot set a constobj twice".format(constobj))
 
-        assert_type(constobj, Token)
-        assert_type(constobj.value, str)
-        self._constobj = constobj.value
+        assert_type(constobj, str)
+        self._constobj = constobj
+
+    @property
+    def functions(self):
+        return self._functions
+
+    @property
+    def function_conflicts(self):
+        return self._function_conflicts
 
     def add_function(self, mcfunction):
         """

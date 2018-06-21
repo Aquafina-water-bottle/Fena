@@ -130,6 +130,22 @@ $endfor
 #     pass
 
 
+keyword_surround = {
+        "py": "SPECIAL",
+        
+# cannot find certain keywords in documentation: "template", "subst", "pattern"
+# "py", "template", "subst", "pattern", "default", "macro", "nonlocal", "extend", "extend_expr"
+# CMD_KEYWORDS = {
+#     "py", "default", "macro", "nonlocal", "extend", "extend_expr"
+#     "if", "elif", "for", "for_begin", "while", "while_begin", "include", "include_begin",
+#     }
+
+# does not have round brackets at the end of the keywords
+# PURE_CMD_KEYWORDS = {
+#     "else", "endif", "endfor", "endwhile", "endmacro", "begin", "end"
+#     }
+
+
 def parse_pre_expander(text):
     """
     Returns:

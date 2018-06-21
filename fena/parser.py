@@ -46,36 +46,13 @@ from fena.nodes import (ProgramNode, McFunctionNode, FolderNode, PrefixNode, Con
     TeamAddNode, TeamRemoveNode, TeamEmptyNode, TeamJoinNode, TeamLeaveNode, TeamOptionNode,
     XpGetNode, XpMathNode,
 
-    Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, BlockStateNode, NamespaceIdNode, DataPathNode)
+    Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, BlockStateNode, NamespaceIdNode, DataPathNode, ItemNode)
 
 from fena.node_visitors import NodeBuilder, NodeVisitor
 from fena.coord_utils import is_coord_token, are_coords
 from fena.config_data import ConfigData
 from fena.number_utils import is_signed_int, is_nonneg_int, is_pos_int, is_number
 
-
-"""
-test parser logic
-
-def parse8(self):
-    # one place for error and parsing digit without boolean
-    self.eat("(")
-
-    if not self.current_char == ")":
-        while self.current_char.isdigit():
-            self.advance()
-
-            if self.current_char == ",":
-                self.advance()
-            elif self.current_char == ")":
-                break
-            else:
-                self.error("Expected a comma or closing square bracket")
-        else:
-            raise SyntaxError(f"Unexpected character {self.current_char}")
-
-    self.eat(")")
-"""
 
 r"""
 Organizes all tokens into nodes of an abstract syntax tree (AST)
@@ -92,7 +69,7 @@ constobj_stmt ::= "constobj" && STR
 
 command_suite ::= [NEWLINE, (command, NEWLINE)]*
 command ::= (execute_cmd)? && [sb_cmd, simple_cmd]
-simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, tag_cmd, team_cmd, xp_cmd, (COMMAND_KEYWORD && (STR, selector, nbt, json)*)]
+simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, tag_cmd, team_cmd, xp_cmd, (COMMAND_KEYWORD && (STR, selector, nbt, json, item)*)]
 
 execute_cmd_1_12 ::= selector && (vec3)? && (exec_sub_if)? && (execute_cmd_1_12)? && ":"
 execute_cmd_1_13 ::= [selector, vec3, exec_sub_cmds]+ && ":"
@@ -244,6 +221,7 @@ block_state ::= STR && "=" && STR
 
 data_type ::= ["byte", "short", "int", "long", "float", "double"]
 namespace_id ::= STR && (":" && STR)?
+item ::= ("minecraft" & ":")? & item_id & item_data? & nbt?
 """
 
 def all_permutations(iterable):
@@ -626,17 +604,26 @@ class Parser:
         command_nodes = []
 
         # note that this is essentially a do-while since it never starts out as a newline
-        while self.current_token.matches_any_of(WhitespaceToken.NEWLINE, TypedToken.STRING, DelimiterToken.AT):
-            # base case is if a newline is not met
+        while self.current_token.matches_any_of(TypedToken.STRING, DelimiterToken.AT, WhitespaceToken.NEWLINE):
             if self.current_token.matches(WhitespaceToken.NEWLINE):
-                self.eat(WhitespaceToken.NEWLINE)
-
+                self.advance()
             elif self.current_token.matches_any_of(TypedToken.STRING, DelimiterToken.AT):
                 command_node = self.command()
                 command_nodes.append(command_node)
+                if not self.current_token.matches(WhitespaceToken.DEDENT):
+                    self.eat(WhitespaceToken.NEWLINE)
 
-            else:
-                self.error("Expected a newline, command or statement specifier")
+        # while self.current_token.matches_any_of(WhitespaceToken.NEWLINE, TypedToken.STRING, DelimiterToken.AT):
+        #     # base case is if a newline is not met
+        #     if self.current_token.matches(WhitespaceToken.NEWLINE):
+        #         self.eat(WhitespaceToken.NEWLINE)
+
+        #     elif self.current_token.matches_any_of(TypedToken.STRING, DelimiterToken.AT):
+        #         command_node = self.command()
+        #         command_nodes.append(command_node)
+
+        #     else:
+        #         self.error("Expected a newline, command or statement specifier")
 
         logging.debug(f"End command compound at {self.current_token!r}")
 
@@ -670,22 +657,18 @@ class Parser:
 
     def mfunc_stmt(self):
         """
-        mfunc_stmt ::= "mfunc" && STR && (NEWLINE)* & INDENT && suite && DEDENT
+        mfunc_stmt ::= "mfunc" && [STR, literal_str] && ":" && (NEWLINE)* & INDENT && command_suite && DEDENT
 
         Returns:
             McFunctionNode: The mcfunction node to define the mcfunction in the parse tree
         """
         self.eat(TypedToken.STRING, value="mfunc")
 
-        # if self.symbol_table.function is not None:
-        #     self.error("Cannot define a mcfunction inside an mcfunction")
+        if not self.current_token.matches_any_of(TypedToken.STRING, TypedToken.LITERAL_STRING):
+            self.error("Expected a string or quoted string right after a mfunc statement")
+        mfunc_name = self.advance()
 
-        mfunc_name = self.eat(TypedToken.STRING, error_message="Expected a string after a mfunc statement")
-
-        # if self.symbol_table.folders is None:
-        #     full_path = os.path.join(self.file_path, name)
-        # else:
-        #     full_path = os.path.join(self.file_path, self.symbol_table.folders, name)
+        self.eat(DelimiterToken.COLON)
 
         # skips any and all newlines right after a mfunc statement
         while self.current_token.matches(WhitespaceToken.NEWLINE):
@@ -706,15 +689,11 @@ class Parser:
         """
         self.eat(TypedToken.STRING, value="folder")
 
-        # requires there to be no current mcfunction since a folder statement
-        # always occurs outside a mfunc statement
-        # if self.symbol_table.function is not None:
-        #     self.error("Cannot parse a folder statement inside an mcfunction")
+        if not self.current_token.matches_any_of(TypedToken.STRING, TypedToken.LITERAL_STRING):
+            self.error("Expected a string or quoted string right after a mfunc statement")
+        folder_token = self.advance()
 
-        # sets the current folder
-        # self.symbol_table = ScopedSymbolTable(enclosing_scope=self.symbol_table)
-        # self.symbol_table.add_folder(folder_token.value)
-        folder_token = self.eat(TypedToken.STRING)
+        self.eat(DelimiterToken.COLON)
 
         # skips any and all newlines right after a folder statement
         while self.current_token.matches(WhitespaceToken.NEWLINE):
@@ -799,7 +778,9 @@ class Parser:
             else:
                 self.error("Expected a newline, selector or start of a simple command")
 
-        return FenaCmdNode(command_segment_nodes)
+        fena_cmd_node = FenaCmdNode(command_segment_nodes)
+        logging.debug(fena_cmd_node)
+        return fena_cmd_node
 
     def selector_begin_cmd(self):
         """
@@ -1310,7 +1291,7 @@ class Parser:
             return ScoreboardCmdMathValueNode(begin_target, begin_objective, operator, end_target)
 
         # scoreboard players operation node
-        return ScoreboardCmdMathNode(begin_target, begin_objective, operator, end_target, nbt)
+        return ScoreboardCmdMathNode(begin_target, begin_objective, operator, end_target)
 
     def sb_players_special(self, begin_target):
         """
@@ -1336,7 +1317,7 @@ class Parser:
             self.error("Expected a command name (specifed under fena/src/config/command_names.json")
 
         # advances the command name
-        command_name_token = self.advance()
+        command_name_token = self.eat(TypedToken.STRING)
 
         if command_name in ("bossbar", "data", "effect", "function", "tag", "team", "xp"):
             # for each command name, does something like self.bossbar_cmd()
@@ -1363,14 +1344,33 @@ class Parser:
             nodes = [command_name_token]
 
         # STR, selector, nbt, json
-        while not self.current_token.matches_any_of(WhitespaceToken.NEWLINE, WhitespaceToken.EOF):
-            if self.current_token.matches(DelimiterToken.AT):
+        while not self.current_token.matches_any_of(WhitespaceToken.NEWLINE, WhitespaceToken.EOF, WhitespaceToken.DEDENT):
+            if self.current_token.matches(DelimiterToken.NUMBER_SIGN):
+                # TODO
+                raise NotImplementedError()
+
+            elif self.current_token.matches(DelimiterToken.COLON):
+                # namespace, possibly item
+                if not nodes:
+                    self.error("Expected an item before a colon to specify a proper namespace")
+                namespace = nodes.pop()
+                self.advance()
+                if (self.current_token.matches(TypedToken.STRING, values=Parser.config_data.items) and namespace.value == "minecraft"):
+                    return self.item()
+
+                id_value = self.eat(TypedToken.STRING)
+                return NamespaceIdNode(id_value, namespace)
+
+            elif self.current_token.matches(DelimiterToken.AT):
                 selector_node = self.selector()
                 nodes.append(selector_node)
 
             elif self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
                 tag_node = self.curly_bracket_tag()
                 nodes.append(tag_node)
+
+            elif self.current_token.matches(TypedToken.STRING, values=Parser.config_data.items):
+                return self.item()
 
             else:
                 str_token = self.eat(TypedToken.STRING)
@@ -1533,7 +1533,7 @@ class Parser:
             return EffectGiveNode(selector, effect_id)
         duration = self.advance()
 
-        if not (self.current_token.matches(TypedToken.STRING) and is_pos_int(self.current_token.value)):
+        if not (self.current_token.matches(TypedToken.STRING) and is_nonneg_int(self.current_token.value)):
             # without level
             return EffectGiveNode(selector, effect_id, duration)
         level = self.advance()
@@ -1577,7 +1577,13 @@ class Parser:
         """
         function_cmd ::= "function" && STR
         """
-        raise NotImplementedError()
+        function_id = self.eat(TypedToken.STRING)
+        if self.current_token.matches(DelimiterToken.COLON):
+            self.advance()
+            function_namespace = function_id
+            function_id = self.eat(TypedToken.STRING)
+            return FunctionCmdNode(function_id, function_namespace)
+        return FunctionCmdNode(function_id)
 
     def tag_cmd(self):
         """
@@ -2065,7 +2071,7 @@ class Parser:
             return self.nbt_number()
         if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
             return self.nbt_object()
-        self.error("Unexpected default case")
+        self.error("Expected '[', '{', quoted string or number")
 
     def nbt_number(self):
         """
@@ -2074,7 +2080,8 @@ class Parser:
         if self.current_token.matches(TypedToken.INT):
             int_value = self.advance()
             if self.current_token.matches(TypedToken.STRING):
-                int_type = self.eat(TypedToken.STRING, values=("b", "s", "L"))
+                # quick hack to include "f" and "d" in the nbt integers
+                int_type = self.eat(TypedToken.STRING, values=("b", "s", "L", "f", "d"))
             else:
                 int_type = None
             return NbtIntegerNode(int_value, int_type)
@@ -2535,6 +2542,23 @@ class Parser:
 
         return NamespaceIdNode(id_value)
 
+    def item(self, ignore_minecraft=False):
+        """
+        item ::= ("minecraft" & ":")? & item_id & item_data? & nbt?
+
+        Returns:
+            ItemNode
+        """
+        if not ignore_minecraft and self.current_token.matches(TypedToken.STRING, value="minecraft"):
+            self.advance()
+            self.eat(DelimiterToken.COLON)
+
+        item_id = self.eat(TypedToken.STRING, values=Parser.config_data.items)
+        if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
+            nbt = self.nbt()
+            return ItemNode(item_id, nbt)
+        return ItemNode(item_id)
+
     def __repr__(self):
         return f"Parser[iterator={self.iterator!r}, current_token={self.current_token!r}]"
 
@@ -2543,17 +2567,15 @@ if __name__ == "__main__":
 
     logging_setup.format_file_name("test_lexer.txt")
 
-    # with open("test_lexer.txt") as file:
-    #     text = file.read()
-    # lexer = Lexer(text)
+    with open("test_lexer.txt") as file:
+        text = file.read()
+    lexer = Lexer(text)
 
-    # r"C:\Users\Austin-zs\AppData\Roaming\.minecraft\saves\Snapshot 17w18b\data\functions\ego\event_name"
-    # parser = Parser(lexer)
-
-    # try:
-    #     parser.parse()
-    # except Exception as e:
-    #     logging.exception(e)
+    parser = Parser(lexer)
+    try:
+        parser.parse()
+    except Exception as e:
+        logging.exception(e) # type: ignore
 
     # mcfunctions = parser.mcfunctions
     # for mcfunction in mcfunctions:

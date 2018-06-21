@@ -5,7 +5,7 @@ if __name__ == "__main__":
 
 from fena.assert_utils import assert_type
 from fena.lexical_token import Token
-from fena.nodes import CmdNode, StmtNode
+from fena.nodes import CmdNode, StmtNode, ProgramNode
 
 class TreePostfixTraversal:
     """
@@ -47,7 +47,7 @@ class NodeVisitor(TreePostfixTraversal):
         Returns:
             Whatever is gotten with the visitor method
         """
-        assert_type(node, StmtNode, Token)
+        assert_type(node, StmtNode, Token, ProgramNode)
         return self._visit("visit", node, **kwargs)
 
 class NodeBuilder(TreePostfixTraversal):

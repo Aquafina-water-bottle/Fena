@@ -1,6 +1,7 @@
 """ Contains node visitors for the AST of a command to build itself """
 
 import logging
+import os
 
 if __name__ == "__main__":
     import sys
@@ -24,15 +25,18 @@ class CommandBuilder_1_12(NodeBuilder):
     """
     Attributes:
         cmd_root (Node): The parent node of the AST representing a command
+        mcfunction_path (str): The full path to the mcfunction file used for smart function shortcuts)
     """
 
     config_data = ConfigData()
     in_file_config = InFileConfig()
 
-    def __init__(self, cmd_root):
+    def __init__(self, cmd_root, mcfunction_path):
         assert_type(cmd_root, CmdNode, Token)
+        assert_type(mcfunction_path, str)
         assert self.in_file_config.finalized
         self.cmd_root = cmd_root
+        self.mcfunction_path = mcfunction_path
 
     def interpret(self):
         """
@@ -120,7 +124,7 @@ class CommandBuilder_1_12(NodeBuilder):
         objective = self.build(node.objective, prefix=True)
         operator = self.build(node.operator)
         target_get = self.build(node.target_get)
-        objective_get = self.build(node.objective_get, prefix=True)
+        objective_get = objective if node.objective_get is None else self.build(node.objective_get, prefix=True)
         return f"scoreboard players operation {target} {objective} {operator} {target_get} {objective_get}"
 
     def build_ScoreboardCmdMathValueNode(self, node):
@@ -211,12 +215,23 @@ class CommandBuilder_1_12(NodeBuilder):
 
     def build_FunctionCmdNode(self, node):
         """
-        Args:
-            node (FunctionCmdNode)
+        Node Attributes:
+            value (Token)
+            namespace (Token or None)
         """
-        raise NotImplementedError()
-        # function = self.in_file_config.functions[node.function_name]
-        # return f"function {function}"
+        if node.namespace is None:
+            function_shortcut = self.build(node.value)
+        else:
+            value = self.build(node.value)
+            namespace = self.build(node.namespace)
+            function_shortcut = f"{namespace}:{value}"
+
+        if function_shortcut in self.in_file_config.function_conflicts:
+            # smart assigning
+            raise NotImplementedError()
+
+        function_name = self.in_file_config.functions[function_shortcut]
+        return f"function {function_name}"
 
     def build_SimpleCmdNode(self, node):
         """
@@ -738,8 +753,8 @@ class CommandBuilder_1_12(NodeBuilder):
 
 # TODO finish 1.13
 class CommandBuilder_1_13(CommandBuilder_1_12):
-    def __init__(self, cmd_root):
-        super().__init__(cmd_root)
+    def __init__(self, *args):
+        super().__init__(*args)
 
     def build_FenaCmdNode(self, node):
         # gets rid of a trailing " run" if it exists
@@ -1426,3 +1441,12 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
 
         return f"xp get {selector} {sub_cmd}"
 
+    def build_ItemNode(self, node):
+        """
+        Node Attributes:
+            item_id (Token)
+            nbt (NbtObjectNode or None)
+        """
+        item_id = self.build(node.item_id)
+        nbt = "" if node.nbt is None else self.build(node.nbt)
+        return f"minecraft:{item_id}{nbt}"

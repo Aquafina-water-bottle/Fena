@@ -266,12 +266,14 @@ class Lexer:
         Yields:
             Token: Indent and dedent tokens, and statement tokens
         """
-
         # gets any whitespace past the newline
         self.recorder.lock()
         self.skip_whitespace()
         whitespace = self.get_locked_chars()
         self.recorder.unlock()
+
+        if self.reached_eof:
+            return
 
         # if the current char is a comment after whitespace, it is still an empty line
         if self.get_char() in (WhitespaceToken.NEWLINE.value, WhitespaceToken.COMMENT.value):
@@ -322,7 +324,12 @@ class Lexer:
                 self.skip_whitespace()
                 continue
 
-            yield self.get_until_space()
+            if self.current_chars_are(DelimiterToken.QUOTE.value):
+                yield self.get_literal_string()
+            elif self.get_char() in TokenValues.get(DelimiterToken):
+                yield self.create_new_token(DelimiterToken(self.get_char()), advance=True)
+            else:
+                yield self.get_until_space(exempt_chars=TokenValues.get(DelimiterToken))
 
     def get_until_space(self, exempt_chars=""):
         """

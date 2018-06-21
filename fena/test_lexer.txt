@@ -2,10 +2,10 @@
 # if the python script was ran under "\ego\event_name\src"
 # script.py main.ccu ../
 
-!prefix RR
+!prefix rr
 !constobj constants
 
-!mfunc json_test
+!mfunc json_test:
     tellraw @a {"text":"","extra":[
         {"text":"[","color":"gray"},
         {"text":"MM","color":"gold","bold":"true",
@@ -23,7 +23,7 @@
         {"selector":"@e[type=armor_stand,MMrn=3,MMCorrect4]"},
         {"text":"!","color":"green"}]}
 
-!mfunc execute_test
+!mfunc execute_test:
     # @p ~2 ~1 ~-1 execute @a 3 5.2 -2 @s @r ifblock 2 ~-1 ~ stonebrick 0 @e ifblock stonebrick *: say @a
     @p ~2 ~1 ~-1 @a 3 5.2 -2 @s @r if(stonebrick[0] 2 ~-1 ~) @e if(stonebrick): say @a
     # execute @p ~ -4.2 3 execute @a ~ ~ ~ execute @s ~ ~ ~ execute @r ~ ~ ~ ifblock ~ ~-1 ~ stonebrick 0 execute @e ~ ~ ~ detect ~ ~ ~ stonebrick *: say @a
@@ -52,10 +52,10 @@
     # execute @a ifblock stonebrick 0: say test
     # execute @a: say test
     
-    # execute @s ~ ~ ~ detect ~ ~-1 ~ stonebrick * execute @s ~ ~ ~ detect ~ ~ ~ stonebrick_stairs facing=west execute @s ~ ~ ~ detect ~ ~1 ~ stonebrick *: kill
-    # @s ifblock ~ ~-1 ~ stonebrick * @s detect stonebrick_stairs facing=west @s ifblock ~ ~1 ~ stonebrick *: kill
-    @s if(stonebrick ~ ~-1 ~) @s if(stonebrick_stairs[facing=west]) @s if(stonebrick ~ ~1 ~): kill
-    @s if(stonebrick ~ ~-1 ~, stonebrick_stairs[facing=west], stonebrick ~ ~1 ~): kill
+    # execute @s ~ ~ ~ detect ~ ~-1 ~ stonebrick * execute @s ~ ~ ~ detect ~ ~ ~ stone_brick_stairs facing=west execute @s ~ ~ ~ detect ~ ~1 ~ stonebrick *: kill
+    # @s ifblock ~ ~-1 ~ stonebrick * @s detect stone_brick_stairs facing=west @s ifblock ~ ~1 ~ stonebrick *: kill
+    @s if(stonebrick ~ ~-1 ~) @s if(stone_brick_stairs[facing=west]) @s if(stonebrick ~ ~1 ~): kill
+    @s if(stonebrick ~ ~-1 ~, stone_brick_stairs[facing=west], stonebrick ~ ~1 ~): kill
 
     # testing out chained commands: DISCONTINUED
     # @e[type=armor_stand,_ti=(0..20)]:
@@ -76,17 +76,17 @@
     @e[type=armor_stand,_ti=(0..20)]: @a[_pl=1] _pl = 0
     @e[type=armor_stand,_ti=(0..20)] @a[_pl=1]: playsound sound_1 voice @a
     @e[type=armor_stand,_ti=(0..20)] @a[_pl=1]: playsound sound_2 voice @a
-    @e[type=armor_stand,_ti=0]: effect @a[_pl=0] effect_1 20 0 true
-    @e[type=armor_stand,_ti=0]: effect @a[_pl=0] effect_2 20 0 true
+    @e[type=armor_stand,_ti=0]: effect @a[_pl=0] + saturation 20 0 true
+    @e[type=armor_stand,_ti=0]: effect @a[_pl=0] + minecraft:resistance 20 0 true
 
-!mfunc scoreboard_test
+!mfunc scoreboard_test:
     @s: @e[type=armor_stand,_stand] _ti -= 1 {DisabledSlots:2096896}
     @s: @e[type=armor_stand,_stand] _ti = 10 {DisabledSlots:2096896}
     @s: @e[type=armor_stand,_stand] reset _ti
     @s: @e[type=armor_stand,_stand] enable _ti
-    @s: @e[type=armor_stand,_stand] += _timer {Marker:1b}
-    @s: @e[type=armor_stand,_stand] -= _timer {Marker:1b}
-    @s: team _d_y += @e[type=armor_stand,_stand]
+    @s: tag @e[type=armor_stand,_stand] + _timer {Marker:1b}
+    @s: tag @e[type=armor_stand,_stand] - _timer {Marker:1b}
+    @s: team _d_y + @e[type=armor_stand,_stand]
     @s: team leave @e[type=armor_stand,_stand]
     @s: team empty _d_y
 
@@ -94,9 +94,9 @@
     @e[type=armor_stand,_stand] _ti = 10 {DisabledSlots:2096896}
     @e[type=armor_stand,_stand] reset _ti
     @e[type=armor_stand,_stand] enable _ti
-    @e[type=armor_stand,_stand] += _timer {Marker:1b}
-    @e[type=armor_stand,_stand] -= _timer {Marker:1b}
-    team _d_y += @e[type=armor_stand,_stand]
+    tag @e[type=armor_stand,_stand] + _timer {Marker:1b}
+    tag @e[type=armor_stand,_stand] - _timer {Marker:1b}
+    team _d_y + @e[type=armor_stand,_stand]
     team leave @e[type=armor_stand,_stand]
     team empty _d_y
     
@@ -104,9 +104,9 @@
     player _ti = 10 {DisabledSlots:2096896}
     player reset _ti
     player enable _ti
-    player += _timer {Marker:1b}
-    player -= _timer {Marker:1b}
-    team _d_y += player 
+    # tag player + _timer {Marker:1b}
+    # tag player - _timer {Marker:1b}
+    team _d_y + player 
     team leave player
     team empty _d_y
 
@@ -129,45 +129,45 @@
     # shortcut for scoreboard players set ya potato
     @e[type=armor_stand,_stand] _ti = 3
 
-    @e[type=armor_stand,_stand]: @s _ti * Players _ti2
-    @e[type=armor_stand,_stand]: @s _ti * @r _ti2
-    @e[type=armor_stand,_stand] _ti * Players _ti2
-    @e[type=armor_stand,_stand] _ti * @r _ti2
+    @e[type=armor_stand,_stand]: @s _ti *= Players _ti2
+    @e[type=armor_stand,_stand]: @s _ti *= @r _ti2
+    @e[type=armor_stand,_stand] _ti *= Players _ti2
+    @e[type=armor_stand,_stand] _ti *= @r _ti2
 
     # players_op_const (value as int)
     # will use the constant objective specifed under !constobj <value>
-    @e[type=armor_stand,_stand] _ti * 3
+    @e[type=armor_stand,_stand] _ti *= 3
 
-    @e[type=armor_stand,_stand]: @s _ti / Players _ti2
-    @e[type=armor_stand,_stand]: @s _ti / @r _ti2
-    @e[type=armor_stand,_stand] _ti / Players _ti2
-    @e[type=armor_stand,_stand] _ti / @r _ti2
-    @e[type=armor_stand,_stand] _ti / 3
+    @e[type=armor_stand,_stand]: @s _ti /= Players _ti2
+    @e[type=armor_stand,_stand]: @s _ti /= @r _ti2
+    @e[type=armor_stand,_stand] _ti /= Players _ti2
+    @e[type=armor_stand,_stand] _ti /= @r _ti2
+    @e[type=armor_stand,_stand] _ti /= 3
 
-    @e[type=armor_stand,_stand]: @s _ti % Players _ti2
-    @e[type=armor_stand,_stand]: @s _ti % @r _ti2
-    @e[type=armor_stand,_stand] _ti % Players _ti2
-    @e[type=armor_stand,_stand] _ti % @r _ti2
-    @e[type=armor_stand,_stand] _ti % 3
+    @e[type=armor_stand,_stand]: @s _ti %= Players _ti2
+    @e[type=armor_stand,_stand]: @s _ti %= @r _ti2
+    @e[type=armor_stand,_stand] _ti %= Players _ti2
+    @e[type=armor_stand,_stand] _ti %= @r _ti2
+    @e[type=armor_stand,_stand] _ti %= 3
 
-    @e[type=armor_stand,_stand]: @s _ti + Players _ti2
-    @e[type=armor_stand,_stand]: @s _ti + @r _ti2
-    @e[type=armor_stand,_stand] _ti + Players _ti2
-    @e[type=armor_stand,_stand] _ti + @r _ti2
+    @e[type=armor_stand,_stand]: @s _ti += Players _ti2
+    @e[type=armor_stand,_stand]: @s _ti += @r _ti2
+    @e[type=armor_stand,_stand] _ti += Players _ti2
+    @e[type=armor_stand,_stand] _ti += @r _ti2
 
     # shortcut for scoreboard players add
-    @e[type=armor_stand,_stand] _ti + 3
+    @e[type=armor_stand,_stand] _ti += 3
 
-    @e[type=armor_stand,_stand]: @s _ti - Players _ti2
-    @e[type=armor_stand,_stand]: @s _ti - @r _ti2
-    @e[type=armor_stand,_stand] _ti - Players _ti2
-    @e[type=armor_stand,_stand] _ti - @r _ti2
+    @e[type=armor_stand,_stand]: @s _ti -= Players _ti2
+    @e[type=armor_stand,_stand]: @s _ti -= @r _ti2
+    @e[type=armor_stand,_stand] _ti -= Players _ti2
+    @e[type=armor_stand,_stand] _ti -= @r _ti2
 
     # shortcut for scoreboard players remove
-    @e[type=armor_stand,_stand] _ti - 3
+    @e[type=armor_stand,_stand] _ti -= 3
 
     # datatag shortcut: should be able to cut through multiple lines
-    @e[type=armor_stand,_stand] _ti + 1 {
+    @e[type=armor_stand,_stand] _ti += 1 {
         Tags:["_Entity","_Display","RRAestheticsStand"],
         
         # it's free real estate 
@@ -191,10 +191,10 @@
             RightLeg:[2f,0f,5f]
         },
         ArmorItems:[{},{},{},
-            {id:quartz_stairs,Count:1}]}
+            {id:"minecraft:quartz_stairs",Count:1}]}
 
     
-!mfunc selector_test
+!mfunc selector_test:
     # say @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,RRar>=3<=5] @a[RRpl>=3<5] @a[RRpl>=3] 3
     say @a[x=-153,y=0,z=299,dx=158,dy=110,dz=168,m=2,RRar=3..5] @a[RRpl=3..4] @a[RRpl=3..] 3
     
@@ -206,7 +206,7 @@
     
     # say @a[RRpl<5>=3] @a[RRpl<5>3] @a[RRpl<3]
     say @a[RRpl=3..4] @a[RRpl=4] @a[RRpl=4..]
-    say @a[RRpl=(3..4)] @a[RRpl=(4)] @a[RRpl=(4..)]
+    say @a[_pl=(3..4)] @a[_pl=(4)] @a[_pl=(4..)]
     say @a[]
                     # lol comment
     say @a[distance=2..5] @a[distance=5] @a[distance=2..] @a[distance=..5]
@@ -218,57 +218,55 @@
     say @a[lvl=(2..5)] @a[lvl=(5)] @a[lvl=(2..)] @a[lvl=(..5)]
 
     say @a[x_rotation=2..5] @a[x_rotation=5] @a[x_rotation=2..] @a[x_rotation=..5]
-    say @a[x_rot=2..5] @a[x_rot=5] @a[x_rot=2..] @a[x_rot=..5]
-    say @a[x_rot=(2..5)] @a[x_rot=(5)] @a[x_rot=(2..)] @a[x_rot=(..5)]
+    say @a[xrot=2..5] @a[xrot=5] @a[xrot=2..] @a[xrot=..5]
+    say @a[xrot=(2..5)] @a[xrot=(5)] @a[xrot=(2..)] @a[xrot=(..5)]
 
     say @a[y_rotation=2..5] @a[y_rotation=5] @a[y_rotation=2..] @a[y_rotation=..5]
-    say @a[y_rot=2..5] @a[y_rot=5] @a[y_rot=2..] @a[y_rot=..5]
-    say @a[y_rot=(2..5)] @a[y_rot=(5)] @a[y_rot=(2..)] @a[y_rot=(..5)]
+    say @a[yrot=2..5] @a[yrot=5] @a[yrot=2..] @a[yrot=..5]
+    say @a[yrot=(2..5)] @a[yrot=(5)] @a[yrot=(2..)] @a[yrot=(..5)]
 
     say @a[limit=5,gamemode=creative]
-    say @a[limit=(5),gamemode=(creative)]
-    say @a[limit=(((5))),gamemode=(((creative)))]
     
-!folder ayylmao
-    !mfunc wiki_test
-        @a _ti - 1 {SomeData:Tag}
-        @a _ti = 10 {SomeData:Tag}
-        @a _ti ? 5
-        @a _ti ? 0 10
+!folder ayylmao:
+    !mfunc wiki_test:
+        @a _ti -= 1 {SomeData:"Tag"}
+        @a _ti = 10 {SomeData:"Tag"}
+        # @a _ti ? 5
+        # @a _ti ? 0 10
         @a reset _ti
         @a enable _ti
-        @a <- _ti
-        @a + _timer {SomeData:Tag}
-        @a - _timer {SomeData:Tag}
+        # @a <- _ti
+        tag @a + _timer {SomeData:"Tag"}
+        tag @a - _timer {SomeData:"Tag"}
         team add _d_y display yellow
-        team @a + _d_y
+        team _d_y + @a
         team leave @a
         team empty _d_y
 
         # testing invalid selectors
         # @k say test
 
-    !folder kek
-        !mfunc function_test
+    !folder "kek":
+        !mfunc "function_test":
             function wiki_test
             function selector_test
-!mfunc not_in_folders
+!mfunc not_in_folders:
     # testing prefixes
     # @e[type=armor_stand,_stand]: @e[c=1,r=1,type=armor_stand,_stand] _ti = @e[c=1,r=1,type=armor_stand,_Stand] _ti2
     @e[type=armor_stand,_stand]: @s _ti = _ti2
     say @a[_pl=3..5] @a[_pl=4..5] @a[_pl=..3]
 
-    @a _ti - 1 {SomeData:Tag}
-    scoreboard players remove @a _ti 1 {SomeData:Tag}
+    @a _ti -= 1 {SomeData:"Tag"}
+    scoreboard players remove @a _ti 1 {SomeData:"Tag"}
 
-    @a _ti = 10 {SomeData:Tag}
-    scoreboard players set @a _ti 10 {SomeData:Tag}
+    @a _ti = 10 {SomeData:"Tag"}
+    scoreboard players set @a _ti 10 {SomeData:"Tag"}
     
-    @a _ti ? 5
-    scoreboard players test @a _ti 5
+    # @a _ti ? 5
+    # scoreboard players test @a _ti 5
     
-    @a _ti ? 0 10
-    scoreboard players test @a _ti 0 10
+    # @a _ti ? 0 10
+    # scoreboard players test @a _ti 0 10
 
     @a reset _ti
     scoreboard players reset _ti @a 
@@ -276,14 +274,14 @@
     @a enable _ti
     scoreboard players enable _ti @a 
     
-    @a + _Timer {SomeData:Tag}
+    tag @a + _Timer {SomeData:"Tag"}
     scoreboard players tag @a add _Timer
 
-    @a - _Timer {SomeData:Tag}
+    tag @a - _Timer {SomeData:"Tag"}
     scoreboard players tag @a remove _Timer
     
-    join _d_y @a
+    team _d_y + @a
     scoreboard teams join _d_y @a
 
-    empty _d_y
+    team empty _d_y
     scoreboard teams empty _d_y

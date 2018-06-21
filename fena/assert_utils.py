@@ -1,5 +1,6 @@
 """
 Simple assert utils to make sure that an object matches some specified type
+or the items in an iterable match some specified type
 
 The main difference between using this function and using assert isinstance(...)
 is that it provides a more in-depth error message
@@ -41,6 +42,7 @@ def assert_type(checked_object, *valid_types, additional_message=None, optional=
             checked_types_str += " or None"
 
         full_message = f"Expected type of {checked_object!r} to be {checked_types_str} but got {type(checked_object)}"
+        #full_message = f"Expected type of {type(checked_object)} to be {checked_types_str} but got {type(checked_object)}"
         if additional_message is not None:
             full_message += f" {additional_message}"
         raise AssertionError(full_message)

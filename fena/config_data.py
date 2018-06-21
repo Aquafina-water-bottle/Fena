@@ -94,7 +94,7 @@ class ConfigData:
         return cls._config_data
 
     def __str__(self):
-        return "ConfigData[vars={}]".format(vars(self))
+        return f"ConfigData[vars={vars(self)}]"
 
     __repr__ = __str__
 
@@ -223,10 +223,10 @@ def _validate_options(options, valid_options):
     extra_options = frozenset(options.keys()) - valid_options
 
     if missing_options:
-        raise SyntaxError("{}: Option(s) were not found".format(set(missing_options)))
+        raise SyntaxError(f"{set(missing_options)}: Option(s) were not found")
 
     if extra_options:
-        raise SyntaxError("{}: Extra option(s) were detected".format(set(extra_options)))
+        raise SyntaxError(f"{set(extra_options)}: Extra option(s) were detected")
 
 
 def get_all_data(version=None):
@@ -246,7 +246,7 @@ def get_all_data(version=None):
     valid_versions = frozenset({"1.12", "1.13"})
     version = general_options["version"]
     if version not in valid_versions:
-        raise SyntaxError("{}: Invalid version in config (must be in {})".format(version, valid_versions))
+        raise SyntaxError(f"{version}: Invalid version in config (must be in {valid_versions})")
 
     # makes sure "ego" is set to true or false (with any capitalization)
     valid_bool = frozenset({"true", "false"})
@@ -257,7 +257,7 @@ def get_all_data(version=None):
         else:
             general_options["ego"] = False
     else:
-        raise SyntaxError("{}: Invalid ego boolean value (must be in {})".format(ego, valid_bool))
+        raise SyntaxError(f"{ego}: Invalid ego boolean value (must be in {valid_bool})")
 
     # gets all selector config options from the config data
     # selector_options = _get_selector_config_data(version)
@@ -277,7 +277,7 @@ def get_all_data(version=None):
     # ensures that this is the first instance of the ConfigData object
     all_options = {**general_options, **json_options}
     config_data = ConfigData(**all_options)
-    logging.debug("Got the config data: {}".format(config_data))
+    logging.debug(f"Got the config data: {config_data}")
 
 
 get_all_data()

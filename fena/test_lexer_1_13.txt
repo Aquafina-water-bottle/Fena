@@ -57,30 +57,30 @@
 # result(selector objective) -> store result score selector objective
 # success(selector objective) -> store success score selector objective
 
-!mfunc execute_test
-    @p ~2 ~1 ~-1 at(@a) 3 5.2 -2 @s @r if(2 ~-1 ~ stone_brick) @e if(stone_brick): say @a
+!mfunc execute_test:
+    @p ~2 ~1 ~-1 at(@a) 3 5.2 -2 @s @r if(stone_bricks 2 ~-1 ~) @e if(stone_bricks): say @a
     
     # @s @r -> execute as @s as @r ...
     # pos(@p) -> execute positioned as @p ...
     # rot(@a) -> execute rotated as @a ...
     # 3 5.2 -2 -> execute positioned 3 5.2 -2 ...
-    pos(@p) rot(@a) 3 5.2 -2 @s @r:
+    pos(@p) rot(@a) 3 5.2 -2 @s @r
 
-        # if(@a) -> execute if entity @a ...
-        # if(stone_brick) -> execute if block ~ ~ ~ stone_brick ...
-        # in(nether) -> execute in nether ...
-        if(@a) if(stone_brick) @e in(nether): say @a
-        if(@a, stone_brick) @e in(nether): say @a
+    # if(@a) -> execute if entity @a ...
+    # if(stone_bricks) -> execute if block ~ ~ ~ stone_bricks ...
+    # in(nether) -> execute in nether ...
+    if(@a) if(stone_bricks) @e in(nether): say @a
+    if(@a, stone_bricks) @e in(nether): say @a
 
-        # if(@r _ti == @s _st) -> execute if score @r _ti = @s _st ...
-        # if(stone_brick ~ ~-1 ~) -> execute if block ~ ~-1 ~ stone_brick
-        # if(@r _ti == @s _st, stone_brick ~ ~-1 ~) -> execute if score @r _ti = @s _st if block ~ ~ ~ stone_brick ...
-        # at(feet) -> execute anchored feet ...
-        if(@r _ti == @s _st, stone_brick ~ ~-1 ~) at(feet): say @a
-        
-        # ifnot(stone_brick 2 3 4 3 4 5) -> execute unless block 2 3 4 3 4 5 stone_brick ...
-        # at(@a) -> execute at @a ...
-        ifnot(stone_brick 2 3 4 3 4 5) at(@a; feet): say @a
+    # if(@r _ti == @s _st) -> execute if score @r _ti = @s _st ...
+    # if(stone_bricks ~ ~-1 ~) -> execute if block ~ ~-1 ~ stone_bricks
+    # if(@r _ti == @s _st, stone_bricks ~ ~-1 ~) -> execute if score @r _ti = @s _st if block ~ ~ ~ stone_bricks ...
+    # at(feet) -> execute anchored feet ...
+    if(@r _ti == @s _st, stone_bricks ~ ~-1 ~) at(feet): say @a
+    
+    # ifnot(1 2 3 2 3 4 == 3 4 5) -> execute unless blocks 1 2 3 2 3 4 3 4 5 ...
+    # at(@a) -> execute at @a ...
+    ifnot(1 2 3 2 3 4 == 3 4 5) at(@a, feet): say @a
 
     # at(xy) -> execute align xy ...
     # facing(2 3 4) -> execute facing 2 3 4 ...
@@ -97,7 +97,7 @@
     @a result(@s _pl) if(@e[type=pig])
 
     # and scoreboard shortcuts can start with selectors too
-    @s _tp + 1
+    @s _tp += 1
 
     # success(~ ~ ~ Items[0].Count 2) -> execute store success block ~ ~ ~ Items[0].Count byte 2 run ...
     success(~ ~ ~ Items[0].Count 2): say @a
@@ -119,28 +119,20 @@
     # success(idk value) -> execute store success bossbar minecraft:idk value ...
 
 
-!mfunc selector_test
+!mfunc selector_test:
     # @a[advancements={minecraft:story/mine_diamond={diamond=true},minecraft:story/iron_tools=true}]
     # naturally @a[advancements={story/mine_diamond={diamond=true},story/iron_tools=true}]
-    say @a[adv=(story/mine_diamond=(diamond),story/iron_tools)]
+    # TODO say @a[adv=(story/mine_diamond=(diamond),story/iron_tools)]
+    say @a[nou]
 
     # @a[advancements={minecraft:story/mine_diamond={diamond=false},minecraft:story/iron_tools=false}]
     # naturally @a[advancements={story/mine_diamond={diamond=false},story/iron_tools=false}]
-    say @a[adv=(story/mine_diamond=(!diamond),!story/iron_tools)]
+    # TODO say @a[adv=(story/mine_diamond=(!diamond),!story/iron_tools)]
 
 # Note that bossbars are actually extremely weird
 # They have almost the same purpose as scoreboard objectives setdisplay
 
-!mfunc objectives_test
-    # format:
-    # _name . display
-    # _ . _
-
-    # first _ are prefix
-    # . means "dummy", everything else should be specified
-    # third _ is the given display name
-
-!mfunc bossbar_test
+!mfunc bossbar_test:
     # all possible options: get, set, create, remove, list
     # bossbar add <id> <name>
     # bossbar remove <id>
@@ -168,7 +160,7 @@
     # bossbar set <id> name <name>
     # name ::= json
     # bossbar set _lol name {"text":"asdf"}
-    bossbar _lol name = asdf
+    # bossbar _lol name = asdf
     bossbar _lol name = {"text":"asdf"}
 
     # bossbar set <id> players <players>
@@ -199,7 +191,7 @@
     bossbar _lol visible = true
     bossbar _lol visible = false
 
-!mfunc data_test
+!mfunc data_test:
     # data get block <vec3> [path] [scale]
     # data <vec3> <- [path] [scale]
     data (~ ~ ~) <-
@@ -228,10 +220,10 @@
     # data <selector> - <path>
     data @e[type=item,c=1] - Movement.2
 
-!mfunc effect_test
+!mfunc effect_test:
     # effect clear <selector>
     # effect clear @a
-    effect @a - all
+    effect @a - *
 
     # effect clear <selector> <effect>
     # effect @a - minecraft:saturation
@@ -244,23 +236,23 @@
     effect @a + saturation 1000000 0
 
     # effect give @a minecraft:saturation 10000000 0 false
-    effect @a + saturation 1000000 false
+    effect @a + saturation 1000000 0 false
 
-!mfunc scoreboard_test
-    @a _ti - 1
+!mfunc scoreboard_test:
+    @a _ti -= 1
     @a _ti = 10
     @a reset _ti
     @a enable _ti
     @a get _ti
-    @a + _timer
-    @a - _timer
+    tag @a + _timer
+    tag @a - _timer
     team add _d_y display yellow
-    team @a + _d_y
+    team _d_y + @a
     team leave @a
     team empty _d_y
     team remove _d_y
 
-!mfunc tags_test
+!mfunc tags_test:
     # tag <selector> add <tag>
     # tag <selector> + <tag>
     tag @e[type=pig,name=test] + _lol
@@ -269,7 +261,7 @@
     # tag <selector> - <tag>
     tag @e[type=pig,name=test] - _lol
 
-!mfunc team_test
+!mfunc team_test:
     # team add <team> <display_name> (no shortcut)
     team add _team team_test
 
@@ -278,7 +270,7 @@
     
     # team join <team> <targets>
     # team join team_name @a
-    team team_name += @a
+    team team_name + @a
 
     # team leave <targets> (no shortcut)
     team leave @a
@@ -288,7 +280,7 @@
     team _team friendlyfire = true
     team _team color = green
     team _team seeFriendlyInvisibles = false
-    team _team nametagVisiblity = hideForOwnTeam
+    team _team nametagVisibility = hideForOwnTeam
     team _team deathMessageVisibility = never
     team _team collisionRule = pushOwnTeam
 
@@ -299,7 +291,7 @@
     # team remove <team> (no shortcut)
     team remove _team
 
-!mfunc xp_test
+!mfunc xp_test:
     # xp add <selector> amount ["levels", "points"]
     # xp query <selector> ["levels", "points"]
     # xp set <selector> amount ["levels", "points"]
