@@ -3,17 +3,23 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
+    # note that this is actually used since importing it sets up the logging
+    # pylint: disable=unused-import
     import fena.logging_setup as logging_setup
 
 import os
 import json
 import logging
+from types import MappingProxyType
 
 from fena.assert_utils import assert_type
 
 """
 Gets all config data from the config folder
 """
+
+PATH_TO_CONFIG_DIR = "config/"
+MAIN_CONFIG_NAME = "config.ini"
 
 class ConfigData:
     """
@@ -43,6 +49,9 @@ class ConfigData:
         scoreboard_math (dict)
         scoreboard_special (dict)
 
+        replaceitem_entity_slots (list)
+        replaceitem_block_slots (list)
+
         blocks (list of strs)
         command_names (list of str objects): All possible command names
         bossbar_get (list of str objects)
@@ -52,39 +61,40 @@ class ConfigData:
         items (list of str objects)
         team_options (dict): maps each team option to its possible values
     """
+
+    __slots__ = [
+        "version",
+        "ego",
+        "leading_commands",
+        "plugin_conflict_commands",
+        "selector_variable_specifiers",
+        "selector_arguments",
+        "selector_replacements",
+        "selector_argument_details",
+        "execute_dimensions",
+        "execute_keywords",
+        "execute_data_types",
+        "execute_comparison_operators",
+        "scoreboard_math",
+        "scoreboard_special",
+        "replaceitem_entity_slots",
+        "replaceitem_block_slots",
+        "blocks",
+        "bossbar_set",
+        "bossbar_get",
+        "command_names",
+        "effects",
+        "entities",
+        "items",
+        "team_options",
+    ]
+
     def __init__(self, **options):
-        # for key in options:
-        #     setattr(self, key, options[key])
+        for key in options:
+            setattr(self, key, options[key])
 
-        # changing the above to having all customly defined for pylint
-        if options:
-            self.version = options["version"]
-            self.ego = options["ego"]
-            self.leading_commands = options["leading_commands"]
-            self.plugin_conflict_commands = options["plugin_conflict_commands"]
-
-            self.selector_variable_specifiers = options["selector_variable_specifiers"]
-            self.selector_arguments = options["selector_arguments"]
-            self.selector_replacements = options["selector_replacements"]
-            self.selector_argument_details = options["selector_argument_details"]
-
-            self.execute_dimensions = options["execute_dimensions"]
-            self.execute_keywords = options["execute_keywords"]
-            self.execute_data_types = options["execute_data_types"]
-            self.execute_comparison_operators = options["execute_comparison_operators"]
-
-            self.scoreboard_math = options["scoreboard_math"]
-            self.scoreboard_special = options["scoreboard_special"]
-
-            self.blocks = options["blocks"]
-            self.bossbar_set = options["bossbar_set"]
-            self.bossbar_get = options["bossbar_get"]
-            self.command_names = options["command_names"]
-            self.effects = options["effects"]
-            self.entities = options["entities"]
-            self.items = options["items"]
-            self.team_options = options["team_options"]
-
+    # options are automatically passed with __new__
+    # pylint: disable=unused-argument
     def __new__(cls, **options):
         """
         Ensures they are the same class
@@ -93,8 +103,21 @@ class ConfigData:
             cls._config_data = super().__new__(cls)
         return cls._config_data
 
+    @property
+    def variables(self):
+        """
+        Returns:
+            MappingProxyType: Read-only dictionary of the variables stored in the config data
+        """
+        variables = {}
+        for key in ConfigData.__slots__:
+            variables[key] = getattr(self, key)
+        return MappingProxyType(variables)
+        # variables = {key: getattr(self, key) for key in ConfigData.__slots__)
+
     def __str__(self):
-        return f"ConfigData[vars={vars(self)}]"
+        # return f"ConfigData[vars={vars(self)}]"
+        return f"ConfigData[vars={self.variables}]"
 
     __repr__ = __str__
 
@@ -106,24 +129,12 @@ def _get_file_str(file_name):
         str: The full file as a str
     """
     dir_path = os.path.dirname(__file__)
-    file_path = os.path.join(dir_path, "../config/" + file_name)
+    file_path = os.path.join(dir_path, PATH_TO_CONFIG_DIR + file_name)
 
     with open(file_path, "r") as file:
         file_data = file.read()
 
     return file_data
-
-
-# def _get_file_name(option_name, extension="txt"):
-#     """
-#     Gets the data inside the file given the version, option and extension
-#
-#     Args:
-#         version (str)
-#         option_name (str)
-#         extension (str)
-#     """
-#     return f"{option_name}.{extension}"
 
 
 def _get_config_data(version=None):
@@ -144,8 +155,7 @@ def _get_config_data(version=None):
     assert_type(version, str, optional=True)
 
     # the config file should be placed one directory below
-    config_name = "config.ini"
-    file_data = _get_file_str(config_name)
+    file_data = _get_file_str(MAIN_CONFIG_NAME)
     options = {}
 
     # gets rid of empty lines, trailing whitespace and comments
@@ -175,6 +185,7 @@ def _get_json_config_data(version):
         execute.json
         items.json
         scoreboard.json
+        replaceitem.json
         selector.json
         team_options.json
 
@@ -183,7 +194,7 @@ def _get_json_config_data(version):
     """
     # result for all files
     json_options = {}
-    option_names = ("blocks", "bossbar", "command_names", "effects", "entities", "execute", "items", "selector", "scoreboard", "team_options")
+    option_names = ("blocks", "bossbar", "command_names", "effects", "entities", "execute", "items", "selector", "scoreboard", "replaceitem", "team_options")
 
     for option_name in option_names:
         file_name = f"{option_name}.json"
@@ -252,10 +263,7 @@ def get_all_data(version=None):
     valid_bool = frozenset({"true", "false"})
     ego = general_options["ego"].lower()
     if ego in valid_bool:
-        if ego == "true":
-            general_options["ego"] = True
-        else:
-            general_options["ego"] = False
+        general_options["ego"] = (ego == "true")
     else:
         raise SyntaxError(f"{ego}: Invalid ego boolean value (must be in {valid_bool})")
 
@@ -265,15 +273,6 @@ def get_all_data(version=None):
     # gets all blocks, commands and entities
     json_options = _get_json_config_data(version)
 
-    selector_json_args = {"selector_variable_specifiers", "selector_arguments", "selector_replacements", "selector_argument_details"}
-    scoreboard_json_args = {"scoreboard_math", "scoreboard_special"}
-    execute_json_args = {"execute_dimensions", "execute_keywords", "execute_data_types", "execute_comparison_operators"}
-    general_json_args = {"blocks", "command_names", "effects", "entities", "items", "team_options"}
-    bossbar_json_args = {"bossbar_set", "bossbar_get"}
-
-    all_json_args = (selector_json_args | scoreboard_json_args | execute_json_args | general_json_args | bossbar_json_args)
-    _validate_options(json_options, all_json_args)
-
     # ensures that this is the first instance of the ConfigData object
     all_options = {**general_options, **json_options}
     config_data = ConfigData(**all_options)
@@ -282,22 +281,11 @@ def get_all_data(version=None):
 
 get_all_data()
 
-def test():
-    # should be the original from the config file
-    config_data = ConfigData()
-    print(config_data)
-
-    # completely different options
-    # _get_config_data(file_data)
-    # print(config_data)
-
-    # check id value
-    config_data_2 = ConfigData()
-    assert id(config_data) == id(config_data_2), (id(config_data), id(config_data_2))
-
 if __name__ == "__main__":
-    config_data = ConfigData()
-    print(json.dumps(vars(config_data), indent=4))
-    print(list(vars(config_data)))
+    get_all_data(version="1.12")
+    print(json.dumps(dict(ConfigData().variables), indent=4))
+    print(list(ConfigData().variables))
+    print(ConfigData().replaceitem_entity_slots)
     # print(config_data)
     # test()
+

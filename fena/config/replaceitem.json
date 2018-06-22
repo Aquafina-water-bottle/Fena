@@ -73,6 +73,7 @@
             "weapon.mainhand",
             "weapon.offhand"
         ],
+
         "replaceitem_block_slots": [
             "container.0",
             "container.1",
