@@ -1,8 +1,6 @@
 debug_info.log
 parsed_cmds.txt
 _post_test.txt
-setup.cfg
-setup.py
 
 __pycache__/
 output/
