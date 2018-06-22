@@ -17,6 +17,7 @@ from fena.in_file_config import InFileConfig
 
 import test_fena.v1_12.test_all
 import test_fena.v1_13.test_all
+import test_fena.test_pre_pyexpander
 import test_fena.test_common
 
 logging_setup.format_file_name("test_cases")
@@ -30,6 +31,9 @@ config_data = ConfigData()
 begin = time.perf_counter()
 
 try:
+    logging.debug("\n\npre-pyexpander")
+    test_fena.test_pre_pyexpander.test_pre_pyexpander()
+
     logging.debug("\n\n1.12")
     get_all_data("1.12")
     # sets ego to false to remove unnecessary warnings

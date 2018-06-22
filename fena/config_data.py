@@ -90,8 +90,13 @@ class ConfigData:
     ]
 
     def __init__(self, **options):
-        for key in options:
-            setattr(self, key, options[key])
+        if options:
+            for key in options:
+                setattr(self, key, options[key])
+
+            # makes sure that all variables in __slots__ are used
+            for key in ConfigData.__slots__:
+                assert hasattr(self, key)
 
     # options are automatically passed with __new__
     # pylint: disable=unused-argument
@@ -284,8 +289,10 @@ get_all_data()
 if __name__ == "__main__":
     get_all_data(version="1.12")
     print(json.dumps(dict(ConfigData().variables), indent=4))
-    print(list(ConfigData().variables))
-    print(ConfigData().replaceitem_entity_slots)
+    print(ConfigData().variables)
+    # print(list(ConfigData().variables))
+    # print(ConfigData().replaceitem_entity_slots)
     # print(config_data)
     # test()
+
 
