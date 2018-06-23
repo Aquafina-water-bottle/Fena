@@ -1,5 +1,13 @@
-**Suddenly Python**
+# Fena
+This is a preprocessor language for Minecraft, and supports versions 1.12 and 1.13.
 
-Currently cleaning up all of the code. Refer to this for a brief and very much incomplete todo list: https://github.com/Aquafina-water-bottle/Fena/blob/unstable/version_history.txt (scroll all the way down)
+### Installation
+* TODO
 
-If you want the old java version (ew), check out https://github.com/Aquafina-water-bottle/Command-Compiler-Unlimited/tree/cb62da740e1d5e040e50e1c329d35d738b22503c
+### Usage
+* TODO
+
+### Previous versions:
+* CCU (Java, 1.10.x to 1.12.x): https://github.com/Aquafina-water-bottle/Fena/tree/cb62da740e1d5e040e50e1c329d35d738b22503c
+* CCU2 (Python, 1.12.x): https://github.com/Aquafina-water-bottle/Fena/tree/ccu2
+

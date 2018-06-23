@@ -1,10 +1,18 @@
+# log files
 debug_info.log
 parsed_cmds.txt
 _post_test.txt
 
+# general python
 __pycache__/
-output/
-functions/
 venv/
 .idea/
+
+# testing
+functions/
 pyexpander_fena/*.txt
+
+# packaging
+dist/
+*.egg-info/
+build/

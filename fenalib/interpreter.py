@@ -92,7 +92,7 @@ class Interpreter(NodeVisitor):
 
         # direct path from the functions folder
         if ":" in mfunc_name:
-            raise NotImplementedError(f"Cannot have ':' in an mcfunction name {node.name}")
+            raise NotImplementedError(f"Cannot have ':' in an mcfunction name {node.name} since that specifies a full path")
         full_path = os.path.join(self.output_path, *self.current_folders, mfunc_name + ".mcfunction")
         mcfunction = McFunction(mfunc_name, full_path)
 

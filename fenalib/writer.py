@@ -14,7 +14,7 @@ PATH_TO_LOG_DIR = "log"
 def write_after_pre_pyexpander(text):
     current_dir_path = os.path.dirname(__file__)
     after_pre_pyexpander_path = os.path.join(current_dir_path, PATH_TO_LOG_DIR, "after_pre_pyexpander.txt")
-    with open(after_pre_pyexpander_path) as file:
+    with open(after_pre_pyexpander_path, "w") as file:
         file.write(text)
     logging.debug("Successfully wriitten 'after_pre_pyexpander.txt'")
 
@@ -22,7 +22,7 @@ def write_after_pre_pyexpander(text):
 def write_after_pyexpander(text):
     current_dir_path = os.path.dirname(__file__)
     after_pyexpander_path = os.path.join(current_dir_path, PATH_TO_LOG_DIR, "after_pyexpander.txt")
-    with open(after_pyexpander_path) as file:
+    with open(after_pyexpander_path, "w") as file:
         file.write(text)
     logging.debug("Successfully wriitten 'after_pyexpander.txt'")
 

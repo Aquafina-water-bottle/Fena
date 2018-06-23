@@ -1,0 +1,18 @@
+!folder search_1:
+    !mfunc asdf1:
+        say search_1:asdf1
+
+    !mfunc asdf2:
+        function asdf1
+
+!folder search_2:
+    !mfunc asdf1:
+        say search_2:asdf1
+
+    !mfunc asdf2:
+        function asdf1
+
+!mfunc "nou":
+    function ego:lmao
+
+

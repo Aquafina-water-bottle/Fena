@@ -14,6 +14,7 @@ import os
 import pyexpander.lib as pyexpander
 
 import fenalib.logging_setup as logging_setup
+logging_setup.setup_logging()
 from fenalib.config_data import get_all_data
 from fenalib.pre_pyexpander import parse_pre_pyexpander
 from fenalib.lexer import Lexer
@@ -54,7 +55,7 @@ def get_args():
 
 
 def main():
-    print("Fena:", "semantic_version={}".format(semantic_version), "public_version={}".format(public_version), sep="\n")
+    print(f"Fena: semantic_version={semantic_version}, public_version={public_version}")
 
     # checks for python version (must be greater than or equal to 3.6)
     if not (sys.version_info.major >= 3 and sys.version_info.minor >= 6):

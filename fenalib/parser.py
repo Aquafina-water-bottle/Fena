@@ -1488,7 +1488,6 @@ class Parser:
     def effect_give(self, selector):
         """
         effect_give ::= selector && "+" && effect_id && (pos_int && ((nonneg_int)? && ["true", "false"]? )? )?
-        # effect_id are defined under effects_version.txt
 
         Returns:
             EffectGiveNode
@@ -1534,12 +1533,14 @@ class Parser:
         return EffectClearNode(selector, effect_id)
 
     def effect_id(self):
+        """
+        # effect_id are defined under effects.json
+        """
         if self.current_token.matches(TypedToken.STRING, value="minecraft"):
             self.advance()
             self.eat(DelimiterToken.COLON)
 
-        effect_id_value = self.eat(TypedToken.STRING, values=Parser.config_data.effects)
-        return NamespaceIdNode(effect_id_value)
+        return self.eat(TypedToken.STRING, values=Parser.config_data.effects)
 
     def function_cmd(self):
         """

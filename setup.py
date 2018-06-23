@@ -13,24 +13,12 @@ Examples:
 """
 
 
-# Utility function to read the README file.
-# Used for the long_description.  It's nice, because now 1) we have a top level
-# README file and 2) it's easier to type in the README file than to put a raw
-# string in below ...
-def read(fname):
-    with open(os.path.join(os.path.dirname(__file__), fname)) as file:
-        string = file.read()
-    return string
-
-
 setup(
     name="fena",
     version="0.0.4",
     author="Austin Siew",
     author_email="glowing.locker@gmail.com",
     description=("Fena Preprocessor Language for Minecaft"),
-    long_description=read('README.md'),
-    long_description_content_type="text/markdown",
     keywords="minecaft language fena preprocessor",
     url="https://github.com/Aquafina-water-bottle/Fena",
     # packages=['fena', 'fena_pyexpander'],

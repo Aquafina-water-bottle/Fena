@@ -643,11 +643,11 @@ class EffectClearNode(EffectCmdNode):
     """
     Attributes:
         selector (SelectorNode)
-        effect_id (NamespaceIdNode or None)
+        effect_id (Token or None)
     """
     def __init__(self, selector, effect_id=None):
         assert_type(selector, SelectorNode)
-        assert_type(effect_id, NamespaceIdNode, optional=True)
+        assert_type(effect_id, Token, optional=True)
         self.selector = selector
         self.effect_id = effect_id
 
@@ -655,14 +655,14 @@ class EffectGiveNode(EffectCmdNode):
     """
     Attributes:
         selector (SelectorNode)
-        effect_id (NamespaceIdNode)
+        effect_id (Token)
         duration (Token or None)
         level (Token or None)
         hide_particles (bool)
     """
     def __init__(self, selector, effect_id, duration=None, level=None, hide_particles=True):
         assert_type(selector, SelectorNode)
-        assert_type(effect_id, NamespaceIdNode)
+        assert_type(effect_id, Token)
         assert_type(duration, Token, optional=True)
         assert_type(level, Token, optional=True)
         assert_type(hide_particles, bool)

@@ -1,13 +1,12 @@
 import logging
-import json
-import re
 
 if __name__ == "__main__":
     import sys
     sys.path.append("..")
     del sys
 
-    import fenalib.logging_setup
+    import fenalib.logging_setup as logging_setup
+    logging_setup.setup_logging()
 
 from fenalib.assert_utils import assert_type
 from fenalib.repr_utils import addrepr
@@ -67,7 +66,7 @@ class Lexer:
                 yield from self.get_command()
 
         # at the end of file by this point, and it must end with dedent tokens if a newline did not end
-        if self.indents > 0:
+        while self.indents > 0:
             yield self.get_dedent()
 
         # gets one last EOF token
@@ -589,13 +588,15 @@ class Lexer:
 if __name__ == "__main__":
     # import timeit
 
-    # with open("test_lexer.txt") as file:
-    #     text = file.read()
+    with open("log/after_pre_pyexpander.txt") as file:
+        text = file.read()
 
-    # lexer = Lexer(text)
+    lexer = Lexer(text)
 
-    # for token in lexer:
-    #     logging.debug(repr(token))
+    for token in lexer:
+        logging.debug(repr(token))
+
+    print(repr(lexer))
 
     # gets only selector tokens
     # lexer = Lexer("@e[x=5,y=4,z=2, type=armor_stand,_entity, _pl=(5..6), {CustomNameVisible:1b}]")
@@ -611,6 +612,7 @@ if __name__ == "__main__":
     # print(lexer.get_until_space())
     # lexer = Lexer("@s _ti += players _ti2")
     # lexer = Lexer("setblock _ti <= players _ti2")
-    lexer = Lexer("stonebrick[variant=mossy_stonebrick]")
-    for token in lexer.get_command():
-        print(repr(token))
+    # lexer = Lexer("stonebrick[variant=mossy_stonebrick]")
+    # for token in lexer.get_command():
+    #     print(repr(token))
+

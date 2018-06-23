@@ -9,11 +9,12 @@ if __name__ == "__main__":
     del sys
 
     import fenalib.logging_setup as logging_setup
+    logging_setup.setup_logging()
 
 from fenalib.assert_utils import assert_type
 from fenalib.lexical_token import Token
 from fenalib.config_data import ConfigData
-from fenalib.in_file_config import InFileConfig
+from fenalib.in_file_config import InFileConfig, get_mcfunc_directories
 from fenalib.node_visitors import NodeBuilder
 from fenalib.nodes import CmdNode, IntRangeNode, SelectorDefaultGroupArgValueNode, JsonObjectNode, JsonMapNode, SelectorNode
 from fenalib.number_utils import is_signed_int
@@ -25,7 +26,7 @@ class CommandBuilder_1_12(NodeBuilder):
     """
     Attributes:
         cmd_root (Node): The parent node of the AST representing a command
-        mcfunction_path (str): The full path to the mcfunction file used for smart function shortcuts)
+        mcfunction_dir (str): The full directory of mcfunction file used for smart function shortcuts
     """
 
     config_data = ConfigData()
@@ -35,6 +36,7 @@ class CommandBuilder_1_12(NodeBuilder):
         assert_type(cmd_root, CmdNode, Token)
         assert_type(mcfunction_path, str)
         assert self.in_file_config.finalized
+
         self.cmd_root = cmd_root
         self.mcfunction_path = mcfunction_path
 
@@ -188,20 +190,20 @@ class CommandBuilder_1_12(NodeBuilder):
         """
         Node Attributes:
             selector (SelectorNode)
-            effect_id (NamespaceIdNode or None)
+            effect_id (Token or None)
         """
         selector = self.build(node.selector)
         if node.effect_id is None:
             return f"effect {selector} clear"
 
         effect_id = self.build(node.effect_id)
-        return f"effect {selector} {effect_id} 0 0 true"
+        return f"effect {selector} minecraft:{effect_id} 0 0 true"
 
     def build_EffectGiveNode(self, node):
         """
         Node Attributes:
             selector (SelectorNode)
-            effect_id (NamespaceIdNode)
+            effect_id (Token)
             duration (Token or None)
             level (Token or None)
             hide_particles (bool)
@@ -211,7 +213,7 @@ class CommandBuilder_1_12(NodeBuilder):
         duration = "2" if node.duration is None else self.build(node.duration)
         level = "0" if node.level is None else self.build(node.level)
         hide_particles = "true" if node.hide_particles else "false"
-        return f"effect {selector} {effect_id} {duration} {level} {hide_particles}"
+        return f"effect {selector} minecraft:{effect_id} {duration} {level} {hide_particles}"
 
     def build_FunctionCmdNode(self, node):
         """
@@ -219,16 +221,40 @@ class CommandBuilder_1_12(NodeBuilder):
             value (Token)
             namespace (Token or None)
         """
-        if node.namespace is None:
-            function_shortcut = self.build(node.value)
-        else:
+        if node.namespace is not None:
+            # if there is a namespace, it is assumed that the path is correct
             value = self.build(node.value)
             namespace = self.build(node.namespace)
-            function_shortcut = f"{namespace}:{value}"
+            return f"function {namespace}:{value}"
+
+        function_shortcut = self.build(node.value)
 
         if function_shortcut in self.in_file_config.function_conflicts:
-            # smart assigning
-            raise NotImplementedError()
+            # smart assigning using self.mcfunction_dir
+            # assumes 'functions' is a folder that exists
+
+            # makes the following function shortcuts based off of the mcfunction directories
+            # pops the last one because that's the mcfunction name
+            mcfunc_dirs = get_mcfunc_directories(self.mcfunction_path)
+            mcfunc_dirs.pop()
+
+            while mcfunc_dirs:
+                insert_dir = mcfunc_dirs.pop()
+                # if there are no more directories, this is the last one and must be added with ":" instead of "/"
+                if mcfunc_dirs:
+                    function_shortcut = f"{insert_dir}/{function_shortcut}"
+                else:
+                    function_shortcut = f"{insert_dir}:{function_shortcut}"
+
+                if function_shortcut in self.in_file_config.function_conflicts or function_shortcut not in self.in_file_config.functions:
+                    continue
+
+                # otherwise, returns the function shortcut
+                break
+
+            else:
+                # completely invalid, apparently there are two of the exact same shortcut names
+                raise SyntaxError(f"Invalid function shortcut for node {node} (duplicate)")
 
         function_name = self.in_file_config.functions[function_shortcut]
         return f"function {function_name}"
@@ -780,13 +806,13 @@ class CommandBuilder_1_12(NodeBuilder):
         coord3 = self.build(node.coord3)
         return f"{coord1} {coord2} {coord3}"
 
-    def build_NamespaceIdNode(self, node):
+    def build_NamespaceIdNode(self, node, prefix=False):
         """
         Attributes:
             id_value (Token)
             namespace (Token or None)
         """
-        id_value = self.build(node.id_value, prefix=True)
+        id_value = self.build(node.id_value, prefix=prefix)
         namespace = ("minecraft" if node.namespace is None else self.build(node.namespace))
         return f"{namespace}:{id_value}"
 
@@ -1283,7 +1309,7 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             bossbar_id (NamespaceIdNode)
             sub_cmd (Token)
         """
-        bossbar_id = self.build(node.bossbar_id)
+        bossbar_id = self.build(node.bossbar_id, prefix=True)
         sub_cmd = self.build(node.sub_cmd)
         return f"store {node.store_type} bossbar {bossbar_id} {sub_cmd}"
 
@@ -1293,7 +1319,7 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             bossbar_id (NamespaceIdNode)
             json (JsonObjectNode)
         """
-        bossbar_id = self.build(node.bossbar_id)
+        bossbar_id = self.build(node.bossbar_id, prefix=True)
         json = self.build(node.json)
         return f"bossbar add {bossbar_id} {json}"
 
@@ -1302,7 +1328,7 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
         Node Attributes:
             bossbar_id (NamespaceIdNode)
         """
-        bossbar_id = self.build(node.bossbar_id)
+        bossbar_id = self.build(node.bossbar_id, prefix=True)
         return f"bossbar remove {bossbar_id}"
 
     def build_BossbarGetNode(self, node):
@@ -1311,7 +1337,7 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             bossbar_id (NamespaceIdNode)
             sub_cmd (Token)
         """
-        bossbar_id = self.build(node.bossbar_id)
+        bossbar_id = self.build(node.bossbar_id, prefix=True)
         sub_cmd = self.build(node.sub_cmd)
         return f"bossbar get {bossbar_id} {sub_cmd}"
 
@@ -1322,7 +1348,7 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             arg (Token)
             arg_value (Token, JsonObjectNode)
         """
-        bossbar_id = self.build(node.bossbar_id)
+        bossbar_id = self.build(node.bossbar_id, prefix=True)
         arg = self.build(node.arg)
         arg_value = self.build(node.arg_value)
         return f"bossbar set {bossbar_id} {arg} {arg_value}"
@@ -1373,20 +1399,20 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
         """
         Node Attributes:
             selector (SelectorNode)
-            effect_id (NamespaceIdNode or None)
+            effect_id (Token or None)
         """
         selector = self.build(node.selector)
         if node.effect_id is None:
             return f"effect clear {selector}"
 
         effect_id = self.build(node.effect_id)
-        return f"effect clear {selector} {effect_id}"
+        return f"effect clear {selector} minecraft:{effect_id}"
 
     def build_EffectGiveNode(self, node):
         """
         Node Attributes:
             selector (SelectorNode)
-            effect_id (NamespaceIdNode)
+            effect_id (Token)
             duration (Token or None)
             level (Token or None)
             hide_particles (bool)
@@ -1396,7 +1422,7 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
         duration = "2" if node.duration is None else self.build(node.duration)
         level = "0" if node.level is None else self.build(node.level)
         hide_particles = "true" if node.hide_particles else "false"
-        return f"effect give {selector} {effect_id} {duration} {level} {hide_particles}"
+        return f"effect give {selector} minecraft:{effect_id} {duration} {level} {hide_particles}"
 
     def build_DataPathNode(self, node):
         """
