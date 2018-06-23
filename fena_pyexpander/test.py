@@ -15,8 +15,8 @@ if __name__ == "__main__":
     import sys
     sys.path.append("..")
 
-from fena.assert_utils import assert_type
-from fena.repr_utils import addrepr
+from fenalib.assert_utils import assert_type
+from fenalib.repr_utils import addrepr
 
 LINESEP = "\n"
 LINESEP_LEN = len(LINESEP)

@@ -5,14 +5,14 @@ if __name__ == "__main__":
 
     # note that this is actually used since importing it sets up the logging
     # pylint: disable=unused-import
-    import fena.logging_setup as logging_setup
+    import fenalib.logging_setup as logging_setup
 
 import os
 import json
 import logging
 from types import MappingProxyType
 
-from fena.assert_utils import assert_type
+from fenalib.assert_utils import assert_type
 
 """
 Gets all config data from the config folder
@@ -208,16 +208,18 @@ def _get_json_config_data(version):
 
         # if it's a string, it refers back to the previous version completely
         # note that this does not prevent recursion
-        while isinstance(json_object[version], str):
-            version = json_object[version]
+        # use 'temp_version' to not change the actual version variable for the next usage
+        temp_version = version
+        while isinstance(json_object[temp_version], str):
+            temp_version = json_object[temp_version]
 
         # when config data has new versions
-        if isinstance(json_object[version], list):
-            json_options[option_name] = json_object[version]
-        elif isinstance(json_object[version], dict):
-            for option in json_object[version]:
-                json_options[option] = json_object[version][option]
-        elif json_object[version] is None:
+        if isinstance(json_object[temp_version], list):
+            json_options[option_name] = json_object[temp_version]
+        elif isinstance(json_object[temp_version], dict):
+            for option in json_object[temp_version]:
+                json_options[option] = json_object[temp_version][option]
+        elif json_object[temp_version] is None:
             # doesn't do anything since there is no need to replace None with a different value
             pass
         else:
@@ -289,7 +291,10 @@ get_all_data()
 if __name__ == "__main__":
     get_all_data(version="1.12")
     print(json.dumps(dict(ConfigData().variables), indent=4))
-    print(ConfigData().variables)
+    print(list(ConfigData().team_options))
+    get_all_data(version="1.13")
+    print(list(ConfigData().team_options))
+    # print(ConfigData().variables)
     # print(list(ConfigData().variables))
     # print(ConfigData().replaceitem_entity_slots)
     # print(config_data)

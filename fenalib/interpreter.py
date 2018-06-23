@@ -6,17 +6,17 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-    import fena.logging_setup as logging_setup
+    import fenalib.logging_setup as logging_setup
 
-from fena.assert_utils import assert_type
-from fena.parser import Parser
-from fena.token_classes import TypedToken
-from fena.str_utils import encode_str, decode_str
-from fena.node_visitors import NodeVisitor
-from fena.config_data import ConfigData
-from fena.in_file_config import InFileConfig
-from fena.command_builder import CommandBuilder_1_12, CommandBuilder_1_13
-from fena.mcfunction import McFunction
+from fenalib.assert_utils import assert_type
+from fenalib.parser import Parser
+from fenalib.token_classes import TypedToken
+from fenalib.str_utils import encode_str, decode_str
+from fenalib.node_visitors import NodeVisitor
+from fenalib.config_data import ConfigData
+from fenalib.in_file_config import InFileConfig
+from fenalib.command_builder import CommandBuilder_1_12, CommandBuilder_1_13
+from fenalib.mcfunction import McFunction
 
 class Interpreter(NodeVisitor):
     """
@@ -151,9 +151,9 @@ if __name__ == "__main__":
         - have the lexer/parser require ":" at the end of a folder and mfunc statement
     """
 
-    from fena.lexer import Lexer
-    from fena.parser import Parser
-    from fena.writer import Writer
+    from fenalib.lexer import Lexer
+    from fenalib.parser import Parser
+    from fenalib.writer import Writer
 
     # logging_setup.format_file_name("test_lexer.txt")
     # with open("test_lexer.txt") as file:

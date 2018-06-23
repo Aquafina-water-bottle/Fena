@@ -19,10 +19,10 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-from fena.assert_utils import assert_type
-from fena.repr_utils import addrepr
-from fena.mcfunction import McFunction
-from fena.lexical_token import Token
+from fenalib.assert_utils import assert_type
+from fenalib.repr_utils import addrepr
+from fenalib.mcfunction import McFunction
+from fenalib.lexical_token import Token
 
 @addrepr
 class InFileConfig:

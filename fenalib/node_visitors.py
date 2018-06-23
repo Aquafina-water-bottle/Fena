@@ -3,9 +3,9 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-from fena.assert_utils import assert_type
-from fena.lexical_token import Token
-from fena.nodes import CmdNode, StmtNode, ProgramNode
+from fenalib.assert_utils import assert_type
+from fenalib.lexical_token import Token
+from fenalib.nodes import CmdNode, StmtNode, ProgramNode
 
 class TreePostfixTraversal:
     """

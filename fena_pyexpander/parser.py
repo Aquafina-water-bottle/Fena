@@ -26,8 +26,8 @@ if __name__ == "__main__":
     import sys
     sys.path.append("..")
 
-from fena.assert_utils import assert_type
-from fena.repr_utils import addrepr
+from fenalib.assert_utils import assert_type
+from fenalib.repr_utils import addrepr
 
 # These are now CONSTANT like how global variables should be
 LINESEP = "\n"

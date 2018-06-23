@@ -13,13 +13,12 @@ import os
 
 import pyexpander.lib as pyexpander
 
-import fenalib.logging_setup as logging_setup
-from fenalib.config_data import get_all_data
-from fenalib.pre_pyexpander import parse_pre_pyexpander
-from fenalib.lexer import Lexer
-from fenalib.parser import Parser
-from fenalib.interpreter import Interpreter
-from fenalib.writer import Writer, write_after_pre_pyexpander, write_after_pyexpander
+import fenalib.logging_setup
+import fenalib.config_data
+import fenalib.lexer
+import fenalib.parser
+import fenalib.writer
+import fenalib.interpreter
 
 semantic_version = "s6.0.0"
 public_version = "v0.3.0-ALPHA"
@@ -33,8 +32,7 @@ def get_args():
 
     # optional output directory
     default_output_path = "functions/fena"
-    parser.add_argument("output_path", nargs="?", default=default_output_path,
-                        help="the directory in which all mcfunctions will be created, with the default being 'functions/fena'")
+    parser.add_argument("output_path", nargs="?", default=default_output_path, help="the directory in which all mcfunctions will be created, with the default being 'functions/fena'")
 
     # cleans mcfunctions
     parser.add_argument("-c", "--clean", help="removes all mcfunction files inside the output directory", action="store_true")
@@ -53,6 +51,32 @@ def get_args():
     return args
 
 
+def get_content(args):
+    """
+    Gets the file contents within the main file
+
+    Raises:
+        EOFError: if there is literally no content on the main file
+    """
+
+    file_name = args.file_name
+
+    # gets the file path of the main fena file
+    with open(file_name, "r") as file:
+        dir_path = os.path.dirname(os.path.realpath(file.name))
+
+        # add the directory of the file to the import path
+        # allows any py commands in the file to import py files relative to said file
+        sys.path.append(dir_path)
+        source_file_text = file.read()
+
+        # raises an exception if pyexpander fails to parse
+        text = pyexpander.expandToStr(source_file_text, filename=file_name)[0]
+        logging.debug("\n" + text)
+
+    return text
+
+
 def main():
     print("Fena:", "semantic_version={}".format(semantic_version), "public_version={}".format(public_version), sep="\n")
 
@@ -65,42 +89,27 @@ def main():
 
     #  overrides the version if necessary
     if args.version is not None:
-        get_all_data(args.version)
+        fena.config_data.get_all_data(args.version)
 
+    # required to get relative path of the config, debug_info and parsed_cmds file
+    text = get_content(args)
     file_name = args.file_name
     output_path = args.output_path
-    with open(file_name) as file:
-        text = file.read()
-
-    # pre pyexpander
-    text = parse_pre_pyexpander(text)
-    write_after_pre_pyexpander(text)
-
-    # add the directory of the file to the import path
-    # allows any py commands in the file to import py files relative to said file
-    dir_path = os.path.dirname(os.path.realpath(file_name))
-    sys.path.append(dir_path)
-
-    # raises an exception if pyexpander fails to parse
-    text = pyexpander.expandToStr(text, filename=file_name)[0]
-    write_after_pyexpander(text)
 
     # sets the file name for logging
-    logging_setup.format_file_name(file_name)
+    fena.logging_setup.format_file_name(file_name)
 
-    lexer = Lexer(text)
-    parser = Parser(lexer)
-    interpreter = Interpreter(parser, output_path)
+    lexer = fena.lexer.Lexer(text)
+    parser = fena.parser.Parser(lexer)
+    interpreter = fena.interpreter.Interpreter(parser, output_path)
     mcfunctions = interpreter.interpret()
 
-    writer = Writer(mcfunctions, args.clean, args.debug)
+    writer = fena.writer.Writer(mcfunctions, args.clean, args.debug)
     writer.write()
 
 if __name__ == '__main__':
-    # print("test")
-
     try:
         main()
     except Exception as e:
         logging.exception(e) # type: ignore
-
+    # print(get_args())

@@ -15,20 +15,22 @@ CONSOLE_DATE_FMT = "%H:%M:%S"
 FORMAT = "[%(asctime)s] [{}/%(levelname)s]: %(message)s"
 
 
-def setup_logging():
+def setup_logging(file_path=None):
     """
     creates 2 loggers:
         file logger, set at the debug level
         console logger, set at the warning level
     """
 
-    FILE_NAME = "../debug_info.log"
+    # note that the file path is relative to this file only no matter where this is imported
+    if file_path is None:
+        file_path = "log/debug_info.log"
     dir_path = os.path.dirname(__file__)
-    file_path = os.path.join(dir_path, FILE_NAME)
-    
+    file_path = os.path.join(dir_path, file_path)
+
     # actually sets up the logger
     logging.basicConfig(format=FORMAT.format("?"), datefmt=FILE_DATE_FMT, filename=file_path, level=FILE_LEVEL, filemode=FILE_MODE)
-    
+
     # sets up the console logger
     console = logging.StreamHandler()
     console.setLevel(CONSOLE_LEVEL)
@@ -38,7 +40,7 @@ def setup_logging():
 
     logging.debug("Logger has been set up")
 
-    
+
 def format_file_name(file_name):
     """
     Simple "hack" to format the logger to include the file name when it didn't before
@@ -46,15 +48,16 @@ def format_file_name(file_name):
     log_format = FORMAT.format(file_name)
     file_formatter = logging.Formatter(log_format, datefmt=FILE_DATE_FMT)
     console_formatter = logging.Formatter(log_format, datefmt=CONSOLE_DATE_FMT)
-    
+
     file_handler, console_handler = logging.getLogger().handlers
     file_handler.setFormatter(file_formatter)
     console_handler.setFormatter(console_formatter)
 
 
-setup_logging()
+# setup_logging()
 
 def test():
+    setup_logging()
     logging.debug("test entry")
 
 if __name__ == "__main__":

@@ -10,6 +10,9 @@ def test_simple_cmds():
     test_cmd(r"tag @s + _lol {Invulnerable:1b}", r"scoreboard players tag @s add fena.lol {Invulnerable:1b}")
     test_cmd(r"tag @s - _lol {Invulnerable:1b}", r"scoreboard players tag @s remove fena.lol {Invulnerable:1b}")
 
-
+    test_cmd("particle happy_villager ~ ~ ~")
     test_cmd("particle minecraft:happy_villager ~ ~ ~")
+    test_cmd(r'give @s diamond_pickaxe 1 0 {display:{Name:"test"}}')
+    test_cmd(r'give @s minecraft:diamond_pickaxe 1 0 {display:{Name:"test"}}')
+    test_cmd(r'give @s minecraft:diamond_pickaxe')
 

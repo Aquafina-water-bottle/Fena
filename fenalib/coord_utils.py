@@ -3,9 +3,9 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-from fena.config_data import ConfigData
-from fena.token_classes import TypedToken
-from fena.number_utils import is_number
+from fenalib.config_data import ConfigData
+from fenalib.token_classes import TypedToken
+from fenalib.number_utils import is_number
 
 config_data = ConfigData()
 

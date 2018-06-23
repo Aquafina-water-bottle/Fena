@@ -6,7 +6,7 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-from fena.assert_utils import assert_type
+from fenalib.assert_utils import assert_type
 
 r"""
 Runs a quick script before pyexpander is run
@@ -288,7 +288,7 @@ class Parser:
                 yield finalize_line(self.advance(), dedents=dedents)
 
 
-def parse_pre_expander(text):
+def parse_pre_pyexpander(text):
     """
     Returns:
         Properly parsed text to be used by pyexpanxer

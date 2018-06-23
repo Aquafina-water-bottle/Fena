@@ -1,5 +1,5 @@
-from fena.assert_utils import assert_type, assert_list_types
-from fena.repr_utils import addrepr
+from fenalib.assert_utils import assert_type, assert_list_types
+from fenalib.repr_utils import addrepr
 
 @addrepr
 class McFunction:

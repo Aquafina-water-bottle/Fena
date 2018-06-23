@@ -1,4 +1,4 @@
-from fena.assert_utils import assert_type
+from fenalib.assert_utils import assert_type
 import logging
 
 class TokenPositionRecorder:

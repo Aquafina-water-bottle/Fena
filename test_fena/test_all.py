@@ -11,9 +11,11 @@ if __name__ == "__main__":
 import logging
 import time
 
-import fena.logging_setup as logging_setup
-from fena.config_data import get_all_data, ConfigData
-from fena.in_file_config import InFileConfig
+import fenalib.logging_setup as logging_setup
+logging_setup.setup_logging()
+
+from fenalib.config_data import get_all_data, ConfigData
+from fenalib.in_file_config import InFileConfig
 
 import test_fena.v1_12.test_all
 import test_fena.v1_13.test_all

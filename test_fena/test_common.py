@@ -5,10 +5,10 @@ import sys
 if __name__ == "__main__":
     sys.path.append("..")
 
-from fena.command_builder import CommandBuilder_1_12, CommandBuilder_1_13
-from fena.config_data import ConfigData
-from fena.lexer import Lexer
-from fena.parser import Parser
+from fenalib.command_builder import CommandBuilder_1_12, CommandBuilder_1_13
+from fenalib.config_data import ConfigData
+from fenalib.lexer import Lexer
+from fenalib.parser import Parser
 
 config_data = ConfigData()
 full_dir_path = os.path.realpath("functions/fena")

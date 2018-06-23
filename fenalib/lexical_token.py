@@ -5,12 +5,12 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-from fena.assert_utils import assert_type
-from fena.token_position import TokenPosition
-from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken
-from fena.token_classes import SimpleTokenClass, TokenClass
-from fena.coord_utils import is_coord
-from fena.config_data import ConfigData
+from fenalib.assert_utils import assert_type
+from fenalib.token_position import TokenPosition
+from fenalib.token_classes import TypedToken, DelimiterToken, WhitespaceToken
+from fenalib.token_classes import SimpleTokenClass, TokenClass
+from fenalib.coord_utils import is_coord
+from fenalib.config_data import ConfigData
 
 """
 Note that this file is named "lexical_token" because if it was named "token",

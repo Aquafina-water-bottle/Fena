@@ -1,4 +1,3 @@
-import os
 import logging
 import inspect
 import itertools
@@ -8,15 +7,15 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-    import fena.logging_setup as logging_setup
+    import fenalib.logging_setup as logging_setup
+    logging_setup.setup_logging()
 
-from fena.assert_utils import assert_type
-from fena.lexical_token import Token
-from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken
-from fena.lexer import Lexer
-# from fena.nodes import *
+from fenalib.assert_utils import assert_type
+from fenalib.lexical_token import Token
+from fenalib.token_classes import TypedToken, DelimiterToken, WhitespaceToken
+from fenalib.lexer import Lexer
 
-from fena.nodes import (ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode,
+from fenalib.nodes import (ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode,
     ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode,
 
     ExecuteCmdNode, ExecuteSubLegacyArg,
@@ -42,16 +41,17 @@ from fena.nodes import (ProgramNode, McFunctionNode, FolderNode, PrefixNode, Con
     BossbarAddNode, BossbarRemoveNode, BossbarGetNode, BossbarSetNode,
     DataGetNode, DataMergeNode, DataRemoveNode,
     EffectClearNode, EffectGiveNode,
+    ItemNode, ItemGiveNode, ItemClearNode, ItemReplaceEntityNode, ItemReplaceBlockNode,
     TagAddNode, TagRemoveNode,
     TeamAddNode, TeamRemoveNode, TeamEmptyNode, TeamJoinNode, TeamLeaveNode, TeamOptionNode,
     XpGetNode, XpMathNode,
 
-    Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, BlockStateNode, NamespaceIdNode, DataPathNode, ItemNode)
+    Vec3Node, Vec2Node, IntRangeNode, NumberRangeNode, BlockNode, BlockStateNode, NamespaceIdNode, DataPathNode)
 
-from fena.node_visitors import NodeBuilder, NodeVisitor
-from fena.coord_utils import is_coord_token, are_coords
-from fena.config_data import ConfigData
-from fena.number_utils import is_signed_int, is_nonneg_int, is_pos_int, is_number
+from fenalib.node_visitors import NodeBuilder, NodeVisitor
+from fenalib.coord_utils import is_coord_token, are_coords
+from fenalib.config_data import ConfigData
+from fenalib.number_utils import is_signed_int, is_nonneg_int, is_pos_int, is_number
 
 
 r"""
@@ -69,7 +69,8 @@ constobj_stmt ::= "constobj" && STR
 
 command_suite ::= [NEWLINE, (command, NEWLINE)]*
 command ::= (execute_cmd)? && [sb_cmd, simple_cmd]
-simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, tag_cmd, team_cmd, xp_cmd, (COMMAND_KEYWORD && (STR, selector, nbt, json, item)*)]
+simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, item_cmd, tag_cmd, team_cmd, xp_cmd,
+                (COMMAND_KEYWORD && (STR, selector, nbt, json, item, namespace_id, group_tag)*)]
 
 execute_cmd_1_12 ::= selector && (vec3)? && (exec_sub_if)? && (execute_cmd_1_12)? && ":"
 execute_cmd_1_13 ::= [selector, vec3, exec_sub_cmds]+ && ":"
@@ -128,6 +129,15 @@ effect_give ::= selector && "+" && effect_id && (pos_int && ((nonneg_int)? && ["
 # effect_id are defined under effects.json
 
 function_cmd ::= "function" && STR
+
+item_cmd ::= "item" && [item_give, item_clear, item_replace_entity, item_replace_block]
+item_give ::= selector && "+" && item && (INT)?
+item_clear ::= selector && "-" && ["*", item] && (INT)?
+item_replace_entity ::= selector && entity_slots && "=" && item && (INT)?
+item_replace_block ::= vec3 && block_slots && "=" && item && (INT)?
+item ::= ("minecraft" & ":")? & item_id & item_damage? & nbt?
+item_damage ::= "[" & INT & "]"
+# item_id, entity_slots and block_slots are defined under items.json and replaceitem.json
 
 tag_cmd ::= "tag" && [tag_add, tag_remove]
 tag_add ::= selector && "+" && STR
@@ -221,7 +231,7 @@ block_state ::= STR && "=" && STR
 
 data_type ::= ["byte", "short", "int", "long", "float", "double"]
 namespace_id ::= STR && (":" && STR)?
-item ::= ("minecraft" & ":")? & item_id & item_data? & nbt?
+group_tag ::= "#" && STR && ":" && STR
 """
 
 def all_permutations(iterable):
@@ -255,16 +265,8 @@ class Parser:
 
     config_data = ConfigData()
 
-    # nbt_int_ends = frozenset({"b", "s", "L"})
-    # nbt_number_ends = frozenset({"b", "s", "L", "f", "d"})
-    # nbt_array_start = frozenset({"I", "B", "L"})
-    # sb_special_operators = frozenset({"enable", "reset", "<-"})
-    # sb_math_operators = frozenset({"=", "<=", ">=", "swap", "+=", "-=", "*=", "/=", "%="})
-    # statement_keywords = frozenset({"mfunc", "folder", "prefix", "constobj"})
-
     json_parse_options = {
         "bossbar_set": "bossbar_set",
-        # "bossbar_get": "bossbar_get",
         "team_options": "team_options",
         "selector": "selector_argument_details"
     }
@@ -613,20 +615,7 @@ class Parser:
                 if not self.current_token.matches(WhitespaceToken.DEDENT):
                     self.eat(WhitespaceToken.NEWLINE)
 
-        # while self.current_token.matches_any_of(WhitespaceToken.NEWLINE, TypedToken.STRING, DelimiterToken.AT):
-        #     # base case is if a newline is not met
-        #     if self.current_token.matches(WhitespaceToken.NEWLINE):
-        #         self.eat(WhitespaceToken.NEWLINE)
-
-        #     elif self.current_token.matches_any_of(TypedToken.STRING, DelimiterToken.AT):
-        #         command_node = self.command()
-        #         command_nodes.append(command_node)
-
-        #     else:
-        #         self.error("Expected a newline, command or statement specifier")
-
         logging.debug(f"End command compound at {self.current_token!r}")
-
         return command_nodes
 
     def statement(self):
@@ -703,9 +692,6 @@ class Parser:
         statement_nodes = self.statement_suite()
         self.eat(WhitespaceToken.DEDENT)
 
-        # resets the current folder
-        # self.symbol_table = self.symbol_table.enclosing_scope
-
         return FolderNode(folder_token, statement_nodes)
 
     def prefix_stmt(self):
@@ -717,12 +703,6 @@ class Parser:
         """
         self.eat(TypedToken.STRING, value="prefix")
         prefix_token = self.eat(TypedToken.STRING, error_message="Expected a string after a prefix statement")
-
-        # requires the prefix to be defined in the global scope
-        # if not self.symbol_table.is_global:
-        #     self.error("Cannot define a prefix when the scope is not global")
-
-        # self.in_file_config.prefix = prefix_token
         return PrefixNode(prefix_token)
 
     def constobj_stmt(self):
@@ -734,12 +714,6 @@ class Parser:
         """
         self.eat(TypedToken.STRING, value="constobj")
         constobj_token = self.eat(TypedToken.STRING, error_message="Expected a string after a constobj statement")
-
-        # requires the constobj to be defined in the global scope
-        # if not self.symbol_table.is_global:
-        #     self.error("The constobj cannot be set outside the global context")
-
-        # self.in_file_config.constobj = constobj_token
         return ConstObjNode(constobj_token)
 
     def command(self):
@@ -1306,7 +1280,8 @@ class Parser:
 
     def simple_cmd(self):
         """
-        simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, tag_cmd, team_cmd, xp_cmd, (COMMAND_KEYWORD && (STR, selector, nbt, json)*)]
+        simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, item_cmd, tag_cmd, team_cmd, xp_cmd,
+                        (COMMAND_KEYWORD && (STR, selector, nbt, json, item, namespace_id, group_tag)*)]
 
         Note that a simple command can turn into a scoreboard command
         because "tp" can be a fake player name being set to a scoreboard value
@@ -1319,7 +1294,7 @@ class Parser:
         # advances the command name
         command_name_token = self.eat(TypedToken.STRING)
 
-        if command_name in ("bossbar", "data", "effect", "function", "tag", "team", "xp"):
+        if command_name in ("bossbar", "data", "effect", "function", "item", "tag", "team", "xp"):
             # for each command name, does something like self.bossbar_cmd()
             method_name = f"{command_name}_cmd"
             method = getattr(self, method_name, self.invalid_method)
@@ -1343,23 +1318,19 @@ class Parser:
         else:
             nodes = [command_name_token]
 
-        # STR, selector, nbt, json
+        # STR, selector, nbt, json, namespace_ids
         while not self.current_token.matches_any_of(WhitespaceToken.NEWLINE, WhitespaceToken.EOF, WhitespaceToken.DEDENT):
             if self.current_token.matches(DelimiterToken.NUMBER_SIGN):
-                # TODO
-                raise NotImplementedError()
+                group_tag_node = self.group_tag()
+                nodes.append(group_tag_node)
 
             elif self.current_token.matches(DelimiterToken.COLON):
                 # namespace, possibly item
                 if not nodes:
                     self.error("Expected an item before a colon to specify a proper namespace")
                 namespace = nodes.pop()
-                self.advance()
-                if (self.current_token.matches(TypedToken.STRING, values=Parser.config_data.items) and namespace.value == "minecraft"):
-                    return self.item()
-
-                id_value = self.eat(TypedToken.STRING)
-                return NamespaceIdNode(id_value, namespace)
+                namespace_id_node = self.namespace_id(begin_id=namespace)
+                nodes.append(namespace_id_node)
 
             elif self.current_token.matches(DelimiterToken.AT):
                 selector_node = self.selector()
@@ -1368,9 +1339,6 @@ class Parser:
             elif self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
                 tag_node = self.curly_bracket_tag()
                 nodes.append(tag_node)
-
-            elif self.current_token.matches(TypedToken.STRING, values=Parser.config_data.items):
-                return self.item()
 
             else:
                 str_token = self.eat(TypedToken.STRING)
@@ -1584,6 +1552,135 @@ class Parser:
             function_id = self.eat(TypedToken.STRING)
             return FunctionCmdNode(function_id, function_namespace)
         return FunctionCmdNode(function_id)
+
+    def item_cmd(self):
+        """
+        item_cmd ::= "item" && [item_give, item_clear, item_replace_entity, item_replace_block]
+        """
+        # selector
+        if self.current_token.matches(DelimiterToken.AT):
+            selector = self.selector()
+            if self.current_token.matches(TypedToken.STRING, value="+"):
+                return self.item_give(selector)
+            if self.current_token.matches(TypedToken.STRING, value="-"):
+                return self.item_clear(selector)
+            return self.item_replace_entity(selector)
+
+        # coordinates for replaceitem block
+        if is_coord_token(self.current_token):
+            return self.item_replace_block()
+
+        self.error("Expected either a selector or a coordinate after 'item'")
+
+    def item_give(self, selector):
+        """
+        item_give ::= selector && "+" && item && (INT)?
+
+        Returns:
+            ItemGiveNode
+        """
+        self.eat(TypedToken.STRING, value="+")
+        item = self.item()
+        if self.current_token.matches(TypedToken.STRING) and is_nonneg_int(self.current_token.value):
+            count = self.advance()
+            return ItemGiveNode(selector, item, count)
+        return ItemGiveNode(selector, item)
+
+
+    def item_clear(self, selector):
+        """
+        item_clear ::= selector && "-" && ["*", item] && (INT)?
+
+        Returns:
+            ItemClearNode
+        """
+        self.eat(TypedToken.STRING, value="-")
+        if self.current_token.matches(TypedToken.STRING, value="*"):
+            item = self.advance()
+        else:
+            item = self.item()
+        if self.current_token.matches(TypedToken.STRING) and is_nonneg_int(self.current_token.value):
+            count = self.advance()
+            return ItemClearNode(selector, item, count)
+        return ItemClearNode(selector, item)
+
+    def item_replace_entity(self, selector):
+        """
+        item_replace_entity ::= selector && entity_slots && "=" && item && (INT)?
+        entity_slot is defined under replaceitem.json
+
+        Returns:
+            ItemReplaceEntity
+        """
+        entity_slot = self.eat(TypedToken.STRING, values=Parser.config_data.replaceitem_entity_slots)
+        self.eat(TypedToken.STRING, value="=")
+        item = self.item()
+        if self.current_token.matches(TypedToken.STRING) and is_nonneg_int(self.current_token.value):
+            count = self.advance()
+            return ItemReplaceEntityNode(selector, entity_slot, item, count)
+        return ItemReplaceEntityNode(selector, entity_slot, item)
+
+    def item_replace_block(self):
+        """
+        item_replace_block ::= vec3 && block_slots && "=" && item && (INT)?
+        block_slot is defined under replaceitem.json
+
+        Returns:
+            ItemReplaceBlock
+        """
+        vec3 = self.vec3()
+        block_slot = self.eat(TypedToken.STRING, values=Parser.config_data.replaceitem_block_slots)
+        self.eat(TypedToken.STRING, value="=")
+        item = self.item()
+        if self.current_token.matches(TypedToken.STRING) and is_nonneg_int(self.current_token.value):
+            count = self.advance()
+            return ItemReplaceBlockNode(vec3, block_slot, item, count)
+        return ItemReplaceBlockNode(vec3, block_slot, item)
+
+
+    def item(self):
+        """
+        item ::= ("minecraft" & ":")? & item_id & item_damage? & nbt?
+        item_id is defined under items.json
+
+        Returns:
+            ItemNode
+        """
+        if self.current_token.matches(TypedToken.STRING, value="minecraft"):
+            self.advance()
+            self.eat(DelimiterToken.COLON)
+
+        item_id = self.eat(TypedToken.STRING, values=Parser.config_data.items)
+
+        if self.current_token.matches(DelimiterToken.OPEN_SQUARE_BRACKET):
+            item_damage = self.item_damage()
+        else:
+            item_damage = None
+
+        if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
+            nbt = self.nbt()
+        else:
+            nbt = None
+
+        return ItemNode(item_id, item_damage, nbt)
+
+
+    def item_damage(self):
+        """
+        item_damage ::= "[" & INT & "]"
+
+        Note that this only exists in 1.12
+
+        Returns:
+            Token
+        """
+        if Parser.config_data.version != "1.12":
+            self.error("Cannot get item damage for any versions past 1.12")
+        self.advance()
+        item_damage = self.eat(TypedToken.INT)
+        self.eat(DelimiterToken.CLOSE_SQUARE_BRACKET)
+        return item_damage
+
 
     def tag_cmd(self):
         """
@@ -2406,9 +2503,9 @@ class Parser:
         """
         coord ::= ("^", "~")? & [signed_int, signed_float]
         """
-        if is_coord_token(self.current_token):
-            return self.eat(TypedToken.STRING)
-        self.error("Expected a coordinate token")
+        if not is_coord_token(self.current_token):
+            self.error("Expected a coordinate token")
+        return self.eat(TypedToken.STRING)
 
     # def _coords(self, coord_num):
     #     """
@@ -2542,29 +2639,13 @@ class Parser:
 
         return NamespaceIdNode(id_value)
 
-    def item(self, ignore_minecraft=False):
-        """
-        item ::= ("minecraft" & ":")? & item_id & item_data? & nbt?
-
-        Returns:
-            ItemNode
-        """
-        if not ignore_minecraft and self.current_token.matches(TypedToken.STRING, value="minecraft"):
-            self.advance()
-            self.eat(DelimiterToken.COLON)
-
-        item_id = self.eat(TypedToken.STRING, values=Parser.config_data.items)
-        if self.current_token.matches(DelimiterToken.OPEN_CURLY_BRACKET):
-            nbt = self.nbt()
-            return ItemNode(item_id, nbt)
-        return ItemNode(item_id)
+    def group_tag(self):
+        raise NotImplementedError()
 
     def __repr__(self):
         return f"Parser[iterator={self.iterator!r}, current_token={self.current_token!r}]"
 
-if __name__ == "__main__":
-    from fena.lexer import Lexer
-
+def _test():
     logging_setup.format_file_name("test_lexer.txt")
 
     with open("test_lexer.txt") as file:
@@ -2576,6 +2657,9 @@ if __name__ == "__main__":
         parser.parse()
     except Exception as e:
         logging.exception(e) # type: ignore
+
+if __name__ == "__main__":
+    _test()
 
     # mcfunctions = parser.mcfunctions
     # for mcfunction in mcfunctions:
@@ -2596,3 +2680,4 @@ if __name__ == "__main__":
 
     # import doctest
     # doctest.testmod()
+

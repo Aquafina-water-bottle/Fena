@@ -5,10 +5,10 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-from fena.config_data import ConfigData
-from fena.repr_utils import addrepr
-from fena.assert_utils import assert_type, assert_list_types, assert_tuple_types
-from fena.lexical_token import Token
+from fenalib.config_data import ConfigData
+from fenalib.repr_utils import addrepr
+from fenalib.assert_utils import assert_type, assert_list_types, assert_tuple_types
+from fenalib.lexical_token import Token
 
 config_data = ConfigData()
 
@@ -539,7 +539,7 @@ class SimpleCmdNode(MainCmdNode):
     """
     def __init__(self, tokens):
         assert_type(tokens, list)
-        assert_list_types(tokens, Token, SelectorNode, JsonObjectNode, NbtObjectNode)
+        assert_list_types(tokens, Token, SelectorNode, JsonObjectNode, NbtObjectNode, NamespaceIdNode)
         self.tokens = tokens
 
 class BossbarCmdNode(MainCmdNode, ABC):
@@ -684,6 +684,91 @@ class FunctionCmdNode(MainCmdNode):
         assert_type(namespace, Token, optional=True)
         self.value = value
         self.namespace = namespace
+
+
+class ItemCmdNode(MainCmdNode):
+    pass
+
+class ItemGiveNode(ItemCmdNode):
+    """
+    Attributes:
+        selector (SelectorNode)
+        item (ItemNode)
+        count (Token or None)
+    """
+    def __init__(self, selector, item, count=None):
+        assert_type(selector, SelectorNode)
+        assert_type(item, ItemNode)
+        assert_type(count, Token, optional=True)
+        self.selector = selector
+        self.item = item
+        self.count = count
+
+class ItemClearNode(ItemCmdNode):
+    """
+    Attributes:
+        selector (SelectorNode)
+        item (ItemNode or Token)
+        count (Token or None)
+    """
+    def __init__(self, selector, item, count=None):
+        assert_type(selector, SelectorNode)
+        assert_type(item, ItemNode, Token)
+        assert_type(count, Token, optional=True)
+        self.selector = selector
+        self.item = item
+        self.count = count
+
+class ItemReplaceEntityNode(ItemCmdNode):
+    """
+    Attributes:
+        selector (SelectorNode)
+        slot (Token)
+        item (ItemNode)
+        count (Token or None)
+    """
+    def __init__(self, selector, slot, item, count=None):
+        assert_type(selector, SelectorNode)
+        assert_type(slot, Token)
+        assert_type(item, ItemNode)
+        assert_type(count, Token, optional=True)
+        self.selector = selector
+        self.slot = slot
+        self.item = item
+        self.count = count
+
+class ItemReplaceBlockNode(ItemCmdNode):
+    """
+    Attributes:
+        vec3 (Vec3Node)
+        slot (Token)
+        item (ItemNode)
+        count (Token or None)
+    """
+    def __init__(self, vec3, slot, item, count=None):
+        assert_type(vec3, Vec3Node)
+        assert_type(slot, Token)
+        assert_type(item, ItemNode)
+        assert_type(count, Token, optional=True)
+        self.vec3 = vec3
+        self.slot = slot
+        self.item = item
+        self.count = count
+
+class ItemNode(CmdNode):
+    """
+    Attributes:
+        item_id (Token)
+        damage (Token or None)
+        nbt (NbtObjectNode or None)
+    """
+    def __init__(self, item_id, damage=None, nbt=None):
+        assert_type(item_id, Token)
+        assert_type(damage, Token, optional=True)
+        assert_type(nbt, NbtObjectNode, optional=True)
+        self.item_id = item_id
+        self.damage = damage
+        self.nbt = nbt
 
 
 class TagCmdNode(MainCmdNode):
@@ -1170,18 +1255,6 @@ class Vec3Node(CmdNode):
         self.coord1 = coord1
         self.coord2 = coord2
         self.coord3 = coord3
-
-class ItemNode(CmdNode):
-    """
-    Attributes:
-        item_id (Token)
-        nbt (NbtObjectNode or None)
-    """
-    def __init__(self, item_id, nbt=None):
-        assert_type(item_id, Token)
-        assert_type(nbt, NbtObjectNode, optional=True)
-        self.item_id = item_id
-        self.nbt = nbt
 
 class NamespaceIdNode(CmdNode):
     """

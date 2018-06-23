@@ -6,8 +6,26 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-from fena.mcfunction import McFunction
-from fena.assert_utils import assert_type, assert_list_types
+from fenalib.mcfunction import McFunction
+from fenalib.assert_utils import assert_type, assert_list_types
+
+PATH_TO_LOG_DIR = "log"
+
+def write_after_pre_pyexpander(text):
+    current_dir_path = os.path.dirname(__file__)
+    after_pre_pyexpander_path = os.path.join(current_dir_path, PATH_TO_LOG_DIR, "after_pre_pyexpander.txt")
+    with open(after_pre_pyexpander_path) as file:
+        file.write(text)
+    logging.debug("Successfully wriitten 'after_pre_pyexpander.txt'")
+
+
+def write_after_pyexpander(text):
+    current_dir_path = os.path.dirname(__file__)
+    after_pyexpander_path = os.path.join(current_dir_path, PATH_TO_LOG_DIR, "after_pyexpander.txt")
+    with open(after_pyexpander_path) as file:
+        file.write(text)
+    logging.debug("Successfully wriitten 'after_pyexpander.txt'")
+
 
 class Writer:
     """
@@ -20,8 +38,9 @@ class Writer:
 
     Writes:
         - each mcfunction file based off of their full path
-        - fena/src/parsed_cmds.txt to summarize all commands for each mcfunction file
+        - fenalib/log/parsed_cmds.txt to summarize all commands for each mcfunction file
     """
+
     def __init__(self, mcfunctions, clean=False, debug=False):
         assert_list_types(mcfunctions, McFunction)
         assert_type(clean, bool)
@@ -84,7 +103,7 @@ class Writer:
     def write_parsed_commands(self):
         # gets the directory path of this current file path
         current_dir_path = os.path.dirname(__file__)
-        parsed_cmds_path = os.path.join(current_dir_path, "../parsed_cmds.txt")
+        parsed_cmds_path = os.path.join(current_dir_path, PATH_TO_LOG_DIR, "parsed_cmds.txt")
 
         with open(parsed_cmds_path, "w") as file:
             for mcfunction in self.mcfunctions:

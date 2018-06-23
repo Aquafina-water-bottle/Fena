@@ -3,7 +3,7 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-from fena.pre_expander import parse_pre_expander
+from fenalib.pre_pyexpander import parse_pre_pyexpander
 
 input_str = """
 # python code
@@ -145,7 +145,7 @@ $endif
 
 
 def test_pre_pyexpander():
-    assert output_str == parse_pre_expander(input_str)
+    assert output_str == parse_pre_pyexpander(input_str)
 
     # print(repr(parse_pre_expander(input_str)))
     # print(repr(output_str))

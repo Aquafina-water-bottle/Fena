@@ -3,7 +3,7 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-import fena.logging_setup as logging_setup
+import fenalib.logging_setup as logging_setup
 logging_setup.format_file_name("test_lexer")
 
 from test_fena.test_common import test_lexer

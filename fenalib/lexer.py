@@ -7,14 +7,14 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-    import fena.logging_setup
+    import fenalib.logging_setup
 
-from fena.assert_utils import assert_type
-from fena.repr_utils import addrepr
-from fena.token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
-from fena.config_data import ConfigData
-from fena.lexical_token import Token
-from fena.token_position import TokenPosition, TokenPositionRecorder
+from fenalib.assert_utils import assert_type
+from fenalib.repr_utils import addrepr
+from fenalib.token_classes import TypedToken, DelimiterToken, WhitespaceToken, TokenValues
+from fenalib.config_data import ConfigData
+from fenalib.lexical_token import Token
+from fenalib.token_position import TokenPosition, TokenPositionRecorder
 
 @addrepr
 class Lexer:

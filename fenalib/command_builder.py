@@ -8,18 +8,18 @@ if __name__ == "__main__":
     sys.path.append("..")
     del sys
 
-    import fena.logging_setup as logging_setup
+    import fenalib.logging_setup as logging_setup
 
-from fena.assert_utils import assert_type
-from fena.lexical_token import Token
-from fena.config_data import ConfigData
-from fena.in_file_config import InFileConfig
-from fena.node_visitors import NodeBuilder
-from fena.nodes import CmdNode, IntRangeNode, SelectorDefaultGroupArgValueNode, JsonObjectNode, JsonMapNode, SelectorNode
-from fena.number_utils import is_signed_int
-from fena.str_utils import encode_str, decode_str
-from fena.lexer import Lexer
-from fena.parser import Parser
+from fenalib.assert_utils import assert_type
+from fenalib.lexical_token import Token
+from fenalib.config_data import ConfigData
+from fenalib.in_file_config import InFileConfig
+from fenalib.node_visitors import NodeBuilder
+from fenalib.nodes import CmdNode, IntRangeNode, SelectorDefaultGroupArgValueNode, JsonObjectNode, JsonMapNode, SelectorNode
+from fenalib.number_utils import is_signed_int
+from fenalib.str_utils import encode_str, decode_str
+from fenalib.lexer import Lexer
+from fenalib.parser import Parser
 
 class CommandBuilder_1_12(NodeBuilder):
     """
@@ -239,6 +239,83 @@ class CommandBuilder_1_12(NodeBuilder):
             node (SimpleCmdNode)
         """
         return self.iter_build(node.tokens, " ")
+
+    def build_ItemGiveNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            item (ItemNode)
+            count (Token or None)
+        """
+        selector = self.build(node.selector)
+        item_id = self.build(node.item.item_id)
+        count = "1" if node.count is None else self.build(node.count)
+        damage = "0" if node.item.damage is None else self.build(node.item.damage)
+
+        if node.item.nbt is not None:
+            nbt = self.build(node.item.nbt)
+            return f"give {selector} minecraft:{item_id} {count} {damage} {nbt}"
+
+        return f"give {selector} minecraft:{item_id} {count} {damage}"
+
+    def build_ItemClearNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            item (ItemNode)
+            count (Token or None)
+        """
+        selector = self.build(node.selector)
+        if isinstance(node.item, Token):
+            return f"clear {selector}"
+
+        item_id = self.build(node.item.item_id)
+        count = "-1" if node.count is None else self.build(node.count)
+        damage = "-1" if node.item.damage is None else self.build(node.item.damage)
+
+        if node.item.nbt is not None:
+            nbt = self.build(node.item.nbt)
+            return f"clear {selector} minecraft:{item_id} {damage} {count} {nbt}"
+
+        return f"clear {selector} minecraft:{item_id} {damage} {count}"
+
+    def build_ItemReplaceEntityNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            slot (Token)
+            item (ItemNode)
+            count (Token or None)
+        """
+        selector = self.build(node.selector)
+        slot = self.build(node.slot)
+        item_id = self.build(node.item.item_id)
+        count = "1" if node.count is None else self.build(node.count)
+        damage = "0" if node.item.damage is None else self.build(node.item.damage)
+
+        if node.item.nbt is not None:
+            nbt = self.build(node.item.nbt)
+            return f"replaceitem entity {selector} slot.{slot} minecraft:{item_id} {count} {damage} {nbt}"
+        return f"replaceitem entity {selector} slot.{slot} minecraft:{item_id} {count} {damage}"
+
+    def build_ItemReplaceBlockNode(self, node):
+        """
+        Node Attributes:
+            vec3 (Vec3Node)
+            slot (Token)
+            item (ItemNode)
+            count (Token or None)
+        """
+        vec3 = self.build(node.vec3)
+        slot = self.build(node.slot)
+        item_id = self.build(node.item.item_id)
+        count = "1" if node.count is None else self.build(node.count)
+        damage = "0" if node.item.damage is None else self.build(node.item.damage)
+
+        if node.item.nbt is not None:
+            nbt = self.build(node.item.nbt)
+            return f"replaceitem block {vec3} slot.{slot} minecraft:{item_id} {count} {damage} {nbt}"
+        return f"replaceitem block {vec3} slot.{slot} minecraft:{item_id} {count} {damage}"
 
     def build_TagAddNode(self, node):
         """
@@ -1441,6 +1518,61 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
 
         return f"xp get {selector} {sub_cmd}"
 
+    def build_ItemGiveNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            item (ItemNode)
+            count (Token or None)
+        """
+        selector = self.build(node.selector)
+        item = self.build(node.item)
+        count = "1" if node.count is None else self.build(node.count)
+        return f"give {selector} {item} {count}"
+
+    def build_ItemClearNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            item (ItemNode or Token)
+            count (Token or None)
+        """
+        selector = self.build(node.selector)
+        if isinstance(node.item, Token):
+            return f"clear {selector}"
+
+        item = self.build(node.item)
+        count = "-1" if node.count is None else self.build(node.count)
+        return f"clear {selector} {item} {count}"
+
+    def build_ItemReplaceEntityNode(self, node):
+        """
+        Node Attributes:
+            selector (SelectorNode)
+            slot (Token)
+            item (ItemNode)
+            count (Token or None)
+        """
+        selector = self.build(node.selector)
+        slot = self.build(node.slot)
+        item = self.build(node.item)
+        count = "1" if node.count is None else self.build(node.count)
+        return f"replaceitem entity {selector} {slot} {item} {count}"
+
+    def build_ItemReplaceBlockNode(self, node):
+        """
+        Node Attributes:
+            vec3 (Vec3Node)
+            slot (Token)
+            item (ItemNode)
+            count (Token or None)
+        """
+        vec3 = self.build(node.vec3)
+        slot = self.build(node.slot)
+        item = self.build(node.item)
+        count = "1" if node.count is None else self.build(node.count)
+        return f"replaceitem block {vec3} {slot} {item} {count}"
+
     def build_ItemNode(self, node):
         """
         Node Attributes:
@@ -1450,3 +1582,5 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
         item_id = self.build(node.item_id)
         nbt = "" if node.nbt is None else self.build(node.nbt)
         return f"minecraft:{item_id}{nbt}"
+
+
