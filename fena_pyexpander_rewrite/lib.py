@@ -1,14 +1,13 @@
-"""The main pyexpander library.
 """
-# pylint: disable=too-many-lines
+The main pyexpander library.
+"""
 
-import re
 import os
 import os.path
 import inspect
-
 import sys
 import keyword
+
 
 if __name__ == "__main__":
     # if this module is directly called like a script, we have to add the path
@@ -16,13 +15,9 @@ if __name__ == "__main__":
     # "pyexpander.[module]".
     sys.path.append("..")
 
-# pylint: disable=wrong-import-position
-# pylint: disable=invalid-name
+import pyexpander_fena.parser as EP
 
-import fena_pyexpander.parser as EP
-
-__version__= "1.8.3" #VERSION#
-assert __version__==EP.__version__
+VERSION = "1.8.3"
 
 # ---------------------------------------------
 # constants
@@ -117,8 +112,10 @@ def parseString(st):
     """parse a string."""
     return EP.parseAll(EP.IndexedString(st), 0)
 
-def parseFile(filename, no_stdin_warning):
-    """parse a file."""
+def parseFile(filename: str, no_stdin_warning: bool) -> str:
+    """
+    parse a file
+    """
     if filename is None:
         if not no_stdin_warning:
             sys.stderr.write("(reading from stdin)\n")
@@ -136,7 +133,8 @@ def parseFile(filename, no_stdin_warning):
 # ---------------------------------------------
 
 class ResultText(object):
-    """basically a list of strings with a current column property.
+    """
+    basically a list of strings with a current column property.
     """
     def __init__(self):
         """initialize the object."""
@@ -191,6 +189,7 @@ class Block(object):
     global variable dictionary and some more properties that are needed during
     execution of the program.
     """
+
     # pylint: disable=too-many-instance-attributes
     def posmsg(self, msg=None, pos=None):
         """return a message together with a position.
@@ -1293,15 +1292,12 @@ def __pyexpander_helper3(*args, **kwargs):
     """
     return (args,kwargs)
 
-# contains an indent at the end of the string
-rx_ENDING_INDENT = re.compile(r'\n[\t ]+$')
 def processToList(parse_list, filename=None,
                   external_definitions=None,
                   allow_nobracket_vars= False,
                   auto_continuation= False,
                   auto_indent= False,
-                  include_paths= None,
-                  auto_indent_python=False):
+                  include_paths= None):
     """Expand a parse list to a list of strings.
 
     args:
@@ -1320,8 +1316,6 @@ def processToList(parse_list, filename=None,
                                      the same level as the macro invocation.
         include_paths (list)       : A list of paths that are searched for the
                                      $include command. 
-        auto_indent_python (bool)   : If True, indents the contents of python
-                                     output to the same level
 
     returns a tuple containing:
         - The expanded text as a list of strings
@@ -1403,29 +1397,12 @@ def processToList(parse_list, filename=None,
             # The current block can be used like a dict in order to get values
             # of variables:
             if not block.skip:
-                # checks if there is an indent behind the variable as a literal
-                if auto_indent_python and isinstance(tp_last, EP.ParsedLiteral):
-                    search = re.search(rx_ENDING_INDENT, tp_last.string())
-                    if search is not None:
-                        # group() contains a newline at the beginning of the string
-                        indent = search.group()
-                        string = str(block[tp.string()])
-                        result.append(string.replace("\n", indent))
-                        continue
                 result.append(str(block[tp.string()]))
             continue
         if isinstance(tp, EP.ParsedEval):
             # if skip mode is off, evaluate the eval expression,
             # convert it to a string and insert the result:
             if not block.skip:
-                if auto_indent_python and isinstance(tp_last, EP.ParsedLiteral):
-                    search = re.search(rx_ENDING_INDENT, tp_last.string())
-                    if search is not None:
-                        # group() contains a newline at the beginning of the string
-                        indent = search.group()
-                        string = block.str_eval(tp.string())
-                        result.append(string.replace("\n", indent))
-                        continue
                 result.append(block.str_eval(tp.string()))
             continue
         if isinstance(tp, EP.ParsedCommand):
@@ -1463,7 +1440,7 @@ def processToList(parse_list, filename=None,
                     # evaluate all the named arguments:
                     args= block.eval_("__pyexpander_helper(%s)" % tp.args())
                     # first argument may be the name of the substfile,
-                    # this is undocumented and usually not used:
+                    # this is undocumented and usually not used: TRIGGEREDDD
                     fn= args[0]
                     if fn is not None:
                         block.set_substfile(fn, tp)
@@ -1530,7 +1507,7 @@ def processToList(parse_list, filename=None,
                 e= None
                 try:
                     # try to parse the arguments of $for():
-                    for_parts= EP.scanPyIn(tp.args())
+                    for_parts= EP.scan_py_in_stmt(tp.args())
                 except EP.ParseException as _e:
                     e= _e
                 if e is not None:
@@ -1564,7 +1541,7 @@ def processToList(parse_list, filename=None,
                 # $macro(...)
                 try:
                     # try to parse the arguments of $macro():
-                    identifiers= EP.scanPyIdentList(tp.args())
+                    identifiers= EP.scan_py_identifier_list(tp.args())
                 except EP.ParseException as _:
                     raise EP.ParseException(\
                           block.posmsg("error in \"macro\" command at", \
@@ -1593,7 +1570,7 @@ def processToList(parse_list, filename=None,
                     e= None
                     try:
                         # try to parse the arguments of $nonlocal():
-                        identifiers= EP.scanPyIdentList(tp.args())
+                        identifiers= EP.scan_py_identifier_list(tp.args())
                     except EP.ParseException as _e:
                         e= _e
                     if e is not None:
@@ -1621,7 +1598,7 @@ def processToList(parse_list, filename=None,
                         e= None
                         try:
                             # try to parse the arguments of $extend():
-                            identifiers= EP.scanPyIdentList(tp.args())
+                            identifiers= EP.scan_py_identifier_list(tp.args())
                         except EP.ParseException as _e:
                             e= _e
                         if e is not None:
@@ -1804,10 +1781,30 @@ def processToList(parse_list, filename=None,
         raise EP.ParseException(block.posmsg("unclosed block at"))
     return (result.list_(),block.globals_)
 
-def processToPrint(parse_list, **kwargs):
+def processToPrint(parse_list, filename=None,
+                   external_definitions=None,
+                   allow_nobracket_vars= False,
+                   auto_continuation= False,
+                   auto_indent= False,
+                   include_paths=None):
     """Gets a parse list, expand the text in it and print it.
 
-    args: see `processToList`
+    args:
+        parse_list                 : A parse list created by parseString().
+        filename (str)             : The filename, if given, is included in
+                                     possible error messages.
+        external_definitions (dict): A dict with items to import to the
+                                     globals() dictionary.
+        allow_nobracket_vars (bool): If True, allow variables in the form $VAR
+                                     instead of $(VAR).
+        auto_continuation (bool)   : If True, remove newline at the end of
+                                     lines with a command. This works like
+                                     having an '\' at the end of each line with
+                                     a command.
+        auto_indent (bool)         : If True, indent the contents of macros to
+                                     the same level as the macro invocation.
+        include_paths (list)       : A list of paths that are searched for the
+                                     $include command. 
 
     returns:
         The internal globals() dictionary.
@@ -1816,38 +1813,109 @@ def processToPrint(parse_list, **kwargs):
     # debug:
     # for elm in parse_list:
     #     print elm
-    (result,exp_globals)= processToList(parse_list, **kwargs)
-    print("".join(result), end='')
+    result, exp_globals = processToList(parse_list, filename, external_definitions, allow_nobracket_vars, auto_continuation, auto_indent, include_paths)
+    # print("".join(result), end="")
+    print("".join(result))
+    print("asdf", end="")
     return exp_globals
 
-def expandToStr(st, **kwargs):
+def expandToStr(st, filename=None,
+                external_definitions=None,
+                allow_nobracket_vars= False,
+                auto_continuation= False,
+                auto_indent= False,
+                include_paths=None):
     """Get a string, expand the text in it and return it as a string.
 
-    args: see `processToList`
+    args:
+        st (str)                   : The string that is to be expaned.
+        filename (str)             : The filename, if given, is included in
+                                     possible error messages.
+        external_definitions (dict): A dict with items to import to the
+                                     globals() dictionary.
+        allow_nobracket_vars (bool): If True, allow variables in the form $VAR
+                                     instead of $(VAR).
+        auto_continuation (bool)   : If True, remove newline at the end of
+                                     lines with a command. This works like
+                                     having an '\' at the end of each line with
+                                     a command.
+        auto_indent (bool)         : If True, indent the contents of macros to
+                                     the same level as the macro invocation.
+        include_paths (list)       : A list of paths that are searched for the
+                                     $include command. 
 
     returns a tuple containing:
         - The expanded text as a single string.
         - The internal globals() dictionary.
     """
     # pylint: disable=too-many-arguments
-    (result,exp_globals)= processToList(parseString(st), **kwargs)
+    (result,exp_globals)= processToList(parseString(st), filename,
+                                        external_definitions,
+                                        allow_nobracket_vars,
+                                        auto_continuation,
+                                        auto_indent,
+                                        include_paths)
     return ("".join(result), exp_globals)
 
-def expand(st, **kwargs):
+def expand(st, filename=None,
+           external_definitions=None,
+           allow_nobracket_vars= False,
+           auto_continuation= False,
+           auto_indent= False,
+           include_paths=None):
     """Get a string, expand the text in it and print it.
 
-    args: see `processToList`
+    args:
+        st (str)                   : The string that is to be expaned.
+        filename (str)             : The filename, if given, is included in
+                                     possible error messages.
+        external_definitions (dict): A dict with items to import to the
+                                     globals() dictionary.
+        allow_nobracket_vars (bool): If True, allow variables in the form $VAR
+                                     instead of $(VAR).
+        auto_continuation (bool)   : If True, remove newline at the end of
+                                     lines with a command. This works like
+                                     having an '\' at the end of each line with
+                                     a command.
+        auto_indent (bool)         : If True, indent the contents of macros to
+                                     the same level as the macro invocation.
+        include_paths (list)       : A list of paths that are searched for the
+                                     $include command. 
 
     returns:
         The internal globals() dictionary.
     """
     # pylint: disable=too-many-arguments
-    return processToPrint(parseString(st), **kwargs)
+    return processToPrint(parseString(st), filename,
+                          external_definitions,
+                          allow_nobracket_vars,
+                          auto_continuation,
+                          auto_indent,
+                          include_paths)
 
-def expandFile(filename, no_stdin_warning=False, **kwargs):
+def expandFile(filename,
+               external_definitions=None,
+               allow_nobracket_vars= False,
+               auto_continuation= False,
+               auto_indent= False,
+               include_paths=None,
+               no_stdin_warning= False):
     """Get a filename, expand the text in it and print it.
 
-    args: (see `processToList`)
+    args:
+        filename (str)             : The name of the file
+        external_definitions (dict): A dict with items to import to the
+                                     globals() dictionary.
+        allow_nobracket_vars (bool): If True, allow variables in the form $VAR
+                                     instead of $(VAR).
+        auto_continuation (bool)   : If True, remove newline at the end of
+                                     lines with a command. This works like
+                                     having an '\' at the end of each line with
+                                     a command.
+        auto_indent (bool)         : If True, indent the contents of macros to
+                                     the same level as the macro invocation.
+        include_paths (list)       : A list of paths that are searched for the
+                                     $include command. 
         no_stdin_warning (bool)    : If True, print short message on stderr
                                      when the program is waiting on input from
                                      stdin.
@@ -1856,7 +1924,12 @@ def expandFile(filename, no_stdin_warning=False, **kwargs):
         The internal globals() dictionary.
     """
     # pylint: disable=too-many-arguments
-    return processToPrint(parseFile(filename, no_stdin_warning), **kwargs)
+    return processToPrint(parseFile(filename, no_stdin_warning), filename,
+                          external_definitions,
+                          allow_nobracket_vars,
+                          auto_continuation,
+                          auto_indent,
+                          include_paths)
 
 def _test():
     """perform the doctest tests."""

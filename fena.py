@@ -1,9 +1,13 @@
 """
-A butt load of code shameless taken from Ruslan Spivak's tutorial for making an interpreter:
+A butt load of code shamelessly taken from Ruslan Spivak's tutorial for making an interpreter:
     https://ruslanspivak.com/lsbasi-part1/
 
-blocks.txt and entities.txt shamelessly taken from:
+Pyexpander code shamelessly taken from:
+    http://pyexpander.sourceforge.net/
+
+Lots of config files shamelessly gotten from:
     https://github.com/PepijnMC/Minecraft
+    https://github.com/Arcensoth/mcdata
 """
 
 import argparse
@@ -11,10 +15,12 @@ import logging
 import sys
 import os
 
-import pyexpander.lib as pyexpander
+# import pyexpander.lib as pyexpander
+import fena_pyexpander.lib as pyexpander
 
 import fenalib.logging_setup as logging_setup
 logging_setup.setup_logging()
+
 from fenalib.config_data import get_all_data
 from fenalib.pre_pyexpander import parse_pre_pyexpander
 from fenalib.lexer import Lexer
@@ -22,8 +28,8 @@ from fenalib.parser import Parser
 from fenalib.interpreter import Interpreter
 from fenalib.writer import Writer, write_after_pre_pyexpander, write_after_pyexpander
 
-semantic_version = "s6.0.0"
-public_version = "v0.3.0-ALPHA"
+semantic_version = "6.0.0"
+public_version = "0.3.0-ALPHA"
 
 def get_args():
     # Usage: main.py fileName [output_path] [-d, --debug] [-c, --clean]
@@ -44,7 +50,7 @@ def get_args():
     parser.add_argument("-d", "--debug", help="puts say commands at the front of each mcfunction to show who is running it", action="store_true")
 
     # debug log
-    parser.add_argument("-dl", "--debug-log", help="outputs the debug log to see all debug info from the Fena language", action="store_true")
+    # parser.add_argument("-dl", "--debug-log", help="outputs the debug log to see all debug info from the Fena language", action="store_true")
 
     # custom version
     parser.add_argument("-v", "--version", nargs="?", default=None, help="custom version to override the config file if provided")
@@ -52,6 +58,46 @@ def get_args():
     args = parser.parse_args()
     args.output_path = os.path.realpath(args.output_path)
     return args
+
+
+def parse_text(text, file_name, output_path, clean=False, debug=False, use_pre_pyexpander=True, write_functions=True):
+    """
+    Args:
+        file_name (str): File name of the file that will be parsed
+            - used for getting the full path to the file and setting the filename for pyexander
+        output_path (str): Output path of the mcfunctions
+        clean (bool): Whether mcfunctions will be deleted or not
+        debug (bool): Whether mcfunctions will be debugged with a say cmd or not
+        use_pre_pyexpander (bool): Whether the pre-pyexpander script will be used or not
+        write_functions (bool): Whether mcfunctions should be written or not
+
+    Returns:
+        list of McFunction objects
+    """
+
+    if use_pre_pyexpander:
+        text = parse_pre_pyexpander(text)
+        write_after_pre_pyexpander(text)
+
+    # add the directory of the file to the import path
+    # allows any py commands in the file to import py files relative to said file
+    dir_path = os.path.dirname(os.path.realpath(file_name))
+    sys.path.append(dir_path)
+
+    # raises an exception if pyexpander fails to parse
+    text = pyexpander.expandToStr(text, filename=file_name, auto_indent=True, auto_indent_python=True)[0]
+    write_after_pyexpander(text)
+
+    lexer = Lexer(text)
+    parser = Parser(lexer)
+    interpreter = Interpreter(parser, output_path)
+    mcfunctions = interpreter.interpret()
+
+    if write_functions:
+        writer = Writer(mcfunctions, clean, debug)
+        writer.write()
+
+    return mcfunctions
 
 
 def main():
@@ -73,35 +119,17 @@ def main():
     with open(file_name) as file:
         text = file.read()
 
-    # pre pyexpander
-    text = parse_pre_pyexpander(text)
-    write_after_pre_pyexpander(text)
-
-    # add the directory of the file to the import path
-    # allows any py commands in the file to import py files relative to said file
-    dir_path = os.path.dirname(os.path.realpath(file_name))
-    sys.path.append(dir_path)
-
-    # raises an exception if pyexpander fails to parse
-    text = pyexpander.expandToStr(text, filename=file_name)[0]
-    write_after_pyexpander(text)
-
     # sets the file name for logging
     logging_setup.format_file_name(file_name)
+    parse_text(text, file_name, output_path, clean=args.clean, debug=args.debug)
 
-    lexer = Lexer(text)
-    parser = Parser(lexer)
-    interpreter = Interpreter(parser, output_path)
-    mcfunctions = interpreter.interpret()
-
-    writer = Writer(mcfunctions, args.clean, args.debug)
-    writer.write()
 
 if __name__ == '__main__':
     # print("test")
 
     try:
         main()
+    # pylint: disable=broad-except
     except Exception as e:
         logging.exception(e) # type: ignore
 

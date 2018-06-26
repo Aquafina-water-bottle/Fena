@@ -10,9 +10,13 @@ venv/
 
 # testing
 functions/
-pyexpander_fena/*.txt
+fena_pyexpander/*.txt
+fena_pyexpander_rewrite/*.txt
 
 # packaging
 dist/
 *.egg-info/
 build/
+
+# vim session lol
+Session.vim

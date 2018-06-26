@@ -10,10 +10,7 @@ from optparse import OptionParser
 import os.path
 import sys
 
-if __name__ == "__main__":
-    sys.path.append("..")
-
-import fena_pyexpander.lib as pyexpander
+import pyexpander.lib as pyexpander
 
 # version of the program:
 __version__= "1.8.3" #VERSION#
@@ -34,25 +31,23 @@ def process_files(options,args):
     if len(args)>0: # extra arguments
         filelist.extend(args)
     if len(filelist)<=0:
-        pyexpander.expandFile(filename=None,
-                              external_definitions=my_globals,
-                              allow_nobracket_vars=options.simple_vars,
-                              auto_continuation=options.auto_continuation,
-                              auto_indent=options.auto_indent,
-                              include_paths=options.include,
-                              auto_indent_python=options.auto_indent_python,
-                              no_stdin_warning=options.no_stdin_msg)
+        pyexpander.expandFile(None,
+                              my_globals,
+                              options.simple_vars,
+                              options.auto_continuation,
+                              options.auto_indent,
+                              options.include,
+                              options.no_stdin_msg)
     else:
         for f in filelist:
             # all files are expanded in a single scope:
             my_globals= \
-                pyexpander.expandFile(filename=f,
-                                      external_definitions=my_globals,
-                                      allow_nobracket_vars=options.simple_vars,
-                                      auto_continuation=options.auto_continuation,
-                                      auto_indent=options.auto_indent,
-                                      auto_indent_python=options.auto_indent_python,
-                                      include_paths=options.include)
+                pyexpander.expandFile(f,
+                                      my_globals,
+                                      options.simple_vars,
+                                      options.auto_continuation,
+                                      options.auto_indent,
+                                      options.include)
 
 def script_shortname():
     """return the name of this script without a path component."""
@@ -115,10 +110,6 @@ def main():
     parser.add_option("-i", "--auto-indent",
                       action="store_true",
                       help="Automatically indent macros.",
-                     )
-    parser.add_option("-p", "--auto-indent-python",
-                      action="store_true",
-                      help="Automatically indent python output.",
                      )
     parser.add_option("--no-stdin-msg",
                       action="store_true",
