@@ -63,7 +63,7 @@ def is_number(string):
     if re.search(_alpha, string) is not None:
         return False
     return True
-    
+
 def is_signed_int(num_str):
     """
     Args:
@@ -149,7 +149,7 @@ def is_nonneg_int(num_str):
         >>> is_nonneg_int("^26.3")
         False
     """
-    
+
     assert isinstance(num_str, str)
     return num_str.isdigit()
 
@@ -192,7 +192,7 @@ def is_pos_int(num_str):
         >>> is_pos_int("^26.3")
         False
     """
-    
+
     assert isinstance(num_str, str)
     if num_str.isdigit():
         return int(num_str) != 0
@@ -201,3 +201,4 @@ def is_pos_int(num_str):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+

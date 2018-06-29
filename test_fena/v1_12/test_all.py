@@ -9,6 +9,7 @@ from test_fena.v1_12.test_simple_cmds import test_simple_cmds
 from test_fena.v1_12.test_datas import test_datas
 from test_fena.v1_12.test_effects import test_effects
 from test_fena.v1_12.test_items import test_items
+from test_fena.v1_12.test_objectives import test_objectives
 from test_fena.v1_12.test_teams import test_teams
 from test_fena.v1_12.test_xps import test_xps
 
@@ -24,6 +25,7 @@ def test_all():
     test_effects()
     test_datas()
     test_items()
+    test_objectives()
     test_teams()
     test_xps()
 

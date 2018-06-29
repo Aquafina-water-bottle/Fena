@@ -1,12 +1,2880 @@
-!folder search_1:
-    !mfunc asdf1:
-        say search_1:asdf1
-    !mfunc asdf2:
-        function asdf1
-!folder search_2:
-    !mfunc asdf1:
-        say search_2:asdf1
-    !mfunc asdf2:
-        function asdf1
-!mfunc "nou":
-    function ego:lmao
+
+!set prefix = fl
+
+
+!blocktag terracotta_portal = {
+    "replace": false",
+    "values": [
+        "minecraft:lime_terracotta",
+        "minecraft:magenta_terracotta",
+        "minecraft:orange_terracotta",
+        "minecraft:cyan_terracotta"
+    ]
+}
+!mfunc init:
+    objective add g.number dummy
+    -1 g.number = -1
+    objective add g.sa dummy Global Select All
+    objective add g.na dummy Global Names for IDs
+    objective add g.de deathCount Global Death Count
+    objective add g.cs stat.useItem.minecraft.carrot_on_a_stick Global Use Carrot Stick
+    objective add g.lg stat.leaveGame Global Leave Game
+    objective add g.to stat.useItem.minecraft.totem_of_undying Global Use Totem
+    objective add g.sc dummy Global CmdStat SuccessCount
+    objective add g.ab dummy Global CmdStat AffectedBlocks
+    objective add g.ai dummy Global CmdStat AffectedItems
+    objective add g.ae dummy Global CmdStat AffectedEntites
+    objective add g.qr dummy Global CmdStat QueryResult
+    objective add g.temp dummy Global Temp Calcs
+    objective add g.ftp dummy Global Teleported from Floo
+    objective add g.stp dummy Global Teleported from Spawn
+    objective add gr.at dummy Global Rank Admin Trainer
+    objective add gr.apps dummy Global Rank Panda Squad
+    objective add gr.ec dummy Global Rank Event Coordinator
+    objective add gr.le dummy Global Rank Leadership
+    objective add gr.cmd dummy Global Rank Special Command
+    objective add gr.total dummy Global Rank Total Rank
+    objective add gp.id dummy Global Python Spawnpoint ID
+    objective add gp.tp dummy Global Python Teleport ID
+    objective add gp.bk dummy Global Python Book ID
+    objective add gp.trm dummy Global Python Termination Toggle
+    objective add gp.cgi dummy Global Python Current Game ID
+    objective add gp.pvp dummy Global Python PVP toggle
+    objective add gp.sat dummy Global Python Saturation toggle
+    objective add gp.rgt dummy Global Python Custom Regen Timer
+    objective add g.hp health Health
+    objective setdisplay list g.hp
+    objective add _rbs dummy Floo Network Rank Binary Score
+    objective add _rac dummy Floo Network Rank Calc
+    objective add _vot trigger Floo Network Voting
+    objective add _dly dummy Floo Network Spawn delay
+    objective add _dim dummy Floo Network Correct Dimension
+    objective add _rgc dummy Floo Network Can have Regen
+    team add g.nopush Global No Push
+    team add collisionRule Global never
+    team add friendlyfire Global false
+    team add g.nopvp Global No PVP
+    
+    
+    ir g.na = 271805586
+    
+    ice_race g.na = 271805586
+    
+    
+    
+    sr g.na = 728155891
+    
+    slow_race g.na = 728155891
+    
+    
+    
+    nr g.na = 1674043405
+    
+    nether_race g.na = 1674043405
+    
+    
+    
+    evilr g.na = 1551573155
+    
+    evil_race g.na = 1551573155
+    
+    
+    
+    dr g.na = 35174176
+    
+    diamond_race g.na = 35174176
+    
+    
+    
+    er g.na = 1263176935
+    
+    emerald_race g.na = 1263176935
+    
+    
+    
+    qr g.na = 1175479079
+    
+    quartz_race g.na = 1175479079
+    
+    
+    
+    18r g.na = 1558779551
+    
+    1_8_race g.na = 1558779551
+    
+    
+    
+    epicr g.na = 1170582816
+    
+    epic_race g.na = 1170582816
+    
+    
+    
+    saltr g.na = 2038721375
+    
+    salt_race g.na = 2038721375
+    
+    
+    
+    deathr g.na = 1710430244
+    
+    death_run g.na = 1710430244
+    
+    
+    
+    dirtr g.na = 1711592156
+    
+    dirt_race g.na = 1711592156
+    
+    
+    
+    mr g.na = 526729826
+    
+    mycelium_race g.na = 526729826
+    
+    
+    
+    fbr g.na = 1995158614
+    
+    frostburn_run g.na = 1995158614
+    
+    
+    
+    ecr g.na = 148716625
+    
+    ever_changing_race g.na = 148716625
+    
+    
+    
+    vr1 g.na = 1935481488
+    
+    virus1 g.na = 1935481488
+    
+    virus/1 g.na = 1935481488
+    
+    
+    
+    vr2 g.na = 933181290
+    
+    virus2 g.na = 933181290
+    
+    virus/2 g.na = 933181290
+    
+    
+    
+    vrm g.na = 1106121449
+    
+    virusm g.na = 1106121449
+    
+    virus/mansion g.na = 1106121449
+    
+    
+    
+    vrh g.na = 711572688
+    
+    virush g.na = 711572688
+    
+    virus/hell g.na = 711572688
+    
+    
+    
+    pvp1 g.na = 1793355344
+    
+    oldctf g.na = 1793355344
+    
+    pvp/old_ctf g.na = 1793355344
+    
+    
+    
+    ctf g.na = 905070336
+    
+    capture_the_flag g.na = 905070336
+    
+    
+    
+    tpl3 g.na = 2140363891
+    
+    tp g.na = 2140363891
+    
+    the_pit_3 g.na = 2140363891
+    
+    
+    
+    st g.na = 370149165
+    
+    sand_tomb g.na = 370149165
+    
+    
+    
+    ad g.na = 2071894910
+    
+    anvil_drop g.na = 2071894910
+    
+    
+    
+    dp g.na = 2007743934
+    
+    death_pit g.na = 2007743934
+    
+    
+    
+    rb g.na = 1405382069
+    
+    rabbit_ball g.na = 1405382069
+    
+    
+    
+    mm g.na = 763003760
+    
+    mastermind g.na = 763003760
+    
+    
+    
+    mmh g.na = 1663541988
+    
+    mm2 g.na = 1663541988
+    
+    mastermind_hell g.na = 1663541988
+    
+    
+    
+    pc g.na = 1916439502
+    
+    pictionary g.na = 1916439502
+    
+    
+    
+    rr g.na = 81659237
+    
+    royal_rumble g.na = 81659237
+    
+    
+    
+    bhasv g.na = 1319821240
+    
+    bh_a_small_village g.na = 1319821240
+    
+    
+    
+    bha g.na = 1389015345
+    
+    bh_apocalypse g.na = 1389015345
+    
+    
+    
+    bhcde g.na = 1750738907
+    
+    bh_castle_de_emmy g.na = 1750738907
+    
+    
+    
+    bhfc g.na = 96726284
+    
+    bh_four_corners g.na = 96726284
+    
+    
+    
+    bhhd g.na = 944999815
+    
+    bh_hasdaa g.na = 944999815
+    
+    
+    
+    bhh g.na = 1105720171
+    
+    bh_hospital g.na = 1105720171
+    
+    
+    
+    bhj g.na = 641871916
+    
+    bh_jungle g.na = 641871916
+    
+    
+    
+    bhmm g.na = 641806378
+    
+    bhm g.na = 641806378
+    
+    bh_mastermind g.na = 641806378
+    
+    
+    
+    bhmv g.na = 1671568857
+    
+    bh_mushroom_village g.na = 1671568857
+    
+    
+    
+    bho g.na = 942174366
+    
+    bh_old g.na = 942174366
+    
+    
+    
+    bhp g.na = 38982321
+    
+    bh_park g.na = 38982321
+    
+    
+    
+    bhra g.na = 1146235770
+    
+    bh_rainbow g.na = 1146235770
+    
+    
+    
+    bhre g.na = 2043998994
+    
+    bh_resort g.na = 2043998994
+    
+    
+    
+    bhts g.na = 1031034945
+    
+    bh_train_station g.na = 1031034945
+    
+    
+    
+    bhvr1 g.na = 220163574
+    
+    bh_virus_1 g.na = 220163574
+    
+    
+    
+    bhvr2 g.na = 301123243
+    
+    bh_virus_2 g.na = 301123243
+    
+    
+    
+    bhz g.na = 1891781749
+    
+    bh_zelda g.na = 1891781749
+    
+    
+    
+    bday g.na = 99934939
+    
+    birthday g.na = 99934939
+    
+    
+    
+    spawn g.na = 709458611
+    
+    
+    
+    cmd g.na = 1416570985
+    
+    floo g.na = 1416570985
+    
+    diagonally g.na = 1416570985
+    
+    floo_network g.na = 1416570985
+    
+    
+    
+    ts g.na = 425737659
+    
+    tstoken g.na = 425737659
+    
+    ts_token g.na = 425737659
+    
+    
+    
+    mghub g.na = 282336826
+    
+    
+    
+    pvphub g.na = 348727811
+    
+    
+    
+    mmhub g.na = 818460664
+    
+    
+    
+    racehub g.na = 1096614035
+    
+    
+    kill @e[type=armor_stand,gp.stand]
+    summon armor_stand 348 4 114 {
+        Tags:["gp.stand"],Invulnerable:1b,Invisible:1b,Marker:1b,NoGravity:1b
+        }
+    Acefire97 gr.apps = 1
+    Acefire97 gr.total += 1
+    ashtongreen00 gr.apps = 1
+    ashtongreen00 gr.total += 1
+    ENFORCER_GAMING gr.apps = 1
+    ENFORCER_GAMING gr.total += 1
+    VampireQueen94 gr.apps = 1
+    VampireQueen94 gr.total += 1
+    TedddyB gr.apps = 1
+    TedddyB gr.total += 1
+    ItsArk_ gr.apps = 1
+    ItsArk_ gr.total += 1
+    CMDZane gr.at = 1
+    CMDZane gr.apps = 1
+    CMDZane gr.total += 3
+    french_man gr.ec = 1
+    french_man gr.total += 4
+    jamboree_lee gr.ec = 1
+    jamboree_lee gr.total += 4
+    CynRyn gr.ec = 1
+    CynRyn gr.total += 4
+    Icohedron gr.ec = 1
+    Icohedron gr.total += 4
+    TheDarkOne239 gr.ec = 1
+    TheDarkOne239 gr.total += 4
+    T3ben gr.ec = 1
+    T3ben gr.total += 4
+    BUTTERLOVER7683 gr.at = 1
+    BUTTERLOVER7683 gr.le = 1
+    BUTTERLOVER7683 gr.total += 10
+    FoxyTheBoomQueen gr.at = 1
+    FoxyTheBoomQueen gr.le = 1
+    FoxyTheBoomQueen gr.total += 10
+    Daa_ gr.ec = 1
+    Daa_ gr.le = 1
+    Daa_ gr.total += 12
+    idk_lobsters gr.le = 1
+    idk_lobsters gr.total += 8
+    JadeofallTrades gr.le = 1
+    JadeofallTrades gr.total += 8
+    Witch_Doctor gr.le = 1
+    Witch_Doctor gr.cmd = 1
+    Witch_Doctor gr.total += 24
+    FirezFury gr.le = 1
+    FirezFury gr.total += 8
+    
+    @e[type=armor_stand,gp.floo_stand] gp.pvp = 1
+    
+    @e[type=armor_stand,gp.floo_stand] gp.sat = 1
+    
+    gamerule naturalRegeneration true
+    @e[type=armor_stand,gp.floo_stand] gp.rgt = 0
+    
+    @e[type=armor_stand,gp.stand] gp.tp = 0
+    @e[type=armor_stand,gp.stand] _rbs = 28
+    @e[type=armor_stand,gp.stand] gp.cgi = 0
+    tellraw @a[EC=0] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Floo Network","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},
+        {"text":" has been installed!","color":"gray"}
+    ]}
+!mfunc main:
+    @e[type=armor_stand,gp.stand,gp.cgi=1..]: function run_event
+    @a[gp.id=1..]: function spawnpoint
+    @a[gp.tp=1..]: function teleport
+    * enable _vot
+    @a[_vot=1..]: function vote
+    @e[type=player,gp.bk=1..]: function book
+    @a[x=397,y=17,z=61,r=5]: function in_spawn_tree
+    @a[x=350,y=14,z=13,dx=90,dy=5,dz=90,m=!3] if(~ 3 ~ stained_hardened_clay function tp_portal
+    
+    @a _dim = 0
+    @a[{Dimension:0}] _dim = 1
+
+    @e[type=armor_stand,gp.stand] function calc_rank
+    @a[_rac=1] function use_rank
+    @e[type=armor_stand,gp.stand] function use_options
+    
+    
+    
+    @a[g.de=1..] g.de = 0
+    
+    @a[g.cs=1..] g.cs = 0
+    
+    @a[g.lg=1..] g.lg = 0
+    
+    @a[g.to=1..] g.to = 0
+    
+    @a[g.ftp=1..] g.ftp = 0
+    
+    @a[g.stp=1..] g.stp = 0
+    
+
+!mfunc term:
+    function stop_events
+    objective remove g.sa
+    objective remove g.na
+    objective remove g.de
+    objective remove g.cs
+    objective remove g.lg
+    objective remove g.to
+    objective remove g.sc
+    objective remove g.ab
+    objective remove g.ai
+    objective remove g.ae
+    objective remove g.qr
+    objective remove g.temp
+    objective remove g.ftp
+    objective remove g.stp
+    objective remove gr.at
+    objective remove gr.apps
+    objective remove gr.ec
+    objective remove gr.le
+    objective remove gr.cmd
+    objective remove gr.total
+    objective remove gp.id
+    objective remove gp.tp
+    objective remove gp.bk
+    objective remove gp.trm
+    objective remove gp.cgi
+    objective remove gp.pvp
+    objective remove gp.sat
+    objective remove gp.rgt
+    objective setdisplay list
+    objective remove _rbs
+    objective remove _rac
+    objective remove _vot
+    objective remove _dly
+    objective remove _dim
+    objective remove _rgc
+    tellraw @a[EC=0] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Floo Network","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},
+        {"text":" has been uninstalled!","color":"gray"}
+    ]}
+    kill @e[type=armor_stand,gp.stand]
+!mfunc run_event:
+    function run_event/search_35174176_to_2140363891
+!folder run_event:
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=35174176..1106121449]) : function search_35174176_to_1106121449
+        if (@s[gp.cgi=1146235770..2140363891]) : function search_1146235770_to_2140363891
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=35174176..526729826]) : function search_35174176_to_526729826
+        if (@s[gp.cgi=641806378..1106121449]) : function search_641806378_to_1106121449
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=35174176..148716625]) : function search_35174176_to_148716625
+        if (@s[gp.cgi=220163574..526729826]) : function search_220163574_to_526729826
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=35174176..81659237]) : function search_35174176_to_81659237
+        if (@s[gp.cgi=96726284..148716625]) : function search_96726284_to_148716625
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=35174176]) : function use_35174176
+        if (@s[gp.cgi=38982321..81659237]) : function search_38982321_to_81659237
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=38982321]) : function use_38982321
+        if (@s[gp.cgi=81659237]) : function use_81659237
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=96726284]) : function use_96726284
+        if (@s[gp.cgi=99934939..148716625]) : function search_99934939_to_148716625
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=99934939]) : function use_99934939
+        if (@s[gp.cgi=148716625]) : function use_148716625
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=220163574..301123243]) : function search_220163574_to_301123243
+        if (@s[gp.cgi=370149165..526729826]) : function search_370149165_to_526729826
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=220163574]) : function use_220163574
+        if (@s[gp.cgi=271805586..301123243]) : function search_271805586_to_301123243
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=271805586]) : function use_271805586
+        if (@s[gp.cgi=301123243]) : function use_301123243
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=370149165]) : function use_370149165
+        if (@s[gp.cgi=425737659..526729826]) : function search_425737659_to_526729826
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=425737659]) : function use_425737659
+        if (@s[gp.cgi=526729826]) : function use_526729826
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=641806378..905070336]) : function search_641806378_to_905070336
+        if (@s[gp.cgi=933181290..1106121449]) : function search_933181290_to_1106121449
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=641806378..711572688]) : function search_641806378_to_711572688
+        if (@s[gp.cgi=728155891..905070336]) : function search_728155891_to_905070336
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=641806378]) : function use_641806378
+        if (@s[gp.cgi=641871916..711572688]) : function search_641871916_to_711572688
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=641871916]) : function use_641871916
+        if (@s[gp.cgi=711572688]) : function use_711572688
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=728155891]) : function use_728155891
+        if (@s[gp.cgi=763003760..905070336]) : function search_763003760_to_905070336
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=763003760]) : function use_763003760
+        if (@s[gp.cgi=905070336]) : function use_905070336
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=933181290..944999815]) : function search_933181290_to_944999815
+        if (@s[gp.cgi=1031034945..1106121449]) : function search_1031034945_to_1106121449
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=933181290]) : function use_933181290
+        if (@s[gp.cgi=942174366..944999815]) : function search_942174366_to_944999815
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=942174366]) : function use_942174366
+        if (@s[gp.cgi=944999815]) : function use_944999815
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1031034945]) : function use_1031034945
+        if (@s[gp.cgi=1105720171..1106121449]) : function search_1105720171_to_1106121449
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1105720171]) : function use_1105720171
+        if (@s[gp.cgi=1106121449]) : function use_1106121449
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1146235770..1674043405]) : function search_1146235770_to_1674043405
+        if (@s[gp.cgi=1710430244..2140363891]) : function search_1710430244_to_2140363891
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1146235770..1389015345]) : function search_1146235770_to_1389015345
+        if (@s[gp.cgi=1405382069..1674043405]) : function search_1405382069_to_1674043405
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1146235770..1175479079]) : function search_1146235770_to_1175479079
+        if (@s[gp.cgi=1263176935..1389015345]) : function search_1263176935_to_1389015345
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1146235770]) : function use_1146235770
+        if (@s[gp.cgi=1170582816..1175479079]) : function search_1170582816_to_1175479079
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1170582816]) : function use_1170582816
+        if (@s[gp.cgi=1175479079]) : function use_1175479079
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1263176935]) : function use_1263176935
+        if (@s[gp.cgi=1319821240..1389015345]) : function search_1319821240_to_1389015345
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1319821240]) : function use_1319821240
+        if (@s[gp.cgi=1389015345]) : function use_1389015345
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1405382069..1558779551]) : function search_1405382069_to_1558779551
+        if (@s[gp.cgi=1663541988..1674043405]) : function search_1663541988_to_1674043405
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1405382069]) : function use_1405382069
+        if (@s[gp.cgi=1551573155..1558779551]) : function search_1551573155_to_1558779551
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1551573155]) : function use_1551573155
+        if (@s[gp.cgi=1558779551]) : function use_1558779551
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1663541988]) : function use_1663541988
+        if (@s[gp.cgi=1671568857..1674043405]) : function search_1671568857_to_1674043405
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1671568857]) : function use_1671568857
+        if (@s[gp.cgi=1674043405]) : function use_1674043405
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1710430244..1916439502]) : function search_1710430244_to_1916439502
+        if (@s[gp.cgi=1935481488..2140363891]) : function search_1935481488_to_2140363891
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1710430244..1750738907]) : function search_1710430244_to_1750738907
+        if (@s[gp.cgi=1793355344..1916439502]) : function search_1793355344_to_1916439502
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1710430244]) : function use_1710430244
+        if (@s[gp.cgi=1711592156..1750738907]) : function search_1711592156_to_1750738907
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1711592156]) : function use_1711592156
+        if (@s[gp.cgi=1750738907]) : function use_1750738907
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1793355344]) : function use_1793355344
+        if (@s[gp.cgi=1891781749..1916439502]) : function search_1891781749_to_1916439502
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1891781749]) : function use_1891781749
+        if (@s[gp.cgi=1916439502]) : function use_1916439502
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1935481488..2007743934]) : function search_1935481488_to_2007743934
+        if (@s[gp.cgi=2038721375..2140363891]) : function search_2038721375_to_2140363891
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1935481488]) : function use_1935481488
+        if (@s[gp.cgi=1995158614..2007743934]) : function search_1995158614_to_2007743934
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1995158614]) : function use_1995158614
+        if (@s[gp.cgi=2007743934]) : function use_2007743934
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=2038721375..2043998994]) : function search_2038721375_to_2043998994
+        if (@s[gp.cgi=2071894910..2140363891]) : function search_2071894910_to_2140363891
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=2038721375]) : function use_2038721375
+        if (@s[gp.cgi=2043998994]) : function use_2043998994
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=2071894910]) : function use_2071894910
+        if (@s[gp.cgi=2140363891]) : function use_2140363891
+        
+        
+    
+    
+    !mfunc use_271805586:
+        function ego:ice_race/main
+    
+    
+    
+    !mfunc use_728155891:
+        function ego:slow_race/main
+    
+    
+    
+    !mfunc use_1674043405:
+        function ego:nether_race/main
+    
+    
+    
+    !mfunc use_1551573155:
+        function ego:evil_race/main
+    
+    
+    
+    !mfunc use_35174176:
+        function ego:diamond_race/main
+    
+    
+    
+    !mfunc use_1263176935:
+        function ego:emerald_race/main
+    
+    
+    
+    !mfunc use_1175479079:
+        function ego:quartz_race/main
+    
+    
+    
+    !mfunc use_1558779551:
+        function ego:1_8_race/main
+    
+    
+    
+    !mfunc use_1170582816:
+        function ego:epic_race/main
+    
+    
+    
+    !mfunc use_2038721375:
+        function ego:salt_race/main
+    
+    
+    
+    !mfunc use_1710430244:
+        function ego:death_run/main
+    
+    
+    
+    !mfunc use_1711592156:
+        function ego:dirt_race/main
+    
+    
+    
+    !mfunc use_526729826:
+        function ego:mycelium_race/main
+    
+    
+    
+    !mfunc use_1995158614:
+        function ego:frostburn_run/main
+    
+    
+    
+    !mfunc use_148716625:
+        function ego:ever_changing_race/main
+    
+    
+    
+    !mfunc use_1935481488:
+        function ego:virus/1/main
+    
+    
+    
+    !mfunc use_933181290:
+        function ego:virus/2/main
+    
+    
+    
+    !mfunc use_1106121449:
+        function ego:virus/mansion/main
+    
+    
+    
+    !mfunc use_711572688:
+        function ego:virus/hell/main
+    
+    
+    
+    !mfunc use_1793355344:
+        function ego:pvp/old_ctf/main
+    
+    
+    
+    !mfunc use_905070336:
+        function ego:capture_the_flag/main
+    
+    
+    
+    !mfunc use_2140363891:
+        function ego:the_pit_3/main
+    
+    
+    
+    !mfunc use_370149165:
+        function ego:sand_tomb/main
+    
+    
+    
+    !mfunc use_2071894910:
+        function ego:anvil_drop/main
+    
+    
+    
+    !mfunc use_2007743934:
+        function ego:death_pit/main
+    
+    
+    
+    !mfunc use_1405382069:
+        function ego:rabbit_ball/main
+    
+    
+    
+    !mfunc use_763003760:
+        function ego:mastermind/main
+    
+    
+    
+    !mfunc use_1663541988:
+        function ego:mastermind_hell/main
+    
+    
+    
+    !mfunc use_1916439502:
+        function ego:pictionary/main
+    
+    
+    
+    !mfunc use_81659237:
+        function ego:royal_rumble/main
+    
+    
+    
+    !mfunc use_1319821240:
+        function ego:bh_a_small_village/main
+    
+    
+    
+    !mfunc use_1389015345:
+        function ego:bh_apocalypse/main
+    
+    
+    
+    !mfunc use_1750738907:
+        function ego:bh_castle_de_emmy/main
+    
+    
+    
+    !mfunc use_96726284:
+        function ego:bh_four_corners/main
+    
+    
+    
+    !mfunc use_944999815:
+        function ego:bh_hasdaa/main
+    
+    
+    
+    !mfunc use_1105720171:
+        function ego:bh_hospital/main
+    
+    
+    
+    !mfunc use_641871916:
+        function ego:bh_jungle/main
+    
+    
+    
+    !mfunc use_641806378:
+        function ego:bh_mastermind/main
+    
+    
+    
+    !mfunc use_1671568857:
+        function ego:bh_mushroom_village/main
+    
+    
+    
+    !mfunc use_942174366:
+        function ego:bh_old/main
+    
+    
+    
+    !mfunc use_38982321:
+        function ego:bh_park/main
+    
+    
+    
+    !mfunc use_1146235770:
+        function ego:bh_rainbow/main
+    
+    
+    
+    !mfunc use_2043998994:
+        function ego:bh_resort/main
+    
+    
+    
+    !mfunc use_1031034945:
+        function ego:bh_train_station/main
+    
+    
+    
+    !mfunc use_220163574:
+        function ego:bh_virus_1/main
+    
+    
+    
+    !mfunc use_301123243:
+        function ego:bh_virus_2/main
+    
+    
+    
+    !mfunc use_1891781749:
+        function ego:bh_zelda/main
+    
+    
+    
+    !mfunc use_99934939:
+        function ego:birthday/main
+    
+    
+    
+    
+    
+    
+    
+    !mfunc use_425737659:
+        function ego:ts_token/main
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+!mfunc spawnpoint:
+    
+    spawnpoint @s[gp.id=271805586] 49 36 -45
+    tellraw @s[gp.id=271805586] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"49 36 -45","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Ice race","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Ice race","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 271805586"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=728155891] 75 7 -80
+    tellraw @s[gp.id=728155891] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"75 7 -80","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Slow Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Slow Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 728155891"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1674043405] 73 7 -102
+    tellraw @s[gp.id=1674043405] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"73 7 -102","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Nether Race","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Nether Race","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1674043405"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1551573155] 23 7 -133
+    tellraw @s[gp.id=1551573155] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"23 7 -133","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Evil Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Evil Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1551573155"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=35174176] 218 18 -37
+    tellraw @s[gp.id=35174176] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"218 18 -37","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Diamond Race","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Diamond Race","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 35174176"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1263176935] 276 17 -96
+    tellraw @s[gp.id=1263176935] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"276 17 -96","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Emerald Race","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Emerald Race","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1263176935"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1175479079] 229 8 -157
+    tellraw @s[gp.id=1175479079] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"229 8 -157","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Quartz Race","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Quartz Race","color":"white"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1175479079"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1558779551] 242 26 -222
+    tellraw @s[gp.id=1558779551] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"242 26 -222","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"1.8 Race","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"1.8 Race","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1558779551"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1170582816] 424 12 -122
+    tellraw @s[gp.id=1170582816] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"424 12 -122","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Epic Race","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Epic Race","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1170582816"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=2038721375] 467 8 -33
+    tellraw @s[gp.id=2038721375] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"467 8 -33","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Salt Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Salt Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 2038721375"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1710430244] 31 20 -240
+    tellraw @s[gp.id=1710430244] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"31 20 -240","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Death Run","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Death Run","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1710430244"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1711592156] 23 15 -189
+    tellraw @s[gp.id=1711592156] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"23 15 -189","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Dirt Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Dirt Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1711592156"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=526729826] 445 68 -669
+    tellraw @s[gp.id=526729826] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"445 68 -669","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Mycelium Race","color":"dark_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mycelium Race","color":"dark_purple"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 526729826"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1995158614] 517 11 -827
+    tellraw @s[gp.id=1995158614] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"517 11 -827","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Frostburn Run","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Frostburn Run","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1995158614"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=148716625] 460 3 -331
+    tellraw @s[gp.id=148716625] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"460 3 -331","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"EverChanging Race","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"EverChanging Race","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 148716625"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1935481488] -85 45 -241
+    tellraw @s[gp.id=1935481488] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-85 45 -241","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=933181290] -77 56 -85
+    tellraw @s[gp.id=933181290] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-77 56 -85","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Virus 2","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 2","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 933181290"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1106121449] -164 14 -1211
+    tellraw @s[gp.id=1106121449] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-164 14 -1211","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Mansion Virus","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mansion Virus","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1106121449"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=711572688] -133 100 -1439
+    tellraw @s[gp.id=711572688] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-133 100 -1439","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Virus Hell","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus Hell","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 711572688"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1793355344] -268 49 -39
+    tellraw @s[gp.id=1793355344] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-268 49 -39","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"PVP: Old CTF","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"PVP: Old CTF","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1793355344"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=905070336] 558 107 159
+    tellraw @s[gp.id=905070336] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"558 107 159","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Capture","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 905070336"}},{"text":" the ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"white"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 905070336"}},{"text":"flag","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"blue"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 905070336"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=2140363891] -105 25 200
+    tellraw @s[gp.id=2140363891] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-105 25 200","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"The Pit 3","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Pit 3","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 2140363891"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=370149165] -250 25 18
+    tellraw @s[gp.id=370149165] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-250 25 18","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Sand Tomb","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Sand Tomb","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 370149165"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=2071894910] -16 5 87
+    tellraw @s[gp.id=2071894910] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-16 5 87","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Anvil Drop","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Anvil Drop","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 2071894910"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=2007743934] -187 24 96
+    tellraw @s[gp.id=2007743934] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-187 24 96","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Death Pit","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Death Pit","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 2007743934"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1405382069] 214 27 334
+    tellraw @s[gp.id=1405382069] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"214 27 334","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Rabbit","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit ball","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1405382069"}},{"text":" ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit ball","color":"white"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1405382069"}},{"text":"ball","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit ball","color":"blue"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1405382069"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=763003760] 77 5 41
+    tellraw @s[gp.id=763003760] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"77 5 41","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Mastermind","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mastermind","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 763003760"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1663541988] 177 5 45
+    tellraw @s[gp.id=1663541988] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"177 5 45","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Mastermind Hell","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mastermind Hell","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1663541988"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1916439502] 161 4 180
+    tellraw @s[gp.id=1916439502] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"161 4 180","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"P","color":"light_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"light_purple"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"i","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"c","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"t","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"o","color":"dark_green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"dark_green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"n","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"blue"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"a","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"r","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"y","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"white"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=81659237] -103 19 482
+    tellraw @s[gp.id=81659237] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-103 19 482","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Royal","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"blue"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 81659237"}},{"text":" ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"white"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 81659237"}},{"text":"Rumble","color":"dark_green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"dark_green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 81659237"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1319821240] -1439 12 -228
+    tellraw @s[gp.id=1319821240] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1439 12 -228","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"A Small Village","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1319821240"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1389015345] -1530 45 -50
+    tellraw @s[gp.id=1389015345] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1530 45 -50","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Apocalypse","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Apocalypse","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1389015345"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1750738907] -1607 64 -60
+    tellraw @s[gp.id=1750738907] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1607 64 -60","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Castle de Emmy","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Castle de Emmy","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1750738907"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=96726284] -1313 102 -241
+    tellraw @s[gp.id=96726284] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1313 102 -241","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Four Corners","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Four Corners","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 96726284"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=944999815] -1107 24 -35
+    tellraw @s[gp.id=944999815] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1107 24 -35","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"HASDaa","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"HASDaa","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 944999815"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1105720171] -1073 26 -277
+    tellraw @s[gp.id=1105720171] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1073 26 -277","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Hospital","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Hospital","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1105720171"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=641871916] -1106 10 -97
+    tellraw @s[gp.id=641871916] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1106 10 -97","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Jungle","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Jungle","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 641871916"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=641806378] -1175 46 -264
+    tellraw @s[gp.id=641806378] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1175 46 -264","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"BH Mastermind","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"BH Mastermind","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 641806378"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1671568857] -1081 43 -189
+    tellraw @s[gp.id=1671568857] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1081 43 -189","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Mushroom Village","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mushroom Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1671568857"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=942174366] -1158 44 -139
+    tellraw @s[gp.id=942174366] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1158 44 -139","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Old","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Old","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 942174366"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=38982321] -1242 37 -246
+    tellraw @s[gp.id=38982321] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1242 37 -246","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Park","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Park","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 38982321"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1146235770] -1153 27 -69
+    tellraw @s[gp.id=1146235770] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1153 27 -69","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Rainbow","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rainbow","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1146235770"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=2043998994] -1430 98 -46
+    tellraw @s[gp.id=2043998994] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1430 98 -46","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Resort","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Resort","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 2043998994"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1031034945] -1252 32 -88
+    tellraw @s[gp.id=1031034945] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1252 32 -88","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Train Station","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Train Station","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1031034945"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=220163574] -85 45 -241
+    tellraw @s[gp.id=220163574] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-85 45 -241","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 220163574"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=301123243] -77 56 -85
+    tellraw @s[gp.id=301123243] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-77 56 -85","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Virus 2","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 2","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 301123243"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1891781749] -1168 32 -191
+    tellraw @s[gp.id=1891781749] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"-1168 32 -191","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Zelda","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Zelda","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1891781749"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=99934939] 801 70 135
+    tellraw @s[gp.id=99934939] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"801 70 135","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Jade's Birthday","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Jade's Birthday","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 99934939"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=709458611] 397 17 61
+    tellraw @s[gp.id=709458611] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"397 17 61","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Spawn","color":"dark_red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Spawn","color":"dark_red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 709458611"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1416570985] 348 4 114
+    tellraw @s[gp.id=1416570985] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"348 4 114","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Floo Network","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=425737659] 549 20 42
+    tellraw @s[gp.id=425737659] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"549 20 42","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Teamspeak Token","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Teamspeak Token","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 425737659"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=282336826] 329 24 171
+    tellraw @s[gp.id=282336826] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"329 24 171","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"The Minigame Hub","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Minigame Hub","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 282336826"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=348727811] 385 15 159
+    tellraw @s[gp.id=348727811] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"385 15 159","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"The PVP hub","color":"light_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The PVP hub","color":"light_purple"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 348727811"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=818460664] 329 24 154
+    tellraw @s[gp.id=818460664] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"329 24 154","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"The Mastermind Hub","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Mastermind Hub","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 818460664"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    spawnpoint @s[gp.id=1096614035] 329 24 137
+    tellraw @s[gp.id=1096614035] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"329 24 137","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"The Race Hub","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Race Hub","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1096614035"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    playsound minecraft:entity.experience_orb.pickup voice @s
+    @s gp.id *= -1
+!mfunc teleport:
+    
+    tp @s[gp.tp=271805586] 49 36 -45 -90 0
+    tellraw @s[gp.tp=271805586] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"49 36 -45","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Ice race","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Ice race","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 271805586"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=728155891] 75 7 -80 90 0
+    tellraw @s[gp.tp=728155891] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"75 7 -80","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Slow Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Slow Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 728155891"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1674043405] 73 7 -102 90 0
+    tellraw @s[gp.tp=1674043405] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"73 7 -102","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Nether Race","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Nether Race","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1674043405"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1551573155] 23 7 -133 -90 0
+    tellraw @s[gp.tp=1551573155] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"23 7 -133","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Evil Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Evil Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1551573155"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=35174176] 218 18 -37 -90 0
+    tellraw @s[gp.tp=35174176] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"218 18 -37","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Diamond Race","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Diamond Race","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 35174176"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1263176935] 276 17 -96 90 0
+    tellraw @s[gp.tp=1263176935] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"276 17 -96","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Emerald Race","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Emerald Race","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1263176935"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1175479079] 229 8 -157 -90 0
+    tellraw @s[gp.tp=1175479079] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"229 8 -157","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Quartz Race","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Quartz Race","color":"white"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1175479079"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1558779551] 242 26 -222 -90 0
+    tellraw @s[gp.tp=1558779551] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"242 26 -222","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"1.8 Race","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"1.8 Race","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1558779551"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1170582816] 424 12 -122 -90 0
+    tellraw @s[gp.tp=1170582816] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"424 12 -122","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Epic Race","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Epic Race","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1170582816"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=2038721375] 467 8 -33 -90 0
+    tellraw @s[gp.tp=2038721375] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"467 8 -33","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Salt Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Salt Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 2038721375"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1710430244] 31 20 -240 -45 0
+    tellraw @s[gp.tp=1710430244] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"31 20 -240","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Death Run","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Death Run","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1710430244"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1711592156] 23 15 -189 -90 0
+    tellraw @s[gp.tp=1711592156] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"23 15 -189","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Dirt Race","color":"gray","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Dirt Race","color":"gray"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1711592156"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=526729826] 445 68 -669 -90 0
+    tellraw @s[gp.tp=526729826] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"445 68 -669","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Mycelium Race","color":"dark_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mycelium Race","color":"dark_purple"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 526729826"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1995158614] 517 11 -827 90 0
+    tellraw @s[gp.tp=1995158614] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"517 11 -827","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Frostburn Run","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Frostburn Run","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1995158614"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=148716625] 460 3 -331 -90 0
+    tellraw @s[gp.tp=148716625] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"460 3 -331","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"EverChanging Race","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"EverChanging Race","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 148716625"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1935481488] -85 45 -241 -45 0
+    tellraw @s[gp.tp=1935481488] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-85 45 -241","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=933181290] -77 56 -85 -45 0
+    tellraw @s[gp.tp=933181290] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-77 56 -85","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Virus 2","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 2","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 933181290"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1106121449] -164 14 -1211 -90 0
+    tellraw @s[gp.tp=1106121449] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-164 14 -1211","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Mansion Virus","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mansion Virus","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1106121449"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=711572688] -133 100 -1439 0 0
+    tellraw @s[gp.tp=711572688] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-133 100 -1439","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Virus Hell","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus Hell","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 711572688"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1793355344] -268 49 -39 -90 0
+    tellraw @s[gp.tp=1793355344] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-268 49 -39","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"PVP: Old CTF","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"PVP: Old CTF","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1793355344"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=905070336] 558 107 159 90 0
+    tellraw @s[gp.tp=905070336] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"558 107 159","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Capture","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 905070336"}},{"text":" the ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"white"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 905070336"}},{"text":"flag","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Capture the flag","color":"blue"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 905070336"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=2140363891] -105 25 200 -135 0
+    tellraw @s[gp.tp=2140363891] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-105 25 200","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"The Pit 3","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Pit 3","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 2140363891"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=370149165] -250 25 18 -90 0
+    tellraw @s[gp.tp=370149165] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-250 25 18","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Sand Tomb","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Sand Tomb","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 370149165"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=2071894910] -16 5 87 90 0
+    tellraw @s[gp.tp=2071894910] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-16 5 87","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Anvil Drop","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Anvil Drop","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 2071894910"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=2007743934] -187 24 96 -90 0
+    tellraw @s[gp.tp=2007743934] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-187 24 96","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Death Pit","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Death Pit","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 2007743934"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1405382069] 214 27 334 -90 0
+    tellraw @s[gp.tp=1405382069] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"214 27 334","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Rabbit","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit ball","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1405382069"}},{"text":" ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit ball","color":"white"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1405382069"}},{"text":"ball","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rabbit ball","color":"blue"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1405382069"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=763003760] 77 5 41 0 -15
+    tellraw @s[gp.tp=763003760] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"77 5 41","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Mastermind","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mastermind","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 763003760"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1663541988] 177 5 45 -90 0
+    tellraw @s[gp.tp=1663541988] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"177 5 45","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Mastermind Hell","color":"red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mastermind Hell","color":"red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1663541988"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1916439502] 161 4 180 90 0
+    tellraw @s[gp.tp=1916439502] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"161 4 180","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"P","color":"light_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"light_purple"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"i","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"c","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"t","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"o","color":"dark_green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"dark_green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"n","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"blue"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"a","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"r","color":"aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},{"text":"y","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Pictonary","color":"white"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1916439502"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=81659237] -103 19 482 -180 0
+    tellraw @s[gp.tp=81659237] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-103 19 482","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Royal","color":"blue","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"blue"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 81659237"}},{"text":" ","color":"white","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"white"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 81659237"}},{"text":"Rumble","color":"dark_green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Royal Rumble","color":"dark_green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 81659237"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1319821240] -1439 12 -228 90 0
+    tellraw @s[gp.tp=1319821240] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1439 12 -228","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"A Small Village","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1319821240"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1389015345] -1530 45 -50
+    tellraw @s[gp.tp=1389015345] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1530 45 -50","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Apocalypse","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Apocalypse","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1389015345"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1750738907] -1607 64 -60 90 0
+    tellraw @s[gp.tp=1750738907] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1607 64 -60","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Castle de Emmy","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Castle de Emmy","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1750738907"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=96726284] -1313 102 -241 0 0
+    tellraw @s[gp.tp=96726284] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1313 102 -241","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Four Corners","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Four Corners","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 96726284"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=944999815] -1107 24 -35 -90 0
+    tellraw @s[gp.tp=944999815] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1107 24 -35","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"HASDaa","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"HASDaa","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 944999815"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1105720171] -1073 26 -277 90 0
+    tellraw @s[gp.tp=1105720171] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1073 26 -277","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Hospital","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Hospital","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1105720171"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=641871916] -1106 10 -97 180 0
+    tellraw @s[gp.tp=641871916] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1106 10 -97","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Jungle","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Jungle","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 641871916"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=641806378] -1175 46 -264
+    tellraw @s[gp.tp=641806378] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1175 46 -264","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"BH Mastermind","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"BH Mastermind","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 641806378"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1671568857] -1081 43 -189 180 0
+    tellraw @s[gp.tp=1671568857] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1081 43 -189","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Mushroom Village","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Mushroom Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1671568857"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=942174366] -1158 44 -139 180 0
+    tellraw @s[gp.tp=942174366] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1158 44 -139","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Old","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Old","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 942174366"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=38982321] -1242 37 -246 0 0
+    tellraw @s[gp.tp=38982321] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1242 37 -246","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Park","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Park","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 38982321"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1146235770] -1153 27 -69 -180 0
+    tellraw @s[gp.tp=1146235770] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1153 27 -69","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Rainbow","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Rainbow","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1146235770"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=2043998994] -1430 98 -46 0 0
+    tellraw @s[gp.tp=2043998994] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1430 98 -46","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Resort","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Resort","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 2043998994"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1031034945] -1252 32 -88
+    tellraw @s[gp.tp=1031034945] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1252 32 -88","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Train Station","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Train Station","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1031034945"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=220163574] -85 45 -241 -45 0
+    tellraw @s[gp.tp=220163574] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-85 45 -241","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 220163574"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=301123243] -77 56 -85 -45 0
+    tellraw @s[gp.tp=301123243] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-77 56 -85","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Virus 2","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 2","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 301123243"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1891781749] -1168 32 -191 -180 0
+    tellraw @s[gp.tp=1891781749] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"-1168 32 -191","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Zelda","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Zelda","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1891781749"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=99934939] 801 70 135 0 0
+    tellraw @s[gp.tp=99934939] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"801 70 135","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Jade's Birthday","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Jade's Birthday","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 99934939"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=709458611] 397 17 61 90 0
+    tellraw @s[gp.tp=709458611] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"397 17 61","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Spawn","color":"dark_red","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Spawn","color":"dark_red"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 709458611"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1416570985] 348 4 114 -90 0
+    tellraw @s[gp.tp=1416570985] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"348 4 114","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Floo Network","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=425737659] 549 20 42
+    tellraw @s[gp.tp=425737659] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"549 20 42","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"Teamspeak Token","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Teamspeak Token","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 425737659"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=282336826] 329 24 171 90 0
+    tellraw @s[gp.tp=282336826] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"329 24 171","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"The Minigame Hub","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Minigame Hub","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 282336826"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=348727811] 385 15 159 180 0
+    tellraw @s[gp.tp=348727811] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"385 15 159","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"The PVP hub","color":"light_purple","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The PVP hub","color":"light_purple"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 348727811"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=818460664] 329 24 154 90 0
+    tellraw @s[gp.tp=818460664] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"329 24 154","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"The Mastermind Hub","color":"gold","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Mastermind Hub","color":"gold"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 818460664"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    tp @s[gp.tp=1096614035] 329 24 137 90 0
+    tellraw @s[gp.tp=1096614035] {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"329 24 137","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        {"text":"The Race Hub","color":"dark_aqua","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"The Race Hub","color":"dark_aqua"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1096614035"}},
+        {"text":"!","color":"gray"}
+    ]}
+    
+    @s playsound minecraft:entity.experience_orb.pickup voice @s
+    @s gp.tp = 0
+!mfunc book:
+    
+    
+    function ego:ice_race/book if @s[gp.bk=271805586]
+    
+    
+    
+    function ego:slow_race/book if @s[gp.bk=728155891]
+    
+    
+    
+    function ego:nether_race/book if @s[gp.bk=1674043405]
+    
+    
+    
+    function ego:evil_race/book if @s[gp.bk=1551573155]
+    
+    
+    
+    function ego:diamond_race/book if @s[gp.bk=35174176]
+    
+    
+    
+    function ego:emerald_race/book if @s[gp.bk=1263176935]
+    
+    
+    
+    function ego:quartz_race/book if @s[gp.bk=1175479079]
+    
+    
+    
+    function ego:1_8_race/book if @s[gp.bk=1558779551]
+    
+    
+    
+    function ego:epic_race/book if @s[gp.bk=1170582816]
+    
+    
+    
+    function ego:salt_race/book if @s[gp.bk=2038721375]
+    
+    
+    
+    function ego:death_run/book if @s[gp.bk=1710430244]
+    
+    
+    
+    function ego:dirt_race/book if @s[gp.bk=1711592156]
+    
+    
+    
+    function ego:mycelium_race/book if @s[gp.bk=526729826]
+    
+    
+    
+    function ego:frostburn_run/book if @s[gp.bk=1995158614]
+    
+    
+    
+    function ego:ever_changing_race/book if @s[gp.bk=148716625]
+    
+    
+    
+    function ego:virus/1/book if @s[gp.bk=1935481488]
+    
+    
+    
+    function ego:virus/2/book if @s[gp.bk=933181290]
+    
+    
+    
+    function ego:virus/mansion/book if @s[gp.bk=1106121449]
+    
+    
+    
+    function ego:virus/hell/book if @s[gp.bk=711572688]
+    
+    
+    
+    function ego:pvp/old_ctf/book if @s[gp.bk=1793355344]
+    
+    
+    
+    function ego:capture_the_flag/book if @s[gp.bk=905070336]
+    
+    
+    
+    function ego:the_pit_3/book if @s[gp.bk=2140363891]
+    
+    
+    
+    function ego:sand_tomb/book if @s[gp.bk=370149165]
+    
+    
+    
+    function ego:anvil_drop/book if @s[gp.bk=2071894910]
+    
+    
+    
+    function ego:death_pit/book if @s[gp.bk=2007743934]
+    
+    
+    
+    function ego:rabbit_ball/book if @s[gp.bk=1405382069]
+    
+    
+    
+    function ego:mastermind/book if @s[gp.bk=763003760]
+    
+    
+    
+    function ego:mastermind_hell/book if @s[gp.bk=1663541988]
+    
+    
+    
+    function ego:pictionary/book if @s[gp.bk=1916439502]
+    
+    
+    
+    function ego:royal_rumble/book if @s[gp.bk=81659237]
+    
+    
+    
+    function ego:bh_a_small_village/book if @s[gp.bk=1319821240]
+    
+    
+    
+    function ego:bh_apocalypse/book if @s[gp.bk=1389015345]
+    
+    
+    
+    function ego:bh_castle_de_emmy/book if @s[gp.bk=1750738907]
+    
+    
+    
+    function ego:bh_four_corners/book if @s[gp.bk=96726284]
+    
+    
+    
+    function ego:bh_hasdaa/book if @s[gp.bk=944999815]
+    
+    
+    
+    function ego:bh_hospital/book if @s[gp.bk=1105720171]
+    
+    
+    
+    function ego:bh_jungle/book if @s[gp.bk=641871916]
+    
+    
+    
+    function ego:bh_mastermind/book if @s[gp.bk=641806378]
+    
+    
+    
+    function ego:bh_mushroom_village/book if @s[gp.bk=1671568857]
+    
+    
+    
+    function ego:bh_old/book if @s[gp.bk=942174366]
+    
+    
+    
+    function ego:bh_park/book if @s[gp.bk=38982321]
+    
+    
+    
+    function ego:bh_rainbow/book if @s[gp.bk=1146235770]
+    
+    
+    
+    function ego:bh_resort/book if @s[gp.bk=2043998994]
+    
+    
+    
+    function ego:bh_train_station/book if @s[gp.bk=1031034945]
+    
+    
+    
+    function ego:bh_virus_1/book if @s[gp.bk=220163574]
+    
+    
+    
+    function ego:bh_virus_2/book if @s[gp.bk=301123243]
+    
+    
+    
+    function ego:bh_zelda/book if @s[gp.bk=1891781749]
+    
+    
+    
+    function ego:birthday/book if @s[gp.bk=99934939]
+    
+    
+    
+    
+    
+    
+    
+    function ego:ts_token/book if @s[gp.bk=425737659]
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @s gp.bk = 0
+!mfunc in_spawn_tree:
+    effect @s minecraft:saturation 2 0 true
+    gamemode 2 @s[m=0]
+    @e[type=armor_stand,gp.stand,gp.pvp=0] join NoPVP @a[x=397,y=17,z=61,r=5,m=2]
+    @s[m=!3] _dly += 1
+    ScOP @s[_dly=10..] gp.tp = @e[type=armor_stand,gp.stand,gp.tp=1..] gp.tp
+    @s[_dly=10..] _dly = 0
+!mfunc tp_portal:
+    @s if(~ 3 ~ lime_terracotta): @s gp.tp = mghub g.na
+    @s if(~ 3 ~ magenta_terracotta): @s gp.tp = pvphub g.na
+    @s if(~ 3 ~ orange_terracotta): @s gp.tp = mmhub g.na
+    @s if(~ 3 ~ cyan_terracotta): @s gp.tp = racehub g.na
+!mfunc calc_rank:
+    @a _rac = 1
+    @s[_rbs=1..] _rac = @s[_rbs=1..] _rbs
+
+    )
+    @s[_rac=16..]: @a[CMD=1,_dim=1] _rac = 0
+    @s[_rac=16..] _rac - 16
+    )
+    @s[_rac=8..]: @a[LE=1,_dim=1] _rac = 0
+    @s[_rac=8..] _rac - 8
+    )
+    @s[_rac=4..]: @a[EC=1,_dim=1] _rac = 0
+    @s[_rac=4..] _rac - 4
+    )
+    @s[_rac=2..]: @a[AT=1,_dim=1] _rac = 0
+    @s[_rac=2..] _rac - 2
+    )
+    @s[_rac=1..]: @a[APPS=1,_dim=1] _rac = 0
+    @s[_rac=1..] _rac - 1
+    
+!mfunc use_rank:
+    gamemode adventure @s[m=1,_dim=1]
+    gamemode adventure @s[m=0,_dim=1]
+    @s[g.lg=(1..),_dim=1] gp.tp = spawn g.na
+    clear @s[x=397,y=17,z=61,r=5]
+!mfunc use_options:
+    @s[gp.pvp=0] join NoPVP @a[team=!NoPVP,_dim=1]
+    @s[gp.pvp=1] effect @a[_dim=1] minecraft:weakness 3 100 true
+    @s[gp.sat=1] effect @a[_dim=1] minecraft:saturation 2 0 true
+    @a[_rgc=1] _rgc = 0
+    @s[gp.rgt=(1..)]: @a[_dim=1,g.hp=..19] _rgc = 1
+    @a[_rgc=1]: function calc_regen
+!mfunc calc_regen:
+    @s gp.rgt + 1
+    if(@s gp.rgt == @e[type=armor_stand,gp.stand,c=1] gp.rgt): effect @s + minecraft:regeneration 2 10 true
+    if(@s gp.rgt > @e[type=armor_stand,gp.stand,c=1] gp.rgt): effect @s - minecraft:regeneration
+    if(@s gp.rgt > @e[type=armor_stand,gp.stand,c=1] gp.rgt): @s gp.rgt = 0
+!mfunc vote:
+    tellraw @s {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"Floo","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Floo Network","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1416570985"}},{"text":"]","color":"gray"},{"text":":"},
+        {"text":"Vote here: ","color":"gray"},
+        {"text":"Link 1","color":"green","bold":"true","underlined":"true",
+            "clickEvent":{
+                "action":"open_url",
+                "value":"http://minecraft-server-list.com/server/200887/vote/"
+            },
+            "hoverEvent":{
+                "action":"show_text",
+                "value":{"text":"Vote link #1","color":"green"}
+            }
+        },
+        {"text":" "},
+        {"text":"Link 2","color":"dark_green","bold":"true","underlined":"true",
+            "clickEvent":{
+                "action":"open_url",
+                "value":"http://minecraftservers.org/vote/109809"
+            },
+            "hoverEvent":{
+                "action":"show_text",
+                "value":{"text":"Vote link #2","color":"dark_green"}
+            }
+        },
+        {"text":" "},
+        {"text":"Link 3","color":"green","bold":"true","underlined":"true",
+            "clickEvent":{
+                "action":"open_url",
+                "value":"https://minecraftservers.biz/servers/2511/"
+            },
+            "hoverEvent":{
+                "action":"show_text",
+                "value":{"text":"Vote link #3","color":"green"}
+            }
+        },
+        {"text":" "},
+        {"text":"Link 4","color":"dark_green","bold":"true","underlined":"true",
+            "clickEvent":{
+                "action":"open_url",
+                "value":"http://minecraft-mp.com/server/86376/vote/"
+            },
+            "hoverEvent":{
+                "action":"show_text",
+                "value":{"text":"Vote link #4","color":"dark_green"}
+            }
+        },
+        {"text":" "},
+        {"text":"Link 5","color":"green","bold":"true","underlined":"true",
+            "clickEvent":{
+                "action":"open_url",
+                "value":"http://www.planetminecraft.com/server/edge-gamerscom/vote/"
+            },
+            "hoverEvent":{
+                "action":"show_text",
+                "value":{"text":"Vote link #5","color":"green"}
+            }
+        }
+    ]}
+    playsound minecraft:entity.experience_orb.pickup voice @s
+    @s _vot = 0
+!mfunc stop_events:
+    @e[type=armor_stand,gp.stand,gp.cgi=1..] function _stop_events
+!mfunc _stop_events:
+    function stop_events/search_35174176_to_2140363891
+    @s[gp.cgi=1..] gp.cgi = 0
+!folder stop_events
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=35174176..1106121449]) : function search_35174176_to_1106121449
+        if (@s[gp.cgi=1146235770..2140363891]) : function search_1146235770_to_2140363891
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=35174176..526729826]) : function search_35174176_to_526729826
+        if (@s[gp.cgi=641806378..1106121449]) : function search_641806378_to_1106121449
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=35174176..148716625]) : function search_35174176_to_148716625
+        if (@s[gp.cgi=220163574..526729826]) : function search_220163574_to_526729826
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=35174176..81659237]) : function search_35174176_to_81659237
+        if (@s[gp.cgi=96726284..148716625]) : function search_96726284_to_148716625
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=35174176]) : function use_35174176
+        if (@s[gp.cgi=38982321..81659237]) : function search_38982321_to_81659237
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=38982321]) : function use_38982321
+        if (@s[gp.cgi=81659237]) : function use_81659237
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=96726284]) : function use_96726284
+        if (@s[gp.cgi=99934939..148716625]) : function search_99934939_to_148716625
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=99934939]) : function use_99934939
+        if (@s[gp.cgi=148716625]) : function use_148716625
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=220163574..301123243]) : function search_220163574_to_301123243
+        if (@s[gp.cgi=370149165..526729826]) : function search_370149165_to_526729826
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=220163574]) : function use_220163574
+        if (@s[gp.cgi=271805586..301123243]) : function search_271805586_to_301123243
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=271805586]) : function use_271805586
+        if (@s[gp.cgi=301123243]) : function use_301123243
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=370149165]) : function use_370149165
+        if (@s[gp.cgi=425737659..526729826]) : function search_425737659_to_526729826
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=425737659]) : function use_425737659
+        if (@s[gp.cgi=526729826]) : function use_526729826
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=641806378..905070336]) : function search_641806378_to_905070336
+        if (@s[gp.cgi=933181290..1106121449]) : function search_933181290_to_1106121449
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=641806378..711572688]) : function search_641806378_to_711572688
+        if (@s[gp.cgi=728155891..905070336]) : function search_728155891_to_905070336
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=641806378]) : function use_641806378
+        if (@s[gp.cgi=641871916..711572688]) : function search_641871916_to_711572688
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=641871916]) : function use_641871916
+        if (@s[gp.cgi=711572688]) : function use_711572688
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=728155891]) : function use_728155891
+        if (@s[gp.cgi=763003760..905070336]) : function search_763003760_to_905070336
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=763003760]) : function use_763003760
+        if (@s[gp.cgi=905070336]) : function use_905070336
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=933181290..944999815]) : function search_933181290_to_944999815
+        if (@s[gp.cgi=1031034945..1106121449]) : function search_1031034945_to_1106121449
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=933181290]) : function use_933181290
+        if (@s[gp.cgi=942174366..944999815]) : function search_942174366_to_944999815
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=942174366]) : function use_942174366
+        if (@s[gp.cgi=944999815]) : function use_944999815
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1031034945]) : function use_1031034945
+        if (@s[gp.cgi=1105720171..1106121449]) : function search_1105720171_to_1106121449
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1105720171]) : function use_1105720171
+        if (@s[gp.cgi=1106121449]) : function use_1106121449
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1146235770..1674043405]) : function search_1146235770_to_1674043405
+        if (@s[gp.cgi=1710430244..2140363891]) : function search_1710430244_to_2140363891
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1146235770..1389015345]) : function search_1146235770_to_1389015345
+        if (@s[gp.cgi=1405382069..1674043405]) : function search_1405382069_to_1674043405
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1146235770..1175479079]) : function search_1146235770_to_1175479079
+        if (@s[gp.cgi=1263176935..1389015345]) : function search_1263176935_to_1389015345
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1146235770]) : function use_1146235770
+        if (@s[gp.cgi=1170582816..1175479079]) : function search_1170582816_to_1175479079
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1170582816]) : function use_1170582816
+        if (@s[gp.cgi=1175479079]) : function use_1175479079
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1263176935]) : function use_1263176935
+        if (@s[gp.cgi=1319821240..1389015345]) : function search_1319821240_to_1389015345
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1319821240]) : function use_1319821240
+        if (@s[gp.cgi=1389015345]) : function use_1389015345
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1405382069..1558779551]) : function search_1405382069_to_1558779551
+        if (@s[gp.cgi=1663541988..1674043405]) : function search_1663541988_to_1674043405
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1405382069]) : function use_1405382069
+        if (@s[gp.cgi=1551573155..1558779551]) : function search_1551573155_to_1558779551
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1551573155]) : function use_1551573155
+        if (@s[gp.cgi=1558779551]) : function use_1558779551
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1663541988]) : function use_1663541988
+        if (@s[gp.cgi=1671568857..1674043405]) : function search_1671568857_to_1674043405
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1671568857]) : function use_1671568857
+        if (@s[gp.cgi=1674043405]) : function use_1674043405
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1710430244..1916439502]) : function search_1710430244_to_1916439502
+        if (@s[gp.cgi=1935481488..2140363891]) : function search_1935481488_to_2140363891
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1710430244..1750738907]) : function search_1710430244_to_1750738907
+        if (@s[gp.cgi=1793355344..1916439502]) : function search_1793355344_to_1916439502
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1710430244]) : function use_1710430244
+        if (@s[gp.cgi=1711592156..1750738907]) : function search_1711592156_to_1750738907
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1711592156]) : function use_1711592156
+        if (@s[gp.cgi=1750738907]) : function use_1750738907
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1793355344]) : function use_1793355344
+        if (@s[gp.cgi=1891781749..1916439502]) : function search_1891781749_to_1916439502
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1891781749]) : function use_1891781749
+        if (@s[gp.cgi=1916439502]) : function use_1916439502
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1935481488..2007743934]) : function search_1935481488_to_2007743934
+        if (@s[gp.cgi=2038721375..2140363891]) : function search_2038721375_to_2140363891
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1935481488]) : function use_1935481488
+        if (@s[gp.cgi=1995158614..2007743934]) : function search_1995158614_to_2007743934
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=1995158614]) : function use_1995158614
+        if (@s[gp.cgi=2007743934]) : function use_2007743934
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=2038721375..2043998994]) : function search_2038721375_to_2043998994
+        if (@s[gp.cgi=2071894910..2140363891]) : function search_2071894910_to_2140363891
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=2038721375]) : function use_2038721375
+        if (@s[gp.cgi=2043998994]) : function use_2043998994
+        
+        
+    !mfunc search_{num_list[0]}_to_{num_list[-1]}
+        if (@s[gp.cgi=2071894910]) : function use_2071894910
+        if (@s[gp.cgi=2140363891]) : function use_2140363891
+        
+        
+    
+    
+    !mfunc stop_events/use_271805586:
+        function ego:ice_race/term
+    
+    
+    
+    !mfunc stop_events/use_728155891:
+        function ego:slow_race/term
+    
+    
+    
+    !mfunc stop_events/use_1674043405:
+        function ego:nether_race/term
+    
+    
+    
+    !mfunc stop_events/use_1551573155:
+        function ego:evil_race/term
+    
+    
+    
+    !mfunc stop_events/use_35174176:
+        function ego:diamond_race/term
+    
+    
+    
+    !mfunc stop_events/use_1263176935:
+        function ego:emerald_race/term
+    
+    
+    
+    !mfunc stop_events/use_1175479079:
+        function ego:quartz_race/term
+    
+    
+    
+    !mfunc stop_events/use_1558779551:
+        function ego:1_8_race/term
+    
+    
+    
+    !mfunc stop_events/use_1170582816:
+        function ego:epic_race/term
+    
+    
+    
+    !mfunc stop_events/use_2038721375:
+        function ego:salt_race/term
+    
+    
+    
+    !mfunc stop_events/use_1710430244:
+        function ego:death_run/term
+    
+    
+    
+    !mfunc stop_events/use_1711592156:
+        function ego:dirt_race/term
+    
+    
+    
+    !mfunc stop_events/use_526729826:
+        function ego:mycelium_race/term
+    
+    
+    
+    !mfunc stop_events/use_1995158614:
+        function ego:frostburn_run/term
+    
+    
+    
+    !mfunc stop_events/use_148716625:
+        function ego:ever_changing_race/term
+    
+    
+    
+    !mfunc stop_events/use_1935481488:
+        function ego:virus/1/term
+    
+    
+    
+    !mfunc stop_events/use_933181290:
+        function ego:virus/2/term
+    
+    
+    
+    !mfunc stop_events/use_1106121449:
+        function ego:virus/mansion/term
+    
+    
+    
+    !mfunc stop_events/use_711572688:
+        function ego:virus/hell/term
+    
+    
+    
+    !mfunc stop_events/use_1793355344:
+        function ego:pvp/old_ctf/term
+    
+    
+    
+    !mfunc stop_events/use_905070336:
+        function ego:capture_the_flag/term
+    
+    
+    
+    !mfunc stop_events/use_2140363891:
+        function ego:the_pit_3/term
+    
+    
+    
+    !mfunc stop_events/use_370149165:
+        function ego:sand_tomb/term
+    
+    
+    
+    !mfunc stop_events/use_2071894910:
+        function ego:anvil_drop/term
+    
+    
+    
+    !mfunc stop_events/use_2007743934:
+        function ego:death_pit/term
+    
+    
+    
+    !mfunc stop_events/use_1405382069:
+        function ego:rabbit_ball/term
+    
+    
+    
+    !mfunc stop_events/use_763003760:
+        function ego:mastermind/term
+    
+    
+    
+    !mfunc stop_events/use_1663541988:
+        function ego:mastermind_hell/term
+    
+    
+    
+    !mfunc stop_events/use_1916439502:
+        function ego:pictionary/term
+    
+    
+    
+    !mfunc stop_events/use_81659237:
+        function ego:royal_rumble/term
+    
+    
+    
+    !mfunc stop_events/use_1319821240:
+        function ego:bh_a_small_village/term
+    
+    
+    
+    !mfunc stop_events/use_1389015345:
+        function ego:bh_apocalypse/term
+    
+    
+    
+    !mfunc stop_events/use_1750738907:
+        function ego:bh_castle_de_emmy/term
+    
+    
+    
+    !mfunc stop_events/use_96726284:
+        function ego:bh_four_corners/term
+    
+    
+    
+    !mfunc stop_events/use_944999815:
+        function ego:bh_hasdaa/term
+    
+    
+    
+    !mfunc stop_events/use_1105720171:
+        function ego:bh_hospital/term
+    
+    
+    
+    !mfunc stop_events/use_641871916:
+        function ego:bh_jungle/term
+    
+    
+    
+    !mfunc stop_events/use_641806378:
+        function ego:bh_mastermind/term
+    
+    
+    
+    !mfunc stop_events/use_1671568857:
+        function ego:bh_mushroom_village/term
+    
+    
+    
+    !mfunc stop_events/use_942174366:
+        function ego:bh_old/term
+    
+    
+    
+    !mfunc stop_events/use_38982321:
+        function ego:bh_park/term
+    
+    
+    
+    !mfunc stop_events/use_1146235770:
+        function ego:bh_rainbow/term
+    
+    
+    
+    !mfunc stop_events/use_2043998994:
+        function ego:bh_resort/term
+    
+    
+    
+    !mfunc stop_events/use_1031034945:
+        function ego:bh_train_station/term
+    
+    
+    
+    !mfunc stop_events/use_220163574:
+        function ego:bh_virus_1/term
+    
+    
+    
+    !mfunc stop_events/use_301123243:
+        function ego:bh_virus_2/term
+    
+    
+    
+    !mfunc stop_events/use_1891781749:
+        function ego:bh_zelda/term
+    
+    
+    
+    !mfunc stop_events/use_99934939:
+        function ego:birthday/term
+    
+    
+    
+    
+    
+    
+    
+    !mfunc stop_events/use_425737659:
+        function ego:ts_token/term
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+

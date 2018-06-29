@@ -441,14 +441,12 @@ class Block(object):
         try:
             # pylint: disable=eval-used
             return eval(st, self.globals_)
-        except (SyntaxError, NameError, IndexError, TypeError) as _e:
+        except Exception as _e:
+            # https://docs.python.org/3/library/exceptions.html#BaseException.with_traceback
+            tb = sys.exc_info()[2]
             e= _e
-        except Exception as _:
-            sys.stderr.write("error at %s:\n" % self.posmsg())
-            raise
         if e is not None:
-            # pylint: disable=raising-non-exception
-            raise e.__class__("%s at %s" % (str(e), self.posmsg()))
+            raise e.__class__("%s at %s" % (str(e), self.posmsg())).with_traceback(tb)
     def str_eval(self, st):
         """perform eval with the global variable dictionary of the block.
 
@@ -521,11 +519,12 @@ class Block(object):
         try:
             # pylint: disable=eval-used
             return eval(name, self.globals_)
-        except NameError as _e:
+        except Exception as _e:
+            tb = sys.exc_info()[2]
             e= _e
         if e is not None:
             # pylint: disable=raising-non-exception
-            raise e.__class__("%s at %s" % (str(e), self.posmsg()))
+            raise e.__class__("%s at %s" % (str(e), self.posmsg())).with_traceback(tb)
     def __setitem__(self, name, val):
         """sets a value in the globals_ dictionary of the block.
 

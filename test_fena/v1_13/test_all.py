@@ -11,6 +11,7 @@ from test_fena.v1_13.test_bossbars import test_bossbars
 from test_fena.v1_13.test_datas import test_datas
 from test_fena.v1_13.test_effects import test_effects
 from test_fena.v1_13.test_items import test_items
+from test_fena.v1_12.test_objectives import test_objectives
 from test_fena.v1_13.test_teams import test_teams
 from test_fena.v1_13.test_xps import test_xps
 
@@ -28,6 +29,7 @@ def test_all():
     test_datas()
     test_effects()
     test_items()
+    test_objectives()
     test_teams()
     test_xps()
 

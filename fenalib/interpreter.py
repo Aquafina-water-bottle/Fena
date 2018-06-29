@@ -18,6 +18,7 @@ from fenalib.in_file_config import InFileConfig
 from fenalib.command_builder import CommandBuilder_1_12, CommandBuilder_1_13
 from fenalib.mcfunction import McFunction
 
+
 class Interpreter(NodeVisitor):
     """
     - Visits all statement nodes first to get information for the InFileConfig object
@@ -115,25 +116,25 @@ class Interpreter(NodeVisitor):
 
         self.current_folders.pop()
 
-    def visit_PrefixNode(self, node):
+    def visit_VarSetNode(self, node):
         """
         Node Attributes:
-            prefix (Token)
+            variable (Token)
+            value (Token)
         """
-        self.in_file_config.prefix = self.visit(node.prefix)
-
-    def visit_ConstObjNode(self, node):
-        """
-        Node Attributes:
-            constobj (Token)
-        """
-        self.in_file_config.constobj = self.visit(node.constobj)
+        if node.variable.value == "prefix":
+            self.in_file_config.prefix = self.visit(node.prefix)
+        elif node.variable.value == "constobj":
+            self.in_file_config.constobj = self.visit(node.constobj)
+        else:
+            raise SyntaxError(f"Expected one of 'prefix' or 'constobj' for node {node.variable}")
 
     def visit_FenaCmdNode(self, node):
         """
         Node Attributes:
             cmd_segment_nodes (list of MainCmdNode objects)
         """
+        pass
 
     def visit_Token(self, token):
         """

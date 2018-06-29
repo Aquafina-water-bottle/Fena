@@ -15,7 +15,7 @@ from fenalib.lexical_token import Token
 from fenalib.token_classes import TypedToken, DelimiterToken, WhitespaceToken
 from fenalib.lexer import Lexer
 
-from fenalib.nodes import (ProgramNode, McFunctionNode, FolderNode, PrefixNode, ConstObjNode, FenaCmdNode,
+from fenalib.nodes import (ProgramNode, McFunctionNode, FolderNode, VarSetNode, FenaCmdNode,
     ScoreboardCmdMathNode, ScoreboardCmdMathValueNode, ScoreboardCmdSpecialNode, FunctionCmdNode, SimpleCmdNode,
 
     ExecuteCmdNode, ExecuteSubLegacyArg,
@@ -42,6 +42,7 @@ from fenalib.nodes import (ProgramNode, McFunctionNode, FolderNode, PrefixNode, 
     DataGetNode, DataMergeNode, DataRemoveNode,
     EffectClearNode, EffectGiveNode,
     ItemNode, ItemGiveNode, ItemClearNode, ItemReplaceEntityNode, ItemReplaceBlockNode,
+    ObjectiveAddNode, ObjectiveRemoveNode, ObjectiveSetdisplayNode,
     TagAddNode, TagRemoveNode,
     TeamAddNode, TeamRemoveNode, TeamEmptyNode, TeamJoinNode, TeamLeaveNode, TeamOptionNode,
     XpGetNode, XpMathNode,
@@ -64,12 +65,11 @@ statement_suite ::= [NEWLINE, (statement, NEWLINE)]*
 statement ::= "!" && [folder_stmt, mfunc_stmt, prefix_stmt, constobj_stmt]
 folder_stmt ::= "folder" && STR && ":" && (NEWLINE)* & INDENT && statement_suite && DEDENT
 mfunc_stmt ::= "mfunc" && [STR, literal_str] && ":" && (NEWLINE)* & INDENT && command_suite && DEDENT
-prefix_stmt ::= "prefix" && STR
-constobj_stmt ::= "constobj" && STR
+set_var_stmt ::= "set" && ["prefix", "constobj"] && "=" && STR
 
 command_suite ::= [NEWLINE, (command, NEWLINE)]*
 command ::= (execute_cmd)? && [sb_cmd, simple_cmd]
-simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, item_cmd, tag_cmd, team_cmd, xp_cmd,
+simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, item_cmd, objective_cmd, tag_cmd, team_cmd, xp_cmd,
                 (COMMAND_KEYWORD && (STR, selector, nbt, json, item, namespace_id, group_tag)*)]
 
 execute_cmd_1_12 ::= selector && (vec3)? && (exec_sub_if)? && (execute_cmd_1_12)? && ":"
@@ -138,6 +138,11 @@ item_replace_block ::= vec3 && block_slots && "=" && item && (INT)?
 item ::= ("minecraft" & ":")? & item_id & item_damage? & nbt?
 item_damage ::= "[" & INT & "]"
 # item_id, entity_slots and block_slots are defined under items.json and replaceitem.json
+
+objective_cmd ::= "objective" && obj_add, obj_remove, obj_setdisplay
+obj_add ::= "add" && STR && (STR)*
+obj_remove ::= "remove" && STR
+obj_setdisplay ::= "setdisplay" && STR && STR
 
 tag_cmd ::= "tag" && [tag_add, tag_remove]
 tag_add ::= selector && "+" && STR
@@ -637,10 +642,8 @@ class Parser:
             return self.mfunc_stmt()
         if self.current_token.matches(TypedToken.STRING, value="folder"):
             return self.folder_stmt()
-        if self.current_token.matches(TypedToken.STRING, value="prefix"):
-            return self.prefix_stmt()
-        if self.current_token.matches(TypedToken.STRING, value="constobj"):
-            return self.constobj_stmt()
+        if self.current_token.matches(TypedToken.STRING, value="set"):
+            return self.set_var_stmt()
 
         self.error("Invalid statement")
 
@@ -694,27 +697,19 @@ class Parser:
 
         return FolderNode(folder_token, statement_nodes)
 
-    def prefix_stmt(self):
+    def set_var_stmt(self):
         """
-        prefix_stmt ::= "prefix" && STR
+        set_var_stmt ::= "set" && STR && "=" && STR
 
         Returns:
-            PrefixNode
+            VarSetNode
         """
-        self.eat(TypedToken.STRING, value="prefix")
-        prefix_token = self.eat(TypedToken.STRING, error_message="Expected a string after a prefix statement")
-        return PrefixNode(prefix_token)
+        self.eat(TypedToken.STRING, value="set")
+        variable = self.eat(TypedToken.STRING)
+        self.eat(DelimiterToken.EQUALS)
+        value = self.eat(TypedToken.STRING)
 
-    def constobj_stmt(self):
-        """
-        constobj_stmt ::= "constobj" && STR
-
-        Returns:
-            ConstObjNode
-        """
-        self.eat(TypedToken.STRING, value="constobj")
-        constobj_token = self.eat(TypedToken.STRING, error_message="Expected a string after a constobj statement")
-        return ConstObjNode(constobj_token)
+        return VarSetNode(variable, value)
 
     def command(self):
         """
@@ -1280,7 +1275,7 @@ class Parser:
 
     def simple_cmd(self):
         """
-        simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, item_cmd, tag_cmd, team_cmd, xp_cmd,
+        simple_cmd ::= [bossbar_cmd, effect_cmd, data_cmd, function_cmd, item_cmd, objective_cmd, tag_cmd, team_cmd, xp_cmd,
                         (COMMAND_KEYWORD && (STR, selector, nbt, json, item, namespace_id, group_tag)*)]
 
         Note that a simple command can turn into a scoreboard command
@@ -1294,7 +1289,7 @@ class Parser:
         # advances the command name
         command_name_token = self.eat(TypedToken.STRING)
 
-        if command_name in ("bossbar", "data", "effect", "function", "item", "tag", "team", "xp"):
+        if command_name in ("bossbar", "data", "effect", "function", "item", "objective", "tag", "team", "xp"):
             # for each command name, does something like self.bossbar_cmd()
             method_name = f"{command_name}_cmd"
             method = getattr(self, method_name, self.invalid_method)
@@ -1587,7 +1582,6 @@ class Parser:
             return ItemGiveNode(selector, item, count)
         return ItemGiveNode(selector, item)
 
-
     def item_clear(self, selector):
         """
         item_clear ::= selector && "-" && ["*", item] && (INT)?
@@ -1638,7 +1632,6 @@ class Parser:
             return ItemReplaceBlockNode(vec3, block_slot, item, count)
         return ItemReplaceBlockNode(vec3, block_slot, item)
 
-
     def item(self):
         """
         item ::= ("minecraft" & ":")? & item_id & item_damage? & nbt?
@@ -1665,7 +1658,6 @@ class Parser:
 
         return ItemNode(item_id, item_damage, nbt)
 
-
     def item_damage(self):
         """
         item_damage ::= "[" & INT & "]"
@@ -1682,6 +1674,46 @@ class Parser:
         self.eat(DelimiterToken.CLOSE_SQUARE_BRACKET)
         return item_damage
 
+    def objective_cmd(self):
+        """
+        objective_cmd ::= "objective" && obj_add, obj_remove, obj_setdisplay
+        """
+        if self.current_token.matches(TypedToken.STRING, value="add"):
+            return self.obj_add()
+        if self.current_token.matches(TypedToken.STRING, value="remove"):
+            return self.obj_remove()
+        if self.current_token.matches(TypedToken.STRING, value="setdisplay"):
+            return self.obj_setdisplay()
+
+    def obj_add(self):
+        """
+        obj_add ::= "add" && STR && (STR)*
+        """
+        self.eat(TypedToken.STRING, value="add")
+        objective = self.eat(TypedToken.STRING)
+        criteria = self.eat(TypedToken.STRING)
+        display_name = []
+        while self.current_token.matches(TypedToken.STRING):
+            display_name_section = self.eat(TypedToken.STRING)
+            display_name.append(display_name_section)
+        return ObjectiveAddNode(objective, criteria, display_name)
+
+    def obj_remove(self):
+        """
+        obj_remove ::= "remove" && STR
+        """
+        self.eat(TypedToken.STRING, value="remove")
+        objective = self.eat(TypedToken.STRING)
+        return ObjectiveRemoveNode(objective)
+
+    def obj_setdisplay(self):
+        """
+        obj_setdisplay ::= "setdisplay" && STR && STR
+        """
+        self.eat(TypedToken.STRING, value="setdisplay")
+        slot = self.eat(TypedToken.STRING)
+        objective = self.eat(TypedToken.STRING) if self.current_token.matches(TypedToken.STRING) else None
+        return ObjectiveSetdisplayNode(slot, objective)
 
     def tag_cmd(self):
         """

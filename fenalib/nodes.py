@@ -68,23 +68,19 @@ class FolderNode(StmtNode):
         self.folder = folder
         self.statement_nodes = statement_nodes
 
-class PrefixNode(StmtNode):
+class VarSetNode(StmtNode):
     """
-    Attributes:
-        prefix (Token)
-    """
-    def __init__(self, prefix):
-        assert_type(prefix, Token)
-        self.prefix = prefix
+    Holds all variables defined for the file
 
-class ConstObjNode(StmtNode):
-    """
     Attributes:
-        constobj (Token)
+        variable (Token)
+        value (Token)
     """
-    def __init__(self, constobj):
-        assert_type(constobj, Token)
-        self.constobj = constobj
+    def __init__(self, variable, value):
+        assert_type(variable, Token)
+        assert_type(value, Token)
+        self.variable = variable
+        self.value = value
 
 
 class CmdNode(Node, ABC):
@@ -769,6 +765,46 @@ class ItemNode(CmdNode):
         self.item_id = item_id
         self.damage = damage
         self.nbt = nbt
+
+
+class ObjectiveCmdNode(MainCmdNode):
+    pass
+
+class ObjectiveAddNode(ObjectiveCmdNode):
+    """
+    Attributes:
+        objective (Token)
+        criteria (Token)
+        display_name (List[Token])
+    """
+    def __init__(self, objective, criteria, display_name):
+        assert_type(objective, Token)
+        assert_type(criteria, Token)
+        assert_list_types(display_name, Token)
+        self.objective = objective
+        self.criteria = criteria
+        self.display_name = display_name
+
+class ObjectiveRemoveNode(ObjectiveCmdNode):
+    """
+    Attributes:
+        objective (Token)
+    """
+    def __init__(self, objective):
+        assert_type(objective, Token)
+        self.objective = objective
+
+class ObjectiveSetdisplayNode(ObjectiveCmdNode):
+    """
+    Attributes:
+        slot (Token)
+        objective (Token or None)
+    """
+    def __init__(self, slot, objective=None):
+        assert_type(slot, Token)
+        assert_type(objective, Token, optional=True)
+        self.slot = slot
+        self.objective = objective
 
 
 class TagCmdNode(MainCmdNode):

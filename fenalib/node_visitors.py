@@ -65,7 +65,7 @@ class NodeBuilder(TreePostfixTraversal):
         Returns:
             str: Whatever is gotten with the build method
         """
-        assert_type(node, CmdNode, Token)
+        assert_type(node, CmdNode, Token, str)
         return self._visit("build", node, **kwargs)
 
     def iter_build(self, nodes, join_value=None):
@@ -85,3 +85,4 @@ class NodeBuilder(TreePostfixTraversal):
             return build_generator
 
         return join_value.join(build_generator)
+

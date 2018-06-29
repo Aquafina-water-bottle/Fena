@@ -10,6 +10,25 @@ Lots of config files shamelessly gotten from:
     https://github.com/Arcensoth/mcdata
 """
 
+"""
+Random stuff only for me honestly (vim session tab numbers):
+    1: Python3/fena
+        fena.py
+    2: Fena/lib
+        floo_event.py
+        location.py
+    3: floo_network/src
+        main.py
+        main.fena
+    4: Python3/fena/fenalib/log
+        after_pre_pyexpander.txt
+        after_pyexpander.txt
+        parsed_cmds.txt
+    5: Fena.wiki
+        Code-Style.md
+        Code-Documentation.md
+"""
+
 import argparse
 import logging
 import sys

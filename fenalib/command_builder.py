@@ -1,7 +1,6 @@
 """ Contains node visitors for the AST of a command to build itself """
 
 import logging
-import os
 
 if __name__ == "__main__":
     import sys
@@ -22,6 +21,7 @@ from fenalib.str_utils import encode_str, decode_str
 from fenalib.lexer import Lexer
 from fenalib.parser import Parser
 
+# pylint: disable=too-many-public-methods
 class CommandBuilder_1_12(NodeBuilder):
     """
     Attributes:
@@ -68,6 +68,7 @@ class CommandBuilder_1_12(NodeBuilder):
             coords (Vec3Node or None)
             sub_if (list of ExecuteSubIfBlockArg objects)
         """
+        execute = self.build("execute", cmd_name=True)
         if node.coords is None:
             coords = "~ ~ ~"
         else:
@@ -76,16 +77,16 @@ class CommandBuilder_1_12(NodeBuilder):
 
         # no detect area
         if not node.sub_if:
-            return f"execute {selector} {coords}"
+            return f"{execute} {selector} {coords}"
 
         # can have one or more detect areas
         result = []
         for index, sub_if in enumerate(node.sub_if):
             sub_if = self.build(sub_if)
             if index == 0:
-                result.append(f"execute {selector} {coords} {sub_if}")
+                result.append(f"{execute} {selector} {coords} {sub_if}")
             else:
-                result.append(f"execute @s {coords} {sub_if}")
+                result.append(f"{execute} @s {coords} {sub_if}")
         return " ".join(result)
 
     def build_ExecuteSubIfBlockArg(self, node):
@@ -109,9 +110,10 @@ class CommandBuilder_1_12(NodeBuilder):
             nbt (NbtObjectNode)
         """
         data_select_type = "entitydata" if isinstance(node.entity_vec3, SelectorNode) else "blockdata"
+        data_cmd_name = self.build(data_select_type, cmd_name=True)
         entity_vec3 = self.build(node.entity_vec3)
         nbt = self.build(node.nbt)
-        return f"{data_select_type} {entity_vec3} {nbt}"
+        return f"{data_cmd_name} {entity_vec3} {nbt}"
 
     def build_ScoreboardCmdMathNode(self, node):
         """
@@ -122,12 +124,13 @@ class CommandBuilder_1_12(NodeBuilder):
             target_get (SelectorNode or Token)
             objective_get (Token or None)
         """
+        scoreboard = self.build("scoreboard", cmd_name=True)
         target = self.build(node.target)
         objective = self.build(node.objective, prefix=True)
         operator = self.build(node.operator)
         target_get = self.build(node.target_get)
         objective_get = objective if node.objective_get is None else self.build(node.objective_get, prefix=True)
-        return f"scoreboard players operation {target} {objective} {operator} {target_get} {objective_get}"
+        return f"{scoreboard} players operation {target} {objective} {operator} {target_get} {objective_get}"
 
     def build_ScoreboardCmdMathValueNode(self, node):
         """
@@ -138,6 +141,7 @@ class CommandBuilder_1_12(NodeBuilder):
             value (Token)
             nbt (NbtObjectNode)
         """
+        scoreboard = self.build("scoreboard", cmd_name=True)
         target = self.build(node.target)
         objective = self.build(node.objective, prefix=True)
         operator = self.build(node.operator)
@@ -152,8 +156,8 @@ class CommandBuilder_1_12(NodeBuilder):
         if operator in operation_dict:
             operation = operation_dict[operator]
             if nbt:
-                return f"scoreboard players {operation} {target} {objective} {value} {nbt}"
-            return f"scoreboard players {operation} {target} {objective} {value}"
+                return f"{scoreboard} players {operation} {target} {objective} {value} {nbt}"
+            return f"{scoreboard} players {operation} {target} {objective} {value}"
 
         # otherwise, scoreboard players operation
         if node.nbt is not None:
@@ -167,7 +171,7 @@ class CommandBuilder_1_12(NodeBuilder):
         # therefore making the target score greater than or equal to the value
 
         if operator in ("*=", "/=", "%=", "<", ">"):
-            return f"scoreboard players operation {target} {objective} {operator} {value} {constobj}"
+            return f"{scoreboard} players operation {target} {objective} {operator} {value} {constobj}"
 
         if operator == "><":
             # no reason to swap with a constant value
@@ -180,11 +184,11 @@ class CommandBuilder_1_12(NodeBuilder):
         Args:
             node (ScoreboardCmdSpecialNode)
         """
-        # sub_cmd = self.build(node.sub_cmd, replacements={"<-": "get"})
+        scoreboard = self.build("scoreboard", cmd_name=True)
         sub_cmd = self.build(node.sub_cmd)
         target = self.build(node.target)
         objective = self.build(node.objective, prefix=True)
-        return f"scoreboard players {sub_cmd} {objective} {target}"
+        return f"{scoreboard} players {sub_cmd} {objective} {target}"
 
     def build_EffectClearNode(self, node):
         """
@@ -192,12 +196,13 @@ class CommandBuilder_1_12(NodeBuilder):
             selector (SelectorNode)
             effect_id (Token or None)
         """
+        effect = self.build("effect", cmd_name=True)
         selector = self.build(node.selector)
         if node.effect_id is None:
-            return f"effect {selector} clear"
+            return f"{effect} {selector} clear"
 
         effect_id = self.build(node.effect_id)
-        return f"effect {selector} minecraft:{effect_id} 0 0 true"
+        return f"{effect} {selector} minecraft:{effect_id} 0 0 true"
 
     def build_EffectGiveNode(self, node):
         """
@@ -208,12 +213,13 @@ class CommandBuilder_1_12(NodeBuilder):
             level (Token or None)
             hide_particles (bool)
         """
+        effect = self.build("effect", cmd_name=True)
         selector = self.build(node.selector)
         effect_id = self.build(node.effect_id)
         duration = "2" if node.duration is None else self.build(node.duration)
         level = "0" if node.level is None else self.build(node.level)
         hide_particles = "true" if node.hide_particles else "false"
-        return f"effect {selector} minecraft:{effect_id} {duration} {level} {hide_particles}"
+        return f"{effect} {selector} minecraft:{effect_id} {duration} {level} {hide_particles}"
 
     def build_FunctionCmdNode(self, node):
         """
@@ -221,11 +227,12 @@ class CommandBuilder_1_12(NodeBuilder):
             value (Token)
             namespace (Token or None)
         """
+        function = self.build("function", cmd_name=True)
         if node.namespace is not None:
             # if there is a namespace, it is assumed that the path is correct
             value = self.build(node.value)
             namespace = self.build(node.namespace)
-            return f"function {namespace}:{value}"
+            return f"{function} {namespace}:{value}"
 
         function_shortcut = self.build(node.value)
 
@@ -257,14 +264,18 @@ class CommandBuilder_1_12(NodeBuilder):
                 raise SyntaxError(f"Invalid function shortcut for node {node} (duplicate)")
 
         function_name = self.in_file_config.functions[function_shortcut]
-        return f"function {function_name}"
+        return f"{function} {function_name}"
 
     def build_SimpleCmdNode(self, node):
         """
         Args:
             node (SimpleCmdNode)
         """
-        return self.iter_build(node.tokens, " ")
+        cmd_name = self.build(node.tokens[0], cmd_name=True)
+        cmd_args = self.iter_build(node.tokens[1:], ' ')
+        if cmd_args:
+            return f"{cmd_name} {cmd_args}"
+        return cmd_name
 
     def build_ItemGiveNode(self, node):
         """
@@ -273,6 +284,7 @@ class CommandBuilder_1_12(NodeBuilder):
             item (ItemNode)
             count (Token or None)
         """
+        give = self.build("give", cmd_name=True)
         selector = self.build(node.selector)
         item_id = self.build(node.item.item_id)
         count = "1" if node.count is None else self.build(node.count)
@@ -280,9 +292,9 @@ class CommandBuilder_1_12(NodeBuilder):
 
         if node.item.nbt is not None:
             nbt = self.build(node.item.nbt)
-            return f"give {selector} minecraft:{item_id} {count} {damage} {nbt}"
+            return f"{give} {selector} minecraft:{item_id} {count} {damage} {nbt}"
 
-        return f"give {selector} minecraft:{item_id} {count} {damage}"
+        return f"{give} {selector} minecraft:{item_id} {count} {damage}"
 
     def build_ItemClearNode(self, node):
         """
@@ -291,9 +303,10 @@ class CommandBuilder_1_12(NodeBuilder):
             item (ItemNode)
             count (Token or None)
         """
+        clear = self.build("clear", cmd_name=True)
         selector = self.build(node.selector)
         if isinstance(node.item, Token):
-            return f"clear {selector}"
+            return f"{clear} {selector}"
 
         item_id = self.build(node.item.item_id)
         count = "-1" if node.count is None else self.build(node.count)
@@ -301,9 +314,9 @@ class CommandBuilder_1_12(NodeBuilder):
 
         if node.item.nbt is not None:
             nbt = self.build(node.item.nbt)
-            return f"clear {selector} minecraft:{item_id} {damage} {count} {nbt}"
+            return f"{clear} {selector} minecraft:{item_id} {damage} {count} {nbt}"
 
-        return f"clear {selector} minecraft:{item_id} {damage} {count}"
+        return f"{clear} {selector} minecraft:{item_id} {damage} {count}"
 
     def build_ItemReplaceEntityNode(self, node):
         """
@@ -313,6 +326,7 @@ class CommandBuilder_1_12(NodeBuilder):
             item (ItemNode)
             count (Token or None)
         """
+        replaceitem = self.build("replaceitem", cmd_name=True)
         selector = self.build(node.selector)
         slot = self.build(node.slot)
         item_id = self.build(node.item.item_id)
@@ -321,8 +335,8 @@ class CommandBuilder_1_12(NodeBuilder):
 
         if node.item.nbt is not None:
             nbt = self.build(node.item.nbt)
-            return f"replaceitem entity {selector} slot.{slot} minecraft:{item_id} {count} {damage} {nbt}"
-        return f"replaceitem entity {selector} slot.{slot} minecraft:{item_id} {count} {damage}"
+            return f"{replaceitem} entity {selector} slot.{slot} minecraft:{item_id} {count} {damage} {nbt}"
+        return f"{replaceitem} entity {selector} slot.{slot} minecraft:{item_id} {count} {damage}"
 
     def build_ItemReplaceBlockNode(self, node):
         """
@@ -332,6 +346,7 @@ class CommandBuilder_1_12(NodeBuilder):
             item (ItemNode)
             count (Token or None)
         """
+        replaceitem = self.build("replaceitem", cmd_name=True)
         vec3 = self.build(node.vec3)
         slot = self.build(node.slot)
         item_id = self.build(node.item.item_id)
@@ -340,8 +355,44 @@ class CommandBuilder_1_12(NodeBuilder):
 
         if node.item.nbt is not None:
             nbt = self.build(node.item.nbt)
-            return f"replaceitem block {vec3} slot.{slot} minecraft:{item_id} {count} {damage} {nbt}"
-        return f"replaceitem block {vec3} slot.{slot} minecraft:{item_id} {count} {damage}"
+            return f"{replaceitem} block {vec3} slot.{slot} minecraft:{item_id} {count} {damage} {nbt}"
+        return f"{replaceitem} block {vec3} slot.{slot} minecraft:{item_id} {count} {damage}"
+
+    def build_ObjectiveAddNode(self, node):
+        """
+        Node Attributes:
+            objective (Token)
+            criteria (Token)
+            display_name (List[Token])
+        """
+        scoreboard = self.build("scoreboard", cmd_name=True)
+        objective = self.build(node.objective)
+        criteria = self.build(node.criteria)
+        display_name = self.iter_build(node.display_name, " ")
+        # strips in case the display name is nothing
+        return f"{scoreboard} objectives add {objective} {criteria} {display_name}".strip()
+
+    def build_ObjectiveRemoveNode(self, node):
+        """
+        Node Attributes:
+            objective (Token)
+        """
+        scoreboard = self.build("scoreboard", cmd_name=True)
+        objective = self.build(node.objective)
+        return f"{scoreboard} objectives remove {objective}"
+
+    def build_ObjectiveSetdisplayNode(self, node):
+        """
+        Node Attributes:
+            objective (Token)
+            slot (Token)
+        """
+        scoreboard = self.build("scoreboard", cmd_name=True)
+        slot = self.build(node.slot)
+        if node.objective is None:
+            return f"{scoreboard} objectives setdisplay {slot}"
+        objective = self.build(node.objective)
+        return f"{scoreboard} objectives setdisplay {slot} {objective}"
 
     def build_TagAddNode(self, node):
         """
@@ -350,13 +401,14 @@ class CommandBuilder_1_12(NodeBuilder):
             tag (Token)
             nbt (NbtObjectNode or None)
         """
+        scoreboard = self.build("scoreboard", cmd_name=True)
         selector = self.build(node.selector)
         tag = self.build(node.tag, prefix=True)
         if node.nbt is None:
-            return f"scoreboard players tag {selector} add {tag}"
+            return f"{scoreboard} players tag {selector} add {tag}"
 
         nbt = self.build(node.nbt)
-        return f"scoreboard players tag {selector} add {tag} {nbt}"
+        return f"{scoreboard} players tag {selector} add {tag} {nbt}"
 
     def build_TagRemoveNode(self, node):
         """
@@ -365,13 +417,14 @@ class CommandBuilder_1_12(NodeBuilder):
             tag (Token)
             nbt (NbtObjectNode or None)
         """
+        scoreboard = self.build("scoreboard", cmd_name=True)
         selector = self.build(node.selector)
         tag = self.build(node.tag, prefix=True)
         if node.nbt is None:
-            return f"scoreboard players tag {selector} remove {tag}"
+            return f"{scoreboard} players tag {selector} remove {tag}"
 
         nbt = self.build(node.nbt)
-        return f"scoreboard players tag {selector} remove {tag} {nbt}"
+        return f"{scoreboard} players tag {selector} remove {tag} {nbt}"
 
 
     def build_TeamAddNode(self, node):
@@ -380,47 +433,52 @@ class CommandBuilder_1_12(NodeBuilder):
             node (TeamAddNode)
             display_name (list of Token objects)
         """
+        scoreboard = self.build("scoreboard", cmd_name=True)
         team_name = self.build(node.team_name, prefix=True)
         if not node.display_name:
-            return f"scoreboard teams add {team_name}"
+            return f"{scoreboard} teams add {team_name}"
 
         display_name = self.iter_build(node.display_name, " ")
-        return f"scoreboard teams add {team_name} {display_name}"
+        return f"{scoreboard} teams add {team_name} {display_name}"
 
     def build_TeamJoinNode(self, node):
         """
         Args:
             node (TeamJoinNode)
         """
+        scoreboard = self.build("scoreboard", cmd_name=True)
         team_name = self.build(node.team_name, prefix=True)
         target = self.build(node.target)
-        return f"scoreboard teams join {team_name} {target}"
+        return f"{scoreboard} teams join {team_name} {target}"
 
     def build_TeamLeaveNode(self, node):
         """
         Args:
             node (TeamLeaveNode)
         """
+        scoreboard = self.build("scoreboard", cmd_name=True)
         target = self.build(node.target)
-        return f"scoreboard teams leave {target}"
+        return f"{scoreboard} teams leave {target}"
 
     def build_TeamEmptyNode(self, node):
         """
         Args:
             node (TeamEmptyNode)
         """
+        scoreboard = self.build("scoreboard", cmd_name=True)
         team_name = self.build(node.team_name, prefix=True)
-        return f"scoreboard teams empty {team_name}"
+        return f"{scoreboard} teams empty {team_name}"
 
     def build_TeamOptionNode(self, node):
         """
         Args:
             node (TeamOptionNode)
         """
+        scoreboard = self.build("scoreboard", cmd_name=True)
         team_name = self.build(node.team_name, prefix=True)
         option = self.build(node.option)
         value = self.build(node.value)
-        return f"scoreboard teams option {team_name} {option} {value}"
+        return f"{scoreboard} teams option {team_name} {option} {value}"
 
     def build_TeamRemoveNode(self, node):
         """
@@ -438,6 +496,7 @@ class CommandBuilder_1_12(NodeBuilder):
             value (Token)
             sub_cmd (Token or None)
         """
+        xp = self.build("xp", cmd_name=True)
         selector = self.build(node.selector)
         operator = self.build(node.operator)
         value = self.build(node.value)
@@ -451,7 +510,7 @@ class CommandBuilder_1_12(NodeBuilder):
         value_ending = "" if sub_cmd == "points" else "L"
         negative = "-" if operator == "-" else ""
 
-        return f"xp {selector} {negative}{value}{value_ending}"
+        return f"{xp} {selector} {negative}{value}{value_ending}"
 
     def build_SelectorNode(self, node):
         """
@@ -816,7 +875,7 @@ class CommandBuilder_1_12(NodeBuilder):
         namespace = ("minecraft" if node.namespace is None else self.build(node.namespace))
         return f"{namespace}:{id_value}"
 
-    def build_Token(self, token, prefix=False, replacements=None):
+    def build_Token(self, token, prefix=False, replacements=None, cmd_name=False):
         """
         Returns its value with a prefix if avaliable
 
@@ -829,6 +888,8 @@ class CommandBuilder_1_12(NodeBuilder):
         """
         assert_type(prefix, bool)
         assert_type(replacements, dict, optional=True)
+        assert_type(cmd_name, bool)
+        assert not (cmd_name and prefix), "Both cmd_name and prefix cannot be True"
 
         # prioritizes replacement over value
         string = token.replacement if (token.replacement is not None) else str(token.value)
@@ -843,18 +904,23 @@ class CommandBuilder_1_12(NodeBuilder):
             if "." not in string and self.config_data.ego:
                 logging.warning(f"No prefix given to {token!r}")
 
+        if cmd_name and string in self.config_data.plugin_conflict_commands:
+            return f"minecraft:{string}"
+
         if replacements is not None:
             return replacements.get(string, string)
 
         return string
 
-    def build_str(self, node):
+    def build_str(self, node, cmd_name=False):
         """
         Literally just returns itself lmao
         """
+        if cmd_name and node in self.config_data.plugin_conflict_commands:
+            return f"minecraft:{node}"
         return node
 
-# TODO finish 1.13
+
 class CommandBuilder_1_13(CommandBuilder_1_12):
     def __init__(self, *args):
         super().__init__(*args)
@@ -1026,7 +1092,8 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
         Node Attributes:
             sub_cmd_nodes (list of ExecuteSubArgNode objects)
         """
-        return f"execute {self.iter_build(node.sub_cmd_nodes, ' ')} run"
+        execute = self.build("execute", cmd_name=True)
+        return f"{execute} {self.iter_build(node.sub_cmd_nodes, ' ')} run"
 
     def build_ExecuteSubAsArg(self, node):
         """
@@ -1219,7 +1286,6 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
         objective = self.build(node.objective, prefix=True)
         operator = self.build(node.operator)
         int_value = self.build(node.value)
-        sub_cmd = node.sub_cmd
 
         if int_value == "*":
             int_value = f"{-(1<<31)}.."
@@ -1239,7 +1305,7 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
         else:
             raise SyntaxError("Unknown default case")
 
-        return f"{sub_cmd} score {target} {objective} matches {int_range}"
+        return f"{node.sub_cmd} score {target} {objective} matches {int_range}"
 
     def build_ExecuteSubIfRangeArg(self, node):
         """
@@ -1319,17 +1385,19 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             bossbar_id (NamespaceIdNode)
             json (JsonObjectNode)
         """
+        bossbar = self.build("bossbar", cmd_name=True)
         bossbar_id = self.build(node.bossbar_id, prefix=True)
         json = self.build(node.json)
-        return f"bossbar add {bossbar_id} {json}"
+        return f"{bossbar} add {bossbar_id} {json}"
 
     def build_BossbarRemoveNode(self, node):
         """
         Node Attributes:
             bossbar_id (NamespaceIdNode)
         """
+        bossbar = self.build("bossbar", cmd_name=True)
         bossbar_id = self.build(node.bossbar_id, prefix=True)
-        return f"bossbar remove {bossbar_id}"
+        return f"{bossbar} remove {bossbar_id}"
 
     def build_BossbarGetNode(self, node):
         """
@@ -1337,9 +1405,10 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             bossbar_id (NamespaceIdNode)
             sub_cmd (Token)
         """
+        bossbar = self.build("bossbar", cmd_name=True)
         bossbar_id = self.build(node.bossbar_id, prefix=True)
         sub_cmd = self.build(node.sub_cmd)
-        return f"bossbar get {bossbar_id} {sub_cmd}"
+        return f"{bossbar} get {bossbar_id} {sub_cmd}"
 
     def build_BossbarSetNode(self, node):
         """
@@ -1348,10 +1417,11 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             arg (Token)
             arg_value (Token, JsonObjectNode)
         """
+        bossbar = self.build("bossbar", cmd_name=True)
         bossbar_id = self.build(node.bossbar_id, prefix=True)
         arg = self.build(node.arg)
         arg_value = self.build(node.arg_value)
-        return f"bossbar set {bossbar_id} {arg} {arg_value}"
+        return f"{bossbar} set {bossbar_id} {arg} {arg_value}"
 
     def build_DataGetNode(self, node):
         """
@@ -1360,18 +1430,19 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             data_path (DataPathNode or None)
             scale (Token or None)
         """
+        data = self.build("data", cmd_name=True)
         data_select_type = "entity" if isinstance(node.entity_vec3, SelectorNode) else "block"
         entity_vec3 = self.build(node.entity_vec3)
 
         if node.data_path is None:
-            return f"data get {data_select_type} {entity_vec3}"
+            return f"{data} get {data_select_type} {entity_vec3}"
         data_path = self.build(node.data_path)
 
         if node.scale is None:
-            return f"data get {data_select_type} {entity_vec3} {data_path}"
+            return f"{data} get {data_select_type} {entity_vec3} {data_path}"
 
         scale = self.build(node.scale)
-        return f"data get {data_select_type} {entity_vec3} {data_path} {scale}"
+        return f"{data} get {data_select_type} {entity_vec3} {data_path} {scale}"
 
     def build_DataMergeNode(self, node):
         """
@@ -1379,10 +1450,11 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             entity_vec3 (SelectorNode, Vec3Node)
             nbt (NbtObjectNode)
         """
+        data = self.build("data", cmd_name=True)
         data_select_type = "entity" if isinstance(node.entity_vec3, SelectorNode) else "block"
         entity_vec3 = self.build(node.entity_vec3)
         nbt = self.build(node.nbt)
-        return f"data merge {data_select_type} {entity_vec3} {nbt}"
+        return f"{data} merge {data_select_type} {entity_vec3} {nbt}"
 
     def build_DataRemoveNode(self, node):
         """
@@ -1390,10 +1462,11 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             entity_vec3 (SelectorNode, Vec3Node)
             data_path (DataPathNode)
         """
+        data = self.build("data", cmd_name=True)
         data_select_type = "entity" if isinstance(node.entity_vec3, SelectorNode) else "block"
         entity_vec3 = self.build(node.entity_vec3)
         data_path = self.build(node.data_path)
-        return f"data remove {data_select_type} {entity_vec3} {data_path}"
+        return f"{data} remove {data_select_type} {entity_vec3} {data_path}"
 
     def build_EffectClearNode(self, node):
         """
@@ -1401,12 +1474,13 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             selector (SelectorNode)
             effect_id (Token or None)
         """
+        effect = self.build("effect", cmd_name=True)
         selector = self.build(node.selector)
         if node.effect_id is None:
-            return f"effect clear {selector}"
+            return f"{effect} clear {selector}"
 
         effect_id = self.build(node.effect_id)
-        return f"effect clear {selector} minecraft:{effect_id}"
+        return f"{effect} clear {selector} minecraft:{effect_id}"
 
     def build_EffectGiveNode(self, node):
         """
@@ -1417,12 +1491,13 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             level (Token or None)
             hide_particles (bool)
         """
+        effect = self.build("effect", cmd_name=True)
         selector = self.build(node.selector)
         effect_id = self.build(node.effect_id)
         duration = "2" if node.duration is None else self.build(node.duration)
         level = "0" if node.level is None else self.build(node.level)
         hide_particles = "true" if node.hide_particles else "false"
-        return f"effect give {selector} minecraft:{effect_id} {duration} {level} {hide_particles}"
+        return f"{effect} give {selector} minecraft:{effect_id} {duration} {level} {hide_particles}"
 
     def build_DataPathNode(self, node):
         """
@@ -1438,10 +1513,11 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             tag (Token)
             nbt (NbtObjectNode or None)
         """
+        cmd_name = self.build("tag", cmd_name=True)
         selector = self.build(node.selector)
         tag = self.build(node.tag, prefix=True)
         assert node.nbt is None
-        return f"tag {selector} add {tag}"
+        return f"{cmd_name} {selector} add {tag}"
 
     def build_TagRemoveNode(self, node):
         """
@@ -1450,10 +1526,11 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             tag (Token)
             nbt (NbtObjectNode or None)
         """
+        cmd_name = self.build("tag", cmd_name=True)
         selector = self.build(node.selector)
         tag = self.build(node.tag, prefix=True)
         assert node.nbt is None
-        return f"tag {selector} remove {tag}"
+        return f"{cmd_name} {selector} remove {tag}"
 
     def build_TeamAddNode(self, node):
         """
@@ -1461,18 +1538,20 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             node (TeamAddNode)
             display_name (list of Token objects)
         """
+        team = self.build("team", cmd_name=True)
         team_name = self.build(node.team_name, prefix=True)
         if not node.display_name:
-            return f"team add {team_name}"
+            return f"{team} add {team_name}"
 
         display_name = self.iter_build(node.display_name, " ")
-        return f"team add {team_name} {display_name}"
+        return f"{team} add {team_name} {display_name}"
 
     def build_TeamJoinNode(self, node):
         """
         Args:
             node (TeamJoinNode)
         """
+        team = self.build("team", cmd_name=True)
         team_name = self.build(node.team_name, prefix=True)
         target = self.build(node.target)
         return f"team join {team_name} {target}"
@@ -1482,34 +1561,38 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
         Args:
             node (TeamLeaveNode)
         """
+        team = self.build("team", cmd_name=True)
         target = self.build(node.target)
-        return f"team leave {target}"
+        return f"{team} leave {target}"
 
     def build_TeamEmptyNode(self, node):
         """
         Args:
             node (TeamEmptyNode)
         """
+        team = self.build("team", cmd_name=True)
         team_name = self.build(node.team_name, prefix=True)
-        return f"team empty {team_name}"
+        return f"{team} empty {team_name}"
 
     def build_TeamOptionNode(self, node):
         """
         Args:
             node (TeamOptionNode)
         """
+        team = self.build("team", cmd_name=True)
         team_name = self.build(node.team_name, prefix=True)
         option = self.build(node.option)
         value = self.build(node.value)
-        return f"team option {team_name} {option} {value}"
+        return f"{team} option {team_name} {option} {value}"
 
     def build_TeamRemoveNode(self, node):
         """
         Args:
             node (TeamRemoveNode)
         """
+        team = self.build("team", cmd_name=True)
         team_name = self.build(node.team_name, prefix=True)
-        return f"team remove {team_name}"
+        return f"{team} remove {team_name}"
 
     def build_XpMathNode(self, node):
         """
@@ -1519,17 +1602,18 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             value (Token)
             sub_cmd (Token or None)
         """
+        xp = self.build("xp", cmd_name=True)
         selector = self.build(node.selector)
         operator = self.build(node.operator)
         value = self.build(node.value)
         sub_cmd = "points" if node.sub_cmd is None else self.build(node.sub_cmd)
 
         if operator == "=":
-            return f"xp set {selector} {value} {sub_cmd}"
+            return f"{xp} set {selector} {value} {sub_cmd}"
         if operator == "+":
-            return f"xp add {selector} {value} {sub_cmd}"
+            return f"{xp} add {selector} {value} {sub_cmd}"
         if operator == "-":
-            return f"xp add {selector} -{value} {sub_cmd}"
+            return f"{xp} add {selector} -{value} {sub_cmd}"
 
         raise SyntaxError("Unknown default case")
 
@@ -1539,10 +1623,11 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             selector (SelectorNode)
             sub_cmd (Token)
         """
+        xp = self.build("xp", cmd_name=True)
         selector = self.build(node.selector)
         sub_cmd = self.build(node.sub_cmd)
 
-        return f"xp get {selector} {sub_cmd}"
+        return f"{xp} get {selector} {sub_cmd}"
 
     def build_ItemGiveNode(self, node):
         """
@@ -1551,10 +1636,11 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             item (ItemNode)
             count (Token or None)
         """
+        give = self.build("give", cmd_name=True)
         selector = self.build(node.selector)
         item = self.build(node.item)
         count = "1" if node.count is None else self.build(node.count)
-        return f"give {selector} {item} {count}"
+        return f"{give} {selector} {item} {count}"
 
     def build_ItemClearNode(self, node):
         """
@@ -1563,9 +1649,10 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             item (ItemNode or Token)
             count (Token or None)
         """
+        clear = self.build("clear", cmd_name=True)
         selector = self.build(node.selector)
         if isinstance(node.item, Token):
-            return f"clear {selector}"
+            return f"{clear} {selector}"
 
         item = self.build(node.item)
         count = "-1" if node.count is None else self.build(node.count)
@@ -1579,11 +1666,12 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             item (ItemNode)
             count (Token or None)
         """
+        replaceitem = self.build("replaceitem", cmd_name=True)
         selector = self.build(node.selector)
         slot = self.build(node.slot)
         item = self.build(node.item)
         count = "1" if node.count is None else self.build(node.count)
-        return f"replaceitem entity {selector} {slot} {item} {count}"
+        return f"{replaceitem} entity {selector} {slot} {item} {count}"
 
     def build_ItemReplaceBlockNode(self, node):
         """
@@ -1593,11 +1681,12 @@ class CommandBuilder_1_13(CommandBuilder_1_12):
             item (ItemNode)
             count (Token or None)
         """
+        replaceitem = self.build("replaceitem", cmd_name=True)
         vec3 = self.build(node.vec3)
         slot = self.build(node.slot)
         item = self.build(node.item)
         count = "1" if node.count is None else self.build(node.count)
-        return f"replaceitem block {vec3} {slot} {item} {count}"
+        return f"{replaceitem} block {vec3} {slot} {item} {count}"
 
     def build_ItemNode(self, node):
         """

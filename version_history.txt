@@ -224,6 +224,12 @@ s7.0.0      v0.4.0
             - Debug file only when "-dl" or "--debug-log"
             - Specify custom version under "-v" or "--version" as 1.12 or 1.13 that overrides the config specification
 
+        - formatted and custom exceptions
+        - generator for immutable struct-like classes for nodes
+
         1.13:
+            - !blocktag, !itemtag, !functiontag, !fluidtag
             - Change format of execute commands to use ":" and all sub execute commands
             - mcfunction format in datapacks (different namespace)
+            - general change in file system
+
