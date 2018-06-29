@@ -1,0 +1,50 @@
+{
+    "1.12": {
+        "bossbar_get": null,
+        "bossbar_set": null
+    },
+
+    "1.13": {
+        "bossbar_get": ["max", "value", "players", "visible"],
+
+        "bossbar_set": {
+            "max": {
+                "parse_type": "POS_INT"
+            },
+
+            "value": {
+                "parse_type": "NONNEG_INT"
+            },
+
+            "name": {
+                "parse_type": "JSON"
+            },
+
+            "players": {
+                "parse_type": "SELECTOR"
+            },
+
+            "visible": {
+                "parse_type": "VALUES",
+                "values": ["true", "false"]
+            },
+
+            "color": {
+                "parse_type": "VALUES",
+                "values": ["white", "pink", "red", "yellow", "green", "blue", "purple"]
+            },
+
+            "style": {
+                "parse_type": "VALUES",
+                "value_replace": {
+                    "0": "progress",
+                    "6": "notched_6",
+                    "10": "notched_10",
+                    "12": "notched_12",
+                    "20": "notched_20"
+                },
+                "values": ["progress", "notched_6", "notched_10", "notched_12", "notched_20"]
+            }
+        }
+    }
+}

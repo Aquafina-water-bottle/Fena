@@ -1,0 +1,234 @@
+{
+    "1.12": {   
+        "selector_variable_specifiers": ["a", "e", "r", "p", "s"],
+
+        "selector_arguments": [
+            "x", "y", "z", "dx", "dy", "dz", "r", "rm", "rx", "rxm", "ry", "rym",
+            "c", "l", "lm", "team", "name", "tag", "type", "m",
+            "distance", "level", "x_rotation", "y_rotation"
+        ],
+
+        "selector_replacements": {
+            "dist": "distance",
+            "xrot": "x_rotation",
+            "yrot": "y_rotation",
+            "lvl": "level",
+
+            "limit": "c",
+            "gamemode": "m"
+        },
+
+        "selector_argument_details": {
+            "x": {
+                "parse_type": "SIGNED_INT"
+            },
+            "y": {
+                "parse_type": "SIGNED_INT"
+            },
+            "z": {
+                "parse_type": "SIGNED_INT"
+            },
+            "dx": {
+                "parse_type": "SIGNED_INT"
+            },
+            "dy": {
+                "parse_type": "SIGNED_INT"
+            },
+            "dz": {
+                "parse_type": "SIGNED_INT"
+            },
+            "r": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+            "rm": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+            "rx": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+            "rxm": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+            "ry": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+            "rym": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+
+            "c": {
+                "parse_type": "SIGNED_INT"
+            },
+            "l": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+            "lm": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+
+            "team": {
+                "parse_type": "STR",
+                "negation": true
+            },
+            "name": {
+                "parse_type": "STR",
+                "negation": true
+            },
+
+            "tag": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+
+            "distance": {
+                "parse_type": "INT_RANGE_BRACKET",
+                "range_replace": ["rm", "r"]
+            },
+            "x_rotation": {
+                "parse_type": "INT_RANGE_BRACKET",
+                "range_replace": ["rxm", "rx"]
+            },
+            "y_rotation": {
+                "parse_type": "INT_RANGE_BRACKET",
+                "range_replace": ["rym", "ry"]
+            },
+            "level": {
+                "parse_type": "INT_RANGE_BRACKET",
+                "range_replace": ["lm", "l"]
+            },
+
+            "m": {
+                "parse_type": "VALUES",
+                "values": ["0", "1", "2", "3"],
+                "value_replace": {
+                    "survival": "0",
+                    "s": "0",
+                    "creative": "1",
+                    "c": "1",
+                    "adventure": "2",
+                    "a": "2",
+                    "spectator": "3",
+                    "sp": "3"
+                },
+                "negation": true
+            },
+
+            "type": {
+                "parse_type": "ENTITIES",
+                "negation": true
+            }
+        }
+    },
+
+    "1.13": {
+        "selector_variable_specifiers": ["a", "e", "r", "p", "s"],
+
+        "selector_arguments": [
+            "x", "y", "z", "dx", "dy", "dz",
+            "distance", "x_rotation", "y_rotation", "level",
+            "team", "name", "limit", "tag",
+            "type", "sort", "gamemode",
+            "nbt", "scores", "advancements"
+        ],
+
+        "selector_replacements": {
+            "c": "limit",
+            "m": "gamemode",
+            "s": "sort",
+            "adv": "advancements",
+            "dist": "distance",
+            "lvl": "level",
+            "xrot": "x_rotation",
+            "yrot": "y_rotation"
+        },
+
+        "selector_argument_details": {
+            "x": {
+                "parse_type": "NUMBER"
+            },
+            "y": {
+                "parse_type": "NUMBER"
+            },
+            "z": {
+                "parse_type": "NUMBER"
+            },
+            "dx": {
+                "parse_type": "NUMBER"
+            },
+            "dy": {
+                "parse_type": "NUMBER"
+            },
+            "dz": {
+                "parse_type": "NUMBER"
+            },
+
+            "distance": {
+                "parse_type": "NUMBER_RANGE_BRACKET"
+            },
+            "x_rotation": {
+                "parse_type": "NUMBER_RANGE_BRACKET"
+            },
+            "y_rotation": {
+                "parse_type": "NUMBER_RANGE_BRACKET"
+            },
+            "level": {
+                "parse_type": "NUMBER_RANGE_BRACKET"
+            },
+
+            "team": {
+                "group": "negation",
+                "parse_type": "STR",
+                "negation": true
+            },
+            "name": {
+                "parse_type": ["STR", "LITERAL_STR"],
+                "group": "negation",
+                "negation": true
+            },
+            "limit": {
+                "parse_type": "POS_INT"
+            },
+            "tag": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+
+            "type": {
+                "parse_type": "ENTITIES",
+                "group": "negation",
+                "negation": true
+            },
+            "gamemode": {
+                "parse_type": "VALUES",
+                "group": "negation",
+                "value_replace": {
+                    "0": "survival",
+                    "1": "creative",
+                    "2": "adventure",
+                    "3": "spectator"
+                },
+                "values": ["survival", "creative", "adventure", "spectator"],
+                "negation": true
+            },
+            "sort": {
+                "parse_type": "VALUES",
+                "value_replace": {
+                    "a": "arbitrary",
+                    "r": "random",
+                    "c": "closest",
+                    "f": "furthest"
+                },
+                "values": ["arbitrary", "random", "closest", "furthest"]
+            },
+
+            "nbt": {
+                "parse_type": "SHORTCUT_ERROR",
+                "negation": true
+            },
+            "scores": {
+                "parse_type": "SHORTCUT_ERROR"
+            },
+            "advancements": {
+                "parse_type": "ADVANCEMENT_GROUP"
+            }
+        }
+    }
+}

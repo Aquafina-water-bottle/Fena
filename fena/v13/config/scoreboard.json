@@ -1,0 +1,56 @@
+{
+    "1.12": {
+        "scoreboard_math": {
+            "parse_type": "VALUES",
+            "value_replace": {
+                "=": "=",
+                "<=": "<",
+                ">=": ">",
+                "swap": "><",
+                "+=": "+=",
+                "-=": "-=",
+                "*=": "*=",
+                "/=": "/=",
+                "%=": "%="
+            },
+            "values": ["=", "<", ">", "><", "+=", "-=", "*=", "/=", "%="]
+        },
+
+        "scoreboard_special": {
+            "parse_type": "VALUES",
+            "value_replace": {
+                "enable": "enable",
+                "reset": "reset"
+            },
+            "values": ["enable", "reset"]
+        }
+    },
+
+    "1.13": {
+        "scoreboard_math": {
+            "parse_type": "VALUES",
+            "value_replace": {
+                "=": "=",
+                "<=": "<",
+                ">=": ">",
+                "swap": "><",
+                "+=": "+=",
+                "-=": "-=",
+                "*=": "*=",
+                "/=": "/=",
+                "%=": "%="
+            },
+            "values": ["=", "<", ">", "><", "+=", "-=", "*=", "/=", "%="]
+        },
+
+        "scoreboard_special": {
+            "parse_type": "VALUES",
+            "value_replace": {
+                "enable": "enable",
+                "reset": "reset",
+                "<-": "get"
+            },
+            "values": ["enable", "reset", "get"]
+        }
+    }
+}

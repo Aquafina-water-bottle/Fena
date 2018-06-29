@@ -1,0 +1,113 @@
+{
+    "1.12": {
+        "team_options": {
+            "friendlyfire": {
+                "parse_type": "VALUES",
+                "values": ["true", "false"]
+            },
+
+            "color": {
+                "parse_type": "VALUES",
+                "values": [
+                    "dark_red",
+                    "red",
+                    "gold",
+                    "yellow",
+                    "green",
+                    "dark_green",
+                    "dark_blue",
+                    "blue",
+                    "dark_aqua",
+                    "aqua",
+                    "light_purple",
+                    "dark_purple",
+                    "white",
+                    "gray",
+                    "dark_gray",
+                    "black",
+                    "reset"
+                ]
+            },
+
+            "seeFriendlyInvisibles": {
+                "parse_type": "VALUES",
+                "values": ["true", "false"]
+            },
+
+            "nametagVisibility": {
+                "parse_type": "VALUES",
+                "values": ["always", "never", "hideForOtherTeams", "hideForOwnTeam"]
+            },
+
+            "deathMessageVisibility": {
+                "parse_type": "VALUES",
+                "values": ["always", "never", "hideForOtherTeams", "hideForOwnTeam"]
+            },
+
+            "collisionRule": {
+                "parse_type": "VALUES",
+                "values": ["always", "never", "pushOwnTeam", "pushOtherTeams"]
+            }
+        }
+    },
+
+    "1.13": {
+        "team_options": {
+            "friendlyfire": {
+                "parse_type": "VALUES",
+                "values": ["true", "false"]
+            },
+
+            "color": {
+                "parse_type": "VALUES",
+                "values": [
+                    "dark_red",
+                    "red",
+                    "gold",
+                    "yellow",
+                    "green",
+                    "dark_green",
+                    "dark_blue",
+                    "blue",
+                    "dark_aqua",
+                    "aqua",
+                    "light_purple",
+                    "dark_purple",
+                    "white",
+                    "gray",
+                    "dark_gray",
+                    "black",
+                    "reset"
+                ]
+            },
+
+            "seeFriendlyInvisibles": {
+                "parse_type": "VALUES",
+                "values": ["true", "false"]
+            },
+
+            "nametagVisibility": {
+                "parse_type": "VALUES",
+                "values": ["always", "never", "hideForOtherTeams", "hideForOwnTeam"]
+            },
+
+            "deathMessageVisibility": {
+                "parse_type": "VALUES",
+                "values": ["always", "never", "hideForOtherTeams", "hideForOwnTeam"]
+            },
+
+            "collisionRule": {
+                "parse_type": "VALUES",
+                "values": ["always", "never", "pushOwnTeam", "pushOtherTeams"]
+            },
+
+            "prefix": {
+                "parse_type": "JSON"
+            },
+
+            "suffix": {
+                "parse_type": "JSON"
+            }
+        }
+    }
+}
