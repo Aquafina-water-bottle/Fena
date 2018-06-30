@@ -1,0 +1,270 @@
+$py(
+from main import *
+)
+!set prefix = fl
+$macro(calc_dim)
+@a _dim = 0
+@a[{Dimension:$(dimension_id)}] _dim = 1
+$endmacro
+$macro(reset_global_scores)
+$py(
+global_objectives_reset = [
+    "g.de",
+    "g.cs",
+    "g.lg",
+    "g.to",
+    "g.ftp",
+    "g.stp",
+]
+)
+$for(obj in global_objectives_reset)
+@a[$(obj)=1..] $(obj) = 0
+$endfor
+$endmacro
+!blocktag terracotta_portal = {
+    "replace": false",
+    "values": [
+        "minecraft:lime_terracotta",
+        "minecraft:magenta_terracotta",
+        "minecraft:orange_terracotta",
+        "minecraft:cyan_terracotta"
+    ]
+}
+!mfunc init:
+    $(objectives.cmd_init())
+    $(teams.cmd_init())
+    $for(event in Location.members)
+    $for(shortcut in event.shortcuts)
+    $(shortcut) g.na = $(event.location_id)
+    $endfor
+    $endfor
+    kill @e[type=armor_stand,gp.stand]
+    summon armor_stand $(str(stand_coords)) {
+        Tags:["gp.stand"],Invulnerable:1b,Invisible:1b,Marker:1b,NoGravity:1b
+        }
+    $(set_rankings(
+    {
+        "Acefire97": ["APPS"],
+        "ashtongreen00": ["APPS"],
+        "ENFORCER_GAMING": ["APPS"],
+        "VampireQueen94": ["APPS"],
+        "TedddyB": ["APPS"],
+        "ItsArk_": ["APPS"],
+        "CMDZane": ["AT", "APPS"],
+        "french_man": ["EC"],
+        "jamboree_lee": ["EC"],
+        "CynRyn": ["EC"],
+        "Icohedron": ["EC"],
+        "TheDarkOne239": ["EC"],
+        "T3ben": ["EC"],
+        "BUTTERLOVER7683": ["AT", "LE"],
+        "FoxyTheBoomQueen": ["AT", "LE"],
+        "Daa_": ["EC", "LE"],
+        "idk_lobsters": ["LE"],
+        "JadeofallTrades": ["LE"],
+        "Witch_Doctor": ["LE", "CMD"],
+        "FirezFury": ["LE"]
+    }
+    ))
+    $for(option in FlooEvent.valid_options)
+    $(floo_event.cmd_option(option))
+    $endfor
+    @e[type=armor_stand,gp.stand] gp.tp = 0
+    @e[type=armor_stand,gp.stand] _rbs = $(get_total_rank("EC", "LE", "CMD"))
+    @e[type=armor_stand,gp.stand] gp.cgi = 0
+    tellraw @a[EC=0] {"text":"","extra":[
+        $(floo_event.location.prefix_json),
+        $(floo_event.location.name_json),
+        {"text":" has been installed!","color":"gray"}
+    ]}
+!mfunc main:
+    @e[type=armor_stand,gp.stand,gp.cgi=1..]: function run_event
+    @a[gp.id=1..]: function spawnpoint
+    @a[gp.tp=1..]: function teleport
+    * enable _vot
+    @a[_vot=1..]: function vote
+    @e[type=player,gp.bk=1..]: function book
+    @a[$(select_tree)]: function in_spawn_tree
+    @a[$(select_portal),m=!3] if(~ 3 ~ stained_hardened_clay function tp_portal
+    $calc_dim()
+    @e[type=armor_stand,gp.stand] function calc_rank
+    @a[_rac=1] function use_rank
+    @e[type=armor_stand,gp.stand] function use_options
+    $reset_global_scores()
+!mfunc term:
+    function stop_events
+    $(objectives.cmd_term())
+    tellraw @a[EC=0] {"text":"","extra":[
+        $(floo_event.location.prefix_json),
+        $(floo_event.location.name_json),
+        {"text":" has been uninstalled!","color":"gray"}
+    ]}
+    kill @e[type=armor_stand,gp.stand]
+!mfunc run_event:
+    $(floo_event.cmd_start_bin_search(event_id_list, "run_event"))
+!folder run_event:
+    $(floo_event.funcs_bin_search(event_id_list, "gp.cgi"))
+    $for(event in Location.members)
+    $if(event.is_event)
+    !mfunc use_$(event.location_id):
+        function ego:$(event.folder_name)/main
+    $endif
+    $endfor
+!mfunc spawnpoint:
+    $for(event in Location.members)
+    spawnpoint @s[gp.id=$(event.location_id)] $(event.tp_display_coords)
+    tellraw @s[gp.id=$(event.location_id)] {"text":"","extra":[
+        $(floo_event.location.prefix_json),
+        {"text":"Your spawnpoint has been set to ","color":"gray"},
+        {"text":"$(event.tp_display_coords)","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        $(event.name_json),
+        {"text":"!","color":"gray"}
+    ]}
+    $endfor
+    playsound $(Sounds.XP) voice @s
+    @s gp.id *= -1
+!mfunc teleport:
+    $for(event in Location.members)
+    tp @s[gp.tp=$(event.location_id)] $(str(event.tp_coords))
+    tellraw @s[gp.tp=$(event.location_id)] {"text":"","extra":[
+        $(floo_event.location.prefix_json),
+        {"text":"You have been teleported to ","color":"gray"},
+        {"text":"$(event.tp_display_coords)","color":"yellow","bold":"true"},
+        {"text":" at ","color":"gray"},
+        $(event.name_json),
+        {"text":"!","color":"gray"}
+    ]}
+    $endfor
+    @s playsound $(Sounds.XP) voice @s
+    @s gp.tp = 0
+!mfunc book:
+    $for(event in Location.members)
+    $if(event.is_event)
+    function ego:$(event.folder_name)/book if @s[gp.bk=$(event.location_id)]
+    $endif
+    $endfor
+    @s gp.bk = 0
+!mfunc in_spawn_tree:
+    effect @s $(Effects.SATURATION) 2 0 true
+    gamemode 2 @s[m=0]
+    @e[type=armor_stand,gp.stand,gp.pvp=0] join NoPVP @a[$(select_tree),m=2]
+    @s[m=!3] _dly += 1
+    ScOP @s[_dly=10..] gp.tp = @e[type=armor_stand,gp.stand,gp.tp=1..] gp.tp
+    @s[_dly=10..] _dly = 0
+!mfunc tp_portal:
+    @s if(~ 3 ~ lime_terracotta): @s gp.tp = mghub g.na
+    @s if(~ 3 ~ magenta_terracotta): @s gp.tp = pvphub g.na
+    @s if(~ 3 ~ orange_terracotta): @s gp.tp = mmhub g.na
+    @s if(~ 3 ~ cyan_terracotta): @s gp.tp = racehub g.na
+!mfunc calc_rank:
+    @a _rac = 1
+    @s[_rbs=1..] _rac = @s[_rbs=1..] _rbs
+$py(
+powers_of_two = [2**num for num in range(len(RANKINGS))]
+)
+    $for(score, rank in reversed(list(zip(powers_of_two, RANKINGS)))))
+    @s[_rac=$(score)..]: @a[$(rank)=1,_dim=1] _rac = 0
+    @s[_rac=$(score)..] _rac - $(score)
+    $endfor
+!mfunc use_rank:
+    gamemode adventure @s[m=1,_dim=1]
+    gamemode adventure @s[m=0,_dim=1]
+    @s[g.lg=(1..),_dim=1] gp.tp = spawn g.na
+    clear @s[$(select_tree)]
+!mfunc use_options:
+    @s[gp.pvp=0] join NoPVP @a[team=!NoPVP,_dim=1]
+    @s[gp.pvp=1] effect @a[_dim=1] $(Effects.WEAK) 3 100 true
+    @s[gp.sat=1] effect @a[_dim=1] $(Effects.SATURATION) 2 0 true
+    @a[_rgc=1] _rgc = 0
+    @s[gp.rgt=(1..)]: @a[_dim=1,g.hp=..19] _rgc = 1
+    @a[_rgc=1]: function calc_regen
+!mfunc calc_regen:
+    @s gp.rgt + 1
+    if(@s gp.rgt == @e[type=armor_stand,gp.stand,c=1] gp.rgt): effect @s + $(Effects.REGEN) 2 10 true
+    if(@s gp.rgt > @e[type=armor_stand,gp.stand,c=1] gp.rgt): effect @s - $(Effects.REGEN)
+    if(@s gp.rgt > @e[type=armor_stand,gp.stand,c=1] gp.rgt): @s gp.rgt = 0
+!mfunc vote:
+    tellraw @s {"text":"","extra":[
+        $(floo_event.location.prefix_json),
+        {"text":"Vote here: ","color":"gray"},
+        {"text":"Link 1","color":"green","bold":"true","underlined":"true",
+            "clickEvent":{
+                "action":"open_url",
+                "value":"http://minecraft-server-list.com/server/200887/vote/"
+            },
+            "hoverEvent":{
+                "action":"show_text",
+                "value":{"text":"Vote link #1","color":"green"}
+            }
+        },
+        {"text":" "},
+        {"text":"Link 2","color":"dark_green","bold":"true","underlined":"true",
+            "clickEvent":{
+                "action":"open_url",
+                "value":"http://minecraftservers.org/vote/109809"
+            },
+            "hoverEvent":{
+                "action":"show_text",
+                "value":{"text":"Vote link #2","color":"dark_green"}
+            }
+        },
+        {"text":" "},
+        {"text":"Link 3","color":"green","bold":"true","underlined":"true",
+            "clickEvent":{
+                "action":"open_url",
+                "value":"https://minecraftservers.biz/servers/2511/"
+            },
+            "hoverEvent":{
+                "action":"show_text",
+                "value":{"text":"Vote link #3","color":"green"}
+            }
+        },
+        {"text":" "},
+        {"text":"Link 4","color":"dark_green","bold":"true","underlined":"true",
+            "clickEvent":{
+                "action":"open_url",
+                "value":"http://minecraft-mp.com/server/86376/vote/"
+            },
+            "hoverEvent":{
+                "action":"show_text",
+                "value":{"text":"Vote link #4","color":"dark_green"}
+            }
+        },
+        {"text":" "},
+        {"text":"Link 5","color":"green","bold":"true","underlined":"true",
+            "clickEvent":{
+                "action":"open_url",
+                "value":"http://www.planetminecraft.com/server/edge-gamerscom/vote/"
+            },
+            "hoverEvent":{
+                "action":"show_text",
+                "value":{"text":"Vote link #5","color":"green"}
+            }
+        }
+    ]}
+    playsound $(Sounds.XP) voice @s
+    @s _vot = 0
+!mfunc stop_events:
+    @e[type=armor_stand,gp.stand,gp.cgi=1..] function _stop_events
+!mfunc _stop_events:
+    $(floo_event.cmd_start_bin_search(event_id_list, "stop_events"))
+    @s[gp.cgi=1..] gp.cgi = 0
+!folder stop_events
+    $(floo_event.funcs_bin_search(event_id_list, "gp.cgi"))
+    $for(event in Location.members)
+    $if(event.is_event)
+    !mfunc stop_events/use_$(event.location_id):
+        function ego:$(event.folder_name)/term
+    $endif
+    $endfor
+$py(r"""
+    @a[$MM$,SPdim=1] SPmm = 1
+    @a[$NotMM$,SPmm=1] SPmm = 2
+    ScOP @e[type=armor_stand,gp.stand] SPmm = Mastermind SPmm
+    @e[type=armor_stand,gp.stand,SPmm=0] @a[SPmm=1] SPmm = 2
+    @a[SPmm=2,EC=0] SPmm = 0
+    clear @a[SPmm=2] wool -1 -1 {display:{Lore:["Placable Block"]}}
+    clear @a[SPmm=2] shears -1 -1 {display:{Lore:["Remove Block Tool"]}}
+    @a[SPmm=2] SPmm = 0
+""")
