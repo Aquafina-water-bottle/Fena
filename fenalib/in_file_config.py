@@ -200,7 +200,8 @@ class InFileConfig:
         # default for constobj is "g.number"
         if self._constobj is None:
             self._constobj = InFileConfig.default_constobj
-            logging.warning(f"Using the default constobj {self._constobj!r}")
+            if not config_data.ego:
+                logging.warning(f"Using the default constobj {self._constobj!r}")
 
         # sets previously mutable types as immutable
         self._functions = MappingProxyType(self._functions)

@@ -1,270 +1,425 @@
 $py(
-from main import *
+from lib.event.virus import Virus
+from lib.location import VIRUS_1
+from lib.coords import Coords
+virus = Virus(VIRUS_1,
+    select_spawn=Coords("-85 45 -241 -54 50 -210"),
+    wait_coords=Coords("-69.0 53 -225.0"),
+    arena_coords=Coords("-69.0 38 -225.0"),
+    select_virus=Coords("-70 53 -226 -69 56 -225")
 )
-!set prefix = fl
-$macro(calc_dim)
-@a _dim = 0
-@a[{Dimension:$(dimension_id)}] _dim = 1
+virus_door = Coords("-73 52 -222 -66 52 -229")
+mid_door = Coords("-73 49 -229 -66 49 -222")
+)
+!set prefix = vr1
+$macro(edit_py_init) $endmacro
+$macro(edit_type_py_init) $endmacro
+$macro(edit_init) $endmacro
+$macro(edit_type_init) $endmacro
+$macro(edit_main) $endmacro
+$macro(edit_type_main) $endmacro
+$macro(edit_round_start) $endmacro
+$macro(edit_type_round_start) $endmacro
+$macro(edit_add_to_round) $endmacro
+$macro(edit_type_add_to_round) $endmacro
+$macro(edit_countdown) $endmacro
+$macro(edit_type_countdown) $endmacro
+$macro(edit_countdown_end) $endmacro
+$macro(edit_type_countdown_end) $endmacro
+$macro(edit_type_during_round) $endmacro
+$macro(edit_during_round) $endmacro
+$macro(edit_round_end) $endmacro
+$macro(edit_type_round_end) $endmacro
+$macro(edit_round_reset) $endmacro
+$macro(edit_type_round_reset) $endmacro
+$macro(edit_main_end) $endmacro
+$macro(edit_type_main_end) $endmacro
+$macro(edit_clear_player) $endmacro
+$macro(edit_type_clear_player) $endmacro
+$macro(edit_player_effects) $endmacro
+$macro(edit_type_player_effects) $endmacro
+$macro(edit_to_virus) $endmacro
+$macro(edit_type_to_virus) $endmacro
+$macro(edit_to_hider) $endmacro
+$macro(edit_type_to_hider) $endmacro
+$macro(edit_reset_player) $endmacro
+$macro(edit_type_reset_player) $endmacro
+$macro(edit_round_start)
+fill $(mid_door) stonebrick 0 replace redstone_block 0
 $endmacro
-$macro(reset_global_scores)
+$macro(edit_countdown_end)
+fill $(virus_door) stonebrick 0 replace redstone_block 0
+fill $(mid_door) redstone_block 0 replace stonebrick 0
+$endmacro
+$macro(edit_round_end)
+fill $(virus_door) redstone_block 0 replace stonebrick 0
+fill $(mid_door) redstone_block 0 replace stonebrick 0
+$endmacro
+$macro(edit_round_reset)
+fill $(virus_door) redstone_block 0 replace stonebrick 0
+fill $(mid_door) redstone_block 0 replace stonebrick 0
+$endmacro
+$macro(edit_main_end)
+fill $(virus_door) redstone_block 0 replace stonebrick 0
+fill $(mid_door) redstone_block 0 replace stonebrick 0
+$endmacro
 $py(
-global_objectives_reset = [
-    "g.de",
-    "g.cs",
-    "g.lg",
-    "g.to",
-    "g.ftp",
-    "g.stp",
-]
+virus_name = "Virus"
+viruses_name = "Virus"
+hider_name = "Hider"
+hiders_name = "Hiders"
+type_name = "Virus"
 )
-$for(obj in global_objectives_reset)
-@a[$(obj)=1..] $(obj) = 0
-$endfor
+$macro(edit_type_py_init)
+$py(
+teams["_h"].add_option("nametagVisibility", "never")
+)
 $endmacro
-!blocktag terracotta_portal = {
-    "replace": false",
-    "values": [
-        "minecraft:lime_terracotta",
-        "minecraft:magenta_terracotta",
-        "minecraft:orange_terracotta",
-        "minecraft:cyan_terracotta"
-    ]
-}
+$py(
+from lib.consts import Effects, Sounds, Enchants
+from lib.objective import Objectives
+from lib.team import Teams
+from lib.const_ints import ConstInts
+select_all = virus.location.select_all
+objectives = Objectives()
+teams = Teams()
+const_ints = ConstInts()
+objectives.new(f"""
+    _ _ _
+    _pl _ Player List
+    _ti _ Timer
+    _chi _ Count {hiders_name}
+    _cvr _ Count {viruses_name}
+    _gl _ Glowing Players
+    _cl _ Calculations
+    _st _ State
+""", virus.location.name_str)
+objectives["_"].setdisplay("sidebar")
+const_ints.add_constants(20, 60, 1200)
+teams.new(f"""
+    _h {hiders_name}
+        friendlyfire = false
+        collisionRule = never
+        deathMessageVisibility = always
+        color = green
+    _v {viruses_name}
+        friendlyfire = false
+        collisionRule = never
+        deathMessageVisibility = always
+        color = yellow
+    d_y Display Yellow
+        color = yellow
+    d_g Display Green
+        color = green
+""", display=virus.location.name_str)
+)
+$edit_type_py_init()
+$edit_py_init()
 !mfunc init:
+    $(virus.cmd_init())
     $(objectives.cmd_init())
     $(teams.cmd_init())
-    $for(event in Location.members)
-    $for(shortcut in event.shortcuts)
-    $(shortcut) g.na = $(event.location_id)
-    $endfor
-    $endfor
-    kill @e[type=armor_stand,gp.stand]
-    summon armor_stand $(str(stand_coords)) {
-        Tags:["gp.stand"],Invulnerable:1b,Invisible:1b,Marker:1b,NoGravity:1b
-        }
-    $(set_rankings(
-    {
-        "Acefire97": ["APPS"],
-        "ashtongreen00": ["APPS"],
-        "ENFORCER_GAMING": ["APPS"],
-        "VampireQueen94": ["APPS"],
-        "TedddyB": ["APPS"],
-        "ItsArk_": ["APPS"],
-        "CMDZane": ["AT", "APPS"],
-        "french_man": ["EC"],
-        "jamboree_lee": ["EC"],
-        "CynRyn": ["EC"],
-        "Icohedron": ["EC"],
-        "TheDarkOne239": ["EC"],
-        "T3ben": ["EC"],
-        "BUTTERLOVER7683": ["AT", "LE"],
-        "FoxyTheBoomQueen": ["AT", "LE"],
-        "Daa_": ["EC", "LE"],
-        "idk_lobsters": ["LE"],
-        "JadeofallTrades": ["LE"],
-        "Witch_Doctor": ["LE", "CMD"],
-        "FirezFury": ["LE"]
-    }
-    ))
-    $for(option in FlooEvent.valid_options)
-    $(floo_event.cmd_option(option))
-    $endfor
-    @e[type=armor_stand,gp.stand] gp.tp = 0
-    @e[type=armor_stand,gp.stand] _rbs = $(get_total_rank("EC", "LE", "CMD"))
-    @e[type=armor_stand,gp.stand] gp.cgi = 0
-    tellraw @a[EC=0] {"text":"","extra":[
-        $(floo_event.location.prefix_json),
-        $(floo_event.location.name_json),
-        {"text":" has been installed!","color":"gray"}
-    ]}
+    team _d_y + Countdown
+    team _d_y + Minutes
+    team _d_y + Seconds
+    team _d_y + $(viruses_name)
+    team _d_g + $(hiders_name)
+    &Countdown _cl = $(20 * 60)
+    &Glowing _cl = $(20 * 300)
+    &GameTime _cl = $(20 * 600)
+    summon armor_stand ~ ~ ~ {Tags:["_stand","_entity"],Invulnerable:1,PersistenceRequired:1,Invisible:1,Marker:1,NoGravity:1}
+    @e[type=armor_stand,_stand]: function reset_round
+    $edit_init()
+    $edit_type_init()
 !mfunc main:
-    @e[type=armor_stand,gp.stand,gp.cgi=1..]: function run_event
-    @a[gp.id=1..]: function spawnpoint
-    @a[gp.tp=1..]: function teleport
-    * enable _vot
-    @a[_vot=1..]: function vote
-    @e[type=player,gp.bk=1..]: function book
-    @a[$(select_tree)]: function in_spawn_tree
-    @a[$(select_portal),m=!3] if(~ 3 ~ stained_hardened_clay function tp_portal
-    $calc_dim()
-    @e[type=armor_stand,gp.stand] function calc_rank
-    @a[_rac=1] function use_rank
-    @e[type=armor_stand,gp.stand] function use_options
-    $reset_global_scores()
+    $(virus.cmd_main())
+    kill @e[$(select_all),!_entity,type=item]
+    @a[m=2,gDE=1,_pl=0..2] _pl = 0
+    @a _pl += 0
+    @a[g.sa=1,m=2,_pl=0]: function reset_player
+    @a[m=2,g.lg=1,_pl=1..2]: function reset_player
+    @e[type=armor_stand,_stand,_st=0]: function wait_for_start
+    @e[type=armor_stand,_stand,_st=1]: function start_round
+    @e[type=armor_stand,_stand,_st=2]: function countdown
+    @e[type=armor_stand,_stand,_st=3]: function during_round
+    @e[type=armor_stand,_stand,_st=4]: function stop_round
+    @e[type=armor_stand,_stand,_st=5]: function wait_for_reset
+    @e[type=armor_stand,_stand,_st=6]: function reset_round
+    @e[type=armor_stand,_stand]: function set_glowing_effects
+    @e[type=armor_stand,_stand]: function calc_player_numbers
+    @a[$(virus.select_spawn),m=2,_pl=1..2]: function teleport_players
+    $edit_type_main()
+    $edit_main()
 !mfunc term:
-    function stop_events
+    $(virus.cmd_term())
+    @a[_pl=1..2,m=2]: function full_reset_player
+    kill @e[_entity]
+    $edit_type_main_end()
+    $edit_main_end()
     $(objectives.cmd_term())
-    tellraw @a[EC=0] {"text":"","extra":[
-        $(floo_event.location.prefix_json),
-        $(floo_event.location.name_json),
-        {"text":" has been uninstalled!","color":"gray"}
-    ]}
-    kill @e[type=armor_stand,gp.stand]
-!mfunc run_event:
-    $(floo_event.cmd_start_bin_search(event_id_list, "run_event"))
-!folder run_event:
-    $(floo_event.funcs_bin_search(event_id_list, "gp.cgi"))
-    $for(event in Location.members)
-    $if(event.is_event)
-    !mfunc use_$(event.location_id):
-        function ego:$(event.folder_name)/main
+    $(teams.cmd_term())
+!mfunc wait_for_start:
+    @a[g.sa=1,m=2,_pl=2]: function full_reset_player
+!mfunc start_round:
+    title @a actionbar {"text":"The doors are now open","color":"green"}
+    @a: playsound $(Sounds.LEVEL) voice @s
+    $edit_type_round_start()
+    $edit_round_start()
+    @s _ti = &Countdown _cl
+    @s _st = 2
+!mfunc countdown:
+    $edit_type_countdown()
+    $edit_countdown()
+    function timer
+    function player_effects
+    @a[g.sa=1,m=2,_pl=1]: function add_to_round
+    @s[_ti=..0]: function end_countdown
+!mfunc end_countdown:
+    Countdown reset _
+    title @a actionbar {"text":"The $(viruses_name.lower()) has been released!","color":"yellow"}
+    @a: playsound $(Sounds.WITHER) voice @s
+    $edit_type_countdown_end()
+    $edit_countdown_end()
+    @s _ti = &GameTime _cl
+    @s _st = 3
+!mfunc during_round:
+    function timer
+    @a[$(virus.select_spawn),m=2,team=_h]: function to_virus
+    function player_effects
+    function calc_glowing
+    $edit_type_during_round()
+    $edit_during_round()
+    @e[type=armor_stand,_stand,_chi=0] _st = 4
+    @a[g.sa=1,m=2,_pl=1]: function add_to_round
+!mfunc stop_round:
+    @s _gl = 2
+    @s[_chi=0]: title @a title {"text":"The $(viruses_name.lower()) won!","color":"yellow"}
+    @s[_chi=0]: tellraw @a $(virus.location.surround_json(r'{"text":"The ' + viruses_name.lower() + r' won!","color":"yellow"}'))
+    @s[_chi=1..]: title @a title {"text":"Time!","color":"green"}
+    @s[_chi=1..]: title @a subtitle {"text":"The $(hiders_name.lower()) won!","color":"green"}
+    @s[_chi=1..]: tellraw @a $(virus.location.surround_json(r'{"text":"The time is up! The ' + hiders_name.lower() + r' won!","color":"yellow"}'))
+    @s[_chi=1..]: Seconds reset _
+    @s[_chi=1..]: Minutes reset _
+    $edit_type_round_end()
+    $edit_round_end()
+    @s _st = 5
+!mfunc wait_for_reset:
+    @a[g.sa=1,m=2,_pl=1..2]: function invuln_effect
+!mfunc reset_round:
+    @a[g.sa=1,m=2,_pl=2]: function full_reset_player
+    @s _gl = 1
+    $edit_type_round_reset()
+    $edit_round_reset()
+    Countdown reset _
+    Minutes reset _
+    Seconds reset _
+    @s _st = 0
+!mfunc player_effects:
+    effect @a[g.sa=1,m=2,_pl=2,team=_v] + $(Effects.STRENGTH) 3 90 true
+    effect @a[g.sa=1,m=2,_pl=2] + $(Effects.RESIST) 3 3 true
+    effect @a[g.sa=1,m=2,_pl=2] + $(Effects.HP) 100 100 true
+    $edit_type_player_effects()
+    $edit_player_effects()
+!mfunc invuln_effect:
+    effect @s + $(Effects.RESIST) 3 10 true
+    effect @s + $(Effects.HP) 100 100 true
+!mfunc set_glowing_effects:
+    @s[_gl=2]: effect @a[g.sa=1,m=2] + $(Effects.GLOW) 3 0 true
+    @s[_gl=1]: effect @a[g.sa=1,m=2,team=_v] + $(Effects.GLOW) 3 0 true
+!mfunc add_to_round:
+    @s[team=!_v]: function clear_player
+    @s[team=!_v]: function to_hider if @e[type=armor_stand,_stand,_st=0..2]
+    function to_virus if @e[type=armor_stand,_stand,_st=3]
+    function to_hider if @e[type=armor_stand,_stand,_st=4..6]
+    $edit_add_to_round()
+    $edit_type_add_to_round()
+    @s _pl = 2
+!mfunc clear_player:
+    item @s - *
+    effect @s - *
+    $(virus.location.cmd_book("@s[g.host=1]"))
+    $edit_clear_player()
+    $edit_type_clear_player()
+!mfunc reset_player:
+    function to_hider
+    $edit_reset_player()
+    $edit_type_reset_player()
+    @s _pl = 1
+!mfunc full_reset_player:
+    function reset_player
+    function tp_to_spawn
+    function to_hider
+!mfunc to_hider:
+    function clear_player
+    $edit_to_hider()
+    $edit_type_to_hider()
+    team _h + @s
+    @s g.temp = 0
+    @s[$(virus.select_spawn)] g.temp = 1
+    @s[g.temp=0]: function tp_to_spawn if @e[type=armor_stand,_stand,_st=0..1]
+!mfunc to_virus:
+    function clear_player
+    $edit_type_to_virus()
+    $edit_to_virus()
+    replaceitem entity @s slot.armor.head golden_helmet 1 0 {
+        Unbreakable:1,ench:[{id:$(Enchants.BINDING.enchant_id),lvl:1},{id:$(Enchants.VANISH.enchant_id),lvl:1}]
+    }
+    title @s title {"text":"You are now","color":"yellow"}
+    title @s subtitle {"text":"the $(virus_name.lower())!","color":"yellow"}
+    team _v + @s
+    function tp_to_wait if @e[type=armor_stand,_stand,_st=0..2]
+    $if(virus.arena_coords is not None)
+    function tp_to_arena if @e[type=armor_stand,_stand,_st=3..6]
     $endif
-    $endfor
-!mfunc spawnpoint:
-    $for(event in Location.members)
-    spawnpoint @s[gp.id=$(event.location_id)] $(event.tp_display_coords)
-    tellraw @s[gp.id=$(event.location_id)] {"text":"","extra":[
-        $(floo_event.location.prefix_json),
-        {"text":"Your spawnpoint has been set to ","color":"gray"},
-        {"text":"$(event.tp_display_coords)","color":"yellow","bold":"true"},
-        {"text":" at ","color":"gray"},
-        $(event.name_json),
-        {"text":"!","color":"gray"}
-    ]}
-    $endfor
-    playsound $(Sounds.XP) voice @s
-    @s gp.id *= -1
-!mfunc teleport:
-    $for(event in Location.members)
-    tp @s[gp.tp=$(event.location_id)] $(str(event.tp_coords))
-    tellraw @s[gp.tp=$(event.location_id)] {"text":"","extra":[
-        $(floo_event.location.prefix_json),
-        {"text":"You have been teleported to ","color":"gray"},
-        {"text":"$(event.tp_display_coords)","color":"yellow","bold":"true"},
-        {"text":" at ","color":"gray"},
-        $(event.name_json),
-        {"text":"!","color":"gray"}
-    ]}
-    $endfor
-    @s playsound $(Sounds.XP) voice @s
-    @s gp.tp = 0
+!mfunc teleport_players:
+    @s[team=_v]: function tp_to_wait if @e[type=armor_stand,_stand,_st=0..2]
+    $if(virus.arena_coords is not None)
+    @s[team=_v]: function tp_to_arena if @e[type=armor_stand,_stand,_st=3..6]
+    $endif
+!mfunc tp_to_wait:
+    tp @s $(virus.wait_coords)
+!mfunc tp_to_arena:
+    tp @s $(virus.arena_coords)
+!mfunc tp_to_spawn:
+    $(virus.location.cmd_tp())
+!mfunc timer:
+    @s[_ti=1..] _ti -= 1
+    function disp_time_text
+    function disp_time_score
+!mfunc disp_time_text:
+    @s[_ti=$(5*60*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"5 minutes remain!","color":"yellow"}'))
+    @s[_ti=$(4*60*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"4 minutes remain!","color":"yellow"}'))
+    @s[_ti=$(3*60*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"3 minutes remain!","color":"yellow"}'))
+    @s[_ti=$(2*60*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"2 minutes remain!","color":"yellow"}'))
+    @s[_ti=$(1*60*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"1 minute remains!","color":"yellow"}'))
+    @s[_ti=$(30*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"30 seconds remain!","color":"yellow"}'))
+    @s[_ti=$(15*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"15 seconds remain!","color":"yellow"}'))
+    @s[_ti=$(5*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"5!","color":"yellow"}'))
+    @s[_ti=$(4*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"4!","color":"yellow"}'))
+    @s[_ti=$(3*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"3!","color":"yellow"}'))
+    @s[_ti=$(2*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"2!","color":"yellow"}'))
+    @s[_ti=$(1*20)]: tellraw @a $(virus.location.surround_json(r'{"text":"1!","color":"yellow"}'))
+    @s[_ti=..0] _st = 4
+!mfunc disp_time_score:
+    Seconds _ti = @s _ti
+    Seconds _ti /= 20
+    Seconds _ti %= 60
+    Seconds _ti += 1
+    Seconds _ = Seconds _ti
+    Minutes _ti = @s _ti
+    Minutes _ti /= 1200
+    Minutes _ = Minutes _ti
+!mfunc calc_glowing:
+    @s _cl = &Glowing _cl
+    @s _cl -= @s _ti
+    @s[_cl=0..,_gl=1..]: tellraw @a $(virus.location.surround_json(r'{"text":"Glowing has been removed from all ' + viruses_name.lower() + r'!","color":"yellow"}'))
+    @s[_cl=0..,_gl=1..] @a: playsound $(Sounds.XP) voice @a[c=1]
+    @s[_cl=0..,_gl=1..] _gl = 0
+    @s[_cl=..-1,_gl=..0] _gl = 1
+!mfunc calc_player_numbers:
+    @s _chi = 0
+    @a[g.sa=1,m=2,team=_h]: @e[type=armor_stand,_stand] _chi += 1
+    $(hiders_name) _ = @s _chi
+    @s _cvr = 0
+    @a[g.sa=1,m=2,team=_v]: @e[type=armor_stand,_stand] _cvr += 1
+    $(viruses_name) _ = @s _cvr
+!folder input:
+    $(virus.cmd_input())
+    !mfunc start_round:
+        @e[type=armor_stand,_stand] _st = 1
+    !mfunc stop_round:
+        @e[type=armor_stand,_stand] _st = 4
+    !mfunc reset_round:
+        @e[type=armor_stand,_stand] _st = 6
+    !mfunc select_rand_virus:
+        @r[g.sa=1,m=2,team=_h]: function to_virus
+    !mfunc remove_one_virus:
+        @r[g.sa=1,m=2,team=_v]: function to_hider
+    !mfunc select_team:
+        tellraw @a[g.host=1] {"text":"","extra":[
+            $(virus.location.prefix_json),
+            {"text":"Choose team: ","color":"gray"},
+            {"text":"$(hider_name)","color":"green","italic":true,
+                "clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ $(virus.location.cmd_func("to_hider"))"},
+                "hoverEvent":{"action":"show_text","value":{"text":"Force someone to join the $(hiders_name.lower())","color":"green"}}
+            },
+            {"text":", ","color":"gray","italic":true},
+            {"text":"$(virus_name)","color":"yellow","italic":true,
+                "clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ $(virus.location.cmd_func("to_virus"))"},
+                "hoverEvent":{"action":"show_text","value":{"text":"Force someone to join the $(viruses_name.lower())","color":"yellow"}}
+            }
+        ]}
+    !mfunc add_one_min:
+        @e[type=armor_stand,_stand] _ti += $(20*60)
+    !mfunc add_30s:
+        @e[type=armor_stand,_stand] _ti += $(20*30)
+    !mfunc remove_30s:
+        @e[type=armor_stand,_stand] _ti -= $(20*30)
+    !mfunc remove_one_min:
+        @e[type=armor_stand,_stand] _ti -= $(20*60)
 !mfunc book:
-    $for(event in Location.members)
-    $if(event.is_event)
-    function ego:$(event.folder_name)/book if @s[gp.bk=$(event.location_id)]
-    $endif
-    $endfor
-    @s gp.bk = 0
-!mfunc in_spawn_tree:
-    effect @s $(Effects.SATURATION) 2 0 true
-    gamemode 2 @s[m=0]
-    @e[type=armor_stand,gp.stand,gp.pvp=0] join NoPVP @a[$(select_tree),m=2]
-    @s[m=!3] _dly += 1
-    ScOP @s[_dly=10..] gp.tp = @e[type=armor_stand,gp.stand,gp.tp=1..] gp.tp
-    @s[_dly=10..] _dly = 0
-!mfunc tp_portal:
-    @s if(~ 3 ~ lime_terracotta): @s gp.tp = mghub g.na
-    @s if(~ 3 ~ magenta_terracotta): @s gp.tp = pvphub g.na
-    @s if(~ 3 ~ orange_terracotta): @s gp.tp = mmhub g.na
-    @s if(~ 3 ~ cyan_terracotta): @s gp.tp = racehub g.na
-!mfunc calc_rank:
-    @a _rac = 1
-    @s[_rbs=1..] _rac = @s[_rbs=1..] _rbs
-$py(
-powers_of_two = [2**num for num in range(len(RANKINGS))]
-)
-    $for(score, rank in reversed(list(zip(powers_of_two, RANKINGS)))))
-    @s[_rac=$(score)..]: @a[$(rank)=1,_dim=1] _rac = 0
-    @s[_rac=$(score)..] _rac - $(score)
-    $endfor
-!mfunc use_rank:
-    gamemode adventure @s[m=1,_dim=1]
-    gamemode adventure @s[m=0,_dim=1]
-    @s[g.lg=(1..),_dim=1] gp.tp = spawn g.na
-    clear @s[$(select_tree)]
-!mfunc use_options:
-    @s[gp.pvp=0] join NoPVP @a[team=!NoPVP,_dim=1]
-    @s[gp.pvp=1] effect @a[_dim=1] $(Effects.WEAK) 3 100 true
-    @s[gp.sat=1] effect @a[_dim=1] $(Effects.SATURATION) 2 0 true
-    @a[_rgc=1] _rgc = 0
-    @s[gp.rgt=(1..)]: @a[_dim=1,g.hp=..19] _rgc = 1
-    @a[_rgc=1]: function calc_regen
-!mfunc calc_regen:
-    @s gp.rgt + 1
-    if(@s gp.rgt == @e[type=armor_stand,gp.stand,c=1] gp.rgt): effect @s + $(Effects.REGEN) 2 10 true
-    if(@s gp.rgt > @e[type=armor_stand,gp.stand,c=1] gp.rgt): effect @s - $(Effects.REGEN)
-    if(@s gp.rgt > @e[type=armor_stand,gp.stand,c=1] gp.rgt): @s gp.rgt = 0
-!mfunc vote:
-    tellraw @s {"text":"","extra":[
-        $(floo_event.location.prefix_json),
-        {"text":"Vote here: ","color":"gray"},
-        {"text":"Link 1","color":"green","bold":"true","underlined":"true",
-            "clickEvent":{
-                "action":"open_url",
-                "value":"http://minecraft-server-list.com/server/200887/vote/"
+    replaceitem entity @s slot.weapon.offhand written_book 1 0 {
+        title:"$(virus.location.name_str) Book",author:"eGO",pages:["[\"\",
+            {\"text\":\"$(virus.location.name_str) Settings\\n\",\"bold\":true},
+            {\"text\":\"\\n\"},
+            {\"text\":\"$(virus.location.prefix_str): \",\"color\":\"dark_gray\"},
+            {\"text\":\"Start\",\"color\":\"dark_green\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function init\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Starts the $(type_name.lower()) map so it can be ran\",\"color\":\"green\"}}
             },
-            "hoverEvent":{
-                "action":"show_text",
-                "value":{"text":"Vote link #1","color":"green"}
-            }
-        },
-        {"text":" "},
-        {"text":"Link 2","color":"dark_green","bold":"true","underlined":"true",
-            "clickEvent":{
-                "action":"open_url",
-                "value":"http://minecraftservers.org/vote/109809"
+            {\"text\":\" / \",\"color\":\"gray\"},
+            {\"text\":\"Stop\\n\",\"color\":\"red\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function term\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Ends the $(type_name.lower()) map\",\"color\":\"red\"}}
             },
-            "hoverEvent":{
-                "action":"show_text",
-                "value":{"text":"Vote link #2","color":"dark_green"}
-            }
-        },
-        {"text":" "},
-        {"text":"Link 3","color":"green","bold":"true","underlined":"true",
-            "clickEvent":{
-                "action":"open_url",
-                "value":"https://minecraftservers.biz/servers/2511/"
+            {\"text\":\"Round: \",\"color\":\"dark_gray\"},
+            {\"text\":\"Start\",\"color\":\"dark_green\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_start_round\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Starts an individual round\",\"color\":\"dark_green\"}}
             },
-            "hoverEvent":{
-                "action":"show_text",
-                "value":{"text":"Vote link #3","color":"green"}
-            }
-        },
-        {"text":" "},
-        {"text":"Link 4","color":"dark_green","bold":"true","underlined":"true",
-            "clickEvent":{
-                "action":"open_url",
-                "value":"http://minecraft-mp.com/server/86376/vote/"
+            {\"text\":\" / \",\"color\":\"gray\"},
+            {\"text\":\"Stop\",\"color\":\"gold\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_stop_round\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Stops an individual round\",\"color\":\"gold\"}}
             },
-            "hoverEvent":{
-                "action":"show_text",
-                "value":{"text":"Vote link #4","color":"dark_green"}
-            }
-        },
-        {"text":" "},
-        {"text":"Link 5","color":"green","bold":"true","underlined":"true",
-            "clickEvent":{
-                "action":"open_url",
-                "value":"http://www.planetminecraft.com/server/edge-gamerscom/vote/"
+            {\"text\":\" / \",\"color\":\"gray\"},
+            {\"text\":\"Reset\\n\\n\",\"color\":\"red\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_reset_round\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Resets an individual round\",\"color\":\"red\"}}
             },
-            "hoverEvent":{
-                "action":"show_text",
-                "value":{"text":"Vote link #5","color":"green"}
+            {\"text\":\"Select $(virus_name): \",\"color\":\"dark_gray\"},
+            {\"text\":\"[+]\",\"color\":\"dark_green\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_select_rand_virus\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Chooses a $(virus_name.lower())\",\"color\":\"dark_green\"}}
+            },
+            {\"text\":\" \",\"color\":\"gray\"},
+            {\"text\":\"[-]\\n\",\"color\":\"red\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_remove_one_virus\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes a $(virus_name.lower())\",\"color\":\"red\"}}
+            },
+            {\"text\":\"Edit Teams: \",\"color\":\"dark_gray\"},
+            {\"text\":\"[+]\\n\",\"color\":\"gold\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_select_team\"}
+            },
+            {\"text\":\"Time: \",\"color\":\"dark_gray\"},
+            {\"text\":\"[+]\",\"color\":\"dark_green\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_add_one_min\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Adds 1 minute\",\"color\":\"dark_green\"}}
+            },
+            {\"text\":\" \",\"color\":\"gray\"},
+            {\"text\":\"[+]\",\"color\":\"gold\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_add_30s\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Adds 30 seconds\",\"color\":\"gold\"}}
+            },
+            {\"text\":\" \",\"color\":\"gray\"},
+            {\"text\":\"[-]\",\"color\":\"gold\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_remove_30s\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes 30 seconds\",\"color\":\"gold\"}}
+            },
+            {\"text\":\" \",\"color\":\"gray\"},
+            {\"text\":\"[-]\",\"color\":\"red\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_remove_one_min\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes 1 minute\",\"color\":\"red\"}}
             }
-        }
+        ]"
     ]}
-    playsound $(Sounds.XP) voice @s
-    @s _vot = 0
-!mfunc stop_events:
-    @e[type=armor_stand,gp.stand,gp.cgi=1..] function _stop_events
-!mfunc _stop_events:
-    $(floo_event.cmd_start_bin_search(event_id_list, "stop_events"))
-    @s[gp.cgi=1..] gp.cgi = 0
-!folder stop_events
-    $(floo_event.funcs_bin_search(event_id_list, "gp.cgi"))
-    $for(event in Location.members)
-    $if(event.is_event)
-    !mfunc stop_events/use_$(event.location_id):
-        function ego:$(event.folder_name)/term
-    $endif
-    $endfor
-$py(r"""
-    @a[$MM$,SPdim=1] SPmm = 1
-    @a[$NotMM$,SPmm=1] SPmm = 2
-    ScOP @e[type=armor_stand,gp.stand] SPmm = Mastermind SPmm
-    @e[type=armor_stand,gp.stand,SPmm=0] @a[SPmm=1] SPmm = 2
-    @a[SPmm=2,EC=0] SPmm = 0
-    clear @a[SPmm=2] wool -1 -1 {display:{Lore:["Placable Block"]}}
-    clear @a[SPmm=2] shears -1 -1 {display:{Lore:["Remove Block Tool"]}}
-    @a[SPmm=2] SPmm = 0
-""")

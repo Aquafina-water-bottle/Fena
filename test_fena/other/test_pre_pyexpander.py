@@ -23,6 +23,9 @@ $py:
         for x in range(15):
             somedict[x] = "ayylmao"
 
+# include override
+$include("include_text.txt")
+
 # macros
 $macro(edit_give_porkchops):
     say this is a macro
@@ -79,7 +82,7 @@ $endif
             replaceitem entity @s[porkchop=$(x)] slot.hotbar.$(x) porkchop 1 0
 """
 
-output_str = """$py(
+expected_str = """$py(
 code = "unchanged"
 )
 $py(
@@ -93,6 +96,10 @@ somedict = {}
 for x in range(15):
     somedict[x] = "ayylmao"
 )
+hello this is now included
+$for(your_mom in range(25))
+say $(your_mom)
+$endfor
 $macro(edit_give_porkchops)
 say this is a macro
 $endmacro
@@ -145,7 +152,14 @@ $endif
 
 
 def test_pre_pyexpander():
-    assert output_str == parse_pre_pyexpander(input_str)
+    output_str = parse_pre_pyexpander(input_str)
+
+    with open("expected.txt", "w") as file:
+        file.write(expected_str)
+    with open("output.txt", "w") as file:
+        file.write(output_str)
+
+    assert expected_str == output_str
 
     # print(repr(parse_pre_expander(input_str)))
     # print(repr(output_str))

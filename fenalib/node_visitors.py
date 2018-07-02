@@ -47,7 +47,7 @@ class NodeVisitor(TreePostfixTraversal):
         Returns:
             Whatever is gotten with the visitor method
         """
-        assert_type(node, StmtNode, Token, ProgramNode)
+        # assert_type(node, StmtNode, Token, ProgramNode)
         return self._visit("visit", node, **kwargs)
 
 class NodeBuilder(TreePostfixTraversal):
@@ -65,7 +65,7 @@ class NodeBuilder(TreePostfixTraversal):
         Returns:
             str: Whatever is gotten with the build method
         """
-        assert_type(node, CmdNode, Token, str)
+        # assert_type(node, CmdNode, Token, str)
         return self._visit("build", node, **kwargs)
 
     def iter_build(self, nodes, join_value=None):

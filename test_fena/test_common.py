@@ -5,7 +5,8 @@ import sys
 if __name__ == "__main__":
     sys.path.append("..")
 
-from fenalib.command_builder import CommandBuilder_1_12, CommandBuilder_1_13
+# from fenalib.command_builder import CommandBuilder_1_12, CommandBuilder_1_13
+from fenalib.command_builder import CommandBuilder_1_12
 from fenalib.config_data import ConfigData
 from fenalib.lexer import Lexer
 from fenalib.parser import Parser
@@ -16,12 +17,13 @@ full_dir_path = os.path.realpath("functions/fena")
 # global variable (oh no) that determines whether output should be printed or not
 
 def test_builder(string, lexer_method, parser_method, expected=None, expect_error=False, print_ast=False):
-    if config_data.version == "1.12":
-        CommandBuilder = CommandBuilder_1_12
-    elif config_data.version == "1.13":
-        CommandBuilder = CommandBuilder_1_13
-    else:
-        raise RuntimeError
+    # if config_data.version == "1.12":
+    #     CommandBuilder = CommandBuilder_1_12
+    # elif config_data.version == "1.13":
+    #     CommandBuilder = CommandBuilder_1_13
+    # else:
+    #     raise RuntimeError
+    CommandBuilder = CommandBuilder_1_12
 
     try:
         lexer = Lexer(string)

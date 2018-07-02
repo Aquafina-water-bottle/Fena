@@ -15,7 +15,8 @@ from fenalib.str_utils import encode_str, decode_str
 from fenalib.node_visitors import NodeVisitor
 from fenalib.config_data import ConfigData
 from fenalib.in_file_config import InFileConfig
-from fenalib.command_builder import CommandBuilder_1_12, CommandBuilder_1_13
+# from fenalib.command_builder import CommandBuilder_1_12, CommandBuilder_1_13
+from fenalib.command_builder import CommandBuilder_1_12
 from fenalib.mcfunction import McFunction
 
 
@@ -54,14 +55,13 @@ class Interpreter(NodeVisitor):
         self.visit(ast)
         self.in_file_config.finalize()
 
-        config_data = ConfigData()
-
-        if config_data.version == "1.12":
-            CommandBuilder = CommandBuilder_1_12
-        elif config_data.version == "1.13":
-            CommandBuilder = CommandBuilder_1_13
-        else:
-            raise RuntimeError("wtf man")
+        # if config_data.version == "1.12":
+        #     CommandBuilder = CommandBuilder_1_12
+        # elif config_data.version == "1.13":
+        #     CommandBuilder = CommandBuilder_1_13
+        # else:
+        #     raise RuntimeError("wtf man")
+        CommandBuilder = CommandBuilder_1_12
 
         for mcfunction, mcfunction_node in self.mcfunctions.items():
             for command_node in mcfunction_node.command_nodes:
@@ -123,9 +123,9 @@ class Interpreter(NodeVisitor):
             value (Token)
         """
         if node.variable.value == "prefix":
-            self.in_file_config.prefix = self.visit(node.prefix)
+            self.in_file_config.prefix = self.visit(node.value)
         elif node.variable.value == "constobj":
-            self.in_file_config.constobj = self.visit(node.constobj)
+            self.in_file_config.constobj = self.visit(node.value)
         else:
             raise SyntaxError(f"Expected one of 'prefix' or 'constobj' for node {node.variable}")
 

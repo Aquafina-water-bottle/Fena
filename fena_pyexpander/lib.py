@@ -216,7 +216,7 @@ class Block(object):
             parts.append("line %d, col %d" % p_elm.rowcol(pos))
             return " ".join(parts)
         except IndexError as _:
-            return "unknown position"
+            return " ".join(parts) + " at unknown position"
     def _append(self, lst, name, val=None):
         """append a line with property information to a list.
 
@@ -482,18 +482,18 @@ class Block(object):
         >>> b.previous["a"]
         1
         """
+
         e= None
         try:
             # pylint: disable=exec-used
             exec(st, self.globals_)
-        except (SyntaxError, NameError, IndexError, TypeError) as _e:
-            e= _e
-        except Exception as e:
-            sys.stderr.write("error at %s:\n" % self.posmsg())
-            raise
+        except Exception as _e:
+            tb = sys.exc_info()[2]
+            e = _e
         if e is not None:
             # pylint: disable=raising-non-exception
-            raise e.__class__("%s at %s" % (str(e), self.posmsg()))
+            raise e.__class__("%s at %s" % (str(e), self.posmsg())).with_traceback(tb)
+
     def __getitem__(self, name):
         """looks up a value in the globals_ dictionary of the block.
 

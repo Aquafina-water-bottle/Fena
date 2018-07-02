@@ -18,7 +18,7 @@ from fenalib.config_data import get_all_data, ConfigData
 from fenalib.in_file_config import InFileConfig
 
 import test_fena.v1_12.test_all
-import test_fena.v1_13.test_all
+# import test_fena.v1_13.test_all
 import test_fena.other.test_all
 import test_fena.test_common
 
@@ -42,10 +42,10 @@ try:
     config_data.ego = False
     test_fena.v1_12.test_all.test_all()
 
-    logging.debug("\n\n1.13")
-    get_all_data("1.13")
-    config_data.ego = False
-    test_fena.v1_13.test_all.test_all()
+    # logging.debug("\n\n1.13")
+    # get_all_data("1.13")
+    # config_data.ego = False
+    # test_fena.v1_13.test_all.test_all()
 
 except Exception as e:  # pylint: disable=broad-except
     # ignores the mypy warning idk

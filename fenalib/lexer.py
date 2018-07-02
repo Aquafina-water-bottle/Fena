@@ -436,7 +436,7 @@ class Lexer:
             else:
                 self.error()
 
-    def get_literal_string(self):
+    def get_literal_string(self, allow_newline=False):
         """
         Returns:
             Token: Literal string with quotes enclosing it
@@ -454,7 +454,7 @@ class Lexer:
                 self.advance(2)
 
             # There shouldn't ever be a newline in a string
-            elif self.current_chars_are(WhitespaceToken.NEWLINE.value):
+            elif self.current_chars_are(WhitespaceToken.NEWLINE.value) and not allow_newline:
                 self.error("Unexpected newline during a string declaration")
 
             # Advances normally
@@ -552,7 +552,7 @@ class Lexer:
                 yield from self.get_curly_bracket_tag(array=True)
 
             elif self.get_char() == DelimiterToken.QUOTE.value:
-                yield self.get_literal_string()
+                yield self.get_literal_string(allow_newline=True)
             elif self.get_char().isdigit() or self.get_char() == "-":
                 yield self.get_number()
             elif self.get_char().isalpha() or self.get_char() in "_.":

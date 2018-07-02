@@ -1,3 +1,6 @@
+from typing import NamedTuple
+from collections import namedtuple
+
 """
 http://python-3-patterns-idioms-test.readthedocs.io/en/latest/PythonDecorators.html
 http://jfine-python-classes.readthedocs.io/en/latest/decorators.html
@@ -30,6 +33,16 @@ def addrepr(cls):
         >>> a = A("1", 2, (3, "4"))
         >>> repr(a)
         "A[a='1', b=2, c=(3, '4')]"
+
+        >>> @addrepr
+        ... class B(NamedTuple):
+        ...     hue: int
+        ...     saturation: float
+        ...     lightness: float
+
+        >>> b = B(5, 3.5, 7.6)
+        >>> repr(b)
+        "B[hue=5, saturation=3.5, lightness=7.6]"
     """
     def __repr__(self):
         # `type(self)` is used instead of `cls` because `cls` only refers to the most parent object if inherited
@@ -37,7 +50,13 @@ def addrepr(cls):
         class_name = type(self).__name__
 
         variables = []
-        for variable, value in vars(self).items():
+        try:
+            object_dict = vars(self)
+        except TypeError:
+            # possibly NamedTuple
+            object_dict = dict(self._asdict())
+
+        for variable, value in object_dict.items():
             variables.append(f"{variable}={value!r}")
         variables_str = ", ".join(variables)
 
@@ -51,5 +70,18 @@ def addrepr(cls):
     return cls
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    # import doctest
+    # doctest.testmod()
+
+    @addrepr
+    class B(NamedTuple):
+        hue: int
+        saturation: float
+        lightness: float
+
+    b = B(1, 2.3, 4.5)
+    print(b)
+
+
+
+

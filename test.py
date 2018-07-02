@@ -70,11 +70,14 @@ class Color(NamedTuple):
     lightness: float = 0.5
 
 if __name__ == "__main__":
-    print(isinstance([1, 2, 3], List[int]))
+    # print(isinstance([1, 2, 3], List[int]))
     color = Color(1, 2)
     print(color)
     print(color.hue)
     print(color.saturation)
     print(color.lightness)
+    print(color._asdict())
+    print(dict(color._asdict()))
+
     # print(color.__annotations__)
 
