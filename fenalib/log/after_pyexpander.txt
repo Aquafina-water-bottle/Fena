@@ -1,10 +1,4 @@
 
-!set prefix = vr1
-
-
-
-
-
 
 
 
@@ -44,17 +38,23 @@
 
 
  
+
+!set prefix = vr1
+
+
+
+
 !mfunc init:
     @s g.host = 1
-    @e[type=armor_stand,gp.stand] gp.tp = 1935481488
+    @e[type=armor_stand,gp.stand] gp.tp = 2115807378
     @e[type=armor_stand,gp.stand] gp.pvp = 2
     @e[type=armor_stand,gp.stand] gp.sat = 1
     gamerule naturalRegeneration true
     @e[type=armor_stand,gp.stand] gp.rgt = 0
     @a g.sa = 0
     @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181] g.sa = 1
-    tellraw @a[EC=0] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":" has started!","color":"green"}]}
-    @e[type=armor_stand,gp.stand,gp.cgi=0] gp.cgi = 1935481488
+    tellraw @a[g.ec=1] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":" has started!","color":"green"}]}
+    @e[type=armor_stand,gp.stand,gp.cgi=0] gp.cgi = 2115807378
     1200 g.number = 1200
     20 g.number = 20
     60 g.number = 60
@@ -64,47 +64,97 @@
     objective add _ti dummy Virus 1 Timer
     objective add _chi dummy Virus 1 Count Hiders
     objective add _cvr dummy Virus 1 Count Virus
-    objective add _gl dummy Virus 1 Glowing Players
+    objective add _gl dummy Virus 1 Glowing to Virus
     objective add _cl dummy Virus 1 Calculations
+    objective add _igl dummy Virus 1 Input Glowing
+    objective add _igt dummy Virus 1 Input Game Time
+    objective add _icd dummy Virus 1 Input Countdown
     objective add _st dummy Virus 1 State
     team add _h Virus 1 Hiders
     team _h friendlyfire = false
     team _h collisionRule = never
     team _h deathMessageVisibility = always
-    team _h color = green
     team _h nametagVisibility = never
+    team _h color = green
     team add _v Virus 1 Virus
     team _v friendlyfire = false
     team _v collisionRule = never
     team _v deathMessageVisibility = always
     team _v color = yellow
-    team add d_y Virus 1 Display Yellow
-    team d_y color = yellow
-    team add d_g Virus 1 Display Green
-    team d_g color = green
+    team add _d_y Virus 1 Display Yellow
+    team _d_y color = yellow
+    team add _d_g Virus 1 Display Green
+    team _d_g color = green
     team _d_y + Countdown
     team _d_y + Minutes
     team _d_y + Seconds
     team _d_y + Virus
     team _d_g + Hiders
-    &Countdown _cl = 1200
-    &Glowing _cl = 6000
-    &GameTime _cl = 12000
-    summon armor_stand ~ ~ ~ {Tags:["_stand","_entity"],Invulnerable:1,PersistenceRequired:1,Invisible:1,Marker:1,NoGravity:1}
-    @e[type=armor_stand,_stand]: function reset_round
+    @e[gp.stand] ~ ~1 ~: summon armor_stand ~ ~ ~ {Tags:["_stand","_entity"],Invulnerable:1,PersistenceRequired:1,Invisible:1,Marker:1,NoGravity:1}
+    @e[type=armor_stand,_stand] _gl = 0
+    @e[type=armor_stand,_stand] _st = 0
+    
+
+    @e[type=armor_stand,_stand] _icd = 1200
+    
+
+    @e[type=armor_stand,_stand] _igt = 12000
+    
+
+    @e[type=armor_stand,_stand] _igl = 6000
+    
      
      
-!mfunc main:
+!mfunc main debug=false:
     @a g.sa = 0
     @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181] g.sa = 1
     @a[g.sa=1] gp.id += 0
-    @a[g.sa=1, gp.id=(..-1935481489)] gp.id = 1935481488
-    @a[g.sa=1, gp.id=(-1935481487..)] gp.id = 1935481488
+    @a[g.sa=1, gp.id=(..-2115807379)] gp.id = 2115807378
+    @a[g.sa=1, gp.id=(-2115807377..)] gp.id = 2115807378
     kill @e[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,!_entity,type=item]
-    @a[m=2,gDE=1,_pl=0..2] _pl = 0
+    
+
+    @e[type=armor_stand,_stand,_icd=1..]: function calc_input_countdown
+    
+
+    @e[type=armor_stand,_stand,_igt=1..]: function calc_input_gametime
+    
+
+    @e[type=armor_stand,_stand,_igl=1..]: function calc_input_glowing
+    
+    
+    title @a[g.host=1] actionbar {"text":"","extra":[
+        {"text":"Game time: [","color":"green"},
+            {"score":{"name":"&GameTimeMinutes","objective":"_cl"},"color":"yellow","bold":"true"},
+            {"text":":","color":"yellow","bold":"true"},
+            {"score":{"name":"&GameTimeAdditional","objective":"_cl"},"color":"yellow","bold":"true"},
+            {"score":{"name":"&GameTimeSeconds","objective":"_cl"},"color":"yellow","bold":"true"},
+            {"text":" (","color":"yellow"},
+            {"score":{"name":"&GameTime","objective":"_cl"},"color":"yellow"},
+            {"text":"t)","color":"yellow"},
+        {"text":"], Glowing until: [","color":"green"},
+            {"score":{"name":"&GlowingUntilMinutes","objective":"_cl"},"color":"yellow","bold":"true"},
+            {"text":":","color":"yellow","bold":"true"},
+            {"score":{"name":"&GlowingUntilAdditional","objective":"_cl"},"color":"yellow","bold":"true"},
+            {"score":{"name":"&GlowingUntilSeconds","objective":"_cl"},"color":"yellow","bold":"true"},
+            {"text":" (","color":"yellow"},
+            {"score":{"name":"&GlowingUntil","objective":"_cl"},"color":"yellow"},
+            {"text":"t)","color":"yellow"},
+        {"text":"], Countdown: [","color":"green"},
+            {"score":{"name":"&CountdownMinutes","objective":"_cl"},"color":"yellow","bold":"true"},
+            {"text":":","color":"yellow","bold":"true"},
+            {"score":{"name":"&CountdownAdditional","objective":"_cl"},"color":"yellow","bold":"true"},
+            {"score":{"name":"&CountdownSeconds","objective":"_cl"},"color":"yellow","bold":"true"},
+            {"text":" (","color":"yellow"},
+            {"score":{"name":"&Countdown","objective":"_cl"},"color":"yellow"},
+            {"text":"t)","color":"yellow"},
+        {"text":"]","color":"green"}
+    ]}
+
+    @a[g.sa=1,m=2,g.lg=1,_pl=1..2] _pl = 0
+    @a[g.sa=1,m=2,g.stp=1,_pl=1..2] _pl = 0
+    @a[m=2,g.de=1,_pl=1..2] _pl = 0
     @a _pl += 0
-    @a[g.sa=1,m=2,_pl=0]: function reset_player
-    @a[m=2,g.lg=1,_pl=1..2]: function reset_player
     @e[type=armor_stand,_stand,_st=0]: function wait_for_start
     @e[type=armor_stand,_stand,_st=1]: function start_round
     @e[type=armor_stand,_stand,_st=2]: function countdown
@@ -112,20 +162,25 @@
     @e[type=armor_stand,_stand,_st=4]: function stop_round
     @e[type=armor_stand,_stand,_st=5]: function wait_for_reset
     @e[type=armor_stand,_stand,_st=6]: function reset_round
-    @e[type=armor_stand,_stand]: function set_glowing_effects
-    @e[type=armor_stand,_stand]: function calc_player_numbers
-    @a[x=-85,y=45,z=-241,dx=31,dy=5,dz=31,m=2,_pl=1..2]: function teleport_players
+    @e[type=armor_stand,_stand] _chi = 0
+    @a[g.sa=1,m=2,team=_h]: @e[type=armor_stand,_stand] _chi += 1
+    Hiders _ = @e[type=armor_stand,_stand] _chi
+    @e[type=armor_stand,_stand] _cvr = 0
+    @a[g.sa=1,m=2,team=_v]: @e[type=armor_stand,_stand] _cvr += 1
+    Virus _ = @e[type=armor_stand,_stand] _cvr
      
      
 !mfunc term:
+    @a[_pl=1..2,m=2]: function reset_player
+    @a[_pl=1..2,m=2] gp.tp = 2115807378
     * reset g.host
     @e[type=armor_stand,gp.stand] gp.pvp = 0
     @e[type=armor_stand,gp.stand] gp.sat = 1
     gamerule naturalRegeneration true
     @e[type=armor_stand,gp.stand] gp.rgt = 0
-    @e[type=armor_stand,gp.stand,gp.cgi=1935481488] gp.cgi = 0
-    tellraw @a[EC=0] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":" has stopped!","color":"red"}]}
-    @a[_pl=1..2,m=2]: function full_reset_player
+    @e[type=armor_stand,gp.stand,gp.cgi=2115807378] gp.tp = 0
+    @e[type=armor_stand,gp.stand,gp.cgi=2115807378] gp.cgi = 0
+    tellraw @a[g.ec=1] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":" has stopped!","color":"red"}]}
     kill @e[_entity]
      
     
@@ -139,13 +194,18 @@
     objective remove _cvr
     objective remove _gl
     objective remove _cl
+    objective remove _igl
+    objective remove _igt
+    objective remove _icd
     objective remove _st
     team remove _h
     team remove _v
-    team remove d_y
-    team remove d_g
-!mfunc wait_for_start:
-    @a[g.sa=1,m=2,_pl=2]: function full_reset_player
+    team remove _d_y
+    team remove _d_g
+!mfunc wait_for_start debug=false:
+    @a[g.sa=1,m=2,_pl=0,team=_v]: function init_player_as_virus
+    @a[g.sa=1,m=2,_pl=0]: function init_player_as_hider
+    effect @a[g.sa=1,m=2,team=_v] + minecraft:glowing 3 0 true
 !mfunc start_round:
     title @a actionbar {"text":"The doors are now open","color":"green"}
     @a: playsound minecraft:entity.player.levelup voice @s
@@ -155,16 +215,50 @@
 
     @s _ti = &Countdown _cl
     @s _st = 2
-!mfunc countdown:
+!mfunc countdown debug=false:
      
      
-    function timer
-    function player_effects
-    @a[g.sa=1,m=2,_pl=1]: function add_to_round
+    
+    @s[_ti=1..] _ti -= 1
+    
+    @s[_ti=6000]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5 minutes remain!","color":"yellow"}]}
+    @s[_ti=4800]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4 minutes remain!","color":"yellow"}]}
+    @s[_ti=3600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3 minutes remain!","color":"yellow"}]}
+    @s[_ti=2400]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2 minutes remain!","color":"yellow"}]}
+    @s[_ti=1200]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1 minute remains!","color":"yellow"}]}
+    @s[_ti=600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"30 seconds remain!","color":"yellow"}]}
+    @s[_ti=300]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"15 seconds remain!","color":"yellow"}]}
+    @s[_ti=100]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5!","color":"yellow"}]}
+    @s[_ti=80]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4!","color":"yellow"}]}
+    @s[_ti=60]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3!","color":"yellow"}]}
+    @s[_ti=40]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2!","color":"yellow"}]}
+    @s[_ti=20]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1!","color":"yellow"}]}
+    @s[_ti=..0] _st = 4
+    
+    
+    Seconds _ti = @s _ti
+    Seconds _ti /= 20
+    Seconds _ti %= 60
+    Seconds _ti += 1
+    Seconds _ = Seconds _ti
+    Minutes _ti = @s _ti
+    Minutes _ti /= 1200
+    Minutes _ = Minutes _ti
+    
+
+    
+    effect @a[g.sa=1,m=2,_pl=2,team=_v] + minecraft:strength 3 90 true
+    effect @a[g.sa=1,m=2,_pl=2] + minecraft:resistance 3 3 true
+    effect @a[g.sa=1,m=2,_pl=2] + minecraft:instant_health 100 100 true
+
+    @a[g.sa=1,m=2,_pl=0..1,team=_h]: function add_to_round_as_hider
+    @a[g.sa=1,m=2,_pl=0..1] _pl = 2
+    effect @a[g.sa=1,m=2,team=_v] + minecraft:glowing 3 0 true
     @s[_ti=..0]: function end_countdown
 !mfunc end_countdown:
     Countdown reset _
-    title @a actionbar {"text":"The virus has been released!","color":"yellow"}
+    title @a subtitle {"text":""}
+    title @a subtitle {"text":"The virus has been released!","color":"yellow"}
     @a: playsound minecraft:entity.wither.death voice @s
      
     
@@ -173,22 +267,59 @@
 
     @s _ti = &GameTime _cl
     @s _st = 3
-!mfunc during_round:
-    function timer
-    @a[x=-85,y=45,z=-241,dx=31,dy=5,dz=31,m=2,team=_h]: function to_virus
-    function player_effects
-    function calc_glowing
+!mfunc during_round debug=false:
+    
+    @s[_ti=1..] _ti -= 1
+    
+    @s[_ti=6000]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5 minutes remain!","color":"yellow"}]}
+    @s[_ti=4800]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4 minutes remain!","color":"yellow"}]}
+    @s[_ti=3600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3 minutes remain!","color":"yellow"}]}
+    @s[_ti=2400]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2 minutes remain!","color":"yellow"}]}
+    @s[_ti=1200]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1 minute remains!","color":"yellow"}]}
+    @s[_ti=600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"30 seconds remain!","color":"yellow"}]}
+    @s[_ti=300]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"15 seconds remain!","color":"yellow"}]}
+    @s[_ti=100]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5!","color":"yellow"}]}
+    @s[_ti=80]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4!","color":"yellow"}]}
+    @s[_ti=60]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3!","color":"yellow"}]}
+    @s[_ti=40]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2!","color":"yellow"}]}
+    @s[_ti=20]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1!","color":"yellow"}]}
+    @s[_ti=..0] _st = 4
+    
+    
+    Seconds _ti = @s _ti
+    Seconds _ti /= 20
+    Seconds _ti %= 60
+    Seconds _ti += 1
+    Seconds _ = Seconds _ti
+    Minutes _ti = @s _ti
+    Minutes _ti /= 1200
+    Minutes _ = Minutes _ti
+    
+
+    
+    effect @a[g.sa=1,m=2,_pl=2,team=_v] + minecraft:strength 3 90 true
+    effect @a[g.sa=1,m=2,_pl=2] + minecraft:resistance 3 3 true
+    effect @a[g.sa=1,m=2,_pl=2] + minecraft:instant_health 100 100 true
+
+    @a[g.sa=1,m=2,_pl=0..1]: function add_to_round_as_virus
+    @s _cl = &GlowingUntil _cl
+    @s _cl -= @s _ti
+    @s[_cl=0..,_gl=1..]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Glowing has been removed from all virus!","color":"yellow"}]}
+    @s[_cl=0..,_gl=1..] @a: playsound minecraft:entity.experience_orb.pickup voice @a[c=1]
+    @s[_cl=0..,_gl=1..] _gl = 0
+    @s[_cl=..-1,_gl=..0] _gl = 1
+    @s[_gl=1]: effect @a[g.sa=1,m=2,team=_v] + minecraft:glowing 3 0 true
      
-     
+    
+    @a[x=-85,y=45,z=-241,dx=31,dy=5,dz=31,m=2,_pl=2,team=_h]: function add_to_round_as_virus
+
     @e[type=armor_stand,_stand,_chi=0] _st = 4
-    @a[g.sa=1,m=2,_pl=1]: function add_to_round
 !mfunc stop_round:
-    @s _gl = 2
     @s[_chi=0]: title @a title {"text":"The virus won!","color":"yellow"}
-    @s[_chi=0]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"The virus won!","color":"yellow"}]}
+    @s[_chi=0]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"The virus won!","color":"yellow"}]}
     @s[_chi=1..]: title @a title {"text":"Time!","color":"green"}
     @s[_chi=1..]: title @a subtitle {"text":"The hiders won!","color":"green"}
-    @s[_chi=1..]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"The time is up! The hiders won!","color":"yellow"}]}
+    @s[_chi=1..]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"The time is up! The hiders won!","color":"yellow"}]}
     @s[_chi=1..]: Seconds reset _
     @s[_chi=1..]: Minutes reset _
      
@@ -197,11 +328,17 @@
     fill -73 49 -229 -66 49 -222 redstone_block 0 replace stonebrick 0
 
     @s _st = 5
-!mfunc wait_for_reset:
-    @a[g.sa=1,m=2,_pl=1..2]: function invuln_effect
+!mfunc wait_for_reset debug=false:
+    effect @a[g.sa=1,m=2,_pl=1..2] + minecraft:glowing 3 0 true
+    effect @a[g.sa=1,m=2,_pl=1..2] + minecraft:resistance 3 10 true
+    effect @a[g.sa=1,m=2,_pl=1..2] + minecraft:instant_health 100 100 true
+    @a[g.sa=1,m=2,_pl=0]: function init_player_as_hider
+     
+     
 !mfunc reset_round:
-    @a[g.sa=1,m=2,_pl=2]: function full_reset_player
-    @s _gl = 1
+    @a[g.sa=1,m=2,_pl=2] gp.tp = 2115807378
+    team _h + @a[g.sa=1,m=2,_pl=2,team=_v]
+    @a[g.sa=1,m=2,_pl=2] _pl = 0
      
     
     fill -73 52 -222 -66 52 -229 redstone_block 0 replace stonebrick 0
@@ -211,125 +348,151 @@
     Minutes reset _
     Seconds reset _
     @s _st = 0
-!mfunc player_effects:
-    effect @a[g.sa=1,m=2,_pl=2,team=_v] + minecraft:strength 3 90 true
-    effect @a[g.sa=1,m=2,_pl=2] + minecraft:resistance 3 3 true
-    effect @a[g.sa=1,m=2,_pl=2] + minecraft:instant_health 100 100 true
+
+
+
+!mfunc reset_player:
+    
+    item @s - *
+    effect @s - *
+    @s[g.host=1] gp.bk = 2115807378
      
      
-!mfunc invuln_effect:
-    effect @s + minecraft:resistance 3 10 true
-    effect @s + minecraft:instant_health 100 100 true
-!mfunc set_glowing_effects:
-    @s[_gl=2]: effect @a[g.sa=1,m=2] + minecraft:glowing 3 0 true
-    @s[_gl=1]: effect @a[g.sa=1,m=2,team=_v] + minecraft:glowing 3 0 true
-!mfunc add_to_round:
-    @s[team=!_v]: function clear_player
-    @s[team=!_v]: function to_hider if @e[type=armor_stand,_stand,_st=0..2]
-    function to_virus if @e[type=armor_stand,_stand,_st=3]
-    function to_hider if @e[type=armor_stand,_stand,_st=4..6]
+
+!mfunc init_player_as_hider:
+    
+    item @s - *
+    effect @s - *
+    @s[g.host=1] gp.bk = 2115807378
+     
+     
+
+    
+    team _h + @s
+
+    @s _pl = 1
+!mfunc init_player_as_hider_from_virus:
+    function init_player_as_hider
+    @s gp.tp = 2115807378
+!mfunc init_player_as_virus:
+    
+    item @s - *
+    effect @s - *
+    @s[g.host=1] gp.bk = 2115807378
+     
+     
+
+    
+    item @s armor.head = golden_helmet      {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
+    item @s armor.chest = golden_chestplate {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
+    item @s armor.legs = golden_leggings    {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
+    item @s armor.feet = golden_boots       {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
+    team _v + @s
+    title @s title {"text":"You are now","color":"yellow"}
+    title @s subtitle {"text":"the virus!","color":"yellow"}
+    tellraw @a {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},
+        {"selector":"@s"},
+        {"text":" became a ","color":"gray"},
+        {"text":"virus","color":"yellow"},
+        {"text":"!","color":"gray"}
+    ]}
+
+    tp @s -69.0 53 -225.0
+    @s _pl = 1
+!mfunc add_to_round_as_hider:
+    
+    item @s - *
+    effect @s - *
+    @s[g.host=1] gp.bk = 2115807378
+     
+     
+
+    
+    team _h + @s
+
      
      
     @s _pl = 2
-!mfunc clear_player:
+!mfunc add_to_round_as_virus:
+    
     item @s - *
     effect @s - *
-    @s[g.host=1] gp.bk = 1935481488
+    @s[g.host=1] gp.bk = 2115807378
      
      
-!mfunc reset_player:
-    function to_hider
-     
-     
-    @s _pl = 1
-!mfunc full_reset_player:
-    function reset_player
-    function tp_to_spawn
-    function to_hider
-!mfunc to_hider:
-    function clear_player
-     
-     
-    team _h + @s
-    @s g.temp = 0
-    @s[x=-85,y=45,z=-241,dx=31,dy=5,dz=31] g.temp = 1
-    @s[g.temp=0]: function tp_to_spawn if @e[type=armor_stand,_stand,_st=0..1]
-!mfunc to_virus:
-    function clear_player
-     
-     
-    replaceitem entity @s slot.armor.head golden_helmet 1 0 {
-        Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]
-    }
+
+    
+    item @s armor.head = golden_helmet      {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
+    item @s armor.chest = golden_chestplate {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
+    item @s armor.legs = golden_leggings    {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
+    item @s armor.feet = golden_boots       {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
+    team _v + @s
     title @s title {"text":"You are now","color":"yellow"}
     title @s subtitle {"text":"the virus!","color":"yellow"}
+    tellraw @a {"text":"","extra":[
+        {"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},
+        {"selector":"@s"},
+        {"text":" became a ","color":"gray"},
+        {"text":"virus","color":"yellow"},
+        {"text":"!","color":"gray"}
+    ]}
+
     team _v + @s
-    function tp_to_wait if @e[type=armor_stand,_stand,_st=0..2]
     
-    function tp_to_arena if @e[type=armor_stand,_stand,_st=3..6]
-    
-!mfunc teleport_players:
-    @s[team=_v]: function tp_to_wait if @e[type=armor_stand,_stand,_st=0..2]
-    
-    @s[team=_v]: function tp_to_arena if @e[type=armor_stand,_stand,_st=3..6]
-    
-!mfunc tp_to_wait:
-    tp @s -69.0 53 -225.0
-!mfunc tp_to_arena:
     tp @s -69.0 38 -225.0
-!mfunc tp_to_spawn:
-    @s gp.tp = 1935481488
-!mfunc timer:
-    @s[_ti=1..] _ti -= 1
-    function disp_time_text
-    function disp_time_score
-!mfunc disp_time_text:
-    @s[_ti=6000]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5 minutes remain!","color":"yellow"}]}
-    @s[_ti=4800]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4 minutes remain!","color":"yellow"}]}
-    @s[_ti=3600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3 minutes remain!","color":"yellow"}]}
-    @s[_ti=2400]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2 minutes remain!","color":"yellow"}]}
-    @s[_ti=1200]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1 minute remains!","color":"yellow"}]}
-    @s[_ti=600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"30 seconds remain!","color":"yellow"}]}
-    @s[_ti=300]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"15 seconds remain!","color":"yellow"}]}
-    @s[_ti=100]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5!","color":"yellow"}]}
-    @s[_ti=80]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4!","color":"yellow"}]}
-    @s[_ti=60]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3!","color":"yellow"}]}
-    @s[_ti=40]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2!","color":"yellow"}]}
-    @s[_ti=20]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1!","color":"yellow"}]}
-    @s[_ti=..0] _st = 4
-!mfunc disp_time_score:
-    Seconds _ti = @s _ti
-    Seconds _ti /= 20
-    Seconds _ti %= 60
-    Seconds _ti += 1
-    Seconds _ = Seconds _ti
-    Minutes _ti = @s _ti
-    Minutes _ti /= 1200
-    Minutes _ = Minutes _ti
-!mfunc calc_glowing:
-    @s _cl = &Glowing _cl
-    @s _cl -= @s _ti
-    @s[_cl=0..,_gl=1..]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Glowing has been removed from all virus!","color":"yellow"}]}
-    @s[_cl=0..,_gl=1..] @a: playsound minecraft:entity.experience_orb.pickup voice @a[c=1]
-    @s[_cl=0..,_gl=1..] _gl = 0
-    @s[_cl=..-1,_gl=..0] _gl = 1
-!mfunc calc_player_numbers:
-    @s _chi = 0
-    @a[g.sa=1,m=2,team=_h]: @e[type=armor_stand,_stand] _chi += 1
-    Hiders _ = @s _chi
-    @s _cvr = 0
-    @a[g.sa=1,m=2,team=_v]: @e[type=armor_stand,_stand] _cvr += 1
-    Virus _ = @s _cvr
+    
+    @s _pl = 2
+
+
+!mfunc calc_input_countdown:
+    &Countdown _cl = @s _icd
+    &CountdownMinutes _cl = &Countdown _cl
+    &CountdownMinutes _cl /= 1200
+    @s _cl = &Countdown _cl
+    @s _cl /= 20
+    @s _cl %= 60
+    &CountdownSeconds _cl = @s _cl
+    &CountdownAdditional reset _cl
+    @s[_cl=..9]: &CountdownAdditional _cl = 0
+    @s _icd = 0
+
+
+!mfunc calc_input_gametime:
+    &GameTime _cl = @s _igt
+    &GameTimeMinutes _cl = &GameTime _cl
+    &GameTimeMinutes _cl /= 1200
+    @s _cl = &GameTime _cl
+    @s _cl /= 20
+    @s _cl %= 60
+    &GameTimeSeconds _cl = @s _cl
+    &GameTimeAdditional reset _cl
+    @s[_cl=..9]: &GameTimeAdditional _cl = 0
+    @s _igt = 0
+
+
+!mfunc calc_input_glowing:
+    &GlowingUntil _cl = @s _igl
+    &GlowingUntilMinutes _cl = &GlowingUntil _cl
+    &GlowingUntilMinutes _cl /= 1200
+    @s _cl = &GlowingUntil _cl
+    @s _cl /= 20
+    @s _cl %= 60
+    &GlowingUntilSeconds _cl = @s _cl
+    &GlowingUntilAdditional reset _cl
+    @s[_cl=..9]: &GlowingUntilAdditional _cl = 0
+    @s _igl = 0
+
 !folder input:
     !mfunc init:
         tag @e[type=armor_stand,gp.stand,gp.cgi=0] + gp.can_init
-        function ego:virus/1/cmd_init if @e[type=armor_stand,gp.can_init]
+        function ego:virus/virus_1/cmd_init if @e[type=armor_stand,gp.can_init]
         function ego:floo_network/stop_events if @e[type=armor_stand,!gp.can_init]
         tag @e[type=armor_stand,gp.can_init] - gp.can_init
     !mfunc term:
-        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},{"text":" ","color":"gray"},{"text":"Click here","color":"yellow","bold":"true",
-                    "clickEvent":{"action":"run_command","value":"/function ego:virus/1/stop_event"}
-                    },{"text":" to confirm the termination of ","color":"gray"},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}}]}
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":" ","color":"gray"},{"text":"Click here","color":"yellow","bold":"true",
+                    "clickEvent":{"action":"run_command","value":"/function ego:virus/virus_1/stop_event"}
+                    },{"text":" to confirm the termination of ","color":"gray"},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}}]}
     !mfunc start_round:
         @e[type=armor_stand,_stand] _st = 1
     !mfunc stop_round:
@@ -337,21 +500,51 @@
     !mfunc reset_round:
         @e[type=armor_stand,_stand] _st = 6
     !mfunc select_rand_virus:
-        @r[g.sa=1,m=2,team=_h]: function to_virus
+        @e[type=armor_stand,_stand,_st=0..2] @r[g.sa=1,m=2,team=_h]: function init_player_as_virus
     !mfunc remove_one_virus:
-        @r[g.sa=1,m=2,team=_v]: function to_hider
+        @e[type=armor_stand,_stand,_st=0..2] @r[g.sa=1,m=2,team=_v]: function init_player_as_hider_from_virus
     !mfunc select_team:
         tellraw @a[g.host=1] {"text":"","extra":[
-            {"text":"[","color":"gray"},{"text":"vr1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p g.tp = 1935481488"}},{"text":"]","color":"gray"},{"text":": "},
+            {"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},
             {"text":"Choose team: ","color":"gray"},
             {"text":"Hider","color":"green","italic":true,
-                "clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ function ego:virus/1/to_hider"},
+                "clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ function ego:virus/virus_1/to_hider"},
                 "hoverEvent":{"action":"show_text","value":{"text":"Force someone to join the hiders","color":"green"}}
             },
             {"text":", ","color":"gray","italic":true},
             {"text":"Virus","color":"yellow","italic":true,
-                "clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ function ego:virus/1/to_virus"},
+                "clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ function ego:virus/virus_1/to_virus"},
                 "hoverEvent":{"action":"show_text","value":{"text":"Force someone to join the virus","color":"yellow"}}
+            }
+        ]}
+    !mfunc to_default_settings:
+        
+
+        @e[type=armor_stand,_stand] _icd = 1200
+        
+
+        @e[type=armor_stand,_stand] _igt = 12000
+        
+
+        @e[type=armor_stand,_stand] _igl = 6000
+        
+    !mfunc change_settings:
+        tellraw @s[g.host=1] {"text":"","extra":[
+            {"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},
+            {"text":"Game time: ","color":"gray"},
+            {"text":"[+]","color":"yellow",
+                "hoverEvent":{"action":"show_text","value":{"text":"Edit game time for Virus 1 in ticks","color":"yellow"}},
+                "clickEvent":{"action":"suggest_command","value":"/scoreboard players set @e[type=armor_stand,tag=vr1.stand] vr1.igt #"}
+            },
+            {"text":"    Glowing until: ","color":"gray"},
+            {"text":"[+]","color":"yellow",
+                "hoverEvent":{"action":"show_text","value":{"text":"Edit when glowing stops for Virus 1 in ticks","color":"yellow"}},
+                "clickEvent":{"action":"suggest_command","value":"/scoreboard players set @e[type=armor_stand,tag=vr1.stand] vr1.igl #"}
+            },
+            {"text":"    Countdown: ","color":"gray"},
+            {"text":"[+]","color":"yellow",
+                "hoverEvent":{"action":"show_text","value":{"text":"Edit how long the countdown lasts for Virus 1 in ticks","color":"yellow"}},
+                "clickEvent":{"action":"suggest_command","value":"/scoreboard players set @e[type=armor_stand,tag=vr1.stand] vr1.icd #"}
             }
         ]}
     !mfunc add_one_min:
@@ -364,67 +557,77 @@
         @e[type=armor_stand,_stand] _ti -= 1200
 !mfunc book:
     replaceitem entity @s slot.weapon.offhand written_book 1 0 {
-        title:"Virus 1 Book",author:"eGO",pages:["[\"\",
-            {\"text\":\"Virus 1 Settings\n\",\"bold\":true},
-            {\"text\":\"\n\"},
-            {\"text\":\"vr1: \",\"color\":\"dark_gray\"},
+        title:"Virus 1 Book",author:"eGO",pages:["{\"text\":\"\",\"extra\":[
+            {\"text\":\"Virus 1 Settings\\n\",\"bold\":true},
+            {\"text\":\"\\n\"},
+            {\"text\":\"VR1: \",\"color\":\"dark_gray\"},
             {\"text\":\"Start\",\"color\":\"dark_green\",
                 \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function init\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Starts the virus map so it can be ran\",\"color\":\"green\"}}
             },
             {\"text\":\" / \",\"color\":\"gray\"},
-            {\"text\":\"Stop\n\",\"color\":\"red\",
+            {\"text\":\"Stop\\n\",\"color\":\"red\",
                 \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function term\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Ends the virus map\",\"color\":\"red\"}}
             },
             {\"text\":\"Round: \",\"color\":\"dark_gray\"},
             {\"text\":\"Start\",\"color\":\"dark_green\",
-                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_start_round\"},
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/start_round\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Starts an individual round\",\"color\":\"dark_green\"}}
             },
             {\"text\":\" / \",\"color\":\"gray\"},
             {\"text\":\"Stop\",\"color\":\"gold\",
-                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_stop_round\"},
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/stop_round\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Stops an individual round\",\"color\":\"gold\"}}
             },
             {\"text\":\" / \",\"color\":\"gray\"},
-            {\"text\":\"Reset\n\n\",\"color\":\"red\",
-                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_reset_round\"},
+            {\"text\":\"Reset\\n\\n\",\"color\":\"red\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/reset_round\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Resets an individual round\",\"color\":\"red\"}}
             },
             {\"text\":\"Select Virus: \",\"color\":\"dark_gray\"},
             {\"text\":\"[+]\",\"color\":\"dark_green\",
-                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_select_rand_virus\"},
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/select_rand_virus\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Chooses a virus\",\"color\":\"dark_green\"}}
             },
             {\"text\":\" \",\"color\":\"gray\"},
-            {\"text\":\"[-]\n\",\"color\":\"red\",
-                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_remove_one_virus\"},
+            {\"text\":\"[-]\\n\",\"color\":\"red\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/remove_one_virus\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes a virus\",\"color\":\"red\"}}
             },
             {\"text\":\"Edit Teams: \",\"color\":\"dark_gray\"},
-            {\"text\":\"[+]\n\",\"color\":\"gold\",
-                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_select_team\"}
+            {\"text\":\"[+]\\n\",\"color\":\"gold\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/select_team\"}
             },
             {\"text\":\"Time: \",\"color\":\"dark_gray\"},
             {\"text\":\"[+]\",\"color\":\"dark_green\",
-                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_add_one_min\"},
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/add_one_min\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Adds 1 minute\",\"color\":\"dark_green\"}}
             },
             {\"text\":\" \",\"color\":\"gray\"},
             {\"text\":\"[+]\",\"color\":\"gold\",
-                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_add_30s\"},
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/add_30s\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Adds 30 seconds\",\"color\":\"gold\"}}
             },
             {\"text\":\" \",\"color\":\"gray\"},
             {\"text\":\"[-]\",\"color\":\"gold\",
-                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_remove_30s\"},
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/remove_30s\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes 30 seconds\",\"color\":\"gold\"}}
             },
             {\"text\":\" \",\"color\":\"gray\"},
-            {\"text\":\"[-]\",\"color\":\"red\",
-                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input_remove_one_min\"},
+            {\"text\":\"[-]\\n\",\"color\":\"red\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/remove_one_min\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes 1 minute\",\"color\":\"red\"}}
+            },
+            {\"text\":\"Settings: \",\"color\":\"dark_gray\"},
+            {\"text\":\"[+]\",\"color\":\"dark_green\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/change_settings\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Changes settings\",\"color\":\"dark_green\"}}
+            },
+            {\"text\":\" \",\"color\":\"gray\"},
+            {\"text\":\"[-]\\n\",\"color\":\"red\",
+                \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/to_default_settings\"},
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Resets settings to their defaults\",\"color\":\"red\"}}
             }
-        ]"
+        ]}"
     ]}

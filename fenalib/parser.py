@@ -52,7 +52,7 @@ statement_suite ::= [NEWLINE, (statement, NEWLINE)]*
 
 statement ::= "!" && [folder_stmt, mfunc_stmt, prefix_stmt, constobj_stmt]
 folder_stmt ::= "folder" && STR && ":" && (NEWLINE)* & INDENT && statement_suite && DEDENT
-mfunc_stmt ::= "mfunc" && [STR, literal_str] && ":" && (NEWLINE)* & INDENT && command_suite && DEDENT
+mfunc_stmt ::= "mfunc" && [STR, literal_str] && ("debug" && "=" && ["true", "false"]) ":" && (NEWLINE)* & INDENT && command_suite && DEDENT
 set_var_stmt ::= "set" && ["prefix", "constobj"] && "=" && STR
 
 command_suite ::= [NEWLINE, (command, NEWLINE)]*
@@ -275,7 +275,9 @@ class Parser:
 
         else:
             assert_type(method_name, str)
-            lexer_method = getattr(lexer, method_name, lexer.invalid_method)
+            lexer_method = getattr(lexer, method_name, "ERROR")
+            if lexer_method == "ERROR":
+                raise NotImplementedError(f"Invalid method name: {method_name!r}")
 
             # note that try/except with iter() actually primes the function and only raises the error once the method reaches "return"
             # therefore, using inspect.isgeneratorfunction to prevent unnecessary priming
@@ -635,7 +637,7 @@ class Parser:
 
     def mfunc_stmt(self):
         """
-        mfunc_stmt ::= "mfunc" && [STR, literal_str] && ":" && (NEWLINE)* & INDENT && command_suite && DEDENT
+        mfunc_stmt ::= "mfunc" && [STR, literal_str] && ("debug" && "=" && ["true", "false"]) ":" && (NEWLINE)* & INDENT && command_suite && DEDENT
 
         Returns:
             McFunctionNode: The mcfunction node to define the mcfunction in the parse tree
@@ -645,6 +647,14 @@ class Parser:
         if not self.current_token.matches_any_of(TypedToken.STRING, TypedToken.LITERAL_STRING):
             self.error("Expected a string or quoted string right after a mfunc statement")
         mfunc_name = self.advance()
+
+        if self.current_token.matches(TypedToken.STRING, value="debug"):
+            self.advance()
+            self.eat(DelimiterToken.EQUALS)
+            value = self.eat(TypedToken.STRING, values=("true", "false"))
+            debug = True if value == "true" else False
+        else:
+            debug = True
 
         self.eat(DelimiterToken.COLON)
 
@@ -656,7 +666,7 @@ class Parser:
         command_nodes = self.command_suite()
         self.eat(WhitespaceToken.DEDENT)
 
-        return McFunctionNode(mfunc_name, command_nodes)
+        return McFunctionNode(mfunc_name, command_nodes, debug)
 
     def folder_stmt(self):
         """

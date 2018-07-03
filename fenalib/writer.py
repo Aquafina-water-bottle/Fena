@@ -94,7 +94,7 @@ class Writer:
                 os.makedirs(directories)
 
             with open(mcfunction.full_path, "w") as file:
-                if self.debug:
+                if self.debug and mcfunction.debug:
                     file.write(f"say debug mode: running {mcfunction.mfunc_name}\n")
                 file.write("\n".join(mcfunction.commands) + "\n")
 
@@ -108,7 +108,10 @@ class Writer:
         with open(parsed_cmds_path, "w") as file:
             for mcfunction in self.mcfunctions:
                 assert mcfunction.finalized
+
                 file.write(mcfunction.full_path + "\n    ")
+                if self.debug and mcfunction.debug:
+                    file.write(f"say debug mode: running {mcfunction.mfunc_name}\n    ")
                 file.write("\n    ".join(mcfunction.commands) + "\n\n")
 
 if __name__ == "__main__":
@@ -136,7 +139,7 @@ if __name__ == "__main__":
         full_path = get_full_path(relative_path)
         mfunc_name = get_mfunc_name(full_path)
 
-        mcfunction = McFunction(mfunc_name, full_path)
+        mcfunction = McFunction(mfunc_name, full_path, False)
         for command in command_template:
             mcfunction.add_command(command.format(mfunc_name=mfunc_name))
         mcfunction.finalize()

@@ -46,8 +46,15 @@ def encode_str(string):
         >>> encode_str('\\x89\\t')
         '"\\\\x89\\\\t"'
     """
-    return '"' + codecs.encode(string, "unicode_escape").decode("utf-8") + '"'
+    return '"' + codecs.encode(string, "unicode_escape").decode("utf-8").replace('"', r'\"') + '"'
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+
+    print(encode_str(r'{CustomName:"{\"text\":\"test\"}"}'))
+    print(encode_str(r'{CustomName:"\n"}'))
+    print(decode_str(r'"{CustomName:\"\\n\"}"'))
+    print(encode_str(decode_str(r'"{CustomName:\"\\n\"}"')))
+
+

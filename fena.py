@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 A butt load of code shamelessly taken from Ruslan Spivak's tutorial for making an interpreter:
     https://ruslanspivak.com/lsbasi-part1/

@@ -7,17 +7,22 @@ class McFunction:
     Args:
         full_path (str)
         mfunc_name (str)
+        debug (bool)
 
     Attributes:
         full_path (str): The full path to the mcfunction file
         mfunc_name (str)
+        debug (bool): Whether to debug or not with the debug command line option
         commands (list or tuple): The full sequence of strings in an mcfunction
     """
-    def __init__(self, mfunc_name, full_path):
+    def __init__(self, mfunc_name, full_path, debug):
         assert_type(mfunc_name, str)
         assert_type(full_path, str)
+        assert_type(debug, bool)
+
         self.mfunc_name = mfunc_name
         self.full_path = full_path
+        self.debug = debug
         self.commands = []
         self._finalized = False
 

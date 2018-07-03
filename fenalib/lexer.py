@@ -408,7 +408,7 @@ class Lexer:
         Gets all selector arguments inside the square brackets []
         """
         while not self.current_chars_are(DelimiterToken.CLOSE_SQUARE_BRACKET.value):
-            if self.get_char().isspace():
+            if self.get_char().isspace() and self.get_char() != WhitespaceToken.NEWLINE.value:
                 self.skip_whitespace()
                 continue
 

@@ -317,11 +317,12 @@ def parse_pre_pyexpander(text):
     Returns:
         Properly parsed text to be used by pyexpanxer
     """
-    # 2 // -> 4 //// for entire text
-    text = text.replace('\\\\', '\\\\\\\\')
     parser = Parser(text)
     # return list(parser.parse_lines())
-    return "\n".join(parser.parse_lines()) + "\n"
-    # parser.parse_lines()
-    # parser.advance()
+    text = "\n".join(parser.parse_lines()) + "\n"
+
+    # 2 // -> 4 //// for entire text
+    # replaces after the parsing to make sure the $include() files are included
+    text = text.replace('\\\\', '\\\\\\\\')
+    return text
 

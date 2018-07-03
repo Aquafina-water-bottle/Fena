@@ -54,6 +54,7 @@ class McFunctionNode(NamedTuple, StmtNode):
     """
     name: Token
     command_nodes: List[FenaCmdNode]
+    debug: bool
 
 class FolderNode(NamedTuple, StmtNode):
     """

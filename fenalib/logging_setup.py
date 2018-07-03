@@ -28,6 +28,10 @@ def setup_logging(file_path=None):
     dir_path = os.path.dirname(__file__)
     file_path = os.path.join(dir_path, file_path)
 
+    # make directories if it doesn't exista
+    if not os.path.isfile(file_path):
+        os.makedirs(os.path.dirname(file_path))
+
     # actually sets up the logger
     logging.basicConfig(format=FORMAT.format("?"), datefmt=FILE_DATE_FMT, filename=file_path, level=FILE_LEVEL, filemode=FILE_MODE)
 

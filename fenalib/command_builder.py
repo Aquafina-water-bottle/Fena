@@ -15,7 +15,7 @@ from fenalib.lexical_token import Token
 from fenalib.config_data import ConfigData
 from fenalib.in_file_config import InFileConfig, get_mcfunc_directories
 from fenalib.node_visitors import NodeBuilder
-from fenalib.nodes import IntRangeNode, JsonObjectNode, JsonMapNode, SelectorNode, SelectorScoreArgNode, SelectorDefaultArgNode, NbtMapNode
+from fenalib.nodes import IntRangeNode, JsonObjectNode, JsonMapNode, SelectorNode, SelectorScoreArgNode, SelectorDefaultArgNode, NbtMapNode, NbtArrayNode
 from fenalib.str_utils import encode_str, decode_str
 from fenalib.lexer import Lexer
 from fenalib.parser import Parser
@@ -606,17 +606,21 @@ class CommandBuilder_1_12(NodeBuilder):
             return self.build(node.arg_value.arg_value)
 
         arg = self.build(node.arg)
-        arg_value = self.build(node.arg_value)
+
+        if arg == "team":
+            arg_value = self.build(node.arg_value, prefix=True)
+        else:
+            arg_value = self.build(node.arg_value)
         return f"{arg}={arg_value}"
 
-    def build_SelectorDefaultArgValueNode(self, node):
+    def build_SelectorDefaultArgValueNode(self, node, prefix=False):
         """
         Node Attributes:
             arg_value (Token, NumberRangeNode, IntRangeNode)
             negated (bool)
         """
         negated = "!" if node.negated else ""
-        arg_value = self.build(node.arg_value)
+        arg_value = self.build(node.arg_value, prefix=prefix)
         return f"{negated}{arg_value}"
 
     def build_SelectorDefaultGroupArgValueNode(self, node):
@@ -688,18 +692,46 @@ class CommandBuilder_1_12(NodeBuilder):
             value (Token)
         """
         arg = self.build(node.arg)
-        value = self.build(node.value)
+
+        if arg == "pages" and isinstance(node.value, NbtArrayNode):
+            value = self.build(node.value, build_type="json_list")
+        elif arg == "Tags" and isinstance(node.value, NbtArrayNode):
+            value = self.build(node.value, build_type="tag_list")
+        else:
+            value = self.build(node.value)
+
         return f"{arg}:{value}"
 
-    def build_NbtArrayNode(self, node):
+    def build_NbtArrayNode(self, node, build_type=None):
         """
         Node Attributes:
             values (list of NbtNode objects)
             type_specifier (Token or None)
         """
-        values = self.iter_build(node.values, ",")
+        values = []
+        for value in node.values:
+            built_value = self.build(value)
+            if build_type == "json_list":
+                json = decode_str(built_value)
+                lexer = Lexer(json)
+                parser = Parser(lexer, method_name="get_curly_bracket_tag")
+                ast = parser.parse(method_name="json")
+                result = self.build_JsonObjectNode(ast)
+                built_value = encode_str(result)
+
+            elif build_type == "tag_list":
+                tag = decode_str(self.build(value))
+                lexer = Lexer(tag)
+                parser = Parser(lexer, method_name="get_until_space")
+                ast = parser.parse(method_name="advance")
+                result = self.build_Token(ast, prefix=True)
+                built_value = encode_str(result)
+
+            values.append(built_value)
+
+        values_str = ",".join(values)
         type_specifier = ("" if node.type_specifier is None else f"{self.build(node.type_specifier)};")
-        return f"[{type_specifier}{values}]"
+        return f"[{type_specifier}{values_str}]"
 
     def build_NbtIntegerNode(self, node):
         """
@@ -753,14 +785,34 @@ class CommandBuilder_1_12(NodeBuilder):
 
         # only passes on the current argument down if the value is also a json map node
         if isinstance(node.value, JsonObjectNode):
-            # passes the argument "score" in so the "name" arg under "score" can be converted into a proper selector
-            current_arg = '"score"' if arg == '"score"' else None
-            value = self.build(node.value, previous_arg=current_arg)
+            # checks for action "run_command"
+            if arg == '"clickEvent"':
+                for mapping in node.value.mappings:
+                    if mapping.arg.value == '"action"' and mapping.value.value == '"run_command"':
+                        # can parse as a regular command
+                        value = self.build(node.value, previous_arg='"run_command"')
+                        break
+                else:
+                    # only runs if the for loop isn't broken
+                    value = self.build(node.value)
+            else:
+                # passes the argument "score" in so the "name" arg under "score" can be converted into a proper selector
+                current_arg = (arg if arg in ('"score"', '"clickEvent"') else None)
+                value = self.build(node.value, previous_arg=current_arg)
         else:
             value = self.build(node.value)
 
         # if the argument is a selector, it builds a selector
-        if arg == '"selector"':
+        if previous_arg == '"run_command"' and arg == '"value"':
+            # removes the /
+            cmd = decode_str(value)[1:]
+            lexer = Lexer(cmd)
+            parser = Parser(lexer, method_name="get_command")
+            ast = parser.parse(method_name="command")
+            result = self.build_FenaCmdNode(ast)
+            value = encode_str("/" + result)
+
+        elif arg == '"selector"':
             selector = decode_str(value)
             lexer = Lexer(selector)
             parser = Parser(lexer, method_name="get_selector")
@@ -768,11 +820,11 @@ class CommandBuilder_1_12(NodeBuilder):
             result = self.build_SelectorNode(ast)
             value = encode_str(result)
 
-        if previous_arg == '"score"':
+        elif previous_arg == '"score"':
             # gets one token, and builds it with a possible prefix
             if arg == '"objective"':
-                target = decode_str(value)
-                lexer = Lexer(target)
+                objective = decode_str(value)
+                lexer = Lexer(objective)
                 parser = Parser(lexer, method_name="get_until_space")
                 ast = parser.parse(method_name="advance")
                 result = self.build_Token(ast, prefix=True)
