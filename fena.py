@@ -38,7 +38,7 @@ import fenalib.logging_setup as logging_setup
 logging_setup.setup_logging()
 
 from fenalib.general import parse_text_from_args, get_args, semantic_version, public_version
-from fenalib.config_data import get_all_data
+# from fenalib.config_data import get_all_data
 
 
 def main():
@@ -55,12 +55,11 @@ def main():
     # if args.version is not None:
     #     get_all_data(args.version)
 
-    file_name = args.file_name
-    with open(file_name) as file:
+    with open(args.file_name) as file:
         text = file.read()
 
     # sets the file name for logging
-    logging_setup.format_file_name(file_name)
+    logging_setup.format_file_name(args.file_name)
     # parse_text(text, file_name, output_path, clean=args.clean, debug=args.debug)
     parse_text_from_args(text, args)
 

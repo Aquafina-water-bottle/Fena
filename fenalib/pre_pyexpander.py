@@ -300,6 +300,7 @@ class Parser:
                 file_path = decode_str(self.current_line.string)
                 if not os.path.isfile(file_path):
                     raise InvalidFileError(f"{file_path!r} is not a valid file path")
+
                 with open(file_path) as file:
                     parser = Parser(file.read())
                     yield from parser.parse_lines()
