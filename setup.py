@@ -1,5 +1,6 @@
-import os
 from setuptools import setup
+
+from fenalib.general import semantic_version
 
 """
 Resourses:
@@ -13,12 +14,14 @@ Examples:
 
 python3 setup.py sdist bdist_wheel
 twine upload dist/*
+
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 """
 
 
 setup(
     name="fena",
-    version="0.0.7",
+    version=semantic_version,
     author="Austin Siew",
     author_email="glowing.locker@gmail.com",
     description=("Fena Preprocessor Language for Minecaft"),

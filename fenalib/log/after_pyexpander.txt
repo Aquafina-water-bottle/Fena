@@ -37,58 +37,72 @@
 
 
 
+
+!mfunc undisguise:
+    tp @s ~ ~0.1 ~
+    @s: bd undisguise @p[dist=..0]
+    tp @s ~ ~-0.01 ~
+
  
 
-!set prefix = vr1
+!set prefix = bhasv
 
 
 
 
 !mfunc init:
     @s g.host = 1
-    @e[type=armor_stand,gp.stand] gp.tp = 2115807378
+    @e[type=armor_stand,gp.stand] gp.tp = 763457061
     @e[type=armor_stand,gp.stand] gp.pvp = 2
     @e[type=armor_stand,gp.stand] gp.sat = 1
     gamerule naturalRegeneration true
     @e[type=armor_stand,gp.stand] gp.rgt = 0
     @a g.sa = 0
-    @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181] g.sa = 1
-    tellraw @a[g.ec=1] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":" has started!","color":"green"}]}
-    @e[type=armor_stand,gp.stand,gp.cgi=0] gp.cgi = 2115807378
+    @a[x=-1393,y=38,z=-271,dx=-161,dy=-35,dz=162] g.sa = 1
+    tellraw @a[g.ec=1] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"A Small Village","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":" has started!","color":"green"}]}
+    @e[type=armor_stand,gp.stand,gp.cgi=0] gp.cgi = 763457061
+    -1 g.number = -1
     1200 g.number = 1200
     20 g.number = 20
     60 g.number = 60
-    objective add _ dummy Virus 1
+    objective add _prng dummy Pseudo-RNG
+    &Increment _prng = 12345
+    &Modulus _prng = 25
+    &Multiplier _prng = 1103515245
+    &Offset _prng = 0
+    &Seed _prng = 0
+    objective add _ dummy A Small Village
     objective setdisplay sidebar _
-    objective add _pl dummy Virus 1 Player List
-    objective add _ti dummy Virus 1 Timer
-    objective add _chi dummy Virus 1 Count Hiders
-    objective add _cvr dummy Virus 1 Count Virus
-    objective add _gl dummy Virus 1 Glowing to Virus
-    objective add _cl dummy Virus 1 Calculations
-    objective add _igl dummy Virus 1 Input Glowing
-    objective add _igt dummy Virus 1 Input Game Time
-    objective add _icd dummy Virus 1 Input Countdown
-    objective add _st dummy Virus 1 State
-    team add _h Virus 1 Hiders
+    objective add _pl dummy A Small Village Player List
+    objective add _ti dummy A Small Village Timer
+    objective add _chi dummy A Small Village Count Hiders
+    objective add _cvr dummy A Small Village Count Seekers
+    objective add _gl dummy A Small Village Glowing to Virus
+    objective add _cl dummy A Small Village Calculations
+    objective add _igl dummy A Small Village Input Glowing
+    objective add _igt dummy A Small Village Input Game Time
+    objective add _icd dummy A Small Village Input Countdown
+    objective add _st dummy A Small Village State
+    team add _h A Small Village Hiders
     team _h friendlyfire = false
     team _h collisionRule = never
     team _h deathMessageVisibility = always
     team _h nametagVisibility = never
     team _h color = green
-    team add _v Virus 1 Virus
+    team _h seeFriendlyInvisibles = false
+    team add _v A Small Village Seekers
     team _v friendlyfire = false
     team _v collisionRule = never
     team _v deathMessageVisibility = always
     team _v color = yellow
-    team add _d_y Virus 1 Display Yellow
+    team add _d_y A Small Village Display Yellow
     team _d_y color = yellow
-    team add _d_g Virus 1 Display Green
+    team add _d_g A Small Village Display Green
     team _d_g color = green
     team _d_y + Countdown
     team _d_y + Minutes
     team _d_y + Seconds
-    team _d_y + Virus
+    team _d_y + Seekers
     team _d_g + Hiders
     @e[gp.stand] ~ ~1 ~: summon armor_stand ~ ~ ~ {Tags:["_stand","_entity"],Invulnerable:1,PersistenceRequired:1,Invisible:1,Marker:1,NoGravity:1}
     @e[type=armor_stand,_stand] _gl = 0
@@ -104,14 +118,48 @@
     @e[type=armor_stand,_stand] _igl = 6000
     
      
-     
+    
+    summon area_effect_cloud ~ ~ ~ {Tags:["_prng","_prng_true"],Duration:5}
+    summon area_effect_cloud ~ ~ ~ {Tags:["_prng"],Duration:5}
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 1
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 2
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 4
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 8
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 16
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 32
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 64
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 128
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 256
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 512
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 1024
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 2048
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 4096
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 8192
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 16384
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 32768
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 65536
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 131072
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 262144
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 524288
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 1048576
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 2097152
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 4194304
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 8388608
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 16777216
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 33554432
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 67108864
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 134217728
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 268435456
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 536870912
+    @r[type=area_effect_cloud,_prng] @s[_prng_true]: &Seed _prng += 1073741824
+
 !mfunc main debug=false:
     @a g.sa = 0
-    @a[x=-130,y=4,z=-315,dx=121,dy=60,dz=181] g.sa = 1
+    @a[x=-1393,y=38,z=-271,dx=-161,dy=-35,dz=162] g.sa = 1
     @a[g.sa=1] gp.id += 0
-    @a[g.sa=1, gp.id=(..-2115807379)] gp.id = 2115807378
-    @a[g.sa=1, gp.id=(-2115807377..)] gp.id = 2115807378
-    kill @e[x=-130,y=4,z=-315,dx=121,dy=60,dz=181,!_entity,type=item]
+    @a[g.sa=1, gp.id=(..-763457062)] gp.id = 763457061
+    @a[g.sa=1, gp.id=(-763457060..)] gp.id = 763457061
+    kill @e[x=-1393,y=38,z=-271,dx=-161,dy=-35,dz=162,!_entity,type=item]
     
 
     @e[type=armor_stand,_stand,_icd=1..]: function calc_input_countdown
@@ -167,26 +215,24 @@
     Hiders _ = @e[type=armor_stand,_stand] _chi
     @e[type=armor_stand,_stand] _cvr = 0
     @a[g.sa=1,m=2,team=_v]: @e[type=armor_stand,_stand] _cvr += 1
-    Virus _ = @e[type=armor_stand,_stand] _cvr
+    Seekers _ = @e[type=armor_stand,_stand] _cvr
      
      
 !mfunc term:
     @a[_pl=1..2,m=2]: function reset_player
-    @a[_pl=1..2,m=2] gp.tp = 2115807378
+    @a[_pl=1..2,m=2] gp.tp = 763457061
     * reset g.host
     @e[type=armor_stand,gp.stand] gp.pvp = 0
     @e[type=armor_stand,gp.stand] gp.sat = 1
     gamerule naturalRegeneration true
     @e[type=armor_stand,gp.stand] gp.rgt = 0
-    @e[type=armor_stand,gp.stand,gp.cgi=2115807378] gp.tp = 0
-    @e[type=armor_stand,gp.stand,gp.cgi=2115807378] gp.cgi = 0
-    tellraw @a[g.ec=1] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":" has stopped!","color":"red"}]}
+    @e[type=armor_stand,gp.stand,gp.cgi=763457061] gp.tp = 0
+    @e[type=armor_stand,gp.stand,gp.cgi=763457061] gp.cgi = 0
+    tellraw @a[g.ec=1] {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"A Small Village","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":" has stopped!","color":"red"}]}
     kill @e[_entity]
      
-    
-    fill -73 52 -222 -66 52 -229 redstone_block 0 replace stonebrick 0
-    fill -73 49 -229 -66 49 -222 redstone_block 0 replace stonebrick 0
-
+     
+    objective remove _prng
     objective remove _
     objective remove _pl
     objective remove _ti
@@ -210,29 +256,29 @@
     title @a actionbar {"text":"The doors are now open","color":"green"}
     @a: playsound minecraft:entity.player.levelup voice @s
      
-    
-    fill -73 49 -229 -66 49 -222 stonebrick 0 replace redstone_block 0
-
+     
     @s _ti = &Countdown _cl
     @s _st = 2
 !mfunc countdown debug=false:
-     
+    
+    effect @a[g.sa=1,m=2,_pl=2,team=_h] + minecraft:invisibility 3 0 true
+
      
     
     @s[_ti=1..] _ti -= 1
     
-    @s[_ti=6000]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5 minutes remain!","color":"yellow"}]}
-    @s[_ti=4800]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4 minutes remain!","color":"yellow"}]}
-    @s[_ti=3600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3 minutes remain!","color":"yellow"}]}
-    @s[_ti=2400]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2 minutes remain!","color":"yellow"}]}
-    @s[_ti=1200]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1 minute remains!","color":"yellow"}]}
-    @s[_ti=600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"30 seconds remain!","color":"yellow"}]}
-    @s[_ti=300]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"15 seconds remain!","color":"yellow"}]}
-    @s[_ti=100]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5!","color":"yellow"}]}
-    @s[_ti=80]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4!","color":"yellow"}]}
-    @s[_ti=60]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3!","color":"yellow"}]}
-    @s[_ti=40]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2!","color":"yellow"}]}
-    @s[_ti=20]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1!","color":"yellow"}]}
+    @s[_ti=6000]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5 minutes remain!","color":"yellow"}]}
+    @s[_ti=4800]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4 minutes remain!","color":"yellow"}]}
+    @s[_ti=3600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3 minutes remain!","color":"yellow"}]}
+    @s[_ti=2400]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2 minutes remain!","color":"yellow"}]}
+    @s[_ti=1200]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1 minute remains!","color":"yellow"}]}
+    @s[_ti=600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"30 seconds remain!","color":"yellow"}]}
+    @s[_ti=300]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"15 seconds remain!","color":"yellow"}]}
+    @s[_ti=100]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5!","color":"yellow"}]}
+    @s[_ti=80]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4!","color":"yellow"}]}
+    @s[_ti=60]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3!","color":"yellow"}]}
+    @s[_ti=40]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2!","color":"yellow"}]}
+    @s[_ti=20]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1!","color":"yellow"}]}
     @s[_ti=..0] _st = 4
     
     
@@ -258,31 +304,30 @@
 !mfunc end_countdown:
     Countdown reset _
     title @a subtitle {"text":""}
-    title @a subtitle {"text":"The virus has been released!","color":"yellow"}
+    title @a subtitle {"text":"The seekers has been released!","color":"yellow"}
     @a: playsound minecraft:entity.wither.death voice @s
-     
     
-    fill -73 52 -222 -66 52 -229 stonebrick 0 replace redstone_block 0
-    fill -73 49 -229 -66 49 -222 redstone_block 0 replace stonebrick 0
+    tp @a[g.sa=1,m=2,team=_v] -1423 7 -169
 
+     
     @s _ti = &GameTime _cl
     @s _st = 3
 !mfunc during_round debug=false:
     
     @s[_ti=1..] _ti -= 1
     
-    @s[_ti=6000]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5 minutes remain!","color":"yellow"}]}
-    @s[_ti=4800]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4 minutes remain!","color":"yellow"}]}
-    @s[_ti=3600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3 minutes remain!","color":"yellow"}]}
-    @s[_ti=2400]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2 minutes remain!","color":"yellow"}]}
-    @s[_ti=1200]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1 minute remains!","color":"yellow"}]}
-    @s[_ti=600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"30 seconds remain!","color":"yellow"}]}
-    @s[_ti=300]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"15 seconds remain!","color":"yellow"}]}
-    @s[_ti=100]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5!","color":"yellow"}]}
-    @s[_ti=80]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4!","color":"yellow"}]}
-    @s[_ti=60]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3!","color":"yellow"}]}
-    @s[_ti=40]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2!","color":"yellow"}]}
-    @s[_ti=20]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1!","color":"yellow"}]}
+    @s[_ti=6000]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5 minutes remain!","color":"yellow"}]}
+    @s[_ti=4800]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4 minutes remain!","color":"yellow"}]}
+    @s[_ti=3600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3 minutes remain!","color":"yellow"}]}
+    @s[_ti=2400]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2 minutes remain!","color":"yellow"}]}
+    @s[_ti=1200]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1 minute remains!","color":"yellow"}]}
+    @s[_ti=600]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"30 seconds remain!","color":"yellow"}]}
+    @s[_ti=300]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"15 seconds remain!","color":"yellow"}]}
+    @s[_ti=100]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"5!","color":"yellow"}]}
+    @s[_ti=80]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"4!","color":"yellow"}]}
+    @s[_ti=60]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"3!","color":"yellow"}]}
+    @s[_ti=40]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"2!","color":"yellow"}]}
+    @s[_ti=20]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"1!","color":"yellow"}]}
     @s[_ti=..0] _st = 4
     
     
@@ -304,29 +349,28 @@
     @a[g.sa=1,m=2,_pl=0..1]: function add_to_round_as_virus
     @s _cl = &GlowingUntil _cl
     @s _cl -= @s _ti
-    @s[_cl=0..,_gl=1..]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Glowing has been removed from all virus!","color":"yellow"}]}
+    @s[_cl=0..,_gl=1..]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"Glowing has been removed from all seekers!","color":"yellow"}]}
     @s[_cl=0..,_gl=1..] @a: playsound minecraft:entity.experience_orb.pickup voice @a[c=1]
     @s[_cl=0..,_gl=1..] _gl = 0
     @s[_cl=..-1,_gl=..0] _gl = 1
     @s[_gl=1]: effect @a[g.sa=1,m=2,team=_v] + minecraft:glowing 3 0 true
-     
     
-    @a[x=-85,y=45,z=-241,dx=31,dy=5,dz=31,m=2,_pl=2,team=_h]: function add_to_round_as_virus
+    effect @a[g.sa=1,m=2,_pl=2,team=_h] + minecraft:invisibility 3 0 true
 
+     
     @e[type=armor_stand,_stand,_chi=0] _st = 4
 !mfunc stop_round:
-    @s[_chi=0]: title @a title {"text":"The virus won!","color":"yellow"}
-    @s[_chi=0]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"The virus won!","color":"yellow"}]}
+    @s[_chi=0]: title @a title {"text":"The seekers won!","color":"yellow"}
+    @s[_chi=0]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"The seekers won!","color":"yellow"}]}
     @s[_chi=1..]: title @a title {"text":"Time!","color":"green"}
     @s[_chi=1..]: title @a subtitle {"text":"The hiders won!","color":"green"}
-    @s[_chi=1..]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":"The time is up! The hiders won!","color":"yellow"}]}
+    @s[_chi=1..]: tellraw @a {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"The time is up! The hiders won!","color":"yellow"}]}
     @s[_chi=1..]: Seconds reset _
     @s[_chi=1..]: Minutes reset _
-     
     
-    fill -73 52 -222 -66 52 -229 redstone_block 0 replace stonebrick 0
-    fill -73 49 -229 -66 49 -222 redstone_block 0 replace stonebrick 0
+    @a: function undisguise
 
+     
     @s _st = 5
 !mfunc wait_for_reset debug=false:
     effect @a[g.sa=1,m=2,_pl=1..2] + minecraft:glowing 3 0 true
@@ -336,14 +380,13 @@
      
      
 !mfunc reset_round:
-    @a[g.sa=1,m=2,_pl=2] gp.tp = 2115807378
+    @a[g.sa=1,m=2,_pl=2] gp.tp = 763457061
     team _h + @a[g.sa=1,m=2,_pl=2,team=_v]
     @a[g.sa=1,m=2,_pl=2] _pl = 0
-     
     
-    fill -73 52 -222 -66 52 -229 redstone_block 0 replace stonebrick 0
-    fill -73 49 -229 -66 49 -222 redstone_block 0 replace stonebrick 0
+    @a: function undisguise
 
+     
     Countdown reset _
     Minutes reset _
     Seconds reset _
@@ -355,16 +398,20 @@
     
     item @s - *
     effect @s - *
-    @s[g.host=1] gp.bk = 2115807378
-     
+    @s[g.host=1] gp.bk = 763457061
+    
+    function undisguise
+    
      
 
 !mfunc init_player_as_hider:
     
     item @s - *
     effect @s - *
-    @s[g.host=1] gp.bk = 2115807378
-     
+    @s[g.host=1] gp.bk = 763457061
+    
+    function undisguise
+    
      
 
     
@@ -373,13 +420,15 @@
     @s _pl = 1
 !mfunc init_player_as_hider_from_virus:
     function init_player_as_hider
-    @s gp.tp = 2115807378
+    @s gp.tp = 763457061
 !mfunc init_player_as_virus:
     
     item @s - *
     effect @s - *
-    @s[g.host=1] gp.bk = 2115807378
-     
+    @s[g.host=1] gp.bk = 763457061
+    
+    function undisguise
+    
      
 
     
@@ -389,37 +438,44 @@
     item @s armor.feet = golden_boots       {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
     team _v + @s
     title @s title {"text":"You are now","color":"yellow"}
-    title @s subtitle {"text":"the virus!","color":"yellow"}
+    title @s subtitle {"text":"the seeker!","color":"yellow"}
     tellraw @a {"text":"","extra":[
-        {"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},
+        {"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},
         {"selector":"@s"},
         {"text":" became a ","color":"gray"},
         {"text":"virus","color":"yellow"},
         {"text":"!","color":"gray"}
     ]}
 
-    tp @s -69.0 53 -225.0
+    tp @s -1539 4 -159 180 0
     @s _pl = 1
 !mfunc add_to_round_as_hider:
     
     item @s - *
     effect @s - *
-    @s[g.host=1] gp.bk = 2115807378
-     
+    @s[g.host=1] gp.bk = 763457061
+    
+    function undisguise
+    
      
 
     
     team _h + @s
 
-     
+    
+    @s[team=_h]: function give_disguise
+    tp @s[team=_h] -1423 7 -169
+
      
     @s _pl = 2
 !mfunc add_to_round_as_virus:
     
     item @s - *
     effect @s - *
-    @s[g.host=1] gp.bk = 2115807378
-     
+    @s[g.host=1] gp.bk = 763457061
+    
+    function undisguise
+    
      
 
     
@@ -429,9 +485,9 @@
     item @s armor.feet = golden_boots       {Unbreakable:1,ench:[{id:10,lvl:1},{id:71,lvl:1}]}
     team _v + @s
     title @s title {"text":"You are now","color":"yellow"}
-    title @s subtitle {"text":"the virus!","color":"yellow"}
+    title @s subtitle {"text":"the seeker!","color":"yellow"}
     tellraw @a {"text":"","extra":[
-        {"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},
+        {"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},
         {"selector":"@s"},
         {"text":" became a ","color":"gray"},
         {"text":"virus","color":"yellow"},
@@ -440,7 +496,7 @@
 
     team _v + @s
     
-    tp @s -69.0 38 -225.0
+    tp @s -1423 7 -169
     
     @s _pl = 2
 
@@ -486,13 +542,13 @@
 !folder input:
     !mfunc init:
         tag @e[type=armor_stand,gp.stand,gp.cgi=0] + gp.can_init
-        function ego:virus/virus_1/cmd_init if @e[type=armor_stand,gp.can_init]
+        function ego:blockhunt/a_small_village/cmd_init if @e[type=armor_stand,gp.can_init]
         function ego:floo_network/stop_events if @e[type=armor_stand,!gp.can_init]
         tag @e[type=armor_stand,gp.can_init] - gp.can_init
     !mfunc term:
-        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},{"text":" ","color":"gray"},{"text":"Click here","color":"yellow","bold":"true",
-                    "clickEvent":{"action":"run_command","value":"/function ego:virus/virus_1/stop_event"}
-                    },{"text":" to confirm the termination of ","color":"gray"},{"text":"Virus 1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}}]}
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":" ","color":"gray"},{"text":"Click here","color":"yellow","bold":"true",
+                    "clickEvent":{"action":"run_command","value":"/function ego:blockhunt/a_small_village/stop_event"}
+                    },{"text":" to confirm the termination of ","color":"gray"},{"text":"A Small Village","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}}]}
     !mfunc start_round:
         @e[type=armor_stand,_stand] _st = 1
     !mfunc stop_round:
@@ -505,16 +561,16 @@
         @e[type=armor_stand,_stand,_st=0..2] @r[g.sa=1,m=2,team=_v]: function init_player_as_hider_from_virus
     !mfunc select_team:
         tellraw @a[g.host=1] {"text":"","extra":[
-            {"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},
+            {"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},
             {"text":"Choose team: ","color":"gray"},
             {"text":"Hider","color":"green","italic":true,
-                "clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ function ego:virus/virus_1/to_hider"},
+                "clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ function ego:blockhunt/a_small_village/to_hider"},
                 "hoverEvent":{"action":"show_text","value":{"text":"Force someone to join the hiders","color":"green"}}
             },
             {"text":", ","color":"gray","italic":true},
-            {"text":"Virus","color":"yellow","italic":true,
-                "clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ function ego:virus/virus_1/to_virus"},
-                "hoverEvent":{"action":"show_text","value":{"text":"Force someone to join the virus","color":"yellow"}}
+            {"text":"Seeker","color":"yellow","italic":true,
+                "clickEvent":{"action":"suggest_command","value":"/execute PLAYER_NAME ~ ~ ~ function ego:blockhunt/a_small_village/to_virus"},
+                "hoverEvent":{"action":"show_text","value":{"text":"Force someone to join the seekers","color":"yellow"}}
             }
         ]}
     !mfunc to_default_settings:
@@ -530,21 +586,21 @@
         
     !mfunc change_settings:
         tellraw @s[g.host=1] {"text":"","extra":[
-            {"text":"[","color":"gray"},{"text":"VR1","color":"yellow","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"Virus 1","color":"yellow"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 2115807378"}},{"text":"]","color":"gray"},{"text":": "},
+            {"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},
             {"text":"Game time: ","color":"gray"},
             {"text":"[+]","color":"yellow",
-                "hoverEvent":{"action":"show_text","value":{"text":"Edit game time for Virus 1 in ticks","color":"yellow"}},
-                "clickEvent":{"action":"suggest_command","value":"/scoreboard players set @e[type=armor_stand,tag=vr1.stand] vr1.igt #"}
+                "hoverEvent":{"action":"show_text","value":{"text":"Edit game time for A Small Village in ticks","color":"yellow"}},
+                "clickEvent":{"action":"suggest_command","value":"/scoreboard players set @e[type=armor_stand,tag=bhasv.stand] bhasv.igt #"}
             },
             {"text":"    Glowing until: ","color":"gray"},
             {"text":"[+]","color":"yellow",
-                "hoverEvent":{"action":"show_text","value":{"text":"Edit when glowing stops for Virus 1 in ticks","color":"yellow"}},
-                "clickEvent":{"action":"suggest_command","value":"/scoreboard players set @e[type=armor_stand,tag=vr1.stand] vr1.igl #"}
+                "hoverEvent":{"action":"show_text","value":{"text":"Edit when glowing stops for A Small Village in ticks","color":"yellow"}},
+                "clickEvent":{"action":"suggest_command","value":"/scoreboard players set @e[type=armor_stand,tag=bhasv.stand] bhasv.igl #"}
             },
             {"text":"    Countdown: ","color":"gray"},
             {"text":"[+]","color":"yellow",
-                "hoverEvent":{"action":"show_text","value":{"text":"Edit how long the countdown lasts for Virus 1 in ticks","color":"yellow"}},
-                "clickEvent":{"action":"suggest_command","value":"/scoreboard players set @e[type=armor_stand,tag=vr1.stand] vr1.icd #"}
+                "hoverEvent":{"action":"show_text","value":{"text":"Edit how long the countdown lasts for A Small Village in ticks","color":"yellow"}},
+                "clickEvent":{"action":"suggest_command","value":"/scoreboard players set @e[type=armor_stand,tag=bhasv.stand] bhasv.icd #"}
             }
         ]}
     !mfunc add_one_min:
@@ -557,18 +613,18 @@
         @e[type=armor_stand,_stand] _ti -= 1200
 !mfunc book:
     replaceitem entity @s slot.weapon.offhand written_book 1 0 {
-        title:"Virus 1 Book",author:"eGO",pages:["{\"text\":\"\",\"extra\":[
-            {\"text\":\"Virus 1 Settings\\n\",\"bold\":true},
+        title:"A Small Village Book",author:"eGO",pages:["{\"text\":\"\",\"extra\":[
+            {\"text\":\"A Small Village Settings\\n\",\"bold\":true},
             {\"text\":\"\\n\"},
-            {\"text\":\"VR1: \",\"color\":\"dark_gray\"},
+            {\"text\":\"BHASV: \",\"color\":\"dark_gray\"},
             {\"text\":\"Start\",\"color\":\"dark_green\",
                 \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function init\"},
-                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Starts the virus map so it can be ran\",\"color\":\"green\"}}
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Starts the blockhunt map so it can be ran\",\"color\":\"green\"}}
             },
             {\"text\":\" / \",\"color\":\"gray\"},
             {\"text\":\"Stop\\n\",\"color\":\"red\",
                 \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function term\"},
-                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Ends the virus map\",\"color\":\"red\"}}
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Ends the blockhunt map\",\"color\":\"red\"}}
             },
             {\"text\":\"Round: \",\"color\":\"dark_gray\"},
             {\"text\":\"Start\",\"color\":\"dark_green\",
@@ -585,15 +641,15 @@
                 \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/reset_round\"},
                 \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Resets an individual round\",\"color\":\"red\"}}
             },
-            {\"text\":\"Select Virus: \",\"color\":\"dark_gray\"},
+            {\"text\":\"Select Seeker: \",\"color\":\"dark_gray\"},
             {\"text\":\"[+]\",\"color\":\"dark_green\",
                 \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/select_rand_virus\"},
-                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Chooses a virus\",\"color\":\"dark_green\"}}
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Chooses a seeker\",\"color\":\"dark_green\"}}
             },
             {\"text\":\" \",\"color\":\"gray\"},
             {\"text\":\"[-]\\n\",\"color\":\"red\",
                 \"clickEvent\":{\"action\":\"run_command\",\"value\":\"/function input/remove_one_virus\"},
-                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes a virus\",\"color\":\"red\"}}
+                \"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"Removes a seeker\",\"color\":\"red\"}}
             },
             {\"text\":\"Edit Teams: \",\"color\":\"dark_gray\"},
             {\"text\":\"[+]\\n\",\"color\":\"gold\",
@@ -631,3 +687,165 @@
             }
         ]}"
     ]}
+!folder disguise:
+    
+    !mfunc 0:
+        bd disguise minecraft:pumpkin @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:pumpkin'","color":"green"}]}
+    
+    !mfunc 1:
+        bd disguise minecraft:melon_block @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:melon_block'","color":"green"}]}
+    
+    !mfunc 2:
+        bd disguise minecraft:leaves @p[dist=..0] --variant=spruce
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:leaves --variant=spruce'","color":"green"}]}
+    
+    !mfunc 3:
+        bd disguise minecraft:diamond_ore @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:diamond_ore'","color":"green"}]}
+    
+    !mfunc 4:
+        bd disguise minecraft:furnace @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:furnace'","color":"green"}]}
+    
+    !mfunc 5:
+        bd disguise minecraft:gravel @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:gravel'","color":"green"}]}
+    
+    !mfunc 6:
+        bd disguise minecraft:cobblestone @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:cobblestone'","color":"green"}]}
+    
+    !mfunc 7:
+        bd disguise minecraft:lapis_ore @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:lapis_ore'","color":"green"}]}
+    
+    !mfunc 8:
+        bd disguise minecraft:iron_block @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:iron_block'","color":"green"}]}
+    
+    !mfunc 9:
+        bd disguise minecraft:redstone_block @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:redstone_block'","color":"green"}]}
+    
+    !mfunc 10:
+        bd disguise minecraft:purpur_block @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:purpur_block'","color":"green"}]}
+    
+    !mfunc 11:
+        bd disguise minecraft:emerald_ore @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:emerald_ore'","color":"green"}]}
+    
+    !mfunc 12:
+        bd disguise minecraft:emerald_block @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:emerald_block'","color":"green"}]}
+    
+    !mfunc 13:
+        bd disguise minecraft:hay_block @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:hay_block'","color":"green"}]}
+    
+    !mfunc 14:
+        bd disguise minecraft:lapis_block @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:lapis_block'","color":"green"}]}
+    
+    !mfunc 15:
+        bd disguise minecraft:bookshelf @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:bookshelf'","color":"green"}]}
+    
+    !mfunc 16:
+        bd disguise minecraft:iron_ore @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:iron_ore'","color":"green"}]}
+    
+    !mfunc 17:
+        bd disguise minecraft:crafting_table @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:crafting_table'","color":"green"}]}
+    
+    !mfunc 18:
+        bd disguise minecraft:redstone_ore @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:redstone_ore'","color":"green"}]}
+    
+    !mfunc 19:
+        bd disguise minecraft:gold_ore @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:gold_ore'","color":"green"}]}
+    
+    !mfunc 20:
+        bd disguise minecraft:planks @p[dist=..0] --variant=oak
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:planks --variant=oak'","color":"green"}]}
+    
+    !mfunc 21:
+        bd disguise minecraft:diamond_block @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:diamond_block'","color":"green"}]}
+    
+    !mfunc 22:
+        bd disguise minecraft:gold_block @p[dist=..0]
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:gold_block'","color":"green"}]}
+    
+    !mfunc 23:
+        bd disguise minecraft:leaves @p[dist=..0] --variant=jungle
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:leaves --variant=jungle'","color":"green"}]}
+    
+    !mfunc 24:
+        bd disguise minecraft:leaves @p[dist=..0] --variant=oak
+        tellraw @s {"text":"","extra":[{"text":"[","color":"gray"},{"text":"BHASV","color":"green","bold":"true","hoverEvent":{"action":"show_text","value":{"text":"A Small Village","color":"green"}},"clickEvent":{"action":"run_command","value":"/@p gp.tp = 763457061"}},{"text":"]","color":"gray"},{"text":": "},{"text":"You have disguised as: ","color":"gray"},{"text":"'minecraft:leaves --variant=oak'","color":"green"}]}
+    
+!mfunc give_disguise:
+    tp @s[team=_h] ~ ~0.1 ~
+    &Seed _prng *= &Multiplier _prng
+    &Seed _prng += &Increment _prng
+    @s _prng = &Seed _prng
+    @s _prng %= &Modulus _prng
+    @s[_prng=..-1] _prng *= -1
+    @s _prng += &Offset _prng
+    
+    @s[_prng=0]: function disguise/0
+    
+    @s[_prng=1]: function disguise/1
+    
+    @s[_prng=2]: function disguise/2
+    
+    @s[_prng=3]: function disguise/3
+    
+    @s[_prng=4]: function disguise/4
+    
+    @s[_prng=5]: function disguise/5
+    
+    @s[_prng=6]: function disguise/6
+    
+    @s[_prng=7]: function disguise/7
+    
+    @s[_prng=8]: function disguise/8
+    
+    @s[_prng=9]: function disguise/9
+    
+    @s[_prng=10]: function disguise/10
+    
+    @s[_prng=11]: function disguise/11
+    
+    @s[_prng=12]: function disguise/12
+    
+    @s[_prng=13]: function disguise/13
+    
+    @s[_prng=14]: function disguise/14
+    
+    @s[_prng=15]: function disguise/15
+    
+    @s[_prng=16]: function disguise/16
+    
+    @s[_prng=17]: function disguise/17
+    
+    @s[_prng=18]: function disguise/18
+    
+    @s[_prng=19]: function disguise/19
+    
+    @s[_prng=20]: function disguise/20
+    
+    @s[_prng=21]: function disguise/21
+    
+    @s[_prng=22]: function disguise/22
+    
+    @s[_prng=23]: function disguise/23
+    
+    @s[_prng=24]: function disguise/24
+    
+    tp @s[team=_h] ~ ~-0.01 ~

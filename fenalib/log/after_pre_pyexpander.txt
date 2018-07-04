@@ -1,15 +1,12 @@
 $py(
 from lib.event.virus import Virus
-from lib.location import VIRUS_1
+from lib.location import BH_A_SMALL_VILLAGE
 from lib.coords import Coords
 virus = Virus(
-    VIRUS_1,
-    tp_to_wait_coords=Coords("-69.0 53 -225.0"),
-    tp_to_arena_coords=Coords("-69.0 38 -225.0"),
+    BH_A_SMALL_VILLAGE,
+    tp_to_wait_coords=Coords("-1539 4 -159 180 0"),
+    tp_to_arena_coords=Coords("-1423 7 -169")
 )
-virus_door = Coords("-73 52 -222 -66 52 -229")
-mid_door = Coords("-73 49 -229 -66 49 -222")
-select_spawn = Coords("-85 45 -241 -54 50 -210").selector()
 )
 $macro(edit_py_init) $endmacro
 $macro(edit_type_py_init) $endmacro
@@ -37,39 +34,51 @@ $macro(edit_clear_player) $endmacro
 $macro(edit_type_clear_player) $endmacro
 $macro(edit_add_to_round_as_hider) $endmacro
 $macro(edit_type_add_to_round_as_hider) $endmacro
-$macro(edit_round_start)
-fill $(mid_door) stonebrick 0 replace redstone_block 0
-$endmacro
-$macro(edit_countdown_end)
-fill $(virus_door) stonebrick 0 replace redstone_block 0
-fill $(mid_door) redstone_block 0 replace stonebrick 0
-$endmacro
-$macro(edit_during_round)
-@a[$(select_spawn),m=2,_pl=2,team=_h]: function add_to_round_as_virus
-$endmacro
-$macro(edit_stop_round)
-fill $(virus_door) redstone_block 0 replace stonebrick 0
-fill $(mid_door) redstone_block 0 replace stonebrick 0
-$endmacro
-$macro(edit_round_reset)
-fill $(virus_door) redstone_block 0 replace stonebrick 0
-fill $(mid_door) redstone_block 0 replace stonebrick 0
-$endmacro
-$macro(edit_term)
-fill $(virus_door) redstone_block 0 replace stonebrick 0
-fill $(mid_door) redstone_block 0 replace stonebrick 0
-$endmacro
 $py(
-virus_name = "Virus"
-viruses_name = "Virus"
+from lib.prng import PRNG
+from lib.event.blockhunt_block import get_blocks_from_file
+from lib.objective import Objectives
+virus_name = "Seeker"
+viruses_name = "Seekers"
 hider_name = "Hider"
 hiders_name = "Hiders"
-type_name = "Virus"
+type_name = "Blockhunt"
+blocks = get_blocks_from_file("blocks.txt")
+prng = PRNG("_prng", len(blocks))
 )
 $macro(edit_type_py_init)
 $py(
-teams["_h"].add_option("nametagVisibility", "never")
+teams["_h"].add_option("seeFriendlyInvisibles", "false")
 )
+!mfunc undisguise:
+    tp @s ~ ~0.1 ~
+    @s: bd undisguise @p[dist=..0]
+    tp @s ~ ~-0.01 ~
+$endmacro
+$macro(edit_type_init)
+$(prng.cmd_init())
+$endmacro
+$macro(edit_type_add_to_round_as_hider)
+@s[team=_h]: function give_disguise
+tp @s[team=_h] $(virus.tp_to_arena_coords)
+$endmacro
+$macro(edit_type_clear_player)
+function undisguise
+$endmacro
+$macro(edit_type_countdown)
+effect @a[g.sa=1,m=2,_pl=2,team=_h] + $(Effects.INVIS) 3 0 true
+$endmacro
+$macro(edit_type_during_round)
+effect @a[g.sa=1,m=2,_pl=2,team=_h] + $(Effects.INVIS) 3 0 true
+$endmacro
+$macro(edit_type_countdown_end)
+tp @a[g.sa=1,m=2,team=_v] $(virus.tp_to_arena_coords)
+$endmacro
+$macro(edit_type_stop_round)
+@a: function undisguise
+$endmacro
+$macro(edit_type_round_reset)
+@a: function undisguise
 $endmacro
 $py(
 from typing import NamedTuple
@@ -342,7 +351,7 @@ tellraw @a {"text":"","extra":[
     $(virus.location.prefix_json),
     {"selector":"@s"},
     {"text":" became a ","color":"gray"},
-    {"text":"$(virus_name.lower())","color":"yellow"},
+    {"text":"virus","color":"yellow"},
     {"text":"!","color":"gray"}
 ]}
 $endmacro
@@ -526,3 +535,16 @@ _, _, objective, default_time = mfunc_input
             }
         ]}"
     ]}
+!folder disguise:
+    $for(num, block in enumerate(blocks))
+    !mfunc $(num):
+        $(block.disguise())
+        tellraw @s $(virus.location.surround_json(r'{"text":"You have disguised as: ","color":"gray"},{"text":"%s","color":"green"}' % str(block)))
+    $endfor
+!mfunc give_disguise:
+    tp @s[team=_h] ~ ~0.1 ~
+    $(prng.cmd_main())
+    $for(num in range(len(blocks)))
+    @s[$(prng.objective_name)=$(num)]: function disguise/$(num)
+    $endfor
+    tp @s[team=_h] ~ ~-0.01 ~

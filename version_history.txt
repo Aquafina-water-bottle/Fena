@@ -5,20 +5,20 @@ How versioning works:
         -eg. if this program makes backwards incompatable changes that affects 0.001% of the users,
          I'll update the major in the semantic version, but I'll update either the minor or patch in the public version
 
-s2.0.0		v0.0.0
+s2.0.0        v0.0.0
     Mostly reorganizing a huge chunk of the pascal interpreter
         -Got a logger working
         -Things are in modules now
 
-s3.0.0		v0.0.1
-	-Added procedure declarations to the interpreter's GLOBAL_SCOPE
-	-Added a bit more documentation to the overall program
-	-Moved version history to its own file
-	-Changed the main module from s2_0_0 to CCU so I don't have to rename my module every time I update
-	-Added an error module for safe keeping
-	-Change compound_statement to compound_stmt, and AST to Node because I can
+s3.0.0        v0.0.1
+    -Added procedure declarations to the interpreter's GLOBAL_SCOPE
+    -Added a bit more documentation to the overall program
+    -Moved version history to its own file
+    -Changed the main module from s2_0_0 to CCU so I don't have to rename my module every time I update
+    -Added an error module for safe keeping
+    -Change compound_statement to compound_stmt, and AST to Node because I can
 
-s4.0.0		v0.1.0
+s4.0.0        v0.1.0
     Mid: (Unfinished)
         -Changing the format from pascal to CCU:
             -Changed the _text.txt file to reflect the new format
@@ -34,7 +34,7 @@ s4.0.0		v0.1.0
     Post:
         -Generally working now
 
-s4.0.1		v0.1.1
+s4.0.1        v0.1.1
     -Fixed a bug with "scoreboard players test", now doesn't have a random execute command
 
 s4.1.0      v0.1.2
@@ -56,15 +56,20 @@ s6.0.0      v0.3.0
 
 s7.0.0      v0.4.0
     config/config.ini:
-        - Added a version config option to specify "1.12" or "1.13"
+        - Added a version config option to specify "1.12" or "1.13" -> REMOVED due to only supporting 1.12
         - Removed target_selector_arguments and target_selector_variables and replaced it with selector_arguments and selector_variables in the json file
         - moved to /src/config instead of just being under /src
+
+    config/*.json
+        - Holds data for pretty much everything the language uses
 
     config_data.py:
         - Changed all logging errors to syntax error
         - Renamed config options to match up with the wiki https://minecraft.gamepedia.com/Commands#Target_selector_arguments
         - config.ini now supports comments, trailing whitespace and empty lines
         - Changed list of valid options into frozenset because it is only used for containment tests
+        - Completely removed precursor option checking because that should be done during the creation of a ConfigData variable
+            - Now uses __slots__
 
     token_classes.py: (created)
         - Changed string constants to multiple Enum values (token classes) to better organize the constants
@@ -104,6 +109,11 @@ s7.0.0      v0.4.0
         - Added a command chain option by having a command end with ":" and starting as a new block -> REMOVED
             - Equivalent to CBP or CCUv1 "USE"
 
+    interpreter.py:
+        - Now changed to visit general statement nodes
+        - Creates and finalizes the InFileConfig object
+        - Creates and builds all mcfunctions into McFunction objects
+
     mcfunction.py:
         - A simple object to hold the full path to the mcfunction and all commands as strings within it
         - Used to hold a list of Command objects, which hold a list of token objects
@@ -123,6 +133,7 @@ s7.0.0      v0.4.0
     nodes.py: (created)
         - Made a node class to be inherited from all other node classes
             - Only an ABC class with no abstract methods
+            - Now uses NamedTuple which doesn't support proper base classes directly and removed typechecking for this reason
         - Node visitor class taken straight from the tutorial -> moved to node_visitors.py
         - Each section that can contain more than one token will be a node
         - It used to have its own build method, but that has been moved to command_builder.py
@@ -138,9 +149,44 @@ s7.0.0      v0.4.0
     terminology.txt: (created)
         - Created a general list of terms that will remain constant throughout the code documentation and naming conventions
 
+    assert_utils.py: (created)
+        - General utils for type checking over an iterable or for a normal variable
+
+    number_utils.py: (created)
+        - General utils for checking a type of a number given a string
+
+    str_utils.py: (created)
+        - General utils to:
+            - encode a string (surround with regular quotations and escaping characters as necessary)
+            - decode a string (remove regular quotations and removing escape characters)
+
+    logging_setup.py: (created):
+        - Simply sets up the logging format for fena
+
+    general.py: (created):
+        - Further separation of functionality from the main fena.py file
+        - Contains functions to parse text, get command line args, etc.
+
+    test_fena/ (created):
+        - Holds pretty much all of the test cases for Fena
+
+    fena_pyexpander/ (created):
+        - The general pyexpander library with minor changes to the original
+            - Outputs some errors slightly better
+            - Fixed a glitch with auto-indent macros not working with python output
+            - Added an option to auto-indent python output in general
+
+    fena_pyexpander_rewrite/ (created):
+        - Aims to completely rewrite the source code for pyexpander (python3)
+        - Goals:
+            - Less spaghetti code
+            - More documentation
+            - Actual elegance that python code should have
+            - more unit tests
+
     token_types.py: (created -> renamed to token_classes.py)
         - Renamed after setting the terminology.txt as the standard across all files
-        
+
     commands.py: (created -> renamed to command_builder.py)
 
     config files (created to hold info for versions 1.12 and 1.13):
@@ -214,21 +260,21 @@ s7.0.0      v0.4.0
         - Holds all config data specifically for selector based things
             - json is used instead of a regular ini because more formatting is required (lists and dicts)
 
-    TODO:
-        - Allow all forms of "minecraft:"
-        - Have the lexer output whitespace tokens in certain situations
-        - Include type hinting as introduced by python 3.5+ (unless it requires 3.7+)
-        - Look into using dataclasses or NamedTuple for various objects (eg. nodes)
 
-        - Command line arguments:
-            - Debug file only when "-dl" or "--debug-log"
-            - Specify custom version under "-v" or "--version" as 1.12 or 1.13 that overrides the config specification
+TODO:
+    - Have the lexer output whitespace tokens in certain situations
+    - Include type hinting as introduced by python 3.5+ (unless it requires 3.7+)
+    - Look into using dataclasses or NamedTuple for various objects (eg. nodes)
 
-        - formatted and custom exceptions
-        - generator for immutable struct-like classes for nodes
+    - Command line arguments:
+        - Debug file only when "-dl" or "--debug-log"
+        - Specify custom version under "-v" or "--version" as 1.12 or 1.13 that overrides the config specification
+
+    - formatted and custom exceptions
+    - generator for immutable struct-like classes for nodes
 
         1.13:
-            - !blocktag, !itemtag, !functiontag, !fluidtag
+            - !blocktag, !itemtag, !functiontag, !fluidtag, !advancement, !loottable
             - Change format of execute commands to use ":" and all sub execute commands
             - mcfunction format in datapacks (different namespace)
             - general change in file system
