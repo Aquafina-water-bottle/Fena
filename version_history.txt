@@ -261,25 +261,12 @@ s7.0.0      v0.4.0
             - json is used instead of a regular ini because more formatting is required (lists and dicts)
 
 
-TODO:
-    - Have the lexer output whitespace tokens in certain situations
-    - Include type hinting as introduced by python 3.5+ (unless it requires 3.7+)
-    - Look into using dataclasses or NamedTuple for various objects (eg. nodes)
-
-    - Command line arguments:
-        - Debug file only when "-dl" or "--debug-log"
-        - Specify custom version under "-v" or "--version" as 1.12 or 1.13 that overrides the config specification
-
-    - formatted and custom exceptions
-    - generator for immutable struct-like classes for nodes
-
-        1.13:
-            - !blocktag, !itemtag, !functiontag, !fluidtag, !advancement, !loottable
-            - Change format of execute commands to use ":" and all sub execute commands
-            - mcfunction format in datapacks (different namespace)
-            - general change in file system
-
-
 s7.0.1      v0.4.1
     - Literally just super small changes in formatting
+
+s7.0.2      v0.4.2
+    - Added license info and the date of when the code was changed for pyexpander
+    - Fixed a glitch with /xp being in the wrong format (/xp selector number -> /xp number selector)
+    - Removed TODO and moved into github issues
+
 

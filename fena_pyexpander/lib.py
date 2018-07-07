@@ -1,4 +1,9 @@
-"""The main pyexpander library.
+"""
+The main pyexpander library.
+
+NOTE: THIS IS A MODIFIED VERSION OF PYEXPANDER as of July 2018
+License: https://bitbucket.org/goetzpf/pyexpander/src/b466de6fd801545650edfa790a18f022dc7e151a/LICENSE?at=default&fileviewer=file-view-default
+Original: http://pyexpander.sourceforge.net/
 """
 # pylint: disable=too-many-lines
 

@@ -14,12 +14,16 @@ disable=
     line-too-long,
     wrong-import-position,
     trailing-newlines
+TODO include this under project pylintrc file
+
+NOTE: THIS IS A MODIFIED VERSION OF PYEXPANDER as of July 2018
+License: https://bitbucket.org/goetzpf/pyexpander/src/b466de6fd801545650edfa790a18f022dc7e151a/LICENSE?at=default&fileviewer=file-view-default
+Original: http://pyexpander.sourceforge.net/
 """
 
 import re
 from bisect import bisect_right
-from typing import List, Tuple
-from collections import namedtuple
+from typing import List, Tuple, NamedTuple
 
 # mrw I have to import stuff from the fena library because it's actually too damn useful
 if __name__ == "__main__":
@@ -34,7 +38,10 @@ LINESEP = "\n"
 LINESEP_LEN = len(LINESEP)
 
 
-RowColBase = namedtuple("RowColBase", ["row", "column"])
+class RowColBase(NamedTuple):
+    row: int
+    column: int
+
 class RowCol(RowColBase):
     """
     NamedTuple to keep the functionality of indexing and immutablility

@@ -53,7 +53,8 @@ statement_suite ::= [NEWLINE, (statement, NEWLINE)]*
 statement ::= "!" && [folder_stmt, mfunc_stmt, prefix_stmt, constobj_stmt]
 folder_stmt ::= "folder" && STR && ":" && (NEWLINE)* & INDENT && statement_suite && DEDENT
 mfunc_stmt ::= "mfunc" && [STR, literal_str] && ("debug" && "=" && ["true", "false"]) ":" && (NEWLINE)* & INDENT && command_suite && DEDENT
-set_var_stmt ::= "set" && ["prefix", "constobj"] && "=" && STR
+# note that the first STR is not defined as "constobj" and "prefix" since the parser accepts any string
+set_var_stmt ::= "set" && STR && "=" && STR
 
 command_suite ::= [NEWLINE, (command, NEWLINE)]*
 command ::= (execute_cmd)? && [sb_cmd, simple_cmd]

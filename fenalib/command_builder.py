@@ -514,7 +514,7 @@ class CommandBuilder_1_12(NodeBuilder):
         value_ending = "" if sub_cmd == "points" else "L"
         negative = "-" if operator == "-" else ""
 
-        return f"{xp} {selector} {negative}{value}{value_ending}"
+        return f"{xp} {negative}{value}{value_ending} {selector}"
 
     def build_SelectorNode(self, node):
         """
