@@ -1,5 +1,6 @@
 import re
-from collections import namedtuple
+import os
+from typing import NamedTuple, Optional
 
 if __name__ == "__main__":
     import sys
@@ -7,6 +8,7 @@ if __name__ == "__main__":
     del sys
 
 from fenalib.assert_utils import assert_type
+from fenalib.str_utils import decode_str
 
 r"""
 Runs a quick script before pyexpander is run
@@ -112,19 +114,28 @@ INDENT = "    "
 class PrePyexpanderError(Exception):
     pass
 
+class InvalidFileError(PrePyexpanderError):
+    pass
+
 class InvalidIndentError(PrePyexpanderError):
     pass
 
-Line = namedtuple("Line", ["string", "line_number", "indents", "pyexp_keyword", "empty"])
-"""
-Attributes:
-    string (str): A fully unindented string as the line
-    indents (int): The number of indents that the string had
-    line_number (int): The line number in the original file
-    pyexp_keyword (str): The pyexpander keyword if it has the proper syntax for pre-expander parsing
-        - line starts with '$' and ends with ':'
-    empty (bool): Whether the line should be considered for parsing indents or not
-"""
+class Line(NamedTuple):
+    """
+    Attributes:
+        string (str): A fully unindented string as the line
+        indents (int): The number of indents that the string had
+        line_number (int): The line number in the original file
+        pyexp_keyword (Optional[str]): The pyexpander keyword if it has the proper syntax for pre-expander parsing
+            - line starts with '$' and ends with ':'
+        empty (bool): Whether the line should be considered for parsing indents or not
+    """
+    string: str
+    line_number: int
+    indents: int
+    pyexp_keyword: Optional[str]
+    empty: bool
+
 
 def get_line_strings(text):
     """
@@ -169,6 +180,9 @@ def get_lines(text):
             if keyword is None:
                 raise PrePyexpanderError(f"Line {line_number}: Expected a pyexpander keyword in line {line_str!r}")
             yield Line(unindented_str, line_number, indents, pyexp_keyword=keyword.group(), empty=False)
+        elif unindented_str.startswith("$include(") and unindented_str.endswith(")"):
+            file_path = unindented_str[len("$include("):-len(")")]
+            yield Line(file_path, line_number, indents, pyexp_keyword="include", empty=False)
         else:
             yield Line(unindented_str, line_number, indents, pyexp_keyword=None, empty=False)
 
@@ -281,6 +295,17 @@ class Parser:
             elif self.current_line.pyexp_keyword == "else":
                 raise PrePyexpanderError(f"Unexpected 'else' (without accompanying 'if') in self.current_line {self.current_line}")
 
+            elif self.current_line.pyexp_keyword == "include":
+                # override's pyexpander's "include" keyword
+                file_path = decode_str(self.current_line.string)
+                if not os.path.isfile(file_path):
+                    raise InvalidFileError(f"{file_path!r} is not a valid file path")
+
+                with open(file_path) as file:
+                    parser = Parser(file.read())
+                    yield from parser.parse_lines()
+                    self.advance()
+
             elif self.current_line.pyexp_keyword is not None:
                 raise PrePyexpanderError(f"Unexpected pyexpander keyword in self.current_line {self.current_line}")
 
@@ -293,11 +318,12 @@ def parse_pre_pyexpander(text):
     Returns:
         Properly parsed text to be used by pyexpanxer
     """
-    # 2 // -> 4 //// for entire text
-    text = text.replace('\\\\', '\\\\\\\\')
     parser = Parser(text)
     # return list(parser.parse_lines())
-    return "\n".join(parser.parse_lines()) + "\n"
-    # parser.parse_lines()
-    # parser.advance()
+    text = "\n".join(parser.parse_lines()) + "\n"
+
+    # 2 // -> 4 //// for entire text
+    # replaces after the parsing to make sure the $include() files are included
+    text = text.replace('\\\\', '\\\\\\\\')
+    return text
 

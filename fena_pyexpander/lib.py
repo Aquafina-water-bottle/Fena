@@ -1,4 +1,9 @@
-"""The main pyexpander library.
+"""
+The main pyexpander library.
+
+NOTE: THIS IS A MODIFIED VERSION OF PYEXPANDER as of July 2018
+License: https://bitbucket.org/goetzpf/pyexpander/src/b466de6fd801545650edfa790a18f022dc7e151a/LICENSE?at=default&fileviewer=file-view-default
+Original: http://pyexpander.sourceforge.net/
 """
 # pylint: disable=too-many-lines
 
@@ -191,6 +196,7 @@ class Block(object):
     global variable dictionary and some more properties that are needed during
     execution of the program.
     """
+
     # pylint: disable=too-many-instance-attributes
     def posmsg(self, msg=None, pos=None):
         """return a message together with a position.
@@ -216,7 +222,8 @@ class Block(object):
             parts.append("line %d, col %d" % p_elm.rowcol(pos))
             return " ".join(parts)
         except IndexError as _:
-            return "unknown position"
+            return " ".join(parts) + " at unknown position"
+
     def _append(self, lst, name, val=None):
         """append a line with property information to a list.
 
@@ -231,6 +238,7 @@ class Block(object):
             lst.append("    %-20s: %s" % (name,val))
         else:
             lst.append("    %-20s= %s" % (name,elm2str(getattr(self,name))))
+
     def _strlist(self):
         """utility for __str__.
 
@@ -260,6 +268,7 @@ class Block(object):
             self._append(lst, "current parse elm",
                          self.parse_list[self.lst_pos])
         return lst
+
     def __init__(self,
                  previous= None,
                  new_scope= False,
@@ -350,6 +359,7 @@ class Block(object):
             start_pos           = 0
         }
         """
+
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
@@ -417,6 +427,7 @@ class Block(object):
         if external_definitions is not None:
             for (k,v) in list(external_definitions.items()):
                 self.globals_[k]= v
+
     def parse_loop(self):
         """loop across the items in the Block.
 
@@ -424,9 +435,11 @@ class Block(object):
         """
         self.lst_pos+= 1
         return self.lst_pos < len(self.parse_list)
+
     def parse_elm(self):
         """get the current parse element."""
         return self.parse_list[self.lst_pos]
+
     def eval_(self, st):
         """perform eval with the global variable dictionary of the block.
 
@@ -447,6 +460,7 @@ class Block(object):
             e= _e
         if e is not None:
             raise e.__class__("%s at %s" % (str(e), self.posmsg())).with_traceback(tb)
+
     def str_eval(self, st):
         """perform eval with the global variable dictionary of the block.
 
@@ -464,6 +478,7 @@ class Block(object):
         except Exception as _:
             sys.stderr.write("error at %s:\n" % self.posmsg())
             raise
+
     def exec_(self, st):
         """perform exec with the global variable dictionary of the block.
 
@@ -482,18 +497,18 @@ class Block(object):
         >>> b.previous["a"]
         1
         """
+
         e= None
         try:
             # pylint: disable=exec-used
             exec(st, self.globals_)
-        except (SyntaxError, NameError, IndexError, TypeError) as _e:
-            e= _e
-        except Exception as e:
-            sys.stderr.write("error at %s:\n" % self.posmsg())
-            raise
+        except Exception as _e:
+            tb = sys.exc_info()[2]
+            e = _e
         if e is not None:
             # pylint: disable=raising-non-exception
-            raise e.__class__("%s at %s" % (str(e), self.posmsg()))
+            raise e.__class__("%s at %s" % (str(e), self.posmsg())).with_traceback(tb)
+
     def __getitem__(self, name):
         """looks up a value in the globals_ dictionary of the block.
 
@@ -525,6 +540,7 @@ class Block(object):
         if e is not None:
             # pylint: disable=raising-non-exception
             raise e.__class__("%s at %s" % (str(e), self.posmsg())).with_traceback(tb)
+
     def __setitem__(self, name, val):
         """sets a value in the globals_ dictionary of the block.
 
@@ -557,6 +573,7 @@ class Block(object):
         if e is not None:
             # pylint: disable=raising-non-exception
             raise e.__class__("%s at %s" % (str(e), self.posmsg()))
+
     def __delitem__(self, name):
         """deletes a value in the globals_ dictionary of the block.
 
@@ -609,6 +626,7 @@ class Block(object):
             ...
         AttributeError: 'T' object has no attribute 'myvar'
         """
+
         e= None
         try:
             # pylint: disable=exec-used
@@ -618,6 +636,7 @@ class Block(object):
         if e is not None:
             # pylint: disable=raising-non-exception
             raise e.__class__("%s at %s" % (str(e), self.posmsg()))
+
     def __len__(self):
         """returns the number of items in the block.
 
@@ -634,6 +653,7 @@ class Block(object):
         4
         """
         return len(self.globals_)
+
     def setdefault(self, name, val):
         """return a value from globals, set to a default if it's not defined.
 
@@ -672,6 +692,7 @@ class Block(object):
         self.template_parselist_cache= None
         self.template_path= None
         self.template= filename
+
     def substfile_parselist(self, include_paths):
         """return the parselist for a given file.
 
@@ -689,6 +710,7 @@ class Block(object):
         else:
             self.template_parselist_cache= parseFile(self.template_path, False)
         return (self.template_path,self.template_parselist_cache)
+
     def export_symbols(self, lst):
         """appends items to the export_symbols list.
 
@@ -707,6 +729,7 @@ class Block(object):
         ['a', 'b', 'd', 'e']
         """
         self.exported_syms.extend(lst)
+
     def extend(self, lst):
         """adds items to the list of expander functions or variables.
 
@@ -734,12 +757,15 @@ class Block(object):
                 continue
             # assume elm to be a variable:
             self.direct_vars.add(elm)
+
     def set_indent(self, value):
         """sets the indent."""
         self.indent= value
+
     def get_indent(self):
         """gets the indent."""
         return self.indent
+
     def format_text(self, text, indent_start):
         """currently does indent one or more lines."""
         if text=="":
@@ -757,6 +783,7 @@ class Block(object):
             return text
         else:
             return ind+text
+
     def add_macro(self, name, macro_block):
         """add a new macro block.
         """
@@ -793,6 +820,7 @@ class Block(object):
         if not self.new_parse_list:
             self.previous.lst_pos= self.lst_pos
         return self.previous
+
     def __str__(self):
         """returns a string representation of the block.
 
@@ -841,6 +869,7 @@ class Block(object):
         lst.extend(self._strlist())
         lst.append("}")
         return "\n".join(lst)
+
     def get_block_list(self):
         """returns all blocks of the list.
 
@@ -853,12 +882,14 @@ class Block(object):
             block= block.previous
         lst.reverse()
         return lst
+
     def str_block_list(self):
         """returns a string representation of all blocks in the list.
 
         The list is returned with the oldest block first.
         """
         return [str(elm) for elm in self.get_block_list()]
+
     def print_block_list(self):
         """print all blocks in the list.
 
@@ -1250,6 +1281,7 @@ class MacBlock(Block):
             self.parameter_list= declaration_block.parameter_list
             self.lst_pos= declaration_block.start_pos
             self.is_declaration= False
+
     def pop(self):
         """override pop() from base class.
         """
@@ -1259,6 +1291,7 @@ class MacBlock(Block):
         prev= Block.pop(self)
         prev.lst_pos= old_pos
         return prev
+
     def __str__(self):
         lst=["%s{" % "MacBlock"]
         lst.extend(self._strlist())
@@ -1425,7 +1458,12 @@ def processToList(parse_list, filename=None,
                         string = block.str_eval(tp.string())
                         result.append(string.replace("\n", indent))
                         continue
-                result.append(block.str_eval(tp.string()))
+                # wtf?
+                text = block.str_eval(tp.string())
+                indented_text = block.format_text(text, result.column()==1)
+                # print(repr(text), "->", repr(indented_text))
+                result.append(indented_text)
+
             continue
         if isinstance(tp, EP.ParsedCommand):
             # if ParsedItem is a ParsedCommand:
@@ -1646,6 +1684,7 @@ def processToList(parse_list, filename=None,
                     # apply the function directly:
                     result.append(block.str_eval("%s(%s)" % \
                                   (tp.ident,tp.args())))
+
             elif tp.ident in block.macros:
                 if not block.skip:
                     # $macro(args)
@@ -1656,14 +1695,19 @@ def processToList(parse_list, filename=None,
                         # column of the '$' sign:
                         col_= tp.rowcol()[1]-len(tp.ident)-2
                         block.set_indent(block.get_indent()+(col_-1))
+                        # print(block)
+                        # print(tp)
+                        # print(repr(tp.args()))
                     (args,kwargs)= block.eval_("__pyexpander_helper3(%s)" % \
                                                tp.args())
+
                     if len(args)>len(block.parameter_list):
                         raise EP.ParseException( \
                                 block.posmsg(("too many parameters at "
                                               "instantiation of macro "
                                               "\"%s\" at") % tp.ident,
                                              pos= tp.start()))
+
                     for (i,name) in enumerate(block.parameter_list):
                         if i<len(args):
                             # unnamed parameter

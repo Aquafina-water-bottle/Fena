@@ -1,6 +1,11 @@
 #!c:\python36\python.exe
 # -*- coding: UTF-8 -*-
-"""expander.py: this is the pyexpander application.
+"""
+expander.py: this is the pyexpander application.
+
+NOTE: THIS IS A MODIFIED VERSION OF PYEXPANDER as of July 2018
+License: https://bitbucket.org/goetzpf/pyexpander/src/b466de6fd801545650edfa790a18f022dc7e151a/LICENSE?at=default&fileviewer=file-view-default
+Original: http://pyexpander.sourceforge.net/
 """
 
 # pylint: disable=C0322,C0103,R0903
