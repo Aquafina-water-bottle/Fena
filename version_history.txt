@@ -233,3 +233,5 @@ s7.0.0      v0.4.0
             - mcfunction format in datapacks (different namespace)
             - general change in file system
 
+ fenasplit:
+     - pass
