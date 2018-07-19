@@ -21,7 +21,34 @@ Gets all config data from the config folder
 PATH_TO_CONFIG_DIR = "config/"
 MAIN_CONFIG_NAME = "config.ini"
 
-class ConfigData:
+ConfigDataBase = NamedTuple("ConfigData", [
+        "version",
+        "ego",
+        "leading_commands",
+        "plugin_conflict_commands",
+        "selector_variable_specifiers",
+        "selector_arguments",
+        "selector_replacements",
+        "selector_argument_details",
+        "execute_dimensions",
+        "execute_keywords",
+        "execute_data_types",
+        "execute_comparison_operators",
+        "scoreboard_math",
+        "scoreboard_special",
+        "replaceitem_entity_slots",
+        "replaceitem_block_slots",
+        "blocks",
+        "bossbar_set",
+        "bossbar_get",
+        "command_names",
+        "effects",
+        "entities",
+        "items",
+        "team_options",
+    ])
+
+class ConfigData(ConfigDataBase):
     """
     Singleton class based off of:
         https://colab.research.google.com/drive/1eajT5Rl9tA-7RmSHMME54B81U5aSKSni#scrollTo=nfQZINGxuUdK
@@ -61,34 +88,21 @@ class ConfigData:
         items (list of str objects)
         team_options (dict): maps each team option to its possible values
     """
+    @property
+    def variables(self):
+        """
+        Returns:
+            MappingProxyType: Read-only dictionary of the variables stored in the config data
+        """
+        variables = {}
+        for key in ConfigData.__slots__:
+            variables[key] = getattr(self, key)
+        return MappingProxyType(variables)
+        # variables = {key: getattr(self, key) for key in ConfigData.__slots__)
 
-    __slots__ = [
-        "version",
-        "ego",
-        "leading_commands",
-        "plugin_conflict_commands",
-        "selector_variable_specifiers",
-        "selector_arguments",
-        "selector_replacements",
-        "selector_argument_details",
-        "execute_dimensions",
-        "execute_keywords",
-        "execute_data_types",
-        "execute_comparison_operators",
-        "scoreboard_math",
-        "scoreboard_special",
-        "replaceitem_entity_slots",
-        "replaceitem_block_slots",
-        "blocks",
-        "bossbar_set",
-        "bossbar_get",
-        "command_names",
-        "effects",
-        "entities",
-        "items",
-        "team_options",
-    ]
+    pass
 
+class ConfigData:
     def __init__(self, **options):
         if options:
             for key in options:
@@ -108,17 +122,6 @@ class ConfigData:
             cls._config_data = super().__new__(cls)
         return cls._config_data
 
-    @property
-    def variables(self):
-        """
-        Returns:
-            MappingProxyType: Read-only dictionary of the variables stored in the config data
-        """
-        variables = {}
-        for key in ConfigData.__slots__:
-            variables[key] = getattr(self, key)
-        return MappingProxyType(variables)
-        # variables = {key: getattr(self, key) for key in ConfigData.__slots__)
 
     def __str__(self):
         # return f"ConfigData[vars={vars(self)}]"

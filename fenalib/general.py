@@ -1,54 +1,25 @@
-"""
-A butt load of code shamelessly taken from Ruslan Spivak's tutorial for making an interpreter:
-    https://ruslanspivak.com/lsbasi-part1/
-
-Pyexpander code shamelessly taken from:
-    http://pyexpander.sourceforge.net/
-
-Lots of config files shamelessly gotten from:
-    https://github.com/PepijnMC/Minecraft
-    https://github.com/Arcensoth/mcdata
-"""
-
-"""
-Random stuff only for me honestly (vim session tab numbers):
-    1: Python3/fena
-        fena.py
-    2: Fena/lib
-        floo_event.py
-        location.py
-    3: floo_network/src
-        main.py
-        main.fena
-    4: Python3/fena/fenalib/log
-        after_pre_pyexpander.txt
-        after_pyexpander.txt
-        parsed_cmds.txt
-    5: Fena.wiki
-        Code-Style.md
-        Code-Documentation.md
-"""
-
-import argparse
-import logging
-import sys
 import os
+import sys
+import argparse
+
+if __name__ == "__main__":
+    sys.path.append("..")
 
 # import pyexpander.lib as pyexpander
 import fena_pyexpander.lib as pyexpander
-
-import fenalib.logging_setup as logging_setup
-logging_setup.setup_logging()
-
-from fenalib.config_data import get_all_data
 from fenalib.pre_pyexpander import parse_pre_pyexpander
-from fenalib.lexer import Lexer
-from fenalib.parser import Parser
-from fenalib.interpreter import Interpreter
+
 from fenalib.writer import Writer, write_after_pre_pyexpander, write_after_pyexpander
 
-semantic_version = "6.0.0"
-public_version = "0.3.0-ALPHA"
+SEMANTIC_VERSION = "7.0.3"
+PUBLIC_VERSION = "0.4.2-ALPHA"
+
+
+def check_py_version():
+    # checks for python version (must be greater than or equal to 3.6)
+    if not (sys.version_info.major >= 3 and sys.version_info.minor >= 6):
+        raise RuntimeError("Python version must be 3.6 or greater")
+
 
 def get_args():
     # Usage: main.py fileName [output_path] [-d, --debug] [-c, --clean]
@@ -72,11 +43,15 @@ def get_args():
     # parser.add_argument("-dl", "--debug-log", help="outputs the debug log to see all debug info from the Fena language", action="store_true")
 
     # custom version
-    parser.add_argument("-v", "--version", nargs="?", default=None, help="custom version to override the config file if provided")
+    # parser.add_argument("-v", "--version", nargs="?", default=None, help="custom version to override the config file if provided")
 
     args = parser.parse_args()
     args.output_path = os.path.realpath(args.output_path)
     return args
+
+
+def parse_text_from_args(text, args, **kwargs):
+    return parse_text(text, args.file_name, args.output_path, clean=args.clean, debug=args.debug, **kwargs)
 
 
 def parse_text(text, file_name, output_path, clean=False, debug=False, use_pre_pyexpander=True, write_functions=True):
@@ -120,35 +95,23 @@ def parse_text(text, file_name, output_path, clean=False, debug=False, use_pre_p
 
 
 def main():
-    print(f"Fena: semantic_version={semantic_version}, public_version={public_version}")
+    check_py_version()
 
-    # checks for python version (must be greater than or equal to 3.6)
-    if not (sys.version_info.major >= 3 and sys.version_info.minor >= 6):
-        raise RuntimeError("Python version must be 3.6")
+    print(f"Fena: semantic_version={semantic_version}, public_version={public_version}")
 
     # gets all command line arguments
     args = get_args()
 
     #  overrides the version if necessary
-    if args.version is not None:
-        get_all_data(args.version)
+    # if args.version is not None:
+    #     get_all_data(args.version)
 
-    file_name = args.file_name
-    output_path = args.output_path
-    with open(file_name) as file:
+    with open(args.file_name) as file:
         text = file.read()
 
     # sets the file name for logging
-    logging_setup.format_file_name(file_name)
-    parse_text(text, file_name, output_path, clean=args.clean, debug=args.debug)
+    logging_setup.format_file_name(args.file_name)
+    # parse_text(text, file_name, output_path, clean=args.clean, debug=args.debug)
+    parse_text_from_args(text, args)
 
-
-if __name__ == '__main__':
-    # print("test")
-
-    try:
-        main()
-    # pylint: disable=broad-except
-    except Exception as e:
-        logging.exception(e) # type: ignore
 
