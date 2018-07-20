@@ -40,5 +40,6 @@ if __name__ == "__main__":
         # e.args = ('hello',)
         # raise e.with_traceback(tb)
         # raise e
-        raise exc_add_msg(e, 'just like your face')
+        exc_add_msg(e, 'just like your face')
+        raise
     print('ye')
