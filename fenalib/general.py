@@ -50,18 +50,13 @@ def get_args():
     return args
 
 
-def parse_text_from_args(text, args, **kwargs):
-    return parse_text(text, args.file_name, args.output_path, clean=args.clean, debug=args.debug, **kwargs)
+# def parse_text_from_args(text, args, **kwargs):
+#     return parse_text(text, args.file_name, args.output_path, clean=args.clean, debug=args.debug, **kwargs)
 
 
-def parse_text(text, file_name, output_path, clean=False, debug=False, use_pre_pyexpander=True, write_functions=True):
+def parse_text(text, use_pre_pyexpander=True, write_functions=True):
     """
     Args:
-        file_name (str): File name of the file that will be parsed
-            - used for getting the full path to the file and setting the filename for pyexander
-        output_path (str): Output path of the mcfunctions
-        clean (bool): Whether mcfunctions will be deleted or not
-        debug (bool): Whether mcfunctions will be debugged with a say cmd or not
         use_pre_pyexpander (bool): Whether the pre-pyexpander script will be used or not
         write_functions (bool): Whether mcfunctions should be written or not
 
@@ -109,9 +104,13 @@ def main():
     with open(args.file_name) as file:
         text = file.read()
 
+    config_dict = get_config_dict()
+    get_pre_config(text, args, config_dict)
+
     # sets the file name for logging
     logging_setup.format_file_name(args.file_name)
-    # parse_text(text, file_name, output_path, clean=args.clean, debug=args.debug)
-    parse_text_from_args(text, args)
+
+    parse_text(text)
+    # parse_text_from_args(text, args)
 
 

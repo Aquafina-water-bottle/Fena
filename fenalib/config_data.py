@@ -34,7 +34,8 @@ MAIN_CONFIG_NAME = "config.ini"
 
 
 class ConfigDataBase(NamedTuple):
-    output: str
+    input_file: str
+    output_dir: str
     debug: bool
     clean: bool
     ego: bool
@@ -51,7 +52,8 @@ class ConfigData(Singleton, ConfigDataBase):
         https://stackoverflow.com/questions/2466191/set-attributes-from-dictionary-in-python
 
     Attributes:
-        output (str): the output directory
+        input_file (str): the input file as the main fena file
+        output_dir (str): the output directory
         debug (bool): whether the mcfunctions should be in debug mode or not
         clean (bool): whether mcfunctions should be cleaned in general or not
         ego (bool): whether this is specifically used for EdgeGamers' servers
