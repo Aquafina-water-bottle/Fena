@@ -7,11 +7,6 @@ from typing import NamedTuple, Set
 if __name__ == "__main__":
     import sys
     sys.path.append("..")
-    del sys
-
-    # note that this is actually used since importing it sets up the logging
-    # pylint: disable=unused-import
-    import fenalib.logging_setup as logging_setup
 
 from fenalib.assert_utils import assert_type
 from fenalib.singleton import Singleton
@@ -240,7 +235,7 @@ def get_all_data(version=None):
 # get_all_data()
 
 if __name__ == "__main__":
-    pass
+    import fenalib.logging_setup as logging_setup
     # get_all_data(version="1.12")
     # print(json.dumps(dict(ConfigData().variables), indent=4))
     # print(list(ConfigData().team_options))

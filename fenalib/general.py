@@ -33,6 +33,12 @@ def get_args():
     parser.add_argument("output_path", nargs="?", default=default_output_path,
                         help="the directory in which all mcfunctions will be created, with the default being 'functions/fena'")
 
+    # specifies version
+    parser.add_argument("-v", "--version", help="Sets the minecraft version", action="TODO")
+
+    # simple
+    parser.add_argument("-s", "--simple", help="parse commands without shortcuts", action="store_true")
+
     # cleans mcfunctions
     parser.add_argument("-c", "--clean", help="removes all mcfunction files inside the output directory", action="store_true")
 
@@ -40,7 +46,7 @@ def get_args():
     parser.add_argument("-d", "--debug", help="puts say commands at the front of each mcfunction to show who is running it", action="store_true")
 
     # debug log
-    # parser.add_argument("-dl", "--debug-log", help="outputs the debug log to see all debug info from the Fena language", action="store_true")
+    parser.add_argument("-l", "--debug-log", help="outputs the debug log to see all debug info from the Fena language", action="store_true")
 
     # custom version
     # parser.add_argument("-v", "--version", nargs="?", default=None, help="custom version to override the config file if provided")
