@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Fena simple
-- Uses pre-pyexpander
+`python3 -m unittest discover -s unittests`
 """
 
 import logging

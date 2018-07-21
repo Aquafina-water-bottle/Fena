@@ -1,5 +1,8 @@
 [MASTER]
 
+# adds the directory of this file to the sys.path
+init-hook='import os, sys; sys.path.append(os.path.realpath(os.path.dirname(__file__)))'
+
 # Specify a configuration file.
 #rcfile=
 

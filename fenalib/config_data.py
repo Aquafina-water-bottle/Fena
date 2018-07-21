@@ -28,9 +28,24 @@ PATH_TO_CONFIG_DIR = "config/"
 MAIN_CONFIG_NAME = "config.ini"
 
 
-class ConfigDataBase(NamedTuple):
+class PreConfigDataBase(NamedTuple):
     input_file: str
     output_dir: str
+    version: str
+    simple: bool
+
+class PreConfigData(Singleton, PreConfigDataBase):
+    """
+    Attributes:
+        input_file (str): the input file as the main fena file
+        output_dir (str): the output directory
+        version (str): pass
+        simple (bool): pass
+    """
+    pass
+
+
+class ConfigDataBase(NamedTuple):
     debug: bool
     clean: bool
     ego: bool
@@ -40,15 +55,7 @@ class ConfigDataBase(NamedTuple):
 
 class ConfigData(Singleton, ConfigDataBase):
     """
-    Singleton class based off of:
-        https://colab.research.google.com/drive/1eajT5Rl9tA-7RmSHMME54B81U5aSKSni#scrollTo=nfQZINGxuUdK
-
-    Sets its own attributes based off of:
-        https://stackoverflow.com/questions/2466191/set-attributes-from-dictionary-in-python
-
     Attributes:
-        input_file (str): the input file as the main fena file
-        output_dir (str): the output directory
         debug (bool): whether the mcfunctions should be in debug mode or not
         clean (bool): whether mcfunctions should be cleaned in general or not
         ego (bool): whether this is specifically used for EdgeGamers' servers
@@ -59,17 +66,6 @@ class ConfigData(Singleton, ConfigDataBase):
             - eg. if `tp` is inside it, the parsed command name is `minecraft:tp`
         leading_cmds (Set[str]): The commands that can have commands after it
     """
-    @property
-    def variables(self):
-        """
-        Returns:
-            MappingProxyType: Read-only dictionary of the variables stored in the config data
-        """
-        variables = {}
-        for key in ConfigData.__slots__:
-            variables[key] = getattr(self, key)
-        return MappingProxyType(variables)
-        # variables = {key: getattr(self, key) for key in ConfigData.__slots__)
 
 
 def _get_file_str(file_name):

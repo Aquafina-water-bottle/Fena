@@ -7,12 +7,29 @@ if __name__ == "__main__":
 
 # import pyexpander.lib as pyexpander
 import fena_pyexpander.lib as pyexpander
-from fenalib.pre_pyexpander import parse_pre_pyexpander
 
+from fenalib.pre_pyexpander import parse_pre_pyexpander
 from fenalib.writer import Writer, write_after_pre_pyexpander, write_after_pyexpander
+from fenalib.config_data import PreConfigData
+
+
+__all__ = [
+    "SEMANTIC_VERSION",
+    "PUBLIC_VERSION",
+    "VersionedData",
+    "check_py_version",
+    "get_args",
+    "parse_text",
+    "main",
+    ]
 
 SEMANTIC_VERSION = "7.0.3"
 PUBLIC_VERSION = "0.4.2-ALPHA"
+
+
+class VersionedData:
+    def __init__(self, version):
+        pass
 
 
 def check_py_version():
@@ -33,23 +50,15 @@ def get_args():
     parser.add_argument("output_path", nargs="?", default=default_output_path,
                         help="the directory in which all mcfunctions will be created, with the default being 'functions/fena'")
 
-    # specifies version
     parser.add_argument("-v", "--version", help="Sets the minecraft version", action="TODO")
-
-    # simple
+    # parser.add_argument("-v", "--version", nargs="?", default=None, help="custom version to override the config file if provided")
     parser.add_argument("-s", "--simple", help="parse commands without shortcuts", action="store_true")
-
-    # cleans mcfunctions
     parser.add_argument("-c", "--clean", help="removes all mcfunction files inside the output directory", action="store_true")
-
-    # debug
     parser.add_argument("-d", "--debug", help="puts say commands at the front of each mcfunction to show who is running it", action="store_true")
-
-    # debug log
+    parser.add_argument("-e", "--ego", help="outputs the debug log to see all debug info from the Fena language", action="store_true")
     parser.add_argument("-l", "--debug-log", help="outputs the debug log to see all debug info from the Fena language", action="store_true")
 
     # custom version
-    # parser.add_argument("-v", "--version", nargs="?", default=None, help="custom version to override the config file if provided")
 
     args = parser.parse_args()
     args.output_path = os.path.realpath(args.output_path)
@@ -74,6 +83,8 @@ def parse_text(text, use_pre_pyexpander=True, write_functions=True):
         text = parse_pre_pyexpander(text)
         write_after_pre_pyexpander(text)
 
+    pre_config_data = PreConfigData()
+
     # add the directory of the file to the import path
     # allows any py commands in the file to import py files relative to said file
     dir_path = os.path.dirname(os.path.realpath(file_name))
@@ -83,13 +94,15 @@ def parse_text(text, use_pre_pyexpander=True, write_functions=True):
     text = pyexpander.expandToStr(text, filename=file_name, auto_indent=True, auto_indent_python=True)[0]
     write_after_pyexpander(text)
 
-    lexer = Lexer(text)
-    parser = Parser(lexer)
-    interpreter = Interpreter(parser, output_path)
+    versioned_data = VersionedData(pre_config_data.version)
+
+    lexer = versioned_data.Lexer(text)
+    parser = versioned_data.Parser(lexer)
+    interpreter = versioned_data.Interpreter(parser)
     mcfunctions = interpreter.interpret()
 
     if write_functions:
-        writer = Writer(mcfunctions, clean, debug)
+        writer = versioned_data.Writer(mcfunctions, clean, debug)
         writer.write()
 
     return mcfunctions
