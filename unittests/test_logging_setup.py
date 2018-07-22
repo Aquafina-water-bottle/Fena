@@ -1,3 +1,31 @@
+import unittest
+import logging
+import os
+
+from io import StringIO
+
+import fenalib.logging_setup as logging_setup
+
+class TestLoggingSetup(unittest.TestCase):
+    def test_setup_control(self):
+        string_io = StringIO()
+        logging.basicConfig(stream=string_io)
+        logging_setup.setup_logging()
+        logging.warning("test after setup logging")
+
+        print()
+        logging_setup.format_file_name("_test_logging_setup.py")
+        logging.warning("test after file name setup")
+
+        print()
+        logging.warning("test final")
+
+
+        pass
+
+    def test_setup(self):
+        pass
+
 """
 import logging
 import os

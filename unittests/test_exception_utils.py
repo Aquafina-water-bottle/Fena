@@ -2,7 +2,7 @@ import unittest
 
 import fenalib.exception_utils as exc_utils
 
-class TestStringMethods(unittest.TestCase):
+class TestExceptionUtils(unittest.TestCase):
     def name_error(self):
         with self.assertRaises(NameError) as cm:
             a  # pylint: disable=undefined-variable, pointless-statement
