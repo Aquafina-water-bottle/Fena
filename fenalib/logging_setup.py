@@ -49,10 +49,13 @@ def setup_logging(debug_file_path="log/debug_info.log"):
     # `logging.debug` has been used and set a default handler
     if len(logger.handlers) == 1:
         console_handler = logger.handlers[0]
-        logger.handlers.clear()
     else:
         console_handler = logging.StreamHandler()
-    logger.handlers.clear()
+
+    # clears all handlers
+    for handler in logger.handlers:
+        logger.removeHandler(handler)
+
     console_handler.setLevel(CONSOLE_LEVEL)
 
     # sets the console formatter
@@ -90,12 +93,9 @@ def format_file_name(file_name):
         handler.setFormatter(formatter)
 
 
-def test():
+if __name__ == "__main__":
     logging.warning("test entry")
     setup_logging()
     logging.warning("test entry 2")
 
-
-if __name__ == "__main__":
-    test()
 

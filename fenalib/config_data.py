@@ -232,6 +232,8 @@ def get_all_data(version=None):
 
 if __name__ == "__main__":
     import fenalib.logging_setup as logging_setup
+    logging_setup.setup_logging()
+
     # get_all_data(version="1.12")
     # print(json.dumps(dict(ConfigData().variables), indent=4))
     # print(list(ConfigData().team_options))
