@@ -1,0 +1,66 @@
+$py(
+code = "unchanged"
+)
+$py(
+idk = []
+for x in range(15):
+    idk.append(x*2)
+)
+!mfunc hello
+$py(
+somedict = {}
+for x in range(15):
+    somedict[x] = "ayylmao"
+)
+hello this is now included
+$for(your_mom in range(25))
+say $(your_mom)
+$endfor
+$macro(edit_give_porkchops)
+say this is a macro
+$endmacro
+$macro(unchanged)
+    say this is an unchanged macro
+$endmacro
+$for(x in range(5))
+!mfunc give_porkchop_$(x)
+    give @s minecraft:porkchop $(x)
+$endfor
+!mfunc give_porkchops
+    $for(x in range(5))
+    @s[porkchop=$(x)] function give_porkchop_$(x)
+    $endfor
+    $for(_ in range(3))
+    $("say unchanged code")
+    $endfor
+!folder test
+    $if(something == "test")
+    $for(x in range(5))
+    @s[porkchop=$(x)] function give_porkchop_$(x)
+    $endfor
+    $for(_ in range(3))
+    $("say unchanged code")
+    $endfor
+    $endif
+$if(yo_mama == 1)
+!constobj Number
+$elif(yo_mama == 2)
+!constobj constants
+$else
+!constobj g.constants
+$endif
+$if(yo_mama == 1)
+!prefix unchanged
+$elif(yo_mama == 2)
+!prefix t2
+$else
+!prefix t3
+$endif
+!mfunc give_porkchops
+    $for(x in range(5))
+    $if(x >= 3)
+    replaceitem entity @s[porkchop=$(x)] slot.weapon.offhand porkchop 1 0
+    $else
+    replaceitem entity @s[porkchop=$(x)] slot.hotbar.$(x) porkchop 1 0
+    $endif
+    $endfor

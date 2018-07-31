@@ -14,8 +14,8 @@ from fenalib.parser import Parser
 from fenalib.interpreter import Interpreter
 from fenalib.writer import Writer, write_after_pre_pyexpander, write_after_pyexpander
 
-semantic_version = "7.0.2"
-public_version = "0.4.2-ALPHA"
+semantic_version = "8.0.0"
+public_version = "0.4.3-ALPHA"
 
 
 def get_args():

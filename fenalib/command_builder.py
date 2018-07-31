@@ -220,6 +220,30 @@ class CommandBuilder_1_12(NodeBuilder):
         hide_particles = "true" if node.hide_particles else "false"
         return f"{effect} {selector} minecraft:{effect_id} {duration} {level} {hide_particles}"
 
+    def function_shortcut_from_conflict(self, mcfunc_dirs, function_shortcut):
+        """
+        Gets the function shortcut assuming there are conflicting base function names
+        This does a smart check by checking the function to see if the shortcut works
+        with the directories above it as defined in !folder.
+
+        Args:
+            mcfunc_dirs (deque)
+        """
+        while mcfunc_dirs:
+            insert_dir = mcfunc_dirs.pop()
+            # if there are no more directories, this is the last one and must be added with ":" instead of "/"
+            if mcfunc_dirs:
+                function_shortcut = f"{insert_dir}/{function_shortcut}"
+            else:
+                function_shortcut = f"{insert_dir}:{function_shortcut}"
+
+            if function_shortcut in self.in_file_config.function_conflicts or function_shortcut not in self.in_file_config.functions:
+                continue
+
+            # otherwise, returns the function shortcut
+            return function_shortcut
+        return None
+
     def build_FunctionCmdNode(self, node):
         """
         Node Attributes:
@@ -239,25 +263,20 @@ class CommandBuilder_1_12(NodeBuilder):
                 # assumes 'functions' is a folder that exists
 
                 # makes the following function shortcuts based off of the mcfunction directories
-                # pops the last one because that's the mcfunction name
                 mcfunc_dirs = get_mcfunc_directories(self.mcfunction_path)
+
+                # pops the last one because that's the mcfunction name
                 mcfunc_dirs.pop()
 
-                while mcfunc_dirs:
-                    insert_dir = mcfunc_dirs.pop()
-                    # if there are no more directories, this is the last one and must be added with ":" instead of "/"
-                    if mcfunc_dirs:
-                        function_shortcut = f"{insert_dir}/{function_shortcut}"
-                    else:
-                        function_shortcut = f"{insert_dir}:{function_shortcut}"
+                # first checks the function in the general namespace without the current folder
+                general_namespace_dirs = list(mcfunc_dirs)[:-1]
 
-                    if function_shortcut in self.in_file_config.function_conflicts or function_shortcut not in self.in_file_config.functions:
-                        continue
+                function_base_name = function_shortcut
 
-                    # otherwise, returns the function shortcut
-                    break
-
-                else:
+                function_shortcut = self.function_shortcut_from_conflict(general_namespace_dirs, function_base_name)
+                if function_shortcut is None:
+                    function_shortcut = self.function_shortcut_from_conflict(mcfunc_dirs, function_base_name)
+                if function_shortcut is None:
                     # completely invalid, apparently there are two of the exact same shortcut names
                     raise SyntaxError(f"Invalid function shortcut for node {node} (duplicate)")
 
@@ -265,6 +284,7 @@ class CommandBuilder_1_12(NodeBuilder):
 
         if node.sub_arg is None:
             return f"{function} {function_name}"
+
         assert node.sub_arg is not None and node.selector is not None
         sub_arg = self.build(node.sub_arg, replacements={"ifnot": "unless"})
         selector = self.build(node.selector)

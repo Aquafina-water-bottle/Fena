@@ -52,3 +52,4 @@ class McFunction:
 
     def __str__(self):
         return f"McFunction[{self.mfunc_name}]"
+

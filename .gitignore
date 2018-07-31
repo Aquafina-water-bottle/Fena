@@ -1,9 +1,11 @@
 # log files
 log/
+fenalib/log/
 debug_info.log
 _post_test.txt
 
 # general python
+.mypy_cache/
 __pycache__/
 venv/
 .idea/
@@ -18,5 +20,5 @@ dist/
 *.egg-info/
 build/
 
-# vim session lol
-Session.vim
+# vim sessions
+*.vim

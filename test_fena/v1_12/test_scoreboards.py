@@ -241,16 +241,17 @@ def test_scoreboards():
     test_cmd("scoreboard players operation setblock fena.ti >< players fena.ti2")
     test_cmd("scoreboard players operation setblock fena.ti >< @r fena.ti2")
 
-    test_cmd("@s reset _ti",        "scoreboard players reset fena.ti @s")
-    test_cmd("target reset _ti",    "scoreboard players reset fena.ti target")
-    test_cmd("setblock reset _ti",  "scoreboard players reset fena.ti setblock")
+    test_cmd("@s reset _ti",        "scoreboard players reset @s fena.ti")
+    test_cmd("target reset _ti",    "scoreboard players reset target fena.ti")
+    test_cmd("setblock reset _ti",  "scoreboard players reset setblock fena.ti")
     test_cmd("scoreboard players reset fena.ti @s")
     test_cmd("scoreboard players reset fena.ti target")
     test_cmd("scoreboard players reset fena.ti setblock")
 
-    test_cmd("@s enable _ti",       "scoreboard players enable fena.ti @s")
-    test_cmd("target enable _ti",   "scoreboard players enable fena.ti target")
-    test_cmd("setblock enable _ti", "scoreboard players enable fena.ti setblock")
+    test_cmd("@s enable _ti",       "scoreboard players enable @s fena.ti")
+    test_cmd("target enable _ti",   "scoreboard players enable target fena.ti")
+    test_cmd("setblock enable _ti", "scoreboard players enable setblock fena.ti")
     test_cmd("scoreboard players enable fena.ti @s")
     test_cmd("scoreboard players enable fena.ti target")
     test_cmd("scoreboard players enable fena.ti setblock")
+

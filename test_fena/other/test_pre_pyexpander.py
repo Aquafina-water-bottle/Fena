@@ -24,7 +24,7 @@ $py:
             somedict[x] = "ayylmao"
 
 # include override
-$include("include_text.txt")
+$include("other/include_text.txt")
 
 # macros
 $macro(edit_give_porkchops):

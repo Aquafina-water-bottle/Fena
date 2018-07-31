@@ -269,4 +269,9 @@ s7.0.2      v0.4.2
     - Fixed a glitch with /xp being in the wrong format (/xp selector number -> /xp number selector)
     - Removed TODO and moved into github issues
 
+s8.0.0      v0.4.3
+    - Changed how smart detection of function shortcuts work to prevent infinite recursion
+        - Technically backwards incompatable lol
+    - Fixed the tests to match with the bug fixes
+    - Added better comments to the setup.py docstring to specify what each command does
 
