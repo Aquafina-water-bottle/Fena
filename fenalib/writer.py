@@ -159,3 +159,4 @@ if __name__ == "__main__":
 
     writer = Writer(mcfunctions, clean=True, debug=True)
     writer.write()
+

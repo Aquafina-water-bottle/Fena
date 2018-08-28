@@ -39,6 +39,9 @@ setup(
     packages=["fenalib", "fena_pyexpander", "fenalib/config"],
     package_data={'fenalib/config': ["*.json", "*.ini"]},
     scripts=["fena.py"],
+    install_requires=[
+        'fenautils',
+    ],
     classifiers=[
         "Development Status :: 4 - Beta",
         'Natural Language :: English',

@@ -275,3 +275,9 @@ s8.0.0      v0.4.3
     - Fixed the tests to match with the bug fixes
     - Added better comments to the setup.py docstring to specify what each command does
 
+s8.0.1      v0.4.4
+    - Added fenautils as a required package
+
+
+
+
